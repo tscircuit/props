@@ -290,7 +290,24 @@ export const silkscreenLineProps = pcbLayoutProps.extend({
   x2: distance,
   y2: distance,
 })
-export type silkscreenLineProps = z.input<typeof silkscreenLineProps>
+export type SilkscreenLineProps = z.input<typeof silkscreenLineProps>
+
+export const silkscreenRectProps = pcbLayoutProps.extend({
+  isFilled: z.boolean().optional(),
+  isOutline: z.boolean().optional(),
+  strokeWidth: distance.optional(),
+  width: distance,
+  height: distance,
+})
+export type SilkscreenRectProps = z.input<typeof silkscreenRectProps>
+
+export const silkscreenCircleProps = pcbLayoutProps.extend({
+  isFilled: z.boolean().optional(),
+  isOutline: z.boolean().optional(),
+  strokeWidth: distance.optional(),
+  radius: distance,
+})
+export type SilkscreenCircleProps = z.input<typeof silkscreenCircleProps>
 
 export const traceHintProps = z.object({
   for: z.string(),

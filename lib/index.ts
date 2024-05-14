@@ -1,0 +1,303 @@
+import { z } from "zod"
+import {
+  distance,
+  rotation,
+  layer_ref,
+  supplier_name,
+  resistance,
+  capacitance,
+  inductance,
+  point,
+  voltage,
+  route_hint_point,
+} from "@tscircuit/soup"
+import { ReactElement, ReactNode } from "react"
+import { pcb_route_hint, StandardFootprint } from "@tscircuit/builder"
+import { LayoutBuilder } from "@tscircuit/layout"
+
+export const direction = z.enum(["up", "down", "left", "right"])
+
+export const relativeDirection = z.enum([
+  "top-to-bottom",
+  "left-to-right",
+  "bottom-to-top",
+  "right-to-left",
+])
+
+export const explicitPinSideDefinition = z.object({
+  pins: z.array(z.number()),
+  direction: z.union([
+    z.literal("top-to-bottom"),
+    z.literal("left-to-right"),
+    z.literal("bottom-to-top"),
+    z.literal("right-to-left"),
+  ]),
+})
+
+export type Footprint = StandardFootprint | ReactElement
+export const pcbLayoutProps = z.object({
+  pcbX: distance,
+  pcbY: distance,
+  pcbRotation: rotation.optional(),
+  layer: layer_ref.optional(),
+})
+export const commonLayoutProps = z.object({
+  pcbX: distance.optional(),
+  pcbY: distance.optional(),
+  pcbRotation: rotation.optional(),
+  schX: distance.optional(),
+  schY: distance.optional(),
+  schRotation: rotation.optional(),
+  layer: layer_ref.optional(),
+
+  // TODO pull in literals from @tscircuit/footprint
+  // TODO footprint can be a string or react child
+  footprint: z.custom<Footprint>((v) => true).optional(),
+})
+export type CommonLayoutProps = z.input<typeof commonLayoutProps>
+
+export const supplierProps = z.object({
+  supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
+})
+export type SupplierProps = z.input<typeof supplierProps>
+
+export const commonComponentProps = commonLayoutProps
+  .merge(supplierProps)
+  .extend({
+    name: z.string(),
+    children: z.any().optional(),
+  })
+export type CommonComponentProps = z.input<typeof commonComponentProps>
+
+export const lrPins = ["pin1", "left", "pin2", "right"] as const
+export const lrPolarPins = [
+  "pin1",
+  "left",
+  "anode",
+  "pos",
+  "pin2",
+  "right",
+  "cathode",
+  "neg",
+] as const
+
+export const resistorProps = commonComponentProps.extend({
+  resistance,
+})
+export const resistorPins = lrPins
+export type ResistorProps = z.input<typeof resistorProps>
+
+export const capacitorProps = commonComponentProps.extend({
+  capacitance,
+})
+export const capacitorPins = lrPolarPins
+export type CapacitorProps = z.input<typeof capacitorProps>
+
+export const inductorProps = commonComponentProps.extend({
+  inductance,
+})
+export const inductorPins = lrPins
+export type InductorProps = z.input<typeof inductorProps>
+
+export const diodeProps = commonComponentProps.extend({})
+export const diodePins = lrPolarPins
+export type DiodeProps = z.input<typeof diodeProps>
+
+export const ledProps = commonComponentProps.extend({
+  color: z.string().optional(),
+})
+export const ledPins = lrPolarPins
+export type LedProps = z.input<typeof ledProps>
+
+export const boardProps = z.object({
+  width: distance,
+  height: distance,
+  pcbCenterX: distance.optional().default(0),
+  pcbCenterY: distance.optional().default(0),
+  layout: z.any().optional(),
+  children: z.any(),
+})
+export type BoardProps = z.input<typeof boardProps>
+
+export const bugProps = commonComponentProps.extend({
+  pinLabels: z.record(z.number(), z.string()),
+  schPortArrangement: z
+    .object({
+      leftSize: z.number().optional(),
+      topSize: z.number().optional(),
+      rightSize: z.number().optional(),
+      bottomSize: z.number().optional(),
+    })
+    .or(
+      z.object({
+        leftSide: explicitPinSideDefinition.optional(),
+        rightSide: explicitPinSideDefinition.optional(),
+        topSide: explicitPinSideDefinition.optional(),
+        bottomSide: explicitPinSideDefinition.optional(),
+      })
+    ),
+})
+export type BugProps = z.input<typeof bugProps>
+
+export const viaProps = commonLayoutProps.extend({
+  fromLayer: layer_ref,
+  toLayer: layer_ref,
+  holeDiameter: distance,
+  outerDiameter: distance,
+})
+export type ViaProps = z.input<typeof viaProps>
+
+export const netAliasProps = commonLayoutProps.extend({
+  net: z.string().optional(),
+})
+export type NetAliasProps = z.input<typeof netAliasProps>
+
+export const traceProps = z
+  .object({
+    path: z.array(z.string()),
+    thickness: distance.optional(),
+    schematicRouteHints: z.array(point).optional(),
+    pcbRouteHints: z.array(pcb_route_hint).optional(),
+  })
+  .or(
+    z.object({
+      from: z.string(),
+      to: z.string(),
+      thickness: distance.optional(),
+      schematicRouteHints: z.array(point).optional(),
+      pcbRouteHints: z.array(pcb_route_hint).optional(),
+    })
+  )
+export type TraceProps = z.input<typeof traceProps>
+
+export const smtPadProps = z.union([
+  pcbLayoutProps.omit({ pcbRotation: true }).extend({
+    shape: z.literal("circle"),
+    radius: distance.optional(),
+    portHints: z.array(z.string()).optional(),
+  }),
+  pcbLayoutProps.omit({ pcbRotation: true }).extend({
+    shape: z.literal("rect"),
+    width: distance.optional(),
+    height: distance.optional(),
+    portHints: z.array(z.string()).optional(),
+  }),
+])
+export type SmtPadProps = z.input<typeof smtPadProps>
+
+export const platedHoleProps = pcbLayoutProps
+  .omit({ pcbRotation: true, layer: true })
+  .extend({
+    holeDiameter: distance,
+    outerDiameter: distance,
+  })
+export type PlatedHoleProps = z.input<typeof platedHoleProps>
+
+export const holeProps = pcbLayoutProps.omit({ pcbRotation: true }).extend({
+  holeDiameter: distance,
+})
+export type HoleProps = z.input<typeof holeProps>
+
+export const schematicBoxProps = z.object({
+  schX: distance,
+  schY: distance,
+  width: distance,
+  height: distance,
+})
+export type SchematicBoxProps = z.input<typeof schematicBoxProps>
+
+export const schematicTextProps = z.object({
+  schX: distance,
+  schY: distance,
+  text: z.string(),
+})
+export type SchematicTextProps = z.input<typeof schematicTextProps>
+
+export const schematicLineProps = z.object({
+  x1: distance,
+  y1: distance,
+  x2: distance,
+  y2: distance,
+})
+export type SchematicLineProps = z.input<typeof schematicLineProps>
+
+export const schematicPathProps = z.object({
+  points: z.array(point),
+  isFilled: z.boolean().optional().default(false),
+  fillColor: z.enum(["red", "blue"]).optional(),
+})
+export type SchematicPathProps = z.input<typeof schematicPathProps>
+
+export const constraintProps = z.union([
+  z.object({
+    type: z.literal("xdist"),
+    dist: distance,
+    left: z.string(),
+    right: z.string(),
+  }),
+  z.object({
+    type: z.literal("ydist"),
+    dist: distance,
+    top: z.string(),
+    bottom: z.string(),
+  }),
+])
+export type ConstraintProps = z.input<typeof constraintProps>
+
+export const constrainedLayoutProps = z.object({})
+export type ConstrainedLayoutProps = z.input<typeof constrainedLayoutProps>
+
+export const footprintProps = z.object({})
+export type FootprintProps = z.input<typeof footprintProps>
+
+export const componentProps = commonComponentProps
+export type ComponentProps = z.input<typeof componentProps>
+
+export const groupProps = commonLayoutProps.extend({
+  name: z.string().optional(),
+  layout: z.custom<LayoutBuilder>((v) => true).optional(),
+  children: z.any().optional(),
+})
+export type GroupProps = z.input<typeof groupProps>
+
+export const powerSourceProps = commonComponentProps.extend({
+  voltage,
+})
+export type PowerSourceProps = z.input<typeof powerSourceProps>
+
+export const portProps = commonLayoutProps.extend({
+  name: z.string(),
+  pinNumber: z.number().optional(),
+  aliases: z.array(z.string()).optional(),
+  direction: direction,
+})
+export type PortProps = z.input<typeof portProps>
+
+export const silkscreenTextProps = pcbLayoutProps.extend({
+  text: z.string(),
+  font: z.enum(["tscircuit2024"]).optional(),
+})
+export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>
+
+export const silkscreenPathProps = pcbLayoutProps.extend({
+  route: z.array(pcb_route_hint),
+})
+export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>
+
+export const silkscreenLineProps = pcbLayoutProps.extend({
+  strokeWidth: distance,
+  x1: distance,
+  y1: distance,
+  x2: distance,
+  y2: distance,
+})
+export type silkscreenLineProps = z.input<typeof silkscreenLineProps>
+
+export const traceHintProps = z.object({
+  for: z.string(),
+  order: z.number().optional(),
+  offset: route_hint_point.optional(),
+  offsets: z.array(route_hint_point).optional(),
+})
+
+export type TraceHintProps = z.input<typeof traceHintProps>

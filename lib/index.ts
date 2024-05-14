@@ -11,9 +11,8 @@ import {
   voltage,
   route_hint_point,
 } from "@tscircuit/soup"
-import { ReactElement, ReactNode } from "react"
-import { pcb_route_hint, StandardFootprint } from "@tscircuit/builder"
-import { LayoutBuilder } from "@tscircuit/layout"
+import type { ReactElement, ReactNode } from "react"
+import type { LayoutBuilder } from "@tscircuit/layout"
 
 export const direction = z.enum(["up", "down", "left", "right"])
 
@@ -34,7 +33,7 @@ export const explicitPinSideDefinition = z.object({
   ]),
 })
 
-export type Footprint = StandardFootprint | ReactElement
+export type Footprint = string | ReactElement
 export const pcbLayoutProps = z.object({
   pcbX: distance,
   pcbY: distance,
@@ -157,7 +156,7 @@ export const traceProps = z
     path: z.array(z.string()),
     thickness: distance.optional(),
     schematicRouteHints: z.array(point).optional(),
-    pcbRouteHints: z.array(pcb_route_hint).optional(),
+    pcbRouteHints: z.array(route_hint_point).optional(),
   })
   .or(
     z.object({
@@ -165,7 +164,7 @@ export const traceProps = z
       to: z.string(),
       thickness: distance.optional(),
       schematicRouteHints: z.array(point).optional(),
-      pcbRouteHints: z.array(pcb_route_hint).optional(),
+      pcbRouteHints: z.array(route_hint_point).optional(),
     })
   )
 export type TraceProps = z.input<typeof traceProps>
@@ -280,7 +279,7 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
 export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>
 
 export const silkscreenPathProps = pcbLayoutProps.extend({
-  route: z.array(pcb_route_hint),
+  route: z.array(route_hint_point),
 })
 export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>
 

@@ -274,6 +274,9 @@ export type PortProps = z.input<typeof portProps>
 
 export const silkscreenTextProps = pcbLayoutProps.extend({
   text: z.string(),
+  anchorAlignment: z
+    .enum(["center", "top_left", "top_right", "bottom_left", "bottom_right"])
+    .default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: distance.optional(),
 })

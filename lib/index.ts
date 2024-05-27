@@ -321,3 +321,9 @@ export const traceHintProps = z.object({
 })
 
 export type TraceHintProps = z.input<typeof traceHintProps>
+
+export const pcbTraceProps = z.object({
+  layer: z.string().optional(),
+  route: z.array(route_hint_point),
+})
+export type PcbTraceProps = z.input<typeof pcbTraceProps>

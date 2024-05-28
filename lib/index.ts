@@ -14,6 +14,8 @@ import {
 import type { ReactElement, ReactNode } from "react"
 import type { LayoutBuilder } from "@tscircuit/layout"
 
+export const portHints = z.array(z.string().or(z.number()))
+
 export const direction = z.enum(["up", "down", "left", "right"])
 
 export const relativeDirection = z.enum([
@@ -173,13 +175,13 @@ export const smtPadProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true }).extend({
     shape: z.literal("circle"),
     radius: distance.optional(),
-    portHints: z.array(z.string()).optional(),
+    portHints: portHints.optional(),
   }),
   pcbLayoutProps.omit({ pcbRotation: true }).extend({
     shape: z.literal("rect"),
     width: distance.optional(),
     height: distance.optional(),
-    portHints: z.array(z.string()).optional(),
+    portHints: portHints.optional(),
   }),
 ])
 export type SmtPadProps = z.input<typeof smtPadProps>
@@ -189,6 +191,7 @@ export const platedHoleProps = pcbLayoutProps
   .extend({
     holeDiameter: distance,
     outerDiameter: distance,
+    portHints: portHints.optional(),
   })
 export type PlatedHoleProps = z.input<typeof platedHoleProps>
 

@@ -285,13 +285,15 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
 })
 export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>
 
-export const silkscreenPathProps = pcbLayoutProps.extend({
-  route: z.array(route_hint_point),
-})
+export const silkscreenPathProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    route: z.array(route_hint_point),
+  })
 export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>
 
 export const silkscreenLineProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true })
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
   .extend({
     strokeWidth: distance,
     x1: distance,
@@ -301,21 +303,25 @@ export const silkscreenLineProps = pcbLayoutProps
   })
 export type SilkscreenLineProps = z.input<typeof silkscreenLineProps>
 
-export const silkscreenRectProps = pcbLayoutProps.extend({
-  isFilled: z.boolean().optional(),
-  isOutline: z.boolean().optional(),
-  strokeWidth: distance.optional(),
-  width: distance,
-  height: distance,
-})
+export const silkscreenRectProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    isFilled: z.boolean().optional(),
+    isOutline: z.boolean().optional(),
+    strokeWidth: distance.optional(),
+    width: distance,
+    height: distance,
+  })
 export type SilkscreenRectProps = z.input<typeof silkscreenRectProps>
 
-export const silkscreenCircleProps = pcbLayoutProps.extend({
-  isFilled: z.boolean().optional(),
-  isOutline: z.boolean().optional(),
-  strokeWidth: distance.optional(),
-  radius: distance,
-})
+export const silkscreenCircleProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    isFilled: z.boolean().optional(),
+    isOutline: z.boolean().optional(),
+    strokeWidth: distance.optional(),
+    radius: distance,
+  })
 export type SilkscreenCircleProps = z.input<typeof silkscreenCircleProps>
 
 export const traceHintProps = z.object({

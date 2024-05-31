@@ -10,6 +10,7 @@ import {
   point,
   voltage,
   route_hint_point,
+  length,
 } from "@tscircuit/soup"
 import type { ReactElement, ReactNode } from "react"
 import type { LayoutBuilder } from "@tscircuit/layout"
@@ -281,7 +282,7 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
     .enum(["center", "top_left", "top_right", "bottom_left", "bottom_right"])
     .default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
-  fontSize: distance.optional(),
+  fontSize: length.optional(),
 })
 export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>
 
@@ -289,6 +290,7 @@ export const silkscreenPathProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
   .extend({
     route: z.array(route_hint_point),
+    strokeWidth: length.optional(),
   })
 export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>
 

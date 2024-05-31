@@ -290,13 +290,15 @@ export const silkscreenPathProps = pcbLayoutProps.extend({
 })
 export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>
 
-export const silkscreenLineProps = pcbLayoutProps.extend({
-  strokeWidth: distance,
-  x1: distance,
-  y1: distance,
-  x2: distance,
-  y2: distance,
-})
+export const silkscreenLineProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true })
+  .extend({
+    strokeWidth: distance,
+    x1: distance,
+    y1: distance,
+    x2: distance,
+    y2: distance,
+  })
 export type SilkscreenLineProps = z.input<typeof silkscreenLineProps>
 
 export const silkscreenRectProps = pcbLayoutProps.extend({

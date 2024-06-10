@@ -11,7 +11,7 @@ import {
   voltage,
   route_hint_point,
   length,
-  type AnySoupElement,
+  type AnySoupElementInput,
 } from "@tscircuit/soup"
 import type { ReactElement, ReactNode } from "react"
 import type { LayoutBuilder } from "@tscircuit/layout"
@@ -37,7 +37,7 @@ export const explicitPinSideDefinition = z.object({
   ]),
 })
 
-export type Footprint = string | ReactElement | AnySoupElement[]
+export type Footprint = string | ReactElement | AnySoupElementInput[]
 export const pcbLayoutProps = z.object({
   pcbX: distance,
   pcbY: distance,

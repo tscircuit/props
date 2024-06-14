@@ -121,23 +121,27 @@ export const boardProps = z.object({
 })
 export type BoardProps = z.input<typeof boardProps>
 
+export const schematicPortArrangement = z
+  .object({
+    leftSize: z.number().optional(),
+    topSize: z.number().optional(),
+    rightSize: z.number().optional(),
+    bottomSize: z.number().optional(),
+  })
+  .or(
+    z.object({
+      leftSide: explicitPinSideDefinition.optional(),
+      rightSide: explicitPinSideDefinition.optional(),
+      topSide: explicitPinSideDefinition.optional(),
+      bottomSide: explicitPinSideDefinition.optional(),
+    })
+  )
+
+export type SchematicPortArrangement = z.infer<typeof schematicPortArrangement>
+
 export const bugProps = commonComponentProps.extend({
   pinLabels: z.record(z.number(), z.string()),
-  schPortArrangement: z
-    .object({
-      leftSize: z.number().optional(),
-      topSize: z.number().optional(),
-      rightSize: z.number().optional(),
-      bottomSize: z.number().optional(),
-    })
-    .or(
-      z.object({
-        leftSide: explicitPinSideDefinition.optional(),
-        rightSide: explicitPinSideDefinition.optional(),
-        topSide: explicitPinSideDefinition.optional(),
-        bottomSide: explicitPinSideDefinition.optional(),
-      })
-    ),
+  schPortArrangement: schematicPortArrangement,
 })
 export type BugProps = z.input<typeof bugProps>
 

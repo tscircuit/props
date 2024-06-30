@@ -64,10 +64,24 @@ export const supplierProps = z.object({
 })
 export type SupplierProps = z.input<typeof supplierProps>
 
+export const cadModelStl = z.object({
+  stlUrl: z.string(),
+})
+
+export const cadModelObj = z.object({
+  objUrl: z.string(),
+  mtlUrl: z.string().optional(),
+})
+
+export const cadModelJscad = z.object({
+  jscad: z.any(),
+})
+
 export const commonComponentProps = commonLayoutProps
   .merge(supplierProps)
   .extend({
     name: z.string(),
+    cadModel: z.union([cadModelStl, cadModelObj, cadModelJscad]).optional(),
     children: z.any().optional(),
   })
 export type CommonComponentProps = z.input<typeof commonComponentProps>

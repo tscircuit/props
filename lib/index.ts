@@ -214,13 +214,26 @@ export const smtPadProps = z.union([
 ])
 export type SmtPadProps = z.input<typeof smtPadProps>
 
-export const platedHoleProps = pcbLayoutProps
+export const platedHoleProps = z.union([
+  pcbLayoutProps
   .omit({ pcbRotation: true, layer: true })
   .extend({
+    shape: z.literal("circle"),
     holeDiameter: distance,
     outerDiameter: distance,
     portHints: portHints.optional(),
+  }),
+  pcbLayoutProps
+  .omit({ pcbRotation: true, layer: true })
+  .extend({
+    shape: z.literal("oval"),
+    outerWidth: distance,
+    outerHeight: distance,
+    innerWidth: distance,
+    innerHeight: distance,
+    portHints: portHints.optional(),
   })
+])
 export type PlatedHoleProps = z.input<typeof platedHoleProps>
 
 export const holeProps = pcbLayoutProps.omit({ pcbRotation: true }).extend({

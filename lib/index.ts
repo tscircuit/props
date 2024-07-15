@@ -163,7 +163,7 @@ export const schematicPortArrangement = z
       rightSide: explicitPinSideDefinition.optional(),
       topSide: explicitPinSideDefinition.optional(),
       bottomSide: explicitPinSideDefinition.optional(),
-    })
+    }),
   )
 
 export const bugProps = commonComponentProps.extend({
@@ -207,7 +207,7 @@ export const traceProps = z
       thickness: distance.optional(),
       schematicRouteHints: z.array(point).optional(),
       pcbRouteHints: z.array(route_hint_point).optional(),
-    })
+    }),
   )
 export type TraceProps = z.input<typeof traceProps>
 

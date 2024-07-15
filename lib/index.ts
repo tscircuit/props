@@ -141,8 +141,8 @@ export type LedProps = z.input<typeof ledProps>
 export const boardProps = z.object({
   width: distance,
   height: distance,
-  pcbCenterX: distance.optional().default(0),
-  pcbCenterY: distance.optional().default(0),
+  pcbX: distance.optional().default(0),
+  pcbY: distance.optional().default(0),
   layout: z.any().optional(),
   children: z.any(),
 })
@@ -228,23 +228,23 @@ export type SmtPadProps = z.input<typeof smtPadProps>
 
 export const platedHoleProps = z.union([
   pcbLayoutProps
-  .omit({ pcbRotation: true, layer: true })
-  .extend({
-    shape: z.literal("circle"),
-    holeDiameter: distance,
-    outerDiameter: distance,
-    portHints: portHints.optional(),
-  }),
+    .omit({ pcbRotation: true, layer: true })
+    .extend({
+      shape: z.literal("circle"),
+      holeDiameter: distance,
+      outerDiameter: distance,
+      portHints: portHints.optional(),
+    }),
   pcbLayoutProps
-  .omit({ pcbRotation: true, layer: true })
-  .extend({
-    shape: z.literal("oval"),
-    outerWidth: distance,
-    outerHeight: distance,
-    innerWidth: distance,
-    innerHeight: distance,
-    portHints: portHints.optional(),
-  })
+    .omit({ pcbRotation: true, layer: true })
+    .extend({
+      shape: z.literal("oval"),
+      outerWidth: distance,
+      outerHeight: distance,
+      innerWidth: distance,
+      innerHeight: distance,
+      portHints: portHints.optional(),
+    })
 ])
 export type PlatedHoleProps = z.input<typeof platedHoleProps>
 

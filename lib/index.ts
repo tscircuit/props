@@ -167,8 +167,8 @@ export const schematicPortArrangement = z
   )
 
 export const bugProps = commonComponentProps.extend({
-  pinLabels: z.record(z.number(), z.string()),
-  schPortArrangement: schematicPortArrangement,
+  pinLabels: z.record(z.number(), z.string()).optional(),
+  schPortArrangement: schematicPortArrangement.optional(),
   schPinSpacing: distanceOrMultiplier
     .or(z.literal("auto"))
     .optional()
@@ -227,24 +227,20 @@ export const smtPadProps = z.union([
 export type SmtPadProps = z.input<typeof smtPadProps>
 
 export const platedHoleProps = z.union([
-  pcbLayoutProps
-    .omit({ pcbRotation: true, layer: true })
-    .extend({
-      shape: z.literal("circle"),
-      holeDiameter: distance,
-      outerDiameter: distance,
-      portHints: portHints.optional(),
-    }),
-  pcbLayoutProps
-    .omit({ pcbRotation: true, layer: true })
-    .extend({
-      shape: z.literal("oval"),
-      outerWidth: distance,
-      outerHeight: distance,
-      innerWidth: distance,
-      innerHeight: distance,
-      portHints: portHints.optional(),
-    })
+  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    shape: z.literal("circle"),
+    holeDiameter: distance,
+    outerDiameter: distance,
+    portHints: portHints.optional(),
+  }),
+  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    shape: z.literal("oval"),
+    outerWidth: distance,
+    outerHeight: distance,
+    innerWidth: distance,
+    innerHeight: distance,
+    portHints: portHints.optional(),
+  }),
 ])
 export type PlatedHoleProps = z.input<typeof platedHoleProps>
 

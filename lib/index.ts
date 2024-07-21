@@ -1,20 +1,20 @@
-import { z } from "zod"
+import type { LayoutBuilder } from "@tscircuit/layout"
 import {
-  distance,
-  rotation,
-  layer_ref,
-  supplier_name,
-  resistance,
-  capacitance,
-  inductance,
-  point,
-  voltage,
-  route_hint_point,
-  length,
   type AnySoupElementInput,
+  capacitance,
+  distance,
+  inductance,
+  layer_ref,
+  length,
+  point,
+  resistance,
+  rotation,
+  route_hint_point,
+  supplier_name,
+  voltage,
 } from "@tscircuit/soup"
 import type { ReactElement, ReactNode } from "react"
-import type { LayoutBuilder } from "@tscircuit/layout"
+import { z } from "zod"
 
 export const portHints = z.array(z.string().or(z.number()))
 

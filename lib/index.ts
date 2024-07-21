@@ -167,6 +167,7 @@ export const schematicPortArrangement = z
   )
 
 export const bugProps = commonComponentProps.extend({
+  manufacturerPartNumber: z.string().optional(),
   pinLabels: z.record(z.number(), z.string()).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
   schPinSpacing: distanceOrMultiplier

@@ -163,15 +163,15 @@ export const schematicPortArrangement = z
       rightSide: explicitPinSideDefinition.optional(),
       topSide: explicitPinSideDefinition.optional(),
       bottomSide: explicitPinSideDefinition.optional(),
-    }),
+    })
   )
 
 export const bugProps = commonComponentProps.extend({
   pinLabels: z.record(z.number(), z.string()).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
-  schPinSpacing: distanceOrMultiplier
-    .or(z.literal("auto"))
-    .optional()
+        schPinSpacing: distanceOrMultiplier
+          .or(z.literal("auto"))
+          .optional()
     .default("auto"),
   schWidth: distanceOrMultiplier
     .or(z.literal("auto"))
@@ -207,7 +207,7 @@ export const traceProps = z
       thickness: distance.optional(),
       schematicRouteHints: z.array(point).optional(),
       pcbRouteHints: z.array(route_hint_point).optional(),
-    }),
+    })
   )
 export type TraceProps = z.input<typeof traceProps>
 

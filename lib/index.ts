@@ -309,6 +309,7 @@ export const groupProps = commonLayoutProps.extend({
   name: z.string().optional(),
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
   children: z.any().optional(),
+  routingDisabled: z.boolean().optional(),
 })
 export type GroupProps = z.input<typeof groupProps>
 

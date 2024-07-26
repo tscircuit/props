@@ -9,9 +9,7 @@
     "format:check": "biome format ."
   },
   "keywords": [],
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "author": "",
   "license": "ISC",
   "devDependencies": {

@@ -144,6 +144,7 @@ export const boardProps = z.object({
   pcbX: distance.optional().default(0),
   pcbY: distance.optional().default(0),
   layout: z.any().optional(),
+  routingDisabled: z.boolean().optional(),
   children: z.any(),
 })
 export type BoardProps = z.input<typeof boardProps>

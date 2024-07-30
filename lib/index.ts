@@ -167,7 +167,7 @@ export const schematicPortArrangement = z
     }),
   )
 
-export const bugProps = commonComponentProps.extend({
+export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z.record(z.number(), z.string()).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
@@ -180,7 +180,7 @@ export const bugProps = commonComponentProps.extend({
     .optional()
     .default("auto"),
 })
-export type BugProps = z.input<typeof bugProps>
+export type ChipProps = z.input<typeof chipProps>
 
 export const viaProps = commonLayoutProps.extend({
   fromLayer: layer_ref,

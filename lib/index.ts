@@ -180,12 +180,11 @@ export const chipProps = commonComponentProps.extend({
     .optional()
     .default("auto"),
 })
-export type ChipProps = z.input<typeof chipProps>
-
 /**
  * @deprecated Use ChipProps instead. 
  */
 export const bugProps = chipProps
+export type ChipProps = z.input<typeof chipProps>
 
 export const viaProps = commonLayoutProps.extend({
   fromLayer: layer_ref,

@@ -230,7 +230,7 @@ export type SmtPadProps = z.input<typeof smtPadProps>
 
 export const platedHoleProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    shape: z.literal("circle"),
+    shape: z.literal("circle").default("circle"),
     holeDiameter: distance,
     outerDiameter: distance,
     portHints: portHints.optional(),

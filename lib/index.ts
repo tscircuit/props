@@ -185,7 +185,7 @@ export type ChipProps = z.input<typeof chipProps>
 /**
  * @deprecated Use ChipProps instead. 
  */
-export type BugProps = ChipProps
+export const bugProps = chipProps
 
 export const viaProps = commonLayoutProps.extend({
   fromLayer: layer_ref,

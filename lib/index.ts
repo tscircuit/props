@@ -13,7 +13,7 @@ import {
   supplier_name,
   voltage,
 } from "@tscircuit/soup"
-import type { ReactElement, ReactNode } from "react"
+import type { ReactElement } from "react"
 import { z } from "zod"
 
 export const portHints = z.array(z.string().or(z.number()))
@@ -382,6 +382,7 @@ export const traceHintProps = z.object({
   order: z.number().optional(),
   offset: route_hint_point.optional(),
   offsets: z.array(route_hint_point).optional(),
+  traceWidth: z.number().optional(),
 })
 
 export type TraceHintProps = z.input<typeof traceHintProps>

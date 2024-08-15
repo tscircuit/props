@@ -382,7 +382,6 @@ export const traceHintProps = z.object({
   order: z.number().optional(),
   offset: route_hint_point.optional(),
   offsets: z.array(route_hint_point).optional(),
-  traceWidth: z.number().optional(),
 })
 
 export type TraceHintProps = z.input<typeof traceHintProps>

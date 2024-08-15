@@ -142,16 +142,7 @@ export const switchProps = commonComponentProps.extend({
   ftype: z.literal("switch"),
   closed: z.boolean().optional(),
 })
-export const switchPins = z.object({
-  p1: z.object({
-    portNumber: z.number(),
-  }),
-  p2: z.object({
-    portNumber: z.number(),
-  }),
-})
 export type SwitchProps = z.input<typeof switchProps>
-export type SwitchPins = z.input<typeof switchPins>
 
 export const boardProps = z.object({
   width: distance,

@@ -140,7 +140,8 @@ export type LedProps = z.input<typeof ledProps>
 
 export const switchProps = commonComponentProps.extend({
   ftype: z.literal("switch"),
-  closed: z.boolean().optional(),
+  switchType: z.enum(["spst"]).default("spst"),
+  isNormallyClosed: z.boolean().default(false)
 })
 export type SwitchProps = z.input<typeof switchProps>
 

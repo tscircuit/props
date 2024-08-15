@@ -138,6 +138,21 @@ export const ledProps = commonComponentProps.extend({
 export const ledPins = lrPolarPins
 export type LedProps = z.input<typeof ledProps>
 
+export const switchProps = commonComponentProps.extend({
+  ftype: z.literal("switch"),
+  closed: z.boolean().optional(),
+})
+export const switchPins = z.object({
+  p1: z.object({
+    portNumber: z.number(),
+  }),
+  p2: z.object({
+    portNumber: z.number(),
+  }),
+})
+export type SwitchProps = z.input<typeof switchProps>
+export type SwitchPins = z.input<typeof switchPins>
+
 export const boardProps = z.object({
   width: distance,
   height: distance,
@@ -181,7 +196,7 @@ export const chipProps = commonComponentProps.extend({
     .default("auto"),
 })
 /**
- * @deprecated Use ChipProps instead. 
+ * @deprecated Use ChipProps instead.
  */
 export const bugProps = chipProps
 export type ChipProps = z.input<typeof chipProps>

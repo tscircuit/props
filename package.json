@@ -15,7 +15,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@tscircuit/layout": "^0.0.11",
-    "@tscircuit/soup": "^0.0.17",
+    "@tscircuit/soup": "^0.0.50",
     "@types/node": "^20.12.11",
     "@types/react": "^18.3.2",
     "ava": "^6.1.3",

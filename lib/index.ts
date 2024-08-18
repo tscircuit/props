@@ -206,17 +206,22 @@ export const netAliasProps = commonLayoutProps.extend({
 })
 export type NetAliasProps = z.input<typeof netAliasProps>
 
+export const portRef = z.union([
+  z.string(),
+  z.object({ getPortSelector: z.function(z.tuple([]), z.string()) }),
+])
+
 export const traceProps = z
   .object({
-    path: z.array(z.string()),
+    path: z.array(portRef),
     thickness: distance.optional(),
     schematicRouteHints: z.array(point).optional(),
     pcbRouteHints: z.array(route_hint_point).optional(),
   })
   .or(
     z.object({
-      from: z.string(),
-      to: z.string(),
+      from: portRef,
+      to: portRef,
       thickness: distance.optional(),
       schematicRouteHints: z.array(point).optional(),
       pcbRouteHints: z.array(route_hint_point).optional(),

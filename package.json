@@ -3,14 +3,16 @@
   "version": "0.0.34",
   "description": "Props for tscircuit builtin component types",
   "main": "dist/index.js",
+  "types": "./lib/index.ts",
   "scripts": {
-    "build": "tsup lib/index.ts --dts --sourcemap",
+    "build": "tsup lib/index.ts --sourcemap",
     "format": "biome format . --write",
     "format:check": "biome format ."
   },
   "keywords": [],
   "files": [
-    "dist"
+    "dist",
+    "lib"
   ],
   "author": "",
   "license": "ISC",

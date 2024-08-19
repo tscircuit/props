@@ -208,7 +208,9 @@ export type NetAliasProps = z.input<typeof netAliasProps>
 
 export const portRef = z.union([
   z.string(),
-  z.object({ getPortSelector: z.function(z.tuple([]), z.string()) }),
+  z.custom<{ getPortSelector: () => string }>((v) =>
+    Boolean(v.getPortSelector),
+  ),
 ])
 
 export const traceProps = z

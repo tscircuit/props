@@ -399,7 +399,7 @@ export const traceHintProps = z.object({
   for: z
     .string()
     .optional()
-    .description(
+    .describe(
       "Selector for the port you're targeting, not required if you're inside a trace",
     ),
   order: z.number().optional(),

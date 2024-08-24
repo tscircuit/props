@@ -396,7 +396,12 @@ export const silkscreenCircleProps = pcbLayoutProps
 export type SilkscreenCircleProps = z.input<typeof silkscreenCircleProps>
 
 export const traceHintProps = z.object({
-  for: z.string().optional().description("Selector for the port you're targeting, not required if you're inside a trace"),
+  for: z
+    .string()
+    .optional()
+    .description(
+      "Selector for the port you're targeting, not required if you're inside a trace",
+    ),
   order: z.number().optional(),
   offset: route_hint_point.optional(),
   offsets: z.array(route_hint_point).optional(),

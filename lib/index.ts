@@ -176,7 +176,7 @@ export const schematicPortArrangement = z
 
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
-  pinLabels: z.record(z.number(), z.string()).optional(),
+  pinLabels: z.record(z.number().or(z.string()), z.string()).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
   schPinSpacing: distanceOrMultiplier
     .or(z.literal("auto"))

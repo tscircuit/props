@@ -96,7 +96,13 @@ export const commonComponentProps = commonLayoutProps
     cadModel: z.union([cadModelStl, cadModelObj, cadModelJscad]).optional(),
     children: z.any().optional(),
   })
-export type CommonComponentProps = z.input<typeof commonComponentProps>
+
+type CommonComponentPropsType = typeof commonComponentProps
+export type CommonComponentProps = {
+  [Property in keyof CommonComponentPropsType["shape"]]: z.input<
+    CommonComponentPropsType["shape"][Property]
+  >
+}
 
 export const lrPins = ["pin1", "left", "pin2", "right"] as const
 export const lrPolarPins = [

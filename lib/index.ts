@@ -39,10 +39,6 @@ export * from "./common/schematicPinDefinitions"
 export * from "./components/board"
 export * from "./components/chip"
 
-type FootprintSoupElements = PCBSMTPadInput | PCBPlatedHoleInput
-
-export type Footprint = string | ReactElement | FootprintSoupElements[]
-
 export const supplierProps = z.object({
   supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
 })

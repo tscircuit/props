@@ -1,4 +1,3 @@
-import type { ReactElement } from "react"
 import { z } from "zod"
 import {
   type AnySoupElementInput,
@@ -10,8 +9,6 @@ import {
 import { point3 } from "./point3"
 import { cadModelJscad, cadModelObj, cadModelStl } from "./cadModel"
 import { footprintProp } from "./footprintProp"
-
-export type Footprint = string | ReactElement | AnySoupElementInput[]
 
 export const pcbLayoutProps = z.object({
   pcbX: distance,

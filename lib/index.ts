@@ -161,11 +161,22 @@ export const distanceOrMultiplier = distance.or(z.enum(["2x", "3x", "4x"]))
 
 export const schematicPortArrangement = z
   .object({
-    leftSize: z.number().optional(),
-    topSize: z.number().optional(),
-    rightSize: z.number().optional(),
-    bottomSize: z.number().optional(),
+    leftSize: z.number().optional().describe("@deprecated, use leftPinCount"),
+    topSize: z.number().optional().describe("@deprecated, use topPinCount"),
+    rightSize: z.number().optional().describe("@deprecated, use rightPinCount"),
+    bottomSize: z
+      .number()
+      .optional()
+      .describe("@deprecated, use bottomPinCount"),
   })
+  .or(
+    z.object({
+      leftPinCount: z.number().optional(),
+      rightPinCount: z.number().optional(),
+      topPinCount: z.number().optional(),
+      bottomPinCount: z.number().optional(),
+    }),
+  )
   .or(
     z.object({
       leftSide: explicitPinSideDefinition.optional(),
@@ -178,15 +189,24 @@ export const schematicPortArrangement = z
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z.record(z.number().or(z.string()), z.string()).optional(),
+
   schPortArrangement: schematicPortArrangement.optional(),
+  schPinStyle: z
+    .record(
+      z.object({
+        leftMargin: distance.optional(),
+        rightMargin: distance.optional(),
+        topMargin: distance.optional(),
+        bottomMargin: distance.optional(),
+      }),
+    )
+    .optional(),
   schPinSpacing: distanceOrMultiplier
     .or(z.literal("auto"))
     .optional()
     .default("auto"),
-  schWidth: distanceOrMultiplier
-    .or(z.literal("auto"))
-    .optional()
-    .default("auto"),
+  schWidth: distance.or(z.literal("auto")).optional().default("auto"),
+  schHeight: distance.or(z.literal("auto")).optional().default("auto"),
 })
 /**
  * @deprecated Use ChipProps instead.
@@ -396,6 +416,13 @@ export const silkscreenCircleProps = pcbLayoutProps
   })
 export type SilkscreenCircleProps = z.input<typeof silkscreenCircleProps>
 
+export const routeHintPointProps = z.object({
+  x: distance,
+  y: distance,
+  via: z.boolean().optional(),
+  toLayer: layer_ref.optional(),
+})
+
 export const traceHintProps = z.object({
   for: z
     .string()
@@ -404,8 +431,11 @@ export const traceHintProps = z.object({
       "Selector for the port you're targeting, not required if you're inside a trace",
     ),
   order: z.number().optional(),
-  offset: route_hint_point.optional(),
-  offsets: z.array(route_hint_point).optional(),
+  offset: route_hint_point.or(routeHintPointProps).optional(),
+  offsets: z
+    .array(route_hint_point)
+    .or(z.array(routeHintPointProps))
+    .optional(),
   traceWidth: z.number().optional(),
 })
 

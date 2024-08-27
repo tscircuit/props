@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { chipProps, type ChipProps } from "lib/index"
+import { chipProps, type ChipProps } from "lib/components/chip"
 import type { z } from "zod"
 import { expectTypeOf } from "expect-type"
 

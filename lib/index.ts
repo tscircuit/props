@@ -1,25 +1,29 @@
-import type { LayoutBuilder } from "@tscircuit/layout"
+// Re-export everything from the new files
+export * from "./types/common"
+export * from "./components/resistor"
+export * from "./components/capacitor"
+export * from "./components/inductor"
+export * from "./components/diode"
+export * from "./components/led"
+export * from "./components/switch"
+export * from "./components/board"
+export * from "./components/chip"
+export * from "./utils/direction"
+export * from "./utils/portHints"
+
+import { z } from "zod"
+import { commonLayoutProps, pcbLayoutProps } from "./types/common"
 import {
-  type AnySoupElementInput,
-  capacitance,
   distance,
-  inductance,
   layer_ref,
   length,
   point,
-  resistance,
-  rotation,
   route_hint_point,
-  supplier_name,
   voltage,
 } from "@tscircuit/soup"
-import type { ReactElement } from "react"
-import { z } from "zod"
+import type { LayoutBuilder } from "@tscircuit/layout"
 import { direction } from "./utils/direction"
 import { portHints } from "./utils/portHints"
-
-export * from "./utils/direction"
-export * from "./utils/portHints"
 
 export const directionAlongEdge = z.enum([
   "top-to-bottom",
@@ -27,193 +31,6 @@ export const directionAlongEdge = z.enum([
   "bottom-to-top",
   "right-to-left",
 ])
-
-export const explicitPinSideDefinition = z.object({
-  pins: z.array(z.number()),
-  direction: z.union([
-    z.literal("top-to-bottom"),
-    z.literal("left-to-right"),
-    z.literal("bottom-to-top"),
-    z.literal("right-to-left"),
-  ]),
-})
-
-export type Footprint = string | ReactElement | AnySoupElementInput[]
-export const pcbLayoutProps = z.object({
-  pcbX: distance,
-  pcbY: distance,
-  pcbRotation: rotation.optional(),
-  layer: layer_ref.optional(),
-})
-export const commonLayoutProps = z.object({
-  pcbX: distance.optional(),
-  pcbY: distance.optional(),
-  pcbRotation: rotation.optional(),
-  schX: distance.optional(),
-  schY: distance.optional(),
-  schRotation: rotation.optional(),
-  layer: layer_ref.optional(),
-
-  // TODO pull in literals from @tscircuit/footprint
-  // TODO footprint can be a string or react child
-  footprint: z.custom<Footprint>((v) => true).optional(),
-})
-export type CommonLayoutProps = z.input<typeof commonLayoutProps>
-
-export const supplierProps = z.object({
-  supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
-})
-export type SupplierProps = z.input<typeof supplierProps>
-
-const point3 = z.object({
-  x: z.union([z.number(), z.string()]),
-  y: z.union([z.number(), z.string()]),
-  z: z.union([z.number(), z.string()]),
-})
-
-export const cadModelBase = z.object({
-  rotationOffset: z.number().or(point3).optional(),
-  positionOffset: point3.optional(),
-  size: point3.optional(),
-})
-
-export const cadModelStl = cadModelBase.extend({
-  stlUrl: z.string(),
-})
-
-export const cadModelObj = cadModelBase.extend({
-  objUrl: z.string(),
-  mtlUrl: z.string().optional(),
-})
-
-export const cadModelJscad = cadModelBase.extend({
-  jscad: z.any(),
-})
-
-export const commonComponentProps = commonLayoutProps
-  .merge(supplierProps)
-  .extend({
-    name: z.string(),
-    cadModel: z.union([cadModelStl, cadModelObj, cadModelJscad]).optional(),
-    children: z.any().optional(),
-  })
-export type CommonComponentProps = z.input<typeof commonComponentProps>
-
-export const lrPins = ["pin1", "left", "pin2", "right"] as const
-export const lrPolarPins = [
-  "pin1",
-  "left",
-  "anode",
-  "pos",
-  "pin2",
-  "right",
-  "cathode",
-  "neg",
-] as const
-
-export const resistorProps = commonComponentProps.extend({
-  resistance,
-})
-export const resistorPins = lrPins
-export type ResistorProps = z.input<typeof resistorProps>
-
-export const capacitorProps = commonComponentProps.extend({
-  capacitance,
-})
-export const capacitorPins = lrPolarPins
-export type CapacitorProps = z.input<typeof capacitorProps>
-
-export const inductorProps = commonComponentProps.extend({
-  inductance,
-})
-export const inductorPins = lrPins
-export type InductorProps = z.input<typeof inductorProps>
-
-export const diodeProps = commonComponentProps.extend({})
-export const diodePins = lrPolarPins
-export type DiodeProps = z.input<typeof diodeProps>
-
-export const ledProps = commonComponentProps.extend({
-  color: z.string().optional(),
-})
-export const ledPins = lrPolarPins
-export type LedProps = z.input<typeof ledProps>
-
-export const switchProps = commonComponentProps.extend({
-  ftype: z.literal("switch"),
-  switchType: z.enum(["spst"]).default("spst"),
-  isNormallyClosed: z.boolean().default(false),
-})
-export type SwitchProps = z.input<typeof switchProps>
-
-export const boardProps = z.object({
-  width: distance,
-  height: distance,
-  outline: z.array(point).optional(),
-  pcbX: distance.optional().default(0),
-  pcbY: distance.optional().default(0),
-  layout: z.any().optional(),
-  routingDisabled: z.boolean().optional(),
-  children: z.any(),
-})
-export type BoardProps = z.input<typeof boardProps>
-
-export const distanceOrMultiplier = distance.or(z.enum(["2x", "3x", "4x"]))
-
-export const schematicPortArrangement = z
-  .object({
-    leftSize: z.number().optional().describe("@deprecated, use leftPinCount"),
-    topSize: z.number().optional().describe("@deprecated, use topPinCount"),
-    rightSize: z.number().optional().describe("@deprecated, use rightPinCount"),
-    bottomSize: z
-      .number()
-      .optional()
-      .describe("@deprecated, use bottomPinCount"),
-  })
-  .or(
-    z.object({
-      leftPinCount: z.number().optional(),
-      rightPinCount: z.number().optional(),
-      topPinCount: z.number().optional(),
-      bottomPinCount: z.number().optional(),
-    }),
-  )
-  .or(
-    z.object({
-      leftSide: explicitPinSideDefinition.optional(),
-      rightSide: explicitPinSideDefinition.optional(),
-      topSide: explicitPinSideDefinition.optional(),
-      bottomSide: explicitPinSideDefinition.optional(),
-    }),
-  )
-
-export const chipProps = commonComponentProps.extend({
-  manufacturerPartNumber: z.string().optional(),
-  pinLabels: z.record(z.number().or(z.string()), z.string()).optional(),
-
-  schPortArrangement: schematicPortArrangement.optional(),
-  schPinStyle: z
-    .record(
-      z.object({
-        leftMargin: distance.optional(),
-        rightMargin: distance.optional(),
-        topMargin: distance.optional(),
-        bottomMargin: distance.optional(),
-      }),
-    )
-    .optional(),
-  schPinSpacing: distanceOrMultiplier
-    .or(z.literal("auto"))
-    .optional()
-    .default("auto"),
-  schWidth: distance.or(z.literal("auto")).optional().default("auto"),
-  schHeight: distance.or(z.literal("auto")).optional().default("auto"),
-})
-/**
- * @deprecated Use ChipProps instead.
- */
-export const bugProps = chipProps
-export type ChipProps = z.input<typeof chipProps>
 
 export const viaProps = commonLayoutProps.extend({
   fromLayer: layer_ref,
@@ -343,7 +160,7 @@ export type ConstrainedLayoutProps = z.input<typeof constrainedLayoutProps>
 export const footprintProps = z.object({})
 export type FootprintProps = z.input<typeof footprintProps>
 
-export const componentProps = commonComponentProps
+export const componentProps = commonLayoutProps
 export type ComponentProps = z.input<typeof componentProps>
 
 export const groupProps = commonLayoutProps.extend({
@@ -354,7 +171,7 @@ export const groupProps = commonLayoutProps.extend({
 })
 export type GroupProps = z.input<typeof groupProps>
 
-export const powerSourceProps = commonComponentProps.extend({
+export const powerSourceProps = commonLayoutProps.extend({
   voltage,
 })
 export type PowerSourceProps = z.input<typeof powerSourceProps>

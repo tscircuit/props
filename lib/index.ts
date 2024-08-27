@@ -18,6 +18,9 @@ import { z } from "zod"
 import { direction } from "./utils/direction"
 import { portHints } from "./utils/portHints"
 
+export * from "./utils/direction"
+export * from "./utils/portHints"
+
 export const directionAlongEdge = z.enum([
   "top-to-bottom",
   "left-to-right",

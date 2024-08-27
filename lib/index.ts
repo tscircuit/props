@@ -15,12 +15,13 @@ import {
 } from "@tscircuit/soup"
 import type { ReactElement } from "react"
 import { z } from "zod"
+import { direction } from "./utils/direction"
+import { portHints } from "./utils/portHints"
 
-export const portHints = z.array(z.string().or(z.number()))
+export * from "./utils/direction"
+export * from "./utils/portHints"
 
-export const direction = z.enum(["up", "down", "left", "right"])
-
-export const relativeDirection = z.enum([
+export const directionAlongEdge = z.enum([
   "top-to-bottom",
   "left-to-right",
   "bottom-to-top",

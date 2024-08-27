@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsup lib/index.ts --dts --sourcemap",
+    "check-circular-deps": "madge --circular --extensions ts ./lib",
     "format": "biome format . --write",
     "format:check": "biome format ."
   },

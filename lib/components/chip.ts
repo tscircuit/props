@@ -18,9 +18,9 @@ export const chipProps = commonComponentProps.extend({
       }),
     )
     .optional(),
-  schPinSpacing: distance.or(z.literal("auto")).optional().default("auto"),
-  schWidth: distance.or(z.literal("auto")).optional().default("auto"),
-  schHeight: distance.or(z.literal("auto")).optional().default("auto"),
+  schPinSpacing: distance.optional(),
+  schWidth: distance.optional(),
+  schHeight: distance.optional(),
 })
 
 export type SchematicPinStyle = {

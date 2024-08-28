@@ -40,6 +40,7 @@ export const commonComponentProps = commonLayoutProps
     name: z.string(),
     cadModel: z.union([cadModelStl, cadModelObj, cadModelJscad]).optional(),
     children: z.any().optional(),
+    symbolName: z.string().optional(),
   })
 export type CommonComponentProps = z.input<typeof commonComponentProps>
 

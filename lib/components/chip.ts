@@ -22,6 +22,15 @@ export const chipProps = commonComponentProps.extend({
   schWidth: distance.or(z.literal("auto")).optional().default("auto"),
   schHeight: distance.or(z.literal("auto")).optional().default("auto"),
 })
+
+export type SchematicPinStyle = {
+  leftMargin?: number | string
+  rightMargin?: number | string
+  topMargin?: number | string
+  bottomMargin?: number | string
+}
+export type SchematicPinStyles = Record<string, SchematicPinStyle>
+
 /**
  * @deprecated Use ChipProps instead.
  */

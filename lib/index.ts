@@ -1,3 +1,11 @@
+/**
+ * THINKING ABOUT ADDING SOMETHING TO THIS FILE?
+ *
+ * THINK AGAIN!
+ *
+ * This file is TOO BIG! Create files using the pattern in the surrounding
+ * directories, then export from this file.
+ */
 import type { LayoutBuilder } from "@tscircuit/layout"
 import {
   type AnySoupElementInput,

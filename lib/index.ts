@@ -46,23 +46,10 @@ export * from "./common/schematicPinDefinitions"
 
 export * from "./components/board"
 export * from "./components/chip"
+export * from "./components/jumper"
 
-export const supplierProps = z.object({
-  supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
-})
-export type SupplierProps = z.input<typeof supplierProps>
-
-export const resistorProps = commonComponentProps.extend({
-  resistance,
-})
-export const resistorPins = lrPins
-export type ResistorProps = z.input<typeof resistorProps>
-
-export const capacitorProps = commonComponentProps.extend({
-  capacitance,
-})
-export const capacitorPins = lrPolarPins
-export type CapacitorProps = z.input<typeof capacitorProps>
+export * from "./components/resistor"
+export * from "./components/capacitor"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,

@@ -1,3 +1,5 @@
-export const expectTypesMatch = <T1, T2>(
-  shouldBe: T1 extends T2 ? (T2 extends T1 ? true : false) : false,
+import type { TypeEqual } from "ts-expect"
+
+export const expectTypesMatch = <const T1, const T2>(
+  shouldBe: TypeEqual<T1, T2>,
 ): void => {}

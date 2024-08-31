@@ -2,22 +2,14 @@ import { z } from "zod"
 import { distance } from "@tscircuit/soup"
 import { commonComponentProps } from "lib/common/layout"
 import { schematicPortArrangement } from "lib/common/schematicPinDefinitions"
+import { schematicPinStyle } from "lib/common/schematicPinStyle"
 
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z.record(z.number().or(z.string()), z.string()).optional(),
 
   schPortArrangement: schematicPortArrangement.optional(),
-  schPinStyle: z
-    .record(
-      z.object({
-        leftMargin: distance.optional(),
-        rightMargin: distance.optional(),
-        topMargin: distance.optional(),
-        bottomMargin: distance.optional(),
-      }),
-    )
-    .optional(),
+  schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),
   schWidth: distance.optional(),
   schHeight: distance.optional(),

@@ -17,6 +17,7 @@ export interface JumperProps extends CommonComponentProps {
   schPinSpacing?: number | string
   schWidth?: number | string
   schHeight?: number | string
+  schDirection?: "left" | "right"
 }
 
 export const jumperProps = commonComponentProps.extend({
@@ -26,6 +27,7 @@ export const jumperProps = commonComponentProps.extend({
   schPinSpacing: distance.optional(),
   schWidth: distance.optional(),
   schHeight: distance.optional(),
+  schDirection: z.enum(["left", "right"]).optional(),
 })
 
 type InferredJumperProps = z.input<typeof jumperProps>

@@ -1,4 +1,46 @@
+import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+
+/**
+ * @deprecated Use SchematicPortArrangementWithPinCounts instead.
+ */
+export interface SchematicPortArrangementWithSizes {
+  leftSize?: number
+  topSize?: number
+  rightSize?: number
+  bottomSize?: number
+}
+
+/**
+ * Specifies the number of pins on each side of the schematic box component.
+ */
+export interface SchematicPortArrangementWithPinCounts {
+  leftPinCount?: number
+  topPinCount?: number
+  rightPinCount?: number
+  bottomPinCount?: number
+}
+
+export interface PinSideDefinition {
+  pins: number[]
+  direction:
+    | "top-to-bottom"
+    | "left-to-right"
+    | "bottom-to-top"
+    | "right-to-left"
+}
+
+export interface SchematicPortArrangementWithSides {
+  leftSide?: PinSideDefinition
+  topSide?: PinSideDefinition
+  rightSide?: PinSideDefinition
+  bottomSide?: PinSideDefinition
+}
+
+export type SchematicPortArrangement =
+  | SchematicPortArrangementWithSizes
+  | SchematicPortArrangementWithSides
+  | SchematicPortArrangementWithPinCounts
 
 export const explicitPinSideDefinition = z.object({
   pins: z.array(z.number()),
@@ -36,3 +78,8 @@ export const schematicPortArrangement = z
       bottomSide: explicitPinSideDefinition.optional(),
     }),
   )
+
+expectTypesMatch<
+  SchematicPortArrangement,
+  z.input<typeof schematicPortArrangement>
+>(true)

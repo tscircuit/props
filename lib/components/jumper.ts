@@ -9,6 +9,7 @@ import {
 } from "lib/common/schematicPinStyle"
 import { distance } from "@tscircuit/soup"
 import { expectTypesMatch } from "lib/typecheck"
+import { schematicPortArrangement } from "lib/common/schematicPinDefinitions"
 
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string
@@ -18,6 +19,7 @@ export interface JumperProps extends CommonComponentProps {
   schWidth?: number | string
   schHeight?: number | string
   schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
 }
 
 export const jumperProps = commonComponentProps.extend({
@@ -28,6 +30,7 @@ export const jumperProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
+  schPortArrangement: schematicPortArrangement.optional(),
 })
 
 type InferredJumperProps = z.input<typeof jumperProps>

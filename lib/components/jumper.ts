@@ -9,7 +9,10 @@ import {
 } from "lib/common/schematicPinStyle"
 import { distance } from "@tscircuit/soup"
 import { expectTypesMatch } from "lib/typecheck"
-import { schematicPortArrangement } from "lib/common/schematicPinDefinitions"
+import {
+  schematicPortArrangement,
+  type SchematicPortArrangement,
+} from "lib/common/schematicPinDefinitions"
 
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string

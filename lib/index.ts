@@ -50,7 +50,7 @@ export * from "./components/jumper"
 
 export * from "./components/resistor"
 export * from "./components/capacitor"
-
+export * from "./components/group"
 export const inductorProps = commonComponentProps.extend({
   inductance,
 })
@@ -206,14 +206,6 @@ export type FootprintProps = z.input<typeof footprintProps>
 
 export const componentProps = commonComponentProps
 export type ComponentProps = z.input<typeof componentProps>
-
-export const groupProps = commonLayoutProps.extend({
-  name: z.string().optional(),
-  layout: z.custom<LayoutBuilder>((v) => true).optional(),
-  children: z.any().optional(),
-  routingDisabled: z.boolean().optional(),
-})
-export type GroupProps = z.input<typeof groupProps>
 
 export const powerSourceProps = commonComponentProps.extend({
   voltage,

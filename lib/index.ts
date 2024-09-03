@@ -51,6 +51,7 @@ export * from "./components/jumper"
 export * from "./components/resistor"
 export * from "./components/capacitor"
 export * from "./components/group"
+export * from "./components/net"
 export const inductorProps = commonComponentProps.extend({
   inductance,
 })

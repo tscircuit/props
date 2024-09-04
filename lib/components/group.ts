@@ -3,19 +3,37 @@ import { commonLayoutProps, type CommonLayoutProps } from "lib/common/layout"
 import type { LayoutBuilder } from "@tscircuit/layout"
 import { expectTypesMatch } from "lib/typecheck"
 
-export interface GroupProps extends CommonLayoutProps {
+export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
-  layout?: LayoutBuilder
   children?: any
+}
+
+export interface SubcircuitGroupProps extends BaseGroupProps {
+  subcircuit: true
+  layout?: LayoutBuilder
   routingDisabled?: boolean
 }
 
-export const groupProps = commonLayoutProps.extend({
+export type GroupProps = SubcircuitGroupProps | BaseGroupProps
+
+export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),
-  layout: z.custom<LayoutBuilder>((v) => true).optional(),
   children: z.any().optional(),
+})
+
+export const subcircuitGroupProps = baseGroupProps.extend({
+  subcircuit: z.literal(true),
+  layout: z.custom<LayoutBuilder>((v) => true).optional(),
   routingDisabled: z.boolean().optional(),
 })
 
-export type InferredGroupProps = z.input<typeof groupProps>
+export const groupProps = z.union([baseGroupProps, subcircuitGroupProps])
+
+type InferredBaseGroupProps = z.input<typeof baseGroupProps>
+type InferredSubcircuitGroupProps = z.input<typeof subcircuitGroupProps>
+
+expectTypesMatch<BaseGroupProps, InferredBaseGroupProps>(true)
+expectTypesMatch<SubcircuitGroupProps, InferredSubcircuitGroupProps>(true)
+
+type InferredGroupProps = z.input<typeof groupProps>
 expectTypesMatch<GroupProps, InferredGroupProps>(true)

@@ -20,6 +20,6 @@
     "lib": ["es2022"]
   },
   // Include the necessary files for your project
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["lib/**/*.ts", "lib/**/*.tsx", "tests/**/*.ts", "tests/**/*.tsx"],
   "exclude": ["node_modules"]
 }

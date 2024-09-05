@@ -54,6 +54,7 @@ export * from "./components/group"
 export * from "./components/net"
 export * from "./components/constrainedlayout"
 export * from "./components/constraint"
+export * from "./components/smtpad"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,
@@ -117,21 +118,6 @@ export const traceProps = z
     }),
   )
 export type TraceProps = z.input<typeof traceProps>
-
-export const smtPadProps = z.union([
-  pcbLayoutProps.omit({ pcbRotation: true }).extend({
-    shape: z.literal("circle"),
-    radius: distance.optional(),
-    portHints: portHints.optional(),
-  }),
-  pcbLayoutProps.omit({ pcbRotation: true }).extend({
-    shape: z.literal("rect"),
-    width: distance.optional(),
-    height: distance.optional(),
-    portHints: portHints.optional(),
-  }),
-])
-export type SmtPadProps = z.input<typeof smtPadProps>
 
 export const platedHoleProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({

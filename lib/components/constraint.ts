@@ -5,69 +5,133 @@ import { z } from "zod"
 
 export type PcbXDistConstraint = {
   pcb?: true
-  type?: "xdist"
-  xdist: Distance
+  xDist: Distance
+
+  /**
+   * Selector for left component, e.g. ".U1" or ".R1", you can also specify the
+   * edge or center of the component e.g. ".R1 leftedge", ".R1 center"
+   */
   left: string
+
+  /**
+   * Selector for right component, e.g. ".U1" or ".R1", you can also specify the
+   * edge or center of the component e.g. ".R1 leftedge", ".R1 center"
+   */
   right: string
 
+  /**
+   * If true, the provided distance is the distance between the closest edges of
+   * the left and right components
+   */
   edgeToEdge?: true
-  centerToCenter?: true
 
-  fromLeftEdge?: true
-  fromLeftCenter?: true
-  toRightEdge?: true
-  toRightCenter?: true
+  /**
+   * If true, the provided distance is the distance between the centers of the
+   * left and right components
+   */
+  centerToCenter?: true
 }
 
 export type PcbYDistConstraint = {
   pcb?: true
-  type?: "ydist"
-  ydist: Distance
+  yDist: Distance
+
+  /**
+   * Selector for top component, e.g. ".U1" or ".R1", you can also specify the
+   * edge or center of the component e.g. ".R1 topedge", ".R1 center"
+   */
   top: string
+
+  /**
+   * Selector for bottom component, e.g. ".U1" or ".R1", you can also specify the
+   * edge or center of the component e.g. ".R1 bottomedge", ".R1 center"
+   */
   bottom: string
 
   edgeToEdge?: true
   centerToCenter?: true
-
-  fromTopEdge?: true
-  fromTopCenter?: true
-  toBottomEdge?: true
-  toBottomCenter?: true
 }
 
-export type ConstraintProps = PcbXDistConstraint | PcbYDistConstraint
+export type PcbSameYConstraint = {
+  pcb?: true
+  sameY?: true
+
+  /**
+   * Selector for components, e.g. [".U1", ".R1"], you can also specify the
+   * edge or center of the component e.g. [".R1 leftedge", ".U1 center"]
+   */
+  for: string[]
+}
+
+export type PcbSameXConstraint = {
+  pcb?: true
+  sameX?: true
+  /**
+   * Selector for components, e.g. [".U1", ".R1"], you can also specify the
+   * edge or center of the component e.g. [".R1 leftedge", ".U1 center"]
+   */
+  for: string[]
+}
+
+export type ConstraintProps =
+  | PcbXDistConstraint
+  | PcbYDistConstraint
+  | PcbSameYConstraint
+  | PcbSameXConstraint
+
+// -----------------------------------------------------------------------------
+// Zod
+// -----------------------------------------------------------------------------
+
+export const pcbXDistConstraintProps = z.object({
+  pcb: z.literal(true).optional(),
+  xDist: distance,
+  left: z.string(),
+  right: z.string(),
+
+  edgeToEdge: z.literal(true).optional(),
+  centerToCenter: z.literal(true).optional(),
+})
+expectTypesMatch<PcbXDistConstraint, z.input<typeof pcbXDistConstraintProps>>(
+  true,
+)
+
+export const pcbYDistConstraintProps = z.object({
+  pcb: z.literal(true).optional(),
+  yDist: distance,
+  top: z.string(),
+  bottom: z.string(),
+
+  edgeToEdge: z.literal(true).optional(),
+  centerToCenter: z.literal(true).optional(),
+})
+expectTypesMatch<PcbYDistConstraint, z.input<typeof pcbYDistConstraintProps>>(
+  true,
+)
+
+export const pcbSameYConstraintProps = z.object({
+  pcb: z.literal(true).optional(),
+  sameY: z.literal(true).optional(),
+  for: z.array(z.string()),
+})
+expectTypesMatch<PcbSameYConstraint, z.input<typeof pcbSameYConstraintProps>>(
+  true,
+)
+
+export const pcbSameXConstraintProps = z.object({
+  pcb: z.literal(true).optional(),
+  sameX: z.literal(true).optional(),
+  for: z.array(z.string()),
+})
+expectTypesMatch<PcbSameXConstraint, z.input<typeof pcbSameXConstraintProps>>(
+  true,
+)
 
 export const constraintProps = z.union([
-  z.object({
-    pcb: z.literal(true).optional(),
-    type: z.literal("xdist").optional(),
-    xdist: distance,
-    left: z.string(),
-    right: z.string(),
-
-    edgeToEdge: z.literal(true).optional(),
-    centerToCenter: z.literal(true).optional(),
-
-    fromLeftEdge: z.literal(true).optional(),
-    fromLeftCenter: z.literal(true).optional(),
-    toRightEdge: z.literal(true).optional(),
-    toRightCenter: z.literal(true).optional(),
-  }),
-  z.object({
-    pcb: z.literal(true).optional(),
-    type: z.literal("ydist").optional(),
-    ydist: distance,
-    top: z.string(),
-    bottom: z.string(),
-
-    edgeToEdge: z.literal(true).optional(),
-    centerToCenter: z.literal(true).optional(),
-
-    fromTopEdge: z.literal(true).optional(),
-    fromTopCenter: z.literal(true).optional(),
-    toBottomEdge: z.literal(true).optional(),
-    toBottomCenter: z.literal(true).optional(),
-  }),
+  pcbXDistConstraintProps,
+  pcbYDistConstraintProps,
+  pcbSameYConstraintProps,
+  pcbSameXConstraintProps,
 ])
 
 expectTypesMatch<ConstraintProps, z.input<typeof constraintProps>>(true)

@@ -199,25 +199,6 @@ export const schematicPathProps = z.object({
 })
 export type SchematicPathProps = z.input<typeof schematicPathProps>
 
-export const constraintProps = z.union([
-  z.object({
-    type: z.literal("xdist"),
-    dist: distance,
-    left: z.string(),
-    right: z.string(),
-  }),
-  z.object({
-    type: z.literal("ydist"),
-    dist: distance,
-    top: z.string(),
-    bottom: z.string(),
-  }),
-])
-export type ConstraintProps = z.input<typeof constraintProps>
-
-export const constrainedLayoutProps = z.object({})
-export type ConstrainedLayoutProps = z.input<typeof constrainedLayoutProps>
-
 export const footprintProps = z.object({})
 export type FootprintProps = z.input<typeof footprintProps>
 

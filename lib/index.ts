@@ -56,6 +56,7 @@ export * from "./components/net"
 export * from "./components/constrainedlayout"
 export * from "./components/constraint"
 export * from "./components/smtpad"
+export * from "./components/hole"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,
@@ -150,11 +151,6 @@ export const pcbKeepoutProps = z.union([
   }),
 ])
 export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>
-
-export const holeProps = pcbLayoutProps.omit({ pcbRotation: true }).extend({
-  holeDiameter: distance,
-})
-export type HoleProps = z.input<typeof holeProps>
 
 export const schematicBoxProps = z.object({
   schX: distance,

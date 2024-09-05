@@ -123,12 +123,14 @@ export type TraceProps = z.input<typeof traceProps>
 
 export const platedHoleProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    name: z.string().optional(),
     shape: z.literal("circle"),
     holeDiameter: distance,
     outerDiameter: distance,
     portHints: portHints.optional(),
   }),
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    name: z.string().optional(),
     shape: z.literal("oval"),
     outerWidth: distance,
     outerHeight: distance,

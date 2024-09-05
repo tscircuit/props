@@ -1,9 +1,10 @@
-import type { z } from "zod"
+import { z } from "zod"
 import { distance, type Distance } from "lib/common/distance"
 import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 
 export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   diameter?: Distance
   radius?: Distance
 }
@@ -11,6 +12,7 @@ export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 export const holeProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     diameter: distance.optional(),
     radius: distance.optional(),
   })

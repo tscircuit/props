@@ -148,6 +148,19 @@ export const platedHoleProps = z.union([
 ])
 export type PlatedHoleProps = z.input<typeof platedHoleProps>
 
+export const pcbKeepoutProps = z.union([
+  pcbLayoutProps.omit({ pcbRotation: true }).extend({
+    shape: z.literal("circle"),
+    radius: distance,
+  }),
+  pcbLayoutProps.extend({
+    shape: z.literal("rect"),
+    width: distance,
+    height: distance,
+  }),
+])
+export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>
+
 export const holeProps = pcbLayoutProps.omit({ pcbRotation: true }).extend({
   holeDiameter: distance,
 })

@@ -23,8 +23,8 @@ import { footprintProp, type Footprint } from "./footprintProp"
 import { expectTypesMatch } from "lib/typecheck"
 
 export interface PcbLayoutProps {
-  pcbX: string | number
-  pcbY: string | number
+  pcbX?: string | number
+  pcbY?: string | number
   pcbRotation?: string | number
   layer?: LayerRefInput
 }
@@ -43,8 +43,8 @@ export interface CommonLayoutProps {
 }
 
 export const pcbLayoutProps = z.object({
-  pcbX: distance,
-  pcbY: distance,
+  pcbX: distance.optional(),
+  pcbY: distance.optional(),
   pcbRotation: rotation.optional(),
   layer: layer_ref.optional(),
 })

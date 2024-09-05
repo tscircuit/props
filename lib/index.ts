@@ -156,7 +156,7 @@ export const pcbKeepoutProps = z.union([
   pcbLayoutProps.extend({
     shape: z.literal("rect"),
     width: distance,
-    height: distance
+    height: distance,
   }),
 ])
 export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>

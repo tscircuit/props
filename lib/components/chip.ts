@@ -1,13 +1,33 @@
 import { z } from "zod"
 import { distance } from "@tscircuit/soup"
-import { commonComponentProps } from "lib/common/layout"
-import { schematicPortArrangement } from "lib/common/schematicPinDefinitions"
-import { schematicPinStyle } from "lib/common/schematicPinStyle"
+import {
+  commonComponentProps,
+  type CommonComponentProps,
+} from "lib/common/layout"
+import {
+  schematicPortArrangement,
+  type SchematicPortArrangement,
+} from "lib/common/schematicPinDefinitions"
+import {
+  schematicPinStyle,
+  type SchematicPinStyle,
+} from "lib/common/schematicPinStyle"
+import type { Distance } from "lib/common/distance"
+import { expectTypesMatch } from "lib/typecheck"
+
+export interface ChipProps extends CommonComponentProps {
+  manufacturerPartNumber?: string
+  pinLabels?: Record<number | string, string>
+  schPortArrangement?: SchematicPortArrangement
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: Distance
+  schWidth?: Distance
+  schHeight?: Distance
+}
 
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z.record(z.number().or(z.string()), z.string()).optional(),
-
   schPortArrangement: schematicPortArrangement.optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),
@@ -15,16 +35,10 @@ export const chipProps = commonComponentProps.extend({
   schHeight: distance.optional(),
 })
 
-export type SchematicPinStyle = {
-  leftMargin?: number | string
-  rightMargin?: number | string
-  topMargin?: number | string
-  bottomMargin?: number | string
-}
-export type SchematicPinStyles = Record<string, SchematicPinStyle>
-
 /**
  * @deprecated Use ChipProps instead.
  */
 export const bugProps = chipProps
-export type ChipProps = z.input<typeof chipProps>
+export type InferredChipProps = z.input<typeof chipProps>
+
+expectTypesMatch<InferredChipProps, ChipProps>(true)

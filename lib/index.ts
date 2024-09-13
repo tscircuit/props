@@ -292,6 +292,7 @@ export const fabricationNoteTextProps = pcbLayoutProps.extend({
     .default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
+  color: z.string().optional(),
 })
 export type FabricationNoteTextProps = z.input<typeof fabricationNoteTextProps>
 
@@ -300,5 +301,6 @@ export const fabricationNotePathProps = pcbLayoutProps
   .extend({
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),
+    color: z.string().optional(),
   })
 export type FabricationNotePathProps = z.input<typeof fabricationNotePathProps>

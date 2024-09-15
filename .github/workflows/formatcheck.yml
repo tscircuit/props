@@ -1,25 +1,26 @@
+# Created using @tscircuit/plop (npm install -g @tscircuit/plop)
 name: Format Check
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   format-check:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '22'
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: bun install
 
-    - name: Run format check
-      run: npm run format:check
+      - name: Run format check
+        run: bun run format:check

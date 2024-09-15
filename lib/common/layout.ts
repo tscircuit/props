@@ -82,6 +82,7 @@ export const supplierProps = z.object({
 expectTypesMatch<SupplierProps, z.input<typeof supplierProps>>(true)
 
 export interface CommonComponentProps extends CommonLayoutProps {
+  key?: any
   name: string
   supplierPartNumbers?: SupplierProps["supplierPartNumbers"]
   cadModel?: CadModelProp

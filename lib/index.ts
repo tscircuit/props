@@ -57,6 +57,7 @@ export * from "./components/constrainedlayout"
 export * from "./components/constraint"
 export * from "./components/smtpad"
 export * from "./components/hole"
+export * from "./components/trace"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,
@@ -95,31 +96,6 @@ export const netAliasProps = commonLayoutProps.extend({
   net: z.string().optional(),
 })
 export type NetAliasProps = z.input<typeof netAliasProps>
-
-export const portRef = z.union([
-  z.string(),
-  z.custom<{ getPortSelector: () => string }>((v) =>
-    Boolean(v.getPortSelector),
-  ),
-])
-
-export const traceProps = z
-  .object({
-    path: z.array(portRef),
-    thickness: distance.optional(),
-    schematicRouteHints: z.array(point).optional(),
-    pcbRouteHints: z.array(route_hint_point).optional(),
-  })
-  .or(
-    z.object({
-      from: portRef,
-      to: portRef,
-      thickness: distance.optional(),
-      schematicRouteHints: z.array(point).optional(),
-      pcbRouteHints: z.array(route_hint_point).optional(),
-    }),
-  )
-export type TraceProps = z.input<typeof traceProps>
 
 export const platedHoleProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({

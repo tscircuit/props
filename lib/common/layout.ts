@@ -93,6 +93,7 @@ export interface CommonComponentProps extends CommonLayoutProps {
 export const commonComponentProps = commonLayoutProps
   .merge(supplierProps)
   .extend({
+    key: z.any().optional(),
     name: z.string(),
     cadModel: cadModelProp.optional(),
     children: z.any().optional(),

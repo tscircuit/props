@@ -2,6 +2,8 @@ import { z } from "zod"
 import { distance } from "@tscircuit/soup"
 import { point, type Point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
+import type { SubcircuitGroupProps } from "./group"
+import type { Distance } from "lib/common/distance"
 
 export interface BoardProps {
   width?: number | string
@@ -12,6 +14,7 @@ export interface BoardProps {
   layout?: any
   routingDisabled?: boolean
   children?: any
+  defaultTraceWidth?: Distance
 }
 
 export const boardProps = z.object({
@@ -23,6 +26,7 @@ export const boardProps = z.object({
   layout: z.any().optional(),
   routingDisabled: z.boolean().optional(),
   children: z.any(),
+  defaultTraceWidth: distance.optional(),
 })
 
 expectTypesMatch<BoardProps, z.input<typeof boardProps>>(true)

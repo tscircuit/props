@@ -1,7 +1,9 @@
 import { z } from "zod"
 import { commonLayoutProps, type CommonLayoutProps } from "lib/common/layout"
+import { length } from "@tscircuit/soup"
 import type { LayoutBuilder } from "@tscircuit/layout"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Distance } from "lib/common/distance"
 
 export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
@@ -12,6 +14,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   subcircuit: true
   layout?: LayoutBuilder
   routingDisabled?: boolean
+  defaultTraceWidth?: Distance
 }
 
 export type GroupProps = SubcircuitGroupProps | BaseGroupProps
@@ -25,6 +28,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   subcircuit: z.literal(true),
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
   routingDisabled: z.boolean().optional(),
+  defaultTraceWidth: length.optional(),
 })
 
 export const groupProps = z.union([baseGroupProps, subcircuitGroupProps])

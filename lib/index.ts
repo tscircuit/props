@@ -44,6 +44,7 @@ export * from "./common/portHints"
 export * from "./common/footprintProp"
 export * from "./common/schematicPinDefinitions"
 export * from "./common/schematicPinStyle"
+export * from "./common/cadModel"
 
 export * from "./components/board"
 export * from "./components/chip"

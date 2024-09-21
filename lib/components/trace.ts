@@ -11,7 +11,6 @@ export const portRef = z.union([
 
 const baseTraceProps = z.object({
   key: z.string().optional(),
-  path: z.array(portRef),
   thickness: distance.optional(),
   schematicRouteHints: z.array(point).optional(),
   pcbRouteHints: z.array(route_hint_point).optional(),

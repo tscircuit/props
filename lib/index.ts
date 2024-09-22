@@ -59,6 +59,7 @@ export * from "./components/constraint"
 export * from "./components/smtpad"
 export * from "./components/hole"
 export * from "./components/trace"
+export * from "./components/footprint"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,
@@ -160,9 +161,6 @@ export const schematicPathProps = z.object({
   fillColor: z.enum(["red", "blue"]).optional(),
 })
 export type SchematicPathProps = z.input<typeof schematicPathProps>
-
-export const footprintProps = z.object({})
-export type FootprintProps = z.input<typeof footprintProps>
 
 export const componentProps = commonComponentProps
 export type ComponentProps = z.input<typeof componentProps>

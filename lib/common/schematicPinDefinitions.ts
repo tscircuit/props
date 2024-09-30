@@ -37,10 +37,10 @@ export interface SchematicPortArrangementWithSides {
   bottomSide?: PinSideDefinition
 }
 
-export type SchematicPortArrangement =
-  | SchematicPortArrangementWithSizes
-  | SchematicPortArrangementWithSides
-  | SchematicPortArrangementWithPinCounts
+export interface SchematicPortArrangement
+  extends SchematicPortArrangementWithSizes,
+    SchematicPortArrangementWithSides,
+    SchematicPortArrangementWithPinCounts {}
 
 export const explicitPinSideDefinition = z.object({
   pins: z.array(z.number()),
@@ -52,32 +52,20 @@ export const explicitPinSideDefinition = z.object({
   ]),
 })
 
-export const schematicPortArrangement = z
-  .object({
-    leftSize: z.number().optional().describe("@deprecated, use leftPinCount"),
-    topSize: z.number().optional().describe("@deprecated, use topPinCount"),
-    rightSize: z.number().optional().describe("@deprecated, use rightPinCount"),
-    bottomSize: z
-      .number()
-      .optional()
-      .describe("@deprecated, use bottomPinCount"),
-  })
-  .or(
-    z.object({
-      leftPinCount: z.number().optional(),
-      rightPinCount: z.number().optional(),
-      topPinCount: z.number().optional(),
-      bottomPinCount: z.number().optional(),
-    }),
-  )
-  .or(
-    z.object({
-      leftSide: explicitPinSideDefinition.optional(),
-      rightSide: explicitPinSideDefinition.optional(),
-      topSide: explicitPinSideDefinition.optional(),
-      bottomSide: explicitPinSideDefinition.optional(),
-    }),
-  )
+export const schematicPortArrangement = z.object({
+  leftSize: z.number().optional().describe("@deprecated, use leftPinCount"),
+  topSize: z.number().optional().describe("@deprecated, use topPinCount"),
+  rightSize: z.number().optional().describe("@deprecated, use rightPinCount"),
+  bottomSize: z.number().optional().describe("@deprecated, use bottomPinCount"),
+  leftPinCount: z.number().optional(),
+  rightPinCount: z.number().optional(),
+  topPinCount: z.number().optional(),
+  bottomPinCount: z.number().optional(),
+  leftSide: explicitPinSideDefinition.optional(),
+  rightSide: explicitPinSideDefinition.optional(),
+  topSide: explicitPinSideDefinition.optional(),
+  bottomSide: explicitPinSideDefinition.optional(),
+})
 
 expectTypesMatch<
   SchematicPortArrangement,

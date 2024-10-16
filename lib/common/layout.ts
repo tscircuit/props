@@ -88,6 +88,8 @@ export interface CommonComponentProps extends CommonLayoutProps {
   cadModel?: CadModelProp
   children?: any
   symbolName?: string
+  width?: string | number
+  height?: string | number
 }
 
 export const commonComponentProps = commonLayoutProps

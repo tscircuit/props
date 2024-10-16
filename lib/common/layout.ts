@@ -100,6 +100,8 @@ export const commonComponentProps = commonLayoutProps
     cadModel: cadModelProp.optional(),
     children: z.any().optional(),
     symbolName: z.string().optional(),
+    width: distance.optional(),
+    height: distance.optional(),
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

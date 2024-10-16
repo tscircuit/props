@@ -88,8 +88,10 @@ export interface CommonComponentProps extends CommonLayoutProps {
   cadModel?: CadModelProp
   children?: any
   symbolName?: string
-  width?: string | number
-  height?: string | number
+  schWidth?: string | number
+  schHeight?: string | number
+  pcbWidth?: string | number
+  pcbHeight?: string | number
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -100,8 +102,10 @@ export const commonComponentProps = commonLayoutProps
     cadModel: cadModelProp.optional(),
     children: z.any().optional(),
     symbolName: z.string().optional(),
-    width: distance.optional(),
-    height: distance.optional(),
+    schWidth: distance.optional(),
+    schHeight: distance.optional(),
+    pcbWidth: distance.optional(),
+    pcbHeight: distance.optional(),
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

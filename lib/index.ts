@@ -61,6 +61,7 @@ export * from "./components/solderpaste"
 export * from "./components/hole"
 export * from "./components/trace"
 export * from "./components/footprint"
+export * from "./components/battery"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,

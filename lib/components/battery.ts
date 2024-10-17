@@ -7,6 +7,7 @@ import {
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 
+/** @deprecated use battery_capacity from circuit-json when circuit-json is updated */
 const capacity = z
   .number()
   .or(z.string().endsWith("mAh"))

@@ -15,6 +15,13 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   layout?: LayoutBuilder
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
+
+  /**
+   * If true, we'll automatically layout the schematic for this group. Must be
+   * a subcircuit (currently). This is eventually going to be replaced with more
+   * sophisticated layout options/modes and will be enabled by default.
+   */
+  schAutoLayoutEnabled?: boolean
 }
 
 export type GroupProps = SubcircuitGroupProps | BaseGroupProps
@@ -27,6 +34,7 @@ export const baseGroupProps = commonLayoutProps.extend({
 export const subcircuitGroupProps = baseGroupProps.extend({
   subcircuit: z.literal(true),
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
+  schAutoLayoutEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
 })

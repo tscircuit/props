@@ -15,6 +15,12 @@ export interface BoardProps {
   routingDisabled?: boolean
   children?: any
   defaultTraceWidth?: Distance
+  /**
+   * If true, we'll automatically layout the schematic for this group. Must be
+   * a subcircuit (currently). This is eventually going to be replaced with more
+   * sophisticated layout options/modes and will be enabled by default.
+   */
+  schAutoLayoutEnabled?: boolean
 }
 
 export const boardProps = z.object({
@@ -27,6 +33,7 @@ export const boardProps = z.object({
   routingDisabled: z.boolean().optional(),
   children: z.any(),
   defaultTraceWidth: distance.optional(),
+  schAutoLayoutEnabled: z.boolean().optional(),
 })
 
 expectTypesMatch<BoardProps, z.input<typeof boardProps>>(true)

@@ -102,7 +102,6 @@ export const netAliasProps = commonLayoutProps.extend({
 })
 export type NetAliasProps = z.input<typeof netAliasProps>
 
-
 export const pcbKeepoutProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true }).extend({
     shape: z.literal("circle"),

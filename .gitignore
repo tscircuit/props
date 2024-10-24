@@ -3,3 +3,4 @@ dist
 .vscode
 .aider*
 package-lock.json
+.env

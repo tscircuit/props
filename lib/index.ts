@@ -49,6 +49,7 @@ export * from "./common/cadModel"
 export * from "./components/board"
 export * from "./components/chip"
 export * from "./components/jumper"
+export * from "./components/platedhole"
 
 export * from "./components/resistor"
 export * from "./components/capacitor"
@@ -101,25 +102,6 @@ export const netAliasProps = commonLayoutProps.extend({
 })
 export type NetAliasProps = z.input<typeof netAliasProps>
 
-export const platedHoleProps = z.union([
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    shape: z.literal("circle"),
-    holeDiameter: distance,
-    outerDiameter: distance,
-    portHints: portHints.optional(),
-  }),
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    shape: z.literal("oval"),
-    outerWidth: distance,
-    outerHeight: distance,
-    innerWidth: distance,
-    innerHeight: distance,
-    portHints: portHints.optional(),
-  }),
-])
-export type PlatedHoleProps = z.input<typeof platedHoleProps>
 
 export const pcbKeepoutProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true }).extend({

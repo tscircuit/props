@@ -27,7 +27,7 @@ export interface OvalPlatedHoleProps
 
 export type PlatedHoleProps = CirclePlatedHoleProps | OvalPlatedHoleProps
 
-export const platedHoleProps = z.union([
+export const platedHoleProps = z.discriminatedUnion("shape", [
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
     name: z.string().optional(),
     shape: z.literal("circle"),

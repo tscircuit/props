@@ -60,6 +60,7 @@ const allInterfaces = files.flatMap((file) => {
 const template = `# @tscircuit/props Overview
 
 > Generated at ${new Date().toISOString()}
+> Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
 Each interface has a corresponding zod validator that can be imported from the package.

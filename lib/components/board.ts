@@ -1,9 +1,9 @@
-import { z } from "zod"
+import type { ManualEditFile } from "@tscircuit/layout"
 import { distance } from "@tscircuit/soup"
-import { point, type Point } from "lib/common/point"
-import { expectTypesMatch } from "lib/typecheck"
-import type { SubcircuitGroupProps } from "./group"
 import type { Distance } from "lib/common/distance"
+import { type Point, point } from "lib/common/point"
+import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export interface BoardProps {
   width?: number | string
@@ -12,6 +12,7 @@ export interface BoardProps {
   pcbX?: number | string
   pcbY?: number | string
   layout?: any
+  manualEdits?: ManualEditFile
   routingDisabled?: boolean
   children?: any
   defaultTraceWidth?: Distance
@@ -30,6 +31,7 @@ export const boardProps = z.object({
   pcbX: distance.optional().default(0),
   pcbY: distance.optional().default(0),
   layout: z.any().optional(),
+  manualEdits: z.custom<ManualEditFile>((v) => true).optional(),
   routingDisabled: z.boolean().optional(),
   children: z.any(),
   defaultTraceWidth: distance.optional(),

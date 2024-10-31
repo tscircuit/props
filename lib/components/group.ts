@@ -1,9 +1,9 @@
-import { z } from "zod"
-import { commonLayoutProps, type CommonLayoutProps } from "lib/common/layout"
+import type { LayoutBuilder, ManualEditFile } from "@tscircuit/layout"
 import { length } from "@tscircuit/soup"
-import type { LayoutBuilder } from "@tscircuit/layout"
-import { expectTypesMatch } from "lib/typecheck"
 import type { Distance } from "lib/common/distance"
+import { type CommonLayoutProps, commonLayoutProps } from "lib/common/layout"
+import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
@@ -13,6 +13,7 @@ export interface BaseGroupProps extends CommonLayoutProps {
 export interface SubcircuitGroupProps extends BaseGroupProps {
   subcircuit: true
   layout?: LayoutBuilder
+  manualEdits?: ManualEditFile
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
 
@@ -34,6 +35,7 @@ export const baseGroupProps = commonLayoutProps.extend({
 export const subcircuitGroupProps = baseGroupProps.extend({
   subcircuit: z.literal(true),
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
+  manualEdits: z.custom<ManualEditFile>((v) => true).optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),

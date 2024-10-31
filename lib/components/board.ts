@@ -1,4 +1,4 @@
-import type { ManualEditFile } from "@tscircuit/layout"
+import type { LayoutBuilder, ManualEditFile } from "@tscircuit/layout"
 import { distance } from "@tscircuit/soup"
 import type { Distance } from "lib/common/distance"
 import { type Point, point } from "lib/common/point"
@@ -11,7 +11,7 @@ export interface BoardProps {
   outline?: Point[]
   pcbX?: number | string
   pcbY?: number | string
-  layout?: any
+  layout?: LayoutBuilder
   manualEdits?: ManualEditFile
   routingDisabled?: boolean
   children?: any
@@ -30,7 +30,7 @@ export const boardProps = z.object({
   outline: z.array(point).optional(),
   pcbX: distance.optional().default(0),
   pcbY: distance.optional().default(0),
-  layout: z.any().optional(),
+  layout: z.custom<LayoutBuilder>((v) => true).optional(),
   manualEdits: z.custom<ManualEditFile>((v) => true).optional(),
   routingDisabled: z.boolean().optional(),
   children: z.any(),

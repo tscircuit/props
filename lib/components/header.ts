@@ -6,7 +6,7 @@ import {
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 
-export interface HeaderProps extends CommonComponentProps {
+export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Number of pins in the header
    */
@@ -43,7 +43,7 @@ export interface HeaderProps extends CommonComponentProps {
   platedDiameter?: number | string
 }
 
-export const headerProps = commonComponentProps.extend({
+export const pinHeaderProps = commonComponentProps.extend({
   pinCount: z.number(),
   pitch: distance.optional(),
   gender: z.enum(["male", "female"]).optional(),
@@ -53,5 +53,5 @@ export const headerProps = commonComponentProps.extend({
   platedDiameter: distance.optional(),
 })
 
-type InferredHeaderProps = z.input<typeof headerProps>
-expectTypesMatch<HeaderProps, InferredHeaderProps>(true)
+type InferredPinHeaderProps = z.input<typeof pinHeaderProps>
+expectTypesMatch<PinHeaderProps, InferredPinHeaderProps>(true)

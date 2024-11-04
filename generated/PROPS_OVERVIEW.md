@@ -1,6 +1,7 @@
 # @tscircuit/props Overview
 
 > Generated at 2024-10-24T23:36:55.414Z
+> Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
 Each interface has a corresponding zod validator that can be imported from the package.
@@ -28,7 +29,6 @@ export interface JumperProps extends CommonComponentProps {
   schPortArrangement?: SchematicPortArrangement
 }
 
-
 export interface ResistorProps extends CommonComponentProps {
   resistance: number | string
   pullupFor?: string
@@ -36,7 +36,6 @@ export interface ResistorProps extends CommonComponentProps {
   pulldownFor?: string
   pulldownTo?: string
 }
-
 
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
@@ -46,7 +45,6 @@ export interface CirclePlatedHoleProps
   outerDiameter: number | string
   portHints?: PortHints
 }
-
 
 export interface OvalPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
@@ -59,7 +57,6 @@ export interface OvalPlatedHoleProps
   portHints?: PortHints
 }
 
-
 export interface PillPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
@@ -71,12 +68,10 @@ export interface PillPlatedHoleProps
   portHints?: PortHints
 }
 
-
 export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
   children?: any
 }
-
 
 export interface SubcircuitGroupProps extends BaseGroupProps {
   subcircuit: true
@@ -92,7 +87,6 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   schAutoLayoutEnabled?: boolean
 }
 
-
 export interface RectSolderPasteProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "rect"
@@ -100,13 +94,11 @@ export interface RectSolderPasteProps
   height: Distance
 }
 
-
 export interface CircleSolderPasteProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "circle"
   radius: Distance
 }
-
 
 export interface CapacitorProps extends CommonComponentProps {
   capacitance: number | string
@@ -118,7 +110,6 @@ export interface CapacitorProps extends CommonComponentProps {
   bypassTo?: string
 }
 
-
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "rect"
   width: Distance
@@ -126,18 +117,15 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
 }
 
-
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "circle"
   radius: Distance
   portHints?: PortHints
 }
 
-
 export interface NetProps {
   name: string
 }
-
 
 export interface ChipProps extends CommonComponentProps {
   manufacturerPartNumber?: string
@@ -149,11 +137,9 @@ export interface ChipProps extends CommonComponentProps {
   schHeight?: Distance
 }
 
-
 export interface BatteryProps extends CommonComponentProps {
   capacity?: number | string
 }
-
 
 export interface FootprintProps {
   /**
@@ -169,20 +155,17 @@ export interface FootprintProps {
   originalLayer?: LayerRef
 }
 
-
 export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
   diameter?: Distance
   radius?: Distance
 }
 
-
 export interface ConstrainedLayoutProps {
   name?: string
   pcbOnly?: boolean
   schOnly?: boolean
 }
-
 
 export interface BoardProps {
   width?: number | string
@@ -202,7 +185,6 @@ export interface BoardProps {
   schAutoLayoutEnabled?: boolean
 }
 
-
 export interface CadModelBase {
   rotationOffset?:
     | number
@@ -215,22 +197,18 @@ export interface CadModelBase {
   size?: { x: number | string; y: number | string; z: number | string }
 }
 
-
 export interface CadModelStl extends CadModelBase {
   stlUrl: string
 }
-
 
 export interface CadModelObj extends CadModelBase {
   objUrl: string
   mtlUrl?: string
 }
 
-
 export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
 }
-
 
 export interface PcbLayoutProps {
   pcbX?: string | number
@@ -238,7 +216,6 @@ export interface PcbLayoutProps {
   pcbRotation?: string | number
   layer?: LayerRefInput
 }
-
 
 export interface CommonLayoutProps {
   pcbX?: string | number
@@ -253,11 +230,9 @@ export interface CommonLayoutProps {
   footprint?: Footprint
 }
 
-
 export interface SupplierProps {
   supplierPartNumbers?: { [k in SupplierName]?: string[] }
 }
-
 
 export interface CommonComponentProps extends CommonLayoutProps {
   key?: any
@@ -268,7 +243,6 @@ export interface CommonComponentProps extends CommonLayoutProps {
   symbolName?: string
 }
 
-
 export interface SchematicPortArrangementWithSizes {
   leftSize?: number
   topSize?: number
@@ -276,14 +250,12 @@ export interface SchematicPortArrangementWithSizes {
   bottomSize?: number
 }
 
-
 export interface SchematicPortArrangementWithPinCounts {
   leftPinCount?: number
   topPinCount?: number
   rightPinCount?: number
   bottomPinCount?: number
 }
-
 
 export interface PinSideDefinition {
   pins: number[]
@@ -294,12 +266,10 @@ export interface PinSideDefinition {
     | "right-to-left"
 }
 
-
 export interface SchematicPortArrangementWithSides {
   leftSide?: PinSideDefinition
   topSide?: PinSideDefinition
   rightSide?: PinSideDefinition
   bottomSide?: PinSideDefinition
 }
-
 ```

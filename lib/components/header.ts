@@ -31,6 +31,16 @@ export interface HeaderProps extends CommonComponentProps {
    * Whether the header has two rows of pins
    */
   doubleRow?: boolean
+
+  /**
+   * Diameter of the through-hole for each pin
+   */
+  holeDiameter?: number | string
+
+  /**
+   * Diameter of the plated area around each hole
+   */
+  platedDiameter?: number | string
 }
 
 export const headerProps = commonComponentProps.extend({
@@ -39,6 +49,8 @@ export const headerProps = commonComponentProps.extend({
   gender: z.enum(["male", "female"]).optional(),
   showSilkscreenPinLabels: z.boolean().optional(),
   doubleRow: z.boolean().optional(),
+  holeDiameter: distance.optional(),
+  platedDiameter: distance.optional(),
 })
 
 type InferredHeaderProps = z.input<typeof headerProps>

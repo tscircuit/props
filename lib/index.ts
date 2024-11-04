@@ -63,7 +63,7 @@ export * from "./components/hole"
 export * from "./components/trace"
 export * from "./components/footprint"
 export * from "./components/battery"
-export * from "./components/pinheader"
+export * from "./components/pin-header"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,

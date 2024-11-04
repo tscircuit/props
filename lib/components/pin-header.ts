@@ -41,6 +41,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Diameter of the plated area around each hole
    */
   platedDiameter?: number | string
+
+  /**
+   * Labels for each pin
+   */
+  pinLabels?: string[]
 }
 
 export const pinHeaderProps = commonComponentProps.extend({
@@ -51,6 +56,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   doubleRow: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
+  pinLabels: z.array(z.string()).optional(),
 })
 
 type InferredPinHeaderProps = z.input<typeof pinHeaderProps>

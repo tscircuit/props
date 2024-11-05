@@ -88,3 +88,17 @@ if (!fs.existsSync(generatedDir)) {
 }
 
 fs.writeFileSync(path.join(generatedDir, "PROPS_OVERVIEW.md"), template)
+import { expect, test } from "bun:test"
+import { pinHeaderProps } from "lib/components/pin-header"
+
+test("should parse pin header props with schFacingDirection", () => {
+  const rawProps = {
+    name: "J1",
+    pinCount: 4,
+    pitch: "2.54mm",
+    schFacingDirection: "right"
+  }
+
+  const parsedProps = pinHeaderProps.parse(rawProps)
+  expect(parsedProps.schFacingDirection).toBe("right")
+})

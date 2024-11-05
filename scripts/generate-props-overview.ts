@@ -96,7 +96,7 @@ test("should parse pin header props with schFacingDirection", () => {
     name: "J1",
     pinCount: 4,
     pitch: "2.54mm",
-    schFacingDirection: "right"
+    schFacingDirection: "right",
   }
 
   const parsedProps = pinHeaderProps.parse(rawProps)

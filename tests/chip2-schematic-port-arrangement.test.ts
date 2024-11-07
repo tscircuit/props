@@ -67,6 +67,7 @@ test("should parse chip props (string)", () => {
   const parsedProps = chipProps.parse(rawProps)
 
   expect((parsedProps.schPortArrangement as any)?.topSide.pins).toEqual([
-    "A4", "B18",
+    "A4",
+    "B18",
   ])
 })

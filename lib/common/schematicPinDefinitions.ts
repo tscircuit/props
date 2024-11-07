@@ -22,7 +22,7 @@ export interface SchematicPortArrangementWithPinCounts {
 }
 
 export interface PinSideDefinition {
-  pins: number[] | string[]
+  pins: number[]
   direction:
     | "top-to-bottom"
     | "left-to-right"
@@ -43,7 +43,7 @@ export interface SchematicPortArrangement
     SchematicPortArrangementWithPinCounts {}
 
 export const explicitPinSideDefinition = z.object({
-  pins: z.array(z.number()).or(z.array(z.string())),
+  pins: z.array(z.number()),
   direction: z.union([
     z.literal("top-to-bottom"),
     z.literal("left-to-right"),

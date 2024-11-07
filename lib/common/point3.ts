@@ -1,4 +1,4 @@
-import { distance } from "@tscircuit/soup"
+import { distance } from "circuit-json"
 import { z } from "zod"
 
 export const point3 = z.object({

@@ -1,6 +1,6 @@
-import { z } from "zod"
-import { distance } from "@tscircuit/soup"
+import { distance } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export type SchematicPinStyle = Record<
   string,

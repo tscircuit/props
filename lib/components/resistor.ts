@@ -1,11 +1,11 @@
-import { z } from "zod"
-import { resistance } from "@tscircuit/soup"
+import { resistance } from "circuit-json"
 import {
+  type CommonComponentProps,
   commonComponentProps,
   lrPins,
-  type CommonComponentProps,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export interface ResistorProps extends CommonComponentProps {
   resistance: number | string

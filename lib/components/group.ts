@@ -1,5 +1,5 @@
 import type { LayoutBuilder, ManualEditFile } from "@tscircuit/layout"
-import { length } from "@tscircuit/soup"
+import { length } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import { type CommonLayoutProps, commonLayoutProps } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"

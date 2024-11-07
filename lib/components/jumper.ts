@@ -1,18 +1,18 @@
-import { z } from "zod"
+import { distance } from "circuit-json"
 import {
-  commonComponentProps,
   type CommonComponentProps,
+  commonComponentProps,
 } from "lib/common/layout"
 import {
-  schematicPinStyle,
-  type SchematicPinStyle,
-} from "lib/common/schematicPinStyle"
-import { distance } from "@tscircuit/soup"
-import { expectTypesMatch } from "lib/typecheck"
-import {
-  schematicPortArrangement,
   type SchematicPortArrangement,
+  schematicPortArrangement,
 } from "lib/common/schematicPinDefinitions"
+import {
+  type SchematicPinStyle,
+  schematicPinStyle,
+} from "lib/common/schematicPinStyle"
+import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string

@@ -1,10 +1,10 @@
-import { z } from "zod"
-import { distance } from "@tscircuit/soup"
+import { distance } from "circuit-json"
 import {
-  commonComponentProps,
-  type CommonComponentProps,
+    type CommonComponentProps,
+    commonComponentProps,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export interface PinHeaderProps extends CommonComponentProps {
   /**

@@ -1,26 +1,14 @@
-import { z } from "zod"
 import {
-  type AnySoupElementInput,
+  type LayerRefInput,
   distance,
   layer_ref,
-  type LayerRef,
-  type LayerRefInput,
   rotation,
   supplier_name,
-} from "@tscircuit/soup"
-import { point3 } from "./point3"
-import {
-  cadModelJscad,
-  cadModelObj,
-  cadModelProp,
-  cadModelStl,
-  type CadModelJscad,
-  type CadModelObj,
-  type CadModelProp,
-  type CadModelStl,
-} from "./cadModel"
-import { footprintProp, type Footprint } from "./footprintProp"
+} from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
+import { type CadModelProp, cadModelProp } from "./cadModel"
+import { type Footprint, footprintProp } from "./footprintProp"
 
 export interface PcbLayoutProps {
   pcbX?: string | number

@@ -19,11 +19,11 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@tscircuit/layout": "^0.0.11",
-    "@tscircuit/soup": "^0.0.69",
     "@types/bun": "^1.1.8",
     "@types/node": "^20.12.11",
     "@types/react": "^18.3.2",
     "ava": "^6.1.3",
+    "circuit-json": "^0.0.93",
     "expect-type": "^0.20.0",
     "madge": "^8.0.0",
     "react": "^18.3.1",
@@ -35,7 +35,7 @@
   },
   "peerDependencies": {
     "@tscircuit/layout": "*",
-    "@tscircuit/soup": "*",
+    "circuit-json": "*",
     "react": "*",
     "zod": "*"
   }

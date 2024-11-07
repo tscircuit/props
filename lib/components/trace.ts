@@ -1,5 +1,5 @@
+import { distance, route_hint_point } from "circuit-json"
 import { z } from "zod"
-import { distance, route_hint_point } from "@tscircuit/soup"
 import { point } from "../common/point"
 
 export const portRef = z.union([

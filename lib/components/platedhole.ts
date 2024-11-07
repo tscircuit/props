@@ -1,9 +1,9 @@
-import { z } from "zod"
-import { pcbLayoutProps } from "lib/common/layout"
-import { distance } from "@tscircuit/soup"
-import { portHints, type PortHints } from "lib/common/portHints"
-import { expectTypesMatch } from "lib/typecheck"
+import { distance } from "circuit-json"
 import type { PcbLayoutProps } from "lib/common/layout"
+import { pcbLayoutProps } from "lib/common/layout"
+import { type PortHints, portHints } from "lib/common/portHints"
+import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {

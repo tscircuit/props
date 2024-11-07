@@ -1,4 +1,4 @@
-import type { LayerRef } from "@tscircuit/soup"
+import type { LayerRef } from "circuit-json"
 import type { ReactElement } from "react"
 import { z } from "zod"
 

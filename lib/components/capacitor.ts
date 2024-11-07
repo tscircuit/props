@@ -1,12 +1,11 @@
-import { z } from "zod"
-import { capacitance } from "@tscircuit/soup"
+import { capacitance } from "circuit-json"
 import {
-  commonComponentProps,
-  lrPins,
-  lrPolarPins,
   type CommonComponentProps,
+  commonComponentProps,
+  lrPolarPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export interface CapacitorProps extends CommonComponentProps {
   capacitance: number | string

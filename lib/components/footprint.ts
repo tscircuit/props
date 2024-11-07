@@ -1,4 +1,4 @@
-import { layer_ref, type LayerRef } from "@tscircuit/soup"
+import { type LayerRef, layer_ref } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 

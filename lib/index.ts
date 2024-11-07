@@ -22,7 +22,7 @@ import {
   route_hint_point,
   supplier_name,
   voltage,
-} from "@tscircuit/soup"
+} from "circuit-json"
 import type { ReactElement } from "react"
 import { z } from "zod"
 import { direction } from "./common/direction"

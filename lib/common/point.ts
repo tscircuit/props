@@ -1,5 +1,5 @@
-import { distance } from "circuit-json";
-import { z } from "zod";
+import { distance } from "circuit-json"
+import { z } from "zod"
 
 export const point = z.object({
   x: distance,

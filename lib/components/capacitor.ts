@@ -2,7 +2,7 @@ import { capacitance } from "circuit-json"
 import {
   type CommonComponentProps,
   commonComponentProps,
-  lrPolarPins
+  lrPolarPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"

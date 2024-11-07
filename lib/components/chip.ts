@@ -1,16 +1,16 @@
 import { distance } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import {
-    type CommonComponentProps,
-    commonComponentProps,
+  type CommonComponentProps,
+  commonComponentProps,
 } from "lib/common/layout"
 import {
-    type SchematicPortArrangement,
-    schematicPortArrangement,
+  type SchematicPortArrangement,
+  schematicPortArrangement,
 } from "lib/common/schematicPinDefinitions"
 import {
-    type SchematicPinStyle,
-    schematicPinStyle,
+  type SchematicPinStyle,
+  schematicPinStyle,
 } from "lib/common/schematicPinStyle"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"

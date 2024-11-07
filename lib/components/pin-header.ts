@@ -1,7 +1,7 @@
 import { distance } from "circuit-json"
 import {
-    type CommonComponentProps,
-    commonComponentProps,
+  type CommonComponentProps,
+  commonComponentProps,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"

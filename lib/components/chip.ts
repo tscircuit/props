@@ -17,7 +17,7 @@ import { z } from "zod"
 
 export interface ChipProps extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | string[]>
+  pinLabels?: Record<number | string, string | readonly string[]>
   schPortArrangement?: SchematicPortArrangement
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: Distance
@@ -28,7 +28,10 @@ export interface ChipProps extends CommonComponentProps {
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z
-    .record(z.number().or(z.string()), z.string().or(z.array(z.string())))
+    .record(
+      z.number().or(z.string()),
+      z.string().or(z.array(z.string()).readonly()),
+    )
     .optional(),
   schPortArrangement: schematicPortArrangement.optional(),
   schPinStyle: schematicPinStyle.optional(),

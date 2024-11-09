@@ -64,6 +64,7 @@ export * from "./components/trace"
 export * from "./components/footprint"
 export * from "./components/battery"
 export * from "./components/pin-header"
+export * from "./components/netalias"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,
@@ -98,10 +99,6 @@ export const viaProps = commonLayoutProps.extend({
 })
 export type ViaProps = z.input<typeof viaProps>
 
-export const netAliasProps = commonLayoutProps.extend({
-  net: z.string().optional(),
-})
-export type NetAliasProps = z.input<typeof netAliasProps>
 
 export const pcbKeepoutProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true }).extend({

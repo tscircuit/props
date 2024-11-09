@@ -99,7 +99,6 @@ export const viaProps = commonLayoutProps.extend({
 })
 export type ViaProps = z.input<typeof viaProps>
 
-
 export const pcbKeepoutProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true }).extend({
     shape: z.literal("circle"),

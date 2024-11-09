@@ -6,14 +6,14 @@ export interface NetAliasProps {
   net?: string
   schX?: number
   schY?: number
-  facingDirection?: "left" | "up" | "right" | "down"
+  anchorSide?: "left" | "up" | "right" | "down"
 }
 
 export const netAliasProps = z.object({
   net: z.string().optional(),
   schX: distance.optional(),
   schY: distance.optional(),
-  facingDirection: z.enum(["left", "up", "right", "down"]).optional(),
+  anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
 })
 
 type InferredNetAliasProps = z.infer<typeof netAliasProps>

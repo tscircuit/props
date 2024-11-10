@@ -65,6 +65,7 @@ export * from "./components/footprint"
 export * from "./components/battery"
 export * from "./components/pin-header"
 export * from "./components/netalias"
+export * from "./components/pushbutton"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,
@@ -82,8 +83,7 @@ export const ledProps = commonComponentProps.extend({
 export const ledPins = lrPolarPins
 export type LedProps = z.input<typeof ledProps>
 
-export const pushbuttonProps = commonComponentProps.extend({})
-export type PushButtonProps = z.input<typeof pushbuttonProps>
+
 
 export const switchProps = commonComponentProps.extend({
   ftype: z.literal("switch"),

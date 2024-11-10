@@ -83,8 +83,6 @@ export const ledProps = commonComponentProps.extend({
 export const ledPins = lrPolarPins
 export type LedProps = z.input<typeof ledProps>
 
-
-
 export const switchProps = commonComponentProps.extend({
   ftype: z.literal("switch"),
   switchType: z.enum(["spst"]).default("spst"),

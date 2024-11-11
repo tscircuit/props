@@ -20,7 +20,7 @@ export interface CapacitorProps extends CommonComponentProps {
 
 export const capacitorProps = commonComponentProps.extend({
   capacitance,
-  
+
   polarized: z.boolean().optional().default(false),
 
   decouplingFor: z.string().optional(),

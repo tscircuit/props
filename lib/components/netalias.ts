@@ -16,5 +16,5 @@ export const netAliasProps = z.object({
   anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
 })
 
-type InferredNetAliasProps = z.infer<typeof netAliasProps>
+type InferredNetAliasProps = z.input<typeof netAliasProps>
 expectTypesMatch<NetAliasProps, InferredNetAliasProps>(true)

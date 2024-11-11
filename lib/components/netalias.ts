@@ -4,8 +4,8 @@ import { distance } from "lib/common/distance"
 
 export interface NetAliasProps {
   net?: string
-  schX?: number
-  schY?: number
+  schX?: number | string
+  schY?: number | string
   anchorSide?: "left" | "up" | "right" | "down"
 }
 

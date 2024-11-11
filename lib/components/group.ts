@@ -1,9 +1,14 @@
 import type { LayoutBuilder, ManualEditFile } from "@tscircuit/layout"
 import { length } from "circuit-json"
 import type { Distance } from "lib/common/distance"
-import { type CommonLayoutProps, commonLayoutProps } from "lib/common/layout"
+import {
+  type CommonLayoutProps,
+  commonLayoutProps,
+  type SupplierPartNumbers,
+} from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import type { AnySourceComponent } from "circuit-json"
 
 export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
@@ -39,6 +44,11 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   schAutoLayoutEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
+  partsEngine: z.custom<{
+    findPart: (
+      sourceComponent: AnySourceComponent,
+    ) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+  }>(),
 })
 
 export const groupProps = z.union([baseGroupProps, subcircuitGroupProps])

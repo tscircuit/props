@@ -27,6 +27,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   manualEdits?: ManualEditFile
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
+  minTraceWidth?: Distance
 
   /**
    * If true, we'll automatically layout the schematic for this group. Must be
@@ -52,6 +53,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   schAutoLayoutEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
+  minTraceWidth: length.optional(),
   partsEngine: z.custom<PartsEngine>((v) => "findPart" in v).optional(),
 })
 

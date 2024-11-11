@@ -15,6 +15,12 @@ export interface BaseGroupProps extends CommonLayoutProps {
   children?: any
 }
 
+export type PartsEngine = {
+  findPart: (
+    sourceComponent: AnySourceComponent,
+  ) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+}
+
 export interface SubcircuitGroupProps extends BaseGroupProps {
   subcircuit: true
   layout?: LayoutBuilder
@@ -28,6 +34,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
    * sophisticated layout options/modes and will be enabled by default.
    */
   schAutoLayoutEnabled?: boolean
+
+  partsEngine?: PartsEngine
 }
 
 export type GroupProps = SubcircuitGroupProps | BaseGroupProps
@@ -44,11 +52,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   schAutoLayoutEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
-  partsEngine: z.custom<{
-    findPart: (
-      sourceComponent: AnySourceComponent,
-    ) => Promise<SupplierPartNumbers> | SupplierPartNumbers
-  }>(),
+  partsEngine: z.custom<PartsEngine>((v) => "findPart" in v).optional(),
 })
 
 export const groupProps = z.union([baseGroupProps, subcircuitGroupProps])

@@ -9,6 +9,7 @@ import { z } from "zod"
 
 export interface CapacitorProps extends CommonComponentProps {
   capacitance: number | string
+  polarized?: boolean
 
   decouplingFor?: string
   decouplingTo?: string

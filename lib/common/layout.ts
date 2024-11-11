@@ -60,8 +60,9 @@ export type SupplierName =
   | "digikey"
   | "mouser"
   | "lcsc"
+export type SupplierPartNumbers = { [k in SupplierName]?: string[] }
 export interface SupplierProps {
-  supplierPartNumbers?: { [k in SupplierName]?: string[] }
+  supplierPartNumbers?: SupplierPartNumbers
 }
 export const supplierProps = z.object({
   supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
@@ -72,7 +73,7 @@ expectTypesMatch<SupplierProps, z.input<typeof supplierProps>>(true)
 export interface CommonComponentProps extends CommonLayoutProps {
   key?: any
   name: string
-  supplierPartNumbers?: SupplierProps["supplierPartNumbers"]
+  supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   children?: any
   symbolName?: string

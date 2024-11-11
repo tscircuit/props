@@ -4,8 +4,8 @@ import { distance } from "lib/common/distance"
 
 export interface NetAliasProps {
   net?: string
-  schX?: number
-  schY?: number
+  schX?: number | string
+  schY?: number | string
   anchorSide?: "left" | "up" | "right" | "down"
 }
 
@@ -16,5 +16,5 @@ export const netAliasProps = z.object({
   anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
 })
 
-type InferredNetAliasProps = z.infer<typeof netAliasProps>
+type InferredNetAliasProps = z.input<typeof netAliasProps>
 expectTypesMatch<NetAliasProps, InferredNetAliasProps>(true)

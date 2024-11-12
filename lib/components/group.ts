@@ -16,9 +16,10 @@ export interface BaseGroupProps extends CommonLayoutProps {
 }
 
 export type PartsEngine = {
-  findPart: (
-    sourceComponent: AnySourceComponent,
-  ) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+  findPart: (params: {
+    sourceComponent: AnySourceComponent
+    footprinterString?: string
+  }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
 }
 
 export interface SubcircuitGroupProps extends BaseGroupProps {

@@ -9,6 +9,7 @@ import { z } from "zod"
 
 export interface CapacitorProps extends CommonComponentProps {
   capacitance: number | string
+  polarized?: boolean
 
   decouplingFor?: string
   decouplingTo?: string
@@ -19,6 +20,8 @@ export interface CapacitorProps extends CommonComponentProps {
 
 export const capacitorProps = commonComponentProps.extend({
   capacitance,
+
+  polarized: z.boolean().optional().default(false),
 
   decouplingFor: z.string().optional(),
   decouplingTo: z.string().optional(),

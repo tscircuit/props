@@ -66,6 +66,7 @@ export * from "./components/battery"
 export * from "./components/pin-header"
 export * from "./components/netalias"
 export * from "./components/push-button"
+export * from "./components/potentiometer"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,

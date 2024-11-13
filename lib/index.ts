@@ -52,6 +52,7 @@ export * from "./components/jumper"
 export * from "./components/platedhole"
 
 export * from "./components/resistor"
+export * from "./components/potentiometer"
 export * from "./components/capacitor"
 export * from "./components/group"
 export * from "./components/net"

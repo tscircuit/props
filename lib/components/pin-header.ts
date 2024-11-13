@@ -46,6 +46,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Labels for each pin
    */
   pinLabels?: string[]
+
+  /**
+   * Direction the header is facing
+   */
+  facingDirection?: "left" | "right"
 }
 
 export const pinHeaderProps = commonComponentProps.extend({
@@ -57,6 +62,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z.array(z.string()).optional(),
+  facingDirection: z.enum(["left", "right"]).optional(),
 })
 
 type InferredPinHeaderProps = z.input<typeof pinHeaderProps>

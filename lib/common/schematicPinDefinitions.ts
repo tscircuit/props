@@ -22,7 +22,7 @@ export interface SchematicPortArrangementWithPinCounts {
 }
 
 export interface PinSideDefinition {
-  pins: number[] | string[]
+  pins: Array<number | string>
   direction:
     | "top-to-bottom"
     | "left-to-right"

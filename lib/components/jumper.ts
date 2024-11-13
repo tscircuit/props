@@ -16,7 +16,7 @@ import { z } from "zod"
 
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string>
+  pinLabels?: Record<number | string, string | string[]>
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: number | string
   schWidth?: number | string
@@ -27,7 +27,9 @@ export interface JumperProps extends CommonComponentProps {
 
 export const jumperProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
-  pinLabels: z.record(z.number().or(z.string()), z.string()).optional(),
+  pinLabels: z
+    .record(z.number().or(z.string()), z.string().or(z.array(z.string())))
+    .optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),
   schWidth: distance.optional(),

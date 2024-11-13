@@ -1,8 +1,8 @@
 import { resistance } from "circuit-json"
 import {
-    type CommonComponentProps,
-    commonComponentProps,
-    lrPins,
+  type CommonComponentProps,
+  commonComponentProps,
+  lrPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"

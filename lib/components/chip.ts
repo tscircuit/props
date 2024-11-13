@@ -25,6 +25,18 @@ export interface ChipProps extends CommonComponentProps {
   schHeight?: Distance
 }
 
+export type PinLabels = Record<
+  number | string,
+  string | readonly string[] | string[]
+>
+
+export const pinLabelsProp = z.record(
+  z.number().or(z.string()),
+  z.string().or(z.array(z.string()).readonly()).or(z.array(z.string())),
+)
+
+expectTypesMatch<PinLabels, z.input<typeof pinLabelsProp>>(true)
+
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z

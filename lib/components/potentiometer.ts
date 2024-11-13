@@ -5,16 +5,14 @@ import {
   lrPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
-import { z } from "zod"
+import type { z } from "zod"
 
 export interface PotentiometerProps extends CommonComponentProps {
-  resistance: number | string
-  wiper?: number
+  maxResistance: number | string
 }
 
 export const potentiometerProps = commonComponentProps.extend({
-  resistance,
-  wiper: z.number().min(0).max(1).optional().default(0.5),
+  maxResistance: resistance,
 })
 export const potentiometerPins = lrPins
 

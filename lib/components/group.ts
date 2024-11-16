@@ -23,7 +23,6 @@ export type PartsEngine = {
 }
 
 export interface SubcircuitGroupProps extends BaseGroupProps {
-  subcircuit: true
   layout?: LayoutBuilder
   manualEdits?: ManualEditFile
   routingDisabled?: boolean
@@ -40,7 +39,11 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   partsEngine?: PartsEngine
 }
 
-export type GroupProps = SubcircuitGroupProps | BaseGroupProps
+export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
+  subcircuit: true
+}
+
+export type GroupProps = SubcircuitGroupPropsWithBool | BaseGroupProps
 
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),

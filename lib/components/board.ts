@@ -12,13 +12,11 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   outline?: Point[]
 }
 
-export const boardProps = subcircuitGroupProps
-  .omit({ subcircuit: true })
-  .extend({
-    width: distance.optional(),
-    height: distance.optional(),
-    outline: z.array(point).optional(),
-  })
+export const boardProps = subcircuitGroupProps.extend({
+  width: distance.optional(),
+  height: distance.optional(),
+  outline: z.array(point).optional(),
+})
 
 type InferredBoardProps = z.input<typeof boardProps>
 expectTypesMatch<BoardProps, InferredBoardProps>(true)

@@ -51,7 +51,6 @@ export const baseGroupProps = commonLayoutProps.extend({
 })
 
 export const subcircuitGroupProps = baseGroupProps.extend({
-  subcircuit: z.literal(true),
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
   manualEdits: z.custom<ManualEditFile>((v) => true).optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
@@ -61,13 +60,25 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   partsEngine: z.custom<PartsEngine>((v) => "findPart" in v).optional(),
 })
 
-export const groupProps = z.union([baseGroupProps, subcircuitGroupProps])
+export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
+  subcircuit: z.literal(true),
+})
+
+export const groupProps = z.union([
+  baseGroupProps,
+  subcircuitGroupPropsWithBool,
+])
 
 type InferredBaseGroupProps = z.input<typeof baseGroupProps>
-type InferredSubcircuitGroupProps = z.input<typeof subcircuitGroupProps>
+type InferredSubcircuitGroupPropsWithBool = z.input<
+  typeof subcircuitGroupPropsWithBool
+>
 
 expectTypesMatch<BaseGroupProps, InferredBaseGroupProps>(true)
-expectTypesMatch<SubcircuitGroupProps, InferredSubcircuitGroupProps>(true)
+expectTypesMatch<
+  SubcircuitGroupPropsWithBool,
+  InferredSubcircuitGroupPropsWithBool
+>(true)
 
 type InferredGroupProps = z.input<typeof groupProps>
 expectTypesMatch<GroupProps, InferredGroupProps>(true)

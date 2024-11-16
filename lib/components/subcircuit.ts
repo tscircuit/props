@@ -5,7 +5,7 @@ import { expectTypesMatch } from "lib/typecheck"
 
 export type SubcircuitProps = SubcircuitGroupProps
 
-export const subcircuitProps = subcircuitGroupProps.omit({ subcircuit: true })
+export const subcircuitProps = subcircuitGroupProps
 
 type InferredSubcircuitProps = z.input<typeof subcircuitProps>
 expectTypesMatch<SubcircuitProps, InferredSubcircuitProps>(true)

@@ -64,8 +64,8 @@ export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
   subcircuit: z.literal(true),
 })
 
-export const groupProps = z.union([
-  baseGroupProps,
+export const groupProps = z.discriminatedUnion("subcircuit", [
+  baseGroupProps.extend({ subcircuit: z.literal(false).optional() }),
   subcircuitGroupPropsWithBool,
 ])
 

@@ -43,7 +43,11 @@ export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
   subcircuit: true
 }
 
-export type GroupProps = SubcircuitGroupPropsWithBool | BaseGroupProps
+export interface NonSubcircuitGroupProps extends BaseGroupProps {
+  subcircuit?: false | undefined
+}
+
+export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps
 
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),

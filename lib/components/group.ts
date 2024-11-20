@@ -27,6 +27,11 @@ interface PcbRouteCache {
   cacheKey: string
 }
 
+interface AutorouterConfig {
+  serverUrl?: string
+  inputFormat?: "simplified" | "circuit-json"
+}
+
 export interface SubcircuitGroupProps extends BaseGroupProps {
   layout?: LayoutBuilder
   manualEdits?: ManualEditFile
@@ -34,6 +39,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
+
+  autorouter?: AutorouterConfig | "auto" | "auto-local" | "auto-cloud"
 
   /**
    * If true, we'll automatically layout the schematic for this group. Must be

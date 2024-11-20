@@ -22,7 +22,7 @@ export type PartsEngine = {
   }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
 }
 
-interface PcbRouteCache {
+export interface PcbRouteCache {
   pcbTraces: PcbTrace[]
   cacheKey: string
 }

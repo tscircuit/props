@@ -27,6 +27,31 @@ export interface PcbRouteCache {
   cacheKey: string
 }
 
+export interface AutorouterConfig {
+  serverUrl?: string
+  inputFormat?: "simplified" | "circuit-json"
+  cache?: PcbRouteCache
+}
+
+export type AutorouterProp =
+  | AutorouterConfig
+  | "auto"
+  | "auto-local"
+  | "auto-cloud"
+
+export const autorouterConfig = z.object({
+  serverUrl: z.string().optional(),
+  inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
+  cache: z.custom<PcbRouteCache>((v) => true).optional(),
+})
+
+export const autorouterProp = z.union([
+  autorouterConfig,
+  z.literal("auto"),
+  z.literal("auto-local"),
+  z.literal("auto-cloud"),
+])
+
 export interface SubcircuitGroupProps extends BaseGroupProps {
   layout?: LayoutBuilder
   manualEdits?: ManualEditFile
@@ -34,6 +59,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
+
+  autorouter?: AutorouterProp
 
   /**
    * If true, we'll automatically layout the schematic for this group. Must be
@@ -69,6 +96,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   minTraceWidth: length.optional(),
   partsEngine: z.custom<PartsEngine>((v) => "findPart" in v).optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
+  autorouter: autorouterProp.optional(),
 })
 
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({

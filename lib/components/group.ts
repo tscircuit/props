@@ -8,7 +8,7 @@ import {
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import type { AnySourceComponent } from "circuit-json"
+import type { AnySourceComponent, PcbTrace } from "circuit-json"
 
 export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
@@ -22,12 +22,18 @@ export type PartsEngine = {
   }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
 }
 
+interface PcbRouteCache {
+  pcbTraces: PcbTrace[]
+  cacheKey: string
+}
+
 export interface SubcircuitGroupProps extends BaseGroupProps {
   layout?: LayoutBuilder
   manualEdits?: ManualEditFile
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
+  pcbRouteCache?: PcbRouteCache
 
   /**
    * If true, we'll automatically layout the schematic for this group. Must be
@@ -62,6 +68,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
   partsEngine: z.custom<PartsEngine>((v) => "findPart" in v).optional(),
+  pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
 })
 
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({

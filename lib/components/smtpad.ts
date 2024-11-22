@@ -15,13 +15,25 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
 }
 
+export interface RotatedRectSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rotated_rect"
+  width: Distance
+  height: Distance
+  ccwRotation: number
+  portHints?: PortHints
+}
+
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "circle"
   radius: Distance
   portHints?: PortHints
 }
 
-export type SmtPadProps = RectSmtPadProps | CircleSmtPadProps
+export type SmtPadProps =
+  | RectSmtPadProps
+  | CircleSmtPadProps
+  | RotatedRectSmtPadProps
 
 // ----------------------------------------------------------------------------
 // Zod
@@ -38,6 +50,18 @@ export const rectSmtPadProps = pcbLayoutProps
 type InferredRectSmtPadProps = z.input<typeof rectSmtPadProps>
 expectTypesMatch<InferredRectSmtPadProps, RectSmtPadProps>(true)
 
+export const rotatedRectSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("rotated_rect"),
+    width: distance,
+    height: distance,
+    ccwRotation: z.number(),
+    portHints: portHints.optional(),
+  })
+type InferredRotatedRectSmtPadProps = z.input<typeof rotatedRectSmtPadProps>
+expectTypesMatch<InferredRotatedRectSmtPadProps, RotatedRectSmtPadProps>(true)
+
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
@@ -48,7 +72,11 @@ export const circleSmtPadProps = pcbLayoutProps
 type InferredCircleSmtPadProps = z.input<typeof circleSmtPadProps>
 expectTypesMatch<InferredCircleSmtPadProps, CircleSmtPadProps>(true)
 
-export const smtPadProps = z.union([circleSmtPadProps, rectSmtPadProps])
+export const smtPadProps = z.union([
+  circleSmtPadProps,
+  rectSmtPadProps,
+  rotatedRectSmtPadProps,
+])
 
 export type InferredSmtPadProps = z.input<typeof smtPadProps>
 expectTypesMatch<InferredSmtPadProps, SmtPadProps>(true)

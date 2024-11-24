@@ -56,7 +56,7 @@ export interface PinHeaderProps extends CommonComponentProps {
 export const pinHeaderProps = commonComponentProps.extend({
   pinCount: z.number(),
   pitch: distance.optional(),
-  gender: z.enum(["male", "female"]).default("male"),
+  gender: z.enum(["male", "female"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
   doubleRow: z.boolean().optional(),
   holeDiameter: distance.optional(),

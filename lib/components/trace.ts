@@ -5,25 +5,7 @@ import { point } from "../common/point"
 export const portRef = z.union(
   [
     z.string(),
-    z.custom<{ getPortSelector: () => string }>(
-      (v) => {
-        if (!v || typeof v !== "object") {
-          throw new Error(
-            `Invalid port reference: Expected a string selector or Port object, received "${JSON.stringify(v)}". This often happens when trying to access a port that doesn't exist`,
-          )
-        }
-        if (typeof v.getPortSelector !== "function") {
-          throw new Error(
-            `Invalid port reference: Object "${JSON.stringify(v)}" is missing required getPortSelector() method. This usually means the referenced port wasn't properly initialized or doesn't exist`,
-          )
-        }
-        return true
-      },
-      {
-        message:
-          "Port reference must be either a string selector (e.g. '.ComponentName > .portName') or a valid Port object",
-      },
-    ),
+    z.any()
   ],
   {
     description: "Port Reference",

@@ -2,17 +2,11 @@ import { distance, route_hint_point } from "circuit-json"
 import { z } from "zod"
 import { point } from "../common/point"
 
-export const portRef = z.union(
-  [
-    z.string(),
-    z.any()
-  ],
-  {
-    description: "Port Reference",
-    invalid_type_error:
-      "Port reference must be either a string selector or Port object with getPortSelector() method",
-  },
-)
+export const portRef = z.union([z.string(), z.any()], {
+  description: "Port Reference",
+  invalid_type_error:
+    "Port reference must be either a string selector or Port object with getPortSelector() method",
+})
 
 const baseTraceProps = z.object({
   key: z.string().optional(),

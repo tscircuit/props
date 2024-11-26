@@ -35,6 +35,8 @@ export interface AutorouterConfig {
 
 export type AutorouterProp =
   | AutorouterConfig
+  | "sequential-trace"
+  | "subcircuit"
   | "auto"
   | "auto-local"
   | "auto-cloud"
@@ -47,6 +49,8 @@ export const autorouterConfig = z.object({
 
 export const autorouterProp = z.union([
   autorouterConfig,
+  z.literal("sequential-trace"),
+  z.literal("subcircuit"),
   z.literal("auto"),
   z.literal("auto-local"),
   z.literal("auto-cloud"),

@@ -74,6 +74,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   schAutoLayoutEnabled?: boolean
 
   partsEngine?: PartsEngine
+
+  schematicDisabled?: boolean
 }
 
 export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
@@ -101,6 +103,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   partsEngine: z.custom<PartsEngine>((v) => "findPart" in v).optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  schematicDisabled: z.boolean().optional(),
 })
 
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({

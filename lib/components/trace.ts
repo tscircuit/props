@@ -14,6 +14,7 @@ const baseTraceProps = z.object({
   thickness: distance.optional(),
   schematicRouteHints: z.array(point).optional(),
   pcbRouteHints: z.array(route_hint_point).optional(),
+  schDisplayLabel: z.string().optional(),
 })
 
 export const traceProps = z.union([

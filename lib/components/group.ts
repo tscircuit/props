@@ -1,11 +1,12 @@
-import type { LayoutBuilder, ManualEditFile } from "@tscircuit/layout"
-import { length } from "circuit-json"
+import type { LayoutBuilder } from "@tscircuit/layout"
+import { length, type PcbRouteHint } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import {
   type CommonLayoutProps,
   commonLayoutProps,
   type SupplierPartNumbers,
 } from "lib/common/layout"
+import { type ManualEditFile, manualEditFile } from "lib/common/manualEdit"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import type { AnySourceComponent, PcbTrace } from "circuit-json"
@@ -68,11 +69,6 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
   autorouter?: AutorouterProp
 
-  /**
-   * If true, we'll automatically layout the schematic for this group. Must be
-   * a subcircuit (currently). This is eventually going to be replaced with more
-   * sophisticated layout options/modes and will be enabled by default.
-   */
   schAutoLayoutEnabled?: boolean
 
   partsEngine?: PartsEngine
@@ -95,7 +91,7 @@ export const baseGroupProps = commonLayoutProps.extend({
 
 export const subcircuitGroupProps = baseGroupProps.extend({
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
-  manualEdits: z.custom<ManualEditFile>((v) => true).optional(),
+  manualEdits: z.lazy(() => manualEditFile).optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
@@ -123,7 +119,7 @@ expectTypesMatch<BaseGroupProps, InferredBaseGroupProps>(true)
 expectTypesMatch<
   SubcircuitGroupPropsWithBool,
   InferredSubcircuitGroupPropsWithBool
->(true)
+>("property manualEdits has mismatched types")
 
 type InferredGroupProps = z.input<typeof groupProps>
-expectTypesMatch<GroupProps, InferredGroupProps>(true)
+expectTypesMatch<GroupProps, InferredGroupProps>(false)

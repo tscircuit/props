@@ -45,6 +45,7 @@ export * from "./common/footprintProp"
 export * from "./common/schematicPinDefinitions"
 export * from "./common/schematicPinStyle"
 export * from "./common/cadModel"
+export * from "./common/manualEdit"
 
 export * from "./components/board"
 export * from "./components/chip"

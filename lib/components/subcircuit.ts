@@ -8,4 +8,4 @@ export type SubcircuitProps = SubcircuitGroupProps
 export const subcircuitProps = subcircuitGroupProps
 
 type InferredSubcircuitProps = z.input<typeof subcircuitProps>
-expectTypesMatch<SubcircuitProps, InferredSubcircuitProps>(true)
+expectTypesMatch<SubcircuitProps, InferredSubcircuitProps>("property manualEdits has mismatched types")

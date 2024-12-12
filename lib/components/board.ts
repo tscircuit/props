@@ -14,9 +14,9 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   outline?: Point[]
 }
 
-export const boardProps = commonLayoutProps.merge(
-  subcircuitGroupProps
-    .pick({
+export const boardProps = commonLayoutProps
+  .merge(
+    subcircuitGroupProps.pick({
       name: true,
       children: true,
       layout: true,
@@ -27,13 +27,16 @@ export const boardProps = commonLayoutProps.merge(
       pcbRouteCache: true,
       autorouter: true,
       partsEngine: true,
-      schAutoLayoutEnabled: true
-    })
-).extend({
-  width: distance.optional(),
-  height: distance.optional(),
-  outline: z.array(point).optional(),
-})
+      schAutoLayoutEnabled: true,
+    }),
+  )
+  .extend({
+    width: distance.optional(),
+    height: distance.optional(),
+    outline: z.array(point).optional(),
+  })
 
 type InferredBoardProps = z.input<typeof boardProps>
-expectTypesMatch<BoardProps, InferredBoardProps>("property manualEdits has mismatched types")
+expectTypesMatch<BoardProps, InferredBoardProps>(
+  "property manualEdits has mismatched types",
+)

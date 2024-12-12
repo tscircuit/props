@@ -5,16 +5,20 @@ import {
   lrPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
-import type { z } from "zod"
+import { z } from "zod"
+
+export type PinVariant = "2pin" | "4pin"
 
 export interface CrystalProps extends CommonComponentProps {
   frequency: number | string
   loadCapacitance: number | string
+  pinVariant?: PinVariant
 }
 
 export const crystalProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
+  pinVariant: z.enum(["2pin", "4pin"]).optional(),
 })
 export const crystalPins = lrPins
 

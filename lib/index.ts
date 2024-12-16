@@ -33,6 +33,7 @@ import {
   lrPins,
   lrPolarPins,
   pcbLayoutProps,
+  type CommonComponentProps,
 } from "./common/layout"
 import { explicitPinSideDefinition } from "./common/schematicPinDefinitions"
 
@@ -178,7 +179,11 @@ export const silkscreenPathProps = pcbLayoutProps
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),
   })
-export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>
+export type SilkscreenPathProps = z.input<
+  typeof silkscreenPathProps
+> extends CommonComponentProps
+  ? z.input<typeof silkscreenPathProps>
+  : z.input<typeof silkscreenPathProps> & CommonComponentProps
 
 export const silkscreenLineProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })

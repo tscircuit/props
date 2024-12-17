@@ -1,5 +1,8 @@
 import { expect, test } from "bun:test"
-import { resonatorProps, type ResonatorProps } from "../lib/components/resonator"
+import { 
+  resonatorProps,
+  type ResonatorProps
+} from "../lib/components/resonator"
 import { expectTypeOf } from "expect-type"
 
 test("should parse resonator props with 3pin variant", () => {
@@ -19,7 +22,7 @@ test("should fail to parse resonator props with invalid pin variant", () => {
     name: "resonator",
     frequency: "16MHz",
     loadCapacitance: "20pF",
-    pinVariant: "2pin", 
+    pinVariant: "2pin",
   }
 
   expect(() => resonatorProps.parse(rawProps)).toThrow()

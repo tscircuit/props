@@ -8,15 +8,15 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface ResonatorProps extends CommonComponentProps {
-  frequency: number | string 
-  loadCapacitance: number | string 
+  frequency: number | string
+  loadCapacitance: number | string
   pinVariant: "3pin"
 }
 
 export const resonatorProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
-  pinVariant: z.literal("3pin"), 
+  pinVariant: z.literal("3pin"),
 })
 
 export const resonatorPins = lrPins

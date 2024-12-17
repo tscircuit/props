@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
-import { 
+import {
   resonatorProps,
-  type ResonatorProps
+  type ResonatorProps,
 } from "../lib/components/resonator"
 import { expectTypeOf } from "expect-type"
 

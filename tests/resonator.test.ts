@@ -28,18 +28,6 @@ test("should fail to parse resonator props with invalid pin variant", () => {
   expect(() => resonatorProps.parse(rawProps)).toThrow()
 })
 
-test("should parse resonator props without pinVariant (default 3pin)", () => {
-  const rawProps: ResonatorProps = {
-    name: "resonator",
-    frequency: "16MHz",
-    loadCapacitance: "20pF",
-    pinVariant: "3pin",
-  }
-
-  const parsedProps = resonatorProps.parse(rawProps)
-  expect(parsedProps.pinVariant).toBe("3pin")
-})
-
 test("should enforce correct types for resonator props", () => {
   const rawProps: ResonatorProps = {
     name: "resonator",

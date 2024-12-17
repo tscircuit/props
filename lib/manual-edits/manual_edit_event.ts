@@ -17,5 +17,6 @@ export const manual_edit_event = z.union([
 ])
 
 export type ManualEditEventInput = z.input<typeof manual_edit_event>
+type InferredManualEditEvent = z.infer<typeof manual_edit_event>
 
-expectTypesMatch<ManualEditEvent, z.infer<typeof manual_edit_event>>(true)
+expectTypesMatch<ManualEditEvent, InferredManualEditEvent>(true)

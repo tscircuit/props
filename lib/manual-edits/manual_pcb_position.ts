@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { point } from "circuit-json"
 
-export const manual_pcb_position = z.object({
+export const manual_pcb_placement = z.object({
   selector: z.string(),
   relative_to: z
     .string()
@@ -11,12 +11,5 @@ export const manual_pcb_position = z.object({
   center: point,
 })
 
-export const manual_layout = z.object({
-  pcb_positions: z.array(manual_pcb_position).optional(),
-})
-
-export type ManualPcbPosition = z.infer<typeof manual_pcb_position>
-export type ManualPcbPositionInput = z.input<typeof manual_pcb_position>
-
-export type ManualLayout = z.infer<typeof manual_layout>
-export type ManualLayoutInput = z.input<typeof manual_layout>
+export type ManualPcbPosition = z.infer<typeof manual_pcb_placement>
+export type ManualPcbPositionInput = z.input<typeof manual_pcb_placement>

@@ -2,7 +2,6 @@ import { frequency, capacitance } from "circuit-json"
 import {
   type CommonComponentProps,
   commonComponentProps,
-  lrPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
@@ -18,8 +17,6 @@ export const resonatorProps = commonComponentProps.extend({
   loadCapacitance: capacitance,
   pinVariant: z.literal("3pin"),
 })
-
-export const resonatorPins = lrPins
 
 type InferredResonatorProps = z.input<typeof resonatorProps>
 expectTypesMatch<ResonatorProps, InferredResonatorProps>(true)

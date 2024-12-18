@@ -18,6 +18,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   pitch?: number | string
 
   /**
+   * Direction the pin header is facing in the schematic
+   */
+  schFacingDirection?: Direction
+
+  /**
    * Whether the header is male or female
    */
   gender?: "male" | "female"

@@ -71,6 +71,7 @@ export * from "./components/netalias"
 export * from "./components/push-button"
 export * from "./components/subcircuit"
 export * from "./manual-edits"
+export * from "./manual-edits/manual_edit_file"
 
 export const inductorProps = commonComponentProps.extend({
   inductance,

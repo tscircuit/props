@@ -7,7 +7,8 @@ import { expectTypesMatch } from "lib/typecheck"
 import { route_hint_point } from "circuit-json"
 
 export const edit_trace_hint_event = base_manual_edit_event.extend({
-  pcb_edit_event_type: z.literal("edit_trace_hint"),
+  pcb_edit_event_type: z.literal("edit_trace_hint").describe("deprecated"),
+  edit_event_type: z.literal("edit_pcb_trace_hint").optional(),
   pcb_port_id: z.string(),
   pcb_trace_hint_id: z.string().optional(),
   route: z.array(
@@ -16,7 +17,9 @@ export const edit_trace_hint_event = base_manual_edit_event.extend({
 })
 
 export interface EditTraceHintEvent extends BaseManualEditEvent {
+  /** @deprecated */
   pcb_edit_event_type: "edit_trace_hint"
+  edit_event_type?: "edit_pcb_trace_hint"
   pcb_port_id: string
   pcb_trace_hint_id?: string
   route: Array<{ x: number; y: number; via?: boolean }>

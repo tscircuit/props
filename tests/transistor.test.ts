@@ -14,15 +14,15 @@ test("should parse transistor props for NPN transistor", () => {
       base: "B",
       collector: "C",
     },
-    vce: "5V",
-    vbe: "0.7V",
-    ic: "10mA",
+    collectorEmitterVoltage: "5V",
+    baseEmitterVoltage: "0.7V",
+    collectorCurrent: "10mA",
   }
 
   const parsedProps = transistorProps.parse(rawProps)
   expect(parsedProps.transistorType).toBe("NPN")
-  expect(parsedProps.vce).toBe(5)
-  expect(parsedProps.ic).toBe(0.01)
+  expect(parsedProps.collectorEmitterVoltage).toBe(5)
+  expect(parsedProps.collectorCurrent).toBe(0.01)
 })
 
 test("should parse transistor props for PNP transistor", () => {
@@ -34,16 +34,16 @@ test("should parse transistor props for PNP transistor", () => {
       base: "B",
       collector: "C",
     },
-    vce: 3.3,
-    vbe: 0.6,
-    ic: 20,
+    collectorEmitterVoltage: 3.3,
+    baseEmitterVoltage: 0.6,
+    collectorCurrent: 20,
   }
 
   const parsedProps = transistorProps.parse(rawProps)
   expect(parsedProps.transistorType).toBe("PNP")
-  expect(parsedProps.vce).toBe(3.3)
-  expect(parsedProps.vbe).toBe(0.6)
-  expect(parsedProps.ic).toBe(20)
+  expect(parsedProps.collectorEmitterVoltage).toBe(3.3)
+  expect(parsedProps.baseEmitterVoltage).toBe(0.6)
+  expect(parsedProps.collectorCurrent).toBe(20)
 })
 
 test("should fail to parse transistor props with invalid transistor type", () => {
@@ -55,9 +55,9 @@ test("should fail to parse transistor props with invalid transistor type", () =>
       base: "B",
       collector: "C",
     },
-    vce: "5V",
-    vbe: "0.7V",
-    ic: "10mA",
+    collectorEmitterVoltage: "5V",
+    baseEmitterVoltage: "0.7V",
+    collectorCurrent: "10mA",
   }
 
   expect(() => transistorProps.parse(rawProps)).toThrow()
@@ -72,9 +72,9 @@ test("should enforce correct types for transistor props", () => {
       base: "B",
       collector: "C",
     },
-    vce: "5V",
-    vbe: "0.7V",
-    ic: "10mA",
+    collectorEmitterVoltage: "5V",
+    baseEmitterVoltage: "0.7V",
+    collectorCurrent: "10mA",
   }
 
   expectTypeOf(rawProps).toMatchTypeOf<TransistorProps>()

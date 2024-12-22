@@ -9,9 +9,9 @@ import { z } from "zod"
 export interface TransistorProps extends CommonComponentProps {
   transistorType: "NPN" | "PNP"
   pinLabels: Record<"emitter" | "base" | "collector", string>
-  vce?: number | string
-  vbe?: number | string
-  ic?: number | string
+  collectorEmitterVoltage?: number | string
+  baseEmitterVoltage?: number | string
+  collectorCurrent?: number | string
 }
 
 export const transistorProps = commonComponentProps.extend({
@@ -21,9 +21,9 @@ export const transistorProps = commonComponentProps.extend({
     base: z.string(),
     collector: z.string(),
   }),
-  vce: voltage.optional(),
-  vbe: voltage.optional(),
-  ic: current.optional(),
+  collectorEmitterVoltage: voltage.optional(),
+  baseEmitterVoltage: voltage.optional(),
+  collectorCurrent: current.optional(),
 })
 
 type InferredTransistorProps = z.input<typeof transistorProps>

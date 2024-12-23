@@ -68,13 +68,15 @@ export interface PillPlatedHoleProps
   portHints?: PortHints
 }
 
-export interface SquarePlatedHoleProps
+export interface CircularHoleWithSquarePadProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
-  shape: "square"
+  shape: "circular_hole_with_square_pad"
   holeSideLength: number | string
   outerSideLength: number | string
   portHints?: PortHints
+  holeShape: "circle"
+  padShape: "square"
 }
 
 export interface BaseGroupProps extends CommonLayoutProps {

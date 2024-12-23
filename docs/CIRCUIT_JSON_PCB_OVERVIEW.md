@@ -134,9 +134,11 @@ export interface PcbPlatedHoleOval {
   pcb_plated_hole_id: string
 }
 
-export interface PcbPlatedHoleSquare {
+export interface PcbPlatedHoleCircularWithSquarePad {
   type: "pcb_plated_hole"
-  shape: "square"
+  shape: "circular_hole_with_square_pad"
+  hole_shape: "circle"
+  pad_shape: "square"
   outer_side_length: number
   hole_side_length: number
   x: Distance
@@ -148,7 +150,7 @@ export interface PcbPlatedHoleSquare {
   pcb_plated_hole_id: string
 }
 
-export type PcbPlatedHole = PcbPlatedHoleCircle | PcbPlatedHoleOval | PcbPlatedHoleSquare
+export type PcbPlatedHole = PcbPlatedHoleCircle | PcbPlatedHoleOval | PcbPlatedHoleCircularWithSquarePad
 
 export interface PcbFabricationNoteText {
   type: "pcb_fabrication_note_text"

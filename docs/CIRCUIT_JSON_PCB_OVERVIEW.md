@@ -139,8 +139,9 @@ export interface PcbPlatedHoleCircularWithSquarePad {
   shape: "circular_hole_with_square_pad"
   hole_shape: "circle"
   pad_shape: "square"
-  outer_side_length: number
-  hole_side_length: number
+  hole_diameter: number
+  square_pad_width: number
+  square_pad_height: number
   x: Distance
   y: Distance
   layers: LayerRef[]

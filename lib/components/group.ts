@@ -1,4 +1,4 @@
-import type { LayoutBuilder, ManualEditFile } from "@tscircuit/layout"
+import type { LayoutBuilder } from "@tscircuit/layout"
 import { length } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import {
@@ -9,6 +9,11 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import type { AnySourceComponent, PcbTrace } from "circuit-json"
+import {
+  manual_edits_file,
+  type ManualEditsFile,
+  type ManualEditsFileInput,
+} from "lib/manual-edits"
 
 export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
@@ -60,7 +65,7 @@ export const autorouterProp = z.union([
 
 export interface SubcircuitGroupProps extends BaseGroupProps {
   layout?: LayoutBuilder
-  manualEdits?: ManualEditFile
+  manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
@@ -95,7 +100,7 @@ export const baseGroupProps = commonLayoutProps.extend({
 
 export const subcircuitGroupProps = baseGroupProps.extend({
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
-  manualEdits: z.custom<ManualEditFile>((v) => true).optional(),
+  manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),

@@ -9,7 +9,11 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import type { AnySourceComponent, PcbTrace } from "circuit-json"
-import { manual_edits_file, type ManualEditsFile } from "lib/manual-edits"
+import {
+  manual_edits_file,
+  type ManualEditsFile,
+  type ManualEditsFileInput,
+} from "lib/manual-edits"
 
 export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
@@ -61,7 +65,7 @@ export const autorouterProp = z.union([
 
 export interface SubcircuitGroupProps extends BaseGroupProps {
   layout?: LayoutBuilder
-  manualEdits?: ManualEditsFile
+  manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance

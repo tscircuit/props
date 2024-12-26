@@ -6,16 +6,18 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
+export type PinVariant = "no_ground" | "ground_pin" | "two_ground_pins"
+
 export interface ResonatorProps extends CommonComponentProps {
   frequency: number | string
   loadCapacitance: number | string
-  pinVariant: "3pin"
+  pinVariant?: PinVariant
 }
 
 export const resonatorProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
-  pinVariant: z.literal("3pin"),
+  pinVariant: z.enum(["no_ground", "ground_pin", "two_ground_pins"]).optional(),
 })
 
 type InferredResonatorProps = z.input<typeof resonatorProps>

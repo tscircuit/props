@@ -1,4 +1,3 @@
-import { voltage, current } from "circuit-json"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -7,23 +6,11 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface TransistorProps extends CommonComponentProps {
-  transistorType: "NPN" | "PNP"
-  pinLabels: Record<"emitter" | "base" | "collector", string>
-  collectorEmitterVoltage?: number | string
-  baseEmitterVoltage?: number | string
-  collectorCurrent?: number | string
+  transistorType: "npn" | "pnp"
 }
 
 export const transistorProps = commonComponentProps.extend({
-  transistorType: z.enum(["NPN", "PNP"]),
-  pinLabels: z.object({
-    emitter: z.string(),
-    base: z.string(),
-    collector: z.string(),
-  }),
-  collectorEmitterVoltage: voltage.optional(),
-  baseEmitterVoltage: voltage.optional(),
-  collectorCurrent: current.optional(),
+  transistorType: z.enum(["npn", "pnp"]),
 })
 
 type InferredTransistorProps = z.input<typeof transistorProps>

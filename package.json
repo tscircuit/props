@@ -1,6 +1,6 @@
 {
   "name": "@tscircuit/props",
-  "version": "0.0.120",
+  "version": "0.0.121",
   "description": "Props for tscircuit builtin component types",
   "main": "dist/index.js",
   "type": "module",

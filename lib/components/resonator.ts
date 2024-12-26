@@ -6,12 +6,12 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export type PinVariant = "no_ground" | "ground_pin" | "two_ground_pins"
+export type ResonatorPinVariant = "no_ground" | "ground_pin" | "two_ground_pins"
 
 export interface ResonatorProps extends CommonComponentProps {
   frequency: number | string
   loadCapacitance: number | string
-  pinVariant?: PinVariant
+  pinVariant?: ResonatorPinVariant
 }
 
 export const resonatorProps = commonComponentProps.extend({

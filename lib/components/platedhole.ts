@@ -39,7 +39,7 @@ export interface PillPlatedHoleProps
 export interface CircularHoleWithSquarePlatedProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
-  shape: "circular_hole_with_square_pad"
+  shape: "circularHoleWithSquarePad"
   holeDiameter: number | string
   squarePadWidth: number | string
   squarePadHeight: number | string
@@ -82,7 +82,7 @@ export const platedHoleProps = z.discriminatedUnion("shape", [
   }),
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
     name: z.string().optional(),
-    shape: z.literal("circular_hole_with_square_pad"),
+    shape: z.literal("circularHoleWithSquarePad"),
     holeDiameter: distance,
     squarePadWidth: distance,
     squarePadHeight: distance,

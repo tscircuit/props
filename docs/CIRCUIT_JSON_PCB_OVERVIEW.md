@@ -11,18 +11,18 @@ can also import.
 ```ts
 export interface PcbFabricationNotePath {
   type: "pcb_fabrication_note_path"
-  pcb_fabrication_note_path_id: string
-  pcb_component_id: string
+  pcbFabricationNotePathId: string
+  pcbComponentId: string
   layer: LayerRef
   route: Point[]
-  stroke_width: Length
+  strokeWidth: Length
   color?: string
 }
 
 export interface PcbComponent {
   type: "pcb_component"
-  pcb_component_id: string
-  source_component_id: string
+  pcbComponentId: string
+  sourceComponentId: string
   center: Point
   layer: LayerRef
   rotation: Rotation
@@ -32,49 +32,49 @@ export interface PcbComponent {
 
 export interface PcbPortNotMatchedError {
   type: "pcb_port_not_matched_error"
-  pcb_error_id: string
+  pcbErrorId: string
   message: string
-  pcb_component_ids: string[]
+  pcbComponentIds: string[]
 }
 
 export interface PcbSolderPasteCircle {
   type: "pcb_solder_paste"
   shape: "circle"
-  pcb_solder_paste_id: string
+  pcbSolderPasteId: string
   x: Distance
   y: Distance
   radius: number
   layer: LayerRef
-  pcb_component_id?: string
-  pcb_smtpad_id?: string
+  pcbComponentId?: string
+  pcbSmtpadId?: string
 }
 
 export interface PcbSolderPasteRect {
   type: "pcb_solder_paste"
   shape: "rect"
-  pcb_solder_paste_id: string
+  pcbSolderPasteId: string
   x: Distance
   y: Distance
   width: number
   height: number
   layer: LayerRef
-  pcb_component_id?: string
-  pcb_smtpad_id?: string
+  pcbComponentId?: string
+  pcbSmtpadId?: string
 }
 
 export type PcbSolderPaste = PcbSolderPasteCircle | PcbSolderPasteRect
 
 export interface PcbSilkscreenText {
   type: "pcb_silkscreen_text"
-  pcb_silkscreen_text_id: string
+  pcbSilkscreenTextId: string
   font: "tscircuit2024"
-  font_size: Length
-  pcb_component_id: string
+  fontSize: Length
+  pcbComponentId: string
   text: string
   layer: LayerRef
-  is_mirrored?: boolean
-  anchor_position: Point
-  anchor_alignment:
+  isMirrored?: boolean
+  anchorPosition: Point
+  anchorAlignment:
     | "center"
     | "top_left"
     | "top_right"
@@ -84,20 +84,20 @@ export interface PcbSilkscreenText {
 
 export interface PcbTraceError {
   type: "pcb_trace_error"
-  pcb_trace_error_id: string
-  error_type: "pcb_trace_error"
+  pcbTraceErrorId: string
+  errorType: "pcb_trace_error"
   message: string
   center?: Point
-  pcb_trace_id: string
-  source_trace_id: string
-  pcb_component_ids: string[]
-  pcb_port_ids: string[]
+  pcbTraceId: string
+  sourceTraceId: string
+  pcbComponentIds: string[]
+  pcbPortIds: string[]
 }
 
 export interface PcbSilkscreenPill {
   type: "pcb_silkscreen_pill"
-  pcb_silkscreen_pill_id: string
-  pcb_component_id: string
+  pcbSilkscreenPillId: string
+  pcbComponentId: string
   center: Point
   width: Length
   height: Length
@@ -107,62 +107,62 @@ export interface PcbSilkscreenPill {
 export interface PcbPlatedHoleCircle {
   type: "pcb_plated_hole"
   shape: "circle"
-  outer_diameter: number
-  hole_diameter: number
+  outerDiameter: number
+  holeDiameter: number
   x: Distance
   y: Distance
   layers: LayerRef[]
-  port_hints?: string[]
-  pcb_component_id?: string
-  pcb_port_id?: string
-  pcb_plated_hole_id: string
+  portHints?: string[]
+  pcbComponentId?: string
+  pcbPortId?: string
+  pcbPlatedHoleId: string
 }
 
 export interface PcbPlatedHoleOval {
   type: "pcb_plated_hole"
   shape: "oval" | "pill"
-  outer_width: number
-  outer_height: number
-  hole_width: number
-  hole_height: number
+  outerWidth: number
+  outerHeight: number
+  holeWidth: number
+  holeHeight: number
   x: Distance
   y: Distance
   layers: LayerRef[]
-  port_hints?: string[]
-  pcb_component_id?: string
-  pcb_port_id?: string
-  pcb_plated_hole_id: string
+  portHints?: string[]
+  pcbComponentId?: string
+  pcbPortId?: string
+  pcbPlatedHoleId: string
 }
 
 export interface PcbHoleCircularWithSquarePlated {
   type: "pcb_plated_hole"
   shape: "circular_hole_with_square_pad"
-  hole_shape: "circle"
-  pad_shape: "square"
-  hole_diameter: number
-  square_pad_width: number
-  square_pad_height: number
+  holeShape: "circle"
+  padShape: "square"
+  holeDiameter: number
+  squarePadWidth: number
+  squarePadHeight: number
   x: Distance
   y: Distance
   layers: LayerRef[]
-  port_hints?: string[]
-  pcb_component_id?: string
-  pcb_port_id?: string
-  pcb_plated_hole_id: string
+  portHints?: string[]
+  pcbComponentId?: string
+  pcbPortId?: string
+  pcbPlatedHoleId: string
 }
 
 export type PcbPlatedHole = PcbPlatedHoleCircle | PcbPlatedHoleOval | PcbHoleCircularWithSquarePlated
 
 export interface PcbFabricationNoteText {
   type: "pcb_fabrication_note_text"
-  pcb_fabrication_note_text_id: string
+  pcbFabricationNoteTextId: string
   font: "tscircuit2024"
-  font_size: Length
-  pcb_component_id: string
+  fontSize: Length
+  pcbComponentId: string
   text: string
   layer: VisibleLayer
-  anchor_position: Point
-  anchor_alignment:
+  anchorPosition: Point
+  anchorAlignment:
     | "center"
     | "top_left"
     | "top_right"
@@ -173,8 +173,8 @@ export interface PcbFabricationNoteText {
 
 export interface PcbSilkscreenCircle {
   type: "pcb_silkscreen_circle"
-  pcb_silkscreen_circle_id: string
-  pcb_component_id: string
+  pcbSilkscreenCircleId: string
+  pcbComponentId: string
   center: Point
   radius: Length
   layer: VisibleLayer
@@ -182,16 +182,16 @@ export interface PcbSilkscreenCircle {
 
 export interface PcbSilkscreenPath {
   type: "pcb_silkscreen_path"
-  pcb_silkscreen_path_id: string
-  pcb_component_id: string
+  pcbSilkscreenPathId: string
+  pcbComponentId: string
   layer: VisibleLayerRef
   route: Point[]
-  stroke_width: Length
+  strokeWidth: Length
 }
 
 export interface PcbText {
   type: "pcb_text"
-  pcb_text_id: string
+  pcbTextId: string
   text: string
   center: Point
   layer: LayerRef
@@ -201,50 +201,50 @@ export interface PcbText {
   align: "bottom-left"
 }
 
-export interface PCBKeepout {
+export interface PcbKeepout {
   type: "pcb_keepout"
   shape: "rect" | "circle"
   center: Point
   width?: Distance
   height?: Distance
   radius?: Distance
-  pcb_keepout_id: string
+  pcbKeepoutId: string
   layers: string[]
   description?: string
 }
 
 export interface PcbVia {
   type: "pcb_via"
-  pcb_via_id: string
+  pcbViaId: string
   x: Distance
   y: Distance
-  outer_diameter: Distance
-  hole_diameter: Distance
+  outerDiameter: Distance
+  holeDiameter: Distance
   layers: LayerRef[]
-  pcb_trace_id?: string
+  pcbTraceId?: string
 }
 
 export interface PcbSilkscreenOval {
   type: "pcb_silkscreen_oval"
-  pcb_silkscreen_oval_id: string
-  pcb_component_id: string
+  pcbSilkscreenOvalId: string
+  pcbComponentId: string
   center: Point
-  radius_x: Distance
-  radius_y: Distance
+  radiusX: Distance
+  radiusY: Distance
   layer: VisibleLayer
 }
 
 export interface PcbPlacementError {
   type: "pcb_placement_error"
-  pcb_placement_error_id: string
+  pcbPlacementErrorId: string
   message: string
 }
 
 export interface PcbPort {
   type: "pcb_port"
-  pcb_port_id: string
-  source_port_id: string
-  pcb_component_id: string
+  pcbPortId: string
+  sourcePortId: string
+  pcbComponentId: string
   x: Distance
   y: Distance
   layers: LayerRef[]
@@ -253,37 +253,37 @@ export interface PcbPort {
 export interface PcbSmtPadCircle {
   type: "pcb_smtpad"
   shape: "circle"
-  pcb_smtpad_id: string
+  pcbSmtpadId: string
   x: Distance
   y: Distance
   radius: number
   layer: LayerRef
-  port_hints?: string[]
-  pcb_component_id?: string
-  pcb_port_id?: string
+  portHints?: string[]
+  pcbComponentId?: string
+  pcbPortId?: string
 }
 
 export interface PcbSmtPadRect {
   type: "pcb_smtpad"
   shape: "rect"
-  pcb_smtpad_id: string
+  pcbSmtpadId: string
   x: Distance
   y: Distance
   width: number
   height: number
   layer: LayerRef
-  port_hints?: string[]
-  pcb_component_id?: string
-  pcb_port_id?: string
+  portHints?: string[]
+  pcbComponentId?: string
+  pcbPortId?: string
 }
 
 export type PcbSmtPad = PcbSmtPadCircle | PcbSmtPadRect
 
 export interface PcbSilkscreenLine {
   type: "pcb_silkscreen_line"
-  pcb_silkscreen_line_id: string
-  pcb_component_id: string
-  stroke_width: Distance
+  pcbSilkscreenLineId: string
+  pcbComponentId: string
+  strokeWidth: Distance
   x1: Distance
   y1: Distance
   x2: Distance
@@ -293,19 +293,19 @@ export interface PcbSilkscreenLine {
 
 export interface PcbHoleCircleOrSquare {
   type: "pcb_hole"
-  pcb_hole_id: string
-  hole_shape: "circle" | "square"
-  hole_diameter: number
+  pcbHoleId: string
+  holeShape: "circle" | "square"
+  holeDiameter: number
   x: Distance
   y: Distance
 }
 
 export interface PcbHoleOval {
   type: "pcb_hole"
-  pcb_hole_id: string
-  hole_shape: "oval"
-  hole_width: number
-  hole_height: number
+  pcbHoleId: string
+  holeShape: "oval"
+  holeWidth: number
+  holeHeight: number
   x: Distance
   y: Distance
 }
@@ -313,43 +313,43 @@ export interface PcbHoleOval {
 export type PcbHole = PcbHoleCircleOrSquare | PcbHoleOval
 
 export interface PcbTraceRoutePointWire {
-  route_type: "wire"
+  routeType: "wire"
   x: Distance
   y: Distance
   width: Distance
-  start_pcb_port_id?: string
-  end_pcb_port_id?: string
+  startPcbPortId?: string
+  endPcbPortId?: string
   layer: LayerRef
 }
 
 export interface PcbTraceRoutePointVia {
-  route_type: "via"
+  routeType: "via"
   x: Distance
   y: Distance
-  from_layer: string
-  to_layer: string
+  fromLayer: string
+  toLayer: string
 }
 
 export type PcbTraceRoutePoint = PcbTraceRoutePointWire | PcbTraceRoutePointVia
 
 export interface PcbTrace {
   type: "pcb_trace"
-  source_trace_id?: string
-  pcb_component_id?: string
-  pcb_trace_id: string
-  route_order_index?: number
-  route_thickness_mode?: "constant" | "interpolated"
-  should_round_corners?: boolean
+  sourceTraceId?: string
+  pcbComponentId?: string
+  pcbTraceId: string
+  routeOrderIndex?: number
+  routeThicknessMode?: "constant" | "interpolated"
+  shouldRoundCorners?: boolean
   route: Array<PcbTraceRoutePoint>
 }
 
 export interface PcbBoard {
   type: "pcb_board"
-  pcb_board_id: string
+  pcbBoardId: string
   width: Length
   height: Length
   thickness: Length
-  num_layers: number
+  numLayers: number
   center: Point
   outline?: Point[]
 }

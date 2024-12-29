@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { point3 } from "./point3"
-import { expectTypesMatch } from "lib/typecheck"
+import { expectTypesMatch } from "../typecheck"
 
 export const rotationPoint3 = z.object({
   x: z.union([z.number(), z.string()]),

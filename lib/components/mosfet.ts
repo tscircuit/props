@@ -6,11 +6,13 @@ import { expectTypesMatch } from "../typecheck"
 import { z } from "zod"
 
 export interface MosfetProps extends CommonComponentProps {
-  channelType: "nmos" | "pmos"
+  mosfetType: "n_channel_moset" | "p_channel_moset"
+  schRotation?: number
 }
 
 export const mosfetProps = commonComponentProps.extend({
-  channelType: z.enum(["nmos", "pmos"]),
+  mosfetType: z.enum(["n_channel_moset", "p_channel_moset"]),
+  schRotation: z.number().optional(),
 })
 
 type InferredMosfetProps = z.input<typeof mosfetProps>

@@ -5,7 +5,7 @@ import {
   rotation,
   supplier_name,
 } from "circuit-json"
-import { expectTypesMatch } from "lib/typecheck"
+import { expectTypesMatch } from "../typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
 import { type Footprint, footprintProp } from "./footprintProp"

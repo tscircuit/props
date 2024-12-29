@@ -1,17 +1,20 @@
 import {
   type CommonComponentProps,
   commonComponentProps,
+  lrPolarPins,
 } from "../common/layout"
 import { expectTypesMatch } from "../typecheck"
 import { z } from "zod"
 
 export interface MosfetProps extends CommonComponentProps {
-  channelType: "nmos" | "pmos"
+  channelType: "n_channel_mosfet" | "p_channel_mosfet"
 }
 
 export const mosfetProps = commonComponentProps.extend({
-  channelType: z.enum(["nmos", "pmos"]),
+  channelType: z.enum(["n_channel_mosfet", "p_channel_mosfet"]),
 })
+
+export const mosfetPins = lrPolarPins
 
 type InferredMosfetProps = z.input<typeof mosfetProps>
 expectTypesMatch<MosfetProps, InferredMosfetProps>(true)

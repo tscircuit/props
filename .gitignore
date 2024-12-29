@@ -4,3 +4,5 @@ dist
 .aider*
 package-lock.json
 .env
+.yalc
+yalc.*

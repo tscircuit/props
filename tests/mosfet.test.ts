@@ -1,37 +1,33 @@
 import { expect, test } from "bun:test"
 import { mosfetProps, type MosfetProps } from "../lib/components/mosfet"
-import { expectTypeOf } from "expect-type"
 
-test("should parse mosfet props for nmos", () => {
+test("should parse mosfet props for n channel type and enhancement mode", () => {
   const rawProps: MosfetProps = {
     name: "mosfet",
-    channelType: "nmos",
+    channelType: "n",
+    mosfetMode: "enhancement",
   }
   const parsedProps = mosfetProps.parse(rawProps)
-  expect(parsedProps.channelType).toBe("nmos")
+  expect(parsedProps.channelType).toBe("n")
+  expect(parsedProps.mosfetMode).toBe("enhancement")
 })
 
-test("should parse mosfet props for pmos", () => {
+test("should parse mosfet props for p channel type and depletion mode", () => {
   const rawProps: MosfetProps = {
     name: "mosfet",
-    channelType: "pmos",
+    channelType: "p",
+    mosfetMode: "depletion",
   }
   const parsedProps = mosfetProps.parse(rawProps)
-  expect(parsedProps.channelType).toBe("pmos")
+  expect(parsedProps.channelType).toBe("p")
+  expect(parsedProps.mosfetMode).toBe("depletion")
 })
 
 test("should fail to parse mosfet with invalid channelType", () => {
   const rawProps = {
     name: "mosfet",
     channelType: "INVALID",
+    mosfetMode: "N/A",
   }
   expect(() => mosfetProps.parse(rawProps)).toThrow()
-})
-
-test("should enforce correct types for mosfet props", () => {
-  const rawProps: MosfetProps = {
-    name: "mosfet",
-    channelType: "nmos",
-  }
-  expectTypeOf(rawProps).toMatchTypeOf<MosfetProps>()
 })

@@ -13,5 +13,14 @@ export const transistorProps = commonComponentProps.extend({
   transistorType: z.enum(["npn", "pnp"]),
 })
 
+export const transistorPins = [
+  "pin1",
+  "emitter",
+  "pin2",
+  "collector",
+  "pin3",
+  "base",
+] as const
+
 type InferredTransistorProps = z.input<typeof transistorProps>
 expectTypesMatch<TransistorProps, InferredTransistorProps>(true)

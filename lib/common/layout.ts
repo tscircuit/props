@@ -103,13 +103,5 @@ export const lrPolarPins = [
   "cathode",
   "neg",
 ] as const
-export const transistorPins = [
-  "pin1",
-  "drain",
-  "pin2",
-  "source",
-  "pin3",
-  "gate",
-] as const
 
 export const distanceOrMultiplier = distance.or(z.enum(["2x", "3x", "4x"]))

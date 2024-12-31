@@ -1,7 +1,7 @@
 import {
   type CommonComponentProps,
   commonComponentProps,
-  lrPolarPins,
+  transistorPins,
 } from "../common/layout"
 import { expectTypesMatch } from "../typecheck"
 import { z } from "zod"
@@ -16,7 +16,7 @@ export const mosfetProps = commonComponentProps.extend({
   mosfetMode: z.enum(["enhancement", "depletion"]),
 })
 
-export const mosfetPins = lrPolarPins
+export const mosfetPins = transistorPins
 
 type InferredMosfetProps = z.input<typeof mosfetProps>
 expectTypesMatch<MosfetProps, InferredMosfetProps>(true)

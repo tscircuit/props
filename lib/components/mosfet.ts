@@ -7,11 +7,13 @@ import { expectTypesMatch } from "../typecheck"
 import { z } from "zod"
 
 export interface MosfetProps extends CommonComponentProps {
-  channelType: "n_channel_mosfet" | "p_channel_mosfet"
+  channelType: "n" | "p"
+  mosfetMode: "enhancement" | "depletion"
 }
 
 export const mosfetProps = commonComponentProps.extend({
-  channelType: z.enum(["n_channel_mosfet", "p_channel_mosfet"]),
+  channelType: z.enum(["n", "p"]),
+  mosfetMode: z.enum(["enhancement", "depletion"]),
 })
 
 export const mosfetPins = lrPolarPins

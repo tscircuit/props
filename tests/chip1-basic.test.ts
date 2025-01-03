@@ -21,6 +21,7 @@ test("should parse chip props", () => {
     },
     schPinSpacing: "0.2mm",
     schWidth: 2,
+    noSchematicRepresentation: true,
   }
 
   expectTypeOf(rawProps).toMatchTypeOf<z.input<typeof chipProps>>()
@@ -28,4 +29,5 @@ test("should parse chip props", () => {
   const parsedProps = chipProps.parse(rawProps)
 
   expect(parsedProps.schPinSpacing).toBe(0.2)
+  expect(parsedProps.noSchematicRepresentation).toBe(true)
 })

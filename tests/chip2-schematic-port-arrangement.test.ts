@@ -29,15 +29,15 @@ test("should parse chip props (number)", () => {
     },
     schPinSpacing: "0.2mm",
     schWidth: 2,
+    noSchematicRepresentation: false, // Add this line
   }
-
-  // expectTypeOf(rawProps).toMatchTypeOf<z.input<typeof chipProps>>()
 
   const parsedProps = chipProps.parse(rawProps)
 
   expect((parsedProps.schPortArrangement as any)?.leftSide.pins).toEqual([
     29, 7, 8, 20, 19, 22,
   ])
+  expect(parsedProps.noSchematicRepresentation).toBe(false)
 })
 
 test("should parse chip props (string)", () => {
@@ -62,6 +62,7 @@ test("should parse chip props (string)", () => {
     },
     schPinSpacing: "0.2mm",
     schWidth: 2,
+    noSchematicRepresentation: false, // Add this line
   }
 
   const parsedProps = chipProps.parse(rawProps)
@@ -70,4 +71,5 @@ test("should parse chip props (string)", () => {
     "A4",
     "B18",
   ])
+  expect(parsedProps.noSchematicRepresentation).toBe(false)
 })

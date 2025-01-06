@@ -10,16 +10,16 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   width?: number | string
   height?: number | string
   outline?: Point[]
-  pcbOffsetX?: number | string
-  pcbOffsetY?: number | string
+  outlineOffsetX?: number | string
+  outlineOffsetY?: number | string
 }
 
 export const boardProps = subcircuitGroupProps.extend({
   width: distance.optional(),
   height: distance.optional(),
   outline: z.array(point).optional(),
-  pcbOffsetX: distance.optional(),
-  pcbOffsetY: distance.optional(),
+  outlineOffsetX: distance.optional(),
+  outlineOffsetY: distance.optional(),
 })
 
 type InferredBoardProps = z.input<typeof boardProps>

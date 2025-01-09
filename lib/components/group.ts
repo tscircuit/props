@@ -80,6 +80,11 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
    */
   schAutoLayoutEnabled?: boolean
 
+  /**
+   * If true, net labels will automatically be created for complex traces
+   */
+  schTraceAutoLabelEnabled?: boolean
+
   partsEngine?: PartsEngine
 }
 
@@ -102,6 +107,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
+  schTraceAutoLabelEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),

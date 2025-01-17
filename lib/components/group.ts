@@ -17,6 +17,7 @@ import {
 
 export interface BaseGroupProps extends CommonLayoutProps {
   name?: string
+  key?: any
   children?: any
 }
 
@@ -101,6 +102,7 @@ export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),
   children: z.any().optional(),
+  key: z.any().optional(),
 })
 
 export const subcircuitGroupProps = baseGroupProps.extend({

@@ -92,6 +92,9 @@ export const commonComponentProps = commonLayoutProps
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>
 expectTypesMatch<CommonComponentProps, InferredCommonComponentProps>(true)
 
+export const componentProps = commonComponentProps
+export type ComponentProps = z.input<typeof componentProps>
+
 export const lrPins = ["pin1", "left", "pin2", "right"] as const
 export const lrPolarPins = [
   "pin1",

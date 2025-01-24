@@ -1,13 +1,13 @@
 {
   "name": "@tscircuit/props",
-  "version": "0.0.131",
+  "version": "0.0.132",
   "description": "Props for tscircuit builtin component types",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "build": "tsup lib/index.ts --format esm --dts --sourcemap",
     "check-circular-deps": "madge --circular --extensions ts ./lib",
-    "format": "biome format . --write", 
+    "format": "biome format . --write",
     "format:check": "biome format .",
     "generate:manual-edits-docs": "tsx scripts/generate-manual-edits-docs.ts",
     "generate:component-types": "tsx scripts/generate-component-types.ts"

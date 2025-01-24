@@ -24,6 +24,8 @@ export interface ChipProps extends CommonComponentProps {
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
+  internallyConnectedPorts?: string[][]
+  externallyConnectedPorts?: string[][]
 }
 
 export type PinLabels = Record<
@@ -46,6 +48,8 @@ export const chipProps = commonComponentProps.extend({
       z.string().or(z.array(z.string()).readonly()),
     )
     .optional(),
+  internallyConnectedPorts: z.array(z.array(z.string())).optional(),
+  externallyConnectedPorts: z.array(z.array(z.string())).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),

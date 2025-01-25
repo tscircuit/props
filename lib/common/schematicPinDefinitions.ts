@@ -42,6 +42,12 @@ export interface SchematicPortArrangement
     SchematicPortArrangementWithSides,
     SchematicPortArrangementWithPinCounts {}
 
+export type SchematicPinArrangement = SchematicPortArrangement
+export type SchematicPinArrangementWithSizes = SchematicPortArrangementWithSizes
+export type SchematicPinArrangementWithSides = SchematicPortArrangementWithSides
+export type SchematicPinArrangementWithPinCounts =
+  SchematicPortArrangementWithPinCounts
+
 export const explicitPinSideDefinition = z.object({
   pins: z.array(z.union([z.number(), z.string()])),
   direction: z.union([
@@ -52,6 +58,9 @@ export const explicitPinSideDefinition = z.object({
   ]),
 })
 
+/**
+ * @deprecated Use schematicPinArrangement instead.
+ */
 export const schematicPortArrangement = z.object({
   leftSize: z.number().optional().describe("@deprecated, use leftPinCount"),
   topSize: z.number().optional().describe("@deprecated, use topPinCount"),
@@ -66,6 +75,8 @@ export const schematicPortArrangement = z.object({
   topSide: explicitPinSideDefinition.optional(),
   bottomSide: explicitPinSideDefinition.optional(),
 })
+
+export const schematicPinArrangement = schematicPortArrangement
 
 expectTypesMatch<
   SchematicPortArrangement,

@@ -6,7 +6,7 @@ import {
 } from "lib/common/layout"
 import {
   type SchematicPortArrangement,
-  schematicPortArrangement,
+  schematicPortArrangement as schematicPinArrangement,
 } from "lib/common/schematicPinDefinitions"
 import {
   type SchematicPinStyle,
@@ -18,14 +18,16 @@ import { z } from "zod"
 export interface ChipProps extends CommonComponentProps {
   manufacturerPartNumber?: string
   pinLabels?: Record<number | string, string | readonly string[]>
+  schPinArrangement?: SchematicPortArrangement
+  /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: Distance
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
-  internallyConnectedPorts?: string[][]
-  externallyConnectedPorts?: string[][]
+  internallyConnectedPins?: string[][]
+  externallyConnectedPins?: string[][]
 }
 
 export type PinLabels = Record<
@@ -48,9 +50,10 @@ export const chipProps = commonComponentProps.extend({
       z.string().or(z.array(z.string()).readonly()),
     )
     .optional(),
-  internallyConnectedPorts: z.array(z.array(z.string())).optional(),
-  externallyConnectedPorts: z.array(z.array(z.string())).optional(),
-  schPortArrangement: schematicPortArrangement.optional(),
+  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  externallyConnectedPins: z.array(z.array(z.string())).optional(),
+  schPinArrangement: schematicPinArrangement.optional(),
+  schPortArrangement: schematicPinArrangement.optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),
   schWidth: distance.optional(),

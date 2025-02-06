@@ -4,8 +4,8 @@ import { fileURLToPath } from "node:url"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-function extractInterfaces(content: string): string[] {
-  const interfaces: string[] = []
+function extractInterfaces(content) {
+  const interfaces = []
   const lines = content.split("\n")
   let currentInterface = ""
   let isCapturing = false
@@ -47,9 +47,12 @@ function extractInterfaces(content: string): string[] {
 
       // End capture based on context
       if (
-        (bracketCount === 0 && line.includes("}")) || // Interface/type end
-        line.trim().endsWith(";") || // Simple type end
-        (line.includes(" as const") && line.includes("]")) // Const array end
+        (bracketCount === 0 && line.includes("}")) ||
+        line.trim().endsWith(";") ||
+        (line.includes(" as const") && line.includes("]")) ||
+        (bracketCount === 0 &&
+          !line.trim().endsWith(",") &&
+          !line.trim().endsWith("{"))
       ) {
         interfaces.push(`${currentInterface.trim()}\n`)
         isCapturing = false
@@ -57,6 +60,18 @@ function extractInterfaces(content: string): string[] {
         bracketCount = 0
       }
     }
+  }
+
+  // Extract inner properties using regex
+  const propertyRegex = /([a-zA-Z0-9_]+)\s*:\s*[^,}]+/g
+  const properties = content.match(propertyRegex)
+
+  if (properties) {
+    properties.forEach((prop) => {
+      if (!interfaces.includes(prop)) {
+        interfaces.push(`${prop}\n`)
+      }
+    })
   }
 
   return interfaces
@@ -67,24 +82,18 @@ function generateComponentTypesDoc() {
   const commonDir = path.join(libDir, "common")
   const componentsDir = path.join(libDir, "components")
 
-  // Get common types first
   const commonFiles = fs
     .readdirSync(commonDir)
     .filter((file) => file.endsWith(".ts"))
     .map((file) => path.join(commonDir, file))
 
-  // Then get component types
   const componentFiles = fs
     .readdirSync(componentsDir)
     .filter((file) => file.endsWith(".ts"))
     .map((file) => path.join(componentsDir, file))
 
-  let markdown = `# TSCircuit Component Types
+  let markdown = `# TSCircuit Component Types\n\n## Common Types\n\n`
 
-## Common Types
-
-`
-  // Add common types
   for (const file of commonFiles) {
     const content = fs.readFileSync(file, "utf8")
     const interfaces = extractInterfaces(content)
@@ -100,7 +109,6 @@ function generateComponentTypesDoc() {
 
   markdown += "## Available Component Types\n\n"
 
-  // Process component files
   for (const file of componentFiles) {
     const content = fs.readFileSync(file, "utf8")
     const interfaces = extractInterfaces(content)
@@ -114,7 +122,6 @@ function generateComponentTypesDoc() {
     }
   }
 
-  // Create generated directory if it doesn't exist
   const generatedDir = path.join(__dirname, "../generated")
   if (!fs.existsSync(generatedDir)) {
     fs.mkdirSync(generatedDir)

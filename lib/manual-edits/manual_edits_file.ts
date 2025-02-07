@@ -11,16 +11,18 @@ import {
 } from "./manual_schematic_placement"
 import { expectTypesMatch } from "lib/typecheck"
 
-export const manualEditsProps = z.object({
-  pcbPlacements: z.array(manual_pcb_placement).optional(),
-  manualTraceHints: z.array(manual_trace_hint).optional(),
-  schematicPlacements: z.array(manual_schematic_placement).optional(),
-}).transform<ManualEditsFile>(data => ({
-  ...data,
-  pcb_placements: data.pcbPlacements,
-  manual_trace_hints: data.manualTraceHints,
-  schematic_placements: data.schematicPlacements,
-}))
+export const manualEditsProps = z
+  .object({
+    pcbPlacements: z.array(manual_pcb_placement).optional(),
+    manualTraceHints: z.array(manual_trace_hint).optional(),
+    schematicPlacements: z.array(manual_schematic_placement).optional(),
+  })
+  .transform<ManualEditsFile>((data) => ({
+    ...data,
+    pcb_placements: data.pcbPlacements,
+    manual_trace_hints: data.manualTraceHints,
+    schematic_placements: data.schematicPlacements,
+  }))
 
 export interface ManualEditsFile {
   pcbPlacements?: ManualPcbPlacement[]

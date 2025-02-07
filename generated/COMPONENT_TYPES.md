@@ -296,8 +296,6 @@ export interface SchematicPortArrangementWithSides {
 }
 export interface SchematicPortArrangement
   extends SchematicPortArrangementWithSizes,
-    SchematicPortArrangementWithSides,
-    SchematicPortArrangementWithPinCounts {}
 export type SchematicPinArrangementWithPinCounts =
   SchematicPortArrangementWithPinCounts
 export const explicitPinSideDefinition = z.object({
@@ -356,17 +354,6 @@ bottomSide: explicitPinSideDefinition.optional()
 ```typescript
 export type SchematicPinStyle = Record<
   string,
-  {
-    marginTop?: number | string
-    marginRight?: number | string
-    marginBottom?: number | string
-    marginLeft?: number | string
-
-    leftMargin?: number | string
-    rightMargin?: number | string
-    topMargin?: number | string
-    bottomMargin?: number | string
-  }
 /** @deprecated use marginBottom */
 export const schematicPinStyle = z.record(
   z.object({
@@ -380,6 +367,7 @@ export const schematicPinStyle = z.record(
     topMargin: distance.optional(),
     bottomMargin: distance.optional(),
   }),
+)
 marginLeft: distance.optional()
 marginRight: distance.optional()
 marginTop: distance.optional()
@@ -487,7 +475,6 @@ export interface ChipProps extends CommonComponentProps {
 /** @deprecated Use schPinArrangement instead. */
 export type PinLabels = Record<
   number | string,
-  string | readonly string[] | string[]
 export const pinLabelsProp = z.record(
   z.number().or(z.string()),
   z.string().or(z.array(z.string()).readonly()).or(z.array(z.string())),
@@ -861,6 +848,8 @@ export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
 })
 export const groupProps = z.discriminatedUnion("subcircuit", [
   baseGroupProps.extend({ subcircuit: z.literal(false).optional() }),
+  subcircuitGroupPropsWithBool,
+])
 findPart: (params: {
     sourceComponent: AnySourceComponent
     footprinterString?: string
@@ -1036,6 +1025,12 @@ export const pcbKeepoutProps = z.union([
     shape: z.literal("circle"),
     radius: distance,
   }),
+  pcbLayoutProps.extend({
+    shape: z.literal("rect"),
+    width: distance,
+    height: distance,
+  }),
+])
 export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>
 pcbRotation: true 
 shape: z.literal("circle")
@@ -1189,6 +1184,25 @@ export const platedHoleProps = z.discriminatedUnion("shape", [
     outerDiameter: distance,
     portHints: portHints.optional(),
   }),
+  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    name: z.string().optional(),
+    shape: z.literal("oval"),
+    outerWidth: distance,
+    outerHeight: distance,
+    innerWidth: distance,
+    innerHeight: distance,
+    portHints: portHints.optional(),
+  }),
+  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    name: z.string().optional(),
+    shape: z.literal("pill"),
+    outerWidth: distance,
+    outerHeight: distance,
+    innerWidth: distance,
+    innerHeight: distance,
+    portHints: portHints.optional(),
+  }),
+])
 shape: "circle"
   holeDiameter: number | string
   outerDiameter: number | string
@@ -1675,10 +1689,18 @@ traceWidth: z.number().optional()
 export const portRef = z.union([
   z.string(),
   z.custom<{ getPortSelector: () => string }>((v) =>
+    Boolean(v.getPortSelector),
+  ),
+])
 export const traceProps = z.union([
   baseTraceProps.extend({
     path: z.array(portRef),
   }),
+  baseTraceProps.extend({
+    from: portRef,
+    to: portRef,
+  }),
+])
 export type TraceProps = z.input<typeof traceProps>
 getPortSelector: () => string 
 key: z.string().optional()

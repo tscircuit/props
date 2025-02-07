@@ -10,7 +10,9 @@ function extractInterfaces(content) {
   let currentInterface = ""
   let isCapturing = false
   let captureComments = ""
-  let bracketCount = 0
+  let curlyBracketCount = 0
+  let squareBracketCount = 0
+  let parenthesisCount = 0
 
   for (const line of lines) {
     // Capture JSDoc comments
@@ -38,26 +40,30 @@ function extractInterfaces(content) {
       isCapturing = true
       currentInterface = `${captureComments}${line}\n`
       captureComments = ""
-      bracketCount += (line.match(/{/g) || []).length
-      bracketCount -= (line.match(/}/g) || []).length
+      curlyBracketCount += (line.match(/{/g) || []).length
+      curlyBracketCount -= (line.match(/}/g) || []).length
+      squareBracketCount += (line.match(/\[/g) || []).length
+      squareBracketCount -= (line.match(/\]/g) || []).length
+      parenthesisCount += (line.match(/\(/g) || []).length
+      parenthesisCount -= (line.match(/\)/g) || []).length
     } else if (isCapturing) {
       currentInterface += `${line}\n`
-      bracketCount += (line.match(/{/g) || []).length
-      bracketCount -= (line.match(/}/g) || []).length
+      curlyBracketCount += (line.match(/{/g) || []).length
+      curlyBracketCount -= (line.match(/}/g) || []).length
+      squareBracketCount += (line.match(/\[/g) || []).length
+      squareBracketCount -= (line.match(/\]/g) || []).length
+      parenthesisCount += (line.match(/\(/g) || []).length
+      parenthesisCount -= (line.match(/\)/g) || []).length
 
-      // End capture based on context
+      // End capture based on all bracket counts
       if (
-        (bracketCount === 0 && line.includes("}")) ||
-        line.trim().endsWith(";") ||
-        (line.includes(" as const") && line.includes("]")) ||
-        (bracketCount === 0 &&
-          !line.trim().endsWith(",") &&
-          !line.trim().endsWith("{"))
+        curlyBracketCount === 0 &&
+        squareBracketCount === 0 &&
+        parenthesisCount === 0
       ) {
         interfaces.push(`${currentInterface.trim()}\n`)
         isCapturing = false
         currentInterface = ""
-        bracketCount = 0
       }
     }
   }

@@ -18,6 +18,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   pitch?: number | string
 
   /**
+   * Schematic facing direction
+   */
+  schFacingDirection?: "up" | "down" | "left" | "right"
+
+  /**
    * Whether the header is male or female
    */
   gender?: "male" | "female"
@@ -56,6 +61,7 @@ export interface PinHeaderProps extends CommonComponentProps {
 export const pinHeaderProps = commonComponentProps.extend({
   pinCount: z.number(),
   pitch: distance.optional(),
+  schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   gender: z.enum(["male", "female"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
   doubleRow: z.boolean().optional(),

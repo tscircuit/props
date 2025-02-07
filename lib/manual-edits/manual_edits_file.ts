@@ -26,6 +26,9 @@ export interface ManualEditsFile {
   pcbPlacements?: ManualPcbPlacement[]
   manualTraceHints?: ManualTraceHint[]
   schematicPlacements?: ManualSchematicPlacement[]
+  pcb_placements?: ManualPcbPlacement[]
+  manual_trace_hints?: ManualTraceHint[]
+  schematic_placements?: ManualSchematicPlacement[]
 }
 
 export type ManualEditsFileInput = z.input<typeof manualEditsProps>

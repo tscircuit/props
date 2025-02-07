@@ -10,7 +10,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import type { AnySourceComponent, PcbTrace } from "circuit-json"
 import {
-  manual_edits_file,
+  manualEditsProps,
   type ManualEditsFile,
   type ManualEditsFileInput,
 } from "lib/manual-edits"
@@ -107,7 +107,7 @@ export const baseGroupProps = commonLayoutProps.extend({
 
 export const subcircuitGroupProps = baseGroupProps.extend({
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
-  manualEdits: manual_edits_file.optional(),
+  manualEdits: manualEditsProps.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),

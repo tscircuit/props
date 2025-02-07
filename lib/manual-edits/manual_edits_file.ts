@@ -15,7 +15,7 @@ export const manualEditsProps = z.object({
   pcbPlacements: z.array(manual_pcb_placement).optional(),
   manualTraceHints: z.array(manual_trace_hint).optional(),
   schematicPlacements: z.array(manual_schematic_placement).optional(),
-}).transform(data => ({
+}).transform<ManualEditsFile>(data => ({
   ...data,
   pcb_placements: data.pcbPlacements,
   manual_trace_hints: data.manualTraceHints,

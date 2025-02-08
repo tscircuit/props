@@ -8,18 +8,18 @@ import { z } from "zod"
 
 export interface SwitchProps extends CommonComponentProps {
   ftype: "switch"
-  type: "spst" | "spdt" | "dpst" | "dpdt"
+  type?: "spst" | "spdt" | "dpst" | "dpdt"
   isNormallyClosed?: boolean
-  isSPDT?: boolean
-  isSPST?: boolean
-  isDPST?: boolean
-  isDPDT?: boolean
+  spdt?: boolean
+  spst?: boolean
+  dpst?: boolean
+  dpdt?: boolean
 }
 
 export const switchProps = commonComponentProps
   .extend({
     ftype: z.literal("switch"),
-    type: z.enum(["spst", "spdt", "dpst", "dpdt"]),
+    type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
     isNormallyClosed: z.boolean().optional().default(false),
   })
   .transform((val) => {
@@ -27,16 +27,16 @@ export const switchProps = commonComponentProps
     const updatedVal: SwitchProps = { ...val }
     switch (updatedVal.type) {
       case "spdt":
-        updatedVal.isSPDT = true
+        updatedVal.spdt = true
         break
       case "spst":
-        updatedVal.isSPST = true
+        updatedVal.spst = true
         break
       case "dpst":
-        updatedVal.isDPST = true
+        updatedVal.dpst = true
         break
       case "dpdt":
-        updatedVal.isDPDT = true
+        updatedVal.dpdt = true
         break
     }
 

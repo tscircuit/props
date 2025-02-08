@@ -22,25 +22,25 @@ export const switchProps = commonComponentProps
     type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
     isNormallyClosed: z.boolean().optional().default(false),
   })
-  .transform((val) => {
+  .transform((props) => {
     // Add boolean properties based on 'type'
-    const updatedVal: SwitchProps = { ...val }
-    switch (updatedVal.type) {
+    const updatedProp: SwitchProps = { ...props }
+    switch (updatedProp.type) {
       case "spdt":
-        updatedVal.spdt = true
+        updatedProp.spdt = true
         break
       case "spst":
-        updatedVal.spst = true
+        updatedProp.spst = true
         break
       case "dpst":
-        updatedVal.dpst = true
+        updatedProp.dpst = true
         break
       case "dpdt":
-        updatedVal.dpdt = true
+        updatedProp.dpdt = true
         break
     }
 
-    return updatedVal
+    return updatedProp
   })
 
 export type InferredSwitchProps = z.infer<typeof switchProps>

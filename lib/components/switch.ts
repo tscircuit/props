@@ -24,23 +24,23 @@ export const switchProps = commonComponentProps
   })
   .transform((props) => {
     // Add boolean properties based on 'type'
-    const updatedProp: SwitchProps = { ...props }
-    switch (updatedProp.type) {
+    const updatedProps: SwitchProps = { ...props }
+    switch (updatedProps.type) {
       case "spdt":
-        updatedProp.spdt = true
+        updatedProps.spdt = true
         break
       case "spst":
-        updatedProp.spst = true
+        updatedProps.spst = true
         break
       case "dpst":
-        updatedProp.dpst = true
+        updatedProps.dpst = true
         break
       case "dpdt":
-        updatedProp.dpdt = true
+        updatedProps.dpdt = true
         break
     }
 
-    return updatedProp
+    return updatedProps
   })
 
 export type InferredSwitchProps = z.infer<typeof switchProps>

@@ -37,6 +37,7 @@ export interface AutorouterConfig {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
+  serverCacheEnabled?: boolean
   cache?: PcbRouteCache
 }
 
@@ -52,6 +53,7 @@ export const autorouterConfig = z.object({
   serverUrl: z.string().optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
+  serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
 })
 

@@ -28,7 +28,7 @@ test("should parse transistor props for pnp transistor", () => {
 test("should fail to parse transistor props with invalid transistor type", () => {
   const rawProps = {
     name: "transistor",
-    type: "INVALID",
+    transistorType: "INVALID",
   }
 
   expect(() => transistorProps.parse(rawProps)).toThrow()

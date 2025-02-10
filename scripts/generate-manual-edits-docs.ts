@@ -11,8 +11,10 @@ interface ElementDoc {
 
 async function generateManualEditsDocs() {
   const pattern = "lib/manual-edits/**/*.ts"
-  const interfaceRegex = /(?:\/\*\*[\s\S]*?\*\/\s*)?export\s+interface\s+([A-Z][a-zA-Z0-9]*)(?:\s+extends\s+[A-Za-z0-9._]+)?\s*{[\s\S]*?(?:^}|\n\s*})/gm;
-  const typeRegex = /(?:\/\*\*[\s\S]*?\*\/\s*)?export\s+type\s+([A-Z][a-zA-Z0-9]*)(?!\s*=\s*(?:z\.|.*Input|.*infer))[^;]*;/gm;
+  const interfaceRegex =
+    /(?:\/\*\*[\s\S]*?\*\/\s*)?export\s+interface\s+([A-Z][a-zA-Z0-9]*)(?:\s+extends\s+[A-Za-z0-9._]+)?\s*{[\s\S]*?(?:^}|\n\s*})/gm
+  const typeRegex =
+    /(?:\/\*\*[\s\S]*?\*\/\s*)?export\s+type\s+([A-Z][a-zA-Z0-9]*)(?!\s*=\s*(?:z\.|.*Input|.*infer))[^;]*;/gm
   const files = await glob(pattern, {
     cwd: process.cwd(),
     absolute: true,

@@ -7,7 +7,6 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface SwitchProps extends CommonComponentProps {
-  ftype: "switch"
   type?: "spst" | "spdt" | "dpst" | "dpdt"
   isNormallyClosed?: boolean
   spdt?: boolean
@@ -18,7 +17,6 @@ export interface SwitchProps extends CommonComponentProps {
 
 export const switchProps = commonComponentProps
   .extend({
-    ftype: z.literal("switch"),
     type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
     isNormallyClosed: z.boolean().optional().default(false),
   })

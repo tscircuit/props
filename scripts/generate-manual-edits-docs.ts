@@ -11,6 +11,8 @@ interface ElementDoc {
 
 async function generateManualEditsDocs() {
   const pattern = "lib/manual-edits/**/*.ts"
+  const interfaceRegex = /(?:\/\*\*[\s\S]*?\*\/\s*)?export\s+interface\s+([A-Z][a-zA-Z0-9]*)(?:\s+extends\s+[A-Za-z0-9._]+)?\s*{[\s\S]*?(?:^}|\n\s*})/gm;
+  const typeRegex = /(?:\/\*\*[\s\S]*?\*\/\s*)?export\s+type\s+([A-Z][a-zA-Z0-9]*)(?!\s*=\s*(?:z\.|.*Input|.*infer))[^;]*;/gm;
   const files = await glob(pattern, {
     cwd: process.cwd(),
     absolute: true,
@@ -61,10 +63,7 @@ async function generateManualEditsDocs() {
 
     // Match export interface declarations with proper multiline handling
     // Match export interface declarations with proper multiline handling
-    const interfaceMatches =
-      content.match(
-        /(?:\/\*\*[\s\S]*?\*\/\s*)?export\s+interface\s+([A-Z][a-zA-Z0-9]*)(?:\s+extends\s+[A-Za-z0-9._]+)?\s*{[\s\S]*?(?:^}|\n\s*})/gm,
-      ) ?? []
+    const interfaceMatches = content.match(interfaceRegex) ?? []
 
     // Debug logging for interface detection
     console.log(`[${basename}] Searching for interfaces...`)
@@ -79,10 +78,7 @@ async function generateManualEditsDocs() {
     // Match export type declarations (excluding Zod types)
     // Match export type declarations (excluding input/infer types)
     // Match export type declarations (excluding input/infer types)
-    const typeMatches =
-      content.match(
-        /(?:\/\*\*[\s\S]*?\*\/\s*)?export\s+type\s+([A-Z][a-zA-Z0-9]*)(?!\s*=\s*(?:z\.|.*Input|.*infer))[^;]*;/gm,
-      ) ?? []
+    const typeMatches = content.match(typeRegex) ?? []
 
     // Debug logging for type detection
     console.log(`[${basename}] Searching for types...`)

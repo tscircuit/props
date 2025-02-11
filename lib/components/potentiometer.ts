@@ -5,16 +5,19 @@ import {
   lrPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
-import type { z } from "zod"
+import { z } from "zod"
+
+export type PotentiometerPinVariant = "two_pin" | "three_pin"
 
 export interface PotentiometerProps extends CommonComponentProps {
   maxResistance: number | string
+  pinVariant?: PotentiometerPinVariant
 }
 
 export const potentiometerProps = commonComponentProps.extend({
   maxResistance: resistance,
+  pinVariant: z.enum(["two_pin", "three_pin"]).optional(),
 })
-export const potentiometerPins = lrPins
 
 type InferredPotentiometerProps = z.input<typeof potentiometerProps>
 expectTypesMatch<PotentiometerProps, InferredPotentiometerProps>(true)

@@ -39,6 +39,8 @@ export interface AutorouterConfig {
   serverMode?: "job" | "solve-endpoint"
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
+  groupMode?: "sequential-trace" | "subcircuit"
+  local?: boolean
 }
 
 export type AutorouterProp =
@@ -55,6 +57,8 @@ export const autorouterConfig = z.object({
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
   serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
+  groupMode: z.enum(["sequential-trace", "subcircuit"]).optional(),
+  local: z.boolean().optional(),
 })
 
 export const autorouterProp = z.union([

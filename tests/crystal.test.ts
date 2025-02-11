@@ -8,11 +8,11 @@ test("should parse crystal props with 2pin variant", () => {
     name: "crystal",
     frequency: "16MHz",
     loadCapacitance: "20pF",
-    pinVariant: "2pin",
+    pinVariant: "two_pin",
   }
 
   const parsedProps = crystalProps.parse(rawProps)
-  expect(parsedProps.pinVariant).toBe("2pin")
+  expect(parsedProps.pinVariant).toBe("two_pin")
 })
 
 test("should parse crystal props with 4pin variant", () => {
@@ -20,9 +20,9 @@ test("should parse crystal props with 4pin variant", () => {
     name: "crystal",
     frequency: "16MHz",
     loadCapacitance: "20pF",
-    pinVariant: "4pin",
+    pinVariant: "four_pin",
   }
 
   const parsedProps = crystalProps.parse(rawProps)
-  expect(parsedProps.pinVariant).toBe("4pin")
+  expect(parsedProps.pinVariant).toBe("four_pin")
 })

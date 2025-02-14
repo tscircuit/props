@@ -15,6 +15,10 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
+// Define types for connections
+export type ConnectionTarget = string | readonly string[] | string[]
+export type Connections = Record<number | string, ConnectionTarget>
+
 export interface ChipProps extends CommonComponentProps {
   manufacturerPartNumber?: string
   pinLabels?: Record<number | string, string | readonly string[]>
@@ -28,12 +32,22 @@ export interface ChipProps extends CommonComponentProps {
   noSchematicRepresentation?: boolean
   internallyConnectedPins?: string[][]
   externallyConnectedPins?: string[][]
+  connections?: Connections
 }
 
 export type PinLabels = Record<
   number | string,
   string | readonly string[] | string[]
 >
+
+// Zod schema for connection target
+const connectionTarget = z
+  .string()
+  .or(z.array(z.string()).readonly())
+  .or(z.array(z.string()))
+
+// Zod schema for connections
+const connectionsProp = z.record(z.number().or(z.string()), connectionTarget)
 
 export const pinLabelsProp = z.record(
   z.number().or(z.string()),
@@ -59,6 +73,7 @@ export const chipProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   noSchematicRepresentation: z.boolean().optional(),
+  connections: connectionsProp.optional(),
 })
 
 /**

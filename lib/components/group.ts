@@ -111,6 +111,8 @@ export const baseGroupProps = commonLayoutProps.extend({
   key: z.any().optional(),
 })
 
+export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
+
 export const subcircuitGroupProps = baseGroupProps.extend({
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
   manualEdits: manual_edits_file.optional(),
@@ -119,7 +121,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
-  partsEngine: z.custom<PartsEngine>((v) => "findPart" in v).optional(),
+  partsEngine: partsEngine.optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
 })

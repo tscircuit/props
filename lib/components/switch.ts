@@ -19,10 +19,24 @@ export const switchProps = commonComponentProps
   .extend({
     type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
     isNormallyClosed: z.boolean().optional().default(false),
+    spst: z.boolean().optional(),
+    spdt: z.boolean().optional(),
+    dpst: z.boolean().optional(),
+    dpdt: z.boolean().optional(),
   })
   .transform((props) => {
-    // Add boolean properties based on 'type'
     const updatedProps: SwitchProps = { ...props }
+
+    if (updatedProps.dpdt) {
+      updatedProps.type = "dpdt"
+    } else if (updatedProps.spst) {
+      updatedProps.type = "spst"
+    } else if (updatedProps.spdt) {
+      updatedProps.type = "spdt"
+    } else if (updatedProps.dpst) {
+      updatedProps.type = "dpst"
+    }
+
     switch (updatedProps.type) {
       case "spdt":
         updatedProps.spdt = true

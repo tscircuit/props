@@ -1,4 +1,4 @@
-import { capacitance } from "circuit-json"
+import { capacitance, voltage } from "circuit-json"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -9,6 +9,7 @@ import { z } from "zod"
 
 export interface CapacitorProps extends CommonComponentProps {
   capacitance: number | string
+  maxVoltageRating?: number | string
   polarized?: boolean
   decouplingFor?: string
   decouplingTo?: string
@@ -19,6 +20,7 @@ export interface CapacitorProps extends CommonComponentProps {
 
 export const capacitorProps = commonComponentProps.extend({
   capacitance,
+  maxVoltageRating: voltage.optional(),
   polarized: z.boolean().optional().default(false),
   decouplingFor: z.string().optional(),
   decouplingTo: z.string().optional(),

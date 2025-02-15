@@ -24,7 +24,7 @@ test("should parse switch props with flag value", () => {
 test("should fail to parse switch props with invalid switch type", () => {
   const rawProps = {
     name: "transistor",
-    dpst: true,
+    dpst: false,
   }
 
   const parsedProps = switchProps.parse(rawProps)

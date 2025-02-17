@@ -16,7 +16,7 @@ test("should parse stampboard props", () => {
     topPinCount: 3,
     bottomPinCount: 3,
     pinPitch: 2.54,
-    innerHole: true,
+    innerHoles: true,
   }
 
   expectTypeOf(rawProps).toMatchTypeOf<z.input<typeof stampboardProps>>()
@@ -25,7 +25,7 @@ test("should parse stampboard props", () => {
 
   expect(parsedProps.width).toBe(50)
   expect(parsedProps.height).toBe(30)
-  expect(parsedProps.innerHole).toBe(true)
+  expect(parsedProps.innerHoles).toBe(true)
 })
 
 test("should handle optional properties", () => {
@@ -40,7 +40,7 @@ test("should handle optional properties", () => {
   expect(parsedProps.width).toBe(100)
   expect(parsedProps.height).toBe(60)
   expect(parsedProps.leftPins).toBeUndefined()
-  expect(parsedProps.innerHole).toBeUndefined()
+  expect(parsedProps.innerHoles).toBeUndefined()
 })
 
 test("should parse numeric and string pitch values", () => {

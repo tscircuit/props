@@ -11,11 +11,11 @@ test("should parse stampboard props", () => {
     name: "stampboard",
     width: 50,
     height: 30,
-    leftPins: 5,
-    rightPins: 5,
-    topPins: 3,
-    bottomPins: 3,
-    pitch: 2.54,
+    leftPinCount: 5,
+    rightPinCount: 5,
+    topPinCount: 3,
+    bottomPinCount: 3,
+    pinPitch: 2.54,
     innerHole: true,
   }
 
@@ -44,9 +44,9 @@ test("should handle optional properties", () => {
 })
 
 test("should parse numeric and string pitch values", () => {
-  const rawProps1: StampboardProps = { name: "stampboard", pitch: 2.54 }
-  const rawProps2: StampboardProps = { name: "stampboard", pitch: 2.54 }
+  const rawProps1: StampboardProps = { name: "stampboard", pinPitch: 2.54 }
+  const rawProps2: StampboardProps = { name: "stampboard", pinPitch: 2.54 }
 
-  expect(stampboardProps.parse(rawProps1).pitch).toBe(2.54)
-  expect(stampboardProps.parse(rawProps2).pitch).toBe(2.54)
+  expect(stampboardProps.parse(rawProps1).pinPitch).toBe(2.54)
+  expect(stampboardProps.parse(rawProps2).pinPitch).toBe(2.54)
 })

@@ -13,7 +13,7 @@ export interface StampboardProps extends BoardProps {
   topPins?: string[]
   bottomPins?: string[]
   pinPitch?: number | string
-  innerHole?: boolean
+  innerHoles?: boolean
 }
 
 export const stampboardProps = boardProps.extend({
@@ -26,7 +26,7 @@ export const stampboardProps = boardProps.extend({
   topPins: z.array(z.string()).optional(),
   bottomPins: z.array(z.string()).optional(),
   pinPitch: distance.optional(),
-  innerHole: z.boolean().optional(),
+  innerHoles: z.boolean().optional(),
 })
 
 type InferredStampboardProps = z.input<typeof stampboardProps>

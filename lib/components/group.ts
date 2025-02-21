@@ -1,5 +1,5 @@
 import type { LayoutBuilder } from "@tscircuit/layout"
-import { length } from "circuit-json"
+import { layer_ref, length } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import {
   type CommonLayoutProps,
@@ -105,24 +105,38 @@ export interface NonSubcircuitGroupProps extends BaseGroupProps {
 
 export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps
 
+export const layoutConfig = z.object({
+  layoutMode: z.enum(["grid", "flex", "none"]).optional(),
+  position: z.enum(["absolute", "relative"]).optional(),
+
+  grid: z.boolean().optional(),
+  gridCols: z.number().or(z.string()).optional(),
+  gridRows: z.number().or(z.string()).optional(),
+  gridTemplateRows: z.string().optional(),
+  gridTemplateColumns: z.string().optional(),
+  gridTemplate: z.string().optional(),
+  gridGap: z.number().or(z.string()).optional(),
+
+  flex: z.boolean().or(z.string()).optional(),
+  flexDirection: z.enum(["row", "column"]).optional(),
+  alignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
+  justifyContent: z.enum(["start", "center", "end", "stretch"]).optional(),
+  flexRow: z.boolean().optional(),
+  flexColumn: z.boolean().optional(),
+})
+
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),
   children: z.any().optional(),
   key: z.any().optional(),
 
-  layoutMode: z.enum(["grid", "flex", "none"]).optional(),
-  pcbLayoutMode: z.enum(["grid", "manual", "none"]).optional(),
-  schLayoutMode: z.enum(["grid", "flex", "none"]).optional(),
-
-  grid: z.boolean().optional(),
-  flex: z.boolean().optional(),
-
-  flexDirection: z.enum(["row", "column"]).optional(),
-
-  flexRow: z.boolean().optional(),
-  flexColumn: z.boolean().optional(),
-
-  gridCell: z.boolean().optional(),
+  ...layoutConfig.shape,
+  pcbWidth: length.optional(),
+  pcbHeight: length.optional(),
+  schWidth: length.optional(),
+  schHeight: length.optional(),
+  pcbLayout: layoutConfig.optional(),
+  schLayout: layoutConfig.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

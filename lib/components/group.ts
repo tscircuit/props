@@ -33,6 +33,7 @@ export const layoutConfig = z.object({
   justifyContent: z.enum(["start", "center", "end", "stretch"]).optional(),
   flexRow: z.boolean().optional(),
   flexColumn: z.boolean().optional(),
+  gap: z.number().or(z.string()).optional(),
 })
 
 export interface LayoutConfig {
@@ -53,6 +54,7 @@ export interface LayoutConfig {
   justifyContent?: "start" | "center" | "end" | "stretch"
   flexRow?: boolean
   flexColumn?: boolean
+  gap?: number | string
 }
 
 expectTypesMatch<LayoutConfig, z.input<typeof layoutConfig>>(true)

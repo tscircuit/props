@@ -15,10 +15,60 @@ import {
   type ManualEditsFileInput,
 } from "lib/manual-edits"
 
-export interface BaseGroupProps extends CommonLayoutProps {
+export const layoutConfig = z.object({
+  layoutMode: z.enum(["grid", "flex", "none"]).optional(),
+  position: z.enum(["absolute", "relative"]).optional(),
+
+  grid: z.boolean().optional(),
+  gridCols: z.number().or(z.string()).optional(),
+  gridRows: z.number().or(z.string()).optional(),
+  gridTemplateRows: z.string().optional(),
+  gridTemplateColumns: z.string().optional(),
+  gridTemplate: z.string().optional(),
+  gridGap: z.number().or(z.string()).optional(),
+
+  flex: z.boolean().or(z.string()).optional(),
+  flexDirection: z.enum(["row", "column"]).optional(),
+  alignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
+  justifyContent: z.enum(["start", "center", "end", "stretch"]).optional(),
+  flexRow: z.boolean().optional(),
+  flexColumn: z.boolean().optional(),
+})
+
+export interface LayoutConfig {
+  layoutMode?: "grid" | "flex" | "none"
+  position?: "absolute" | "relative"
+
+  grid?: boolean
+  gridCols?: number | string
+  gridRows?: number | string
+  gridTemplateRows?: string
+  gridTemplateColumns?: string
+  gridTemplate?: string
+  gridGap?: number | string
+
+  flex?: boolean | string
+  flexDirection?: "row" | "column"
+  alignItems?: "start" | "center" | "end" | "stretch"
+  justifyContent?: "start" | "center" | "end" | "stretch"
+  flexRow?: boolean
+  flexColumn?: boolean
+}
+
+expectTypesMatch<LayoutConfig, z.input<typeof layoutConfig>>(true)
+
+export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   name?: string
   key?: any
   children?: any
+
+  pcbWidth?: Distance
+  pcbHeight?: Distance
+  schWidth?: Distance
+  schHeight?: Distance
+
+  pcbLayout?: LayoutConfig
+  schLayout?: LayoutConfig
 }
 
 export type PartsEngine = {
@@ -104,26 +154,6 @@ export interface NonSubcircuitGroupProps extends BaseGroupProps {
 }
 
 export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps
-
-export const layoutConfig = z.object({
-  layoutMode: z.enum(["grid", "flex", "none"]).optional(),
-  position: z.enum(["absolute", "relative"]).optional(),
-
-  grid: z.boolean().optional(),
-  gridCols: z.number().or(z.string()).optional(),
-  gridRows: z.number().or(z.string()).optional(),
-  gridTemplateRows: z.string().optional(),
-  gridTemplateColumns: z.string().optional(),
-  gridTemplate: z.string().optional(),
-  gridGap: z.number().or(z.string()).optional(),
-
-  flex: z.boolean().or(z.string()).optional(),
-  flexDirection: z.enum(["row", "column"]).optional(),
-  alignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
-  justifyContent: z.enum(["start", "center", "end", "stretch"]).optional(),
-  flexRow: z.boolean().optional(),
-  flexColumn: z.boolean().optional(),
-})
 
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),

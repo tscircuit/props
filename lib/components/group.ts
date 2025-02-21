@@ -117,7 +117,12 @@ export const baseGroupProps = commonLayoutProps.extend({
   grid: z.boolean().optional(),
   flex: z.boolean().optional(),
 
-  cell: z.boolean().optional(),
+  flexDirection: z.enum(["row", "column"]).optional(),
+
+  flexRow: z.boolean().optional(),
+  flexColumn: z.boolean().optional(),
+
+  gridCell: z.boolean().optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

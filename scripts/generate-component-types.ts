@@ -10,18 +10,20 @@ function extractInterfaces(content: string): string[] {
   let currentInterface = ""
   let isCapturing = false
   let captureComments = ""
+  let inJSDoc = false
   let bracketCount = 0
 
   for (const line of lines) {
-    // Capture JSDoc comments
+    // Capture JSDoc comments using inJSDoc flag
     if (line.trim().startsWith("/**")) {
+      inJSDoc = true
       captureComments = `${line}\n`
       continue
     }
-    if (captureComments && line.trim().startsWith("*")) {
+    if (inJSDoc) {
       captureComments += `${line}\n`
-      if (line.trim() === "*/") {
-        continue
+      if (line.trim().endsWith("*/")) {
+        inJSDoc = false
       }
       continue
     }
@@ -93,7 +95,7 @@ function generateComponentTypesDoc() {
       const typeName = path.basename(file, ".ts")
       markdown += `### ${typeName}\n\n`
       markdown += "```typescript\n"
-      markdown += interfaces.join("")
+      markdown += interfaces.join("\n\n")
       markdown += "```\n\n"
     }
   }
@@ -109,7 +111,7 @@ function generateComponentTypesDoc() {
       const componentName = path.basename(file, ".ts")
       markdown += `### ${componentName}\n\n`
       markdown += "```typescript\n"
-      markdown += interfaces.join("")
+      markdown += interfaces.join("\n\n")
       markdown += "```\n\n"
     }
   }

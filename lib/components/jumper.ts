@@ -23,7 +23,7 @@ export interface JumperProps extends CommonComponentProps {
   schHeight?: number | string
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
-  numRows?: number
+  rows?: number
 }
 
 export const jumperProps = commonComponentProps.extend({
@@ -37,7 +37,7 @@ export const jumperProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
-  numRows: z.number().optional(),
+  rows: z.number().optional(),
 })
 
 type InferredJumperProps = z.input<typeof jumperProps>

@@ -24,7 +24,6 @@ export interface JumperProps extends CommonComponentProps {
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
   numRows?: number
-
 }
 
 export const jumperProps = commonComponentProps.extend({

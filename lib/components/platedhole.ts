@@ -93,10 +93,10 @@ const platedHoleProps = z
     }),
   ])
   .refine(
-    (hole) => {
+    (prop) => {
       if (
-        hole.shape === "circularHoleWithRectPad" &&
-        (!hole.holeDiameter || !hole.rectPadWidth || !hole.rectPadHeight)
+        prop.shape === "circularHoleWithRectPad" &&
+        (!prop.holeDiameter || !prop.rectPadWidth || !prop.rectPadHeight)
       ) {
         return false
       }

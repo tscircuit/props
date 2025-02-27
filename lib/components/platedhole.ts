@@ -35,6 +35,7 @@ export interface PillPlatedHoleProps
   innerHeight: number | string
   portHints?: PortHints
 }
+
 export interface CircularHoleWithRectPlatedProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
@@ -53,43 +54,59 @@ export type PlatedHoleProps =
   | PillPlatedHoleProps
   | CircularHoleWithRectPlatedProps
 
-export const platedHoleProps = z.discriminatedUnion("shape", [
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    shape: z.literal("circle"),
-    holeDiameter: distance,
-    outerDiameter: distance,
-    portHints: portHints.optional(),
-  }),
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    shape: z.literal("oval"),
-    outerWidth: distance,
-    outerHeight: distance,
-    innerWidth: distance,
-    innerHeight: distance,
-    portHints: portHints.optional(),
-  }),
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    shape: z.literal("pill"),
-    outerWidth: distance,
-    outerHeight: distance,
-    innerWidth: distance,
-    innerHeight: distance,
-    portHints: portHints.optional(),
-  }),
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    holeDiameter: distance,
-    rectPadWidth: distance,
-    rectPadHeight: distance,
-    holeShape: z.literal("circle").optional(),
-    padShape: z.literal("rect").optional(),
-    shape: z.literal("circularHoleWithRectPad").optional(),
-    portHints: portHints.optional(),
-  }),
-])
+const platedHoleProps = z
+  .discriminatedUnion("shape", [
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      shape: z.literal("circle"),
+      holeDiameter: distance,
+      outerDiameter: distance,
+      portHints: portHints.optional(),
+    }),
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      shape: z.literal("oval"),
+      outerWidth: distance,
+      outerHeight: distance,
+      innerWidth: distance,
+      innerHeight: distance,
+      portHints: portHints.optional(),
+    }),
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      shape: z.literal("pill"),
+      outerWidth: distance,
+      outerHeight: distance,
+      innerWidth: distance,
+      innerHeight: distance,
+      portHints: portHints.optional(),
+    }),
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      holeDiameter: distance,
+      rectPadWidth: distance,
+      rectPadHeight: distance,
+      holeShape: z.literal("circle").optional(),
+      padShape: z.literal("rect").optional(),
+      shape: z.literal("circularHoleWithRectPad").optional(),
+      portHints: portHints.optional(),
+    }),
+  ])
+  .refine(
+    (hole) => {
+      if (
+        hole.shape === "circularHoleWithRectPad" &&
+        (!hole.holeDiameter || !hole.rectPadWidth || !hole.rectPadHeight)
+      ) {
+        return false
+      }
+      return true
+    },
+    {
+      message: "Missing required fields based on the selected hole type",
+    },
+  )
 
 type InferredPlatedHoleProps = z.input<typeof platedHoleProps>
+
 expectTypesMatch<PlatedHoleProps, InferredPlatedHoleProps>(true)

@@ -35,11 +35,23 @@ export interface PillPlatedHoleProps
   innerHeight: number | string
   portHints?: PortHints
 }
+export interface CircularHoleWithRectPlatedProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  name?: string
+  shape: "circularHoleWithRectPad"
+  holeDiameter: number | string
+  rectPadWidth: number | string
+  rectPadHeight: number | string
+  holeShape: "circle"
+  padShape: "rect"
+  portHints?: PortHints
+}
 
 export type PlatedHoleProps =
   | CirclePlatedHoleProps
   | OvalPlatedHoleProps
   | PillPlatedHoleProps
+  | CircularHoleWithRectPlatedProps
 
 export const platedHoleProps = z.discriminatedUnion("shape", [
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
@@ -65,6 +77,16 @@ export const platedHoleProps = z.discriminatedUnion("shape", [
     outerHeight: distance,
     innerWidth: distance,
     innerHeight: distance,
+    portHints: portHints.optional(),
+  }),
+  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    name: z.string().optional(),
+    shape: z.literal("circularHoleWithRectPad"),
+    holeDiameter: distance,
+    rectPadWidth: distance,
+    rectPadHeight: distance,
+    holeShape: z.literal("circle"),
+    padShape: z.literal("rect"),
     portHints: portHints.optional(),
   }),
 ])

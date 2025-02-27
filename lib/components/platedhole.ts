@@ -42,8 +42,6 @@ export interface CircularHoleWithRectPlatedProps
   holeDiameter: number | string
   rectPadWidth: number | string
   rectPadHeight: number | string
-  holeShape: "circle"
-  padShape: "rect"
   portHints?: PortHints
 }
 
@@ -85,8 +83,6 @@ export const platedHoleProps = z.discriminatedUnion("shape", [
     holeDiameter: distance,
     rectPadWidth: distance,
     rectPadHeight: distance,
-    holeShape: z.literal("circle"),
-    padShape: z.literal("rect"),
     portHints: portHints.optional(),
   }),
 ])

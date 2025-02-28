@@ -111,7 +111,11 @@ export const autorouterConfig = z.object({
   serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   groupMode: z.enum(["sequential-trace", "subcircuit"]).optional(),
-  algorithmFn: z.function().optional(),
+  algorithmFn: z
+    .custom<(simpleRouteJson: any) => Promise<any>>(
+      (v) => typeof v === "function" || v === undefined,
+    )
+    .optional(),
   local: z.boolean().optional(),
 })
 

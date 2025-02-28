@@ -476,7 +476,7 @@ export const crystalProps = commonComponentProps.extend({
 ```typescript
 export const fabricationNotePathProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
-.extend({
+  .extend({
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),
     color: z.string().optional(),
@@ -667,7 +667,7 @@ export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 export const holeProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     name: z.string().optional(),
     diameter: distance.optional(),
     radius: distance.optional(),
@@ -1017,7 +1017,7 @@ export const schematicTextProps = z.object({
 ```typescript
 export const silkscreenCircleProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     isFilled: z.boolean().optional(),
     isOutline: z.boolean().optional(),
     strokeWidth: distance.optional(),
@@ -1030,7 +1030,7 @@ export const silkscreenCircleProps = pcbLayoutProps
 ```typescript
 export const silkscreenLineProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
-.extend({
+  .extend({
     strokeWidth: distance,
     x1: distance,
     y1: distance,
@@ -1044,7 +1044,7 @@ export const silkscreenLineProps = pcbLayoutProps
 ```typescript
 export const silkscreenPathProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
-.extend({
+  .extend({
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),
   })
@@ -1055,7 +1055,7 @@ export const silkscreenPathProps = pcbLayoutProps
 ```typescript
 export const silkscreenRectProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     isFilled: z.boolean().optional(),
     isOutline: z.boolean().optional(),
     strokeWidth: distance.optional(),
@@ -1108,7 +1108,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 export const rectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     shape: z.literal("rect"),
     width: distance,
     height: distance,
@@ -1116,7 +1116,7 @@ export const rectSmtPadProps = pcbLayoutProps
   })
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     shape: z.literal("rotated_rect"),
     width: distance,
     height: distance,
@@ -1125,14 +1125,14 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
   })
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     shape: z.literal("circle"),
     radius: distance,
     portHints: portHints.optional(),
   })
 export const pillSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     shape: z.literal("pill"),
     width: distance,
     height: distance,
@@ -1157,14 +1157,14 @@ export interface CircleSolderPasteProps
 }
 export const rectSolderPasteProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     shape: z.literal("rect"),
     width: distance,
     height: distance,
   })
 export const circleSolderPasteProps = pcbLayoutProps
   .omit({ pcbRotation: true })
-.extend({
+  .extend({
     shape: z.literal("circle"),
     radius: distance,
   })

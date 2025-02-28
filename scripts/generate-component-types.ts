@@ -30,7 +30,8 @@ function extractInterfaces(content: string): string[] {
     if (
       (line.includes("export interface") ||
         line.includes("export type") ||
-        line.match(/export\s+(const|let|var)\s+\w+\s*=/)) &&
+        line.match(/export\s+(const|let|var)\s+\w+\s*=/) ||
+        line.includes(".extend(")) && // Capture extended properties
       !line.includes("@deprecated") &&
       !line.includes("Input") &&
       !line.includes("Inferred")
@@ -120,7 +121,14 @@ function generateComponentTypesDoc() {
     fs.mkdirSync(generatedDir)
   }
 
-  fs.writeFileSync(path.join(generatedDir, "COMPONENT_TYPES.md"), markdown)
+  const formattedMarkdown = markdown.replace(
+    /\)\s*\n\s*\.extend\(/g,
+    ")\n  .extend(",
+  )
+  fs.writeFileSync(
+    path.join(generatedDir, "COMPONENT_TYPES.md"),
+    formattedMarkdown,
+  )
 }
 
 generateComponentTypesDoc()

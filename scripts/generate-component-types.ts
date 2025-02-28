@@ -30,7 +30,8 @@ function extractInterfaces(content: string): string[] {
     if (
       (line.includes("export interface") ||
         line.includes("export type") ||
-        line.match(/export\s+(const|let|var)\s+\w+\s*=/)) &&
+        line.match(/export\s+(const|let|var)\s+\w+\s*=/) ||
+        line.includes(".extend(")) && // Capture extended properties
       !line.includes("@deprecated") &&
       !line.includes("Input") &&
       !line.includes("Inferred")

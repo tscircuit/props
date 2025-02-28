@@ -54,34 +54,35 @@ export type PlatedHoleProps =
   | PillPlatedHoleProps
   | CircularHoleWithRectPlatedProps
 
-export const platedHoleProps = z
-  .discriminatedUnion("shape", [
-    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-      name: z.string().optional(),
-      shape: z.literal("circle"),
-      holeDiameter: distance,
-      outerDiameter: distance,
-      portHints: portHints.optional(),
-    }),
-    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-      name: z.string().optional(),
-      shape: z.literal("oval"),
-      outerWidth: distance,
-      outerHeight: distance,
-      innerWidth: distance,
-      innerHeight: distance,
-      portHints: portHints.optional(),
-    }),
-    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-      name: z.string().optional(),
-      shape: z.literal("pill"),
-      outerWidth: distance,
-      outerHeight: distance,
-      innerWidth: distance,
-      innerHeight: distance,
-      portHints: portHints.optional(),
-    }),
-    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+export const platedHoleProps = z.union([
+  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    name: z.string().optional(),
+    shape: z.literal("circle"),
+    holeDiameter: distance,
+    outerDiameter: distance,
+    portHints: portHints.optional(),
+  }),
+  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    name: z.string().optional(),
+    shape: z.literal("oval"),
+    outerWidth: distance,
+    outerHeight: distance,
+    innerWidth: distance,
+    innerHeight: distance,
+    portHints: portHints.optional(),
+  }),
+  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    name: z.string().optional(),
+    shape: z.literal("pill"),
+    outerWidth: distance,
+    outerHeight: distance,
+    innerWidth: distance,
+    innerHeight: distance,
+    portHints: portHints.optional(),
+  }),
+  pcbLayoutProps
+    .omit({ pcbRotation: true, layer: true })
+    .extend({
       name: z.string().optional(),
       holeDiameter: distance,
       rectPadWidth: distance,
@@ -90,22 +91,18 @@ export const platedHoleProps = z
       padShape: z.literal("rect").optional(),
       shape: z.literal("circularHoleWithRectPad").optional(),
       portHints: portHints.optional(),
-    }),
-  ])
-  .refine(
-    (prop) => {
-      if (
-        prop.shape === "circularHoleWithRectPad" &&
-        (!prop.holeDiameter || !prop.rectPadWidth || !prop.rectPadHeight)
-      ) {
-        return false
-      }
-      return true
-    },
-    {
-      message: "Missing required fields based on the selected hole type",
-    },
-  )
+    })
+    .refine(
+      (prop) => {
+        return prop.shape === "circularHoleWithRectPad"
+          ? prop.holeDiameter && prop.rectPadWidth && prop.rectPadHeight
+          : true
+      },
+      {
+        message: "Missing required fields for circularHoleWithRectPad",
+      },
+    ),
+])
 
 type InferredPlatedHoleProps = z.input<typeof platedHoleProps>
 

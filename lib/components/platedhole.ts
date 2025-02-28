@@ -54,7 +54,7 @@ export type PlatedHoleProps =
   | PillPlatedHoleProps
   | CircularHoleWithRectPlatedProps
 
-const platedHoleProps = z
+export const platedHoleProps = z
   .discriminatedUnion("shape", [
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),

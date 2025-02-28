@@ -36,12 +36,25 @@ export interface PillPlatedHoleProps
   portHints?: PortHints
 }
 
+export interface CircularHoleWithRectPlatedProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  name?: string
+  holeDiameter: number | string
+  rectPadWidth: number | string
+  rectPadHeight: number | string
+  holeShape?: "circle"
+  padShape?: "rect"
+  shape?: "circularHoleWithRectPad"
+  portHints?: PortHints
+}
+
 export type PlatedHoleProps =
   | CirclePlatedHoleProps
   | OvalPlatedHoleProps
   | PillPlatedHoleProps
+  | CircularHoleWithRectPlatedProps
 
-export const platedHoleProps = z.discriminatedUnion("shape", [
+export const platedHoleProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
     name: z.string().optional(),
     shape: z.literal("circle"),
@@ -67,7 +80,30 @@ export const platedHoleProps = z.discriminatedUnion("shape", [
     innerHeight: distance,
     portHints: portHints.optional(),
   }),
+  pcbLayoutProps
+    .omit({ pcbRotation: true, layer: true })
+    .extend({
+      name: z.string().optional(),
+      holeDiameter: distance,
+      rectPadWidth: distance,
+      rectPadHeight: distance,
+      holeShape: z.literal("circle").optional(),
+      padShape: z.literal("rect").optional(),
+      shape: z.literal("circularHoleWithRectPad").optional(),
+      portHints: portHints.optional(),
+    })
+    .refine(
+      (prop) => {
+        return prop.shape === "circularHoleWithRectPad"
+          ? prop.holeDiameter && prop.rectPadWidth && prop.rectPadHeight
+          : true
+      },
+      {
+        message: "Missing required fields for circularHoleWithRectPad",
+      },
+    ),
 ])
 
 type InferredPlatedHoleProps = z.input<typeof platedHoleProps>
+
 expectTypesMatch<PlatedHoleProps, InferredPlatedHoleProps>(true)

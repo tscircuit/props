@@ -14,12 +14,10 @@ test("should parse CircularHoleWithRectPlatedProps with all required fields", ()
     rectPadHeight: 20,
   }
 
-  // Type-check
   expectTypeOf(rawProps).toMatchTypeOf<z.input<typeof platedHoleProps>>()
 
   const parsedProps = platedHoleProps.parse(rawProps)
 
-  // Type narrowing for CircularHoleWithRectPlatedProps
   if (parsedProps.shape === "circularHoleWithRectPad") {
     expect(parsedProps.holeDiameter).toBe(5)
     expect(parsedProps.rectPadWidth).toBe(10)

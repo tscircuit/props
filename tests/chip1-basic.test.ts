@@ -1,7 +1,11 @@
 import { expect, test } from "bun:test"
-import { chipProps, type ChipProps } from "lib/components/chip"
 import type { z } from "zod"
 import { expectTypeOf } from "expect-type"
+import {
+  chipProps,
+  type ChipProps,
+  type Connections,
+} from "lib/components/chip"
 
 test("should parse chip props", () => {
   const rawProps: ChipProps = {
@@ -200,4 +204,41 @@ test("should maintain backward compatibility with non-generic usage", () => {
     SIG: ".INPUT > .pin1",
     5: "net.reset",
   })
+})
+
+test("should properly type check the connections property with generic PinLabel", () => {
+  type MCUPins = "TX" | "RX" | "MOSI" | "MISO" | "SCK" | "RESET"
+
+  const mcuChip: ChipProps<MCUPins> = {
+    name: "mcu-chip",
+    connections: {
+      TX: ".UART > .RX",
+      RX: ".UART > .TX",
+      MOSI: ".SPI > .DI",
+      MISO: ".SPI > .DO",
+      SCK: ".SPI > .CLK",
+      RESET: "net.reset",
+      1: "net.misc",
+    },
+  }
+
+  expectTypeOf<typeof mcuChip.connections>().toMatchTypeOf<
+    Connections<MCUPins> | undefined
+  >()
+
+  type ZodConnectionsType = z.infer<typeof chipProps>["connections"]
+  expectTypeOf<Connections<MCUPins>>().toMatchTypeOf<ZodConnectionsType>()
+})
+
+test("should enforce type safety for Connections type", () => {
+  type CustomPins = "IN" | "OUT" | "EN"
+
+  const validConnections: Connections<CustomPins> = {
+    IN: "net.input",
+    OUT: ["net.output1", "net.output2"],
+    EN: ".control > .enable",
+    1: "net.misc",
+  }
+
+  expectTypeOf(validConnections).toMatchTypeOf<Connections<CustomPins>>()
 })

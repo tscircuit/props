@@ -148,3 +148,56 @@ test("should handle invalid connection values", () => {
 
   expect(() => chipProps.parse(rawProps)).not.toThrow()
 })
+
+test("should support generic pin labels for type safety", () => {
+  type MyPinLabels = "VCC" | "GND" | "DATA" | "CLK"
+
+  const typedChip: ChipProps<MyPinLabels> = {
+    name: "typed-chip",
+    manufacturerPartNumber: "TST123",
+    connections: {
+      VCC: "net.power",
+      GND: "net.ground",
+      DATA: [".MCU > .pin7", ".EEPROM > .pin3"],
+      CLK: ".MCU > .pin8",
+      // Numeric pins are still valid
+      1: "net.misc",
+    },
+  }
+
+  const parsedChip = chipProps.parse(typedChip)
+
+  expect(parsedChip.connections).toEqual({
+    VCC: "net.power",
+    GND: "net.ground",
+    DATA: [".MCU > .pin7", ".EEPROM > .pin3"],
+    CLK: ".MCU > .pin8",
+    1: "net.misc",
+  })
+
+  expectTypeOf(typedChip).toMatchTypeOf<ChipProps<MyPinLabels>>()
+
+  expectTypeOf(typedChip).toMatchTypeOf<Parameters<typeof chipProps.parse>[0]>()
+})
+
+test("should maintain backward compatibility with non-generic usage", () => {
+  const legacyChip: ChipProps = {
+    name: "legacy-chip",
+    connections: {
+      VCC: "net.power",
+      GND: "net.ground",
+      DATA: [".MCU > .pin7"],
+      SIG: ".INPUT > .pin1",
+      5: "net.reset",
+    },
+  }
+
+  const parsedLegacy = chipProps.parse(legacyChip)
+  expect(parsedLegacy.connections).toEqual({
+    VCC: "net.power",
+    GND: "net.ground",
+    DATA: [".MCU > .pin7"],
+    SIG: ".INPUT > .pin1",
+    5: "net.reset",
+  })
+})

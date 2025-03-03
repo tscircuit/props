@@ -16,11 +16,15 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export type ConnectionTarget = string | readonly string[] | string[]
-export type Connections = Record<number | string, ConnectionTarget>
+export type Connections<PinLabel extends string = string> = Record<
+  PinLabel | number,
+  ConnectionTarget
+>
 
-export interface ChipProps extends CommonComponentProps {
+export interface ChipProps<PinLabel extends string = string>
+  extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | readonly string[]>
+  pinLabels?: Record<PinLabel | number, string | readonly string[] | string[]>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -31,11 +35,11 @@ export interface ChipProps extends CommonComponentProps {
   noSchematicRepresentation?: boolean
   internallyConnectedPins?: string[][]
   externallyConnectedPins?: string[][]
-  connections?: Connections
+  connections?: Connections<PinLabel>
 }
 
-export type PinLabels = Record<
-  number | string,
+export type PinLabelsProp<PinLabel extends string = string> = Record<
+  PinLabel | number,
   string | readonly string[] | string[]
 >
 
@@ -44,21 +48,28 @@ const connectionTarget = z
   .or(z.array(z.string()).readonly())
   .or(z.array(z.string()))
 
-const connectionsProp = z.record(z.number().or(z.string()), connectionTarget)
-
-export const pinLabelsProp = z.record(
-  z.number().or(z.string()),
-  z.string().or(z.array(z.string()).readonly()).or(z.array(z.string())),
+const connectionsProp = z.record(
+  z.union([z.number(), z.string()]),
+  connectionTarget,
 )
 
-expectTypesMatch<PinLabels, z.input<typeof pinLabelsProp>>(true)
+export const pinLabelsProp = z.record(
+  z.union([z.number(), z.string()]),
+  z.union([z.string(), z.array(z.string()).readonly(), z.array(z.string())]),
+)
+
+expectTypesMatch<PinLabelsProp, z.input<typeof pinLabelsProp>>(true)
 
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z
     .record(
-      z.number().or(z.string()),
-      z.string().or(z.array(z.string()).readonly()),
+      z.union([z.number(), z.string()]),
+      z.union([
+        z.string(),
+        z.array(z.string()).readonly(),
+        z.array(z.string()),
+      ]),
     )
     .optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),

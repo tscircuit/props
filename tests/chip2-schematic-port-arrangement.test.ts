@@ -1,5 +1,9 @@
 import { expect, test } from "bun:test"
-import { chipProps, type ChipProps } from "lib/components/chip"
+import {
+  chipProps,
+  type ChipProps,
+  type ConnectionTarget,
+} from "lib/components/chip"
 import type { z } from "zod"
 import { expectTypeOf } from "expect-type"
 
@@ -100,6 +104,13 @@ test("should work with string literal pin labels", () => {
     },
     schPinSpacing: "0.2mm",
     schWidth: 2,
+    connections: {
+      CLK: "net1",
+      RST: "net2",
+      DATA: "net3",
+      VCC: "VCC",
+      GND: "GND",
+    },
   }
 
   const parsedProps = chipProps.parse(rawProps)
@@ -110,4 +121,14 @@ test("should work with string literal pin labels", () => {
     VCC: "Power",
     GND: "Ground",
   })
+
+  // Type tests for connections
+  // The following line is a type test - it should compile
+  // because CLK is a valid key in the connections object
+  const clkConnection: ConnectionTarget = rawProps.connections!.CLK
+
+  // The following line should not compile because DOES_NOT_EXIST
+  // is not a valid key in the connections object
+  // @ts-expect-error
+  const invalidConnection = rawProps.connections!.DOES_NOT_EXIST
 })

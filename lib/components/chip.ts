@@ -36,7 +36,7 @@ export interface ChipProps<PinLabel extends string | number = string | number>
   connections?: Connections<PinLabel>
 }
 
-export type PinLabels<PinLabel extends string | number = string | number> =
+export type PinLabelsProp<PinLabel extends string | number = string | number> =
   Record<PinLabel, string | readonly string[] | string[]>
 
 const connectionTarget = z
@@ -51,7 +51,7 @@ export const pinLabelsProp = z.record(
   z.string().or(z.array(z.string()).readonly()).or(z.array(z.string())),
 )
 
-expectTypesMatch<PinLabels, z.input<typeof pinLabelsProp>>(true)
+expectTypesMatch<PinLabelsProp, z.input<typeof pinLabelsProp>>(true)
 
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),

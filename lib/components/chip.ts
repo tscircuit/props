@@ -16,11 +16,13 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export type ConnectionTarget = string | readonly string[] | string[]
-export type Connections = Record<number | string, ConnectionTarget>
+export type Connections<PinLabel extends string | number = string | number> =
+  Record<PinLabel, ConnectionTarget>
 
-export interface ChipProps extends CommonComponentProps {
+export interface ChipProps<PinLabel extends string | number = string | number>
+  extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | readonly string[]>
+  pinLabels?: Record<PinLabel, string | readonly string[] | string[]>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -31,13 +33,11 @@ export interface ChipProps extends CommonComponentProps {
   noSchematicRepresentation?: boolean
   internallyConnectedPins?: string[][]
   externallyConnectedPins?: string[][]
-  connections?: Connections
+  connections?: Connections<PinLabel>
 }
 
-export type PinLabels = Record<
-  number | string,
-  string | readonly string[] | string[]
->
+export type PinLabels<PinLabel extends string | number = string | number> =
+  Record<PinLabel, string | readonly string[] | string[]>
 
 const connectionTarget = z
   .string()
@@ -58,7 +58,7 @@ export const chipProps = commonComponentProps.extend({
   pinLabels: z
     .record(
       z.number().or(z.string()),
-      z.string().or(z.array(z.string()).readonly()),
+      z.string().or(z.array(z.string()).readonly()).or(z.array(z.string())),
     )
     .optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),

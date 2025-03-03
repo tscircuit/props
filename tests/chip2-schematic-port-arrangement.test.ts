@@ -73,3 +73,41 @@ test("should parse chip props (string)", () => {
   ])
   expect(parsedProps.noSchematicRepresentation).toBe(false)
 })
+
+// Test with generic type parameter
+test("should work with string literal pin labels", () => {
+  type PinLabels = "CLK" | "RST" | "DATA" | "VCC" | "GND"
+
+  const rawProps: ChipProps<PinLabels> = {
+    name: "chip",
+    manufacturerPartNumber: "1234",
+    pinLabels: {
+      CLK: "Clock",
+      RST: "Reset",
+      DATA: "Data",
+      VCC: "Power",
+      GND: "Ground",
+    },
+    schPortArrangement: {
+      leftSide: {
+        pins: ["CLK", "RST", "DATA"],
+        direction: "top-to-bottom",
+      },
+      rightSide: {
+        pins: ["VCC", "GND"],
+        direction: "top-to-bottom",
+      },
+    },
+    schPinSpacing: "0.2mm",
+    schWidth: 2,
+  }
+
+  const parsedProps = chipProps.parse(rawProps)
+  expect(parsedProps.pinLabels).toEqual({
+    CLK: "Clock",
+    RST: "Reset",
+    DATA: "Data",
+    VCC: "Power",
+    GND: "Ground",
+  })
+})

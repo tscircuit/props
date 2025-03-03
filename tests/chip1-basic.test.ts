@@ -148,3 +148,33 @@ test("should handle invalid connection values", () => {
 
   expect(() => chipProps.parse(rawProps)).not.toThrow()
 })
+
+// Test for generic type parameter
+test("should work with generic type parameter for pin labels", () => {
+  // Define a type with specific pin labels
+  type MyChipPins = "VCC" | "GND" | "SIG1" | "SIG2"
+
+  const rawProps: ChipProps<MyChipPins> = {
+    name: "chip",
+    pinLabels: {
+      VCC: "Power",
+      GND: "Ground",
+      SIG1: "Signal 1",
+      SIG2: "Signal 2",
+    },
+    connections: {
+      VCC: "net.VCC",
+      GND: "net.GND",
+      SIG1: ".R1 > .pin1",
+      SIG2: [".LED1 > .anode", ".C1 > .pin1"],
+    },
+  }
+
+  const parsedProps = chipProps.parse(rawProps)
+  expect(parsedProps.connections).toEqual({
+    VCC: "net.VCC",
+    GND: "net.GND",
+    SIG1: ".R1 > .pin1",
+    SIG2: [".LED1 > .anode", ".C1 > .pin1"],
+  })
+})

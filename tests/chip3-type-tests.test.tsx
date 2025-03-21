@@ -2,9 +2,6 @@ import type { ChipProps, ChipPropsSU, PinLabelFromPinLabelMap } from "lib"
 import { expectTypesMatch } from "lib/typecheck"
 import { test } from "bun:test"
 
-// TODO test ChipProps
-// TODO test PinLabelFromPinLabelMap
-
 const pinLabels1 = {
   pin1: "CUSTOM_DATA_1",
   pin2: "CUSTOM_DATA_2",
@@ -50,20 +47,47 @@ test("[typetest] example chip props usage", () => {
     "CUSTOM_DATA_1" | "CUSTOM_DATA_2" | "VCC" | "GND" | "GPIO1" | "GPIO2"
   >(true)
 
-  const MyChip1 = (
-    props: ChipProps<PinLabelFromPinLabelMap<typeof pinLabels1>>,
-  ) => <chip {...props} />
+  const MyChip1 = (props: ChipProps<typeof pinLabels1>) => <chip {...props} />
 
   const testChip1 = (
     <MyChip1
       name="U1"
       pinLabels={{
         CUSTOM_DATA_1: "...",
+
+        // @ts-expect-error
+        PIN_DOESNT_EXIST: "...",
       }}
     />
   )
 
-  const MyChip2 = (
-    props: ChipPropsSU<PinLabelFromPinLabelMap<typeof pinLabels2>>,
-  ) => <chip {...props} />
+  const MyChip2 = (props: ChipProps<typeof pinLabels2>) => <chip {...props} />
+
+  const testChip2 = (
+    <MyChip2
+      name="U1"
+      pinLabels={{
+        CUSTOM_DATA_1: "...",
+        GPIO1: "...",
+
+        // @ts-expect-error
+        PIN_DOESNT_EXIST: "...",
+      }}
+    />
+  )
+
+  const MyChip3 = (props: ChipProps<"MYPIN1" | "MYPIN2">) => <chip {...props} />
+
+  const testChip3 = (
+    <MyChip3
+      name="U1"
+      pinLabels={{
+        MYPIN1: "...",
+        MYPIN2: "...",
+
+        // @ts-expect-error
+        PIN_DOESNT_EXIST: "...",
+      }}
+    />
+  )
 })

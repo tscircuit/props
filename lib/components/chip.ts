@@ -27,13 +27,17 @@ export type PinLabelsProp<
 > = Record<PinNumber, PinLabel | readonly PinLabel[] | PinLabel[]>
 
 export type PinLabelFromPinLabelMap<PinLabelMap extends PinLabelsProp> = {
-  [K in keyof PinLabelMap]: PinLabelMap[K] extends
-    | (infer S extends string)[]
-    | readonly (infer R extends string)[]
-    ? S
-    : PinLabelMap[K] extends string
-      ? PinLabelMap[K]
+  [K in keyof PinLabelMap]: PinLabelMap[K] extends readonly (infer T)[]
+    ? T extends string
+      ? T
       : never
+    : PinLabelMap[K] extends (infer T)[]
+      ? T extends string
+        ? T
+        : never
+      : PinLabelMap[K] extends string
+        ? PinLabelMap[K]
+        : never
 }[keyof PinLabelMap]
 
 export interface ChipPropsSU<PinLabel extends string = string>

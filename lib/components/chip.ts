@@ -15,14 +15,31 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export type ConnectionTarget = string | readonly string[] | string[]
-export type Connections<PinLabel extends string | number = string | number> =
-  Record<PinLabel, ConnectionTarget>
+export type ConnectionTarget = string
+export type Connections<PinLabel extends string = string> = Record<
+  PinLabel,
+  ConnectionTarget
+>
 
-export interface ChipProps<PinLabel extends string | number = string | number>
+export type PinLabelsProp<
+  PinNumber extends string = string,
+  PinLabel extends string = string,
+> = Record<PinNumber, PinLabel | readonly PinLabel[] | PinLabel[]>
+
+export type PinLabelFromPinLabelMap<PinLabelMap extends PinLabelsProp> = {
+  [K in keyof PinLabelMap]: PinLabelMap[K] extends
+    | (infer S extends string)[]
+    | readonly (infer R extends string)[]
+    ? S
+    : PinLabelMap[K] extends string
+      ? PinLabelMap[K]
+      : never
+}[keyof PinLabelMap]
+
+export interface ChipPropsSU<PinLabel extends string = string>
   extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Record<PinLabel, string | readonly string[] | string[]>
+  pinLabels?: Partial<Record<PinLabel, string | readonly string[] | string[]>>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -36,8 +53,12 @@ export interface ChipProps<PinLabel extends string | number = string | number>
   connections?: Connections<PinLabel>
 }
 
-export type PinLabelsProp<PinLabel extends string | number = string | number> =
-  Record<PinLabel, string | readonly string[] | string[]>
+export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
+  ChipPropsSU<
+    PinLabelMap extends PinLabelsProp
+      ? PinLabelFromPinLabelMap<PinLabelMap>
+      : PinLabelMap
+  >
 
 const connectionTarget = z
   .string()

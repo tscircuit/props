@@ -54,7 +54,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
   noSchematicRepresentation?: boolean
   internallyConnectedPins?: string[][]
   externallyConnectedPins?: string[][]
-  connections?: Connections<PinLabel>
+  connections?: Partial<Connections<PinLabel>>
 }
 
 export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
@@ -69,10 +69,10 @@ const connectionTarget = z
   .or(z.array(z.string()).readonly())
   .or(z.array(z.string()))
 
-const connectionsProp = z.record(z.number().or(z.string()), connectionTarget)
+const connectionsProp = z.record(z.string(), connectionTarget)
 
 export const pinLabelsProp = z.record(
-  z.number().or(z.string()),
+  z.string(),
   z.string().or(z.array(z.string()).readonly()).or(z.array(z.string())),
 )
 
@@ -82,7 +82,7 @@ export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z
     .record(
-      z.number().or(z.string()),
+      z.string(),
       z.string().or(z.array(z.string()).readonly()).or(z.array(z.string())),
     )
     .optional(),

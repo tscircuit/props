@@ -69,9 +69,9 @@ test("[typetest] example chip props usage", () => {
       pinLabels={{
         CUSTOM_DATA_1: "...",
         GPIO1: "...",
-
-        // @ts-expect-error
-        PIN_DOESNT_EXIST: "...",
+      }}
+      connections={{
+        CUSTOM_DATA_1: "...",
       }}
     />
   )
@@ -84,6 +84,12 @@ test("[typetest] example chip props usage", () => {
       pinLabels={{
         MYPIN1: "...",
         MYPIN2: "...",
+
+        // @ts-expect-error
+        PIN_DOESNT_EXIST: "...",
+      }}
+      connections={{
+        MYPIN1: "...",
 
         // @ts-expect-error
         PIN_DOESNT_EXIST: "...",

@@ -57,6 +57,44 @@ export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
       : PinLabelMap
   >
 
+/**
+ * Get the pin labels for a component
+ *
+ *   const pinLabels = { pin1: "VCC", pin2: "GND", pin3: "DATA" } as const
+ *   export const MyChip = (props: ChipProps<typeof pinLabels>) => {
+ *     // ...
+ *   }
+ *   type MyChipPinLabels = ChipPinLabels<typeof MyChip>
+ *   // MyChipPinLabels is "VCC" | "GND" | "DATA"
+ *
+ */
+export type ChipPinLabels<T extends (props: ChipProps<any>) => any> =
+  T extends (props: infer Props) => any
+    ? Props extends ChipProps<infer PinLabelMap>
+      ? PinLabelMap extends PinLabelsProp
+        ? PinLabelFromPinLabelMap<PinLabelMap>
+        : never
+      : never
+    : never
+
+/**
+ * Get the connection prop type for a component
+ *
+ *   const pinLabels = { pin1: "VCC", pin2: "GND", pin3: "DATA" } as const
+ *   export const MyChip = (props: ChipProps<typeof pinLabels>) => {
+ *     // ...
+ *   }
+ *   const connections: ChipConnections<typeof MyChip> = {
+ *     VCC: "...",
+ *     GND: "...",
+ *     DATA: "...",
+ *   }
+ *
+ */
+export type ChipConnections<T extends (props: ChipProps<any>) => any> = {
+  [K in ChipPinLabels<T>]: string
+}
+
 const connectionTarget = z
   .string()
   .or(z.array(z.string()).readonly())

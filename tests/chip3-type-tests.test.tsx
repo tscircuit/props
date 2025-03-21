@@ -1,4 +1,10 @@
-import type { ChipProps, ChipPropsSU, PinLabelFromPinLabelMap } from "lib"
+import type {
+  ChipConnections,
+  ChipPinLabels,
+  ChipProps,
+  ChipPropsSU,
+  PinLabelFromPinLabelMap,
+} from "lib"
 import { expectTypesMatch } from "lib/typecheck"
 import { test } from "bun:test"
 
@@ -94,4 +100,26 @@ test("[typetest] example chip props usage", () => {
       }}
     />
   )
+})
+
+test("[typetest] get connections type, get pin labels from Chip function", () => {
+  const MyChip = (props: ChipProps<typeof pinLabels1>) => <chip {...props} />
+
+  type MyChipPinLabels = ChipPinLabels<typeof MyChip>
+  expectTypesMatch<
+    MyChipPinLabels,
+    "CUSTOM_DATA_1" | "CUSTOM_DATA_2" | "VCC" | "GND"
+  >(true)
+
+  const connections: ChipConnections<typeof MyChip> = {
+    CUSTOM_DATA_1: "...",
+    CUSTOM_DATA_2: "...",
+    GND: "...",
+    VCC: "...",
+  }
+
+  const connections2: ChipConnections<typeof MyChip> = {
+    // @ts-expect-error
+    DOES_NOT_EXIST: "...",
+  }
 })

@@ -154,10 +154,10 @@ test("should work with generic type parameter for pin labels", () => {
   const rawProps: ChipProps<MyChipPins> = {
     name: "chip",
     pinLabels: {
-      VCC: "Power",
-      GND: "Ground",
-      SIG1: "Signal 1",
-      SIG2: "Signal 2",
+      pin1: "VCC",
+      pin2: "GND",
+      pin3: "SIG1",
+      pin4: "SIG2",
     },
     connections: {
       VCC: "net.VCC",

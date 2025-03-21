@@ -86,11 +86,11 @@ test("should work with string literal pin labels", () => {
     name: "chip",
     manufacturerPartNumber: "1234",
     pinLabels: {
-      CLK: "Clock",
-      RST: "Reset",
-      DATA: "Data",
-      VCC: "Power",
-      GND: "Ground",
+      pin1: "CLK",
+      pin2: "RST",
+      pin3: "DATA",
+      pin4: "VCC",
+      pin5: "GND",
     },
     schPortArrangement: {
       leftSide: {

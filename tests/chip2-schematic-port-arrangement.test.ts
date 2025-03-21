@@ -125,8 +125,10 @@ test("should work with string literal pin labels", () => {
   // Type tests for connections
   // The following line is a type test - it should compile
   // because CLK is a valid key in the connections object
-  const clkConnection: ConnectionTarget | ConnectionTarget[] =
-    rawProps.connections!.CLK!
+  const clkConnection:
+    | ConnectionTarget
+    | ConnectionTarget[]
+    | readonly ConnectionTarget[] = rawProps.connections!.CLK!
 
   // The following line should not compile because DOES_NOT_EXIST
   // is not a valid key in the connections object

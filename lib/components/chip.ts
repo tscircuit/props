@@ -16,9 +16,11 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export type ConnectionTarget = string
-export type Connections<PinLabel extends string = string> = Record<
-  PinLabel,
-  ConnectionTarget | ConnectionTarget[]
+export type Connections<PinLabel extends string = string> = Partial<
+  Record<
+    PinLabel,
+    ConnectionTarget | ConnectionTarget[] | readonly ConnectionTarget[]
+  >
 >
 
 export type PinLabelsProp<
@@ -26,24 +28,15 @@ export type PinLabelsProp<
   PinLabel extends string = string,
 > = Record<PinNumber, PinLabel | readonly PinLabel[] | PinLabel[]>
 
-export type PinLabelFromPinLabelMap<PinLabelMap extends PinLabelsProp> = {
-  [K in keyof PinLabelMap]: PinLabelMap[K] extends readonly (infer T)[]
-    ? T extends string
-      ? T
-      : never
-    : PinLabelMap[K] extends (infer T)[]
-      ? T extends string
-        ? T
-        : never
-      : PinLabelMap[K] extends string
-        ? PinLabelMap[K]
-        : never
-}[keyof PinLabelMap]
+export type PinLabelFromPinLabelMap<PinLabelMap extends PinLabelsProp> =
+  PinLabelMap extends PinLabelsProp<infer PinNumber, infer PinLabel>
+    ? PinLabel
+    : never
 
 export interface ChipPropsSU<PinLabel extends string = string>
   extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Partial<PinLabelsProp<PinLabel>>
+  pinLabels?: PinLabelsProp<string, PinLabel>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -54,7 +47,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
   noSchematicRepresentation?: boolean
   internallyConnectedPins?: string[][]
   externallyConnectedPins?: string[][]
-  connections?: Partial<Connections<PinLabel>>
+  connections?: Connections<PinLabel>
 }
 
 export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
@@ -69,7 +62,9 @@ const connectionTarget = z
   .or(z.array(z.string()).readonly())
   .or(z.array(z.string()))
 
-const connectionsProp = z.record(z.string(), connectionTarget)
+const connectionsProp = z
+  .custom<Connections>()
+  .pipe(z.record(z.string(), connectionTarget))
 
 export const pinLabelsProp = z.record(
   z.string(),
@@ -101,4 +96,4 @@ export type InferredChipProps = z.input<typeof chipProps>
 
 // Chip props are too complex to match up with zod types, we typecheck
 // them separately in the test files
-// expectTypesMatch<InferredChipProps, ChipPropsSU>(true)
+expectTypesMatch<InferredChipProps, ChipPropsSU<string>>(true)

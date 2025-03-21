@@ -52,7 +52,8 @@ test("[typetest] example chip props usage", () => {
   const testChip1 = (
     <MyChip1
       name="U1"
-      pinLabels={{
+      pinLabels={pinLabels1}
+      connections={{
         CUSTOM_DATA_1: "...",
 
         // @ts-expect-error
@@ -66,10 +67,7 @@ test("[typetest] example chip props usage", () => {
   const testChip2 = (
     <MyChip2
       name="U1"
-      pinLabels={{
-        CUSTOM_DATA_1: "...",
-        GPIO1: "...",
-      }}
+      pinLabels={pinLabels2}
       connections={{
         CUSTOM_DATA_1: "...",
       }}
@@ -82,14 +80,14 @@ test("[typetest] example chip props usage", () => {
     <MyChip3
       name="U1"
       pinLabels={{
-        MYPIN1: "...",
-        MYPIN2: "...",
+        pin1: "MYPIN1",
+        pin2: "MYPIN2",
 
         // @ts-expect-error
         PIN_DOESNT_EXIST: "...",
       }}
       connections={{
-        MYPIN1: "...",
+        MYPIN1: ["...", "..."],
 
         // @ts-expect-error
         PIN_DOESNT_EXIST: "...",

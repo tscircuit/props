@@ -6,3 +6,5 @@ export type PushButtonProps<T extends PinLabelsProp | string = string> =
   ChipProps<T>
 
 export const pushButtonProps = chipProps.extend({})
+
+expectTypesMatch<PushButtonProps, z.input<typeof pushButtonProps>>(true)

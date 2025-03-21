@@ -86,11 +86,11 @@ test("should work with string literal pin labels", () => {
     name: "chip",
     manufacturerPartNumber: "1234",
     pinLabels: {
-      CLK: "Clock",
-      RST: "Reset",
-      DATA: "Data",
-      VCC: "Power",
-      GND: "Ground",
+      pin1: "CLK",
+      pin2: "RST",
+      pin3: "DATA",
+      pin4: "VCC",
+      pin5: "GND",
     },
     schPortArrangement: {
       leftSide: {
@@ -115,17 +115,20 @@ test("should work with string literal pin labels", () => {
 
   const parsedProps = chipProps.parse(rawProps)
   expect(parsedProps.pinLabels).toEqual({
-    CLK: "Clock",
-    RST: "Reset",
-    DATA: "Data",
-    VCC: "Power",
-    GND: "Ground",
+    pin1: "CLK",
+    pin2: "RST",
+    pin3: "DATA",
+    pin4: "VCC",
+    pin5: "GND",
   })
 
   // Type tests for connections
   // The following line is a type test - it should compile
   // because CLK is a valid key in the connections object
-  const clkConnection: ConnectionTarget = rawProps.connections!.CLK
+  const clkConnection:
+    | ConnectionTarget
+    | ConnectionTarget[]
+    | readonly ConnectionTarget[] = rawProps.connections!.CLK!
 
   // The following line should not compile because DOES_NOT_EXIST
   // is not a valid key in the connections object

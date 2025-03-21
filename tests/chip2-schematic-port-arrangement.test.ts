@@ -115,11 +115,11 @@ test("should work with string literal pin labels", () => {
 
   const parsedProps = chipProps.parse(rawProps)
   expect(parsedProps.pinLabels).toEqual({
-    CLK: "Clock",
-    RST: "Reset",
-    DATA: "Data",
-    VCC: "Power",
-    GND: "Ground",
+    pin1: "CLK",
+    pin2: "RST",
+    pin3: "DATA",
+    pin4: "VCC",
+    pin5: "GND",
   })
 
   // Type tests for connections

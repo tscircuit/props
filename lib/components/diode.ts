@@ -27,5 +27,5 @@ export const diodeProps = commonComponentProps.extend({
   pinLabels: z.custom<PinLabelsProp<string, string>>().optional(),
   connections: connectionsProp.optional(),
 })
-
+export const diodePins = lrPolarPins
 export type DiodeProps = z.input<typeof diodeProps>

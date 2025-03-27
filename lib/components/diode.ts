@@ -1,4 +1,4 @@
-import { commonComponentProps } from "lib/common/layout"
+import { commonComponentProps, lrPolarPins } from "lib/common/layout"
 import { z } from "zod"
 
 export type PinLabelsProp<

@@ -1,15 +1,21 @@
 import { commonComponentProps, lrPolarPins } from "lib/common/layout"
 import { z } from "zod"
-import type { Connections } from "./chip"
+
+const diodeConnectionKeys = z.enum([
+  "anode",
+  "cathode",
+  "pin1",
+  "pin2",
+  "pos",
+  "neg",
+])
 
 const connectionTarget = z
   .string()
   .or(z.array(z.string()).readonly())
   .or(z.array(z.string()))
 
-const connectionsProp = z
-  .custom<Connections>()
-  .pipe(z.record(z.string(), connectionTarget))
+const connectionsProp = z.record(diodeConnectionKeys, connectionTarget)
 
 export const diodeProps = commonComponentProps.extend({
   connections: connectionsProp.optional(),

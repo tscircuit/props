@@ -1,5 +1,6 @@
 import { commonComponentProps, lrPolarPins } from "lib/common/layout"
 import { z } from "zod"
+import { expectTypesMatch } from "lib/typecheck"
 
 const diodeConnectionKeys = z.enum([
   "anode",
@@ -24,3 +25,6 @@ export const diodeProps = commonComponentProps.extend({
 export const diodePins = lrPolarPins
 
 export type DiodeProps = z.input<typeof diodeProps>
+
+export type InferredDiodeProps = z.input<typeof diodeProps>
+expectTypesMatch<InferredDiodeProps, DiodeProps>(true)

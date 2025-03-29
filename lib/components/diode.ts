@@ -1,4 +1,8 @@
-import { commonComponentProps, lrPolarPins } from "lib/common/layout"
+import {
+  type CommonComponentProps,
+  commonComponentProps,
+  lrPolarPins,
+} from "lib/common/layout"
 import { z } from "zod"
 import { expectTypesMatch } from "lib/typecheck"
 
@@ -24,7 +28,16 @@ export const diodeProps = commonComponentProps.extend({
 
 export const diodePins = lrPolarPins
 
-export type DiodeProps = z.input<typeof diodeProps>
+export interface DiodeProps extends CommonComponentProps {
+  connections?: {
+    anode?: string | string[] | readonly string[]
+    cathode?: string | string[] | readonly string[]
+    pin1?: string | string[] | readonly string[]
+    pin2?: string | string[] | readonly string[]
+    pos?: string | string[] | readonly string[]
+    neg?: string | string[] | readonly string[]
+  }
+}
 
 export type InferredDiodeProps = z.input<typeof diodeProps>
 expectTypesMatch<InferredDiodeProps, DiodeProps>(true)

@@ -20,8 +20,8 @@ export interface OvalPlatedHoleProps
   shape: "oval"
   outerWidth: number | string
   outerHeight: number | string
-  innerWidth: number | string
-  innerHeight: number | string
+  holeWidth: number | string
+  holeHeight: number | string
   portHints?: PortHints
 }
 
@@ -67,8 +67,8 @@ export const platedHoleProps = z.union([
     shape: z.literal("oval"),
     outerWidth: distance,
     outerHeight: distance,
-    innerWidth: distance,
-    innerHeight: distance,
+    holeWidth: distance,
+    holeHeight: distance,
     portHints: portHints.optional(),
   }),
   pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({

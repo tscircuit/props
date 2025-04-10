@@ -48,8 +48,6 @@ test("should parse PillPlatedHoleProps with all required fields", () => {
     expect(parsedProps.outerHeight).toBe(3)
     expect(parsedProps.outerWidth).toBe(2.3)
   } else {
-    throw new Error(
-      "Expected PillPlatedHoleProps, but got a different shape",
-    )
+    throw new Error("Expected PillPlatedHoleProps, but got a different shape")
   }
 })

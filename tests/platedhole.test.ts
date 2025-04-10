@@ -74,4 +74,3 @@ test("should parse OvalPlatedHoleProps with all required fields", () => {
     throw new Error("Expected OvalPlatedHoleProps, but got a different shape")
   }
 })
-

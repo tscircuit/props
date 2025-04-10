@@ -52,6 +52,30 @@ test("should parse PillPlatedHoleProps with all required fields", () => {
   }
 })
 
+test("should parse PillPlatedHoleProps with all required fields", () => {
+  // @ts-expect-error DEPRECATED fields
+  const rawProps: PlatedHoleProps = {
+    shape: "pill",
+    outerHeight: "3mm",
+    outerWidth: "2.3mm",
+    innerHeight: "2.7mm",
+    innerWidth: "1.3mm",
+  }
+
+  expectTypeOf(rawProps).toMatchTypeOf<z.input<typeof platedHoleProps>>()
+
+  const parsedProps = platedHoleProps.parse(rawProps)
+
+  if (parsedProps.shape === "pill") {
+    expect(parsedProps.holeHeight).toBe(2.7)
+    expect(parsedProps.holeWidth).toBe(1.3)
+    expect(parsedProps.outerHeight).toBe(3)
+    expect(parsedProps.outerWidth).toBe(2.3)
+  } else {
+    throw new Error("Expected PillPlatedHoleProps, but got a different shape")
+  }
+})
+
 test("should parse OvalPlatedHoleProps with all required fields", () => {
   const rawProps: PlatedHoleProps = {
     shape: "oval",

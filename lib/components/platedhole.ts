@@ -23,6 +23,11 @@ export interface OvalPlatedHoleProps
   holeWidth: number | string
   holeHeight: number | string
   portHints?: PortHints
+
+  /** @deprecated use holeWidth */
+  innerWidth?: number | string
+  /** @deprecated use holeHeight */
+  innerHeight?: number | string
 }
 
 export interface PillPlatedHoleProps
@@ -33,6 +38,12 @@ export interface PillPlatedHoleProps
   outerHeight: number | string
   holeWidth: number | string
   holeHeight: number | string
+
+  /** @deprecated use holeWidth */
+  innerWidth?: number | string
+  /** @deprecated use holeHeight */
+  innerHeight?: number | string
+
   portHints?: PortHints
 }
 
@@ -54,55 +65,76 @@ export type PlatedHoleProps =
   | PillPlatedHoleProps
   | CircularHoleWithRectPlatedProps
 
-export const platedHoleProps = z.union([
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    shape: z.literal("circle"),
-    holeDiameter: distance,
-    outerDiameter: distance,
-    portHints: portHints.optional(),
-  }),
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    shape: z.literal("oval"),
-    outerWidth: distance,
-    outerHeight: distance,
-    holeWidth: distance,
-    holeHeight: distance,
-    portHints: portHints.optional(),
-  }),
-  pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
-    name: z.string().optional(),
-    shape: z.literal("pill"),
-    outerWidth: distance,
-    outerHeight: distance,
-    holeWidth: distance,
-    holeHeight: distance,
-    portHints: portHints.optional(),
-  }),
-  pcbLayoutProps
-    .omit({ pcbRotation: true, layer: true })
-    .extend({
+const distanceHiddenUndefined = z
+  .custom<z.input<typeof distance>>()
+  .transform((a) => {
+    if (a === undefined) return undefined
+    return distance.parse(a)
+  })
+
+export const platedHoleProps = z
+  .union([
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      shape: z.literal("circle"),
       holeDiameter: distance,
-      rectPadWidth: distance,
-      rectPadHeight: distance,
-      holeShape: z.literal("circle").optional(),
-      padShape: z.literal("rect").optional(),
-      shape: z.literal("circularHoleWithRectPad").optional(),
+      outerDiameter: distance,
       portHints: portHints.optional(),
-    })
-    .refine(
-      (prop) => {
-        return prop.shape === "circularHoleWithRectPad"
-          ? prop.holeDiameter && prop.rectPadWidth && prop.rectPadHeight
-          : true
-      },
-      {
-        message: "Missing required fields for circularHoleWithRectPad",
-      },
-    ),
-])
+    }),
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      shape: z.literal("oval"),
+      outerWidth: distance,
+      outerHeight: distance,
+      holeWidth: distanceHiddenUndefined,
+      holeHeight: distanceHiddenUndefined,
+      innerWidth: distance.optional().describe("DEPRECATED use holeWidth"),
+      innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
+      portHints: portHints.optional(),
+    }),
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      shape: z.literal("pill"),
+      outerWidth: distance,
+      outerHeight: distance,
+      holeWidth: distanceHiddenUndefined,
+      holeHeight: distanceHiddenUndefined,
+      innerWidth: distance.optional().describe("DEPRECATED use holeWidth"),
+      innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
+      portHints: portHints.optional(),
+    }),
+    pcbLayoutProps
+      .omit({ pcbRotation: true, layer: true })
+      .extend({
+        name: z.string().optional(),
+        holeDiameter: distance,
+        rectPadWidth: distance,
+        rectPadHeight: distance,
+        holeShape: z.literal("circle").optional(),
+        padShape: z.literal("rect").optional(),
+        shape: z.literal("circularHoleWithRectPad").optional(),
+        portHints: portHints.optional(),
+      })
+      .refine(
+        (prop) => {
+          return prop.shape === "circularHoleWithRectPad"
+            ? prop.holeDiameter && prop.rectPadWidth && prop.rectPadHeight
+            : true
+        },
+        {
+          message: "Missing required fields for circularHoleWithRectPad",
+        },
+      ),
+  ])
+  .refine((a) => {
+    if ("innerWidth" in a && a.innerWidth !== undefined) {
+      a.holeWidth ??= a.innerWidth
+    }
+    if ("innerHeight" in a && a.innerHeight !== undefined) {
+      a.holeHeight ??= a.innerHeight
+    }
+    return a
+  })
 
 type InferredPlatedHoleProps = z.input<typeof platedHoleProps>
 

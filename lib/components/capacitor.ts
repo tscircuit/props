@@ -1,11 +1,23 @@
 import { capacitance, voltage } from "circuit-json"
+import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
   lrPolarPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
+
+export const capacitorPinLabels = [
+  "pin1",
+  "pin2",
+  "pos",
+  "neg",
+  "anode",
+  "cathode",
+] as const
+export type CapacitorPinLabels = (typeof capacitorPinLabels)[number]
 
 export interface CapacitorProps extends CommonComponentProps {
   capacitance: number | string
@@ -17,6 +29,7 @@ export interface CapacitorProps extends CommonComponentProps {
   bypassFor?: string
   bypassTo?: string
   maxDecouplingTraceLength?: number
+  connections?: Connections<CapacitorPinLabels>
 }
 
 export const capacitorProps = commonComponentProps.extend({
@@ -29,6 +42,7 @@ export const capacitorProps = commonComponentProps.extend({
   bypassFor: z.string().optional(),
   bypassTo: z.string().optional(),
   maxDecouplingTraceLength: z.number().optional(),
+  connections: createConnectionsProp(capacitorPinLabels).optional(),
 })
 export const capacitorPins = lrPolarPins
 

@@ -1,11 +1,16 @@
 import { resistance } from "circuit-json"
+import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
   lrPins,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
+
+export const resistorPinLabels = ["pin1", "pin2", "pos", "neg"] as const
+export type ResistorPinLabels = (typeof resistorPinLabels)[number]
 
 export interface ResistorProps extends CommonComponentProps {
   resistance: number | string
@@ -13,6 +18,7 @@ export interface ResistorProps extends CommonComponentProps {
   pullupTo?: string
   pulldownFor?: string
   pulldownTo?: string
+  connections?: Connections<ResistorPinLabels>
 }
 
 export const resistorProps = commonComponentProps.extend({
@@ -23,6 +29,8 @@ export const resistorProps = commonComponentProps.extend({
 
   pulldownFor: z.string().optional(),
   pulldownTo: z.string().optional(),
+
+  connections: createConnectionsProp(resistorPinLabels).optional(),
 })
 export const resistorPins = lrPins
 

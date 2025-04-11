@@ -73,7 +73,9 @@ export type ChipPinLabels<T extends (props: ChipProps<any>) => any> =
     ? Props extends ChipProps<infer PinLabelMap>
       ? PinLabelMap extends PinLabelsProp
         ? PinLabelFromPinLabelMap<PinLabelMap>
-        : never
+        : PinLabelMap extends string
+          ? PinLabelMap
+          : never
       : never
     : never
 

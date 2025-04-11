@@ -57,8 +57,7 @@ sel.M1(MyModule).U1.GND // ".M1 > .C1 > .anode"
 
 */
 
-// export type ConnectionNames<T extends > =
-
+export type ConnectionTarget = string
 /**
  * Defines a mapping of strings to connection paths e.g.
  *
@@ -67,7 +66,12 @@ sel.M1(MyModule).U1.GND // ".M1 > .C1 > .anode"
  *   VCC: ".U1 > .VCC",
  * }
  */
-export type Connections = Record<string, string>
+export type Connections<PinLabel extends string = string> = Partial<
+  Record<
+    PinLabel,
+    ConnectionTarget | ConnectionTarget[] | readonly ConnectionTarget[]
+  >
+>
 
 /**
  * Defines a mapping of strings (usually chip names) to connections e.g.

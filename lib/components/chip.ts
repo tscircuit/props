@@ -13,15 +13,8 @@ import {
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
-
-export type ConnectionTarget = string
-export type Connections<PinLabel extends string = string> = Partial<
-  Record<
-    PinLabel,
-    ConnectionTarget | ConnectionTarget[] | readonly ConnectionTarget[]
-  >
->
 
 export type PinLabelsProp<
   PinNumber extends string = string,

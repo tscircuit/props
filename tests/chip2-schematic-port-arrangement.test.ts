@@ -1,9 +1,6 @@
 import { expect, test } from "bun:test"
-import {
-  chipProps,
-  type ChipProps,
-  type ConnectionTarget,
-} from "lib/components/chip"
+import { chipProps, type ChipProps } from "lib/components/chip"
+import type { ConnectionTarget } from "lib/utility-types/connections-and-selectors"
 import type { z } from "zod"
 import { expectTypeOf } from "expect-type"
 

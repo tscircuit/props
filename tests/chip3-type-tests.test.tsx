@@ -123,3 +123,17 @@ test("[typetest] get connections type, get pin labels from Chip function", () =>
     DOES_NOT_EXIST: "...",
   }
 })
+
+test(`[typetest] ChipConnections<ChipProps<"custompin1" | "custompin2">>`, () => {
+  const MyChip = (props: ChipProps<"custompin1" | "custompin2">) => (
+    <chip {...props} />
+  )
+
+  type MyChipPinLabels = ChipPinLabels<typeof MyChip>
+  type MyChipConnections = ChipConnections<typeof MyChip>
+  expectTypesMatch<MyChipPinLabels, "custompin1" | "custompin2">(true)
+  expectTypesMatch<
+    MyChipConnections,
+    { custompin1: string; custompin2: string }
+  >(true)
+})

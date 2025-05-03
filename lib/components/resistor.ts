@@ -19,6 +19,8 @@ export interface ResistorProps extends CommonComponentProps {
   pulldownFor?: string
   pulldownTo?: string
   connections?: Connections<ResistorPinLabels>
+  ptc?: boolean
+  ntc?: boolean
 }
 
 export const resistorProps = commonComponentProps.extend({
@@ -31,6 +33,8 @@ export const resistorProps = commonComponentProps.extend({
   pulldownTo: z.string().optional(),
 
   connections: createConnectionsProp(resistorPinLabels).optional(),
+  ptc: z.boolean().optional(),
+  ntc: z.boolean().optional(),
 })
 export const resistorPins = lrPins
 

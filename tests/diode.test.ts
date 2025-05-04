@@ -119,12 +119,23 @@ test("should default to standard variant when no variant is specified", () => {
     name: "diode",
   }
   const parsedProps = diodeProps.parse(rawProps)
-  expect(parsedProps.variant).toBe("standard")
-  expect(parsedProps.standard).toBe(true)
-  expect(parsedProps.schottky).toBe(false)
-  expect(parsedProps.zener).toBe(false)
-  expect(parsedProps.photo).toBe(false)
-  expect(parsedProps.tvs).toBe(false)
+  expect({
+    variant: parsedProps.variant,
+    standard: parsedProps.standard,
+    schottky: parsedProps.schottky,
+    zener: parsedProps.zener,
+    photo: parsedProps.photo,
+    tvs: parsedProps.tvs,
+  }).toMatchInlineSnapshot(`
+    {
+      "photo": false,
+      "schottky": false,
+      "standard": true,
+      "tvs": false,
+      "variant": "standard",
+      "zener": false,
+    }
+  `)
 })
 
 test("should set the schottky flag when variant is schottky", () => {
@@ -133,12 +144,24 @@ test("should set the schottky flag when variant is schottky", () => {
     variant: "schottky",
   }
   const parsedProps = diodeProps.parse(rawProps)
-  expect(parsedProps.variant).toBe("schottky")
-  expect(parsedProps.standard).toBe(false)
-  expect(parsedProps.schottky).toBe(true)
-  expect(parsedProps.zener).toBe(false)
-  expect(parsedProps.photo).toBe(false)
-  expect(parsedProps.tvs).toBe(false)
+
+  expect({
+    variant: parsedProps.variant,
+    standard: parsedProps.standard,
+    schottky: parsedProps.schottky,
+    zener: parsedProps.zener,
+    photo: parsedProps.photo,
+    tvs: parsedProps.tvs,
+  }).toMatchInlineSnapshot(`
+    {
+      "photo": false,
+      "schottky": true,
+      "standard": false,
+      "tvs": false,
+      "variant": "schottky",
+      "zener": false,
+    }
+  `)
 })
 
 test("should set the zener flag when variant is zener", () => {
@@ -147,12 +170,24 @@ test("should set the zener flag when variant is zener", () => {
     variant: "zener",
   }
   const parsedProps = diodeProps.parse(rawProps)
-  expect(parsedProps.variant).toBe("zener")
-  expect(parsedProps.standard).toBe(false)
-  expect(parsedProps.schottky).toBe(false)
-  expect(parsedProps.zener).toBe(true)
-  expect(parsedProps.photo).toBe(false)
-  expect(parsedProps.tvs).toBe(false)
+
+  expect({
+    variant: parsedProps.variant,
+    standard: parsedProps.standard,
+    schottky: parsedProps.schottky,
+    zener: parsedProps.zener,
+    photo: parsedProps.photo,
+    tvs: parsedProps.tvs,
+  }).toMatchInlineSnapshot(`
+    {
+      "photo": false,
+      "schottky": false,
+      "standard": false,
+      "tvs": false,
+      "variant": "zener",
+      "zener": true,
+    }
+  `)
 })
 
 test("should set the photo flag when variant is photo", () => {
@@ -161,12 +196,24 @@ test("should set the photo flag when variant is photo", () => {
     variant: "photo",
   }
   const parsedProps = diodeProps.parse(rawProps)
-  expect(parsedProps.variant).toBe("photo")
-  expect(parsedProps.standard).toBe(false)
-  expect(parsedProps.schottky).toBe(false)
-  expect(parsedProps.zener).toBe(false)
-  expect(parsedProps.photo).toBe(true)
-  expect(parsedProps.tvs).toBe(false)
+
+  expect({
+    variant: parsedProps.variant,
+    standard: parsedProps.standard,
+    schottky: parsedProps.schottky,
+    zener: parsedProps.zener,
+    photo: parsedProps.photo,
+    tvs: parsedProps.tvs,
+  }).toMatchInlineSnapshot(`
+    {
+      "photo": true,
+      "schottky": false,
+      "standard": false,
+      "tvs": false,
+      "variant": "photo",
+      "zener": false,
+    }
+  `)
 })
 
 test("should set the tvs flag when variant is tvs", () => {
@@ -175,12 +222,24 @@ test("should set the tvs flag when variant is tvs", () => {
     variant: "tvs",
   }
   const parsedProps = diodeProps.parse(rawProps)
-  expect(parsedProps.variant).toBe("tvs")
-  expect(parsedProps.standard).toBe(false)
-  expect(parsedProps.schottky).toBe(false)
-  expect(parsedProps.zener).toBe(false)
-  expect(parsedProps.photo).toBe(false)
-  expect(parsedProps.tvs).toBe(true)
+
+  expect({
+    variant: parsedProps.variant,
+    standard: parsedProps.standard,
+    schottky: parsedProps.schottky,
+    zener: parsedProps.zener,
+    photo: parsedProps.photo,
+    tvs: parsedProps.tvs,
+  }).toMatchInlineSnapshot(`
+    {
+      "photo": false,
+      "schottky": false,
+      "standard": false,
+      "tvs": true,
+      "variant": "tvs",
+      "zener": false,
+    }
+  `)
 })
 
 test("should reject invalid variant values", () => {
@@ -212,10 +271,19 @@ test("should accept variant with connections", () => {
     },
   }
   const parsedProps = diodeProps.parse(rawProps)
-  expect(parsedProps.variant).toBe("schottky")
-  expect(parsedProps.schottky).toBe(true)
-  expect(parsedProps.connections).toEqual({
-    anode: "net.VCC",
-    cathode: "net.GND",
-  })
+
+  expect({
+    variant: parsedProps.variant,
+    schottky: parsedProps.schottky,
+    connections: parsedProps.connections,
+  }).toMatchInlineSnapshot(`
+    {
+      "connections": {
+        "anode": "net.VCC",
+        "cathode": "net.GND",
+      },
+      "schottky": true,
+      "variant": "schottky",
+    }
+  `)
 })

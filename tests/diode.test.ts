@@ -111,3 +111,111 @@ test("should allow optional connections", () => {
   const parsedProps = diodeProps.parse(rawProps)
   expect(parsedProps.connections).toBeUndefined()
 })
+
+// New tests for diode variants
+
+test("should default to standard variant when no variant is specified", () => {
+  const rawProps: DiodeProps = {
+    name: "diode",
+  }
+  const parsedProps = diodeProps.parse(rawProps)
+  expect(parsedProps.variant).toBe("standard")
+  expect(parsedProps.standard).toBe(true)
+  expect(parsedProps.schottky).toBe(false)
+  expect(parsedProps.zener).toBe(false)
+  expect(parsedProps.photo).toBe(false)
+  expect(parsedProps.tvs).toBe(false)
+})
+
+test("should set the schottky flag when variant is schottky", () => {
+  const rawProps: DiodeProps = {
+    name: "diode",
+    variant: "schottky",
+  }
+  const parsedProps = diodeProps.parse(rawProps)
+  expect(parsedProps.variant).toBe("schottky")
+  expect(parsedProps.standard).toBe(false)
+  expect(parsedProps.schottky).toBe(true)
+  expect(parsedProps.zener).toBe(false)
+  expect(parsedProps.photo).toBe(false)
+  expect(parsedProps.tvs).toBe(false)
+})
+
+test("should set the zener flag when variant is zener", () => {
+  const rawProps: DiodeProps = {
+    name: "diode",
+    variant: "zener",
+  }
+  const parsedProps = diodeProps.parse(rawProps)
+  expect(parsedProps.variant).toBe("zener")
+  expect(parsedProps.standard).toBe(false)
+  expect(parsedProps.schottky).toBe(false)
+  expect(parsedProps.zener).toBe(true)
+  expect(parsedProps.photo).toBe(false)
+  expect(parsedProps.tvs).toBe(false)
+})
+
+test("should set the photo flag when variant is photo", () => {
+  const rawProps: DiodeProps = {
+    name: "diode",
+    variant: "photo",
+  }
+  const parsedProps = diodeProps.parse(rawProps)
+  expect(parsedProps.variant).toBe("photo")
+  expect(parsedProps.standard).toBe(false)
+  expect(parsedProps.schottky).toBe(false)
+  expect(parsedProps.zener).toBe(false)
+  expect(parsedProps.photo).toBe(true)
+  expect(parsedProps.tvs).toBe(false)
+})
+
+test("should set the tvs flag when variant is tvs", () => {
+  const rawProps: DiodeProps = {
+    name: "diode",
+    variant: "tvs",
+  }
+  const parsedProps = diodeProps.parse(rawProps)
+  expect(parsedProps.variant).toBe("tvs")
+  expect(parsedProps.standard).toBe(false)
+  expect(parsedProps.schottky).toBe(false)
+  expect(parsedProps.zener).toBe(false)
+  expect(parsedProps.photo).toBe(false)
+  expect(parsedProps.tvs).toBe(true)
+})
+
+test("should reject invalid variant values", () => {
+  expect(() => {
+    diodeProps.parse({
+      name: "diode",
+      variant: "invalid-variant" as any,
+    })
+  }).toThrow(z.ZodError)
+})
+
+test("should throw error when multiple variant flags are set directly", () => {
+  expect(() => {
+    diodeProps.parse({
+      name: "diode",
+      schottky: true,
+      zener: true,
+    } as DiodeProps)
+  }).toThrow("Exactly one diode variant must be enabled")
+})
+
+test("should accept variant with connections", () => {
+  const rawProps: DiodeProps = {
+    name: "diode",
+    variant: "schottky",
+    connections: {
+      anode: "net.VCC",
+      cathode: "net.GND",
+    },
+  }
+  const parsedProps = diodeProps.parse(rawProps)
+  expect(parsedProps.variant).toBe("schottky")
+  expect(parsedProps.schottky).toBe(true)
+  expect(parsedProps.connections).toEqual({
+    anode: "net.VCC",
+    cathode: "net.GND",
+  })
+})

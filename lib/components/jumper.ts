@@ -28,9 +28,10 @@ export interface JumperProps extends CommonComponentProps {
    */
   pinCount?: 2 | 3
   /**
-   * Array of tuples indicating which pins are bridged (e.g., [[1,2], [2,3]])
+   * Groups of pins that are internally connected (bridged)
+   * e.g., [[1,2], [2,3]]
    */
-  bridgedPins?: [number, number][]
+  internallyConnectedPins?: number[][]
 }
 
 export const jumperProps = commonComponentProps.extend({
@@ -45,7 +46,7 @@ export const jumperProps = commonComponentProps.extend({
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
-  bridgedPins: z.array(z.tuple([z.number(), z.number()])).optional(),
+  internallyConnectedPins: z.array(z.array(z.number())).optional(),
 })
 
 type InferredJumperProps = z.input<typeof jumperProps>

@@ -29,6 +29,7 @@ export interface CapacitorProps extends CommonComponentProps {
   bypassFor?: string
   bypassTo?: string
   maxDecouplingTraceLength?: number
+  tolerance?: number | string
   connections?: Connections<CapacitorPinLabels>
 }
 
@@ -42,6 +43,7 @@ export const capacitorProps = commonComponentProps.extend({
   bypassFor: z.string().optional(),
   bypassTo: z.string().optional(),
   maxDecouplingTraceLength: z.number().optional(),
+  tolerance: z.union([z.string(), z.number()]).optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),
 })
 export const capacitorPins = lrPolarPins

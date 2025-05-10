@@ -9,5 +9,6 @@ export const schematicTextProps = z.object({
   text: z.string(),
   anchor: z.union([five_point_anchor.describe("legacy"), nine_point_anchor]),
   color: z.string().optional(),
+  schRotation: z.number().optional(),
 })
 export type SchematicTextProps = z.input<typeof schematicTextProps>

@@ -7,6 +7,7 @@ export const schematicTextProps = z.object({
   schX: distance.default(0),
   schY: distance.default(0),
   text: z.string(),
+  fontSize: z.number().default(1),
   anchor: z
     .union([five_point_anchor.describe("legacy"), nine_point_anchor])
     .default("center"),

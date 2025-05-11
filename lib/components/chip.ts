@@ -4,6 +4,7 @@ import {
   type CommonComponentProps,
   commonComponentProps,
   type SupplierPartNumbers,
+  supplier_name,
 } from "lib/common/layout"
 import {
   type SchematicPortArrangement,
@@ -109,8 +110,6 @@ export const pinLabelsProp = z.record(
 )
 
 expectTypesMatch<PinLabelsProp, z.input<typeof pinLabelsProp>>(true)
-
-const supplier_name = z.enum(["digikey", "lcsc", "mouser"] as const)
 
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),

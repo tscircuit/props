@@ -51,9 +51,15 @@ export const cadModelJscad = cadModelBase.extend({
   jscad: z.record(z.any()),
 })
 
-export type CadModelProp = string | CadModelStl | CadModelObj | CadModelJscad
+export type CadModelProp =
+  | null
+  | string
+  | CadModelStl
+  | CadModelObj
+  | CadModelJscad
 
 export const cadModelProp = z.union([
+  z.null(),
   z.string(),
   cadModelStl,
   cadModelObj,

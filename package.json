@@ -1,6 +1,6 @@
 {
   "name": "@tscircuit/props",
-  "version": "0.0.172",
+  "version": "0.0.179",
   "description": "Props for tscircuit builtin component types",
   "main": "dist/index.js",
   "type": "module",
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@tscircuit/layout": "^0.0.11",
-    "@types/bun": "^1.1.8",
+    "@types/bun": "^1.2.12",
     "@types/node": "^20.12.11",
     "@types/react": "^18.3.2",
     "ava": "^6.1.3",

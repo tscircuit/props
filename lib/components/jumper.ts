@@ -23,6 +23,15 @@ export interface JumperProps extends CommonComponentProps {
   schHeight?: number | string
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
+  /**
+   * Number of pins on the jumper (2 or 3)
+   */
+  pinCount?: 2 | 3
+  /**
+   * Groups of pins that are internally connected (bridged)
+   * e.g., [["1","2"], ["2","3"]]
+   */
+  internallyConnectedPins?: string[][]
 }
 
 export const jumperProps = commonComponentProps.extend({
@@ -36,6 +45,8 @@ export const jumperProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
+  pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
+  internallyConnectedPins: z.array(z.array(z.string())).optional(),
 })
 
 type InferredJumperProps = z.input<typeof jumperProps>

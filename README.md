@@ -17,32 +17,32 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 <!-- COMPONENT_TABLE_START -->
 ## Available Components
 
-| Component | Props Interface | Props Input |
-| --------- | -------------- | ----------- |
-| `<battery />` | `BatteryProps` | `BatteryPropsInput` |
-| `<board />` | `BoardProps` | `BoardPropsInput` |
-| `<capacitor />` | `CapacitorProps` | `CapacitorPropsInput` |
-| `<chip />` | `ChipProps` | `ChipPropsInput` |
-| `<constrainedlayout />` | `ConstrainedLayoutProps` | `ConstrainedLayoutPropsInput` |
-| `<crystal />` | `CrystalProps` | `CrystalPropsInput` |
-| `<diode />` | `DiodeProps` | `DiodePropsInput` |
-| `<footprint />` | `FootprintProps` | `FootprintPropsInput` |
-| `<group />` | `BaseGroupProps` | `BaseGroupPropsInput` |
-| `<hole />` | `HoleProps` | `HolePropsInput` |
-| `<jumper />` | `JumperProps` | `JumperPropsInput` |
-| `<mosfet />` | `MosfetProps` | `MosfetPropsInput` |
-| `<net />` | `NetProps` | `NetPropsInput` |
-| `<netalias />` | `NetAliasProps` | `NetAliasPropsInput` |
-| `<pinheader />` | `PinHeaderProps` | `PinHeaderPropsInput` |
-| `<platedhole />` | `CirclePlatedHoleProps` | `CirclePlatedHolePropsInput` |
-| `<potentiometer />` | `PotentiometerProps` | `PotentiometerPropsInput` |
-| `<resistor />` | `ResistorProps` | `ResistorPropsInput` |
-| `<resonator />` | `ResonatorProps` | `ResonatorPropsInput` |
-| `<smtpad />` | `RectSmtPadProps` | `RectSmtPadPropsInput` |
-| `<solderpaste />` | `RectSolderPasteProps` | `RectSolderPastePropsInput` |
-| `<stampboard />` | `StampboardProps` | `StampboardPropsInput` |
-| `<switch />` | `SwitchProps` | `SwitchPropsInput` |
-| `<transistor />` | `TransistorProps` | `TransistorPropsInput` |
+| Component | Props Interface |
+| --------- | -------------- |
+| `<battery />` | [`BatteryProps`](https://github.com/tscircuit/props/blob/main/lib/components/battery.ts) |
+| `<board />` | [`BoardProps`](https://github.com/tscircuit/props/blob/main/lib/components/board.ts) |
+| `<capacitor />` | [`CapacitorProps`](https://github.com/tscircuit/props/blob/main/lib/components/capacitor.ts) |
+| `<chip />` | [`ChipProps`](https://github.com/tscircuit/props/blob/main/lib/components/chip.ts) |
+| `<constrainedlayout />` | [`ConstrainedLayoutProps`](https://github.com/tscircuit/props/blob/main/lib/components/constrainedlayout.ts) |
+| `<crystal />` | [`CrystalProps`](https://github.com/tscircuit/props/blob/main/lib/components/crystal.ts) |
+| `<diode />` | [`DiodeProps`](https://github.com/tscircuit/props/blob/main/lib/components/diode.ts) |
+| `<footprint />` | [`FootprintProps`](https://github.com/tscircuit/props/blob/main/lib/components/footprint.ts) |
+| `<group />` | [`BaseGroupProps`](https://github.com/tscircuit/props/blob/main/lib/components/group.ts) |
+| `<hole />` | [`HoleProps`](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts) |
+| `<jumper />` | [`JumperProps`](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts) |
+| `<mosfet />` | [`MosfetProps`](https://github.com/tscircuit/props/blob/main/lib/components/mosfet.ts) |
+| `<net />` | [`NetProps`](https://github.com/tscircuit/props/blob/main/lib/components/net.ts) |
+| `<netalias />` | [`NetAliasProps`](https://github.com/tscircuit/props/blob/main/lib/components/netalias.ts) |
+| `<pinheader />` | [`PinHeaderProps`](https://github.com/tscircuit/props/blob/main/lib/components/pin-header.ts) |
+| `<platedhole />` | [`CirclePlatedHoleProps`](https://github.com/tscircuit/props/blob/main/lib/components/platedhole.ts) |
+| `<potentiometer />` | [`PotentiometerProps`](https://github.com/tscircuit/props/blob/main/lib/components/potentiometer.ts) |
+| `<resistor />` | [`ResistorProps`](https://github.com/tscircuit/props/blob/main/lib/components/resistor.ts) |
+| `<resonator />` | [`ResonatorProps`](https://github.com/tscircuit/props/blob/main/lib/components/resonator.ts) |
+| `<smtpad />` | [`RectSmtPadProps`](https://github.com/tscircuit/props/blob/main/lib/components/smtpad.ts) |
+| `<solderpaste />` | [`RectSolderPasteProps`](https://github.com/tscircuit/props/blob/main/lib/components/solderpaste.ts) |
+| `<stampboard />` | [`StampboardProps`](https://github.com/tscircuit/props/blob/main/lib/components/stampboard.ts) |
+| `<switch />` | [`SwitchProps`](https://github.com/tscircuit/props/blob/main/lib/components/switch.ts) |
+| `<transistor />` | [`TransistorProps`](https://github.com/tscircuit/props/blob/main/lib/components/transistor.ts) |
 <!-- COMPONENT_TABLE_END -->
 
 <!-- USAGE_EXAMPLES_START -->

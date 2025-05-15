@@ -24,49 +24,49 @@ function getComponentFiles(dir: string): string[] {
 }
 
 // Extract component names and their exports from files
-function extractComponentInfo(files: string[]): { name: string; props: string; inputs: string }[] {
+function extractComponentInfo(files: string[]): { name: string; props: string; filePath: string }[] {
   const components = []
-  
+
   for (const file of files) {
     const content = fs.readFileSync(file, "utf8")
     const filename = path.basename(file, ".ts")
-    
+    const relativePath = path.relative(path.join(__dirname, ".."), file)
+
     // Convert filename to PascalCase for component name
     const componentName = filename
       .split("-")
       .map(part => part.charAt(0).toUpperCase() + part.slice(1))
       .join("")
-    
+
     // Find the props interface
     const propsMatch = content.match(/export interface (\w+Props)/)
-    const inputsMatch = content.match(/export (type|interface) (\w+PropsInput)/)
-    
+
     if (propsMatch) {
       const propsName = propsMatch[1]
-      const inputsName = inputsMatch ? inputsMatch[2] : `${propsName}Input`
-      
+
       components.push({
         name: componentName,
         props: propsName,
-        inputs: inputsName
+        filePath: relativePath
       })
     }
   }
-  
+
   return components
 }
 
 // Generate components table in markdown
-function generateComponentsTable(components: { name: string; props: string; inputs: string }[]): string {
-  const rows = components.map(comp => 
-    `| \`<${comp.name.toLowerCase()} />\` | \`${comp.props}\` | \`${comp.inputs}\` |`
-  )
-  
+function generateComponentsTable(components: { name: string; props: string; filePath: string }[]): string {
+  const rows = components.map(comp => {
+    const githubPath = `https://github.com/tscircuit/props/blob/main/${comp.filePath}`
+    return `| \`<${comp.name.toLowerCase()} />\` | [\`${comp.props}\`](${githubPath}) |`
+  })
+
   return `
 ## Available Components
 
-| Component | Props Interface | Props Input |
-| --------- | -------------- | ----------- |
+| Component | Props Interface |
+| --------- | -------------- |
 ${rows.join("\n")}
 `
 }

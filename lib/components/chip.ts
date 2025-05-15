@@ -3,6 +3,8 @@ import type { Distance } from "lib/common/distance"
 import {
   type CommonComponentProps,
   commonComponentProps,
+  type SupplierPartNumbers,
+  supplier_name,
 } from "lib/common/layout"
 import {
   type SchematicPortArrangement,
@@ -41,6 +43,10 @@ export interface ChipPropsSU<PinLabel extends string = string>
   internallyConnectedPins?: string[][]
   externallyConnectedPins?: string[][]
   connections?: Connections<PinLabel>
+  pinCompatibleReplacements?: Array<{
+    manufacturerPartNumber: string
+    supplierPartNumbers?: SupplierPartNumbers
+  }>
 }
 
 export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
@@ -70,7 +76,6 @@ export type ChipPinLabels<T extends (props: ChipProps<any>) => any> =
           ? PinLabelMap
           : never
       : never
-    : never
 
 /**
  * Get the connection prop type for a component
@@ -119,6 +124,10 @@ export const chipProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   noSchematicRepresentation: z.boolean().optional(),
   connections: connectionsProp.optional(),
+  pinCompatibleReplacements: z.array(z.object({
+    manufacturerPartNumber: z.string(),
+    supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional()
+  })).optional(),
 })
 
 /**

@@ -1,8 +1,9 @@
-import { distance } from "circuit-json"
+import { distance, supplier_name } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import {
   type CommonComponentProps,
   commonComponentProps,
+  type SupplierPartNumbers,
 } from "lib/common/layout"
 import {
   type SchematicPortArrangement,
@@ -26,6 +27,11 @@ export type PinLabelFromPinLabelMap<PinLabelMap extends PinLabelsProp> =
     ? PinLabel
     : never
 
+export interface PinCompatibleVariant {
+  manufacturerPartNumber?: string
+  supplierPartNumber?: SupplierPartNumbers
+}
+
 export interface ChipPropsSU<PinLabel extends string = string>
   extends CommonComponentProps {
   manufacturerPartNumber?: string
@@ -33,6 +39,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
+  pinCompatibleVariants?: PinCompatibleVariant[]
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: Distance
   schWidth?: Distance
@@ -106,6 +113,11 @@ export const pinLabelsProp = z.record(
 
 expectTypesMatch<PinLabelsProp, z.input<typeof pinLabelsProp>>(true)
 
+export const pinCompatibleVariant = z.object({
+  manufacturerPartNumber: z.string().optional(),
+  supplierPartNumber: z.record(supplier_name, z.array(z.string())).optional(),
+})
+
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
@@ -113,6 +125,7 @@ export const chipProps = commonComponentProps.extend({
   externallyConnectedPins: z.array(z.array(z.string())).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
   schPortArrangement: schematicPinArrangement.optional(),
+  pinCompatibleVariants: z.array(pinCompatibleVariant).optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),
   schWidth: distance.optional(),

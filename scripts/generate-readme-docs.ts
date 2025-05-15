@@ -24,7 +24,14 @@ function getComponentFiles(dir: string): string[] {
 }
 
 // Extract component names and their exports from files
-function extractComponentInfo(files: string[]): { name: string; props: string; filePath: string; interfaceDefinition: string }[] {
+function extractComponentInfo(
+  files: string[],
+): {
+  name: string
+  props: string
+  filePath: string
+  interfaceDefinition: string
+}[] {
   const components = []
 
   for (const file of files) {
@@ -35,7 +42,7 @@ function extractComponentInfo(files: string[]): { name: string; props: string; f
     // Convert filename to PascalCase for component name
     const componentName = filename
       .split("-")
-      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join("")
 
     // Find the props interface
@@ -46,7 +53,10 @@ function extractComponentInfo(files: string[]): { name: string; props: string; f
 
       // Extract the interface definition
       // This regex finds the interface starting with "export interface PropsName" and captures everything until the closing brace
-      const interfaceRegex = new RegExp(`export interface ${propsName}[\\s\\S]+?\\n}`, "m")
+      const interfaceRegex = new RegExp(
+        `export interface ${propsName}[\\s\\S]+?\\n}`,
+        "m",
+      )
       const interfaceMatch = content.match(interfaceRegex)
       const interfaceDefinition = interfaceMatch ? interfaceMatch[0] : ""
 
@@ -54,7 +64,7 @@ function extractComponentInfo(files: string[]): { name: string; props: string; f
         name: componentName,
         props: propsName,
         filePath: relativePath,
-        interfaceDefinition
+        interfaceDefinition,
       })
     }
   }
@@ -63,8 +73,15 @@ function extractComponentInfo(files: string[]): { name: string; props: string; f
 }
 
 // Generate components table in markdown
-function generateComponentsTable(components: { name: string; props: string; filePath: string; interfaceDefinition: string }[]): string {
-  const rows = components.map(comp => {
+function generateComponentsTable(
+  components: {
+    name: string
+    props: string
+    filePath: string
+    interfaceDefinition: string
+  }[],
+): string {
+  const rows = components.map((comp) => {
     // Link to the section in the document instead of GitHub
     const sectionLink = `#${comp.props.toLowerCase()}-${comp.name.toLowerCase()}`
     return `| \`<${comp.name.toLowerCase()} />\` | [\`${comp.props}\`](${sectionLink}) |`
@@ -102,7 +119,14 @@ const myResistor: ResistorProps = {
 }
 
 // Generate interface definitions section
-function generateInterfaceDefinitions(components: { name: string; props: string; filePath: string; interfaceDefinition: string }[]): string {
+function generateInterfaceDefinitions(
+  components: {
+    name: string
+    props: string
+    filePath: string
+    interfaceDefinition: string
+  }[],
+): string {
   // Add CommonComponentProps and SubcircuitGroupProps
   const priorityInterfaces = [
     {
@@ -116,7 +140,7 @@ function generateInterfaceDefinitions(components: { name: string; props: string;
   children?: any
   symbolName?: string
 }`,
-      filePath: "lib/common/layout.ts"
+      filePath: "lib/common/layout.ts",
     },
     {
       name: "Group",
@@ -145,18 +169,22 @@ function generateInterfaceDefinitions(components: { name: string; props: string;
 
   partsEngine?: PartsEngine
 }`,
-      filePath: "lib/components/group.ts"
-    }
-  ];
+      filePath: "lib/components/group.ts",
+    },
+  ]
 
   // Combine priority interfaces with component interfaces
-  const allComponents = [...priorityInterfaces, ...components.filter(comp => comp.interfaceDefinition)];
+  const allComponents = [
+    ...priorityInterfaces,
+    ...components.filter((comp) => comp.interfaceDefinition),
+  ]
 
-  const interfaceBlocks = allComponents.map(comp => {
-    const githubPath = `https://github.com/tscircuit/props/blob/main/${comp.filePath}`;
-    const componentHeader = comp.name !== "Common" && comp.name !== "Group"
-      ? ` \`<${comp.name.toLowerCase()} />\``
-      : '';
+  const interfaceBlocks = allComponents.map((comp) => {
+    const githubPath = `https://github.com/tscircuit/props/blob/main/${comp.filePath}`
+    const componentHeader =
+      comp.name !== "Common" && comp.name !== "Group"
+        ? ` \`<${comp.name.toLowerCase()} />\``
+        : ""
 
     return `
 ### ${comp.props}${componentHeader}
@@ -166,7 +194,7 @@ ${comp.interfaceDefinition}
 \`\`\`
 
 [Source](${githubPath})
-`;
+`
   })
 
   return `
@@ -197,33 +225,36 @@ let readmeContent = fs.readFileSync(readmePath, "utf8")
 // Check if there are existing comment markers
 if (!readmeContent.includes("<!-- COMPONENT_TABLE_START -->")) {
   // Add the markers if they don't exist
-  readmeContent += "\n\n<!-- COMPONENT_TABLE_START -->\n<!-- COMPONENT_TABLE_END -->\n\n"
+  readmeContent +=
+    "\n\n<!-- COMPONENT_TABLE_START -->\n<!-- COMPONENT_TABLE_END -->\n\n"
 }
 
 if (!readmeContent.includes("<!-- USAGE_EXAMPLES_START -->")) {
   // Add the markers if they don't exist
-  readmeContent += "<!-- USAGE_EXAMPLES_START -->\n<!-- USAGE_EXAMPLES_END -->\n"
+  readmeContent +=
+    "<!-- USAGE_EXAMPLES_START -->\n<!-- USAGE_EXAMPLES_END -->\n"
 }
 
 if (!readmeContent.includes("<!-- INTERFACE_DEFINITIONS_START -->")) {
   // Add the markers if they don't exist
-  readmeContent += "\n\n<!-- INTERFACE_DEFINITIONS_START -->\n<!-- INTERFACE_DEFINITIONS_END -->\n"
+  readmeContent +=
+    "\n\n<!-- INTERFACE_DEFINITIONS_START -->\n<!-- INTERFACE_DEFINITIONS_END -->\n"
 }
 
 // Replace the content between the markers
 readmeContent = readmeContent.replace(
   /<!-- COMPONENT_TABLE_START -->[\s\S]*?<!-- COMPONENT_TABLE_END -->/,
-  `<!-- COMPONENT_TABLE_START -->${componentsTable}<!-- COMPONENT_TABLE_END -->`
+  `<!-- COMPONENT_TABLE_START -->${componentsTable}<!-- COMPONENT_TABLE_END -->`,
 )
 
 readmeContent = readmeContent.replace(
   /<!-- USAGE_EXAMPLES_START -->[\s\S]*?<!-- USAGE_EXAMPLES_END -->/,
-  `<!-- USAGE_EXAMPLES_START -->${usageExamples}<!-- USAGE_EXAMPLES_END -->`
+  `<!-- USAGE_EXAMPLES_START -->${usageExamples}<!-- USAGE_EXAMPLES_END -->`,
 )
 
 readmeContent = readmeContent.replace(
   /<!-- INTERFACE_DEFINITIONS_START -->[\s\S]*?<!-- INTERFACE_DEFINITIONS_END -->/,
-  `<!-- INTERFACE_DEFINITIONS_START -->${interfaceDefinitions}<!-- INTERFACE_DEFINITIONS_END -->`
+  `<!-- INTERFACE_DEFINITIONS_START -->${interfaceDefinitions}<!-- INTERFACE_DEFINITIONS_END -->`,
 )
 
 // Write back to README

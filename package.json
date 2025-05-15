@@ -4,6 +4,10 @@
   "description": "Props for tscircuit builtin component types",
   "main": "dist/index.js",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tscircuit/props.git"
+  },
   "scripts": {
     "build": "tsup lib/index.ts --format esm --dts --sourcemap",
     "check-circular-deps": "madge --circular --extensions ts ./lib",

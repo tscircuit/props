@@ -1,0 +1,52 @@
+name: Update README
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lib/**/*.ts'
+      - 'scripts/**/*.ts'
+      - 'package.json'
+
+jobs:
+  update-readme:
+    name: Update README
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Generate README
+        run: bun run scripts/generate-readme-docs.ts
+      
+      - name: Format README
+        run: bunx biome --write README.md
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --name-only --exit-code README.md || echo "readme_changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit changes if README changed
+        if: steps.git-check.outputs.readme_changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "docs: Update README.md with latest component definitions [skip ci]"
+          branch: ${{ github.ref }}
+          commit_user_name: tscircuitbot
+          commit_user_email: tscircuitbot@users.noreply.github.com
+          commit_author: tscircuitbot <tscircuitbot@users.noreply.github.com>

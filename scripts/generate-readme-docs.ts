@@ -24,9 +24,7 @@ function getComponentFiles(dir: string): string[] {
 }
 
 // Extract component names and their exports from files
-function extractComponentInfo(
-  files: string[],
-): {
+function extractComponentInfo(files: string[]): {
   name: string
   props: string
   filePath: string

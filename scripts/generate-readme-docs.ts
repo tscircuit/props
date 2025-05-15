@@ -24,7 +24,7 @@ function getComponentFiles(dir: string): string[] {
 }
 
 // Extract component names and their exports from files
-function extractComponentInfo(files: string[]): { name: string; props: string; filePath: string }[] {
+function extractComponentInfo(files: string[]): { name: string; props: string; filePath: string; interfaceDefinition: string }[] {
   const components = []
 
   for (const file of files) {
@@ -44,10 +44,17 @@ function extractComponentInfo(files: string[]): { name: string; props: string; f
     if (propsMatch) {
       const propsName = propsMatch[1]
 
+      // Extract the interface definition
+      // This regex finds the interface starting with "export interface PropsName" and captures everything until the closing brace
+      const interfaceRegex = new RegExp(`export interface ${propsName}[\\s\\S]+?\\n}`, "m")
+      const interfaceMatch = content.match(interfaceRegex)
+      const interfaceDefinition = interfaceMatch ? interfaceMatch[0] : ""
+
       components.push({
         name: componentName,
         props: propsName,
-        filePath: relativePath
+        filePath: relativePath,
+        interfaceDefinition
       })
     }
   }
@@ -93,6 +100,27 @@ const myResistor: ResistorProps = {
 `
 }
 
+// Generate interface definitions section
+function generateInterfaceDefinitions(components: { name: string; props: string; interfaceDefinition: string }[]): string {
+  const interfaceBlocks = components
+    .filter(comp => comp.interfaceDefinition) // Filter out any components with empty interface definitions
+    .map(comp => `
+### ${comp.props}
+
+\`\`\`ts
+${comp.interfaceDefinition}
+\`\`\`
+`)
+
+  return `
+## Component Interface Definitions
+
+Below are the TypeScript interface definitions for all component props:
+
+${interfaceBlocks.join("\n")}
+`
+}
+
 // Main execution
 const componentsDir = path.join(__dirname, "../lib/components")
 const files = getComponentFiles(componentsDir)
@@ -103,6 +131,7 @@ components.sort((a, b) => a.name.localeCompare(b.name))
 
 const componentsTable = generateComponentsTable(components)
 const usageExamples = generateUsageExamples()
+const interfaceDefinitions = generateInterfaceDefinitions(components)
 
 // Read current README
 const readmePath = path.join(__dirname, "../README.md")
@@ -119,6 +148,11 @@ if (!readmeContent.includes("<!-- USAGE_EXAMPLES_START -->")) {
   readmeContent += "<!-- USAGE_EXAMPLES_START -->\n<!-- USAGE_EXAMPLES_END -->\n"
 }
 
+if (!readmeContent.includes("<!-- INTERFACE_DEFINITIONS_START -->")) {
+  // Add the markers if they don't exist
+  readmeContent += "\n\n<!-- INTERFACE_DEFINITIONS_START -->\n<!-- INTERFACE_DEFINITIONS_END -->\n"
+}
+
 // Replace the content between the markers
 readmeContent = readmeContent.replace(
   /<!-- COMPONENT_TABLE_START -->[\s\S]*?<!-- COMPONENT_TABLE_END -->/,
@@ -128,6 +162,11 @@ readmeContent = readmeContent.replace(
 readmeContent = readmeContent.replace(
   /<!-- USAGE_EXAMPLES_START -->[\s\S]*?<!-- USAGE_EXAMPLES_END -->/,
   `<!-- USAGE_EXAMPLES_START -->${usageExamples}<!-- USAGE_EXAMPLES_END -->`
+)
+
+readmeContent = readmeContent.replace(
+  /<!-- INTERFACE_DEFINITIONS_START -->[\s\S]*?<!-- INTERFACE_DEFINITIONS_END -->/,
+  `<!-- INTERFACE_DEFINITIONS_START -->${interfaceDefinitions}<!-- INTERFACE_DEFINITIONS_END -->`
 )
 
 // Write back to README

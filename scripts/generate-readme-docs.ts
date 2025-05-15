@@ -63,10 +63,11 @@ function extractComponentInfo(files: string[]): { name: string; props: string; f
 }
 
 // Generate components table in markdown
-function generateComponentsTable(components: { name: string; props: string; filePath: string }[]): string {
+function generateComponentsTable(components: { name: string; props: string; filePath: string; interfaceDefinition: string }[]): string {
   const rows = components.map(comp => {
-    const githubPath = `https://github.com/tscircuit/props/blob/main/${comp.filePath}`
-    return `| \`<${comp.name.toLowerCase()} />\` | [\`${comp.props}\`](${githubPath}) |`
+    // Link to the section in the document instead of GitHub
+    const sectionLink = `#${comp.props.toLowerCase()}-${comp.name.toLowerCase()}`
+    return `| \`<${comp.name.toLowerCase()} />\` | [\`${comp.props}\`](${sectionLink}) |`
   })
 
   return `
@@ -101,16 +102,72 @@ const myResistor: ResistorProps = {
 }
 
 // Generate interface definitions section
-function generateInterfaceDefinitions(components: { name: string; props: string; interfaceDefinition: string }[]): string {
-  const interfaceBlocks = components
-    .filter(comp => comp.interfaceDefinition) // Filter out any components with empty interface definitions
-    .map(comp => `
-### ${comp.props}
+function generateInterfaceDefinitions(components: { name: string; props: string; filePath: string; interfaceDefinition: string }[]): string {
+  // Add CommonComponentProps and SubcircuitGroupProps
+  const priorityInterfaces = [
+    {
+      name: "Common",
+      props: "CommonComponentProps",
+      interfaceDefinition: `export interface CommonComponentProps extends CommonLayoutProps {
+  key?: any
+  name: string
+  supplierPartNumbers?: SupplierPartNumbers
+  cadModel?: CadModelProp
+  children?: any
+  symbolName?: string
+}`,
+      filePath: "lib/common/layout.ts"
+    },
+    {
+      name: "Group",
+      props: "SubcircuitGroupProps",
+      interfaceDefinition: `export interface SubcircuitGroupProps extends BaseGroupProps {
+  layout?: LayoutBuilder
+  manualEdits?: ManualEditsFileInput
+  routingDisabled?: boolean
+  defaultTraceWidth?: Distance
+  minTraceWidth?: Distance
+  pcbRouteCache?: PcbRouteCache
+
+  autorouter?: AutorouterProp
+
+  /**
+   * If true, we'll automatically layout the schematic for this group. Must be
+   * a subcircuit (currently). This is eventually going to be replaced with more
+   * sophisticated layout options/modes and will be enabled by default.
+   */
+  schAutoLayoutEnabled?: boolean
+
+  /**
+   * If true, net labels will automatically be created for complex traces
+   */
+  schTraceAutoLabelEnabled?: boolean
+
+  partsEngine?: PartsEngine
+}`,
+      filePath: "lib/components/group.ts"
+    }
+  ];
+
+  // Combine priority interfaces with component interfaces
+  const allComponents = [...priorityInterfaces, ...components.filter(comp => comp.interfaceDefinition)];
+
+  const interfaceBlocks = allComponents.map(comp => {
+    const githubPath = `https://github.com/tscircuit/props/blob/main/${comp.filePath}`;
+    const componentHeader = comp.name !== "Common" && comp.name !== "Group"
+      ? ` \`<${comp.name.toLowerCase()} />\``
+      : '';
+
+    return `
+### ${comp.props}${componentHeader}
 
 \`\`\`ts
 ${comp.interfaceDefinition}
 \`\`\`
-`)
+
+[Source](${githubPath})
+`;
+  })
 
   return `
 ## Component Interface Definitions

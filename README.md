@@ -19,30 +19,30 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 
 | Component | Props Interface |
 | --------- | -------------- |
-| `<battery />` | [`BatteryProps`](https://github.com/tscircuit/props/blob/main/lib/components/battery.ts) |
-| `<board />` | [`BoardProps`](https://github.com/tscircuit/props/blob/main/lib/components/board.ts) |
-| `<capacitor />` | [`CapacitorProps`](https://github.com/tscircuit/props/blob/main/lib/components/capacitor.ts) |
-| `<chip />` | [`ChipProps`](https://github.com/tscircuit/props/blob/main/lib/components/chip.ts) |
-| `<constrainedlayout />` | [`ConstrainedLayoutProps`](https://github.com/tscircuit/props/blob/main/lib/components/constrainedlayout.ts) |
-| `<crystal />` | [`CrystalProps`](https://github.com/tscircuit/props/blob/main/lib/components/crystal.ts) |
-| `<diode />` | [`DiodeProps`](https://github.com/tscircuit/props/blob/main/lib/components/diode.ts) |
-| `<footprint />` | [`FootprintProps`](https://github.com/tscircuit/props/blob/main/lib/components/footprint.ts) |
-| `<group />` | [`BaseGroupProps`](https://github.com/tscircuit/props/blob/main/lib/components/group.ts) |
-| `<hole />` | [`HoleProps`](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts) |
-| `<jumper />` | [`JumperProps`](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts) |
-| `<mosfet />` | [`MosfetProps`](https://github.com/tscircuit/props/blob/main/lib/components/mosfet.ts) |
-| `<net />` | [`NetProps`](https://github.com/tscircuit/props/blob/main/lib/components/net.ts) |
-| `<netalias />` | [`NetAliasProps`](https://github.com/tscircuit/props/blob/main/lib/components/netalias.ts) |
-| `<pinheader />` | [`PinHeaderProps`](https://github.com/tscircuit/props/blob/main/lib/components/pin-header.ts) |
-| `<platedhole />` | [`CirclePlatedHoleProps`](https://github.com/tscircuit/props/blob/main/lib/components/platedhole.ts) |
-| `<potentiometer />` | [`PotentiometerProps`](https://github.com/tscircuit/props/blob/main/lib/components/potentiometer.ts) |
-| `<resistor />` | [`ResistorProps`](https://github.com/tscircuit/props/blob/main/lib/components/resistor.ts) |
-| `<resonator />` | [`ResonatorProps`](https://github.com/tscircuit/props/blob/main/lib/components/resonator.ts) |
-| `<smtpad />` | [`RectSmtPadProps`](https://github.com/tscircuit/props/blob/main/lib/components/smtpad.ts) |
-| `<solderpaste />` | [`RectSolderPasteProps`](https://github.com/tscircuit/props/blob/main/lib/components/solderpaste.ts) |
-| `<stampboard />` | [`StampboardProps`](https://github.com/tscircuit/props/blob/main/lib/components/stampboard.ts) |
-| `<switch />` | [`SwitchProps`](https://github.com/tscircuit/props/blob/main/lib/components/switch.ts) |
-| `<transistor />` | [`TransistorProps`](https://github.com/tscircuit/props/blob/main/lib/components/transistor.ts) |
+| `<battery />` | [`BatteryProps`](#batteryprops-battery) |
+| `<board />` | [`BoardProps`](#boardprops-board) |
+| `<capacitor />` | [`CapacitorProps`](#capacitorprops-capacitor) |
+| `<chip />` | [`ChipProps`](#chipprops-chip) |
+| `<constrainedlayout />` | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout) |
+| `<crystal />` | [`CrystalProps`](#crystalprops-crystal) |
+| `<diode />` | [`DiodeProps`](#diodeprops-diode) |
+| `<footprint />` | [`FootprintProps`](#footprintprops-footprint) |
+| `<group />` | [`BaseGroupProps`](#basegroupprops-group) |
+| `<hole />` | [`HoleProps`](#holeprops-hole) |
+| `<jumper />` | [`JumperProps`](#jumperprops-jumper) |
+| `<mosfet />` | [`MosfetProps`](#mosfetprops-mosfet) |
+| `<net />` | [`NetProps`](#netprops-net) |
+| `<netalias />` | [`NetAliasProps`](#netaliasprops-netalias) |
+| `<pinheader />` | [`PinHeaderProps`](#pinheaderprops-pinheader) |
+| `<platedhole />` | [`CirclePlatedHoleProps`](#circleplatedholeprops-platedhole) |
+| `<potentiometer />` | [`PotentiometerProps`](#potentiometerprops-potentiometer) |
+| `<resistor />` | [`ResistorProps`](#resistorprops-resistor) |
+| `<resonator />` | [`ResonatorProps`](#resonatorprops-resonator) |
+| `<smtpad />` | [`RectSmtPadProps`](#rectsmtpadprops-smtpad) |
+| `<solderpaste />` | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste) |
+| `<stampboard />` | [`StampboardProps`](#stampboardprops-stampboard) |
+| `<switch />` | [`SwitchProps`](#switchprops-switch) |
+| `<transistor />` | [`TransistorProps`](#transistorprops-transistor) |
 <!-- COMPONENT_TABLE_END -->
 
 <!-- USAGE_EXAMPLES_START -->
@@ -70,7 +70,55 @@ const myResistor: ResistorProps = {
 Below are the TypeScript interface definitions for all component props:
 
 
-### BatteryProps
+### CommonComponentProps
+
+```ts
+export interface CommonComponentProps extends CommonLayoutProps {
+  key?: any
+  name: string
+  supplierPartNumbers?: SupplierPartNumbers
+  cadModel?: CadModelProp
+  children?: any
+  symbolName?: string
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/common/layout.ts)
+
+
+### SubcircuitGroupProps
+
+```ts
+export interface SubcircuitGroupProps extends BaseGroupProps {
+  layout?: LayoutBuilder
+  manualEdits?: ManualEditsFileInput
+  routingDisabled?: boolean
+  defaultTraceWidth?: Distance
+  minTraceWidth?: Distance
+  pcbRouteCache?: PcbRouteCache
+
+  autorouter?: AutorouterProp
+
+  /**
+   * If true, we'll automatically layout the schematic for this group. Must be
+   * a subcircuit (currently). This is eventually going to be replaced with more
+   * sophisticated layout options/modes and will be enabled by default.
+   */
+  schAutoLayoutEnabled?: boolean
+
+  /**
+   * If true, net labels will automatically be created for complex traces
+   */
+  schTraceAutoLabelEnabled?: boolean
+
+  partsEngine?: PartsEngine
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/group.ts)
+
+
+### BatteryProps `<battery />`
 
 ```ts
 export interface BatteryProps extends CommonComponentProps {
@@ -78,8 +126,10 @@ export interface BatteryProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/battery.ts)
 
-### BoardProps
+
+### BoardProps `<board />`
 
 ```ts
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
@@ -92,8 +142,10 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/board.ts)
 
-### CapacitorProps
+
+### CapacitorProps `<capacitor />`
 
 ```ts
 export interface CapacitorProps extends CommonComponentProps {
@@ -110,8 +162,10 @@ export interface CapacitorProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/capacitor.ts)
 
-### ChipProps
+
+### ChipProps `<chip />`
 
 ```ts
 export interface ChipPropsSU<PinLabel extends string = string>
@@ -132,8 +186,10 @@ export interface ChipPropsSU<PinLabel extends string = string>
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/chip.ts)
 
-### ConstrainedLayoutProps
+
+### ConstrainedLayoutProps `<constrainedlayout />`
 
 ```ts
 export interface ConstrainedLayoutProps {
@@ -143,8 +199,10 @@ export interface ConstrainedLayoutProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/constrainedlayout.ts)
 
-### CrystalProps
+
+### CrystalProps `<crystal />`
 
 ```ts
 export interface CrystalProps extends CommonComponentProps {
@@ -154,8 +212,10 @@ export interface CrystalProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/crystal.ts)
 
-### DiodeProps
+
+### DiodeProps `<diode />`
 
 ```ts
 export interface DiodeProps extends CommonComponentProps {
@@ -176,8 +236,10 @@ export interface DiodeProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/diode.ts)
 
-### FootprintProps
+
+### FootprintProps `<footprint />`
 
 ```ts
 export interface FootprintProps {
@@ -194,6 +256,8 @@ export interface FootprintProps {
   originalLayer?: LayerRef
 }
 ```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/footprint.ts)
 
 
 ### BaseGroupProps
@@ -214,8 +278,10 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/group.ts)
 
-### HoleProps
+
+### HoleProps `<hole />`
 
 ```ts
 export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -225,8 +291,10 @@ export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
 
-### JumperProps
+
+### JumperProps `<jumper />`
 
 ```ts
 export interface JumperProps extends CommonComponentProps {
@@ -250,8 +318,10 @@ export interface JumperProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts)
 
-### MosfetProps
+
+### MosfetProps `<mosfet />`
 
 ```ts
 export interface MosfetProps extends CommonComponentProps {
@@ -260,8 +330,10 @@ export interface MosfetProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/mosfet.ts)
 
-### NetProps
+
+### NetProps `<net />`
 
 ```ts
 export interface NetProps {
@@ -269,8 +341,10 @@ export interface NetProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/net.ts)
 
-### NetAliasProps
+
+### NetAliasProps `<netalias />`
 
 ```ts
 export interface NetAliasProps {
@@ -282,8 +356,10 @@ export interface NetAliasProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/netalias.ts)
 
-### PinHeaderProps
+
+### PinHeaderProps `<pinheader />`
 
 ```ts
 export interface PinHeaderProps extends CommonComponentProps {
@@ -339,8 +415,10 @@ export interface PinHeaderProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pin-header.ts)
 
-### CirclePlatedHoleProps
+
+### CirclePlatedHoleProps `<platedhole />`
 
 ```ts
 export interface CirclePlatedHoleProps
@@ -353,8 +431,10 @@ export interface CirclePlatedHoleProps
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/platedhole.ts)
 
-### PotentiometerProps
+
+### PotentiometerProps `<potentiometer />`
 
 ```ts
 export interface PotentiometerProps extends CommonComponentProps {
@@ -363,8 +443,10 @@ export interface PotentiometerProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/potentiometer.ts)
 
-### ResistorProps
+
+### ResistorProps `<resistor />`
 
 ```ts
 export interface ResistorProps extends CommonComponentProps {
@@ -377,8 +459,10 @@ export interface ResistorProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/resistor.ts)
 
-### ResonatorProps
+
+### ResonatorProps `<resonator />`
 
 ```ts
 export interface ResonatorProps extends CommonComponentProps {
@@ -388,8 +472,10 @@ export interface ResonatorProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/resonator.ts)
 
-### RectSmtPadProps
+
+### RectSmtPadProps `<smtpad />`
 
 ```ts
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -400,8 +486,10 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/smtpad.ts)
 
-### RectSolderPasteProps
+
+### RectSolderPasteProps `<solderpaste />`
 
 ```ts
 export interface RectSolderPasteProps
@@ -412,8 +500,10 @@ export interface RectSolderPasteProps
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/solderpaste.ts)
 
-### StampboardProps
+
+### StampboardProps `<stampboard />`
 
 ```ts
 export interface StampboardProps extends BoardProps {
@@ -430,8 +520,10 @@ export interface StampboardProps extends BoardProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/stampboard.ts)
 
-### SwitchProps
+
+### SwitchProps `<switch />`
 
 ```ts
 export interface SwitchProps extends CommonComponentProps {
@@ -444,13 +536,17 @@ export interface SwitchProps extends CommonComponentProps {
 }
 ```
 
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/switch.ts)
 
-### TransistorProps
+
+### TransistorProps `<transistor />`
 
 ```ts
 export interface TransistorProps extends CommonComponentProps {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet"
 }
 ```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/transistor.ts)
 
 <!-- INTERFACE_DEFINITIONS_END -->

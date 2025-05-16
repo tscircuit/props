@@ -15,8 +15,10 @@ import {
   type ManualEditsFileInput,
 } from "lib/manual-edits"
 
-export const layoutConfig = z.object({
-  layoutMode: z.enum(["grid", "flex", "none"]).optional(),
+export const baseLayoutConfig = z.object({
+  layoutMode: z
+    .enum(["grid", "flex", "pack", "mash", "mashpack", "none"])
+    .optional(),
   position: z.enum(["absolute", "relative"]).optional(),
 
   grid: z.boolean().optional(),
@@ -34,10 +36,16 @@ export const layoutConfig = z.object({
   flexRow: z.boolean().optional(),
   flexColumn: z.boolean().optional(),
   gap: z.number().or(z.string()).optional(),
+
+  mash: z.boolean().optional(),
+  mashpack: z.boolean().optional(),
+  pack: z.boolean().optional(),
+  packDirection: z.enum(["all", "up", "down", "left", "right"]).optional(),
+  packOrder: z.enum(["largest", "first-to-last", "last-to-first"]).optional(),
 })
 
-export interface LayoutConfig {
-  layoutMode?: "grid" | "flex" | "none"
+export interface BaseLayoutConfig {
+  layoutMode?: "grid" | "flex" | "pack" | "mash" | "mashpack" | "none"
   position?: "absolute" | "relative"
 
   grid?: boolean
@@ -55,11 +63,19 @@ export interface LayoutConfig {
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string
+
+  mash?: boolean
+
+  mashpack?: boolean
+
+  pack?: boolean
+  packDirection?: "all" | "up" | "down" | "left" | "right"
+  packOrder?: "largest" | "first-to-last" | "last-to-first"
 }
 
-expectTypesMatch<LayoutConfig, z.input<typeof layoutConfig>>(true)
+expectTypesMatch<BaseLayoutConfig, z.input<typeof baseLayoutConfig>>(true)
 
-export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
+export interface BaseGroupProps extends CommonLayoutProps, BaseLayoutConfig {
   name?: string
   key?: any
   children?: any
@@ -69,8 +85,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schWidth?: Distance
   schHeight?: Distance
 
-  pcbLayout?: LayoutConfig
-  schLayout?: LayoutConfig
+  pcbLayout?: BaseLayoutConfig
+  schLayout?: BaseLayoutConfig
 }
 
 export type PartsEngine = {
@@ -168,13 +184,13 @@ export const baseGroupProps = commonLayoutProps.extend({
   children: z.any().optional(),
   key: z.any().optional(),
 
-  ...layoutConfig.shape,
+  ...baseLayoutConfig.shape,
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
   schWidth: length.optional(),
   schHeight: length.optional(),
-  pcbLayout: layoutConfig.optional(),
-  schLayout: layoutConfig.optional(),
+  pcbLayout: baseLayoutConfig.optional(),
+  schLayout: baseLayoutConfig.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

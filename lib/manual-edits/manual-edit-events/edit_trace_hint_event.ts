@@ -4,7 +4,6 @@ import {
   type BaseManualEditEvent,
 } from "./base_manual_edit_event"
 import { expectTypesMatch } from "lib/typecheck"
-import { route_hint_point } from "circuit-json"
 
 export const edit_trace_hint_event = base_manual_edit_event.extend({
   pcb_edit_event_type: z.literal("edit_trace_hint").describe("deprecated"),

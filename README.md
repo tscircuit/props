@@ -226,7 +226,7 @@ export interface RectCutoutProps
 export interface CircleCutoutProps
   extends Omit<
     PcbLayoutProps,
-    "layer" | "pcbRotation" | "schX" | "schY" | "schRotation" | "footprint"
+    "layer" | "pcbRotation"
   > {
   name?: string;
   shape: "circle";

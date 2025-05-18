@@ -26,10 +26,7 @@ export const rectCutoutProps = pcbLayoutProps
 expectTypesMatch<RectCutoutProps, z.input<typeof rectCutoutProps>>(true)
 
 export interface CircleCutoutProps
-  extends Omit<
-    PcbLayoutProps,
-    "layer" | "pcbRotation" | "schX" | "schY" | "schRotation" | "footprint"
-  > {
+  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
   name?: string
   shape: "circle"
   radius: Distance

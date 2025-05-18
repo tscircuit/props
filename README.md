@@ -24,7 +24,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<capacitor />` | [`CapacitorProps`](#capacitorprops-capacitor) |
 | `<chip />` | [`ChipProps`](#chipprops-chip) |
 | `<constrainedlayout />` | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout) |
-| `<cutout />` | [`RectCutoutProps`](#rectcutoutprops-cutout) |
+| `<cutout />` | [`CutoutProps`](#cutoutprops-cutout) |
 | `<crystal />` | [`CrystalProps`](#crystalprops-crystal) |
 | `<diode />` | [`DiodeProps`](#diodeprops-diode) |
 | `<footprint />` | [`FootprintProps`](#footprintprops-footprint) |

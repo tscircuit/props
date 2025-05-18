@@ -24,6 +24,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<capacitor />` | [`CapacitorProps`](#capacitorprops-capacitor) |
 | `<chip />` | [`ChipProps`](#chipprops-chip) |
 | `<constrainedlayout />` | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout) |
+| `<cutout />` | [`CutoutProps`](#cutoutprops-cutout) |
 | `<crystal />` | [`CrystalProps`](#crystalprops-crystal) |
 | `<diode />` | [`DiodeProps`](#diodeprops-diode) |
 | `<footprint />` | [`FootprintProps`](#footprintprops-footprint) |
@@ -200,6 +201,61 @@ export interface ConstrainedLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/constrainedlayout.ts)
+
+
+### CutoutProps `<cutout />`
+
+Defines a cutout on the PCB, removing board material. It can be a rectangle, circle, or polygon.
+
+**Rectangular Cutout**
+```ts
+export interface RectCutoutProps
+  extends Omit<
+    PcbLayoutProps,
+    "layer" | "pcbRotation"
+  > {
+  name?: string;
+  shape: "rect";
+  width: Distance;
+  height: Distance;
+}
+```
+
+**Circular Cutout**
+```ts
+export interface CircleCutoutProps
+  extends Omit<
+    PcbLayoutProps,
+    "layer" | "pcbRotation"
+  > {
+  name?: string;
+  shape: "circle";
+  radius: Distance;
+}
+```
+
+**Polygon Cutout**
+```ts
+export interface PolygonCutoutProps
+  extends Omit<
+    PcbLayoutProps,
+    "layer" | "pcbRotation"
+  > {
+  name?: string;
+  shape: "polygon";
+  points: Point[];
+}
+```
+
+**Union Type**
+```ts
+export type CutoutProps =
+  | RectCutoutProps
+  | CircleCutoutProps
+  | PolygonCutoutProps;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/cutout.ts)
 
 
 ### CrystalProps `<crystal />`

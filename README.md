@@ -218,7 +218,6 @@ export interface RectCutoutProps
   shape: "rect";
   width: Distance;
   height: Distance;
-  // pcbX, pcbY from PcbLayoutProps are used for center x, y
 }
 ```
 
@@ -232,7 +231,6 @@ export interface CircleCutoutProps
   name?: string;
   shape: "circle";
   radius: Distance;
-  // pcbX, pcbY from PcbLayoutProps are used for center x, y
 }
 ```
 

@@ -44,17 +44,23 @@ export const circleCutoutProps = pcbLayoutProps
   })
 expectTypesMatch<CircleCutoutProps, z.input<typeof circleCutoutProps>>(true)
 
-export interface PolygonCutoutProps {
+export interface PolygonCutoutProps
+  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
   name?: string
   shape: "polygon"
   points: Point[]
 }
 
-export const polygonCutoutProps = z.object({
-  name: z.string().optional(),
-  shape: z.literal("polygon"),
-  points: z.array(point),
-})
+export const polygonCutoutProps = pcbLayoutProps
+  .omit({
+    layer: true,
+    pcbRotation: true,
+  })
+  .extend({
+    name: z.string().optional(),
+    shape: z.literal("polygon"),
+    points: z.array(point),
+  })
 expectTypesMatch<PolygonCutoutProps, z.input<typeof polygonCutoutProps>>(true)
 
 export type CutoutProps =

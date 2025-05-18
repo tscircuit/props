@@ -236,7 +236,11 @@ export interface CircleCutoutProps
 
 **Polygon Cutout**
 ```ts
-export interface PolygonCutoutProps {
+export interface PolygonCutoutProps
+  extends Omit<
+    PcbLayoutProps,
+    "layer" | "pcbRotation"
+  > {
   name?: string;
   shape: "polygon";
   points: Point[];

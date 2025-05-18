@@ -58,7 +58,7 @@ test("should parse CircleCutoutProps", () => {
   }
 })
 
-test("should parse PolygonCutoutProps", () => {
+test("should parse PolygonCutoutProps with pcbX and pcbY", () => {
   const rawProps: PolygonCutoutProps = {
     name: "polygon_cutout_1",
     shape: "polygon",
@@ -67,6 +67,8 @@ test("should parse PolygonCutoutProps", () => {
       { x: 10, y: 0 },
       { x: 5, y: 5 },
     ],
+    pcbX: "1mm",
+    pcbY: 2,
   }
   const parsed = polygonCutoutProps.parse(rawProps)
   expect(parsed.name).toBe("polygon_cutout_1")
@@ -76,11 +78,15 @@ test("should parse PolygonCutoutProps", () => {
     { x: 10, y: 0 },
     { x: 5, y: 5 },
   ])
+  expect(parsed.pcbX).toBe(1)
+  expect(parsed.pcbY).toBe(2)
 
   const parsedUnion = cutoutProps.parse(rawProps)
   expect(parsedUnion.shape).toBe("polygon")
   if (parsedUnion.shape === "polygon") {
     expect(parsedUnion.points?.length).toBe(3)
+    expect(parsedUnion.pcbX).toBe(1)
+    expect(parsedUnion.pcbY).toBe(2)
   }
 })
 

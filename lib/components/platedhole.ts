@@ -55,7 +55,7 @@ export interface CircularHoleWithRectPlatedProps
   rectPadHeight: number | string
   holeShape?: "circle"
   padShape?: "rect"
-  shape?: "circularHoleWithRectPad"
+  shape?: "circular_hole_with_rect_pad"
   portHints?: PortHints
 }
 
@@ -112,17 +112,17 @@ export const platedHoleProps = z
         rectPadHeight: distance,
         holeShape: z.literal("circle").optional(),
         padShape: z.literal("rect").optional(),
-        shape: z.literal("circularHoleWithRectPad").optional(),
+        shape: z.literal("circular_hole_with_rect_pad").optional(),
         portHints: portHints.optional(),
       })
       .refine(
         (prop) => {
-          return prop.shape === "circularHoleWithRectPad"
+          return prop.shape === "circular_hole_with_rect_pad"
             ? prop.holeDiameter && prop.rectPadWidth && prop.rectPadHeight
             : true
         },
         {
-          message: "Missing required fields for circularHoleWithRectPad",
+          message: "Missing required fields for circular_hole_with_rect_pad",
         },
       ),
   ])

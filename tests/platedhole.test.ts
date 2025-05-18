@@ -8,7 +8,7 @@ import type { z } from "zod"
 
 test("should parse CircularHoleWithRectPlatedProps with all required fields", () => {
   const rawProps: PlatedHoleProps = {
-    shape: "circularHoleWithRectPad",
+    shape: "circular_hole_with_rect_pad",
     holeDiameter: 5,
     rectPadWidth: 10,
     rectPadHeight: 20,
@@ -18,7 +18,7 @@ test("should parse CircularHoleWithRectPlatedProps with all required fields", ()
 
   const parsedProps = platedHoleProps.parse(rawProps)
 
-  if (parsedProps.shape === "circularHoleWithRectPad") {
+  if (parsedProps.shape === "circular_hole_with_rect_pad") {
     expect(parsedProps.holeDiameter).toBe(5)
     expect(parsedProps.rectPadWidth).toBe(10)
     expect(parsedProps.rectPadHeight).toBe(20)

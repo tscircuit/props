@@ -9,7 +9,7 @@ export const schematicBoxProps = z.object({
   height: distance,
   padding: distance.default(0),
   title: z.string().optional(),
-  overlay: z.array(z.string()),
+  overlay: z.array(z.string()).optional(),
   strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
 })
 export type SchematicBoxProps = z.input<typeof schematicBoxProps>

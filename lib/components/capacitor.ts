@@ -19,6 +19,8 @@ export const capacitorPinLabels = [
 ] as const
 export type CapacitorPinLabels = (typeof capacitorPinLabels)[number]
 
+export type TemperatureCoefficient = "C0G" | "X7R" | "X5R" | "Y5V" | "Z5U"
+
 export interface CapacitorProps extends CommonComponentProps {
   capacitance: number | string
   maxVoltageRating?: number | string
@@ -29,6 +31,8 @@ export interface CapacitorProps extends CommonComponentProps {
   bypassFor?: string
   bypassTo?: string
   maxDecouplingTraceLength?: number
+  tolerance?: number | string
+  temperatureCoefficient?: TemperatureCoefficient
   connections?: Connections<CapacitorPinLabels>
 }
 
@@ -42,6 +46,10 @@ export const capacitorProps = commonComponentProps.extend({
   bypassFor: z.string().optional(),
   bypassTo: z.string().optional(),
   maxDecouplingTraceLength: z.number().optional(),
+  tolerance: z.union([z.string(), z.number()]).optional(),
+  temperatureCoefficient: z
+    .enum(["C0G", "X7R", "X5R", "Y5V", "Z5U"])
+    .optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),
 })
 export const capacitorPins = lrPolarPins

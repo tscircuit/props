@@ -59,11 +59,25 @@ export interface CircularHoleWithRectPlatedProps
   portHints?: PortHints
 }
 
+export interface PillWithRectPadPlatedHoleProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  name?: string
+  shape: "pill_hole_with_rect_pad"
+  holeShape: "pill"
+  padShape: "rect"
+  holeWidth: number | string
+  holeHeight: number | string
+  rectPadWidth: number | string
+  rectPadHeight: number | string
+  portHints?: PortHints
+}
+
 export type PlatedHoleProps =
   | CirclePlatedHoleProps
   | OvalPlatedHoleProps
   | PillPlatedHoleProps
   | CircularHoleWithRectPlatedProps
+  | PillWithRectPadPlatedHoleProps
 
 const distanceHiddenUndefined = z
   .custom<z.input<typeof distance>>()
@@ -125,6 +139,17 @@ export const platedHoleProps = z
           message: "Missing required fields for circular_hole_with_rect_pad",
         },
       ),
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      shape: z.literal("pill_hole_with_rect_pad"),
+      holeShape: z.literal("pill"),
+      padShape: z.literal("rect"),
+      holeWidth: distance,
+      holeHeight: distance,
+      rectPadWidth: distance,
+      rectPadHeight: distance,
+      portHints: portHints.optional(),
+    }),
   ])
   .refine((a) => {
     if ("innerWidth" in a && a.innerWidth !== undefined) {

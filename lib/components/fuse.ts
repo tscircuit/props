@@ -24,11 +24,6 @@ export interface FuseProps extends CommonComponentProps {
   voltageRating?: number | string
 
   /**
-   * Type of fuse
-   */
-  type?: "fast-blow" | "slow-blow" | "resettable"
-
-  /**
    * Whether to show ratings on schematic
    */
   schShowRatings?: boolean
@@ -45,7 +40,6 @@ export interface FuseProps extends CommonComponentProps {
 export const fuseProps = commonComponentProps.extend({
   currentRating: z.union([z.number(), z.string()]),
   voltageRating: z.union([z.number(), z.string()]).optional(),
-  type: z.enum(["fast-blow", "slow-blow", "resettable"]).optional(),
   schShowRatings: z.boolean().optional(),
   connections: z
     .record(

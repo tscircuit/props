@@ -3,7 +3,10 @@ import {
   type CommonComponentProps,
   commonComponentProps,
 } from "lib/common/layout"
-import { schematicPinArrangement, type SchematicPinArrangement } from "lib/common/schematicPinDefinitions"
+import {
+  schematicPinArrangement,
+  type SchematicPinArrangement,
+} from "lib/common/schematicPinDefinitions"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 

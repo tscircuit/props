@@ -3,6 +3,7 @@ import {
   type CommonComponentProps,
   commonComponentProps,
 } from "lib/common/layout"
+import { schematicPinArrangement, type SchematicPinArrangement } from "lib/common/schematicPinDefinitions"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
@@ -56,6 +57,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Direction the header is facing
    */
   facingDirection?: "left" | "right"
+
+  /**
+   * Pin arrangement in schematic view
+   */
+  schPinArrangement?: SchematicPinArrangement
 }
 
 export const pinHeaderProps = commonComponentProps.extend({
@@ -69,6 +75,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   platedDiameter: distance.optional(),
   pinLabels: z.array(z.string()).optional(),
   facingDirection: z.enum(["left", "right"]).optional(),
+  schPinArrangement: schematicPinArrangement.optional(),
 })
 
 type InferredPinHeaderProps = z.input<typeof pinHeaderProps>

@@ -20,5 +20,7 @@ test("should parse connector without standard", () => {
 })
 
 test("should fail for invalid connector standard", () => {
-  expect(() => connectorProps.parse({ name: "conn", standard: "invalid" } as any)).toThrow()
+  expect(() =>
+    connectorProps.parse({ name: "conn", standard: "invalid" } as any),
+  ).toThrow()
 })

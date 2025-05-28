@@ -120,17 +120,7 @@ export type Num4_50 =
   | "49"
   | "50"
 
-export type Num10 =
-  | "1"
-  | "2"
-  | "3"
-  | "4"
-  | "5"
-  | "6"
-  | "7"
-  | "8"
-  | "9"
-  | "10"
+export type Num10 = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10"
 
 export type Num128 =
   | "1"
@@ -314,4 +304,3 @@ export type FootprintString = KnownFootprintStrings | (string & {})
 
 export type Footprint = FootprintString | ReactElement | FootprintSoupElements[]
 export const footprintProp = z.custom<Footprint>((v) => true)
-

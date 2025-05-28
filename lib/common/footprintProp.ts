@@ -271,7 +271,6 @@ export type KnownFootprintStrings =
   | "to92_inline"
   | "ms013"
   | "sot723"
-  | "sot457"
   | `bga_${Num50}x${Num50}`
   | `vssop${Num4_50}`
   | `dip${Num4_50}`

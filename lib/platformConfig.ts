@@ -19,6 +19,10 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string
 
+  pcbDisabled?: boolean
+  schematicDisabled?: boolean
+  partsEngineDisabled?: boolean
+
   footprintLibraryMap?: Record<
     string,
     Record<
@@ -44,6 +48,9 @@ export const platformConfig = z.object({
   registryApiUrl: z.string().optional(),
   cloudAutorouterUrl: z.string().optional(),
   localCacheEngine: z.any().optional(),
+  pcbDisabled: z.boolean().optional(),
+  schematicDisabled: z.boolean().optional(),
+  partsEngineDisabled: z.boolean().optional(),
   footprintLibraryMap: z
     .record(
       z.string(),

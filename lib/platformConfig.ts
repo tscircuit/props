@@ -15,6 +15,8 @@ export interface PlatformConfig {
   registryApiUrl?: string
 
   cloudAutorouterUrl?: string
+
+  footprintLibraryMap?: Record<string, Record<string, any[]>>
 }
 
 export const platformConfig = z.object({
@@ -22,6 +24,10 @@ export const platformConfig = z.object({
   autorouter: autorouterProp.optional(),
   registryApiUrl: z.string().optional(),
   cloudAutorouterUrl: z.string().optional(),
+
+  footprintLibraryMap: z
+    .record(z.string(), z.record(z.string(), z.any().array()))
+    .optional(),
 })
 
 expectTypesMatch<PlatformConfig, z.infer<typeof platformConfig>>(true)

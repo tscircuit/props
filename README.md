@@ -31,6 +31,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<group />` | [`BaseGroupProps`](#basegroupprops-group) |
 | `<hole />` | [`HoleProps`](#holeprops-hole) |
 | `<jumper />` | [`JumperProps`](#jumperprops-jumper) |
+| `<connector />` | [`ConnectorProps`](#connectorprops-connector) |
 | `<mosfet />` | [`MosfetProps`](#mosfetprops-mosfet) |
 | `<net />` | [`NetProps`](#netprops-net) |
 | `<netalias />` | [`NetAliasProps`](#netaliasprops-netalias) |
@@ -375,6 +376,33 @@ export interface JumperProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts)
+
+
+### ConnectorProps `<connector />`
+
+```ts
+export interface ConnectorProps extends CommonComponentProps {
+  manufacturerPartNumber?: string
+  pinLabels?: Record<number | string, string | string[]>
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
+  /**
+   * Groups of pins that are internally connected (bridged)
+   * e.g., [["1","2"], ["2","3"]]
+   */
+  internallyConnectedPins?: string[][]
+  /**
+   * Connector standard, e.g. usb_c, m2
+   */
+  standard?: "usb_c" | "m2"
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/connector.ts)
 
 
 ### MosfetProps `<mosfet />`

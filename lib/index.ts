@@ -11,6 +11,7 @@ export * from "./common/cadModel"
 export * from "./components/board"
 export * from "./components/chip"
 export * from "./components/jumper"
+export * from "./components/connector"
 export * from "./components/fuse"
 export * from "./components/platedhole"
 

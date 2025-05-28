@@ -709,6 +709,37 @@ export const jumperProps = commonComponentProps.extend({
 })
 ```
 
+### connector
+
+```typescript
+export interface ConnectorProps extends CommonComponentProps {
+  manufacturerPartNumber?: string
+  pinLabels?: Record<number | string, string | string[]>
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
+  internallyConnectedPins?: string[][]
+  standard?: "usb_c" | "m2"
+}
+export const connectorProps = commonComponentProps.extend({
+  manufacturerPartNumber: z.string().optional(),
+  pinLabels: z
+    .record(z.number().or(z.string()), z.string().or(z.array(z.string())))
+    .optional(),
+  schPinStyle: schematicPinStyle.optional(),
+  schPinSpacing: distance.optional(),
+  schWidth: distance.optional(),
+  schHeight: distance.optional(),
+  schDirection: z.enum(["left", "right"]).optional(),
+  schPortArrangement: schematicPortArrangement.optional(),
+  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  standard: z.enum(["usb_c", "m2"]).optional(),
+})
+```
+
 ### led
 
 ```typescript

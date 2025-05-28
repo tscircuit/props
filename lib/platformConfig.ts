@@ -12,22 +12,47 @@ export interface PlatformConfig {
 
   autorouter?: AutorouterProp
 
+  // TODO this follows a subset of the localStorage interface
+  localCacheEngine?: any
+
   registryApiUrl?: string
 
   cloudAutorouterUrl?: string
 
-  footprintLibraryMap?: Record<string, Record<string, any[]>>
+  footprintLibraryMap?: Record<
+    string,
+    Record<
+      string,
+      | any[]
+      | ((path: string) => Promise<{
+          footprintCircuitJson: any[]
+        }>)
+    >
+  >
 }
+
+const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
+const pathToCircuitJsonFn = z
+  .function()
+  .args(z.string())
+  .returns(z.promise(z.object({ footprintCircuitJson: z.array(z.any()) })))
+  .describe("A function that takes a path and returns Circuit JSON")
 
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
   autorouter: autorouterProp.optional(),
   registryApiUrl: z.string().optional(),
   cloudAutorouterUrl: z.string().optional(),
-
+  localCacheEngine: z.any().optional(),
   footprintLibraryMap: z
-    .record(z.string(), z.record(z.string(), z.any().array()))
+    .record(
+      z.string(),
+      z.record(
+        z.string(),
+        z.union([unvalidatedCircuitJson, pathToCircuitJsonFn]),
+      ),
+    )
     .optional(),
-})
+}) as z.ZodType<PlatformConfig>
 
 expectTypesMatch<PlatformConfig, z.infer<typeof platformConfig>>(true)

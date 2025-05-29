@@ -1,5 +1,4 @@
 import { distance } from "circuit-json"
-import { portRef } from "./trace"
 import { z } from "zod"
 
 export const schematicBoxProps = z.object({
@@ -7,9 +6,13 @@ export const schematicBoxProps = z.object({
   schY: distance,
   width: distance,
   height: distance,
-  padding: distance.default(0),
+  padding: distance.optional(),
   title: z.string().optional(),
   overlay: z.array(z.string()).optional(),
   strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
+  paddingLeft: distance.optional(),
+  paddingRight: distance.optional(),
+  paddingTop: distance.optional(),
+  paddingBottom: distance.optional(),
 })
 export type SchematicBoxProps = z.input<typeof schematicBoxProps>

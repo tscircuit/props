@@ -6,13 +6,13 @@ export const schematicBoxProps = z.object({
   schY: distance,
   width: distance,
   height: distance,
-  padding: distance.default(0),
+  padding: distance.optional(),
   title: z.string().optional(),
   overlay: z.array(z.string()).optional(),
   strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
-  paddingLeft: distance.default(0),
-  paddingRight: distance.default(0),
-  paddingTop: distance.default(0),
-  paddingBottom: distance.default(0),
+  paddingLeft: distance.optional(),
+  paddingRight: distance.optional(),
+  paddingTop: distance.optional(),
+  paddingBottom: distance.optional(),
 })
 export type SchematicBoxProps = z.input<typeof schematicBoxProps>

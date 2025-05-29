@@ -1,5 +1,4 @@
 import { distance } from "circuit-json"
-import { portRef } from "./trace"
 import { z } from "zod"
 
 export const schematicBoxProps = z.object({

@@ -23,15 +23,16 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<board />` | [`BoardProps`](#boardprops-board) |
 | `<capacitor />` | [`CapacitorProps`](#capacitorprops-capacitor) |
 | `<chip />` | [`ChipProps`](#chipprops-chip) |
+| `<connector />` | [`ConnectorProps`](#connectorprops-connector) |
 | `<constrainedlayout />` | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout) |
-| `<cutout />` | [`CutoutProps`](#cutoutprops-cutout) |
 | `<crystal />` | [`CrystalProps`](#crystalprops-crystal) |
+| `<cutout />` | [`RectCutoutProps`](#rectcutoutprops-cutout) |
 | `<diode />` | [`DiodeProps`](#diodeprops-diode) |
 | `<footprint />` | [`FootprintProps`](#footprintprops-footprint) |
+| `<fuse />` | [`FuseProps`](#fuseprops-fuse) |
 | `<group />` | [`BaseGroupProps`](#basegroupprops-group) |
 | `<hole />` | [`HoleProps`](#holeprops-hole) |
 | `<jumper />` | [`JumperProps`](#jumperprops-jumper) |
-| `<connector />` | [`ConnectorProps`](#connectorprops-connector) |
 | `<mosfet />` | [`MosfetProps`](#mosfetprops-mosfet) |
 | `<net />` | [`NetProps`](#netprops-net) |
 | `<netalias />` | [`NetAliasProps`](#netaliasprops-netalias) |
@@ -177,6 +178,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
+  pinCompatibleVariants?: PinCompatibleVariant[]
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: Distance
   schWidth?: Distance
@@ -189,6 +191,33 @@ export interface ChipPropsSU<PinLabel extends string = string>
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/chip.ts)
+
+
+### ConnectorProps `<connector />`
+
+```ts
+export interface ConnectorProps extends CommonComponentProps {
+  manufacturerPartNumber?: string
+  pinLabels?: Record<number | string, string | string[]>
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
+  /**
+   * Groups of pins that are internally connected (bridged)
+   * e.g., [["1","2"], ["2","3"]]
+   */
+  internallyConnectedPins?: string[][]
+  /**
+   * Connector standard, e.g. usb_c, m2
+   */
+  standard?: "usb_c" | "m2"
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/connector.ts)
 
 
 ### ConstrainedLayoutProps `<constrainedlayout />`
@@ -204,61 +233,6 @@ export interface ConstrainedLayoutProps {
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/constrainedlayout.ts)
 
 
-### CutoutProps `<cutout />`
-
-Defines a cutout on the PCB, removing board material. It can be a rectangle, circle, or polygon.
-
-**Rectangular Cutout**
-```ts
-export interface RectCutoutProps
-  extends Omit<
-    PcbLayoutProps,
-    "layer" | "pcbRotation"
-  > {
-  name?: string;
-  shape: "rect";
-  width: Distance;
-  height: Distance;
-}
-```
-
-**Circular Cutout**
-```ts
-export interface CircleCutoutProps
-  extends Omit<
-    PcbLayoutProps,
-    "layer" | "pcbRotation"
-  > {
-  name?: string;
-  shape: "circle";
-  radius: Distance;
-}
-```
-
-**Polygon Cutout**
-```ts
-export interface PolygonCutoutProps
-  extends Omit<
-    PcbLayoutProps,
-    "layer" | "pcbRotation"
-  > {
-  name?: string;
-  shape: "polygon";
-  points: Point[];
-}
-```
-
-**Union Type**
-```ts
-export type CutoutProps =
-  | RectCutoutProps
-  | CircleCutoutProps
-  | PolygonCutoutProps;
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/cutout.ts)
-
-
 ### CrystalProps `<crystal />`
 
 ```ts
@@ -270,6 +244,21 @@ export interface CrystalProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/crystal.ts)
+
+
+### RectCutoutProps `<cutout />`
+
+```ts
+export interface RectCutoutProps
+  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
+  name?: string
+  shape: "rect"
+  width: Distance
+  height: Distance
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/cutout.ts)
 
 
 ### DiodeProps `<diode />`
@@ -315,6 +304,35 @@ export interface FootprintProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/footprint.ts)
+
+
+### FuseProps `<fuse />`
+
+```ts
+export interface FuseProps extends CommonComponentProps {
+  /**
+   * Current rating of the fuse in amperes
+   */
+  currentRating: number | string
+
+  /**
+   * Voltage rating of the fuse
+   */
+  voltageRating?: number | string
+
+  /**
+   * Whether to show ratings on schematic
+   */
+  schShowRatings?: boolean
+
+  /**
+   * Connections to other components
+   */
+  connections?: Connections<FusePinLabels>
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/fuse.ts)
 
 
 ### BaseGroupProps
@@ -376,33 +394,6 @@ export interface JumperProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts)
-
-
-### ConnectorProps `<connector />`
-
-```ts
-export interface ConnectorProps extends CommonComponentProps {
-  manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | string[]>
-  schPinStyle?: SchematicPinStyle
-  schPinSpacing?: number | string
-  schWidth?: number | string
-  schHeight?: number | string
-  schDirection?: "left" | "right"
-  schPortArrangement?: SchematicPortArrangement
-  /**
-   * Groups of pins that are internally connected (bridged)
-   * e.g., [["1","2"], ["2","3"]]
-   */
-  internallyConnectedPins?: string[][]
-  /**
-   * Connector standard, e.g. usb_c, m2
-   */
-  standard?: "usb_c" | "m2"
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/connector.ts)
 
 
 ### MosfetProps `<mosfet />`
@@ -496,6 +487,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Direction the header is facing
    */
   facingDirection?: "left" | "right"
+
+  /**
+   * Pin arrangement in schematic view
+   */
+  schPinArrangement?: SchematicPinArrangement
 }
 ```
 
@@ -634,3 +630,38 @@ export interface TransistorProps extends CommonComponentProps {
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/transistor.ts)
 
 <!-- INTERFACE_DEFINITIONS_END -->
+
+
+<!-- PLATFORM_CONFIG_START -->
+## tscircuit Platform Configuration
+
+### PlatformConfig
+
+```ts
+export interface PlatformConfig {
+  partsEngine?: PartsEngine
+
+  autorouter?: AutorouterProp
+
+  // TODO this follows a subset of the localStorage interface
+  localCacheEngine?: any
+
+  registryApiUrl?: string
+
+  cloudAutorouterUrl?: string
+
+  footprintLibraryMap?: Record<
+    string,
+    Record<
+      string,
+      | any[]
+      | ((path: string) => Promise<{
+          footprintCircuitJson: any[]
+        }>)
+    >
+  >
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/platformConfig.ts)
+<!-- PLATFORM_CONFIG_END -->

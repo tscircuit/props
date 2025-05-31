@@ -2,42 +2,35 @@ import { distance } from "circuit-json"
 import { z } from "zod"
 import { nine_point_anchor } from "lib/common/nine_point_anchor"
 
-const schematicBoxPropsType = z
-  .union([
-    z.object({
-      schX: distance,
-      schY: distance,
-      padding: distance.optional(),
-      title: z.string().optional(),
-      titlePosition: nine_point_anchor.default("top_left"),
-      titleColor: z.string().optional(),
-      titleFontSize: distance.optional(),
-      titleInside: z.boolean().default(false),
-      overlay: z.array(z.string()).optional(),
-      strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
-      paddingLeft: distance.optional(),
-      paddingRight: distance.optional(),
-      paddingTop: distance.optional(),
-      paddingBottom: distance.optional(),
-    }),
-    z.object({
-      schX: distance,
-      schY: distance,
-      width: distance,
-      height: distance,
-      padding: distance.optional(),
-      title: z.string().optional(),
-      titlePosition: nine_point_anchor.default("top_left"),
-      titleColor: z.string().optional(),
-      titleFontSize: distance.optional(),
-      titleInside: z.boolean().default(false),
-      strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
-      paddingLeft: distance.optional(),
-      paddingRight: distance.optional(),
-      paddingTop: distance.optional(),
-      paddingBottom: distance.optional(),
-    }),
-  ])
-  .describe("SchematicBoxProps")
-export const schematicBoxProps = schematicBoxPropsType
+export const schematicBoxProps = z
+  .object({
+    schX: distance,
+    schY: distance,
+    width: distance.optional(),
+    height: distance.optional(),
+    overlay: z.array(z.string()).optional(),
+
+    padding: distance.optional(),
+    paddingLeft: distance.optional(),
+    paddingRight: distance.optional(),
+    paddingTop: distance.optional(),
+    paddingBottom: distance.optional(),
+
+    title: z.string().optional(),
+    titlePosition: nine_point_anchor.default("top_left"),
+    titleColor: z.string().optional(),
+    titleFontSize: distance.optional(),
+    titleInside: z.boolean().default(false),
+    strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
+  })
+  .refine(
+    (elm) =>
+      (elm.width !== undefined && elm.height !== undefined) ||
+      (Array.isArray(elm.overlay) && elm.overlay.length > 0),
+    {
+      message:
+        "Must provide either both `width` and `height`, or a non-empty `overlay` array.",
+      path: [],
+    },
+  )
 export type SchematicBoxProps = z.input<typeof schematicBoxProps>

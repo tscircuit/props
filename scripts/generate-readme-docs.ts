@@ -204,6 +204,29 @@ ${interfaceBlocks.join("\n")}
 `
 }
 
+function generatePlatformConfigSection(): string {
+  const platformConfigPath = path.join(__dirname, "../lib/platformConfig.ts")
+  const content = fs.readFileSync(platformConfigPath, "utf8")
+  const interfaceMatch = content.match(
+    /export interface PlatformConfig[\s\S]+?\n}/,
+  )
+  const interfaceDefinition = interfaceMatch ? interfaceMatch[0] : ""
+  const githubPath =
+    "https://github.com/tscircuit/props/blob/main/lib/platformConfig.ts"
+
+  return `
+## tscircuit Platform Configuration
+
+### PlatformConfig
+
+\`\`\`ts
+${interfaceDefinition}
+\`\`\`
+
+[Source](${githubPath})
+`
+}
+
 // Main execution
 const componentsDir = path.join(__dirname, "../lib/components")
 const files = getComponentFiles(componentsDir)
@@ -215,6 +238,7 @@ components.sort((a, b) => a.name.localeCompare(b.name))
 const componentsTable = generateComponentsTable(components)
 const usageExamples = generateUsageExamples()
 const interfaceDefinitions = generateInterfaceDefinitions(components)
+const platformConfigSection = generatePlatformConfigSection()
 
 // Read current README
 const readmePath = path.join(__dirname, "../README.md")
@@ -239,6 +263,11 @@ if (!readmeContent.includes("<!-- INTERFACE_DEFINITIONS_START -->")) {
     "\n\n<!-- INTERFACE_DEFINITIONS_START -->\n<!-- INTERFACE_DEFINITIONS_END -->\n"
 }
 
+if (!readmeContent.includes("<!-- PLATFORM_CONFIG_START -->")) {
+  readmeContent +=
+    "\n\n<!-- PLATFORM_CONFIG_START -->\n<!-- PLATFORM_CONFIG_END -->\n"
+}
+
 // Replace the content between the markers
 readmeContent = readmeContent.replace(
   /<!-- COMPONENT_TABLE_START -->[\s\S]*?<!-- COMPONENT_TABLE_END -->/,
@@ -253,6 +282,11 @@ readmeContent = readmeContent.replace(
 readmeContent = readmeContent.replace(
   /<!-- INTERFACE_DEFINITIONS_START -->[\s\S]*?<!-- INTERFACE_DEFINITIONS_END -->/,
   `<!-- INTERFACE_DEFINITIONS_START -->${interfaceDefinitions}<!-- INTERFACE_DEFINITIONS_END -->`,
+)
+
+readmeContent = readmeContent.replace(
+  /<!-- PLATFORM_CONFIG_START -->[\s\S]*?<!-- PLATFORM_CONFIG_END -->/,
+  `<!-- PLATFORM_CONFIG_START -->${platformConfigSection}<!-- PLATFORM_CONFIG_END -->`,
 )
 
 // Write back to README

@@ -16,7 +16,7 @@ import {
 } from "lib/manual-edits"
 
 export const layoutConfig = z.object({
-  layoutMode: z.enum(["grid", "flex", "none"]).optional(),
+  layoutMode: z.enum(["grid", "flex", "match-adapt", "none"]).optional(),
   position: z.enum(["absolute", "relative"]).optional(),
 
   grid: z.boolean().optional(),
@@ -34,10 +34,12 @@ export const layoutConfig = z.object({
   flexRow: z.boolean().optional(),
   flexColumn: z.boolean().optional(),
   gap: z.number().or(z.string()).optional(),
+
+  matchAdapt: z.boolean().optional(),
 })
 
 export interface LayoutConfig {
-  layoutMode?: "grid" | "flex" | "none"
+  layoutMode?: "grid" | "flex" | "match-adapt" | "none"
   position?: "absolute" | "relative"
 
   grid?: boolean
@@ -55,6 +57,8 @@ export interface LayoutConfig {
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string
+
+  matchAdapt?: boolean
 }
 
 expectTypesMatch<LayoutConfig, z.input<typeof layoutConfig>>(true)

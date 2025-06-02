@@ -77,6 +77,7 @@ export interface CommonComponentProps extends CommonLayoutProps {
   cadModel?: CadModelProp
   children?: any
   symbolName?: string
+  doNotPlace?: boolean
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -87,6 +88,7 @@ export const commonComponentProps = commonLayoutProps
     cadModel: cadModelProp.optional(),
     children: z.any().optional(),
     symbolName: z.string().optional(),
+    doNotPlace: z.boolean().optional(),
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

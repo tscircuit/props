@@ -137,6 +137,7 @@ function generateInterfaceDefinitions(
   cadModel?: CadModelProp
   children?: any
   symbolName?: string
+  doNotPlace?: boolean
 }`,
       filePath: "lib/common/layout.ts",
     },

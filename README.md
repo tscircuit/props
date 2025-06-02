@@ -83,6 +83,7 @@ export interface CommonComponentProps extends CommonLayoutProps {
   cadModel?: CadModelProp
   children?: any
   symbolName?: string
+  doNotPlace?: boolean
 }
 ```
 
@@ -649,6 +650,10 @@ export interface PlatformConfig {
   registryApiUrl?: string
 
   cloudAutorouterUrl?: string
+
+  pcbDisabled?: boolean
+  schematicDisabled?: boolean
+  partsEngineDisabled?: boolean
 
   footprintLibraryMap?: Record<
     string,

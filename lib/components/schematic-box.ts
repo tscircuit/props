@@ -30,7 +30,19 @@ export const schematicBoxProps = z
     {
       message:
         "Must provide either both `width` and `height`, or a non-empty `overlay` array.",
-      path: [],
+    },
+  )
+  .refine(
+    (elm) =>
+      !(
+        elm.width !== undefined &&
+        elm.height !== undefined &&
+        Array.isArray(elm.overlay) &&
+        elm.overlay.length > 0
+      ),
+    {
+      message:
+        "Cannot provide both `width`/`height` and `overlay` at the same time.",
     },
   )
 export type SchematicBoxProps = z.input<typeof schematicBoxProps>

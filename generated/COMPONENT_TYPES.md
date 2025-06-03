@@ -739,6 +739,9 @@ export const layoutConfig = z.object({
   flexColumn: z.boolean().optional(),
   gap: z.number().or(z.string()).optional(),
 
+  width: length.optional(),
+  height: length.optional(),
+
   matchAdapt: z.boolean().optional(),
 })
 export interface LayoutConfig {
@@ -760,6 +763,9 @@ export interface LayoutConfig {
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string
+
+  width?: Distance
+  height?: Distance
 
   matchAdapt?: boolean
 }
@@ -931,7 +937,7 @@ export const jumperProps = commonComponentProps.extend({
 export const ledProps = commonComponentProps.extend({
   color: z.string().optional(),
   wavelength: z.string().optional(),
-  schValLabel: z.string().optional(),
+  schDisplayValue: z.string().optional(),
 })
 ```
 
@@ -1408,6 +1414,12 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   radius: Distance
   portHints?: PortHints
 }
+export interface PolygonSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "polygon"
+  points: Point[]
+  portHints?: PortHints
+}
 export const rectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
@@ -1439,6 +1451,13 @@ export const pillSmtPadProps = pcbLayoutProps
     width: distance,
     height: distance,
     radius: distance,
+    portHints: portHints.optional(),
+  })
+export const polygonSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("polygon"),
+    points: z.array(point),
     portHints: portHints.optional(),
   })
 ```

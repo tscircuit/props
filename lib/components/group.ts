@@ -35,6 +35,9 @@ export const layoutConfig = z.object({
   flexColumn: z.boolean().optional(),
   gap: z.number().or(z.string()).optional(),
 
+  width: length.optional(),
+  height: length.optional(),
+
   matchAdapt: z.boolean().optional(),
 })
 
@@ -57,6 +60,9 @@ export interface LayoutConfig {
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string
+
+  width?: Distance
+  height?: Distance
 
   matchAdapt?: boolean
 }

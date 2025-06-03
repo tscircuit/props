@@ -6,6 +6,7 @@ import {
 import { z } from "zod"
 import { distance, type Distance } from "lib/common/distance"
 import { portHints, type PortHints } from "lib/common/portHints"
+import { point, type Point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -38,11 +39,19 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
 }
 
+export interface PolygonSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "polygon"
+  points: Point[]
+  portHints?: PortHints
+}
+
 export type SmtPadProps =
   | RectSmtPadProps
   | CircleSmtPadProps
   | RotatedRectSmtPadProps
   | PillSmtPadProps
+  | PolygonSmtPadProps
 
 // ----------------------------------------------------------------------------
 // Zod
@@ -93,11 +102,22 @@ export const pillSmtPadProps = pcbLayoutProps
 type InferredPillSmtPadProps = z.input<typeof pillSmtPadProps>
 expectTypesMatch<InferredPillSmtPadProps, PillSmtPadProps>(true)
 
+export const polygonSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("polygon"),
+    points: z.array(point),
+    portHints: portHints.optional(),
+  })
+type InferredPolygonSmtPadProps = z.input<typeof polygonSmtPadProps>
+expectTypesMatch<InferredPolygonSmtPadProps, PolygonSmtPadProps>(true)
+
 export const smtPadProps = z.union([
   circleSmtPadProps,
   rectSmtPadProps,
   rotatedRectSmtPadProps,
   pillSmtPadProps,
+  polygonSmtPadProps,
 ])
 
 export type InferredSmtPadProps = z.input<typeof smtPadProps>

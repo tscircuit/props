@@ -8,28 +8,28 @@ import { z } from "zod"
 test("should parse pad testpoint", () => {
   const rawProps: TestpointProps = {
     name: "tp1",
-    diameter: 1,
+    padDiameter: 1,
   }
   const parsed = testpointProps.parse(rawProps)
   expect(parsed.footprintVariant).toBe("pad")
-  expect(parsed.diameter).toBe(1)
+  expect(parsed.padDiameter).toBe(1)
   expect(parsed.holeDiameter).toBeUndefined()
 })
 
-test("should parse pad testpoint without diameter", () => {
+test("should parse pad testpoint without padDiameter", () => {
   const rawProps: TestpointProps = {
     name: "tp0",
   }
   const parsed = testpointProps.parse(rawProps)
   expect(parsed.footprintVariant).toBe("pad")
-  expect(parsed.diameter).toBeUndefined()
+  expect(parsed.padDiameter).toBeUndefined()
 })
 
 test("should parse through_hole testpoint", () => {
   const rawProps: TestpointProps = {
     name: "tp2",
     footprintVariant: "through_hole",
-    diameter: 2,
+    padDiameter: 2,
     holeDiameter: 1,
   }
   const parsed = testpointProps.parse(rawProps)
@@ -42,7 +42,7 @@ test("should require holeDiameter for through_hole variant", () => {
     testpointProps.parse({
       name: "tp3",
       footprintVariant: "through_hole",
-      diameter: 2,
+      padDiameter: 2,
     } as TestpointProps),
   ).toThrow(z.ZodError)
 })

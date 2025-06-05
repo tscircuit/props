@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-06-05T22:04:06.360Z
+> Generated at 2025-06-05T22:17:52.427Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -677,9 +677,9 @@ export interface TestpointProps extends CommonComponentProps {
    */
   padShape?: "rect" | "circle"
   /**
-   * Diameter of the copper test point or pad
+   * Diameter of the copper pad (applies to both SMD pads and plated holes)
    */
-  diameter?: number | string
+  padDiameter?: number | string
   /**
    * Diameter of the hole if using a through-hole testpoint
    */

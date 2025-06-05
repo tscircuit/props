@@ -16,9 +16,9 @@ export interface TestpointProps extends CommonComponentProps {
    */
   padShape?: "rect" | "circle"
   /**
-   * Diameter of the copper test point or pad
+   * Diameter of the copper pad (applies to both SMD pads and plated holes)
    */
-  diameter?: number | string
+  padDiameter?: number | string
   /**
    * Diameter of the hole if using a through-hole testpoint
    */
@@ -37,7 +37,7 @@ export const testpointProps = commonComponentProps
   .extend({
     footprintVariant: z.enum(["pad", "through_hole"]).optional().default("pad"),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),
-    diameter: distance.optional(),
+    padDiameter: distance.optional(),
     holeDiameter: distance.optional(),
     width: distance.optional(),
     height: distance.optional(),

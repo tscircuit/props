@@ -634,9 +634,9 @@ export interface TestpointProps extends CommonComponentProps {
    */
   padShape?: "rect" | "circle"
   /**
-   * Diameter of the copper test point or pad
+   * Diameter of the copper pad (applies to both SMD pads and plated holes)
    */
-  diameter?: number | string
+  padDiameter?: number | string
   /**
    * Diameter of the hole if using a through-hole testpoint
    */

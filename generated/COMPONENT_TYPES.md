@@ -1547,7 +1547,7 @@ export interface SwitchProps extends CommonComponentProps {
 export interface TestpointProps extends CommonComponentProps {
   footprintVariant?: "pad" | "through_hole"
   padShape?: "rect" | "circle"
-  diameter?: number | string
+  padDiameter?: number | string
   holeDiameter?: number | string
   width?: number | string
   height?: number | string
@@ -1555,7 +1555,7 @@ export interface TestpointProps extends CommonComponentProps {
 .extend({
     footprintVariant: z.enum(["pad", "through_hole"]).optional().default("pad"),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),
-    diameter: distance.optional(),
+    padDiameter: distance.optional(),
     holeDiameter: distance.optional(),
     width: distance.optional(),
     height: distance.optional(),

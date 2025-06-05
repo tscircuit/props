@@ -626,9 +626,13 @@ export interface SwitchProps extends CommonComponentProps {
 ```ts
 export interface TestpointProps extends CommonComponentProps {
   /**
-   * The variant of testpoint either surface-mount (smd) or through-hole
+   * The footprint variant of the testpoint either a surface pad or through-hole
    */
-  variant?: "smd" | "through_hole"
+  footprintVariant?: "pad" | "through_hole"
+  /**
+   * The shape of the pad if using a pad variant
+   */
+  padShape?: "rect" | "circle"
   /**
    * Diameter of the copper test point or pad
    */
@@ -637,6 +641,14 @@ export interface TestpointProps extends CommonComponentProps {
    * Diameter of the hole if using a through-hole testpoint
    */
   holeDiameter?: number | string
+  /**
+   * Width of the pad when padShape is rect
+   */
+  width?: number | string
+  /**
+   * Height of the pad when padShape is rect
+   */
+  height?: number | string
 }
 ```
 

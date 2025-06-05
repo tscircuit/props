@@ -1545,14 +1545,20 @@ export interface SwitchProps extends CommonComponentProps {
 
 ```typescript
 export interface TestpointProps extends CommonComponentProps {
-  variant?: "smd" | "through_hole"
+  footprintVariant?: "pad" | "through_hole"
+  padShape?: "rect" | "circle"
   diameter?: number | string
   holeDiameter?: number | string
+  width?: number | string
+  height?: number | string
 }
 .extend({
-    variant: z.enum(["smd", "through_hole"]).optional().default("smd"),
+    footprintVariant: z.enum(["pad", "through_hole"]).optional().default("pad"),
+    padShape: z.enum(["rect", "circle"]).optional().default("circle"),
     diameter: distance.optional(),
     holeDiameter: distance.optional(),
+    width: distance.optional(),
+    height: distance.optional(),
   })
 ```
 

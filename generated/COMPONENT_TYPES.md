@@ -1541,6 +1541,21 @@ export interface SwitchProps extends CommonComponentProps {
   })
 ```
 
+### testpoint
+
+```typescript
+export interface TestpointProps extends CommonComponentProps {
+  variant?: "smd" | "through_hole"
+  diameter?: number | string
+  holeDiameter?: number | string
+}
+.extend({
+    variant: z.enum(["smd", "through_hole"]).optional().default("smd"),
+    diameter: distance.optional(),
+    holeDiameter: distance.optional(),
+  })
+```
+
 ### trace-hint
 
 ```typescript

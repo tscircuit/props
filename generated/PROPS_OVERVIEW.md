@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-06-02T14:06:06.727Z
+> Generated at 2025-06-05T22:17:52.427Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -308,6 +308,9 @@ export interface LayoutConfig {
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string
+
+  width?: Distance
+  height?: Distance
 
   matchAdapt?: boolean
 }
@@ -617,6 +620,14 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 
 
+export interface PolygonSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "polygon"
+  points: Point[]
+  portHints?: PortHints
+}
+
+
 export interface RectSolderPasteProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "rect"
@@ -653,6 +664,34 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean
   dpst?: boolean
   dpdt?: boolean
+}
+
+
+export interface TestpointProps extends CommonComponentProps {
+  /**
+   * The footprint variant of the testpoint either a surface pad or through-hole
+   */
+  footprintVariant?: "pad" | "through_hole"
+  /**
+   * The shape of the pad if using a pad variant
+   */
+  padShape?: "rect" | "circle"
+  /**
+   * Diameter of the copper pad (applies to both SMD pads and plated holes)
+   */
+  padDiameter?: number | string
+  /**
+   * Diameter of the hole if using a through-hole testpoint
+   */
+  holeDiameter?: number | string
+  /**
+   * Width of the pad when padShape is rect
+   */
+  width?: number | string
+  /**
+   * Height of the pad when padShape is rect
+   */
+  height?: number | string
 }
 
 

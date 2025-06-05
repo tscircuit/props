@@ -1541,6 +1541,27 @@ export interface SwitchProps extends CommonComponentProps {
   })
 ```
 
+### testpoint
+
+```typescript
+export interface TestpointProps extends CommonComponentProps {
+  footprintVariant?: "pad" | "through_hole"
+  padShape?: "rect" | "circle"
+  padDiameter?: number | string
+  holeDiameter?: number | string
+  width?: number | string
+  height?: number | string
+}
+.extend({
+    footprintVariant: z.enum(["pad", "through_hole"]).optional().default("pad"),
+    padShape: z.enum(["rect", "circle"]).optional().default("circle"),
+    padDiameter: distance.optional(),
+    holeDiameter: distance.optional(),
+    width: distance.optional(),
+    height: distance.optional(),
+  })
+```
+
 ### trace-hint
 
 ```typescript

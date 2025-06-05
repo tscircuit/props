@@ -45,6 +45,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<solderpaste />` | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste) |
 | `<stampboard />` | [`StampboardProps`](#stampboardprops-stampboard) |
 | `<switch />` | [`SwitchProps`](#switchprops-switch) |
+| `<testpoint />` | [`TestpointProps`](#testpointprops-testpoint) |
 | `<transistor />` | [`TransistorProps`](#transistorprops-transistor) |
 <!-- COMPONENT_TABLE_END -->
 
@@ -618,6 +619,40 @@ export interface SwitchProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/switch.ts)
+
+
+### TestpointProps `<testpoint />`
+
+```ts
+export interface TestpointProps extends CommonComponentProps {
+  /**
+   * The footprint variant of the testpoint either a surface pad or through-hole
+   */
+  footprintVariant?: "pad" | "through_hole"
+  /**
+   * The shape of the pad if using a pad variant
+   */
+  padShape?: "rect" | "circle"
+  /**
+   * Diameter of the copper pad (applies to both SMD pads and plated holes)
+   */
+  padDiameter?: number | string
+  /**
+   * Diameter of the hole if using a through-hole testpoint
+   */
+  holeDiameter?: number | string
+  /**
+   * Width of the pad when padShape is rect
+   */
+  width?: number | string
+  /**
+   * Height of the pad when padShape is rect
+   */
+  height?: number | string
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/testpoint.ts)
 
 
 ### TransistorProps `<transistor />`

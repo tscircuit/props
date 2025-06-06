@@ -39,6 +39,7 @@ export const layoutConfig = z.object({
   height: length.optional(),
 
   matchAdapt: z.boolean().optional(),
+  matchAdaptTemplate: z.any().optional(),
 })
 
 export interface LayoutConfig {
@@ -65,6 +66,7 @@ export interface LayoutConfig {
   height?: Distance
 
   matchAdapt?: boolean
+  matchAdaptTemplate?: any
 }
 
 expectTypesMatch<LayoutConfig, z.input<typeof layoutConfig>>(true)

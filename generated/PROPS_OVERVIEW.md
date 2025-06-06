@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-06-05T22:17:52.427Z
+> Generated at 2025-06-06T17:08:15.013Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -313,6 +313,7 @@ export interface LayoutConfig {
   height?: Distance
 
   matchAdapt?: boolean
+  matchAdaptTemplate?: any
 }
 
 

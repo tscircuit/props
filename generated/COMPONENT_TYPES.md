@@ -743,6 +743,7 @@ export const layoutConfig = z.object({
   height: length.optional(),
 
   matchAdapt: z.boolean().optional(),
+  matchAdaptTemplate: z.any().optional(),
 })
 export interface LayoutConfig {
   layoutMode?: "grid" | "flex" | "match-adapt" | "none"
@@ -768,6 +769,7 @@ export interface LayoutConfig {
   height?: Distance
 
   matchAdapt?: boolean
+  matchAdaptTemplate?: any
 }
 export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   name?: string

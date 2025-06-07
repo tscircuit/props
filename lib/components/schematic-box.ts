@@ -1,4 +1,4 @@
-import { distance } from "circuit-json"
+import { distance, position } from "circuit-json"
 import { z } from "zod"
 import { nine_point_anchor } from "lib/common/nine_point_anchor"
 
@@ -17,10 +17,14 @@ export const schematicBoxProps = z
     paddingBottom: distance.optional(),
 
     title: z.string().optional(),
-    titlePosition: nine_point_anchor.default("top_left"),
+    titleAnchorPosition: z.object({
+      x: position.optional(),
+      y: position.optional(),
+    }),
+    titleAnchorAlignment: nine_point_anchor.default("top_left"),
     titleColor: z.string().optional(),
     titleFontSize: distance.optional(),
-    titleInside: z.boolean().default(false),
+    titleInside: z.boolean().default(true),
     strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
   })
   .refine(

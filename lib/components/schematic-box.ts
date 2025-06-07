@@ -24,7 +24,7 @@ export const schematicBoxProps = z
     titleAnchorAlignment: nine_point_anchor.default("center"),
     titleColor: z.string().optional(),
     titleFontSize: distance.optional(),
-    titleInside: z.boolean().default(true),
+    titleInside: z.boolean().default(false),
     strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
   })
   .refine(

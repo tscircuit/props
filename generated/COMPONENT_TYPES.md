@@ -311,6 +311,40 @@ export const boardProps = subcircuitGroupProps.extend({
 })
 ```
 
+### breakout
+
+```typescript
+export interface BreakoutProps
+  extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+}
+export const breakoutProps = subcircuitGroupProps.extend({
+  padding: distance.optional(),
+  paddingLeft: distance.optional(),
+  paddingRight: distance.optional(),
+  paddingTop: distance.optional(),
+  paddingBottom: distance.optional(),
+})
+```
+
+### breakoutpoint
+
+```typescript
+export interface BreakoutPointProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  connection: string
+}
+export const breakoutPointProps = pcbLayoutProps
+  .omit({ pcbRotation: true, layer: true })
+  .extend({
+    connection: z.string(),
+  })
+```
+
 ### capacitor
 
 ```typescript
@@ -1279,7 +1313,13 @@ export const schematicBoxProps = z
     paddingBottom: distance.optional(),
 
     title: z.string().optional(),
-    titlePosition: nine_point_anchor.default("top_left"),
+    titleAnchorPosition: z
+      .object({
+        x: position.optional(),
+        y: position.optional(),
+      })
+      .optional(),
+    titleAnchorAlignment: nine_point_anchor.default("center"),
     titleColor: z.string().optional(),
     titleFontSize: distance.optional(),
     titleInside: z.boolean().default(false),

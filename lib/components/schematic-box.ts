@@ -21,7 +21,7 @@ export const schematicBoxProps = z
       x: position.optional(),
       y: position.optional(),
     }),
-    titleAnchorAlignment: nine_point_anchor.default("top_left"),
+    titleAnchorAlignment: nine_point_anchor.default("center"),
     titleColor: z.string().optional(),
     titleFontSize: distance.optional(),
     titleInside: z.boolean().default(true),

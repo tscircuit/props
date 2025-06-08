@@ -19,8 +19,8 @@ export const schematicBoxProps = z
     title: z.string().optional(),
     titleAnchorPosition: z
       .object({
-        x: position.optional(),
-        y: position.optional(),
+        x: z.number().default(0),
+        y: z.number().default(0),
       })
       .optional(),
     titleAnchorAlignment: nine_point_anchor.default("center"),

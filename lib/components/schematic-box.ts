@@ -1,4 +1,4 @@
-import { distance, position } from "circuit-json"
+import { distance } from "circuit-json"
 import { z } from "zod"
 import { nine_point_anchor } from "lib/common/nine_point_anchor"
 

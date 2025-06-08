@@ -21,6 +21,8 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | --------- | -------------- |
 | `<battery />` | [`BatteryProps`](#batteryprops-battery) |
 | `<board />` | [`BoardProps`](#boardprops-board) |
+| `<breakout />` | [`BreakoutProps`](#breakoutprops-breakout) |
+| `<breakoutpoint />` | [`BreakoutPointProps`](#breakoutpointprops-breakoutpoint) |
 | `<capacitor />` | [`CapacitorProps`](#capacitorprops-capacitor) |
 | `<chip />` | [`ChipProps`](#chipprops-chip) |
 | `<connector />` | [`ConnectorProps`](#connectorprops-connector) |
@@ -148,6 +150,34 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/board.ts)
+
+
+### BreakoutProps `<breakout />`
+
+```ts
+export interface BreakoutProps
+  extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/breakout.ts)
+
+
+### BreakoutPointProps `<breakoutpoint />`
+
+```ts
+export interface BreakoutPointProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  connection: string
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/breakoutpoint.ts)
 
 
 ### CapacitorProps `<capacitor />`

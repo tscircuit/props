@@ -1,4 +1,4 @@
-import { distance, position } from "circuit-json"
+import { distance } from "circuit-json"
 import { z } from "zod"
 import { nine_point_anchor } from "lib/common/nine_point_anchor"
 
@@ -17,7 +17,6 @@ export const schematicBoxProps = z
     paddingBottom: distance.optional(),
 
     title: z.string().optional(),
-    titleAnchorPosition: position.optional(),
     titleAnchorAlignment: nine_point_anchor.default("center"),
     titleColor: z.string().optional(),
     titleFontSize: distance.optional(),

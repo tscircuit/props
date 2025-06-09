@@ -38,6 +38,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<mosfet />` | [`MosfetProps`](#mosfetprops-mosfet) |
 | `<net />` | [`NetProps`](#netprops-net) |
 | `<netalias />` | [`NetAliasProps`](#netaliasprops-netalias) |
+| `<netlabel />` | [`NetLabelProps`](#netlabelprops-netlabel) |
 | `<pinheader />` | [`PinHeaderProps`](#pinheaderprops-pinheader) |
 | `<platedhole />` | [`CirclePlatedHoleProps`](#circleplatedholeprops-platedhole) |
 | `<potentiometer />` | [`PotentiometerProps`](#potentiometerprops-potentiometer) |
@@ -457,6 +458,7 @@ export interface NetProps {
 ```ts
 export interface NetAliasProps {
   net?: string
+  connection?: string
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
@@ -465,6 +467,22 @@ export interface NetAliasProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/netalias.ts)
+
+
+### NetLabelProps `<netlabel />`
+
+```ts
+export interface NetLabelProps {
+  net?: string
+  connection?: string
+  schX?: number | string
+  schY?: number | string
+  schRotation?: number | string
+  anchorSide?: "left" | "up" | "right" | "down"
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/netlabel.ts)
 
 
 ### PinHeaderProps `<pinheader />`

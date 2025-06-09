@@ -3,10 +3,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import { distance } from "lib/common/distance"
 import { rotation } from "circuit-json"
 
-/**
- * @deprecated Use NetLabelProps instead.
- */
-export interface NetAliasProps {
+export interface NetLabelProps {
   net?: string
   connection?: string
   schX?: number | string
@@ -15,8 +12,7 @@ export interface NetAliasProps {
   anchorSide?: "left" | "up" | "right" | "down"
 }
 
-/** @deprecated Use netLabelProps instead. */
-export const netAliasProps = z.object({
+export const netLabelProps = z.object({
   net: z.string().optional(),
   connection: z.string().optional(),
   schX: distance.optional(),
@@ -25,5 +21,5 @@ export const netAliasProps = z.object({
   anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
 })
 
-type InferredNetAliasProps = z.input<typeof netAliasProps>
-expectTypesMatch<NetAliasProps, InferredNetAliasProps>(true)
+type InferredNetLabelProps = z.input<typeof netLabelProps>
+expectTypesMatch<NetLabelProps, InferredNetLabelProps>(true)

@@ -1012,15 +1012,42 @@ export const netProps = z.object({
 ### netalias
 
 ```typescript
+/**
+ * @deprecated Use NetLabelProps instead.
+ */
 export interface NetAliasProps {
   net?: string
+  connection?: string
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
   anchorSide?: "left" | "up" | "right" | "down"
 }
+/** @deprecated Use netLabelProps instead. */
 export const netAliasProps = z.object({
   net: z.string().optional(),
+  connection: z.string().optional(),
+  schX: distance.optional(),
+  schY: distance.optional(),
+  schRotation: rotation.optional(),
+  anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
+})
+```
+
+### netlabel
+
+```typescript
+export interface NetLabelProps {
+  net?: string
+  connection?: string
+  schX?: number | string
+  schY?: number | string
+  schRotation?: number | string
+  anchorSide?: "left" | "up" | "right" | "down"
+}
+export const netLabelProps = z.object({
+  net: z.string().optional(),
+  connection: z.string().optional(),
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),
@@ -1093,7 +1120,10 @@ export const pinHeaderProps = commonComponentProps.extend({
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z.array(z.string()).optional(),
-  connections: z.record(z.string(), connectionTarget).optional(),
+  connections: z
+    .custom<Connections>()
+    .pipe(z.record(z.string(), connectionTarget))
+    .optional(),
   facingDirection: z.enum(["left", "right"]).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
 })

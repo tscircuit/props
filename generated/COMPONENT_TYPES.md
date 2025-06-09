@@ -1014,15 +1014,42 @@ export const netProps = z.object({
 ### netalias
 
 ```typescript
+/**
+ * @deprecated Use NetLabelProps instead.
+ */
 export interface NetAliasProps {
   net?: string
+  connection?: string
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
   anchorSide?: "left" | "up" | "right" | "down"
 }
+/** @deprecated Use netLabelProps instead. */
 export const netAliasProps = z.object({
   net: z.string().optional(),
+  connection: z.string().optional(),
+  schX: distance.optional(),
+  schY: distance.optional(),
+  schRotation: rotation.optional(),
+  anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
+})
+```
+
+### netlabel
+
+```typescript
+export interface NetLabelProps {
+  net?: string
+  connection?: string
+  schX?: number | string
+  schY?: number | string
+  schRotation?: number | string
+  anchorSide?: "left" | "up" | "right" | "down"
+}
+export const netLabelProps = z.object({
+  net: z.string().optional(),
+  connection: z.string().optional(),
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),

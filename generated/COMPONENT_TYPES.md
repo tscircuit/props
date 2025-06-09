@@ -1074,6 +1074,8 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   pinLabels?: string[]
 
+  connections?: Connections<string>
+
   facingDirection?: "left" | "right"
 
   schPinArrangement?: SchematicPinArrangement
@@ -1091,6 +1093,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z.array(z.string()).optional(),
+  connections: z.record(z.string(), connectionTarget).optional(),
   facingDirection: z.enum(["left", "right"]).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
 })

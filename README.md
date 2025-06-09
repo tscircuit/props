@@ -516,6 +516,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   pinLabels?: string[]
 
   /**
+   * Connections to other components
+   */
+  connections?: Connections<string>
+
+  /**
    * Direction the header is facing
    */
   facingDirection?: "left" | "right"

@@ -208,6 +208,10 @@ export interface ChipPropsSU<PinLabel extends string = string>
   extends CommonComponentProps {
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<string, PinLabel>
+  /**
+   * Whether to show pin aliases in the schematic
+   */
+  showPinAliases?: boolean
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement

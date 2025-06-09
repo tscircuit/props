@@ -44,6 +44,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<resistor />` | [`ResistorProps`](#resistorprops-resistor) |
 | `<resonator />` | [`ResonatorProps`](#resonatorprops-resonator) |
 | `<smtpad />` | [`RectSmtPadProps`](#rectsmtpadprops-smtpad) |
+| `<solderjumper />` | [`SolderJumperProps`](#solderjumperprops-solderjumper) |
 | `<solderpaste />` | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste) |
 | `<stampboard />` | [`StampboardProps`](#stampboardprops-stampboard) |
 | `<switch />` | [`SwitchProps`](#switchprops-switch) |
@@ -599,6 +600,20 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/smtpad.ts)
+
+
+### SolderJumperProps `<solderjumper />`
+
+```ts
+export interface SolderJumperProps extends JumperProps {
+  /**
+   * Pins that are bridged with solder by default
+   */
+  bridgedPins?: string[][]
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/solderjumper.ts)
 
 
 ### RectSolderPasteProps `<solderpaste />`

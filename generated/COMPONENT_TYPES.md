@@ -393,6 +393,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
   extends CommonComponentProps {
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<string, PinLabel>
+  showPinAliases?: boolean
   schPinArrangement?: SchematicPortArrangement
   schPortArrangement?: SchematicPortArrangement
   pinCompatibleVariants?: PinCompatibleVariant[]
@@ -429,6 +430,7 @@ export const pinCompatibleVariant = z.object({
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
+  showPinAliases: z.boolean().optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   externallyConnectedPins: z.array(z.array(z.string())).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
@@ -1093,7 +1095,10 @@ export const pinHeaderProps = commonComponentProps.extend({
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z.array(z.string()).optional(),
-  connections: z.record(z.string(), connectionTarget).optional(),
+  connections: z
+    .custom<Connections>()
+    .pipe(z.record(z.string(), connectionTarget))
+    .optional(),
   facingDirection: z.enum(["left", "right"]).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
 })

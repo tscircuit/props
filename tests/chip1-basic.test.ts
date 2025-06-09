@@ -21,6 +21,7 @@ test("should parse chip props", () => {
     },
     schPinSpacing: "0.2mm",
     schWidth: 2,
+    showPinAliases: true,
     noSchematicRepresentation: true,
   }
 
@@ -28,6 +29,7 @@ test("should parse chip props", () => {
 
   expect(parsedProps.schPinSpacing).toBe(0.2)
   expect(parsedProps.noSchematicRepresentation).toBe(true)
+  expect(parsedProps.showPinAliases).toBe(true)
 })
 
 // New tests for connections prop

@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-06-06T17:08:15.013Z
+> Generated at 2025-06-09T20:18:44.102Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -134,6 +134,22 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
 }
 
 
+export interface BreakoutProps
+  extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+}
+
+
+export interface BreakoutPointProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  connection: string
+}
+
+
 export interface CapacitorProps extends CommonComponentProps {
   capacitance: number | string
   maxVoltageRating?: number | string
@@ -158,6 +174,10 @@ export interface ChipPropsSU<PinLabel extends string = string>
   extends CommonComponentProps {
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<string, PinLabel>
+  /**
+   * Whether to show pin aliases in the schematic
+   */
+  showPinAliases?: boolean
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -631,6 +651,14 @@ export interface PolygonSmtPadProps
   shape: "polygon"
   points: Point[]
   portHints?: PortHints
+}
+
+
+export interface SolderJumperProps extends JumperProps {
+  /**
+   * Pins that are bridged with solder by default
+   */
+  bridgedPins?: string[][]
 }
 
 

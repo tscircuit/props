@@ -1102,6 +1102,8 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   pinLabels?: string[]
 
+  connections?: Connections<string>
+
   facingDirection?: "left" | "right"
 
   schPinArrangement?: SchematicPinArrangement
@@ -1119,6 +1121,10 @@ export const pinHeaderProps = commonComponentProps.extend({
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z.array(z.string()).optional(),
+  connections: z
+    .custom<Connections>()
+    .pipe(z.record(z.string(), connectionTarget))
+    .optional(),
   facingDirection: z.enum(["left", "right"]).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
 })
@@ -1524,6 +1530,20 @@ export const polygonSmtPadProps = pcbLayoutProps
     points: z.array(point),
     portHints: portHints.optional(),
   })
+```
+
+### solderjumper
+
+```typescript
+export interface SolderJumperProps extends JumperProps {
+  bridgedPins?: string[][]
+}
+/**
+   * Pins that are bridged with solder by default
+   */
+export const solderjumperProps = jumperProps.extend({
+  bridgedPins: z.array(z.array(z.string())).optional(),
+})
 ```
 
 ### solderpaste

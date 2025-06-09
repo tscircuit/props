@@ -7,6 +7,8 @@ import {
   schematicPinArrangement,
   type SchematicPinArrangement,
 } from "lib/common/schematicPinDefinitions"
+import { connectionTarget } from "lib/common/connectionsProp"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
@@ -57,6 +59,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   pinLabels?: string[]
 
   /**
+   * Connections to other components
+   */
+  connections?: Connections<string>
+
+  /**
    * Direction the header is facing
    */
   facingDirection?: "left" | "right"
@@ -77,6 +84,10 @@ export const pinHeaderProps = commonComponentProps.extend({
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z.array(z.string()).optional(),
+  connections: z
+    .custom<Connections>()
+    .pipe(z.record(z.string(), connectionTarget))
+    .optional(),
   facingDirection: z.enum(["left", "right"]).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
 })

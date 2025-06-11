@@ -1,6 +1,6 @@
 import { length } from "circuit-json"
 import { pcbLayoutProps } from "lib/common/layout"
-import { nine_point_anchor } from "lib/common/nine_point_anchor"
+import { nine_point_anchor } from "lib/common/ninePointAnchor"
 import { z } from "zod"
 
 export const silkscreenTextProps = pcbLayoutProps.extend({

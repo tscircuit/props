@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const nine_point_anchor = z.enum([
+export const ninePointAnchor = z.enum([
   "top_left",
   "top_center",
   "top_right",

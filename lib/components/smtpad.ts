@@ -112,7 +112,7 @@ export const polygonSmtPadProps = pcbLayoutProps
 type InferredPolygonSmtPadProps = z.input<typeof polygonSmtPadProps>
 expectTypesMatch<InferredPolygonSmtPadProps, PolygonSmtPadProps>(true)
 
-export const smtPadProps = z.union([
+export const smtPadProps = z.discriminatedUnion("shape", [
   circleSmtPadProps,
   rectSmtPadProps,
   rotatedRectSmtPadProps,

@@ -1638,7 +1638,7 @@ export interface TestpointProps extends CommonComponentProps {
   height?: number | string
 }
 .extend({
-    footprintVariant: z.enum(["pad", "through_hole"]).optional().default("pad"),
+    footprintVariant: z.enum(["pad", "through_hole"]).optional(),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),
     padDiameter: distance.optional(),
     holeDiameter: distance.optional(),

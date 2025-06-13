@@ -11,7 +11,7 @@ test("should parse pad testpoint", () => {
     padDiameter: 1,
   }
   const parsed = testpointProps.parse(rawProps)
-  expect(parsed.footprintVariant).toBe("pad")
+  expect(parsed.footprintVariant).toBeUndefined()
   expect(parsed.padDiameter).toBe(1)
   expect(parsed.holeDiameter).toBeUndefined()
 })
@@ -21,7 +21,7 @@ test("should parse pad testpoint without padDiameter", () => {
     name: "tp0",
   }
   const parsed = testpointProps.parse(rawProps)
-  expect(parsed.footprintVariant).toBe("pad")
+  expect(parsed.footprintVariant).toBeUndefined()
   expect(parsed.padDiameter).toBeUndefined()
 })
 

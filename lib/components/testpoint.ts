@@ -35,7 +35,7 @@ export interface TestpointProps extends CommonComponentProps {
 
 export const testpointProps = commonComponentProps
   .extend({
-    footprintVariant: z.enum(["pad", "through_hole"]).optional().default("pad"),
+    footprintVariant: z.enum(["pad", "through_hole"]).optional(),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),
     padDiameter: distance.optional(),
     holeDiameter: distance.optional(),
@@ -44,7 +44,8 @@ export const testpointProps = commonComponentProps
   })
   .refine(
     (props) =>
-      props.footprintVariant === "pad" || props.holeDiameter !== undefined,
+      props.footprintVariant !== "through_hole" ||
+      props.holeDiameter !== undefined,
     { message: "holeDiameter is required for through_hole testpoints" },
   )
 

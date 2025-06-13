@@ -50,12 +50,12 @@ export interface PillPlatedHoleProps
 export interface CircularHoleWithRectPlatedProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  shape: "circular_hole_with_rect_pad"
   holeDiameter: number | string
   rectPadWidth: number | string
   rectPadHeight: number | string
-  holeShape?: "circle"
-  padShape?: "rect"
-  shape?: "circular_hole_with_rect_pad"
+  holeShape: "circle"
+  padShape: "rect"
   portHints?: PortHints
 }
 
@@ -87,7 +87,7 @@ const distanceHiddenUndefined = z
   })
 
 export const platedHoleProps = z
-  .union([
+  .discriminatedUnion("shape", [
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
       shape: z.literal("circle"),
@@ -117,28 +117,16 @@ export const platedHoleProps = z
       innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
       portHints: portHints.optional(),
     }),
-    pcbLayoutProps
-      .omit({ pcbRotation: true, layer: true })
-      .extend({
-        name: z.string().optional(),
-        holeDiameter: distance,
-        rectPadWidth: distance,
-        rectPadHeight: distance,
-        holeShape: z.literal("circle").optional(),
-        padShape: z.literal("rect").optional(),
-        shape: z.literal("circular_hole_with_rect_pad").optional(),
-        portHints: portHints.optional(),
-      })
-      .refine(
-        (prop) => {
-          return prop.shape === "circular_hole_with_rect_pad"
-            ? prop.holeDiameter && prop.rectPadWidth && prop.rectPadHeight
-            : true
-        },
-        {
-          message: "Missing required fields for circular_hole_with_rect_pad",
-        },
-      ),
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      shape: z.literal("circular_hole_with_rect_pad"),
+      holeDiameter: distance,
+      rectPadWidth: distance,
+      rectPadHeight: distance,
+      holeShape: z.literal("circle"),
+      padShape: z.literal("rect"),
+      portHints: portHints.optional(),
+    }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
       shape: z.literal("pill_hole_with_rect_pad"),

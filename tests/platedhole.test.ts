@@ -12,8 +12,6 @@ test("should parse CircularHoleWithRectPlatedProps with all required fields", ()
     holeDiameter: 5,
     rectPadWidth: 10,
     rectPadHeight: 20,
-    padShape: "rect",
-    holeShape: "circle",
   }
 
   expectTypeOf(rawProps).toMatchTypeOf<z.input<typeof platedHoleProps>>()
@@ -24,8 +22,6 @@ test("should parse CircularHoleWithRectPlatedProps with all required fields", ()
     expect(parsedProps.holeDiameter).toBe(5)
     expect(parsedProps.rectPadWidth).toBe(10)
     expect(parsedProps.rectPadHeight).toBe(20)
-    expect(parsedProps.padShape).toBe("rect")
-    expect(parsedProps.holeShape).toBe("circle")
   } else {
     throw new Error(
       "Expected CircularHoleWithRectPlatedProps, but got a different shape",

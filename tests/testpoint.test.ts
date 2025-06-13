@@ -8,6 +8,7 @@ import { z } from "zod"
 test("should parse pad testpoint", () => {
   const rawProps: TestpointProps = {
     name: "tp1",
+    footprintVariant: "pad",
     padDiameter: 1,
   }
   const parsed = testpointProps.parse(rawProps)
@@ -16,12 +17,12 @@ test("should parse pad testpoint", () => {
   expect(parsed.holeDiameter).toBeUndefined()
 })
 
-test("should parse pad testpoint without padDiameter", () => {
+test("should parse testpoint without footprintVariant", () => {
   const rawProps: TestpointProps = {
     name: "tp0",
   }
   const parsed = testpointProps.parse(rawProps)
-  expect(parsed.footprintVariant).toBe("pad")
+  expect(parsed.footprintVariant).toBeUndefined()
   expect(parsed.padDiameter).toBeUndefined()
 })
 

@@ -1348,7 +1348,7 @@ export const schematicBoxProps = z
     paddingBottom: distance.optional(),
 
     title: z.string().optional(),
-    titleAlignment: nine_point_anchor.default("center"),
+    titleAlignment: ninePointAnchor.default("center"),
     titleColor: z.string().optional(),
     titleFontSize: distance.optional(),
     titleInside: z.boolean().default(false),
@@ -1386,7 +1386,7 @@ export const schematicTextProps = z.object({
   text: z.string(),
   fontSize: z.number().default(1),
   anchor: z
-    .union([five_point_anchor.describe("legacy"), nine_point_anchor])
+    .union([fivePointAnchor.describe("legacy"), ninePointAnchor])
     .default("center"),
   color: z.string().default("#000000"),
   schRotation: rotation.default(0),
@@ -1450,7 +1450,7 @@ export const silkscreenRectProps = pcbLayoutProps
 ```typescript
 export const silkscreenTextProps = pcbLayoutProps.extend({
   text: z.string(),
-  anchorAlignment: nine_point_anchor.default("center"),
+  anchorAlignment: ninePointAnchor.default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
 })
@@ -1638,7 +1638,7 @@ export interface TestpointProps extends CommonComponentProps {
   height?: number | string
 }
 .extend({
-    footprintVariant: z.enum(["pad", "through_hole"]).optional().default("pad"),
+    footprintVariant: z.enum(["pad", "through_hole"]).optional(),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),
     padDiameter: distance.optional(),
     holeDiameter: distance.optional(),

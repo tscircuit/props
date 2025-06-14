@@ -28,3 +28,23 @@ test("should parse border", () => {
   expect(parsed.border?.strokeWidth).toBe(1)
   expect(parsed.border?.solid).toBe(true)
 })
+
+test("should allow null for cellBorder", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    cellBorder: null,
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.cellBorder).toBeNull()
+})
+
+test("should allow null for border", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    border: null,
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.border).toBeNull()
+})

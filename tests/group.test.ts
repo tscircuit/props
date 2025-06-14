@@ -14,3 +14,17 @@ test("should parse cellBorder", () => {
   expect(parsed.cellBorder?.strokeWidth).toBe(2)
   expect(parsed.cellBorder?.dashed).toBe(true)
 })
+
+test("should parse border", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    border: {
+      strokeWidth: "1mm",
+      solid: true,
+    },
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.border?.strokeWidth).toBe(1)
+  expect(parsed.border?.solid).toBe(true)
+})

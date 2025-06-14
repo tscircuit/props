@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // Read all TypeScript files in the lib/components directory
 function getComponentFiles(dir: string): string[] {
   const files: string[] = []
-  const items = fs.readdirSync(dir)
+  const items = fs.readdirSync(dir).sort()
 
   for (const item of items) {
     const fullPath = path.join(dir, item)

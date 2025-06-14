@@ -11,10 +11,12 @@ interface ElementDoc {
 
 async function generateManualEditsDocs() {
   const pattern = "lib/manual-edits/**/*.ts"
-  const files = await glob(pattern, {
-    cwd: process.cwd(),
-    absolute: true,
-  })
+  const files = (
+    await glob(pattern, {
+      cwd: process.cwd(),
+      absolute: true,
+    })
+  ).sort()
 
   console.log("Found source files:", files)
   const sections = {

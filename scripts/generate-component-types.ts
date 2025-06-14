@@ -71,12 +71,14 @@ function generateComponentTypesDoc() {
   // Get common types first
   const commonFiles = fs
     .readdirSync(commonDir)
+    .sort()
     .filter((file) => file.endsWith(".ts"))
     .map((file) => path.join(commonDir, file))
 
   // Then get component types
   const componentFiles = fs
     .readdirSync(componentsDir)
+    .sort()
     .filter((file) => file.endsWith(".ts"))
     .map((file) => path.join(componentsDir, file))
 

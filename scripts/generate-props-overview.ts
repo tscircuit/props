@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // Read all TypeScript files in the lib directory recursively
 function getAllTypeScriptFiles(dir: string): string[] {
   const files: string[] = []
-  const items = fs.readdirSync(dir)
+  const items = fs.readdirSync(dir).sort()
 
   for (const item of items) {
     const fullPath = path.join(dir, item)
@@ -49,12 +49,18 @@ function extractInterfaces(content: string): string[] {
 
 // Main execution
 const libDir = path.join(__dirname, "../lib")
-const files = getAllTypeScriptFiles(libDir)
+const files = getAllTypeScriptFiles(libDir).sort()
 
-const allInterfaces = files.flatMap((file) => {
-  const content = fs.readFileSync(file, "utf8")
-  return extractInterfaces(content)
-})
+const allInterfaces = files
+  .flatMap((file) => {
+    const content = fs.readFileSync(file, "utf8")
+    return extractInterfaces(content)
+  })
+  .sort((a, b) => {
+    const nameA = /export interface\s+(\w+)/.exec(a)?.[1] || ""
+    const nameB = /export interface\s+(\w+)/.exec(b)?.[1] || ""
+    return nameA.localeCompare(nameB)
+  })
 
 // Generate markdown content
 const template = `# @tscircuit/props Overview

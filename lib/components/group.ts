@@ -71,13 +71,13 @@ export interface LayoutConfig {
 
 expectTypesMatch<LayoutConfig, z.input<typeof layoutConfig>>(true)
 
-export interface CellBorder {
+export interface Border {
   strokeWidth?: Distance
   dashed?: boolean
   solid?: boolean
 }
 
-export const cellBorder = z.object({
+export const border = z.object({
   strokeWidth: length.optional(),
   dashed: z.boolean().optional(),
   solid: z.boolean().optional(),
@@ -95,8 +95,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbLayout?: LayoutConfig
   schLayout?: LayoutConfig
-  cellBorder?: CellBorder
-  border?: CellBorder
+  cellBorder?: Border
+  border?: Border
 }
 
 export type PartsEngine = {
@@ -201,8 +201,8 @@ export const baseGroupProps = commonLayoutProps.extend({
   schHeight: length.optional(),
   pcbLayout: layoutConfig.optional(),
   schLayout: layoutConfig.optional(),
-  cellBorder: cellBorder.optional(),
-  border: cellBorder.optional(),
+  cellBorder: border.optional(),
+  border: border.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

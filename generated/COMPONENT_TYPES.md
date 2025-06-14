@@ -807,6 +807,16 @@ export interface LayoutConfig {
   matchAdapt?: boolean
   matchAdaptTemplate?: any
 }
+export interface CellBorder {
+  strokeWidth?: Distance
+  dashed?: boolean
+  solid?: boolean
+}
+export const cellBorder = z.object({
+  strokeWidth: length.optional(),
+  dashed: z.boolean().optional(),
+  solid: z.boolean().optional(),
+})
 export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   name?: string
   key?: any
@@ -819,6 +829,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbLayout?: LayoutConfig
   schLayout?: LayoutConfig
+  cellBorder?: CellBorder
+  border?: CellBorder
 }
 export type PartsEngine = {
   findPart: (params: {
@@ -891,6 +903,8 @@ export const baseGroupProps = commonLayoutProps.extend({
   schHeight: length.optional(),
   pcbLayout: layoutConfig.optional(),
   schLayout: layoutConfig.optional(),
+  cellBorder: cellBorder.optional(),
+  border: cellBorder.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
   layout: z.custom<LayoutBuilder>((v) => true).optional(),
@@ -1348,7 +1362,7 @@ export const schematicBoxProps = z
     paddingBottom: distance.optional(),
 
     title: z.string().optional(),
-    titleAlignment: nine_point_anchor.default("center"),
+    titleAlignment: ninePointAnchor.default("center"),
     titleColor: z.string().optional(),
     titleFontSize: distance.optional(),
     titleInside: z.boolean().default(false),
@@ -1386,7 +1400,7 @@ export const schematicTextProps = z.object({
   text: z.string(),
   fontSize: z.number().default(1),
   anchor: z
-    .union([five_point_anchor.describe("legacy"), nine_point_anchor])
+    .union([fivePointAnchor.describe("legacy"), ninePointAnchor])
     .default("center"),
   color: z.string().default("#000000"),
   schRotation: rotation.default(0),
@@ -1450,7 +1464,7 @@ export const silkscreenRectProps = pcbLayoutProps
 ```typescript
 export const silkscreenTextProps = pcbLayoutProps.extend({
   text: z.string(),
-  anchorAlignment: nine_point_anchor.default("center"),
+  anchorAlignment: ninePointAnchor.default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
 })

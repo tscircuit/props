@@ -388,7 +388,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbLayout?: LayoutConfig
   schLayout?: LayoutConfig
-  cellBorder?: CellBorder
+  cellBorder?: Border
+  border?: Border
 }
 ```
 

@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-06-14T17:01:25.424Z
+> Generated at 2025-06-14T17:49:47.123Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -18,82 +18,32 @@ const validatedProps = chipProps.parse(unknownProps)
 ## Available Props
 
 ```ts
-export interface EditSchematicGroupLocationEvent extends BaseManualEditEvent {
-  edit_event_type: "edit_schematic_group_location"
-  schematic_group_id: string
-  original_center: { x: number; y: number }
-  new_center: { x: number; y: number }
-}
+export interface PlatformConfig {
+  partsEngine?: PartsEngine
 
+  autorouter?: AutorouterProp
 
-export interface BaseManualEditEvent {
-  edit_event_id: string
-  in_progress?: boolean
-  created_at: number
-}
+  // TODO this follows a subset of the localStorage interface
+  localCacheEngine?: any
 
+  registryApiUrl?: string
 
-export interface EditTraceHintEvent extends BaseManualEditEvent {
-  /** @deprecated */
-  pcb_edit_event_type: "edit_trace_hint"
-  edit_event_type?: "edit_pcb_trace_hint"
-  pcb_port_id: string
-  pcb_trace_hint_id?: string
-  route: Array<{ x: number; y: number; via?: boolean }>
-}
+  cloudAutorouterUrl?: string
 
+  pcbDisabled?: boolean
+  schematicDisabled?: boolean
+  partsEngineDisabled?: boolean
 
-export interface EditPcbGroupLocationEvent extends BaseManualEditEvent {
-  edit_event_type: "edit_pcb_group_location"
-  pcb_group_id: string
-  original_center: { x: number; y: number }
-  new_center: { x: number; y: number }
-}
-
-
-export interface EditPcbComponentLocationEvent extends BaseManualEditEvent {
-  edit_event_type: "edit_pcb_component_location"
-  /** @deprecated */
-  pcb_edit_event_type: "edit_component_location"
-  pcb_component_id: string
-  original_center: { x: number; y: number }
-  new_center: { x: number; y: number }
-}
-
-
-export interface EditSchematicComponentLocationEvent
-  extends BaseManualEditEvent {
-  edit_event_type: "edit_schematic_component_location"
-  schematic_component_id: string
-  original_center: { x: number; y: number }
-  new_center: { x: number; y: number }
-}
-
-
-export interface ManualPcbPlacement {
-  selector: string
-  relative_to: string
-  center: Point
-}
-
-
-export interface ManualEditsFile {
-  pcb_placements?: ManualPcbPlacement[]
-  manual_trace_hints?: ManualTraceHint[]
-  schematic_placements?: ManualSchematicPlacement[]
-}
-
-
-export interface ManualTraceHint {
-  pcb_port_selector: string
-  offsets: Array<RouteHintPoint>
-}
-
-
-export interface ManualSchematicPlacement {
-  selector: string
-  relative_to: string
-  center: Point
+  footprintLibraryMap?: Record<
+    string,
+    Record<
+      string,
+      | any[]
+      | ((path: string) => Promise<{
+          footprintCircuitJson: any[]
+        }>)
+    >
+  >
 }
 
 
@@ -123,40 +73,6 @@ export interface CadModelObj extends CadModelBase {
 
 export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
-}
-
-
-export interface SchematicPortArrangementWithSizes {
-  leftSize?: number
-  topSize?: number
-  rightSize?: number
-  bottomSize?: number
-}
-
-
-export interface SchematicPortArrangementWithPinCounts {
-  leftPinCount?: number
-  topPinCount?: number
-  rightPinCount?: number
-  bottomPinCount?: number
-}
-
-
-export interface PinSideDefinition {
-  pins: Array<number | string>
-  direction:
-    | "top-to-bottom"
-    | "left-to-right"
-    | "bottom-to-top"
-    | "right-to-left"
-}
-
-
-export interface SchematicPortArrangementWithSides {
-  leftSide?: PinSideDefinition
-  topSide?: PinSideDefinition
-  rightSide?: PinSideDefinition
-  bottomSide?: PinSideDefinition
 }
 
 
@@ -198,9 +114,138 @@ export interface CommonComponentProps extends CommonLayoutProps {
 }
 
 
-export interface BreakoutPointProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
-  connection: string
+export interface SchematicPortArrangementWithSizes {
+  leftSize?: number
+  topSize?: number
+  rightSize?: number
+  bottomSize?: number
+}
+
+
+export interface SchematicPortArrangementWithPinCounts {
+  leftPinCount?: number
+  topPinCount?: number
+  rightPinCount?: number
+  bottomPinCount?: number
+}
+
+
+export interface PinSideDefinition {
+  pins: Array<number | string>
+  direction:
+    | "top-to-bottom"
+    | "left-to-right"
+    | "bottom-to-top"
+    | "right-to-left"
+}
+
+
+export interface SchematicPortArrangementWithSides {
+  leftSide?: PinSideDefinition
+  topSide?: PinSideDefinition
+  rightSide?: PinSideDefinition
+  bottomSide?: PinSideDefinition
+}
+
+
+export interface ManualPcbPlacement {
+  selector: string
+  relative_to: string
+  center: Point
+}
+
+
+export interface ManualTraceHint {
+  pcb_port_selector: string
+  offsets: Array<RouteHintPoint>
+}
+
+
+export interface ManualSchematicPlacement {
+  selector: string
+  relative_to: string
+  center: Point
+}
+
+
+export interface ManualEditsFile {
+  pcb_placements?: ManualPcbPlacement[]
+  manual_trace_hints?: ManualTraceHint[]
+  schematic_placements?: ManualSchematicPlacement[]
+}
+
+
+export interface EditTraceHintEvent extends BaseManualEditEvent {
+  /** @deprecated */
+  pcb_edit_event_type: "edit_trace_hint"
+  edit_event_type?: "edit_pcb_trace_hint"
+  pcb_port_id: string
+  pcb_trace_hint_id?: string
+  route: Array<{ x: number; y: number; via?: boolean }>
+}
+
+
+export interface EditSchematicComponentLocationEvent
+  extends BaseManualEditEvent {
+  edit_event_type: "edit_schematic_component_location"
+  schematic_component_id: string
+  original_center: { x: number; y: number }
+  new_center: { x: number; y: number }
+}
+
+
+export interface BaseManualEditEvent {
+  edit_event_id: string
+  in_progress?: boolean
+  created_at: number
+}
+
+
+export interface EditSchematicGroupLocationEvent extends BaseManualEditEvent {
+  edit_event_type: "edit_schematic_group_location"
+  schematic_group_id: string
+  original_center: { x: number; y: number }
+  new_center: { x: number; y: number }
+}
+
+
+export interface EditPcbComponentLocationEvent extends BaseManualEditEvent {
+  edit_event_type: "edit_pcb_component_location"
+  /** @deprecated */
+  pcb_edit_event_type: "edit_component_location"
+  pcb_component_id: string
+  original_center: { x: number; y: number }
+  new_center: { x: number; y: number }
+}
+
+
+export interface EditPcbGroupLocationEvent extends BaseManualEditEvent {
+  edit_event_type: "edit_pcb_group_location"
+  pcb_group_id: string
+  original_center: { x: number; y: number }
+  new_center: { x: number; y: number }
+}
+
+
+export interface ResistorProps extends CommonComponentProps {
+  resistance: number | string
+  pullupFor?: string
+  pullupTo?: string
+  pulldownFor?: string
+  pulldownTo?: string
+  connections?: Connections<ResistorPinLabels>
+}
+
+
+export interface NetProps {
+  name: string
+}
+
+
+export interface ConstrainedLayoutProps {
+  name?: string
+  pcbOnly?: boolean
+  schOnly?: boolean
 }
 
 
@@ -233,17 +278,67 @@ export interface ChipPropsSU<PinLabel extends string = string>
 }
 
 
-export interface ResistorProps extends CommonComponentProps {
-  resistance: number | string
-  pullupFor?: string
-  pullupTo?: string
-  pulldownFor?: string
-  pulldownTo?: string
-  connections?: Connections<ResistorPinLabels>
+export interface RectSolderPasteProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rect"
+  width: Distance
+  height: Distance
 }
 
 
-export interface NetAliasProps {
+export interface CircleSolderPasteProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "circle"
+  radius: Distance
+}
+
+
+export interface TestpointProps extends CommonComponentProps {
+  /**
+   * The footprint variant of the testpoint either a surface pad or through-hole
+   */
+  footprintVariant?: "pad" | "through_hole"
+  /**
+   * The shape of the pad if using a pad variant
+   */
+  padShape?: "rect" | "circle"
+  /**
+   * Diameter of the copper pad (applies to both SMD pads and plated holes)
+   */
+  padDiameter?: number | string
+  /**
+   * Diameter of the hole if using a through-hole testpoint
+   */
+  holeDiameter?: number | string
+  /**
+   * Width of the pad when padShape is rect
+   */
+  width?: number | string
+  /**
+   * Height of the pad when padShape is rect
+   */
+  height?: number | string
+}
+
+
+export interface CrystalProps extends CommonComponentProps {
+  frequency: number | string
+  loadCapacitance: number | string
+  pinVariant?: PinVariant
+}
+
+
+export interface BreakoutProps
+  extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+}
+
+
+export interface NetLabelProps {
   net?: string
   connection?: string
   schX?: number | string
@@ -253,34 +348,26 @@ export interface NetAliasProps {
 }
 
 
-export interface JumperProps extends CommonComponentProps {
-  manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | string[]>
-  schPinStyle?: SchematicPinStyle
-  schPinSpacing?: number | string
-  schWidth?: number | string
-  schHeight?: number | string
-  schDirection?: "left" | "right"
-  schPortArrangement?: SchematicPortArrangement
+export interface FuseProps extends CommonComponentProps {
   /**
-   * Number of pins on the jumper (2 or 3)
+   * Current rating of the fuse in amperes
    */
-  pinCount?: 2 | 3
+  currentRating: number | string
+
   /**
-   * Groups of pins that are internally connected (bridged)
-   * e.g., [["1","2"], ["2","3"]]
+   * Voltage rating of the fuse
    */
-  internallyConnectedPins?: string[][]
-}
+  voltageRating?: number | string
 
+  /**
+   * Whether to show ratings on schematic
+   */
+  schShowRatings?: boolean
 
-export interface BatteryProps extends CommonComponentProps {
-  capacity?: number | string
-}
-
-
-export interface TransistorProps extends CommonComponentProps {
-  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet"
+  /**
+   * Connections to other components
+   */
+  connections?: Connections<FusePinLabels>
 }
 
 
@@ -356,200 +443,9 @@ export interface PillWithRectPadPlatedHoleProps
 }
 
 
-export interface DiodeProps extends CommonComponentProps {
-  connections?: {
-    anode?: string | string[] | readonly string[]
-    cathode?: string | string[] | readonly string[]
-    pin1?: string | string[] | readonly string[]
-    pin2?: string | string[] | readonly string[]
-    pos?: string | string[] | readonly string[]
-    neg?: string | string[] | readonly string[]
-  }
-  variant?: "standard" | "schottky" | "zener" | "photo" | "tvs"
-  standard?: boolean
-  schottky?: boolean
-  zener?: boolean
-  photo?: boolean
-  tvs?: boolean
-}
-
-
-export interface MosfetProps extends CommonComponentProps {
-  channelType: "n" | "p"
-  mosfetMode: "enhancement" | "depletion"
-}
-
-
-export interface RectSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rect"
-  width: Distance
-  height: Distance
-}
-
-
-export interface CircleSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "circle"
-  radius: Distance
-}
-
-
-export interface FuseProps extends CommonComponentProps {
-  /**
-   * Current rating of the fuse in amperes
-   */
-  currentRating: number | string
-
-  /**
-   * Voltage rating of the fuse
-   */
-  voltageRating?: number | string
-
-  /**
-   * Whether to show ratings on schematic
-   */
-  schShowRatings?: boolean
-
-  /**
-   * Connections to other components
-   */
-  connections?: Connections<FusePinLabels>
-}
-
-
-export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rect"
-  width: Distance
-  height: Distance
-  portHints?: PortHints
-}
-
-
-export interface RotatedRectSmtPadProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rotated_rect"
-  width: Distance
-  height: Distance
-  ccwRotation: number
-  portHints?: PortHints
-}
-
-
-export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "circle"
-  radius: Distance
-  portHints?: PortHints
-}
-
-
-export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "pill"
-  width: Distance
-  height: Distance
-  radius: Distance
-  portHints?: PortHints
-}
-
-
-export interface PolygonSmtPadProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "polygon"
-  points: Point[]
-  portHints?: PortHints
-}
-
-
-export interface CapacitorProps extends CommonComponentProps {
-  capacitance: number | string
-  maxVoltageRating?: number | string
-  schShowRatings?: boolean
-  polarized?: boolean
-  decouplingFor?: string
-  decouplingTo?: string
-  bypassFor?: string
-  bypassTo?: string
-  maxDecouplingTraceLength?: number
-  connections?: Connections<CapacitorPinLabels>
-}
-
-
 export interface PotentiometerProps extends CommonComponentProps {
   maxResistance: number | string
   pinVariant?: PotentiometerPinVariant
-}
-
-
-export interface SwitchProps extends CommonComponentProps {
-  type?: "spst" | "spdt" | "dpst" | "dpdt"
-  isNormallyClosed?: boolean
-  spdt?: boolean
-  spst?: boolean
-  dpst?: boolean
-  dpdt?: boolean
-}
-
-
-export interface ConstrainedLayoutProps {
-  name?: string
-  pcbOnly?: boolean
-  schOnly?: boolean
-}
-
-
-export interface NetLabelProps {
-  net?: string
-  connection?: string
-  schX?: number | string
-  schY?: number | string
-  schRotation?: number | string
-  anchorSide?: "left" | "up" | "right" | "down"
-}
-
-
-export interface ConnectorProps extends CommonComponentProps {
-  manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | string[]>
-  schPinStyle?: SchematicPinStyle
-  schPinSpacing?: number | string
-  schWidth?: number | string
-  schHeight?: number | string
-  schDirection?: "left" | "right"
-  schPortArrangement?: SchematicPortArrangement
-  /**
-   * Groups of pins that are internally connected (bridged)
-   * e.g., [["1","2"], ["2","3"]]
-   */
-  internallyConnectedPins?: string[][]
-  /**
-   * Connector standard, e.g. usb_c, m2
-   */
-  standard?: "usb_c" | "m2"
-}
-
-
-export interface BreakoutProps
-  extends Omit<SubcircuitGroupProps, "subcircuit"> {
-  padding?: Distance
-  paddingLeft?: Distance
-  paddingRight?: Distance
-  paddingTop?: Distance
-  paddingBottom?: Distance
-}
-
-
-export interface SolderJumperProps extends JumperProps {
-  /**
-   * Pins that are bridged with solder by default
-   */
-  bridgedPins?: string[][]
-}
-
-
-export interface ResonatorProps extends CommonComponentProps {
-  frequency: number | string
-  loadCapacitance: number | string
-  pinVariant?: ResonatorPinVariant
 }
 
 
@@ -616,13 +512,36 @@ export interface PinHeaderProps extends CommonComponentProps {
 }
 
 
-export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
-  width?: number | string
-  height?: number | string
-  outline?: Point[]
-  outlineOffsetX?: number | string
-  outlineOffsetY?: number | string
-  material?: "fr4" | "fr1"
+export interface ResonatorProps extends CommonComponentProps {
+  frequency: number | string
+  loadCapacitance: number | string
+  pinVariant?: ResonatorPinVariant
+}
+
+
+export interface BatteryProps extends CommonComponentProps {
+  capacity?: number | string
+}
+
+
+export interface ConnectorProps extends CommonComponentProps {
+  manufacturerPartNumber?: string
+  pinLabels?: Record<number | string, string | string[]>
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
+  /**
+   * Groups of pins that are internally connected (bridged)
+   * e.g., [["1","2"], ["2","3"]]
+   */
+  internallyConnectedPins?: string[][]
+  /**
+   * Connector standard, e.g. usb_c, m2
+   */
+  standard?: "usb_c" | "m2"
 }
 
 
@@ -651,51 +570,160 @@ export interface PolygonCutoutProps
 }
 
 
-export interface FootprintProps {
-  /**
-   * The layer that the footprint is designed for. If you set this to "top"
-   * then it means the children were intended to represent the top layer. If
-   * the <chip /> with this footprint is moved to the bottom layer, then the
-   * components will be mirrored.
-   *
-   * Generally, you shouldn't set this except where it can help prevent
-   * confusion because you have a complex multi-layer footprint. Default is
-   * "top" and this is most intuitive.
-   */
-  originalLayer?: LayerRef
+export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
+  diameter?: Distance
+  radius?: Distance
 }
 
 
-export interface TestpointProps extends CommonComponentProps {
-  /**
-   * The footprint variant of the testpoint either a surface pad or through-hole
-   */
-  footprintVariant?: "pad" | "through_hole"
-  /**
-   * The shape of the pad if using a pad variant
-   */
-  padShape?: "rect" | "circle"
-  /**
-   * Diameter of the copper pad (applies to both SMD pads and plated holes)
-   */
-  padDiameter?: number | string
-  /**
-   * Diameter of the hole if using a through-hole testpoint
-   */
-  holeDiameter?: number | string
-  /**
-   * Width of the pad when padShape is rect
-   */
+export interface DiodeProps extends CommonComponentProps {
+  connections?: {
+    anode?: string | string[] | readonly string[]
+    cathode?: string | string[] | readonly string[]
+    pin1?: string | string[] | readonly string[]
+    pin2?: string | string[] | readonly string[]
+    pos?: string | string[] | readonly string[]
+    neg?: string | string[] | readonly string[]
+  }
+  variant?: "standard" | "schottky" | "zener" | "photo" | "tvs"
+  standard?: boolean
+  schottky?: boolean
+  zener?: boolean
+  photo?: boolean
+  tvs?: boolean
+}
+
+
+export interface NetAliasProps {
+  net?: string
+  connection?: string
+  schX?: number | string
+  schY?: number | string
+  schRotation?: number | string
+  anchorSide?: "left" | "up" | "right" | "down"
+}
+
+
+export interface BreakoutPointProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  connection: string
+}
+
+
+export interface SwitchProps extends CommonComponentProps {
+  type?: "spst" | "spdt" | "dpst" | "dpdt"
+  isNormallyClosed?: boolean
+  spdt?: boolean
+  spst?: boolean
+  dpst?: boolean
+  dpdt?: boolean
+}
+
+
+export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   width?: number | string
-  /**
-   * Height of the pad when padShape is rect
-   */
   height?: number | string
+  outline?: Point[]
+  outlineOffsetX?: number | string
+  outlineOffsetY?: number | string
+  material?: "fr4" | "fr1"
 }
 
 
-export interface NetProps {
-  name: string
+export interface CapacitorProps extends CommonComponentProps {
+  capacitance: number | string
+  maxVoltageRating?: number | string
+  schShowRatings?: boolean
+  polarized?: boolean
+  decouplingFor?: string
+  decouplingTo?: string
+  bypassFor?: string
+  bypassTo?: string
+  maxDecouplingTraceLength?: number
+  connections?: Connections<CapacitorPinLabels>
+}
+
+
+export interface MosfetProps extends CommonComponentProps {
+  channelType: "n" | "p"
+  mosfetMode: "enhancement" | "depletion"
+}
+
+
+export interface JumperProps extends CommonComponentProps {
+  manufacturerPartNumber?: string
+  pinLabels?: Record<number | string, string | string[]>
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
+  /**
+   * Number of pins on the jumper (2 or 3)
+   */
+  pinCount?: 2 | 3
+  /**
+   * Groups of pins that are internally connected (bridged)
+   * e.g., [["1","2"], ["2","3"]]
+   */
+  internallyConnectedPins?: string[][]
+}
+
+
+export interface TransistorProps extends CommonComponentProps {
+  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet"
+}
+
+
+export interface SolderJumperProps extends JumperProps {
+  /**
+   * Pins that are bridged with solder by default
+   */
+  bridgedPins?: string[][]
+}
+
+
+export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rect"
+  width: Distance
+  height: Distance
+  portHints?: PortHints
+}
+
+
+export interface RotatedRectSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rotated_rect"
+  width: Distance
+  height: Distance
+  ccwRotation: number
+  portHints?: PortHints
+}
+
+
+export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "circle"
+  radius: Distance
+  portHints?: PortHints
+}
+
+
+export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "pill"
+  width: Distance
+  height: Distance
+  radius: Distance
+  portHints?: PortHints
+}
+
+
+export interface PolygonSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "polygon"
+  points: Point[]
+  portHints?: PortHints
 }
 
 
@@ -746,8 +774,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbLayout?: LayoutConfig
   schLayout?: LayoutConfig
-  cellBorder?: Border
-  border?: Border
+  cellBorder?: Border | null
+  border?: Border | null
 }
 
 
@@ -805,20 +833,6 @@ export interface NonSubcircuitGroupProps extends BaseGroupProps {
 }
 
 
-export interface CrystalProps extends CommonComponentProps {
-  frequency: number | string
-  loadCapacitance: number | string
-  pinVariant?: PinVariant
-}
-
-
-export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  name?: string
-  diameter?: Distance
-  radius?: Distance
-}
-
-
 export interface StampboardProps extends BoardProps {
   leftPinCount?: number
   rightPinCount?: number
@@ -833,32 +847,18 @@ export interface StampboardProps extends BoardProps {
 }
 
 
-export interface PlatformConfig {
-  partsEngine?: PartsEngine
-
-  autorouter?: AutorouterProp
-
-  // TODO this follows a subset of the localStorage interface
-  localCacheEngine?: any
-
-  registryApiUrl?: string
-
-  cloudAutorouterUrl?: string
-
-  pcbDisabled?: boolean
-  schematicDisabled?: boolean
-  partsEngineDisabled?: boolean
-
-  footprintLibraryMap?: Record<
-    string,
-    Record<
-      string,
-      | any[]
-      | ((path: string) => Promise<{
-          footprintCircuitJson: any[]
-        }>)
-    >
-  >
+export interface FootprintProps {
+  /**
+   * The layer that the footprint is designed for. If you set this to "top"
+   * then it means the children were intended to represent the top layer. If
+   * the <chip /> with this footprint is moved to the bottom layer, then the
+   * components will be mirrored.
+   *
+   * Generally, you shouldn't set this except where it can help prevent
+   * confusion because you have a complex multi-layer footprint. Default is
+   * "top" and this is most intuitive.
+   */
+  originalLayer?: LayerRef
 }
 
 ```

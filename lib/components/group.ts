@@ -95,8 +95,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbLayout?: LayoutConfig
   schLayout?: LayoutConfig
-  cellBorder?: Border
-  border?: Border
+  cellBorder?: Border | null
+  border?: Border | null
 }
 
 export type PartsEngine = {
@@ -201,8 +201,8 @@ export const baseGroupProps = commonLayoutProps.extend({
   schHeight: length.optional(),
   pcbLayout: layoutConfig.optional(),
   schLayout: layoutConfig.optional(),
-  cellBorder: border.optional(),
-  border: border.optional(),
+  cellBorder: border.nullable().optional(),
+  border: border.nullable().optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

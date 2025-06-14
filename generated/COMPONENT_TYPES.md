@@ -2,16 +2,6 @@
 
 ## Common Types
 
-### connectionsProp
-
-```typescript
-export const createConnectionsProp = <T extends readonly [string, ...string[]]>(
-  labels: T,
-) => {
-  return z.record(z.enum(labels), connectionTarget)
-}
-```
-
 ### point
 
 ```typescript
@@ -67,112 +57,6 @@ export const cadModelJscad = cadModelBase.extend({
 })
 ```
 
-### schematicPinStyle
-
-```typescript
-export type SchematicPinStyle = Record<
-  string,
-  {
-    marginTop?: number | string
-    marginRight?: number | string
-    marginBottom?: number | string
-    marginLeft?: number | string
-
-    leftMargin?: number | string
-    rightMargin?: number | string
-    topMargin?: number | string
-    bottomMargin?: number | string
-  }
-/** @deprecated use marginBottom */
-export const schematicPinStyle = z.record(
-  z.object({
-    marginLeft: distance.optional(),
-    marginRight: distance.optional(),
-    marginTop: distance.optional(),
-    marginBottom: distance.optional(),
-
-    leftMargin: distance.optional(),
-    rightMargin: distance.optional(),
-    topMargin: distance.optional(),
-    bottomMargin: distance.optional(),
-  }),
-```
-
-### schematicPinDefinitions
-
-```typescript
-/**
- * @deprecated Use SchematicPortArrangementWithPinCounts instead.
- */
-export interface SchematicPortArrangementWithSizes {
-  leftSize?: number
-  topSize?: number
-  rightSize?: number
-  bottomSize?: number
-}
-/**
- * Specifies the number of pins on each side of the schematic box component.
- */
-export interface SchematicPortArrangementWithPinCounts {
-  leftPinCount?: number
-  topPinCount?: number
-  rightPinCount?: number
-  bottomPinCount?: number
-}
-export interface PinSideDefinition {
-  pins: Array<number | string>
-  direction:
-    | "top-to-bottom"
-    | "left-to-right"
-    | "bottom-to-top"
-    | "right-to-left"
-}
-export interface SchematicPortArrangementWithSides {
-  leftSide?: PinSideDefinition
-  topSide?: PinSideDefinition
-  rightSide?: PinSideDefinition
-  bottomSide?: PinSideDefinition
-}
-export interface SchematicPortArrangement
-  extends SchematicPortArrangementWithSizes,
-    SchematicPortArrangementWithSides,
-    SchematicPortArrangementWithPinCounts {}
-export const explicitPinSideDefinition = z.object({
-  pins: z.array(z.union([z.number(), z.string()])),
-  direction: z.union([
-    z.literal("top-to-bottom"),
-    z.literal("left-to-right"),
-    z.literal("bottom-to-top"),
-    z.literal("right-to-left"),
-  ]),
-})
-/**
- * @deprecated Use schematicPinArrangement instead.
- */
-export const schematicPortArrangement = z.object({
-  leftSize: z.number().optional().describe("@deprecated, use leftPinCount"),
-  topSize: z.number().optional().describe("@deprecated, use topPinCount"),
-  rightSize: z.number().optional().describe("@deprecated, use rightPinCount"),
-  bottomSize: z.number().optional().describe("@deprecated, use bottomPinCount"),
-  leftPinCount: z.number().optional(),
-  rightPinCount: z.number().optional(),
-  topPinCount: z.number().optional(),
-  bottomPinCount: z.number().optional(),
-  leftSide: explicitPinSideDefinition.optional(),
-  rightSide: explicitPinSideDefinition.optional(),
-  topSide: explicitPinSideDefinition.optional(),
-  bottomSide: explicitPinSideDefinition.optional(),
-})
-```
-
-### distance
-
-```typescript
-export type Distance = number | string
-
-export { distance, length } from "circuit-json"
-```
-
 ### point3
 
 ```typescript
@@ -181,6 +65,27 @@ export const point3 = z.object({
   y: distance,
   z: distance,
 })
+```
+
+### footprintProp
+
+```typescript
+/**
+ * This is an abbreviated definition of the soup elements that you can find here:
+ * https://docs.tscircuit.com/api-reference/advanced/soup#pcb-smtpad
+ */
+export type FootprintSoupElements = {
+  type: "pcb_smtpad" | "pcb_plated_hole"
+  x: string | number
+  y: string | number
+  layer?: LayerRef
+  holeDiameter?: string | number
+  outerDiameter?: string | number
+  shape?: "circle" | "rect"
+  width?: string | number
+  height?: string | number
+  portHints?: string[]
+}
 ```
 
 ### layout
@@ -255,41 +160,201 @@ export const lrPolarPins = [
 ] as const
 ```
 
-### footprintProp
+### distance
+
+```typescript
+export type Distance = number | string
+
+export { distance, length } from "circuit-json"
+```
+
+### schematicPinStyle
+
+```typescript
+export type SchematicPinStyle = Record<
+  string,
+  {
+    marginTop?: number | string
+    marginRight?: number | string
+    marginBottom?: number | string
+    marginLeft?: number | string
+
+    leftMargin?: number | string
+    rightMargin?: number | string
+    topMargin?: number | string
+    bottomMargin?: number | string
+  }
+/** @deprecated use marginBottom */
+export const schematicPinStyle = z.record(
+  z.object({
+    marginLeft: distance.optional(),
+    marginRight: distance.optional(),
+    marginTop: distance.optional(),
+    marginBottom: distance.optional(),
+
+    leftMargin: distance.optional(),
+    rightMargin: distance.optional(),
+    topMargin: distance.optional(),
+    bottomMargin: distance.optional(),
+  }),
+```
+
+### connectionsProp
+
+```typescript
+export const createConnectionsProp = <T extends readonly [string, ...string[]]>(
+  labels: T,
+) => {
+  return z.record(z.enum(labels), connectionTarget)
+}
+```
+
+### schematicPinDefinitions
 
 ```typescript
 /**
- * This is an abbreviated definition of the soup elements that you can find here:
- * https://docs.tscircuit.com/api-reference/advanced/soup#pcb-smtpad
+ * @deprecated Use SchematicPortArrangementWithPinCounts instead.
  */
-export type FootprintSoupElements = {
-  type: "pcb_smtpad" | "pcb_plated_hole"
-  x: string | number
-  y: string | number
-  layer?: LayerRef
-  holeDiameter?: string | number
-  outerDiameter?: string | number
-  shape?: "circle" | "rect"
-  width?: string | number
-  height?: string | number
-  portHints?: string[]
+export interface SchematicPortArrangementWithSizes {
+  leftSize?: number
+  topSize?: number
+  rightSize?: number
+  bottomSize?: number
 }
+/**
+ * Specifies the number of pins on each side of the schematic box component.
+ */
+export interface SchematicPortArrangementWithPinCounts {
+  leftPinCount?: number
+  topPinCount?: number
+  rightPinCount?: number
+  bottomPinCount?: number
+}
+export interface PinSideDefinition {
+  pins: Array<number | string>
+  direction:
+    | "top-to-bottom"
+    | "left-to-right"
+    | "bottom-to-top"
+    | "right-to-left"
+}
+export interface SchematicPortArrangementWithSides {
+  leftSide?: PinSideDefinition
+  topSide?: PinSideDefinition
+  rightSide?: PinSideDefinition
+  bottomSide?: PinSideDefinition
+}
+export interface SchematicPortArrangement
+  extends SchematicPortArrangementWithSizes,
+    SchematicPortArrangementWithSides,
+    SchematicPortArrangementWithPinCounts {}
+export const explicitPinSideDefinition = z.object({
+  pins: z.array(z.union([z.number(), z.string()])),
+  direction: z.union([
+    z.literal("top-to-bottom"),
+    z.literal("left-to-right"),
+    z.literal("bottom-to-top"),
+    z.literal("right-to-left"),
+  ]),
+})
+/**
+ * @deprecated Use schematicPinArrangement instead.
+ */
+export const schematicPortArrangement = z.object({
+  leftSize: z.number().optional().describe("@deprecated, use leftPinCount"),
+  topSize: z.number().optional().describe("@deprecated, use topPinCount"),
+  rightSize: z.number().optional().describe("@deprecated, use rightPinCount"),
+  bottomSize: z.number().optional().describe("@deprecated, use bottomPinCount"),
+  leftPinCount: z.number().optional(),
+  rightPinCount: z.number().optional(),
+  topPinCount: z.number().optional(),
+  bottomPinCount: z.number().optional(),
+  leftSide: explicitPinSideDefinition.optional(),
+  rightSide: explicitPinSideDefinition.optional(),
+  topSide: explicitPinSideDefinition.optional(),
+  bottomSide: explicitPinSideDefinition.optional(),
+})
 ```
 
 ## Available Component Types
 
-### breakoutpoint
+### resistor
 
 ```typescript
-export interface BreakoutPointProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
-  connection: string
+export interface ResistorProps extends CommonComponentProps {
+  resistance: number | string
+  pullupFor?: string
+  pullupTo?: string
+  pulldownFor?: string
+  pulldownTo?: string
+  connections?: Connections<ResistorPinLabels>
 }
-export const breakoutPointProps = pcbLayoutProps
-  .omit({ pcbRotation: true, layer: true })
+export const resistorProps = commonComponentProps.extend({
+  resistance,
+
+  pullupFor: z.string().optional(),
+  pullupTo: z.string().optional(),
+
+  pulldownFor: z.string().optional(),
+  pulldownTo: z.string().optional(),
+
+  connections: createConnectionsProp(resistorPinLabels).optional(),
+})
+```
+
+### silkscreen-rect
+
+```typescript
+export const silkscreenRectProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
   .extend({
-    connection: z.string(),
+    filled: z.boolean().default(true).optional(),
+    stroke: z.enum(["dashed", "solid", "none"]).optional(),
+    strokeWidth: distance.optional(),
+    width: distance,
+    height: distance,
   })
+```
+
+### net
+
+```typescript
+export interface NetProps {
+  name: string
+}
+export const netProps = z.object({
+  name: z.string(),
+})
+```
+
+### constrainedlayout
+
+```typescript
+export interface ConstrainedLayoutProps {
+  name?: string
+  pcbOnly?: boolean
+  schOnly?: boolean
+}
+export const constrainedLayoutProps = z.object({
+  name: z.string().optional(),
+  pcbOnly: z.boolean().optional(),
+  schOnly: z.boolean().optional(),
+})
+```
+
+### trace
+
+```typescript
+export const portRef = z.union([
+  z.string(),
+  z.custom<{ getPortSelector: () => string }>((v) =>
+baseTraceProps.extend({
+    path: z.array(portRef),
+  }),
+baseTraceProps.extend({
+    from: portRef,
+    to: portRef,
+  }),
 ```
 
 ### chip
@@ -355,47 +420,115 @@ export const chipProps = commonComponentProps.extend({
 })
 ```
 
-### resistor
+### fabrication-note-path
 
 ```typescript
-export interface ResistorProps extends CommonComponentProps {
-  resistance: number | string
-  pullupFor?: string
-  pullupTo?: string
-  pulldownFor?: string
-  pulldownTo?: string
-  connections?: Connections<ResistorPinLabels>
+export const fabricationNotePathProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    route: z.array(route_hint_point),
+    strokeWidth: length.optional(),
+    color: z.string().optional(),
+  })
+```
+
+### solderpaste
+
+```typescript
+export interface RectSolderPasteProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rect"
+  width: Distance
+  height: Distance
 }
-export const resistorProps = commonComponentProps.extend({
-  resistance,
+export interface CircleSolderPasteProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "circle"
+  radius: Distance
+}
+export const rectSolderPasteProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("rect"),
+    width: distance,
+    height: distance,
+  })
+export const circleSolderPasteProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("circle"),
+    radius: distance,
+  })
+```
 
-  pullupFor: z.string().optional(),
-  pullupTo: z.string().optional(),
+### testpoint
 
-  pulldownFor: z.string().optional(),
-  pulldownTo: z.string().optional(),
+```typescript
+export interface TestpointProps extends CommonComponentProps {
+  footprintVariant?: "pad" | "through_hole"
+  padShape?: "rect" | "circle"
+  padDiameter?: number | string
+  holeDiameter?: number | string
+  width?: number | string
+  height?: number | string
+}
+.extend({
+    footprintVariant: z.enum(["pad", "through_hole"]).optional(),
+    padShape: z.enum(["rect", "circle"]).optional().default("circle"),
+    padDiameter: distance.optional(),
+    holeDiameter: distance.optional(),
+    width: distance.optional(),
+    height: distance.optional(),
+  })
+```
 
-  connections: createConnectionsProp(resistorPinLabels).optional(),
+### crystal
+
+```typescript
+export interface CrystalProps extends CommonComponentProps {
+  frequency: number | string
+  loadCapacitance: number | string
+  pinVariant?: PinVariant
+}
+export const crystalProps = commonComponentProps.extend({
+  frequency: frequency,
+  loadCapacitance: capacitance,
+  pinVariant: z.enum(["two_pin", "four_pin"]).optional(),
 })
 ```
 
-### schematic-path
+### breakout
 
 ```typescript
-export const schematicPathProps = z.object({
-  points: z.array(point),
-  isFilled: z.boolean().optional().default(false),
-  fillColor: z.enum(["red", "blue"]).optional(),
+export interface BreakoutProps
+  extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+}
+export const breakoutProps = subcircuitGroupProps.extend({
+  padding: distance.optional(),
+  paddingLeft: distance.optional(),
+  paddingRight: distance.optional(),
+  paddingTop: distance.optional(),
+  paddingBottom: distance.optional(),
 })
 ```
 
-### netalias
+### inductor
 
 ```typescript
-/**
- * @deprecated Use NetLabelProps instead.
- */
-export interface NetAliasProps {
+export const inductorProps = commonComponentProps.extend({
+  inductance,
+})
+```
+
+### netlabel
+
+```typescript
+export interface NetLabelProps {
   net?: string
   connection?: string
   schX?: number | string
@@ -403,8 +536,7 @@ export interface NetAliasProps {
   schRotation?: number | string
   anchorSide?: "left" | "up" | "right" | "down"
 }
-/** @deprecated Use netLabelProps instead. */
-export const netAliasProps = z.object({
+export const netLabelProps = z.object({
   net: z.string().optional(),
   connection: z.string().optional(),
   schX: distance.optional(),
@@ -414,135 +546,71 @@ export const netAliasProps = z.object({
 })
 ```
 
-### jumper
+### pcb-keepout
 
 ```typescript
-export interface JumperProps extends CommonComponentProps {
-  manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | string[]>
-  schPinStyle?: SchematicPinStyle
-  schPinSpacing?: number | string
-  schWidth?: number | string
-  schHeight?: number | string
-  schDirection?: "left" | "right"
-  schPortArrangement?: SchematicPortArrangement
-  pinCount?: 2 | 3
-  internallyConnectedPins?: string[][]
+pcbLayoutProps.omit({ pcbRotation: true }).extend({
+    shape: z.literal("circle"),
+    radius: distance,
+  }),
+pcbLayoutProps.extend({
+    shape: z.literal("rect"),
+    width: distance,
+    height: distance,
+  }),
+```
+
+### fuse
+
+```typescript
+export interface FuseProps extends CommonComponentProps {
+  currentRating: number | string
+
+  voltageRating?: number | string
+
+  schShowRatings?: boolean
+
+  connections?: Connections<FusePinLabels>
 }
 /**
-   * Groups of pins that are internally connected (bridged)
-   * e.g., [["1","2"], ["2","3"]]
-   */
-export const jumperProps = commonComponentProps.extend({
-  manufacturerPartNumber: z.string().optional(),
-  pinLabels: z
-    .record(z.number().or(z.string()), z.string().or(z.array(z.string())))
+ * Schema for validating fuse props
+ */
+export const fuseProps = commonComponentProps.extend({
+  currentRating: z.union([z.number(), z.string()]),
+  voltageRating: z.union([z.number(), z.string()]).optional(),
+  schShowRatings: z.boolean().optional(),
+  connections: z
+    .record(
+      z.string(),
+      z.union([
+        z.string(),
+        z.array(z.string()).readonly(),
+        z.array(z.string()),
+      ]),
+    )
     .optional(),
-  schPinStyle: schematicPinStyle.optional(),
-  schPinSpacing: distance.optional(),
-  schWidth: distance.optional(),
-  schHeight: distance.optional(),
-  schDirection: z.enum(["left", "right"]).optional(),
-  schPortArrangement: schematicPortArrangement.optional(),
-  pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
-  internallyConnectedPins: z.array(z.array(z.string())).optional(),
 })
 ```
 
-### trace
+### port
 
 ```typescript
-export const portRef = z.union([
-  z.string(),
-  z.custom<{ getPortSelector: () => string }>((v) =>
-baseTraceProps.extend({
-    path: z.array(portRef),
-  }),
-baseTraceProps.extend({
-    from: portRef,
-    to: portRef,
-  }),
-```
-
-### pcb-trace
-
-```typescript
-export const pcbTraceProps = z.object({
-  layer: z.string().optional(),
-  thickness: distance.optional(),
-  route: z.array(route_hint_point),
+export const portProps = commonLayoutProps.extend({
+  name: z.string(),
+  pinNumber: z.number().optional(),
+  aliases: z.array(z.string()).optional(),
+  direction: direction,
 })
 ```
 
-### battery
+### schematic-line
 
 ```typescript
-/** @deprecated use battery_capacity from circuit-json when circuit-json is updated */
-export interface BatteryProps extends CommonComponentProps {
-  capacity?: number | string
-}
-export const batteryProps = commonComponentProps.extend({
-  capacity: capacity.optional(),
-})
-```
-
-### transistor
-
-```typescript
-export interface TransistorProps extends CommonComponentProps {
-  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet"
-}
-export const transistorProps = commonComponentProps.extend({
-  type: z.enum(["npn", "pnp", "bjt", "jfet", "mosfet"]),
-})
-export const transistorPins = [
-  "pin1",
-  "emitter",
-  "pin2",
-  "collector",
-  "pin3",
-  "base",
-] as const
-```
-
-### silkscreen-line
-
-```typescript
-export const silkscreenLineProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
-  .extend({
-    strokeWidth: distance,
-    x1: distance,
-    y1: distance,
-    x2: distance,
-    y2: distance,
-  })
-```
-
-### silkscreen-circle
-
-```typescript
-export const silkscreenCircleProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    isFilled: z.boolean().optional(),
-    isOutline: z.boolean().optional(),
-    strokeWidth: distance.optional(),
-    radius: distance,
-  })
-```
-
-### fabrication-note-text
-
-```typescript
-export const fabricationNoteTextProps = pcbLayoutProps.extend({
-  text: z.string(),
-  anchorAlignment: z
-    .enum(["center", "top_left", "top_right", "bottom_left", "bottom_right"])
-    .default("center"),
-  font: z.enum(["tscircuit2024"]).optional(),
-  fontSize: length.optional(),
-  color: z.string().optional(),
+export const schematicLineProps = z.object({
+  x1: distance,
+  y1: distance,
+  x2: distance,
+  y2: distance,
 })
 ```
 
@@ -674,288 +742,6 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
     }),
 ```
 
-### diode
-
-```typescript
-.extend({
-    connections: connectionsProp.optional(),
-    variant: diodeVariant.optional().default("standard"),
-    standard: z.boolean().optional(),
-    schottky: z.boolean().optional(),
-    zener: z.boolean().optional(),
-    photo: z.boolean().optional(),
-    tvs: z.boolean().optional(),
-  })
-export interface DiodeProps extends CommonComponentProps {
-  connections?: {
-    anode?: string | string[] | readonly string[]
-    cathode?: string | string[] | readonly string[]
-    pin1?: string | string[] | readonly string[]
-    pin2?: string | string[] | readonly string[]
-    pos?: string | string[] | readonly string[]
-    neg?: string | string[] | readonly string[]
-  }
-  variant?: "standard" | "schottky" | "zener" | "photo" | "tvs"
-  standard?: boolean
-  schottky?: boolean
-  zener?: boolean
-  photo?: boolean
-  tvs?: boolean
-}
-```
-
-### mosfet
-
-```typescript
-export interface MosfetProps extends CommonComponentProps {
-  channelType: "n" | "p"
-  mosfetMode: "enhancement" | "depletion"
-}
-export const mosfetProps = commonComponentProps.extend({
-  channelType: z.enum(["n", "p"]),
-  mosfetMode: z.enum(["enhancement", "depletion"]),
-})
-export const mosfetPins = [
-  "pin1",
-  "drain",
-  "pin2",
-  "source",
-  "pin3",
-  "gate",
-] as const
-```
-
-### fabrication-note-path
-
-```typescript
-export const fabricationNotePathProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
-  .extend({
-    route: z.array(route_hint_point),
-    strokeWidth: length.optional(),
-    color: z.string().optional(),
-  })
-```
-
-### solderpaste
-
-```typescript
-export interface RectSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rect"
-  width: Distance
-  height: Distance
-}
-export interface CircleSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "circle"
-  radius: Distance
-}
-export const rectSolderPasteProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("rect"),
-    width: distance,
-    height: distance,
-  })
-export const circleSolderPasteProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("circle"),
-    radius: distance,
-  })
-```
-
-### silkscreen-text
-
-```typescript
-export const silkscreenTextProps = pcbLayoutProps.extend({
-  text: z.string(),
-  anchorAlignment: ninePointAnchor.default("center"),
-  font: z.enum(["tscircuit2024"]).optional(),
-  fontSize: length.optional(),
-})
-```
-
-### fuse
-
-```typescript
-export interface FuseProps extends CommonComponentProps {
-  currentRating: number | string
-
-  voltageRating?: number | string
-
-  schShowRatings?: boolean
-
-  connections?: Connections<FusePinLabels>
-}
-/**
- * Schema for validating fuse props
- */
-export const fuseProps = commonComponentProps.extend({
-  currentRating: z.union([z.number(), z.string()]),
-  voltageRating: z.union([z.number(), z.string()]).optional(),
-  schShowRatings: z.boolean().optional(),
-  connections: z
-    .record(
-      z.string(),
-      z.union([
-        z.string(),
-        z.array(z.string()).readonly(),
-        z.array(z.string()),
-      ]),
-    )
-    .optional(),
-})
-```
-
-### smtpad
-
-```typescript
-export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rect"
-  width: Distance
-  height: Distance
-  portHints?: PortHints
-}
-export interface RotatedRectSmtPadProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rotated_rect"
-  width: Distance
-  height: Distance
-  ccwRotation: number
-  portHints?: PortHints
-}
-export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "circle"
-  radius: Distance
-  portHints?: PortHints
-}
-export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "pill"
-  width: Distance
-  height: Distance
-  radius: Distance
-  portHints?: PortHints
-}
-export interface PolygonSmtPadProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "polygon"
-  points: Point[]
-  portHints?: PortHints
-}
-export const rectSmtPadProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("rect"),
-    width: distance,
-    height: distance,
-    portHints: portHints.optional(),
-  })
-export const rotatedRectSmtPadProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("rotated_rect"),
-    width: distance,
-    height: distance,
-    ccwRotation: z.number(),
-    portHints: portHints.optional(),
-  })
-export const circleSmtPadProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("circle"),
-    radius: distance,
-    portHints: portHints.optional(),
-  })
-export const pillSmtPadProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("pill"),
-    width: distance,
-    height: distance,
-    radius: distance,
-    portHints: portHints.optional(),
-  })
-export const polygonSmtPadProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("polygon"),
-    points: z.array(point),
-    portHints: portHints.optional(),
-  })
-```
-
-### power-source
-
-```typescript
-export const powerSourceProps = commonComponentProps.extend({
-  voltage,
-})
-```
-
-### capacitor
-
-```typescript
-export const capacitorPinLabels = [
-  "pin1",
-  "pin2",
-  "pos",
-  "neg",
-  "anode",
-  "cathode",
-] as const
-export interface CapacitorProps extends CommonComponentProps {
-  capacitance: number | string
-  maxVoltageRating?: number | string
-  schShowRatings?: boolean
-  polarized?: boolean
-  decouplingFor?: string
-  decouplingTo?: string
-  bypassFor?: string
-  bypassTo?: string
-  maxDecouplingTraceLength?: number
-  connections?: Connections<CapacitorPinLabels>
-}
-export const capacitorProps = commonComponentProps.extend({
-  capacitance,
-  maxVoltageRating: voltage.optional(),
-  schShowRatings: z.boolean().optional().default(false),
-  polarized: z.boolean().optional().default(false),
-  decouplingFor: z.string().optional(),
-  decouplingTo: z.string().optional(),
-  bypassFor: z.string().optional(),
-  bypassTo: z.string().optional(),
-  maxDecouplingTraceLength: z.number().optional(),
-  connections: createConnectionsProp(capacitorPinLabels).optional(),
-})
-```
-
-### pcb-keepout
-
-```typescript
-pcbLayoutProps.omit({ pcbRotation: true }).extend({
-    shape: z.literal("circle"),
-    radius: distance,
-  }),
-pcbLayoutProps.extend({
-    shape: z.literal("rect"),
-    width: distance,
-    height: distance,
-  }),
-```
-
-### schematic-line
-
-```typescript
-export const schematicLineProps = z.object({
-  x1: distance,
-  y1: distance,
-  x2: distance,
-  y2: distance,
-})
-```
-
 ### potentiometer
 
 ```typescript
@@ -969,277 +755,14 @@ export const potentiometerProps = commonComponentProps.extend({
 })
 ```
 
-### switch
+### schematic-path
 
 ```typescript
-export interface SwitchProps extends CommonComponentProps {
-  type?: "spst" | "spdt" | "dpst" | "dpdt"
-  isNormallyClosed?: boolean
-  spdt?: boolean
-  spst?: boolean
-  dpst?: boolean
-  dpdt?: boolean
-}
-.extend({
-    type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
-    isNormallyClosed: z.boolean().optional().default(false),
-    spst: z.boolean().optional(),
-    spdt: z.boolean().optional(),
-    dpst: z.boolean().optional(),
-    dpdt: z.boolean().optional(),
-  })
-```
-
-### constrainedlayout
-
-```typescript
-export interface ConstrainedLayoutProps {
-  name?: string
-  pcbOnly?: boolean
-  schOnly?: boolean
-}
-export const constrainedLayoutProps = z.object({
-  name: z.string().optional(),
-  pcbOnly: z.boolean().optional(),
-  schOnly: z.boolean().optional(),
+export const schematicPathProps = z.object({
+  points: z.array(point),
+  isFilled: z.boolean().optional().default(false),
+  fillColor: z.enum(["red", "blue"]).optional(),
 })
-```
-
-### inductor
-
-```typescript
-export const inductorProps = commonComponentProps.extend({
-  inductance,
-})
-```
-
-### netlabel
-
-```typescript
-export interface NetLabelProps {
-  net?: string
-  connection?: string
-  schX?: number | string
-  schY?: number | string
-  schRotation?: number | string
-  anchorSide?: "left" | "up" | "right" | "down"
-}
-export const netLabelProps = z.object({
-  net: z.string().optional(),
-  connection: z.string().optional(),
-  schX: distance.optional(),
-  schY: distance.optional(),
-  schRotation: rotation.optional(),
-  anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
-})
-```
-
-### schematic-text
-
-```typescript
-export const schematicTextProps = z.object({
-  schX: distance,
-  schY: distance,
-  text: z.string(),
-  fontSize: z.number().default(1),
-  anchor: z
-    .union([fivePointAnchor.describe("legacy"), ninePointAnchor])
-    .default("center"),
-  color: z.string().default("#000000"),
-  schRotation: rotation.default(0),
-})
-```
-
-### connector
-
-```typescript
-export interface ConnectorProps extends CommonComponentProps {
-  manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | string[]>
-  schPinStyle?: SchematicPinStyle
-  schPinSpacing?: number | string
-  schWidth?: number | string
-  schHeight?: number | string
-  schDirection?: "left" | "right"
-  schPortArrangement?: SchematicPortArrangement
-  internallyConnectedPins?: string[][]
-  standard?: "usb_c" | "m2"
-}
-/**
-   * Connector standard, e.g. usb_c, m2
-   */
-export const connectorProps = commonComponentProps.extend({
-  manufacturerPartNumber: z.string().optional(),
-  pinLabels: z
-    .record(z.number().or(z.string()), z.string().or(z.array(z.string())))
-    .optional(),
-  schPinStyle: schematicPinStyle.optional(),
-  schPinSpacing: distance.optional(),
-  schWidth: distance.optional(),
-  schHeight: distance.optional(),
-  schDirection: z.enum(["left", "right"]).optional(),
-  schPortArrangement: schematicPortArrangement.optional(),
-  internallyConnectedPins: z.array(z.array(z.string())).optional(),
-  standard: z.enum(["usb_c", "m2"]).optional(),
-})
-```
-
-### silkscreen-path
-
-```typescript
-export const silkscreenPathProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
-  .extend({
-    route: z.array(route_hint_point),
-    strokeWidth: length.optional(),
-  })
-```
-
-### trace-hint
-
-```typescript
-export const routeHintPointProps = z.object({
-  x: distance,
-  y: distance,
-  via: z.boolean().optional(),
-  toLayer: layer_ref.optional(),
-})
-export const traceHintProps = z.object({
-  for: z
-    .string()
-    .optional()
-    .describe(
-      "Selector for the port you're targeting, not required if you're inside a trace",
-    ),
-  order: z.number().optional(),
-  offset: route_hint_point.or(routeHintPointProps).optional(),
-  offsets: z
-    .array(route_hint_point)
-    .or(z.array(routeHintPointProps))
-    .optional(),
-  traceWidth: z.number().optional(),
-})
-```
-
-### via
-
-```typescript
-export const viaProps = commonLayoutProps.extend({
-  fromLayer: layer_ref,
-  toLayer: layer_ref,
-  holeDiameter: distance,
-  outerDiameter: distance,
-})
-```
-
-### led
-
-```typescript
-export const ledProps = commonComponentProps.extend({
-  color: z.string().optional(),
-  wavelength: z.string().optional(),
-  schDisplayValue: z.string().optional(),
-})
-```
-
-### breakout
-
-```typescript
-export interface BreakoutProps
-  extends Omit<SubcircuitGroupProps, "subcircuit"> {
-  padding?: Distance
-  paddingLeft?: Distance
-  paddingRight?: Distance
-  paddingTop?: Distance
-  paddingBottom?: Distance
-}
-export const breakoutProps = subcircuitGroupProps.extend({
-  padding: distance.optional(),
-  paddingLeft: distance.optional(),
-  paddingRight: distance.optional(),
-  paddingTop: distance.optional(),
-  paddingBottom: distance.optional(),
-})
-```
-
-### solderjumper
-
-```typescript
-export interface SolderJumperProps extends JumperProps {
-  bridgedPins?: string[][]
-}
-/**
-   * Pins that are bridged with solder by default
-   */
-export const solderjumperProps = jumperProps.extend({
-  bridgedPins: z.array(z.array(z.string())).optional(),
-})
-```
-
-### resonator
-
-```typescript
-export interface ResonatorProps extends CommonComponentProps {
-  frequency: number | string
-  loadCapacitance: number | string
-  pinVariant?: ResonatorPinVariant
-}
-export const resonatorProps = commonComponentProps.extend({
-  frequency: frequency,
-  loadCapacitance: capacitance,
-  pinVariant: z.enum(["no_ground", "ground_pin", "two_ground_pins"]).optional(),
-})
-```
-
-### silkscreen-rect
-
-```typescript
-export const silkscreenRectProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    filled: z.boolean().default(true).optional(),
-    stroke: z.enum(["dashed", "solid", "none"]).optional(),
-    strokeWidth: distance.optional(),
-    width: distance,
-    height: distance,
-  })
-```
-
-### port
-
-```typescript
-export const portProps = commonLayoutProps.extend({
-  name: z.string(),
-  pinNumber: z.number().optional(),
-  aliases: z.array(z.string()).optional(),
-  direction: direction,
-})
-```
-
-### schematic-box
-
-```typescript
-export const schematicBoxProps = z
-  .object({
-    schX: distance,
-    schY: distance,
-    width: distance.optional(),
-    height: distance.optional(),
-    overlay: z.array(z.string()).optional(),
-
-    padding: distance.optional(),
-    paddingLeft: distance.optional(),
-    paddingRight: distance.optional(),
-    paddingTop: distance.optional(),
-    paddingBottom: distance.optional(),
-
-    title: z.string().optional(),
-    titleAlignment: ninePointAnchor.default("center"),
-    titleColor: z.string().optional(),
-    titleFontSize: distance.optional(),
-    titleInside: z.boolean().default(false),
-    strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
-  })
 ```
 
 ### pin-header
@@ -1292,24 +815,64 @@ export const pinHeaderProps = commonComponentProps.extend({
 })
 ```
 
-### board
+### resonator
 
 ```typescript
-export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
-  width?: number | string
-  height?: number | string
-  outline?: Point[]
-  outlineOffsetX?: number | string
-  outlineOffsetY?: number | string
-  material?: "fr4" | "fr1"
+export interface ResonatorProps extends CommonComponentProps {
+  frequency: number | string
+  loadCapacitance: number | string
+  pinVariant?: ResonatorPinVariant
 }
-export const boardProps = subcircuitGroupProps.extend({
-  width: distance.optional(),
-  height: distance.optional(),
-  outline: z.array(point).optional(),
-  outlineOffsetX: distance.optional(),
-  outlineOffsetY: distance.optional(),
-  material: z.enum(["fr4", "fr1"]).default("fr4"),
+export const resonatorProps = commonComponentProps.extend({
+  frequency: frequency,
+  loadCapacitance: capacitance,
+  pinVariant: z.enum(["no_ground", "ground_pin", "two_ground_pins"]).optional(),
+})
+```
+
+### battery
+
+```typescript
+/** @deprecated use battery_capacity from circuit-json when circuit-json is updated */
+export interface BatteryProps extends CommonComponentProps {
+  capacity?: number | string
+}
+export const batteryProps = commonComponentProps.extend({
+  capacity: capacity.optional(),
+})
+```
+
+### connector
+
+```typescript
+export interface ConnectorProps extends CommonComponentProps {
+  manufacturerPartNumber?: string
+  pinLabels?: Record<number | string, string | string[]>
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
+  internallyConnectedPins?: string[][]
+  standard?: "usb_c" | "m2"
+}
+/**
+   * Connector standard, e.g. usb_c, m2
+   */
+export const connectorProps = commonComponentProps.extend({
+  manufacturerPartNumber: z.string().optional(),
+  pinLabels: z
+    .record(z.number().or(z.string()), z.string().or(z.array(z.string())))
+    .optional(),
+  schPinStyle: schematicPinStyle.optional(),
+  schPinSpacing: distance.optional(),
+  schWidth: distance.optional(),
+  schHeight: distance.optional(),
+  schDirection: z.enum(["left", "right"]).optional(),
+  schPortArrangement: schematicPortArrangement.optional(),
+  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  standard: z.enum(["usb_c", "m2"]).optional(),
 })
 ```
 
@@ -1368,245 +931,6 @@ export const polygonCutoutProps = pcbLayoutProps
   })
 ```
 
-### footprint
-
-```typescript
-export interface FootprintProps {
-  originalLayer?: LayerRef
-}
-/**
-   * The layer that the footprint is designed for. If you set this to "top"
-   * then it means the children were intended to represent the top layer. If
-   * the <chip /> with this footprint is moved to the bottom layer, then the
-   * components will be mirrored.
-   *
-   * Generally, you shouldn't set this except where it can help prevent
-   * confusion because you have a complex multi-layer footprint. Default is
-   * "top" and this is most intuitive.
-   */
-export const footprintProps = z.object({
-  originalLayer: layer_ref.default("top").optional(),
-})
-```
-
-### testpoint
-
-```typescript
-export interface TestpointProps extends CommonComponentProps {
-  footprintVariant?: "pad" | "through_hole"
-  padShape?: "rect" | "circle"
-  padDiameter?: number | string
-  holeDiameter?: number | string
-  width?: number | string
-  height?: number | string
-}
-.extend({
-    footprintVariant: z.enum(["pad", "through_hole"]).optional(),
-    padShape: z.enum(["rect", "circle"]).optional().default("circle"),
-    padDiameter: distance.optional(),
-    holeDiameter: distance.optional(),
-    width: distance.optional(),
-    height: distance.optional(),
-  })
-```
-
-### net
-
-```typescript
-export interface NetProps {
-  name: string
-}
-export const netProps = z.object({
-  name: z.string(),
-})
-```
-
-### group
-
-```typescript
-export const layoutConfig = z.object({
-  layoutMode: z.enum(["grid", "flex", "match-adapt", "none"]).optional(),
-  position: z.enum(["absolute", "relative"]).optional(),
-
-  grid: z.boolean().optional(),
-  gridCols: z.number().or(z.string()).optional(),
-  gridRows: z.number().or(z.string()).optional(),
-  gridTemplateRows: z.string().optional(),
-  gridTemplateColumns: z.string().optional(),
-  gridTemplate: z.string().optional(),
-  gridGap: z.number().or(z.string()).optional(),
-
-  flex: z.boolean().or(z.string()).optional(),
-  flexDirection: z.enum(["row", "column"]).optional(),
-  alignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
-  justifyContent: z.enum(["start", "center", "end", "stretch"]).optional(),
-  flexRow: z.boolean().optional(),
-  flexColumn: z.boolean().optional(),
-  gap: z.number().or(z.string()).optional(),
-
-  width: length.optional(),
-  height: length.optional(),
-
-  matchAdapt: z.boolean().optional(),
-  matchAdaptTemplate: z.any().optional(),
-})
-export interface LayoutConfig {
-  layoutMode?: "grid" | "flex" | "match-adapt" | "none"
-  position?: "absolute" | "relative"
-
-  grid?: boolean
-  gridCols?: number | string
-  gridRows?: number | string
-  gridTemplateRows?: string
-  gridTemplateColumns?: string
-  gridTemplate?: string
-  gridGap?: number | string
-
-  flex?: boolean | string
-  flexDirection?: "row" | "column"
-  alignItems?: "start" | "center" | "end" | "stretch"
-  justifyContent?: "start" | "center" | "end" | "stretch"
-  flexRow?: boolean
-  flexColumn?: boolean
-  gap?: number | string
-
-  width?: Distance
-  height?: Distance
-
-  matchAdapt?: boolean
-  matchAdaptTemplate?: any
-}
-export interface Border {
-  strokeWidth?: Distance
-  dashed?: boolean
-  solid?: boolean
-}
-export const border = z.object({
-  strokeWidth: length.optional(),
-  dashed: z.boolean().optional(),
-  solid: z.boolean().optional(),
-})
-export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
-  name?: string
-  key?: any
-  children?: any
-
-  pcbWidth?: Distance
-  pcbHeight?: Distance
-  schWidth?: Distance
-  schHeight?: Distance
-
-  pcbLayout?: LayoutConfig
-  schLayout?: LayoutConfig
-  cellBorder?: Border
-  border?: Border
-}
-export type PartsEngine = {
-  findPart: (params: {
-    sourceComponent: AnySourceComponent
-    footprinterString?: string
-  }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
-}
-export interface PcbRouteCache {
-  pcbTraces: PcbTrace[]
-  cacheKey: string
-}
-export interface AutorouterConfig {
-  serverUrl?: string
-  inputFormat?: "simplified" | "circuit-json"
-  serverMode?: "job" | "solve-endpoint"
-  serverCacheEnabled?: boolean
-  cache?: PcbRouteCache
-  groupMode?: "sequential-trace" | "subcircuit"
-  local?: boolean
-  algorithmFn?: (simpleRouteJson: any) => Promise<any>
-}
-export const autorouterConfig = z.object({
-  serverUrl: z.string().optional(),
-  inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
-  serverMode: z.enum(["job", "solve-endpoint"]).optional(),
-  serverCacheEnabled: z.boolean().optional(),
-  cache: z.custom<PcbRouteCache>((v) => true).optional(),
-  groupMode: z.enum(["sequential-trace", "subcircuit"]).optional(),
-  algorithmFn: z
-    .custom<(simpleRouteJson: any) => Promise<any>>(
-      (v) => typeof v === "function" || v === undefined,
-    )
-    .optional(),
-  local: z.boolean().optional(),
-})
-export interface SubcircuitGroupProps extends BaseGroupProps {
-  layout?: LayoutBuilder
-  manualEdits?: ManualEditsFileInput
-  routingDisabled?: boolean
-  defaultTraceWidth?: Distance
-  minTraceWidth?: Distance
-  pcbRouteCache?: PcbRouteCache
-
-  autorouter?: AutorouterProp
-
-  schAutoLayoutEnabled?: boolean
-
-  schTraceAutoLabelEnabled?: boolean
-
-  partsEngine?: PartsEngine
-}
-/**
-   * If true, net labels will automatically be created for complex traces
-   */
-export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
-  subcircuit: true
-}
-export interface NonSubcircuitGroupProps extends BaseGroupProps {
-  subcircuit?: false | undefined
-}
-export const baseGroupProps = commonLayoutProps.extend({
-  name: z.string().optional(),
-  children: z.any().optional(),
-  key: z.any().optional(),
-
-  ...layoutConfig.shape,
-  pcbWidth: length.optional(),
-  pcbHeight: length.optional(),
-  schWidth: length.optional(),
-  schHeight: length.optional(),
-  pcbLayout: layoutConfig.optional(),
-  schLayout: layoutConfig.optional(),
-  cellBorder: border.optional(),
-  border: border.optional(),
-})
-export const subcircuitGroupProps = baseGroupProps.extend({
-  layout: z.custom<LayoutBuilder>((v) => true).optional(),
-  manualEdits: manual_edits_file.optional(),
-  schAutoLayoutEnabled: z.boolean().optional(),
-  schTraceAutoLabelEnabled: z.boolean().optional(),
-  routingDisabled: z.boolean().optional(),
-  defaultTraceWidth: length.optional(),
-  minTraceWidth: length.optional(),
-  partsEngine: partsEngine.optional(),
-  pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
-  autorouter: autorouterProp.optional(),
-})
-export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
-  subcircuit: z.literal(true),
-})
-```
-
-### crystal
-
-```typescript
-export interface CrystalProps extends CommonComponentProps {
-  frequency: number | string
-  loadCapacitance: number | string
-  pinVariant?: PinVariant
-}
-export const crystalProps = commonComponentProps.extend({
-  frequency: frequency,
-  loadCapacitance: capacitance,
-  pinVariant: z.enum(["two_pin", "four_pin"]).optional(),
-})
-```
-
 ### hole
 
 ```typescript
@@ -1621,6 +945,208 @@ export const holeProps = pcbLayoutProps
     name: z.string().optional(),
     diameter: distance.optional(),
     radius: distance.optional(),
+  })
+```
+
+### diode
+
+```typescript
+.extend({
+    connections: connectionsProp.optional(),
+    variant: diodeVariant.optional().default("standard"),
+    standard: z.boolean().optional(),
+    schottky: z.boolean().optional(),
+    zener: z.boolean().optional(),
+    photo: z.boolean().optional(),
+    tvs: z.boolean().optional(),
+  })
+export interface DiodeProps extends CommonComponentProps {
+  connections?: {
+    anode?: string | string[] | readonly string[]
+    cathode?: string | string[] | readonly string[]
+    pin1?: string | string[] | readonly string[]
+    pin2?: string | string[] | readonly string[]
+    pos?: string | string[] | readonly string[]
+    neg?: string | string[] | readonly string[]
+  }
+  variant?: "standard" | "schottky" | "zener" | "photo" | "tvs"
+  standard?: boolean
+  schottky?: boolean
+  zener?: boolean
+  photo?: boolean
+  tvs?: boolean
+}
+```
+
+### netalias
+
+```typescript
+/**
+ * @deprecated Use NetLabelProps instead.
+ */
+export interface NetAliasProps {
+  net?: string
+  connection?: string
+  schX?: number | string
+  schY?: number | string
+  schRotation?: number | string
+  anchorSide?: "left" | "up" | "right" | "down"
+}
+/** @deprecated Use netLabelProps instead. */
+export const netAliasProps = z.object({
+  net: z.string().optional(),
+  connection: z.string().optional(),
+  schX: distance.optional(),
+  schY: distance.optional(),
+  schRotation: rotation.optional(),
+  anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
+})
+```
+
+### breakoutpoint
+
+```typescript
+export interface BreakoutPointProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  connection: string
+}
+export const breakoutPointProps = pcbLayoutProps
+  .omit({ pcbRotation: true, layer: true })
+  .extend({
+    connection: z.string(),
+  })
+```
+
+### trace-hint
+
+```typescript
+export const routeHintPointProps = z.object({
+  x: distance,
+  y: distance,
+  via: z.boolean().optional(),
+  toLayer: layer_ref.optional(),
+})
+export const traceHintProps = z.object({
+  for: z
+    .string()
+    .optional()
+    .describe(
+      "Selector for the port you're targeting, not required if you're inside a trace",
+    ),
+  order: z.number().optional(),
+  offset: route_hint_point.or(routeHintPointProps).optional(),
+  offsets: z
+    .array(route_hint_point)
+    .or(z.array(routeHintPointProps))
+    .optional(),
+  traceWidth: z.number().optional(),
+})
+```
+
+### switch
+
+```typescript
+export interface SwitchProps extends CommonComponentProps {
+  type?: "spst" | "spdt" | "dpst" | "dpdt"
+  isNormallyClosed?: boolean
+  spdt?: boolean
+  spst?: boolean
+  dpst?: boolean
+  dpdt?: boolean
+}
+.extend({
+    type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
+    isNormallyClosed: z.boolean().optional().default(false),
+    spst: z.boolean().optional(),
+    spdt: z.boolean().optional(),
+    dpst: z.boolean().optional(),
+    dpdt: z.boolean().optional(),
+  })
+```
+
+### fabrication-note-text
+
+```typescript
+export const fabricationNoteTextProps = pcbLayoutProps.extend({
+  text: z.string(),
+  anchorAlignment: z
+    .enum(["center", "top_left", "top_right", "bottom_left", "bottom_right"])
+    .default("center"),
+  font: z.enum(["tscircuit2024"]).optional(),
+  fontSize: length.optional(),
+  color: z.string().optional(),
+})
+```
+
+### board
+
+```typescript
+export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  width?: number | string
+  height?: number | string
+  outline?: Point[]
+  outlineOffsetX?: number | string
+  outlineOffsetY?: number | string
+  material?: "fr4" | "fr1"
+}
+export const boardProps = subcircuitGroupProps.extend({
+  width: distance.optional(),
+  height: distance.optional(),
+  outline: z.array(point).optional(),
+  outlineOffsetX: distance.optional(),
+  outlineOffsetY: distance.optional(),
+  material: z.enum(["fr4", "fr1"]).default("fr4"),
+})
+```
+
+### capacitor
+
+```typescript
+export const capacitorPinLabels = [
+  "pin1",
+  "pin2",
+  "pos",
+  "neg",
+  "anode",
+  "cathode",
+] as const
+export interface CapacitorProps extends CommonComponentProps {
+  capacitance: number | string
+  maxVoltageRating?: number | string
+  schShowRatings?: boolean
+  polarized?: boolean
+  decouplingFor?: string
+  decouplingTo?: string
+  bypassFor?: string
+  bypassTo?: string
+  maxDecouplingTraceLength?: number
+  connections?: Connections<CapacitorPinLabels>
+}
+export const capacitorProps = commonComponentProps.extend({
+  capacitance,
+  maxVoltageRating: voltage.optional(),
+  schShowRatings: z.boolean().optional().default(false),
+  polarized: z.boolean().optional().default(false),
+  decouplingFor: z.string().optional(),
+  decouplingTo: z.string().optional(),
+  bypassFor: z.string().optional(),
+  bypassTo: z.string().optional(),
+  maxDecouplingTraceLength: z.number().optional(),
+  connections: createConnectionsProp(capacitorPinLabels).optional(),
+})
+```
+
+### silkscreen-line
+
+```typescript
+export const silkscreenLineProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    strokeWidth: distance,
+    x1: distance,
+    y1: distance,
+    x2: distance,
+    y2: distance,
   })
 ```
 
@@ -1703,6 +1229,449 @@ export const pcbSameXConstraintProps = z.object({
 })
 ```
 
+### mosfet
+
+```typescript
+export interface MosfetProps extends CommonComponentProps {
+  channelType: "n" | "p"
+  mosfetMode: "enhancement" | "depletion"
+}
+export const mosfetProps = commonComponentProps.extend({
+  channelType: z.enum(["n", "p"]),
+  mosfetMode: z.enum(["enhancement", "depletion"]),
+})
+export const mosfetPins = [
+  "pin1",
+  "drain",
+  "pin2",
+  "source",
+  "pin3",
+  "gate",
+] as const
+```
+
+### jumper
+
+```typescript
+export interface JumperProps extends CommonComponentProps {
+  manufacturerPartNumber?: string
+  pinLabels?: Record<number | string, string | string[]>
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
+  pinCount?: 2 | 3
+  internallyConnectedPins?: string[][]
+}
+/**
+   * Groups of pins that are internally connected (bridged)
+   * e.g., [["1","2"], ["2","3"]]
+   */
+export const jumperProps = commonComponentProps.extend({
+  manufacturerPartNumber: z.string().optional(),
+  pinLabels: z
+    .record(z.number().or(z.string()), z.string().or(z.array(z.string())))
+    .optional(),
+  schPinStyle: schematicPinStyle.optional(),
+  schPinSpacing: distance.optional(),
+  schWidth: distance.optional(),
+  schHeight: distance.optional(),
+  schDirection: z.enum(["left", "right"]).optional(),
+  schPortArrangement: schematicPortArrangement.optional(),
+  pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
+  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+})
+```
+
+### silkscreen-text
+
+```typescript
+export const silkscreenTextProps = pcbLayoutProps.extend({
+  text: z.string(),
+  anchorAlignment: ninePointAnchor.default("center"),
+  font: z.enum(["tscircuit2024"]).optional(),
+  fontSize: length.optional(),
+})
+```
+
+### transistor
+
+```typescript
+export interface TransistorProps extends CommonComponentProps {
+  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet"
+}
+export const transistorProps = commonComponentProps.extend({
+  type: z.enum(["npn", "pnp", "bjt", "jfet", "mosfet"]),
+})
+export const transistorPins = [
+  "pin1",
+  "emitter",
+  "pin2",
+  "collector",
+  "pin3",
+  "base",
+] as const
+```
+
+### solderjumper
+
+```typescript
+export interface SolderJumperProps extends JumperProps {
+  bridgedPins?: string[][]
+}
+/**
+   * Pins that are bridged with solder by default
+   */
+export const solderjumperProps = jumperProps.extend({
+  bridgedPins: z.array(z.array(z.string())).optional(),
+})
+```
+
+### via
+
+```typescript
+export const viaProps = commonLayoutProps.extend({
+  fromLayer: layer_ref,
+  toLayer: layer_ref,
+  holeDiameter: distance,
+  outerDiameter: distance,
+})
+```
+
+### smtpad
+
+```typescript
+export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rect"
+  width: Distance
+  height: Distance
+  portHints?: PortHints
+}
+export interface RotatedRectSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rotated_rect"
+  width: Distance
+  height: Distance
+  ccwRotation: number
+  portHints?: PortHints
+}
+export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "circle"
+  radius: Distance
+  portHints?: PortHints
+}
+export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "pill"
+  width: Distance
+  height: Distance
+  radius: Distance
+  portHints?: PortHints
+}
+export interface PolygonSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "polygon"
+  points: Point[]
+  portHints?: PortHints
+}
+export const rectSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("rect"),
+    width: distance,
+    height: distance,
+    portHints: portHints.optional(),
+  })
+export const rotatedRectSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("rotated_rect"),
+    width: distance,
+    height: distance,
+    ccwRotation: z.number(),
+    portHints: portHints.optional(),
+  })
+export const circleSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("circle"),
+    radius: distance,
+    portHints: portHints.optional(),
+  })
+export const pillSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("pill"),
+    width: distance,
+    height: distance,
+    radius: distance,
+    portHints: portHints.optional(),
+  })
+export const polygonSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    shape: z.literal("polygon"),
+    points: z.array(point),
+    portHints: portHints.optional(),
+  })
+```
+
+### schematic-box
+
+```typescript
+export const schematicBoxProps = z
+  .object({
+    schX: distance,
+    schY: distance,
+    width: distance.optional(),
+    height: distance.optional(),
+    overlay: z.array(z.string()).optional(),
+
+    padding: distance.optional(),
+    paddingLeft: distance.optional(),
+    paddingRight: distance.optional(),
+    paddingTop: distance.optional(),
+    paddingBottom: distance.optional(),
+
+    title: z.string().optional(),
+    titleAlignment: ninePointAnchor.default("center"),
+    titleColor: z.string().optional(),
+    titleFontSize: distance.optional(),
+    titleInside: z.boolean().default(false),
+    strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
+  })
+```
+
+### schematic-text
+
+```typescript
+export const schematicTextProps = z.object({
+  schX: distance,
+  schY: distance,
+  text: z.string(),
+  fontSize: z.number().default(1),
+  anchor: z
+    .union([fivePointAnchor.describe("legacy"), ninePointAnchor])
+    .default("center"),
+  color: z.string().default("#000000"),
+  schRotation: rotation.default(0),
+})
+```
+
+### silkscreen-path
+
+```typescript
+export const silkscreenPathProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    route: z.array(route_hint_point),
+    strokeWidth: length.optional(),
+  })
+```
+
+### led
+
+```typescript
+export const ledProps = commonComponentProps.extend({
+  color: z.string().optional(),
+  wavelength: z.string().optional(),
+  schDisplayValue: z.string().optional(),
+})
+```
+
+### silkscreen-circle
+
+```typescript
+export const silkscreenCircleProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    isFilled: z.boolean().optional(),
+    isOutline: z.boolean().optional(),
+    strokeWidth: distance.optional(),
+    radius: distance,
+  })
+```
+
+### power-source
+
+```typescript
+export const powerSourceProps = commonComponentProps.extend({
+  voltage,
+})
+```
+
+### group
+
+```typescript
+export const layoutConfig = z.object({
+  layoutMode: z.enum(["grid", "flex", "match-adapt", "none"]).optional(),
+  position: z.enum(["absolute", "relative"]).optional(),
+
+  grid: z.boolean().optional(),
+  gridCols: z.number().or(z.string()).optional(),
+  gridRows: z.number().or(z.string()).optional(),
+  gridTemplateRows: z.string().optional(),
+  gridTemplateColumns: z.string().optional(),
+  gridTemplate: z.string().optional(),
+  gridGap: z.number().or(z.string()).optional(),
+
+  flex: z.boolean().or(z.string()).optional(),
+  flexDirection: z.enum(["row", "column"]).optional(),
+  alignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
+  justifyContent: z.enum(["start", "center", "end", "stretch"]).optional(),
+  flexRow: z.boolean().optional(),
+  flexColumn: z.boolean().optional(),
+  gap: z.number().or(z.string()).optional(),
+
+  width: length.optional(),
+  height: length.optional(),
+
+  matchAdapt: z.boolean().optional(),
+  matchAdaptTemplate: z.any().optional(),
+})
+export interface LayoutConfig {
+  layoutMode?: "grid" | "flex" | "match-adapt" | "none"
+  position?: "absolute" | "relative"
+
+  grid?: boolean
+  gridCols?: number | string
+  gridRows?: number | string
+  gridTemplateRows?: string
+  gridTemplateColumns?: string
+  gridTemplate?: string
+  gridGap?: number | string
+
+  flex?: boolean | string
+  flexDirection?: "row" | "column"
+  alignItems?: "start" | "center" | "end" | "stretch"
+  justifyContent?: "start" | "center" | "end" | "stretch"
+  flexRow?: boolean
+  flexColumn?: boolean
+  gap?: number | string
+
+  width?: Distance
+  height?: Distance
+
+  matchAdapt?: boolean
+  matchAdaptTemplate?: any
+}
+export interface Border {
+  strokeWidth?: Distance
+  dashed?: boolean
+  solid?: boolean
+}
+export const border = z.object({
+  strokeWidth: length.optional(),
+  dashed: z.boolean().optional(),
+  solid: z.boolean().optional(),
+})
+export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
+  name?: string
+  key?: any
+  children?: any
+
+  pcbWidth?: Distance
+  pcbHeight?: Distance
+  schWidth?: Distance
+  schHeight?: Distance
+
+  pcbLayout?: LayoutConfig
+  schLayout?: LayoutConfig
+  cellBorder?: Border | null
+  border?: Border | null
+}
+export type PartsEngine = {
+  findPart: (params: {
+    sourceComponent: AnySourceComponent
+    footprinterString?: string
+  }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+}
+export interface PcbRouteCache {
+  pcbTraces: PcbTrace[]
+  cacheKey: string
+}
+export interface AutorouterConfig {
+  serverUrl?: string
+  inputFormat?: "simplified" | "circuit-json"
+  serverMode?: "job" | "solve-endpoint"
+  serverCacheEnabled?: boolean
+  cache?: PcbRouteCache
+  groupMode?: "sequential-trace" | "subcircuit"
+  local?: boolean
+  algorithmFn?: (simpleRouteJson: any) => Promise<any>
+}
+export const autorouterConfig = z.object({
+  serverUrl: z.string().optional(),
+  inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
+  serverMode: z.enum(["job", "solve-endpoint"]).optional(),
+  serverCacheEnabled: z.boolean().optional(),
+  cache: z.custom<PcbRouteCache>((v) => true).optional(),
+  groupMode: z.enum(["sequential-trace", "subcircuit"]).optional(),
+  algorithmFn: z
+    .custom<(simpleRouteJson: any) => Promise<any>>(
+      (v) => typeof v === "function" || v === undefined,
+    )
+    .optional(),
+  local: z.boolean().optional(),
+})
+export interface SubcircuitGroupProps extends BaseGroupProps {
+  layout?: LayoutBuilder
+  manualEdits?: ManualEditsFileInput
+  routingDisabled?: boolean
+  defaultTraceWidth?: Distance
+  minTraceWidth?: Distance
+  pcbRouteCache?: PcbRouteCache
+
+  autorouter?: AutorouterProp
+
+  schAutoLayoutEnabled?: boolean
+
+  schTraceAutoLabelEnabled?: boolean
+
+  partsEngine?: PartsEngine
+}
+/**
+   * If true, net labels will automatically be created for complex traces
+   */
+export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
+  subcircuit: true
+}
+export interface NonSubcircuitGroupProps extends BaseGroupProps {
+  subcircuit?: false | undefined
+}
+export const baseGroupProps = commonLayoutProps.extend({
+  name: z.string().optional(),
+  children: z.any().optional(),
+  key: z.any().optional(),
+
+  ...layoutConfig.shape,
+  pcbWidth: length.optional(),
+  pcbHeight: length.optional(),
+  schWidth: length.optional(),
+  schHeight: length.optional(),
+  pcbLayout: layoutConfig.optional(),
+  schLayout: layoutConfig.optional(),
+  cellBorder: border.nullable().optional(),
+  border: border.nullable().optional(),
+})
+export const subcircuitGroupProps = baseGroupProps.extend({
+  layout: z.custom<LayoutBuilder>((v) => true).optional(),
+  manualEdits: manual_edits_file.optional(),
+  schAutoLayoutEnabled: z.boolean().optional(),
+  schTraceAutoLabelEnabled: z.boolean().optional(),
+  routingDisabled: z.boolean().optional(),
+  defaultTraceWidth: length.optional(),
+  minTraceWidth: length.optional(),
+  partsEngine: partsEngine.optional(),
+  pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
+  autorouter: autorouterProp.optional(),
+})
+export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
+  subcircuit: z.literal(true),
+})
+```
+
 ### stampboard
 
 ```typescript
@@ -1729,6 +1698,37 @@ export const stampboardProps = boardProps.extend({
   bottomPins: z.array(z.string()).optional(),
   pinPitch: distance.optional(),
   innerHoles: z.boolean().optional(),
+})
+```
+
+### pcb-trace
+
+```typescript
+export const pcbTraceProps = z.object({
+  layer: z.string().optional(),
+  thickness: distance.optional(),
+  route: z.array(route_hint_point),
+})
+```
+
+### footprint
+
+```typescript
+export interface FootprintProps {
+  originalLayer?: LayerRef
+}
+/**
+   * The layer that the footprint is designed for. If you set this to "top"
+   * then it means the children were intended to represent the top layer. If
+   * the <chip /> with this footprint is moved to the bottom layer, then the
+   * components will be mirrored.
+   *
+   * Generally, you shouldn't set this except where it can help prevent
+   * confusion because you have a complex multi-layer footprint. Default is
+   * "top" and this is most intuitive.
+   */
+export const footprintProps = z.object({
+  originalLayer: layer_ref.default("top").optional(),
 })
 ```
 

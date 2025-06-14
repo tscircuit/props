@@ -97,6 +97,11 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schLayout?: LayoutConfig
   cellBorder?: Border | null
   border?: Border | null
+  schPadding?: Distance
+  schPaddingLeft?: Distance
+  schPaddingRight?: Distance
+  schPaddingTop?: Distance
+  schPaddingBottom?: Distance
 }
 
 export type PartsEngine = {
@@ -203,6 +208,11 @@ export const baseGroupProps = commonLayoutProps.extend({
   schLayout: layoutConfig.optional(),
   cellBorder: border.nullable().optional(),
   border: border.nullable().optional(),
+  schPadding: length.optional(),
+  schPaddingLeft: length.optional(),
+  schPaddingRight: length.optional(),
+  schPaddingTop: length.optional(),
+  schPaddingBottom: length.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

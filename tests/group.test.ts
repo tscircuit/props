@@ -48,3 +48,15 @@ test("should allow null for border", () => {
   const parsed = baseGroupProps.parse(raw)
   expect(parsed.border).toBeNull()
 })
+
+test("should parse schPadding", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    schPadding: "1mm",
+    schPaddingLeft: 2,
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.schPadding).toBe(1)
+  expect(parsed.schPaddingLeft).toBe(2)
+})

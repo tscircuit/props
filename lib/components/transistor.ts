@@ -6,11 +6,11 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface TransistorProps extends CommonComponentProps {
-  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet"
+  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
 }
 
 export const transistorProps = commonComponentProps.extend({
-  type: z.enum(["npn", "pnp", "bjt", "jfet", "mosfet"]),
+  type: z.enum(["npn", "pnp", "bjt", "jfet", "mosfet", "igbt"]),
 })
 
 export const transistorPins = [

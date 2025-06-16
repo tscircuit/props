@@ -19,5 +19,5 @@ export type FootprintSoupElements = {
   portHints?: string[]
 }
 
-export type Footprint = string | ReactElement | FootprintSoupElements[]
-export const footprintProp = z.custom<Footprint>((v) => true)
+export type FootprintProp = string | ReactElement | FootprintSoupElements[]
+export const footprintProp = z.custom<FootprintProp>((v) => true)

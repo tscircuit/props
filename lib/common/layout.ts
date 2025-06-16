@@ -8,7 +8,7 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
-import { type Footprint, footprintProp } from "./footprintProp"
+import { type FootprintProp, footprintProp } from "./footprintProp"
 
 export interface PcbLayoutProps {
   pcbX?: string | number
@@ -27,7 +27,7 @@ export interface CommonLayoutProps {
   schRotation?: string | number
 
   layer?: LayerRefInput
-  footprint?: Footprint
+  footprint?: FootprintProp
 }
 
 export const pcbLayoutProps = z.object({

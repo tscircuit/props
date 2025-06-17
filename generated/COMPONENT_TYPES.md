@@ -534,7 +534,7 @@ export interface NetLabelProps {
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
-  anchorSide?: "left" | "up" | "right" | "down"
+  anchorSide?: "left" | "top" | "right" | "bottom"
 }
 export const netLabelProps = z.object({
   net: z.string().optional(),
@@ -542,7 +542,7 @@ export const netLabelProps = z.object({
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),
-  anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
+  anchorSide: z.enum(["left", "top", "right", "bottom"]).optional(),
 })
 ```
 
@@ -990,7 +990,7 @@ export interface NetAliasProps {
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
-  anchorSide?: "left" | "up" | "right" | "down"
+  anchorSide?: "left" | "top" | "right" | "bottom"
 }
 /** @deprecated Use netLabelProps instead. */
 export const netAliasProps = z.object({
@@ -999,7 +999,7 @@ export const netAliasProps = z.object({
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),
-  anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
+  anchorSide: z.enum(["left", "top", "right", "bottom"]).optional(),
 })
 ```
 

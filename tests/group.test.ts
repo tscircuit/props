@@ -60,3 +60,19 @@ test("should parse schPadding", () => {
   expect(parsed.schPadding).toBe(1)
   expect(parsed.schPaddingLeft).toBe(2)
 })
+
+test("should parse layout padding", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    padding: "1mm",
+    paddingLeft: "0.5mm",
+    paddingX: "2mm",
+    paddingY: 1,
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.padding).toBe(1)
+  expect(parsed.paddingLeft).toBe(0.5)
+  expect(parsed.paddingX).toBe(2)
+  expect(parsed.paddingY).toBe(1)
+})

@@ -468,7 +468,7 @@ export interface NetAliasProps {
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
-  anchorSide?: "left" | "up" | "right" | "down"
+  anchorSide?: "left" | "top" | "right" | "bottom"
 }
 ```
 
@@ -484,7 +484,7 @@ export interface NetLabelProps {
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
-  anchorSide?: "left" | "up" | "right" | "down"
+  anchorSide?: "left" | "top" | "right" | "bottom"
 }
 ```
 

@@ -9,7 +9,7 @@ export interface NetLabelProps {
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
-  anchorSide?: "left" | "up" | "right" | "down"
+  anchorSide?: "left" | "top" | "right" | "bottom"
 }
 
 export const netLabelProps = z.object({
@@ -18,7 +18,7 @@ export const netLabelProps = z.object({
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),
-  anchorSide: z.enum(["left", "up", "right", "down"]).optional(),
+  anchorSide: z.enum(["left", "top", "right", "bottom"]).optional(),
 })
 
 type InferredNetLabelProps = z.input<typeof netLabelProps>

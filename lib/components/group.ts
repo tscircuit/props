@@ -35,6 +35,14 @@ export const layoutConfig = z.object({
   flexColumn: z.boolean().optional(),
   gap: z.number().or(z.string()).optional(),
 
+  padding: length.optional(),
+  paddingLeft: length.optional(),
+  paddingRight: length.optional(),
+  paddingTop: length.optional(),
+  paddingBottom: length.optional(),
+  paddingX: length.optional(),
+  paddingY: length.optional(),
+
   width: length.optional(),
   height: length.optional(),
 
@@ -61,6 +69,14 @@ export interface LayoutConfig {
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string
+
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+  paddingX?: Distance
+  paddingY?: Distance
 
   width?: Distance
   height?: Distance

@@ -6,6 +6,7 @@ import { rotation } from "circuit-json"
 export interface NetLabelProps {
   net?: string
   connection?: string
+  connectsTo?: string | string[]
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
@@ -15,6 +16,7 @@ export interface NetLabelProps {
 export const netLabelProps = z.object({
   net: z.string().optional(),
   connection: z.string().optional(),
+  connectsTo: z.string().or(z.array(z.string())).optional(),
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),

@@ -34,6 +34,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<fuse />` | [`FuseProps`](#fuseprops-fuse) |
 | `<group />` | [`BaseGroupProps`](#basegroupprops-group) |
 | `<hole />` | [`HoleProps`](#holeprops-hole) |
+| `<inductor />` | [`InductorProps`](#inductorprops-inductor) |
 | `<jumper />` | [`JumperProps`](#jumperprops-jumper) |
 | `<mosfet />` | [`MosfetProps`](#mosfetprops-mosfet) |
 | `<net />` | [`NetProps`](#netprops-net) |
@@ -390,6 +391,11 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schLayout?: LayoutConfig
   cellBorder?: Border | null
   border?: Border | null
+  schPadding?: Distance
+  schPaddingLeft?: Distance
+  schPaddingRight?: Distance
+  schPaddingTop?: Distance
+  schPaddingBottom?: Distance
 }
 ```
 
@@ -407,6 +413,18 @@ export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
+
+
+### InductorProps `<inductor />`
+
+```ts
+export interface InductorProps extends CommonComponentProps {
+  inductance: number | string
+  maxCurrentRating?: number | string
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/inductor.ts)
 
 
 ### JumperProps `<jumper />`
@@ -481,6 +499,7 @@ export interface NetAliasProps {
 export interface NetLabelProps {
   net?: string
   connection?: string
+  connectsTo?: string | string[]
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
@@ -733,7 +752,7 @@ export interface TestpointProps extends CommonComponentProps {
 
 ```ts
 export interface TransistorProps extends CommonComponentProps {
-  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet"
+  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
 }
 ```
 

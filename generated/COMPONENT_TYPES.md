@@ -995,7 +995,7 @@ export interface JumperProps extends CommonComponentProps {
   internallyConnectedPins?: string[][]
 }
 /**
-   * Groups of pins that are internally connected (bridged)
+   * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
 export const jumperProps = commonComponentProps.extend({
@@ -1155,9 +1155,17 @@ export interface PinHeaderProps extends CommonComponentProps {
   facingDirection?: "left" | "right"
 
   schPinArrangement?: SchematicPinArrangement
+
+  schPinStyle?: SchematicPinStyle
+
+  schPinSpacing?: number | string
+
+  schWidth?: number | string
+
+  schHeight?: number | string
 }
 /**
-   * Pin arrangement in schematic view
+   * Schematic height
    */
 export const pinHeaderProps = commonComponentProps.extend({
   pinCount: z.number(),
@@ -1175,6 +1183,10 @@ export const pinHeaderProps = commonComponentProps.extend({
     .optional(),
   facingDirection: z.enum(["left", "right"]).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
+  schPinStyle: schematicPinStyle.optional(),
+  schPinSpacing: distance.optional(),
+  schWidth: distance.optional(),
+  schHeight: distance.optional(),
 })
 ```
 
@@ -1382,8 +1394,8 @@ export const resonatorProps = commonComponentProps.extend({
 ```typescript
 export const schematicBoxProps = z
   .object({
-    schX: distance,
-    schY: distance,
+    schX: distance.optional(),
+    schY: distance.optional(),
     width: distance.optional(),
     height: distance.optional(),
     overlay: z.array(z.string()).optional(),
@@ -1428,8 +1440,8 @@ export const schematicPathProps = z.object({
 
 ```typescript
 export const schematicTextProps = z.object({
-  schX: distance,
-  schY: distance,
+  schX: distance.optional(),
+  schY: distance.optional(),
   text: z.string(),
   fontSize: z.number().default(1),
   anchor: z

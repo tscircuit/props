@@ -24,7 +24,7 @@ export interface ConnectorProps extends CommonComponentProps {
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
   /**
-   * Groups of pins that are internally connected (bridged)
+   * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
   internallyConnectedPins?: string[][]

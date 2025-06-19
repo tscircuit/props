@@ -245,7 +245,7 @@ export interface ConnectorProps extends CommonComponentProps {
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
   /**
-   * Groups of pins that are internally connected (bridged)
+   * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
   internallyConnectedPins?: string[][]
@@ -444,7 +444,7 @@ export interface JumperProps extends CommonComponentProps {
    */
   pinCount?: 2 | 3
   /**
-   * Groups of pins that are internally connected (bridged)
+   * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
   internallyConnectedPins?: string[][]
@@ -573,6 +573,26 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Pin arrangement in schematic view
    */
   schPinArrangement?: SchematicPinArrangement
+
+  /**
+   * Schematic pin style (margins, etc)
+   */
+  schPinStyle?: SchematicPinStyle
+
+  /**
+   * Schematic pin spacing
+   */
+  schPinSpacing?: number | string
+
+  /**
+   * Schematic width
+   */
+  schWidth?: number | string
+
+  /**
+   * Schematic height
+   */
+  schHeight?: number | string
 }
 ```
 

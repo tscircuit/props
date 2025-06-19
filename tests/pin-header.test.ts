@@ -47,3 +47,36 @@ test("should allow optional connections", () => {
   const parsed = pinHeaderProps.parse(rawProps)
   expect(parsed.connections).toBeUndefined()
 })
+
+test("should snapshot schematic props for pin header", () => {
+  const rawProps: PinHeaderProps = {
+    name: "header",
+    pinCount: 4,
+    schWidth: 10,
+    schHeight: 5,
+    schPinSpacing: "0.2in",
+    schPinStyle: {
+      "1": { marginTop: "0.1in" },
+      "2": { marginBottom: "0.1in" },
+    },
+  }
+  const parsed = pinHeaderProps.parse(rawProps)
+  expect(parsed).toMatchInlineSnapshot(`
+    {
+      "gender": "male",
+      "name": "header",
+      "pinCount": 4,
+      "schHeight": 5,
+      "schPinSpacing": 5.08,
+      "schPinStyle": {
+        "1": {
+          "marginTop": 2.54,
+        },
+        "2": {
+          "marginBottom": 2.54,
+        },
+      },
+      "schWidth": 10,
+    }
+  `)
+})

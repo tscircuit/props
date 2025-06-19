@@ -4,8 +4,8 @@ import { ninePointAnchor } from "lib/common/ninePointAnchor"
 
 export const schematicBoxProps = z
   .object({
-    schX: distance,
-    schY: distance,
+    schX: distance.optional(),
+    schY: distance.optional(),
     width: distance.optional(),
     height: distance.optional(),
     overlay: z.array(z.string()).optional(),

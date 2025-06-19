@@ -4,8 +4,8 @@ import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { fivePointAnchor } from "lib/common/fivePointAnchor"
 
 export const schematicTextProps = z.object({
-  schX: distance,
-  schY: distance,
+  schX: distance.optional(),
+  schY: distance.optional(),
   text: z.string(),
   fontSize: z.number().default(1),
   anchor: z

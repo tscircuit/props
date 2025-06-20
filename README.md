@@ -448,6 +448,10 @@ export interface JumperProps extends CommonComponentProps {
    * e.g., [["1","2"], ["2","3"]]
    */
   internallyConnectedPins?: string[][]
+  /**
+   * Connections to other components
+   */
+  connections?: Connections<string>
 }
 ```
 

@@ -77,3 +77,44 @@ test("should fail for invalid internallyConnectedPins (not an array of arrays)",
     }),
   ).toThrow()
 })
+
+test("should parse jumper props with single string connections", () => {
+  const rawProps: JumperProps = {
+    name: "jumper",
+    pinCount: 2,
+    connections: {
+      1: "net.VCC",
+      2: "net.GND",
+    },
+  }
+  const parsed = jumperProps.parse(rawProps)
+  expect(parsed.connections).toEqual({
+    1: "net.VCC",
+    2: "net.GND",
+  })
+})
+
+test("should parse jumper props with array connections", () => {
+  const rawProps: JumperProps = {
+    name: "jumper",
+    pinCount: 3,
+    connections: {
+      1: ["net.VCC", "net.POWER"],
+      2: ["net.GND"],
+    },
+  }
+  const parsed = jumperProps.parse(rawProps)
+  expect(parsed.connections).toEqual({
+    1: ["net.VCC", "net.POWER"],
+    2: ["net.GND"],
+  })
+})
+
+test("should allow optional connections", () => {
+  const rawProps: JumperProps = {
+    name: "jumper",
+    pinCount: 2,
+  }
+  const parsed = jumperProps.parse(rawProps)
+  expect(parsed.connections).toBeUndefined()
+})

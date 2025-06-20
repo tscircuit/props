@@ -993,10 +993,10 @@ export interface JumperProps extends CommonComponentProps {
   schPortArrangement?: SchematicPortArrangement
   pinCount?: 2 | 3
   internallyConnectedPins?: string[][]
+  connections?: Connections<string>
 }
 /**
-   * Groups of pins that are internally connected
-   * e.g., [["1","2"], ["2","3"]]
+   * Connections to other components
    */
 export const jumperProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
@@ -1011,6 +1011,10 @@ export const jumperProps = commonComponentProps.extend({
   schPortArrangement: schematicPortArrangement.optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  connections: z
+    .custom<Connections>()
+    .pipe(z.record(z.string(), connectionTarget))
+    .optional(),
 })
 ```
 

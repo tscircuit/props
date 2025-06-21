@@ -199,11 +199,13 @@ export interface PCBKeepout {
 export interface PcbVia {
   type: "pcb_via"
   pcb_via_id: string
+  name?: string
   x: Distance
   y: Distance
   outer_diameter: Distance
   hole_diameter: Distance
   layers: LayerRef[]
+  connects_to?: string | string[]
   pcb_trace_id?: string
 }
 
@@ -237,6 +239,7 @@ export interface PcbSmtPadCircle {
   type: "pcb_smtpad"
   shape: "circle"
   pcb_smtpad_id: string
+  name?: string
   x: Distance
   y: Distance
   radius: number
@@ -250,6 +253,7 @@ export interface PcbSmtPadRect {
   type: "pcb_smtpad"
   shape: "rect"
   pcb_smtpad_id: string
+  name?: string
   x: Distance
   y: Distance
   width: number

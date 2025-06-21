@@ -1557,6 +1557,7 @@ export interface PolygonSmtPadProps
 export const rectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("rect"),
     width: distance,
     height: distance,
@@ -1565,6 +1566,7 @@ export const rectSmtPadProps = pcbLayoutProps
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("rotated_rect"),
     width: distance,
     height: distance,
@@ -1574,6 +1576,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("circle"),
     radius: distance,
     portHints: portHints.optional(),
@@ -1581,6 +1584,7 @@ export const circleSmtPadProps = pcbLayoutProps
 export const pillSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("pill"),
     width: distance,
     height: distance,
@@ -1590,6 +1594,7 @@ export const pillSmtPadProps = pcbLayoutProps
 export const polygonSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("polygon"),
     points: z.array(point),
     portHints: portHints.optional(),
@@ -1774,10 +1779,12 @@ export const transistorPins = [
 
 ```typescript
 export const viaProps = commonLayoutProps.extend({
+  name: z.string().optional(),
   fromLayer: layer_ref,
   toLayer: layer_ref,
   holeDiameter: distance,
   outerDiameter: distance,
+  connectsTo: z.string().or(z.array(z.string())).optional(),
 })
 ```
 

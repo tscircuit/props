@@ -10,6 +10,7 @@ import { point, type Point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "rect"
   width: Distance
   height: Distance
@@ -18,6 +19,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "rotated_rect"
   width: Distance
   height: Distance
@@ -26,12 +28,14 @@ export interface RotatedRectSmtPadProps
 }
 
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "circle"
   radius: Distance
   portHints?: PortHints
 }
 
 export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "pill"
   width: Distance
   height: Distance
@@ -41,6 +45,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 
 export interface PolygonSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "polygon"
   points: Point[]
   portHints?: PortHints
@@ -60,6 +65,7 @@ export type SmtPadProps =
 export const rectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("rect"),
     width: distance,
     height: distance,
@@ -71,6 +77,7 @@ expectTypesMatch<InferredRectSmtPadProps, RectSmtPadProps>(true)
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("rotated_rect"),
     width: distance,
     height: distance,
@@ -83,6 +90,7 @@ expectTypesMatch<InferredRotatedRectSmtPadProps, RotatedRectSmtPadProps>(true)
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("circle"),
     radius: distance,
     portHints: portHints.optional(),
@@ -93,6 +101,7 @@ expectTypesMatch<InferredCircleSmtPadProps, CircleSmtPadProps>(true)
 export const pillSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("pill"),
     width: distance,
     height: distance,
@@ -105,6 +114,7 @@ expectTypesMatch<InferredPillSmtPadProps, PillSmtPadProps>(true)
 export const polygonSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
+    name: z.string().optional(),
     shape: z.literal("polygon"),
     points: z.array(point),
     portHints: portHints.optional(),

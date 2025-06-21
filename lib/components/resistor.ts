@@ -5,6 +5,10 @@ import {
   commonComponentProps,
   lrPins,
 } from "lib/common/layout"
+import {
+  schematicOrientation,
+  type SchematicOrientation,
+} from "lib/common/schematicOrientation"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
@@ -18,6 +22,7 @@ export interface ResistorProps extends CommonComponentProps {
   pullupTo?: string
   pulldownFor?: string
   pulldownTo?: string
+  schOrientation?: SchematicOrientation
   connections?: Connections<ResistorPinLabels>
 }
 
@@ -29,6 +34,8 @@ export const resistorProps = commonComponentProps.extend({
 
   pulldownFor: z.string().optional(),
   pulldownTo: z.string().optional(),
+
+  schOrientation: schematicOrientation.optional(),
 
   connections: createConnectionsProp(resistorPinLabels).optional(),
 })

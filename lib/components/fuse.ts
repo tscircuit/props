@@ -3,6 +3,10 @@ import {
   type CommonComponentProps,
   commonComponentProps,
 } from "lib/common/layout"
+import {
+  schematicOrientation,
+  type SchematicOrientation,
+} from "lib/common/schematicOrientation"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 
 /**
@@ -28,6 +32,8 @@ export interface FuseProps extends CommonComponentProps {
    */
   schShowRatings?: boolean
 
+  schOrientation?: SchematicOrientation
+
   /**
    * Connections to other components
    */
@@ -41,6 +47,7 @@ export const fuseProps = commonComponentProps.extend({
   currentRating: z.union([z.number(), z.string()]),
   voltageRating: z.union([z.number(), z.string()]).optional(),
   schShowRatings: z.boolean().optional(),
+  schOrientation: schematicOrientation.optional(),
   connections: z
     .record(
       z.string(),

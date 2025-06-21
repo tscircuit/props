@@ -287,3 +287,12 @@ test("should accept variant with connections", () => {
     }
   `)
 })
+
+test("should parse schOrientation for diode", () => {
+  const raw = {
+    name: "d1",
+    schOrientation: "horizontal",
+  }
+  const parsed = diodeProps.parse(raw)
+  expect(parsed.schOrientation).toBe("horizontal")
+})

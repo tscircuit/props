@@ -5,6 +5,10 @@ import {
 } from "lib/common/layout"
 import { z } from "zod"
 import { expectTypesMatch } from "lib/typecheck"
+import {
+  schematicOrientation,
+  type SchematicOrientation,
+} from "lib/common/schematicOrientation"
 
 const diodeConnectionKeys = z.enum([
   "anode",
@@ -33,6 +37,7 @@ export const diodeProps = commonComponentProps
     zener: z.boolean().optional(),
     photo: z.boolean().optional(),
     tvs: z.boolean().optional(),
+    schOrientation: schematicOrientation.optional(),
   })
   .superRefine((data, ctx) => {
     // Check if multiple boolean flags are set directly
@@ -111,6 +116,7 @@ export interface DiodeProps extends CommonComponentProps {
   zener?: boolean
   photo?: boolean
   tvs?: boolean
+  schOrientation?: SchematicOrientation
 }
 
 export type InferredDiodeProps = z.input<typeof diodeProps>

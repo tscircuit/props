@@ -98,3 +98,24 @@ test("should parse OvalPlatedHoleProps with all required fields", () => {
     throw new Error("Expected OvalPlatedHoleProps, but got a different shape")
   }
 })
+
+test("should parse PlatedHoleProps with name and connectsTo", () => {
+  const raw: PlatedHoleProps = {
+    shape: "circle",
+    name: "H1",
+    holeDiameter: "1mm",
+    outerDiameter: "2mm",
+    connectsTo: ["net1"],
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof platedHoleProps>>()
+
+  const parsed = platedHoleProps.parse(raw)
+  if (parsed.shape === "circle") {
+    expect(parsed.name).toBe("H1")
+    expect(parsed.connectsTo).toEqual(["net1"])
+    expect(parsed.outerDiameter).toBe(2)
+  } else {
+    throw new Error("Expected CirclePlatedHoleProps, but got a different shape")
+  }
+})

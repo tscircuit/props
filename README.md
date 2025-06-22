@@ -52,6 +52,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<switch />` | [`SwitchProps`](#switchprops-switch) |
 | `<testpoint />` | [`TestpointProps`](#testpointprops-testpoint) |
 | `<transistor />` | [`TransistorProps`](#transistorprops-transistor) |
+| `<via />` | [`ViaProps`](#viaprops-via) |
 <!-- COMPONENT_TABLE_END -->
 
 <!-- USAGE_EXAMPLES_START -->
@@ -133,6 +134,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 ```ts
 export interface BatteryProps extends CommonComponentProps {
   capacity?: number | string
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -196,6 +198,7 @@ export interface CapacitorProps extends CommonComponentProps {
   bypassFor?: string
   bypassTo?: string
   maxDecouplingTraceLength?: number
+  schOrientation?: SchematicOrientation
   connections?: Connections<CapacitorPinLabels>
 }
 ```
@@ -279,6 +282,7 @@ export interface CrystalProps extends CommonComponentProps {
   frequency: number | string
   loadCapacitance: number | string
   pinVariant?: PinVariant
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -318,6 +322,7 @@ export interface DiodeProps extends CommonComponentProps {
   zener?: boolean
   photo?: boolean
   tvs?: boolean
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -363,6 +368,8 @@ export interface FuseProps extends CommonComponentProps {
    * Whether to show ratings on schematic
    */
   schShowRatings?: boolean
+
+  schOrientation?: SchematicOrientation
 
   /**
    * Connections to other components
@@ -421,6 +428,7 @@ export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 export interface InductorProps extends CommonComponentProps {
   inductance: number | string
   maxCurrentRating?: number | string
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -609,6 +617,7 @@ export interface PinHeaderProps extends CommonComponentProps {
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "circle"
   holeDiameter: number | string
   outerDiameter: number | string
@@ -640,6 +649,7 @@ export interface ResistorProps extends CommonComponentProps {
   pullupTo?: string
   pulldownFor?: string
   pulldownTo?: string
+  schOrientation?: SchematicOrientation
   connections?: Connections<ResistorPinLabels>
 }
 ```
@@ -664,6 +674,7 @@ export interface ResonatorProps extends CommonComponentProps {
 
 ```ts
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "rect"
   width: Distance
   height: Distance
@@ -781,6 +792,22 @@ export interface TransistorProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/transistor.ts)
+
+
+### ViaProps `<via />`
+
+```ts
+export interface ViaProps extends CommonLayoutProps {
+  name?: string
+  fromLayer: LayerRefInput
+  toLayer: LayerRefInput
+  holeDiameter: number | string
+  outerDiameter: number | string
+  connectsTo?: string | string[]
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/via.ts)
 
 <!-- INTERFACE_DEFINITIONS_END -->
 

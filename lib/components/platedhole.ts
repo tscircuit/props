@@ -8,6 +8,7 @@ import { z } from "zod"
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "circle"
   holeDiameter: number | string
   outerDiameter: number | string
@@ -17,6 +18,7 @@ export interface CirclePlatedHoleProps
 export interface OvalPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "oval"
   outerWidth: number | string
   outerHeight: number | string
@@ -33,6 +35,7 @@ export interface OvalPlatedHoleProps
 export interface PillPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "pill"
   outerWidth: number | string
   outerHeight: number | string
@@ -50,6 +53,7 @@ export interface PillPlatedHoleProps
 export interface CircularHoleWithRectPlatedProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "circular_hole_with_rect_pad"
   holeDiameter: number | string
   rectPadWidth: number | string
@@ -62,6 +66,7 @@ export interface CircularHoleWithRectPlatedProps
 export interface PillWithRectPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "pill_hole_with_rect_pad"
   holeShape: "pill"
   padShape: "rect"
@@ -90,6 +95,7 @@ export const platedHoleProps = z
   .discriminatedUnion("shape", [
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("circle"),
       holeDiameter: distance,
       outerDiameter: distance,
@@ -97,6 +103,7 @@ export const platedHoleProps = z
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("oval"),
       outerWidth: distance,
       outerHeight: distance,
@@ -108,6 +115,7 @@ export const platedHoleProps = z
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill"),
       outerWidth: distance,
       outerHeight: distance,
@@ -119,6 +127,7 @@ export const platedHoleProps = z
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("circular_hole_with_rect_pad"),
       holeDiameter: distance,
       rectPadWidth: distance,
@@ -129,6 +138,7 @@ export const platedHoleProps = z
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill_hole_with_rect_pad"),
       holeShape: z.literal("pill"),
       padShape: z.literal("rect"),

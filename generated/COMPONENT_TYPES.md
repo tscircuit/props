@@ -284,9 +284,11 @@ export const schematicPinStyle = z.record(
 /** @deprecated use battery_capacity from circuit-json when circuit-json is updated */
 export interface BatteryProps extends CommonComponentProps {
   capacity?: number | string
+  schOrientation?: SchematicOrientation
 }
 export const batteryProps = commonComponentProps.extend({
   capacity: capacity.optional(),
+  schOrientation: schematicOrientation.optional(),
 })
 ```
 
@@ -366,6 +368,7 @@ export interface CapacitorProps extends CommonComponentProps {
   bypassFor?: string
   bypassTo?: string
   maxDecouplingTraceLength?: number
+  schOrientation?: SchematicOrientation
   connections?: Connections<CapacitorPinLabels>
 }
 export const capacitorProps = commonComponentProps.extend({
@@ -378,6 +381,7 @@ export const capacitorProps = commonComponentProps.extend({
   bypassFor: z.string().optional(),
   bypassTo: z.string().optional(),
   maxDecouplingTraceLength: z.number().optional(),
+  schOrientation: schematicOrientation.optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),
 })
 ```
@@ -580,11 +584,13 @@ export interface CrystalProps extends CommonComponentProps {
   frequency: number | string
   loadCapacitance: number | string
   pinVariant?: PinVariant
+  schOrientation?: SchematicOrientation
 }
 export const crystalProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
   pinVariant: z.enum(["two_pin", "four_pin"]).optional(),
+  schOrientation: schematicOrientation.optional(),
 })
 ```
 
@@ -654,6 +660,7 @@ export const polygonCutoutProps = pcbLayoutProps
     zener: z.boolean().optional(),
     photo: z.boolean().optional(),
     tvs: z.boolean().optional(),
+    schOrientation: schematicOrientation.optional(),
   })
 export interface DiodeProps extends CommonComponentProps {
   connections?: {
@@ -670,6 +677,7 @@ export interface DiodeProps extends CommonComponentProps {
   zener?: boolean
   photo?: boolean
   tvs?: boolean
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -730,6 +738,8 @@ export interface FuseProps extends CommonComponentProps {
 
   schShowRatings?: boolean
 
+  schOrientation?: SchematicOrientation
+
   connections?: Connections<FusePinLabels>
 }
 /**
@@ -739,6 +749,7 @@ export const fuseProps = commonComponentProps.extend({
   currentRating: z.union([z.number(), z.string()]),
   voltageRating: z.union([z.number(), z.string()]).optional(),
   schShowRatings: z.boolean().optional(),
+  schOrientation: schematicOrientation.optional(),
   connections: z
     .record(
       z.string(),
@@ -972,10 +983,12 @@ export const holeProps = pcbLayoutProps
 export interface InductorProps extends CommonComponentProps {
   inductance: number | string
   maxCurrentRating?: number | string
+  schOrientation?: SchematicOrientation
 }
 export const inductorProps = commonComponentProps.extend({
   inductance,
   maxCurrentRating: z.union([z.string(), z.number()]).optional(),
+  schOrientation: schematicOrientation.optional(),
 })
 ```
 
@@ -1025,6 +1038,7 @@ export const ledProps = commonComponentProps.extend({
   color: z.string().optional(),
   wavelength: z.string().optional(),
   schDisplayValue: z.string().optional(),
+  schOrientation: schematicOrientation.optional(),
 })
 ```
 
@@ -1200,6 +1214,7 @@ export const pinHeaderProps = commonComponentProps.extend({
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "circle"
   holeDiameter: number | string
   outerDiameter: number | string
@@ -1208,6 +1223,7 @@ export interface CirclePlatedHoleProps
 export interface OvalPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "oval"
   outerWidth: number | string
   outerHeight: number | string
@@ -1222,6 +1238,7 @@ export interface OvalPlatedHoleProps
 export interface PillPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "pill"
   outerWidth: number | string
   outerHeight: number | string
@@ -1237,6 +1254,7 @@ export interface PillPlatedHoleProps
 export interface CircularHoleWithRectPlatedProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "circular_hole_with_rect_pad"
   holeDiameter: number | string
   rectPadWidth: number | string
@@ -1248,6 +1266,7 @@ export interface CircularHoleWithRectPlatedProps
 export interface PillWithRectPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "pill_hole_with_rect_pad"
   holeShape: "pill"
   padShape: "rect"
@@ -1272,6 +1291,7 @@ const distanceHiddenUndefined = z
   })
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("circle"),
       holeDiameter: distance,
       outerDiameter: distance,
@@ -1279,6 +1299,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("oval"),
       outerWidth: distance,
       outerHeight: distance,
@@ -1290,6 +1311,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill"),
       outerWidth: distance,
       outerHeight: distance,
@@ -1301,6 +1323,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("circular_hole_with_rect_pad"),
       holeDiameter: distance,
       rectPadWidth: distance,
@@ -1311,6 +1334,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill_hole_with_rect_pad"),
       holeShape: z.literal("pill"),
       padShape: z.literal("rect"),
@@ -1363,6 +1387,7 @@ export interface ResistorProps extends CommonComponentProps {
   pullupTo?: string
   pulldownFor?: string
   pulldownTo?: string
+  schOrientation?: SchematicOrientation
   connections?: Connections<ResistorPinLabels>
 }
 export const resistorProps = commonComponentProps.extend({
@@ -1373,6 +1398,8 @@ export const resistorProps = commonComponentProps.extend({
 
   pulldownFor: z.string().optional(),
   pulldownTo: z.string().optional(),
+
+  schOrientation: schematicOrientation.optional(),
 
   connections: createConnectionsProp(resistorPinLabels).optional(),
 })
@@ -1523,6 +1550,7 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
 
 ```typescript
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "rect"
   width: Distance
   height: Distance
@@ -1530,6 +1558,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "rotated_rect"
   width: Distance
   height: Distance
@@ -1537,11 +1566,13 @@ export interface RotatedRectSmtPadProps
   portHints?: PortHints
 }
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "circle"
   radius: Distance
   portHints?: PortHints
 }
 export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "pill"
   width: Distance
   height: Distance
@@ -1550,6 +1581,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 export interface PolygonSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "polygon"
   points: Point[]
   portHints?: PortHints
@@ -1778,6 +1810,14 @@ export const transistorPins = [
 ### via
 
 ```typescript
+export interface ViaProps extends CommonLayoutProps {
+  name?: string
+  fromLayer: LayerRefInput
+  toLayer: LayerRefInput
+  holeDiameter: number | string
+  outerDiameter: number | string
+  connectsTo?: string | string[]
+}
 export const viaProps = commonLayoutProps.extend({
   name: z.string().optional(),
   fromLayer: layer_ref,

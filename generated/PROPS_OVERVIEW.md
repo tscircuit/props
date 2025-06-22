@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-06-19T16:51:31.121Z
+> Generated at 2025-06-22T16:05:26.367Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -61,6 +61,7 @@ export interface BaseManualEditEvent {
 
 export interface BatteryProps extends CommonComponentProps {
   capacity?: number | string
+  schOrientation?: SchematicOrientation
 }
 
 
@@ -136,6 +137,7 @@ export interface CapacitorProps extends CommonComponentProps {
   bypassFor?: string
   bypassTo?: string
   maxDecouplingTraceLength?: number
+  schOrientation?: SchematicOrientation
   connections?: Connections<CapacitorPinLabels>
 }
 
@@ -174,6 +176,7 @@ export interface CircleCutoutProps
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "circle"
   holeDiameter: number | string
   outerDiameter: number | string
@@ -182,6 +185,7 @@ export interface CirclePlatedHoleProps
 
 
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "circle"
   radius: Distance
   portHints?: PortHints
@@ -198,6 +202,7 @@ export interface CircleSolderPasteProps
 export interface CircularHoleWithRectPlatedProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "circular_hole_with_rect_pad"
   holeDiameter: number | string
   rectPadWidth: number | string
@@ -265,6 +270,7 @@ export interface CrystalProps extends CommonComponentProps {
   frequency: number | string
   loadCapacitance: number | string
   pinVariant?: PinVariant
+  schOrientation?: SchematicOrientation
 }
 
 
@@ -283,6 +289,7 @@ export interface DiodeProps extends CommonComponentProps {
   zener?: boolean
   photo?: boolean
   tvs?: boolean
+  schOrientation?: SchematicOrientation
 }
 
 
@@ -362,6 +369,8 @@ export interface FuseProps extends CommonComponentProps {
    */
   schShowRatings?: boolean
 
+  schOrientation?: SchematicOrientation
+
   /**
    * Connections to other components
    */
@@ -379,6 +388,7 @@ export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 export interface InductorProps extends CommonComponentProps {
   inductance: number | string
   maxCurrentRating?: number | string
+  schOrientation?: SchematicOrientation
 }
 
 
@@ -400,6 +410,10 @@ export interface JumperProps extends CommonComponentProps {
    * e.g., [["1","2"], ["2","3"]]
    */
   internallyConnectedPins?: string[][]
+  /**
+   * Connections to other components
+   */
+  connections?: Connections<string>
 }
 
 
@@ -506,6 +520,7 @@ export interface NonSubcircuitGroupProps extends BaseGroupProps {
 export interface OvalPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "oval"
   outerWidth: number | string
   outerHeight: number | string
@@ -537,6 +552,7 @@ export interface PcbRouteCache {
 export interface PillPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "pill"
   outerWidth: number | string
   outerHeight: number | string
@@ -553,6 +569,7 @@ export interface PillPlatedHoleProps
 
 
 export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "pill"
   width: Distance
   height: Distance
@@ -564,6 +581,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 export interface PillWithRectPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
+  connectsTo?: string | string[]
   shape: "pill_hole_with_rect_pad"
   holeShape: "pill"
   padShape: "rect"
@@ -713,6 +731,7 @@ export interface PolygonCutoutProps
 
 export interface PolygonSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "polygon"
   points: Point[]
   portHints?: PortHints
@@ -735,6 +754,7 @@ export interface RectCutoutProps
 
 
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "rect"
   width: Distance
   height: Distance
@@ -756,6 +776,7 @@ export interface ResistorProps extends CommonComponentProps {
   pullupTo?: string
   pulldownFor?: string
   pulldownTo?: string
+  schOrientation?: SchematicOrientation
   connections?: Connections<ResistorPinLabels>
 }
 
@@ -769,6 +790,7 @@ export interface ResonatorProps extends CommonComponentProps {
 
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
   shape: "rotated_rect"
   width: Distance
   height: Distance
@@ -899,6 +921,16 @@ export interface TestpointProps extends CommonComponentProps {
 
 export interface TransistorProps extends CommonComponentProps {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
+}
+
+
+export interface ViaProps extends CommonLayoutProps {
+  name?: string
+  fromLayer: LayerRefInput
+  toLayer: LayerRefInput
+  holeDiameter: number | string
+  outerDiameter: number | string
+  connectsTo?: string | string[]
 }
 
 ```

@@ -104,6 +104,11 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   key?: any
   children?: any
 
+  /**
+   * Title to display above this group in the schematic view
+   */
+  schTitle?: string
+
   pcbWidth?: Distance
   pcbHeight?: Distance
   schWidth?: Distance
@@ -213,6 +218,7 @@ export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),
   children: z.any().optional(),
+  schTitle: z.string().optional(),
   key: z.any().optional(),
 
   ...layoutConfig.shape,

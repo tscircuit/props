@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-06-22T16:05:26.367Z
+> Generated at 2025-06-23T17:02:17.759Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -34,6 +34,11 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   name?: string
   key?: any
   children?: any
+
+  /**
+   * Title to display above this group in the schematic view
+   */
+  schTitle?: string
 
   pcbWidth?: Distance
   pcbHeight?: Distance

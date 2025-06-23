@@ -849,6 +849,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   key?: any
   children?: any
 
+  schTitle?: string
+
   pcbWidth?: Distance
   pcbHeight?: Distance
   schWidth?: Distance
@@ -864,6 +866,9 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
 }
+/**
+   * Title to display above this group in the schematic view
+   */
 export type PartsEngine = {
   findPart: (params: {
     sourceComponent: AnySourceComponent
@@ -926,6 +931,7 @@ export interface NonSubcircuitGroupProps extends BaseGroupProps {
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),
   children: z.any().optional(),
+  schTitle: z.string().optional(),
   key: z.any().optional(),
 
   ...layoutConfig.shape,

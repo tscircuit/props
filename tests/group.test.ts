@@ -76,3 +76,13 @@ test("should parse layout padding", () => {
   expect(parsed.paddingX).toBe(2)
   expect(parsed.paddingY).toBe(1)
 })
+
+test("should parse schTitle", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    schTitle: "My Group",
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.schTitle).toBe("My Group")
+})

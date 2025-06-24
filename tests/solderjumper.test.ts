@@ -36,6 +36,24 @@ test("should parse solderjumper with multiple bridges", () => {
   ])
 })
 
+test("should parse solderjumper with all pins bridged", () => {
+  const rawProps: SolderJumperProps = {
+    name: "solderjumper",
+    bridged: true,
+  }
+  const parsed = solderjumperProps.parse(rawProps)
+  expect(parsed.bridged).toBe(true)
+})
+
+test("should parse solderjumper with bridged set to false", () => {
+  const rawProps: SolderJumperProps = {
+    name: "solderjumper",
+    bridged: false,
+  }
+  const parsed = solderjumperProps.parse(rawProps)
+  expect(parsed.bridged).toBe(false)
+})
+
 test("should fail for invalid bridgedPins", () => {
   expect(() =>
     solderjumperProps.parse({

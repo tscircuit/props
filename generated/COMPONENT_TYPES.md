@@ -1644,12 +1644,14 @@ export const polygonSmtPadProps = pcbLayoutProps
 ```typescript
 export interface SolderJumperProps extends JumperProps {
   bridgedPins?: string[][]
+  bridged?: boolean
 }
 /**
    * Pins that are bridged with solder by default
    */
 export const solderjumperProps = jumperProps.extend({
   bridgedPins: z.array(z.array(z.string())).optional(),
+  bridged: z.boolean().optional(),
 })
 ```
 

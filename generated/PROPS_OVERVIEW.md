@@ -833,6 +833,10 @@ export interface SolderJumperProps extends JumperProps {
    * Pins that are bridged with solder by default
    */
   bridgedPins?: string[][]
+  /**
+   * If true, all pins are bridged with cuttable traces
+   */
+  bridged?: boolean
 }
 
 

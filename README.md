@@ -839,6 +839,11 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string
 
+  projectName?: string
+  version?: string
+  url?: string
+  printBoardInformationToSilkscreen?: boolean
+
   pcbDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean

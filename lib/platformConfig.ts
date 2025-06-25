@@ -19,6 +19,11 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string
 
+  projectName?: string
+  version?: string
+  url?: string
+  printBoardInformationToSilkscreen?: boolean
+
   pcbDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
@@ -47,6 +52,10 @@ export const platformConfig = z.object({
   autorouter: autorouterProp.optional(),
   registryApiUrl: z.string().optional(),
   cloudAutorouterUrl: z.string().optional(),
+  projectName: z.string().optional(),
+  version: z.string().optional(),
+  url: z.string().optional(),
+  printBoardInformationToSilkscreen: z.boolean().optional(),
   localCacheEngine: z.any().optional(),
   pcbDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),

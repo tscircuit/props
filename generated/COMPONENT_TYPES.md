@@ -1723,7 +1723,6 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean
   dpst?: boolean
   dpdt?: boolean
-  connections?: Connections<string>
 }
 .extend({
     type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
@@ -1732,10 +1731,6 @@ export interface SwitchProps extends CommonComponentProps {
     spdt: z.boolean().optional(),
     dpst: z.boolean().optional(),
     dpdt: z.boolean().optional(),
-    connections: z
-      .custom<Connections>()
-      .pipe(z.record(z.string(), connectionTarget))
-      .optional(),
   })
 ```
 

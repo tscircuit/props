@@ -36,14 +36,14 @@ test("should parse switch props with connections", () => {
     name: "s1",
     dpdt: true,
     connections: {
-      1: "net.A",
-      2: ["net.B", "net.C"],
+      pin1: "net.GND",
+      pin2: ["net.TXD", "net.RXD"],
     },
   }
 
   const parsed = switchProps.parse(rawProps)
   expect(parsed.connections).toEqual({
-    1: "net.A",
-    2: ["net.B", "net.C"],
+    pin1: "net.GND",
+    pin2: ["net.TXD", "net.RXD"],
   })
 })

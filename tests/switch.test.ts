@@ -30,3 +30,20 @@ test("should fail to parse switch props with invalid switch type", () => {
   const parsedProps = switchProps.parse(rawProps)
   expect(parsedProps.dpst).toBe(false)
 })
+
+test("should parse switch props with connections", () => {
+  const rawProps: SwitchProps = {
+    name: "s1",
+    dpdt: true,
+    connections: {
+      1: "net.A",
+      2: ["net.B", "net.C"],
+    },
+  }
+
+  const parsed = switchProps.parse(rawProps)
+  expect(parsed.connections).toEqual({
+    1: "net.A",
+    2: ["net.B", "net.C"],
+  })
+})

@@ -752,6 +752,10 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean
   dpst?: boolean
   dpdt?: boolean
+  /**
+   * Connections to other components
+   */
+  connections?: Connections<string>
 }
 ```
 

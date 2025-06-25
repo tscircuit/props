@@ -3,6 +3,8 @@ import {
   commonComponentProps,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
+import { connectionTarget } from "lib/common/connectionsProp"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 
 import { z } from "zod"
 
@@ -13,6 +15,10 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean
   dpst?: boolean
   dpdt?: boolean
+  /**
+   * Connections to other components
+   */
+  connections?: Connections<string>
 }
 
 export const switchProps = commonComponentProps
@@ -23,6 +29,10 @@ export const switchProps = commonComponentProps
     spdt: z.boolean().optional(),
     dpst: z.boolean().optional(),
     dpdt: z.boolean().optional(),
+    connections: z
+      .custom<Connections>()
+      .pipe(z.record(z.string(), connectionTarget))
+      .optional(),
   })
   .transform((props) => {
     const updatedProps: SwitchProps = { ...props }

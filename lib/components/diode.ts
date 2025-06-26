@@ -100,8 +100,9 @@ export const diodeProps = commonComponentProps
   })
 
 export const diodePins = lrPolarPins
+export type DiodePinLabels = (typeof diodePins)[number]
 
-export interface DiodeProps extends CommonComponentProps {
+export interface DiodeProps extends CommonComponentProps<DiodePinLabels> {
   connections?: {
     anode?: string | string[] | readonly string[]
     cathode?: string | string[] | readonly string[]

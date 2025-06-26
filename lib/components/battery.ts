@@ -28,7 +28,8 @@ const capacity = z
   })
   .describe("Battery capacity in mAh")
 
-export interface BatteryProps extends CommonComponentProps {
+export interface BatteryProps
+  extends CommonComponentProps<(typeof batteryPins)[number]> {
   capacity?: number | string
   schOrientation?: SchematicOrientation
 }

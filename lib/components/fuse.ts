@@ -16,7 +16,7 @@ export const fusePinLabels = ["pin1", "pin2"] as const
 
 export type FusePinLabels = (typeof fusePinLabels)[number]
 
-export interface FuseProps extends CommonComponentProps {
+export interface FuseProps extends CommonComponentProps<FusePinLabels> {
   /**
    * Current rating of the fuse in amperes
    */

@@ -11,7 +11,7 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface InductorProps extends CommonComponentProps {
+export interface InductorProps extends CommonComponentProps<InductorPinLabels> {
   inductance: number | string
   maxCurrentRating?: number | string
   schOrientation?: SchematicOrientation
@@ -24,6 +24,7 @@ export const inductorProps = commonComponentProps.extend({
 })
 
 export const inductorPins = lrPins
+export type InductorPinLabels = (typeof inductorPins)[number]
 
 type InferredInductorProps = z.input<typeof inductorProps>
 

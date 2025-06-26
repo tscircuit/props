@@ -33,7 +33,7 @@ export interface PinCompatibleVariant {
 }
 
 export interface ChipPropsSU<PinLabel extends string = string>
-  extends CommonComponentProps {
+  extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<string, PinLabel>
   /**

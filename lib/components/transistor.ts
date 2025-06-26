@@ -5,7 +5,8 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface TransistorProps extends CommonComponentProps {
+export interface TransistorProps
+  extends CommonComponentProps<TransistorPinLabels> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
 }
 
@@ -21,6 +22,7 @@ export const transistorPins = [
   "pin3",
   "base",
 ] as const
+export type TransistorPinLabels = (typeof transistorPins)[number]
 
 type InferredTransistorProps = z.input<typeof transistorProps>
 expectTypesMatch<TransistorProps, InferredTransistorProps>(true)

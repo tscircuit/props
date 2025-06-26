@@ -11,7 +11,8 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface InductorProps extends CommonComponentProps<InductorPinLabels> {
+export interface InductorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   inductance: number | string
   maxCurrentRating?: number | string
   schOrientation?: SchematicOrientation

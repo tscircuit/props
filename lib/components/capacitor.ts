@@ -23,7 +23,8 @@ export const capacitorPinLabels = [
 ] as const
 export type CapacitorPinLabels = (typeof capacitorPinLabels)[number]
 
-export interface CapacitorProps extends CommonComponentProps {
+export interface CapacitorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   capacitance: number | string
   maxVoltageRating?: number | string
   schShowRatings?: boolean

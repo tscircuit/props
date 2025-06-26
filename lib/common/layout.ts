@@ -70,9 +70,11 @@ export const supplierProps = z.object({
 
 expectTypesMatch<SupplierProps, z.input<typeof supplierProps>>(true)
 
-export interface CommonComponentProps extends CommonLayoutProps {
+export interface CommonComponentProps<PinLabel extends string = string>
+  extends CommonLayoutProps {
   key?: any
   name: string
+  pinAttributes?: Record<PinLabel, Record<string, any>>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   children?: any
@@ -89,6 +91,9 @@ export const commonComponentProps = commonLayoutProps
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    pinAttributes: z
+      .record(z.string(), z.record(z.string(), z.any()))
+      .optional(),
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

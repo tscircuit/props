@@ -13,7 +13,8 @@ import { z } from "zod"
 
 export type PinVariant = "two_pin" | "four_pin"
 
-export interface CrystalProps extends CommonComponentProps {
+export interface CrystalProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
   pinVariant?: PinVariant
@@ -27,6 +28,7 @@ export const crystalProps = commonComponentProps.extend({
   schOrientation: schematicOrientation.optional(),
 })
 export const crystalPins = lrPins
+export type CrystalPinLabels = (typeof crystalPins)[number]
 
 type InferredCrystalProps = z.input<typeof crystalProps>
 expectTypesMatch<CrystalProps, InferredCrystalProps>(true)

@@ -28,7 +28,8 @@ const capacity = z
   })
   .describe("Battery capacity in mAh")
 
-export interface BatteryProps extends CommonComponentProps {
+export interface BatteryProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   capacity?: number | string
   schOrientation?: SchematicOrientation
 }
@@ -38,5 +39,6 @@ export const batteryProps = commonComponentProps.extend({
   schOrientation: schematicOrientation.optional(),
 })
 export const batteryPins = lrPolarPins
+export type BatteryPinLabels = (typeof batteryPins)[number]
 
 expectTypesMatch<BatteryProps, z.input<typeof batteryProps>>(true)

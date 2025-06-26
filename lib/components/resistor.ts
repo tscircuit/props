@@ -16,7 +16,8 @@ import { z } from "zod"
 export const resistorPinLabels = ["pin1", "pin2", "pos", "neg"] as const
 export type ResistorPinLabels = (typeof resistorPinLabels)[number]
 
-export interface ResistorProps extends CommonComponentProps {
+export interface ResistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   resistance: number | string
   pullupFor?: string
   pullupTo?: string

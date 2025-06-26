@@ -137,3 +137,21 @@ test(`[typetest] ChipConnections<ChipProps<"custompin1" | "custompin2">>`, () =>
     { custompin1: string; custompin2: string }
   >(true)
 })
+
+test("[typetest] pinAttributes type matches pin labels", () => {
+  const MyChip = (props: ChipProps<typeof pinLabels1>) => <chip {...props} />
+
+  const element = (
+    <MyChip
+      name="U1"
+      pinLabels={pinLabels1}
+      pinAttributes={{
+        VCC: { providesPower: true },
+        GND: { requiresPower: true },
+        // @ts-expect-error
+        INVALID: { foo: true },
+      }}
+    />
+  )
+  void element
+})

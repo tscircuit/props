@@ -130,9 +130,11 @@ export interface SupplierProps {
 export const supplierProps = z.object({
   supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
 })
-export interface CommonComponentProps extends CommonLayoutProps {
+export interface CommonComponentProps<PinLabel extends string = string>
+  extends CommonLayoutProps {
   key?: any
   name: string
+  pinAttributes?: Record<PinLabel, Record<string, any>>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   children?: any
@@ -146,6 +148,9 @@ export interface CommonComponentProps extends CommonLayoutProps {
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    pinAttributes: z
+      .record(z.string(), z.record(z.string(), z.any()))
+      .optional(),
   })
 export const lrPolarPins = [
   "pin1",
@@ -282,7 +287,8 @@ export const schematicPinStyle = z.record(
 
 ```typescript
 /** @deprecated use battery_capacity from circuit-json when circuit-json is updated */
-export interface BatteryProps extends CommonComponentProps {
+export interface BatteryProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   capacity?: number | string
   schOrientation?: SchematicOrientation
 }
@@ -358,7 +364,8 @@ export const capacitorPinLabels = [
   "anode",
   "cathode",
 ] as const
-export interface CapacitorProps extends CommonComponentProps {
+export interface CapacitorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   capacitance: number | string
   maxVoltageRating?: number | string
   schShowRatings?: boolean
@@ -394,7 +401,7 @@ export interface PinCompatibleVariant {
   supplierPartNumber?: SupplierPartNumbers
 }
 export interface ChipPropsSU<PinLabel extends string = string>
-  extends CommonComponentProps {
+  extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<string, PinLabel>
   showPinAliases?: boolean
@@ -580,7 +587,8 @@ export const pcbSameXConstraintProps = z.object({
 ### crystal
 
 ```typescript
-export interface CrystalProps extends CommonComponentProps {
+export interface CrystalProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
   pinVariant?: PinVariant
@@ -662,7 +670,8 @@ export const polygonCutoutProps = pcbLayoutProps
     tvs: z.boolean().optional(),
     schOrientation: schematicOrientation.optional(),
   })
-export interface DiodeProps extends CommonComponentProps {
+export interface DiodeProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   connections?: {
     anode?: string | string[] | readonly string[]
     cathode?: string | string[] | readonly string[]
@@ -731,7 +740,8 @@ export const footprintProps = z.object({
 ### fuse
 
 ```typescript
-export interface FuseProps extends CommonComponentProps {
+export interface FuseProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   currentRating: number | string
 
   voltageRating?: number | string
@@ -740,7 +750,7 @@ export interface FuseProps extends CommonComponentProps {
 
   schOrientation?: SchematicOrientation
 
-  connections?: Connections<FusePinLabels>
+  connections?: Connections<PinLabel>
 }
 /**
  * Schema for validating fuse props
@@ -986,7 +996,8 @@ export const holeProps = pcbLayoutProps
 ### inductor
 
 ```typescript
-export interface InductorProps extends CommonComponentProps {
+export interface InductorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   inductance: number | string
   maxCurrentRating?: number | string
   schOrientation?: SchematicOrientation
@@ -1045,13 +1056,15 @@ export const ledProps = commonComponentProps.extend({
   wavelength: z.string().optional(),
   schDisplayValue: z.string().optional(),
   schOrientation: schematicOrientation.optional(),
+  connections: createConnectionsProp(lrPolarPins).optional(),
 })
 ```
 
 ### mosfet
 
 ```typescript
-export interface MosfetProps extends CommonComponentProps {
+export interface MosfetProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   channelType: "n" | "p"
   mosfetMode: "enhancement" | "depletion"
 }
@@ -1074,9 +1087,11 @@ export const mosfetPins = [
 ```typescript
 export interface NetProps {
   name: string
+  connectsTo?: string | string[]
 }
 export const netProps = z.object({
   name: z.string(),
+  connectsTo: z.string().or(z.array(z.string())).optional(),
 })
 ```
 
@@ -1387,7 +1402,8 @@ export const powerSourceProps = commonComponentProps.extend({
 ### resistor
 
 ```typescript
-export interface ResistorProps extends CommonComponentProps {
+export interface ResistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   resistance: number | string
   pullupFor?: string
   pullupTo?: string
@@ -1647,7 +1663,7 @@ export interface SolderJumperProps extends JumperProps {
   bridged?: boolean
 }
 /**
-   * Pins that are bridged with solder by default
+   * If true, all pins are connected with cuttable traces
    */
 export const solderjumperProps = jumperProps.extend({
   bridgedPins: z.array(z.array(z.string())).optional(),
@@ -1799,7 +1815,8 @@ baseTraceProps.extend({
 ### transistor
 
 ```typescript
-export interface TransistorProps extends CommonComponentProps {
+export interface TransistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
 }
 export const transistorProps = commonComponentProps.extend({

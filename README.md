@@ -132,7 +132,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 ### BatteryProps `<battery />`
 
 ```ts
-export interface BatteryProps extends CommonComponentProps {
+export interface BatteryProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   capacity?: number | string
   schOrientation?: SchematicOrientation
 }
@@ -188,7 +189,8 @@ export interface BreakoutPointProps
 ### CapacitorProps `<capacitor />`
 
 ```ts
-export interface CapacitorProps extends CommonComponentProps {
+export interface CapacitorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   capacitance: number | string
   maxVoltageRating?: number | string
   schShowRatings?: boolean
@@ -210,7 +212,7 @@ export interface CapacitorProps extends CommonComponentProps {
 
 ```ts
 export interface ChipPropsSU<PinLabel extends string = string>
-  extends CommonComponentProps {
+  extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<string, PinLabel>
   /**
@@ -278,7 +280,8 @@ export interface ConstrainedLayoutProps {
 ### CrystalProps `<crystal />`
 
 ```ts
-export interface CrystalProps extends CommonComponentProps {
+export interface CrystalProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
   pinVariant?: PinVariant
@@ -307,7 +310,8 @@ export interface RectCutoutProps
 ### DiodeProps `<diode />`
 
 ```ts
-export interface DiodeProps extends CommonComponentProps {
+export interface DiodeProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   connections?: {
     anode?: string | string[] | readonly string[]
     cathode?: string | string[] | readonly string[]
@@ -353,7 +357,8 @@ export interface FootprintProps {
 ### FuseProps `<fuse />`
 
 ```ts
-export interface FuseProps extends CommonComponentProps {
+export interface FuseProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   /**
    * Current rating of the fuse in amperes
    */
@@ -374,7 +379,7 @@ export interface FuseProps extends CommonComponentProps {
   /**
    * Connections to other components
    */
-  connections?: Connections<FusePinLabels>
+  connections?: Connections<PinLabel>
 }
 ```
 
@@ -430,7 +435,8 @@ export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 ### InductorProps `<inductor />`
 
 ```ts
-export interface InductorProps extends CommonComponentProps {
+export interface InductorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   inductance: number | string
   maxCurrentRating?: number | string
   schOrientation?: SchematicOrientation
@@ -474,7 +480,8 @@ export interface JumperProps extends CommonComponentProps {
 ### MosfetProps `<mosfet />`
 
 ```ts
-export interface MosfetProps extends CommonComponentProps {
+export interface MosfetProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   channelType: "n" | "p"
   mosfetMode: "enhancement" | "depletion"
 }
@@ -488,6 +495,7 @@ export interface MosfetProps extends CommonComponentProps {
 ```ts
 export interface NetProps {
   name: string
+  connectsTo?: string | string[]
 }
 ```
 
@@ -648,7 +656,8 @@ export interface PotentiometerProps extends CommonComponentProps {
 ### ResistorProps `<resistor />`
 
 ```ts
-export interface ResistorProps extends CommonComponentProps {
+export interface ResistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   resistance: number | string
   pullupFor?: string
   pullupTo?: string
@@ -699,7 +708,7 @@ export interface SolderJumperProps extends JumperProps {
    */
   bridgedPins?: string[][]
   /**
-   * If true, all pins are bridged with cuttable traces
+   * If true, all pins are connected with cuttable traces
    */
   bridged?: boolean
 }
@@ -795,7 +804,8 @@ export interface TestpointProps extends CommonComponentProps {
 ### TransistorProps `<transistor />`
 
 ```ts
-export interface TransistorProps extends CommonComponentProps {
+export interface TransistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
 }
 ```

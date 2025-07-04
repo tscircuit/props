@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-01T17:01:48.260Z
+> Generated at 2025-07-04T14:41:45.180Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -24,6 +24,7 @@ export interface AutorouterConfig {
   serverMode?: "job" | "solve-endpoint"
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
+  traceClearance?: Distance
   groupMode?: "sequential-trace" | "subcircuit"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>

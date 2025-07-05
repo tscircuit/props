@@ -34,7 +34,7 @@ jobs:
         run: bun run scripts/generate-readme-docs.ts
       
       - name: Format README
-        run: bunx biome format --write README.md
+        run: bunx prettier --write README.md
 
       - name: Check for changes
         id: git-check

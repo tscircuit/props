@@ -45,6 +45,9 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 | `<potentiometer />` | [`PotentiometerProps`](#potentiometerprops-potentiometer) |
 | `<resistor />` | [`ResistorProps`](#resistorprops-resistor) |
 | `<resonator />` | [`ResonatorProps`](#resonatorprops-resonator) |
+| `<schematiccell />` | [`SchematicCellProps`](#schematiccellprops-schematiccell) |
+| `<schematicrow />` | [`SchematicRowProps`](#schematicrowprops-schematicrow) |
+| `<schematictable />` | [`SchematicTableProps`](#schematictableprops-schematictable) |
 | `<smtpad />` | [`RectSmtPadProps`](#rectsmtpadprops-smtpad) |
 | `<solderjumper />` | [`SolderJumperProps`](#solderjumperprops-solderjumper) |
 | `<solderpaste />` | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste) |
@@ -682,6 +685,51 @@ export interface ResonatorProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/resonator.ts)
+
+
+### SchematicCellProps `<schematiccell />`
+
+```ts
+export interface SchematicCellProps {
+  children: string
+  horizontalAlign?: "left" | "center" | "right"
+  verticalAlign?: "top" | "middle" | "bottom"
+  fontSize?: number | string
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-cell.ts)
+
+
+### SchematicRowProps `<schematicrow />`
+
+```ts
+export interface SchematicRowProps {
+  children?: any
+  height?: number | string
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-row.ts)
+
+
+### SchematicTableProps `<schematictable />`
+
+```ts
+export interface SchematicTableProps {
+  schX?: number | string
+  schY?: number | string
+  children?: any
+  columnWidths?: (number | string)[]
+  rowHeights?: (number | string)[]
+  cellPadding?: number | string
+  borderWidth?: number | string
+  anchor?: z.infer<typeof ninePointAnchor>
+  fontSize?: number | string
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-table.ts)
 
 
 ### RectSmtPadProps `<smtpad />`

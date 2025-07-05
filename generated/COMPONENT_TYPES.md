@@ -1485,6 +1485,23 @@ export const schematicBoxProps = z
   })
 ```
 
+### schematic-cell
+
+```typescript
+export const schematicCellProps = z.object({
+  children: z.string(),
+  horizontalAlign: z.enum(["left", "center", "right"]).optional(),
+  verticalAlign: z.enum(["top", "middle", "bottom"]).optional(),
+  fontSize: distance.optional(),
+})
+export interface SchematicCellProps {
+  children: string
+  horizontalAlign?: "left" | "center" | "right"
+  verticalAlign?: "top" | "middle" | "bottom"
+  fontSize?: number | string
+}
+```
+
 ### schematic-line
 
 ```typescript
@@ -1504,6 +1521,46 @@ export const schematicPathProps = z.object({
   isFilled: z.boolean().optional().default(false),
   fillColor: z.enum(["red", "blue"]).optional(),
 })
+```
+
+### schematic-row
+
+```typescript
+export const schematicRowProps = z.object({
+  children: z.any().optional(),
+  height: distance.optional(),
+})
+export interface SchematicRowProps {
+  children?: any
+  height?: number | string
+}
+```
+
+### schematic-table
+
+```typescript
+export const schematicTableProps = z.object({
+  schX: distance.optional(),
+  schY: distance.optional(),
+  children: z.any().optional(),
+  columnWidths: z.array(distance).optional(),
+  rowHeights: z.array(distance).optional(),
+  cellPadding: distance.optional(),
+  borderWidth: distance.optional(),
+  anchor: ninePointAnchor.optional(),
+  fontSize: distance.optional(),
+})
+export interface SchematicTableProps {
+  schX?: number | string
+  schY?: number | string
+  children?: any
+  columnWidths?: (number | string)[]
+  rowHeights?: (number | string)[]
+  cellPadding?: number | string
+  borderWidth?: number | string
+  anchor?: z.infer<typeof ninePointAnchor>
+  fontSize?: number | string
+}
 ```
 
 ### schematic-text

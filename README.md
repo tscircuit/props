@@ -694,8 +694,6 @@ export interface SchematicTableProps {
   schX?: number | string;
   schY?: number | string;
   children?: any;
-  columnWidths?: (number | string)[];
-  rowHeights?: (number | string)[];
   cellPadding?: number | string;
   borderWidth?: number | string;
   anchor?: z.infer<typeof ninePointAnchor>;

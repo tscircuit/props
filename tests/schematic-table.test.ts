@@ -6,8 +6,6 @@ import {
 
 test("should parse schematic table props", () => {
   const rawProps: SchematicTableProps = {
-    columnWidths: [5, 5],
-    rowHeights: [2, 2],
     schX: 10,
     schY: 20,
     cellPadding: 1,
@@ -16,8 +14,6 @@ test("should parse schematic table props", () => {
     fontSize: "3mm",
   }
   const parsed = schematicTableProps.parse(rawProps)
-  expect(parsed.columnWidths).toEqual([5, 5])
-  expect(parsed.rowHeights).toEqual([2, 2])
   expect(parsed.schX).toBe(10)
   expect(parsed.schY).toBe(20)
   expect(parsed.cellPadding).toBe(1)

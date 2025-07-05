@@ -147,6 +147,12 @@ export interface AutorouterConfig {
   groupMode?: "sequential-trace" | "subcircuit"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
+  preset?:
+    | "sequential-trace"
+    | "subcircuit"
+    | "auto"
+    | "auto-local"
+    | "auto-cloud"
 }
 
 export type AutorouterProp =
@@ -169,6 +175,15 @@ export const autorouterConfig = z.object({
     .custom<(simpleRouteJson: any) => Promise<any>>(
       (v) => typeof v === "function" || v === undefined,
     )
+    .optional(),
+  preset: z
+    .enum([
+      "sequential-trace",
+      "subcircuit",
+      "auto",
+      "auto-local",
+      "auto-cloud",
+    ])
     .optional(),
   local: z.boolean().optional(),
 })

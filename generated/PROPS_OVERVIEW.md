@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-04T14:41:45.180Z
+> Generated at 2025-07-04T22:23:07.403Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -28,6 +28,12 @@ export interface AutorouterConfig {
   groupMode?: "sequential-trace" | "subcircuit"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
+  preset?:
+    | "sequential-trace"
+    | "subcircuit"
+    | "auto"
+    | "auto-local"
+    | "auto-cloud"
 }
 
 

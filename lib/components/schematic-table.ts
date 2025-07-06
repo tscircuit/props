@@ -7,6 +7,8 @@ export const schematicTableProps = z.object({
   schX: distance.optional(),
   schY: distance.optional(),
   children: z.any().optional(),
+  columnWidths: z.array(distance),
+  rowHeights: z.array(distance),
   cellPadding: distance.optional(),
   borderWidth: distance.optional(),
   anchor: ninePointAnchor.optional(),
@@ -17,6 +19,8 @@ export interface SchematicTableProps {
   schX?: number | string
   schY?: number | string
   children?: any
+  columnWidths: (number | string)[]
+  rowHeights: (number | string)[]
   cellPadding?: number | string
   borderWidth?: number | string
   anchor?: z.infer<typeof ninePointAnchor>

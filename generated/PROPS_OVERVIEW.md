@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-04T22:23:07.403Z
+> Generated at 2025-07-06T17:33:05.680Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -827,6 +827,16 @@ export interface RotatedRectSmtPadProps
 }
 
 
+export interface SchematicCellProps {
+  children?: string
+  horizontalAlign?: "left" | "center" | "right"
+  verticalAlign?: "top" | "middle" | "bottom"
+  fontSize?: number | string
+  rowSpan?: number
+  colSpan?: number
+}
+
+
 export interface SchematicPortArrangementWithPinCounts {
   leftPinCount?: number
   topPinCount?: number
@@ -848,6 +858,25 @@ export interface SchematicPortArrangementWithSizes {
   topSize?: number
   rightSize?: number
   bottomSize?: number
+}
+
+
+export interface SchematicRowProps {
+  children?: any
+  height?: number | string
+}
+
+
+export interface SchematicTableProps {
+  schX?: number | string
+  schY?: number | string
+  children?: any
+  columnWidths: (number | string)[]
+  rowHeights: (number | string)[]
+  cellPadding?: number | string
+  borderWidth?: number | string
+  anchor?: z.infer<typeof ninePointAnchor>
+  fontSize?: number | string
 }
 
 

@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-07T16:12:04.582Z
+> Generated at 2025-07-07T16:17:11.953Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -872,8 +872,6 @@ export interface SchematicTableProps {
   schX?: number | string
   schY?: number | string
   children?: any
-  columnWidths?: (number | string)[]
-  rowHeights?: (number | string)[]
   cellPadding?: number | string
   borderWidth?: number | string
   anchor?: z.infer<typeof ninePointAnchor>

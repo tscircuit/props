@@ -667,22 +667,13 @@ export interface ResonatorProps extends CommonComponentProps {
 
 ```ts
 export interface SchematicCellProps {
-<<<<<<< Updated upstream
   children?: string;
   horizontalAlign?: "left" | "center" | "right";
   verticalAlign?: "top" | "middle" | "bottom";
   fontSize?: number | string;
   rowSpan?: number;
   colSpan?: number;
-=======
-  children?: string
-  horizontalAlign?: "left" | "center" | "right"
-  verticalAlign?: "top" | "middle" | "bottom"
-  fontSize?: number | string
-  rowSpan?: number
-  colSpan?: number
-  width?: number | string
->>>>>>> Stashed changes
+  width?: number | string;
 }
 ```
 
@@ -703,27 +694,15 @@ export interface SchematicRowProps {
 
 ```ts
 export interface SchematicTableProps {
-<<<<<<< Updated upstream
   schX?: number | string;
   schY?: number | string;
   children?: any;
-  columnWidths: (number | string)[];
-  rowHeights: (number | string)[];
+  columnWidths?: (number | string)[];
+  rowHeights?: (number | string)[];
   cellPadding?: number | string;
   borderWidth?: number | string;
   anchor?: z.infer<typeof ninePointAnchor>;
   fontSize?: number | string;
-=======
-  schX?: number | string
-  schY?: number | string
-  children?: any
-  columnWidths?: (number | string)[]
-  rowHeights?: (number | string)[]
-  cellPadding?: number | string
-  borderWidth?: number | string
-  anchor?: z.infer<typeof ninePointAnchor>
-  fontSize?: number | string
->>>>>>> Stashed changes
 }
 ```
 

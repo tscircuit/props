@@ -667,10 +667,13 @@ export interface ResonatorProps extends CommonComponentProps {
 
 ```ts
 export interface SchematicCellProps {
-  children: string;
+  children?: string;
   horizontalAlign?: "left" | "center" | "right";
   verticalAlign?: "top" | "middle" | "bottom";
   fontSize?: number | string;
+  rowSpan?: number;
+  colSpan?: number;
+  width?: number | string;
 }
 ```
 

@@ -9,6 +9,7 @@ export const schematicCellProps = z.object({
   fontSize: distance.optional(),
   rowSpan: z.number().optional(),
   colSpan: z.number().optional(),
+  width: distance.optional(),
 })
 
 export interface SchematicCellProps {
@@ -18,6 +19,7 @@ export interface SchematicCellProps {
   fontSize?: number | string
   rowSpan?: number
   colSpan?: number
+  width?: number | string
 }
 
 expectTypesMatch<SchematicCellProps, z.input<typeof schematicCellProps>>(true)

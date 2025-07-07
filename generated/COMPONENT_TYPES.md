@@ -1495,6 +1495,7 @@ export const schematicCellProps = z.object({
   fontSize: distance.optional(),
   rowSpan: z.number().optional(),
   colSpan: z.number().optional(),
+  width: distance.optional(),
 })
 export interface SchematicCellProps {
   children?: string
@@ -1503,6 +1504,7 @@ export interface SchematicCellProps {
   fontSize?: number | string
   rowSpan?: number
   colSpan?: number
+  width?: number | string
 }
 ```
 
@@ -1547,8 +1549,8 @@ export const schematicTableProps = z.object({
   schX: distance.optional(),
   schY: distance.optional(),
   children: z.any().optional(),
-  columnWidths: z.array(distance),
-  rowHeights: z.array(distance),
+  columnWidths: z.array(distance).optional(),
+  rowHeights: z.array(distance).optional(),
   cellPadding: distance.optional(),
   borderWidth: distance.optional(),
   anchor: ninePointAnchor.optional(),
@@ -1558,8 +1560,8 @@ export interface SchematicTableProps {
   schX?: number | string
   schY?: number | string
   children?: any
-  columnWidths: (number | string)[]
-  rowHeights: (number | string)[]
+  columnWidths?: (number | string)[]
+  rowHeights?: (number | string)[]
   cellPadding?: number | string
   borderWidth?: number | string
   anchor?: z.infer<typeof ninePointAnchor>

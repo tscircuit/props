@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-06T17:33:05.680Z
+> Generated at 2025-07-07T16:12:04.582Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -834,6 +834,7 @@ export interface SchematicCellProps {
   fontSize?: number | string
   rowSpan?: number
   colSpan?: number
+  width?: number | string
 }
 
 
@@ -871,8 +872,8 @@ export interface SchematicTableProps {
   schX?: number | string
   schY?: number | string
   children?: any
-  columnWidths: (number | string)[]
-  rowHeights: (number | string)[]
+  columnWidths?: (number | string)[]
+  rowHeights?: (number | string)[]
   cellPadding?: number | string
   borderWidth?: number | string
   anchor?: z.infer<typeof ninePointAnchor>

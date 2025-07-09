@@ -155,3 +155,21 @@ test("[typetest] pinAttributes type matches pin labels", () => {
   )
   void element
 })
+
+test("[typetest] connections can reference pin numbers", () => {
+  const myPinLabels = {
+    pin1: "A",
+    pin2: "B",
+  } as const
+
+  const MyChip = (props: ChipProps<typeof myPinLabels>) => <chip {...props} />
+
+  const byLabel = (
+    <MyChip name="U1" pinLabels={myPinLabels} connections={{ A: "net.A" }} />
+  )
+  const byNumber = (
+    <MyChip name="U1" pinLabels={myPinLabels} connections={{ pin2: "net.B" }} />
+  )
+  void byLabel
+  void byNumber
+})

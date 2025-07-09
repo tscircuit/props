@@ -170,6 +170,18 @@ test("[typetest] connections can reference pin numbers", () => {
   const byNumber = (
     <MyChip name="U1" pinLabels={myPinLabels} connections={{ pin2: "net.B" }} />
   )
+  const invalid = (
+    <MyChip
+      name="U1"
+      pinLabels={myPinLabels}
+      connections={{
+        // @ts-expect-error
+        INVALID_PIN: "net.C",
+      }}
+    />
+  )
+
   void byLabel
   void byNumber
+  void invalid
 })

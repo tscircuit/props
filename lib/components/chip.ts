@@ -57,7 +57,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
 export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
   ChipPropsSU<
     PinLabelMap extends PinLabelsProp
-      ? PinLabelFromPinLabelMap<PinLabelMap> | (keyof PinLabelMap & string)
+      ? PinLabelFromPinLabelMap<PinLabelMap> | keyof PinLabelMap
       : PinLabelMap
   >
 

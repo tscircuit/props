@@ -405,6 +405,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<string, PinLabel>
   showPinAliases?: boolean
+  pcbPinLabels?: Record<string, string>
   schPinArrangement?: SchematicPortArrangement
   schPortArrangement?: SchematicPortArrangement
   pinCompatibleVariants?: PinCompatibleVariant[]
@@ -442,6 +443,7 @@ export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),
+  pcbPinLabels: z.record(z.string(), z.string()).optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   externallyConnectedPins: z.array(z.array(z.string())).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
@@ -1038,6 +1040,7 @@ export interface JumperProps extends CommonComponentProps {
   schHeight?: number | string
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
+  pcbPinLabels?: Record<string, string>
   pinCount?: 2 | 3
   internallyConnectedPins?: string[][]
   connections?: Connections<string>
@@ -1056,6 +1059,7 @@ export const jumperProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
+  pcbPinLabels: z.record(z.string(), z.string()).optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   connections: z
@@ -1198,6 +1202,8 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   showSilkscreenPinLabels?: boolean
 
+  pcbPinLabels?: Record<string, string>
+
   doubleRow?: boolean
 
   holeDiameter?: number | string
@@ -1229,6 +1235,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   gender: z.enum(["male", "female"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
+  pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),

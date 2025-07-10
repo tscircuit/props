@@ -40,6 +40,10 @@ export interface ChipPropsSU<PinLabel extends string = string>
    * Whether to show pin aliases in the schematic
    */
   showPinAliases?: boolean
+  /**
+   * Labels for PCB pins
+   */
+  pcbPinLabels?: Record<string, string>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -126,6 +130,7 @@ export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),
+  pcbPinLabels: z.record(z.string(), z.string()).optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   externallyConnectedPins: z.array(z.array(z.string())).optional(),
   schPinArrangement: schematicPinArrangement.optional(),

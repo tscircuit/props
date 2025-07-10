@@ -43,6 +43,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   showSilkscreenPinLabels?: boolean
 
   /**
+   * Labels for PCB pins
+   */
+  pcbPinLabels?: Record<string, string>
+
+  /**
    * Whether the header has two rows of pins
    */
   doubleRow?: boolean
@@ -104,6 +109,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   gender: z.enum(["male", "female"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
+  pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),

@@ -5,7 +5,9 @@
 - [Manual Edit Events](#manual-edit-events)
   - [BaseManualEditEvent](#basemanualeditevent)
   - [EditPcbComponentLocationEvent](#editpcbcomponentlocationevent)
+  - [EditPcbGroupLocationEvent](#editpcbgrouplocationevent)
   - [EditSchematicComponentLocationEvent](#editschematiccomponentlocationevent)
+  - [EditSchematicGroupLocationEvent](#editschematicgrouplocationevent)
   - [EditTraceHintEvent](#edittracehintevent)
 - [Manual Edit Files](#manual-edit-files)
   - [ManualEditsFile](#manualeditsfile)
@@ -42,12 +44,34 @@ interface EditPcbComponentLocationEvent extends BaseManualEditEvent {
 }
 ```
 
+### EditPcbGroupLocationEvent
+
+```typescript
+interface EditPcbGroupLocationEvent extends BaseManualEditEvent {
+  edit_event_type: "edit_pcb_group_location"
+  pcb_group_id: string
+  original_center: { x: number; y: number }
+  new_center: { x: number; y: number }
+}
+```
+
 ### EditSchematicComponentLocationEvent
 
 ```typescript
 interface EditSchematicComponentLocationEvent extends BaseManualEditEvent {
   edit_event_type: "edit_schematic_component_location"
   schematic_component_id: string
+  original_center: { x: number; y: number }
+  new_center: { x: number; y: number }
+}
+```
+
+### EditSchematicGroupLocationEvent
+
+```typescript
+interface EditSchematicGroupLocationEvent extends BaseManualEditEvent {
+  edit_event_type: "edit_schematic_group_location"
+  schematic_group_id: string
   original_center: { x: number; y: number }
   new_center: { x: number; y: number }
 }

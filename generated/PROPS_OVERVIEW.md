@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-10T06:36:12.010Z
+> Generated at 2025-07-10T15:25:03.238Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -164,6 +164,10 @@ export interface ChipPropsSU<PinLabel extends string = string>
    * Whether to show pin aliases in the schematic
    */
   showPinAliases?: boolean
+  /**
+   * Labels for PCB pins
+   */
+  pcbPinLabels?: Record<string, string>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -237,10 +241,6 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
-  /**
-   * Whether to show pin labels in the schematic view
-   */
-  showSchematicPinLabels?: boolean
 }
 
 
@@ -425,6 +425,10 @@ export interface JumperProps extends CommonComponentProps {
   schHeight?: number | string
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
+  /**
+   * Labels for PCB pins
+   */
+  pcbPinLabels?: Record<string, string>
   /**
    * Number of pins on the jumper (2 or 3)
    */
@@ -650,6 +654,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Whether to show pin labels in silkscreen
    */
   showSilkscreenPinLabels?: boolean
+
+  /**
+   * Labels for PCB pins
+   */
+  pcbPinLabels?: Record<string, string>
 
   /**
    * Whether the header has two rows of pins

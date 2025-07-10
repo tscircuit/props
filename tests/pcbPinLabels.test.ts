@@ -4,11 +4,11 @@ import { jumperProps } from "lib/components/jumper"
 import { solderjumperProps } from "lib/components/solderjumper"
 import { pinHeaderProps } from "lib/components/pin-header"
 
-test("Component props should validate showSchematicPinLabels as an optional boolean", () => {
+test("Component props should validate pcbPinLabels as an optional object", () => {
   // Test chipProps
   const chipValidProps = {
     name: "TestChip",
-    showSchematicPinLabels: true,
+    pcbPinLabels: { pin1: "A", pin2: "B", pin3: "C" },
   }
   const chipResult = chipProps.safeParse(chipValidProps)
   expect(chipResult.success).toBe(true)
@@ -16,7 +16,7 @@ test("Component props should validate showSchematicPinLabels as an optional bool
   // Test jumperProps
   const jumperValidProps = {
     name: "TestJumper",
-    showSchematicPinLabels: true,
+    pcbPinLabels: { pin1: "A", pin2: "B" },
   }
   const jumperResult = jumperProps.safeParse(jumperValidProps)
   expect(jumperResult.success).toBe(true)
@@ -24,7 +24,7 @@ test("Component props should validate showSchematicPinLabels as an optional bool
   // Test solderJumperProps
   const solderJumperValidProps = {
     name: "TestSolderJumper",
-    showSchematicPinLabels: true,
+    pcbPinLabels: { pin1: "A", pin2: "B" },
   }
   const solderJumperResult = solderjumperProps.safeParse(solderJumperValidProps)
   expect(solderJumperResult.success).toBe(true)
@@ -33,32 +33,32 @@ test("Component props should validate showSchematicPinLabels as an optional bool
   const pinHeaderValidProps = {
     name: "TestPinHeader",
     pinCount: 5, // Required prop for pin headers
-    showSchematicPinLabels: true,
+    pcbPinLabels: { pin1: "VCC", pin2: "GND", pin3: "DATA" },
   }
   const pinHeaderResult = pinHeaderProps.safeParse(pinHeaderValidProps)
   expect(pinHeaderResult.success).toBe(true)
 
-  // Test with false value
-  const propsWithFalse = {
+  // Test with empty object
+  const propsWithEmptyObject = {
     name: "TestComponent",
-    showSchematicPinLabels: false,
+    pcbPinLabels: {},
   }
-  expect(chipProps.safeParse(propsWithFalse).success).toBe(true)
-  expect(jumperProps.safeParse(propsWithFalse).success).toBe(true)
-  expect(solderjumperProps.safeParse(propsWithFalse).success).toBe(true)
+  expect(chipProps.safeParse(propsWithEmptyObject).success).toBe(true)
+  expect(jumperProps.safeParse(propsWithEmptyObject).success).toBe(true)
+  expect(solderjumperProps.safeParse(propsWithEmptyObject).success).toBe(true)
 
-  // Test without showSchematicPinLabels
-  const propsWithoutFlag = {
+  // Test without pcbPinLabels
+  const propsWithoutLabels = {
     name: "TestComponent",
   }
-  expect(chipProps.safeParse(propsWithoutFlag).success).toBe(true)
-  expect(jumperProps.safeParse(propsWithoutFlag).success).toBe(true)
-  expect(solderjumperProps.safeParse(propsWithoutFlag).success).toBe(true)
+  expect(chipProps.safeParse(propsWithoutLabels).success).toBe(true)
+  expect(jumperProps.safeParse(propsWithoutLabels).success).toBe(true)
+  expect(solderjumperProps.safeParse(propsWithoutLabels).success).toBe(true)
 
   // Test with invalid value (should fail)
   const invalidProps = {
     name: "TestComponent",
-    showSchematicPinLabels: "true", // String instead of boolean
+    pcbPinLabels: "invalid", // String instead of object
   }
   expect(chipProps.safeParse(invalidProps).success).toBe(false)
   expect(jumperProps.safeParse(invalidProps).success).toBe(false)
@@ -67,7 +67,7 @@ test("Component props should validate showSchematicPinLabels as an optional bool
   const invalidPinHeaderProps = {
     name: "TestPinHeader",
     pinCount: 5,
-    showSchematicPinLabels: "true", // String instead of boolean
+    pcbPinLabels: "invalid", // String instead of object
   }
   expect(pinHeaderProps.safeParse(invalidPinHeaderProps).success).toBe(false)
 })

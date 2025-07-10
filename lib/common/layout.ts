@@ -75,6 +75,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   key?: any
   name: string
   pinAttributes?: Record<PinLabel, Record<string, any>>
+  pcbPinLabels?: Record<string, PinLabel>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   children?: any
@@ -94,6 +95,7 @@ export const commonComponentProps = commonLayoutProps
     pinAttributes: z
       .record(z.string(), z.record(z.string(), z.any()))
       .optional(),
+    pcbPinLabels: z.record(z.string(), z.string()).optional(),
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

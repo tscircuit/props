@@ -1,4 +1,3 @@
-import type { LayoutBuilder } from "@tscircuit/layout"
 import { layer_ref, length } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import {
@@ -198,7 +197,6 @@ export const autorouterProp = z.union([
 ])
 
 export interface SubcircuitGroupProps extends BaseGroupProps {
-  layout?: LayoutBuilder
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
@@ -257,7 +255,6 @@ export const baseGroupProps = commonLayoutProps.extend({
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
 
 export const subcircuitGroupProps = baseGroupProps.extend({
-  layout: z.custom<LayoutBuilder>((v) => true).optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

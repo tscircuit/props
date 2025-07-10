@@ -222,6 +222,10 @@ export interface ChipPropsSU<PinLabel extends string = string>
    * Whether to show pin aliases in the schematic
    */
   showPinAliases?: boolean
+  /**
+   * Whether to show pin labels in the schematic view
+   */
+  showSchematicPinLabels?: boolean
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -462,6 +466,10 @@ export interface JumperProps extends CommonComponentProps {
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
   /**
+   * Whether to show pin labels in the schematic view
+   */
+  showSchematicPinLabels?: boolean
+  /**
    * Number of pins on the jumper (2 or 3)
    */
   pinCount?: 2 | 3
@@ -566,6 +574,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Whether to show pin labels in silkscreen
    */
   showSilkscreenPinLabels?: boolean
+
+  /**
+   * Whether to show pin labels in the schematic view
+   */
+  showSchematicPinLabels?: boolean
 
   /**
    * Whether the header has two rows of pins

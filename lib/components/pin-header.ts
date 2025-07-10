@@ -43,6 +43,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   showSilkscreenPinLabels?: boolean
 
   /**
+   * Whether to show pin labels in the schematic view
+   */
+  showSchematicPinLabels?: boolean
+
+  /**
    * Whether the header has two rows of pins
    */
   doubleRow?: boolean
@@ -104,6 +109,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   gender: z.enum(["male", "female"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
+  showSchematicPinLabels: z.boolean().optional(),
   doubleRow: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),

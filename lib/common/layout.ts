@@ -80,10 +80,6 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
-  /**
-   * Whether to show pin labels in the schematic view
-   */
-  showSchematicPinLabels?: boolean
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -95,7 +91,6 @@ export const commonComponentProps = commonLayoutProps
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
-    showSchematicPinLabels: z.boolean().optional(),
     pinAttributes: z
       .record(z.string(), z.record(z.string(), z.any()))
       .optional(),

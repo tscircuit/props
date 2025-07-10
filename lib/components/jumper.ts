@@ -26,6 +26,10 @@ export interface JumperProps extends CommonComponentProps {
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
   /**
+   * Whether to show pin labels in the schematic view
+   */
+  showSchematicPinLabels?: boolean
+  /**
    * Number of pins on the jumper (2 or 3)
    */
   pinCount?: 2 | 3
@@ -51,6 +55,7 @@ export const jumperProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
+  showSchematicPinLabels: z.boolean().optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   connections: z

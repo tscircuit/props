@@ -140,7 +140,6 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
-  showSchematicPinLabels?: boolean
 }
 .extend({
     key: z.any().optional(),
@@ -149,7 +148,6 @@ export interface CommonComponentProps<PinLabel extends string = string>
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
-    showSchematicPinLabels: z.boolean().optional(),
     pinAttributes: z
       .record(z.string(), z.record(z.string(), z.any()))
       .optional(),
@@ -407,6 +405,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<string, PinLabel>
   showPinAliases?: boolean
+  showSchematicPinLabels?: boolean
   schPinArrangement?: SchematicPortArrangement
   schPortArrangement?: SchematicPortArrangement
   pinCompatibleVariants?: PinCompatibleVariant[]
@@ -444,6 +443,7 @@ export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),
+  showSchematicPinLabels: z.boolean().optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   externallyConnectedPins: z.array(z.array(z.string())).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
@@ -1040,6 +1040,7 @@ export interface JumperProps extends CommonComponentProps {
   schHeight?: number | string
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
+  showSchematicPinLabels?: boolean
   pinCount?: 2 | 3
   internallyConnectedPins?: string[][]
   connections?: Connections<string>
@@ -1058,6 +1059,7 @@ export const jumperProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
+  showSchematicPinLabels: z.boolean().optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   connections: z
@@ -1200,6 +1202,8 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   showSilkscreenPinLabels?: boolean
 
+  showSchematicPinLabels?: boolean
+
   doubleRow?: boolean
 
   holeDiameter?: number | string
@@ -1231,6 +1235,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   gender: z.enum(["male", "female"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
+  showSchematicPinLabels: z.boolean().optional(),
   doubleRow: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),

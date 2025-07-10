@@ -140,6 +140,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  showSchematicPinLabels?: boolean
 }
 .extend({
     key: z.any().optional(),
@@ -148,6 +149,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    showSchematicPinLabels: z.boolean().optional(),
     pinAttributes: z
       .record(z.string(), z.record(z.string(), z.any()))
       .optional(),

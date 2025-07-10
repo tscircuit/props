@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-07T16:17:11.953Z
+> Generated at 2025-07-10T06:36:12.010Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -237,6 +237,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  /**
+   * Whether to show pin labels in the schematic view
+   */
+  showSchematicPinLabels?: boolean
 }
 
 

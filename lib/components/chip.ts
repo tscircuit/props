@@ -13,6 +13,10 @@ import {
   type SchematicPinStyle,
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
+import {
+  providerPinLabel,
+  type ProviderPinLabel,
+} from "lib/common/providerPinLabel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
@@ -43,7 +47,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
   /**
    * Labels for PCB pins
    */
-  pcbPinLabels?: Record<string, string>
+  pcbPinLabels?: Record<string, ProviderPinLabel>
   schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
   schPortArrangement?: SchematicPortArrangement
@@ -130,7 +134,7 @@ export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),
-  pcbPinLabels: z.record(z.string(), z.string()).optional(),
+  pcbPinLabels: z.record(z.string(), providerPinLabel).optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   externallyConnectedPins: z.array(z.array(z.string())).optional(),
   schPinArrangement: schematicPinArrangement.optional(),

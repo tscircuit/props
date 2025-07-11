@@ -45,7 +45,7 @@ jobs:
         if: steps.git-check.outputs.readme_changed == 'true'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "docs: Update README.md with latest component definitions [skip ci]"
+          commit_message: "docs: Update README.md with latest component definitions"
           branch: ${{ github.ref }}
           commit_user_name: tscircuitbot
           commit_user_email: tscircuitbot@users.noreply.github.com

@@ -687,6 +687,7 @@ export interface SchematicCellProps {
   rowSpan?: number;
   colSpan?: number;
   width?: number | string;
+  text?: string;
 }
 ```
 

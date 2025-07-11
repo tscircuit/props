@@ -10,6 +10,7 @@ export const schematicCellProps = z.object({
   rowSpan: z.number().optional(),
   colSpan: z.number().optional(),
   width: distance.optional(),
+  text: z.string().optional(),
 })
 
 export interface SchematicCellProps {
@@ -20,6 +21,7 @@ export interface SchematicCellProps {
   rowSpan?: number
   colSpan?: number
   width?: number | string
+  text?: string
 }
 
 expectTypesMatch<SchematicCellProps, z.input<typeof schematicCellProps>>(true)

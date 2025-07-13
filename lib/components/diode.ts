@@ -96,7 +96,7 @@ export const diodeProps = commonComponentProps
           result.zener = true
           break
         case "avalanche":
-          result.avalanche = true // Treat avalanche as zener for compatibility
+          result.avalanche = true
           break
         case "photo":
           result.photo = true

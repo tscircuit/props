@@ -26,7 +26,14 @@ const connectionTarget = z
 
 const connectionsProp = z.record(diodeConnectionKeys, connectionTarget)
 
-const diodeVariant = z.enum(["standard", "schottky", "zener", "photo", "tvs"])
+const diodeVariant = z.enum([
+  "standard",
+  "schottky",
+  "zener",
+  "avalanche",
+  "photo",
+  "tvs",
+])
 
 export const diodeProps = commonComponentProps
   .extend({
@@ -35,6 +42,7 @@ export const diodeProps = commonComponentProps
     standard: z.boolean().optional(),
     schottky: z.boolean().optional(),
     zener: z.boolean().optional(),
+    avalanche: z.boolean().optional(),
     photo: z.boolean().optional(),
     tvs: z.boolean().optional(),
     schOrientation: schematicOrientation.optional(),
@@ -45,6 +53,7 @@ export const diodeProps = commonComponentProps
       data.standard,
       data.schottky,
       data.zener,
+      data.avalanche,
       data.photo,
       data.tvs,
     ].filter(Boolean).length
@@ -65,6 +74,7 @@ export const diodeProps = commonComponentProps
       standard: false,
       schottky: false,
       zener: false,
+      avalanche: false,
       photo: false,
       tvs: false,
     }
@@ -84,6 +94,9 @@ export const diodeProps = commonComponentProps
           break
         case "zener":
           result.zener = true
+          break
+        case "avalanche":
+          result.avalanche = true // Treat avalanche as zener for compatibility
           break
         case "photo":
           result.photo = true
@@ -112,10 +125,11 @@ export interface DiodeProps<PinLabel extends string = string>
     pos?: string | string[] | readonly string[]
     neg?: string | string[] | readonly string[]
   }
-  variant?: "standard" | "schottky" | "zener" | "photo" | "tvs"
+  variant?: "standard" | "schottky" | "zener" | "avalanche" | "photo" | "tvs"
   standard?: boolean
   schottky?: boolean
   zener?: boolean
+  avalanche?: boolean
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation

@@ -231,6 +231,12 @@ export interface ChipPropsSU<PinLabel extends string = string>
   schPinSpacing?: Distance;
   schWidth?: Distance;
   schHeight?: Distance;
+  schRefAnchorPosition?: Point;
+  schRefAnchorAlignment?: z.infer<typeof ninePointAnchor>;
+  /**
+   * Rotation of the schematic reference text around its anchor.
+   */
+  schRefRotation?: number | string;
   noSchematicRepresentation?: boolean;
   internallyConnectedPins?: string[][];
   externallyConnectedPins?: string[][];

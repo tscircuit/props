@@ -319,10 +319,11 @@ export interface DiodeProps<PinLabel extends string = string>
     pos?: string | string[] | readonly string[];
     neg?: string | string[] | readonly string[];
   };
-  variant?: "standard" | "schottky" | "zener" | "photo" | "tvs";
+  variant?: "standard" | "schottky" | "zener" | "avalanche" | "photo" | "tvs";
   standard?: boolean;
   schottky?: boolean;
   zener?: boolean;
+  avalanche?: boolean;
   photo?: boolean;
   tvs?: boolean;
   schOrientation?: SchematicOrientation;

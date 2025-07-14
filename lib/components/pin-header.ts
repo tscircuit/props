@@ -12,7 +12,10 @@ import {
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
 import { connectionTarget } from "lib/common/connectionsProp"
-import { schematicPinLabel, type SchematicPinLabel } from "lib/common/schematicPinLabel"
+import {
+  schematicPinLabel,
+  type SchematicPinLabel,
+} from "lib/common/schematicPinLabel"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"

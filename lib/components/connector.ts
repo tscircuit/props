@@ -11,13 +11,19 @@ import {
   type SchematicPinStyle,
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
-import { schematicPinLabel, type SchematicPinLabel } from "lib/common/schematicPinLabel"
+import {
+  schematicPinLabel,
+  type SchematicPinLabel,
+} from "lib/common/schematicPinLabel"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface ConnectorProps extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Record<number | SchematicPinLabel, SchematicPinLabel | SchematicPinLabel[]>
+  pinLabels?: Record<
+    number | SchematicPinLabel,
+    SchematicPinLabel | SchematicPinLabel[]
+  >
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: number | string
   schWidth?: number | string
@@ -38,7 +44,10 @@ export interface ConnectorProps extends CommonComponentProps {
 export const connectorProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z
-    .record(z.number().or(schematicPinLabel), schematicPinLabel.or(z.array(schematicPinLabel)))
+    .record(
+      z.number().or(schematicPinLabel),
+      schematicPinLabel.or(z.array(schematicPinLabel)),
+    )
     .optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),

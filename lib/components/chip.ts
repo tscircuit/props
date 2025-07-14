@@ -13,7 +13,10 @@ import {
   type SchematicPinStyle,
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
-import { schematicPinLabel, type SchematicPinLabel } from "lib/common/schematicPinLabel"
+import {
+  schematicPinLabel,
+  type SchematicPinLabel,
+} from "lib/common/schematicPinLabel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
@@ -117,7 +120,9 @@ const connectionsProp = z
 
 export const pinLabelsProp = z.record(
   schematicPinLabel,
-  schematicPinLabel.or(z.array(schematicPinLabel).readonly()).or(z.array(schematicPinLabel)),
+  schematicPinLabel
+    .or(z.array(schematicPinLabel).readonly())
+    .or(z.array(schematicPinLabel)),
 )
 
 expectTypesMatch<PinLabelsProp, z.input<typeof pinLabelsProp>>(true)

@@ -12,14 +12,20 @@ import {
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
 import { connectionTarget } from "lib/common/connectionsProp"
-import { schematicPinLabel, type SchematicPinLabel } from "lib/common/schematicPinLabel"
+import {
+  schematicPinLabel,
+  type SchematicPinLabel,
+} from "lib/common/schematicPinLabel"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Record<number | SchematicPinLabel, SchematicPinLabel | SchematicPinLabel[]>
+  pinLabels?: Record<
+    number | SchematicPinLabel,
+    SchematicPinLabel | SchematicPinLabel[]
+  >
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: number | string
   schWidth?: number | string
@@ -48,7 +54,10 @@ export interface JumperProps extends CommonComponentProps {
 export const jumperProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z
-    .record(z.number().or(schematicPinLabel), schematicPinLabel.or(z.array(schematicPinLabel)))
+    .record(
+      z.number().or(schematicPinLabel),
+      schematicPinLabel.or(z.array(schematicPinLabel)),
+    )
     .optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),

@@ -13,6 +13,10 @@ import {
   type SchematicPinStyle,
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
+import {
+  schematicPinLabel,
+  type SchematicPinLabel,
+} from "lib/common/schematicPinLabel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
@@ -32,10 +36,11 @@ export interface PinCompatibleVariant {
   supplierPartNumber?: SupplierPartNumbers
 }
 
-export interface ChipPropsSU<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
+export interface ChipPropsSU<
+  PinLabel extends SchematicPinLabel = SchematicPinLabel,
+> extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string
-  pinLabels?: PinLabelsProp<string, PinLabel>
+  pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   /**
    * Whether to show pin aliases in the schematic
    */
@@ -115,8 +120,10 @@ const connectionsProp = z
   .pipe(z.record(z.string(), connectionTarget))
 
 export const pinLabelsProp = z.record(
-  z.string(),
-  z.string().or(z.array(z.string()).readonly()).or(z.array(z.string())),
+  schematicPinLabel,
+  schematicPinLabel
+    .or(z.array(schematicPinLabel).readonly())
+    .or(z.array(schematicPinLabel)),
 )
 
 expectTypesMatch<PinLabelsProp, z.input<typeof pinLabelsProp>>(true)

@@ -12,6 +12,10 @@ import {
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
 import { connectionTarget } from "lib/common/connectionsProp"
+import {
+  schematicPinLabel,
+  type SchematicPinLabel,
+} from "lib/common/schematicPinLabel"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
@@ -65,7 +69,7 @@ export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Labels for each pin
    */
-  pinLabels?: string[]
+  pinLabels?: SchematicPinLabel[]
 
   /**
    * Connections to other components
@@ -113,7 +117,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   doubleRow: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
-  pinLabels: z.array(z.string()).optional(),
+  pinLabels: z.array(schematicPinLabel).optional(),
   connections: z
     .custom<Connections>()
     .pipe(z.record(z.string(), connectionTarget))

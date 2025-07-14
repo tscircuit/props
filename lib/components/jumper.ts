@@ -12,17 +12,14 @@ import {
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
 import { connectionTarget } from "lib/common/connectionsProp"
-import {
-  providerPinLabel,
-  type ProviderPinLabel,
-} from "lib/common/providerPinLabel"
+import { schematicPinLabel, type SchematicPinLabel } from "lib/common/schematicPinLabel"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string
-  pinLabels?: Record<number | string, string | string[]>
+  pinLabels?: Record<number | SchematicPinLabel, SchematicPinLabel | SchematicPinLabel[]>
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: number | string
   schWidth?: number | string
@@ -32,7 +29,7 @@ export interface JumperProps extends CommonComponentProps {
   /**
    * Labels for PCB pins
    */
-  pcbPinLabels?: Record<string, ProviderPinLabel>
+  pcbPinLabels?: Record<string, string>
   /**
    * Number of pins on the jumper (2 or 3)
    */
@@ -51,7 +48,7 @@ export interface JumperProps extends CommonComponentProps {
 export const jumperProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z
-    .record(z.number().or(z.string()), z.string().or(z.array(z.string())))
+    .record(z.number().or(schematicPinLabel), schematicPinLabel.or(z.array(schematicPinLabel)))
     .optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),
@@ -59,7 +56,7 @@ export const jumperProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
-  pcbPinLabels: z.record(z.string(), providerPinLabel).optional(),
+  pcbPinLabels: z.record(z.string(), z.string()).optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
   internallyConnectedPins: z.array(z.array(z.string())).optional(),
   connections: z

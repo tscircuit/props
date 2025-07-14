@@ -245,7 +245,7 @@ export interface ChipPropsSU<PinLabel extends string = string>
 ```ts
 export interface ConnectorProps extends CommonComponentProps {
   manufacturerPartNumber?: string;
-  pinLabels?: Record<number | string, string | string[]>;
+  pinLabels?: Record<number | SchematicPinLabel, SchematicPinLabel | SchematicPinLabel[]>;
   schPinStyle?: SchematicPinStyle;
   schPinSpacing?: number | string;
   schWidth?: number | string;
@@ -444,7 +444,7 @@ export interface InductorProps<PinLabel extends string = string>
 ```ts
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string;
-  pinLabels?: Record<number | string, string | string[]>;
+  pinLabels?: Record<number | SchematicPinLabel, SchematicPinLabel | SchematicPinLabel[]>;
   schPinStyle?: SchematicPinStyle;
   schPinSpacing?: number | string;
   schWidth?: number | string;
@@ -579,7 +579,7 @@ export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Labels for each pin
    */
-  pinLabels?: string[];
+  pinLabels?: SchematicPinLabel[];
 
   /**
    * Connections to other components

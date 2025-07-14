@@ -12,10 +12,7 @@ import {
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
 import { connectionTarget } from "lib/common/connectionsProp"
-import {
-  providerPinLabel,
-  type ProviderPinLabel,
-} from "lib/common/providerPinLabel"
+import { schematicPinLabel, type SchematicPinLabel } from "lib/common/schematicPinLabel"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
@@ -49,7 +46,7 @@ export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Labels for PCB pins
    */
-  pcbPinLabels?: Record<string, ProviderPinLabel>
+  pcbPinLabels?: Record<string, string>
 
   /**
    * Whether the header has two rows of pins
@@ -69,7 +66,7 @@ export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Labels for each pin
    */
-  pinLabels?: string[]
+  pinLabels?: SchematicPinLabel[]
 
   /**
    * Connections to other components
@@ -113,11 +110,11 @@ export const pinHeaderProps = commonComponentProps.extend({
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   gender: z.enum(["male", "female"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
-  pcbPinLabels: z.record(z.string(), providerPinLabel).optional(),
+  pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
-  pinLabels: z.array(z.string()).optional(),
+  pinLabels: z.array(schematicPinLabel).optional(),
   connections: z
     .custom<Connections>()
     .pipe(z.record(z.string(), connectionTarget))

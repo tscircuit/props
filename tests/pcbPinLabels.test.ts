@@ -70,21 +70,4 @@ test("Component props should validate pcbPinLabels as an optional object", () =>
     pcbPinLabels: "invalid", // String instead of object
   }
   expect(pinHeaderProps.safeParse(invalidPinHeaderProps).success).toBe(false)
-
-  // Test invalid provider pin label characters
-  const invalidLabelProps = {
-    name: "TestComponent",
-    pcbPinLabels: { pin1: "A-B" },
-  }
-  expect(chipProps.safeParse(invalidLabelProps).success).toBe(false)
-  expect(jumperProps.safeParse(invalidLabelProps).success).toBe(false)
-  expect(solderjumperProps.safeParse(invalidLabelProps).success).toBe(false)
-  const invalidLabelPinHeaderProps = {
-    name: "TestPinHeader",
-    pinCount: 5,
-    pcbPinLabels: { pin1: "A-B" },
-  }
-  expect(pinHeaderProps.safeParse(invalidLabelPinHeaderProps).success).toBe(
-    false,
-  )
 })

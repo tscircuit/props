@@ -36,8 +36,9 @@ export interface PinCompatibleVariant {
   supplierPartNumber?: SupplierPartNumbers
 }
 
-export interface ChipPropsSU<PinLabel extends SchematicPinLabel = SchematicPinLabel>
-  extends CommonComponentProps<PinLabel> {
+export interface ChipPropsSU<
+  PinLabel extends SchematicPinLabel = SchematicPinLabel,
+> extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   /**

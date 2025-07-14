@@ -1,7 +1,5 @@
 import { commonComponentProps, lrPolarPins } from "lib/common/layout"
-import {
-  schematicOrientation,
-} from "lib/common/schematicOrientation"
+import { schematicOrientation } from "lib/common/schematicOrientation"
 import { z } from "zod"
 import { createConnectionsProp } from "lib/common/connectionsProp"
 

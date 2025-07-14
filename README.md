@@ -211,10 +211,11 @@ export interface CapacitorProps<PinLabel extends string = string>
 ### ChipProps `<chip />`
 
 ```ts
-export interface ChipPropsSU<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
+export interface ChipPropsSU<
+  PinLabel extends SchematicPinLabel = SchematicPinLabel,
+> extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string;
-  pinLabels?: PinLabelsProp<string, PinLabel>;
+  pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>;
   /**
    * Whether to show pin aliases in the schematic
    */
@@ -245,7 +246,10 @@ export interface ChipPropsSU<PinLabel extends string = string>
 ```ts
 export interface ConnectorProps extends CommonComponentProps {
   manufacturerPartNumber?: string;
-  pinLabels?: Record<number | SchematicPinLabel, SchematicPinLabel | SchematicPinLabel[]>;
+  pinLabels?: Record<
+    number | SchematicPinLabel,
+    SchematicPinLabel | SchematicPinLabel[]
+  >;
   schPinStyle?: SchematicPinStyle;
   schPinSpacing?: number | string;
   schWidth?: number | string;
@@ -445,7 +449,10 @@ export interface InductorProps<PinLabel extends string = string>
 ```ts
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string;
-  pinLabels?: Record<number | SchematicPinLabel, SchematicPinLabel | SchematicPinLabel[]>;
+  pinLabels?: Record<
+    number | SchematicPinLabel,
+    SchematicPinLabel | SchematicPinLabel[]
+  >;
   schPinStyle?: SchematicPinStyle;
   schPinSpacing?: number | string;
   schWidth?: number | string;

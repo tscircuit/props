@@ -845,6 +845,7 @@ export interface TestpointProps extends CommonComponentProps {
 export interface TransistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt";
+  connections?: Connections<transistorPinsLabels>;
 }
 ```
 

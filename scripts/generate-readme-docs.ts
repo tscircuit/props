@@ -133,6 +133,7 @@ function generateInterfaceDefinitions(
       interfaceDefinition: `export interface CommonComponentProps extends CommonLayoutProps {
   key?: any
   name: string
+  pinAttributes?: Record<PinLabel, PinAttributeMap>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   children?: any

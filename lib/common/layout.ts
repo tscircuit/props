@@ -70,11 +70,31 @@ export const supplierProps = z.object({
 
 expectTypesMatch<SupplierProps, z.input<typeof supplierProps>>(true)
 
+export interface PinAttributeMap {
+  providesPower?: boolean
+  requiresPower?: boolean
+  providesGround?: boolean
+  requiresGround?: boolean
+  providesVoltage?: string | number
+  requiresVoltage?: string | number
+}
+
+export const pinAttributeMap = z.object({
+  providesPower: z.boolean().optional(),
+  requiresPower: z.boolean().optional(),
+  providesGround: z.boolean().optional(),
+  requiresGround: z.boolean().optional(),
+  providesVoltage: z.union([z.string(), z.number()]).optional(),
+  requiresVoltage: z.union([z.string(), z.number()]).optional(),
+})
+
+expectTypesMatch<PinAttributeMap, z.input<typeof pinAttributeMap>>(true)
+
 export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
   key?: any
   name: string
-  pinAttributes?: Record<PinLabel, Record<string, any>>
+  pinAttributes?: Record<PinLabel, PinAttributeMap>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   children?: any
@@ -91,9 +111,7 @@ export const commonComponentProps = commonLayoutProps
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
-    pinAttributes: z
-      .record(z.string(), z.record(z.string(), z.any()))
-      .optional(),
+    pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

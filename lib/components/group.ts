@@ -30,7 +30,17 @@ export const layoutConfig = z.object({
   flex: z.boolean().or(z.string()).optional(),
   flexDirection: z.enum(["row", "column"]).optional(),
   alignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
-  justifyContent: z.enum(["start", "center", "end", "stretch", "space-between", "space-around", "space-evenly"]).optional(),
+  justifyContent: z
+    .enum([
+      "start",
+      "center",
+      "end",
+      "stretch",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ])
+    .optional(),
   flexRow: z.boolean().optional(),
   flexColumn: z.boolean().optional(),
   gap: z.number().or(z.string()).optional(),
@@ -74,7 +84,14 @@ export interface LayoutConfig {
   flex?: boolean | string
   flexDirection?: "row" | "column"
   alignItems?: "start" | "center" | "end" | "stretch"
-  justifyContent?: "start" | "center" | "end" | "stretch" | "space-between" | "space-around" | "space-evenly"
+  justifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string

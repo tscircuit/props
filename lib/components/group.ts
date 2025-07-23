@@ -35,6 +35,15 @@ export const layoutConfig = z.object({
   flexColumn: z.boolean().optional(),
   gap: z.number().or(z.string()).optional(),
 
+  pack: z
+    .boolean()
+    .optional()
+    .describe("Pack the contents of this group using a packing strategy"),
+  packOrderStrategy: z.enum(["largest_to_smallest"]).optional(),
+  packPlacementStrategy: z
+    .enum(["shortest_connection_along_outline"])
+    .optional(),
+
   padding: length.optional(),
   paddingLeft: length.optional(),
   paddingRight: length.optional(),

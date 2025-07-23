@@ -79,6 +79,10 @@ export interface LayoutConfig {
   flexColumn?: boolean
   gap?: number | string
 
+  pack?: boolean
+  packOrderStrategy?: "largest_to_smallest"
+  packPlacementStrategy?: "shortest_connection_along_outline"
+
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance

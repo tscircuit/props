@@ -1,10 +1,11 @@
-import { layer_ref, length } from "circuit-json"
+import { layer_ref, length, distance } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import {
   type CommonLayoutProps,
   commonLayoutProps,
   type SupplierPartNumbers,
 } from "lib/common/layout"
+import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import type { AnySourceComponent, PcbTrace } from "circuit-json"
@@ -218,6 +219,19 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   schTraceAutoLabelEnabled?: boolean
 
   partsEngine?: PartsEngine
+
+  /** When autosizing, the board will be made square */
+  square?: boolean
+  /** Desired empty area of the board e.g. "22mm^2" or "20%" */
+  emptyArea?: string
+  /** Desired filled area of the board e.g. "22mm^2" or "20%" */
+  filledArea?: string
+
+  width?: number | string
+  height?: number | string
+  outline?: Point[]
+  outlineOffsetX?: number | string
+  outlineOffsetY?: number | string
 }
 
 export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
@@ -264,6 +278,14 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   partsEngine: partsEngine.optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  square: z.boolean().optional(),
+  emptyArea: z.string().optional(),
+  filledArea: z.string().optional(),
+  width: distance.optional(),
+  height: distance.optional(),
+  outline: z.array(point).optional(),
+  outlineOffsetX: distance.optional(),
+  outlineOffsetY: distance.optional(),
 })
 
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({

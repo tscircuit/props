@@ -1,6 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import { execSync } from "node:child_process"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -293,5 +294,8 @@ readmeContent = readmeContent.replace(
 
 // Write back to README
 fs.writeFileSync(readmePath, readmeContent)
+
+// Format the README using prettier
+execSync("bunx prettier --write README.md", { stdio: "inherit" })
 
 console.log("README documentation updated successfully!")

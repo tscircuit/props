@@ -95,7 +95,12 @@ export interface PcbLayoutProps {
   pcbY?: string | number
   pcbRotation?: string | number
   layer?: LayerRefInput
+  pcbRelative?: boolean
+  relative?: boolean
 }
+/**
+   * If true, both pcb and schematic coordinates will be interpreted relative to the parent group
+   */
 export interface CommonLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
@@ -107,12 +112,23 @@ export interface CommonLayoutProps {
 
   layer?: LayerRefInput
   footprint?: FootprintProp
+
+  relative?: boolean
+
+  schRelative?: boolean
+
+  pcbRelative?: boolean
 }
+/**
+   * If true, pcbX/pcbY will be interpreted relative to the parent group
+   */
 export const pcbLayoutProps = z.object({
   pcbX: distance.optional(),
   pcbY: distance.optional(),
   pcbRotation: rotation.optional(),
   layer: layer_ref.optional(),
+  pcbRelative: z.boolean().optional(),
+  relative: z.boolean().optional(),
 })
 export const commonLayoutProps = z.object({
   pcbX: distance.optional(),
@@ -123,6 +139,9 @@ export const commonLayoutProps = z.object({
   schRotation: rotation.optional(),
   layer: layer_ref.optional(),
   footprint: footprintProp.optional(),
+  relative: z.boolean().optional(),
+  schRelative: z.boolean().optional(),
+  pcbRelative: z.boolean().optional(),
 })
 export interface SupplierProps {
   supplierPartNumbers?: SupplierPartNumbers
@@ -792,7 +811,7 @@ export const fuseProps = commonComponentProps.extend({
 
 ```typescript
 export const layoutConfig = z.object({
-  layoutMode: z.enum(["grid", "flex", "match-adapt", "none"]).optional(),
+  layoutMode: z.enum(["grid", "flex", "match-adapt", "relative", "none"]).optional(),
   position: z.enum(["absolute", "relative"]).optional(),
 
   grid: z.boolean().optional(),
@@ -806,10 +825,29 @@ export const layoutConfig = z.object({
   flex: z.boolean().or(z.string()).optional(),
   flexDirection: z.enum(["row", "column"]).optional(),
   alignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
-  justifyContent: z.enum(["start", "center", "end", "stretch"]).optional(),
+  justifyContent: z
+    .enum([
+      "start",
+      "center",
+      "end",
+      "stretch",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ])
+    .optional(),
   flexRow: z.boolean().optional(),
   flexColumn: z.boolean().optional(),
   gap: z.number().or(z.string()).optional(),
+
+  pack: z
+    .boolean()
+    .optional()
+    .describe("Pack the contents of this group using a packing strategy"),
+  packOrderStrategy: z.enum(["largest_to_smallest"]).optional(),
+  packPlacementStrategy: z
+    .enum(["shortest_connection_along_outline"])
+    .optional(),
 
   padding: length.optional(),
   paddingLeft: length.optional(),
@@ -826,7 +864,7 @@ export const layoutConfig = z.object({
   matchAdaptTemplate: z.any().optional(),
 })
 export interface LayoutConfig {
-  layoutMode?: "grid" | "flex" | "match-adapt" | "none"
+  layoutMode?: "grid" | "flex" | "match-adapt" | "relative" | "none"
   position?: "absolute" | "relative"
 
   grid?: boolean
@@ -840,10 +878,21 @@ export interface LayoutConfig {
   flex?: boolean | string
   flexDirection?: "row" | "column"
   alignItems?: "start" | "center" | "end" | "stretch"
-  justifyContent?: "start" | "center" | "end" | "stretch"
+  justifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string
+
+  pack?: boolean
+  packOrderStrategy?: "largest_to_smallest"
+  packPlacementStrategy?: "shortest_connection_along_outline"
 
   padding?: Distance
   paddingLeft?: Distance

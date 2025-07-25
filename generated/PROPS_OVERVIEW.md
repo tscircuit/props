@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-23T04:29:29.055Z
+> Generated at 2025-07-24T19:30:46.888Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -251,6 +251,21 @@ export interface CommonLayoutProps {
 
   layer?: LayerRefInput
   footprint?: FootprintProp
+
+  /**
+   * If true, X/Y coordinates will be interpreted relative to the parent group
+   */
+  relative?: boolean
+
+  /**
+   * If true, schX/schY will be interpreted relative to the parent group
+   */
+  schRelative?: boolean
+
+  /**
+   * If true, pcbX/pcbY will be interpreted relative to the parent group
+   */
+  pcbRelative?: boolean
 }
 
 
@@ -449,7 +464,7 @@ export interface JumperProps extends CommonComponentProps {
 
 
 export interface LayoutConfig {
-  layoutMode?: "grid" | "flex" | "match-adapt" | "none"
+  layoutMode?: "grid" | "flex" | "match-adapt" | "relative" | "none"
   position?: "absolute" | "relative"
 
   grid?: boolean
@@ -463,10 +478,21 @@ export interface LayoutConfig {
   flex?: boolean | string
   flexDirection?: "row" | "column"
   alignItems?: "start" | "center" | "end" | "stretch"
-  justifyContent?: "start" | "center" | "end" | "stretch"
+  justifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
   flexRow?: boolean
   flexColumn?: boolean
   gap?: number | string
+
+  pack?: boolean
+  packOrderStrategy?: "largest_to_smallest"
+  packPlacementStrategy?: "shortest_connection_along_outline"
 
   padding?: Distance
   paddingLeft?: Distance
@@ -573,6 +599,14 @@ export interface PcbLayoutProps {
   pcbY?: string | number
   pcbRotation?: string | number
   layer?: LayerRefInput
+  /**
+   * If true, pcbX/pcbY will be interpreted relative to the parent group
+   */
+  pcbRelative?: boolean
+  /**
+   * If true, both pcb and schematic coordinates will be interpreted relative to the parent group
+   */
+  relative?: boolean
 }
 
 

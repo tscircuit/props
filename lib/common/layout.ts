@@ -15,6 +15,14 @@ export interface PcbLayoutProps {
   pcbY?: string | number
   pcbRotation?: string | number
   layer?: LayerRefInput
+  /**
+   * If true, pcbX/pcbY will be interpreted relative to the parent group
+   */
+  pcbRelative?: boolean
+  /**
+   * If true, both pcb and schematic coordinates will be interpreted relative to the parent group
+   */
+  relative?: boolean
 }
 
 export interface CommonLayoutProps {
@@ -28,6 +36,21 @@ export interface CommonLayoutProps {
 
   layer?: LayerRefInput
   footprint?: FootprintProp
+
+  /**
+   * If true, X/Y coordinates will be interpreted relative to the parent group
+   */
+  relative?: boolean
+
+  /**
+   * If true, schX/schY will be interpreted relative to the parent group
+   */
+  schRelative?: boolean
+
+  /**
+   * If true, pcbX/pcbY will be interpreted relative to the parent group
+   */
+  pcbRelative?: boolean
 }
 
 export const pcbLayoutProps = z.object({
@@ -35,6 +58,8 @@ export const pcbLayoutProps = z.object({
   pcbY: distance.optional(),
   pcbRotation: rotation.optional(),
   layer: layer_ref.optional(),
+  pcbRelative: z.boolean().optional(),
+  relative: z.boolean().optional(),
 })
 type InferredPcbLayoutProps = z.input<typeof pcbLayoutProps>
 expectTypesMatch<PcbLayoutProps, InferredPcbLayoutProps>(true)
@@ -48,6 +73,9 @@ export const commonLayoutProps = z.object({
   schRotation: rotation.optional(),
   layer: layer_ref.optional(),
   footprint: footprintProp.optional(),
+  relative: z.boolean().optional(),
+  schRelative: z.boolean().optional(),
+  pcbRelative: z.boolean().optional(),
 })
 
 type InferredCommonLayoutProps = z.input<typeof commonLayoutProps>

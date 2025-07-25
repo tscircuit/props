@@ -1,4 +1,4 @@
-import { distance, supplier_name } from "circuit-json"
+import { distance, rotation, supplier_name } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import {
   type CommonComponentProps,
@@ -20,6 +20,8 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
+import { ninePointAnchor } from "lib/common/ninePointAnchor"
+import { point, type Point } from "lib/common/point"
 
 export type PinLabelsProp<
   PinNumber extends string = string,
@@ -57,6 +59,12 @@ export interface ChipPropsSU<
   schPinSpacing?: Distance
   schWidth?: Distance
   schHeight?: Distance
+  schRefAnchorPosition?: Point
+  schRefAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  /**
+   * Rotation of the schematic reference text around its anchor.
+   */
+  schRefRotation?: number | string
   noSchematicRepresentation?: boolean
   internallyConnectedPins?: string[][]
   externallyConnectedPins?: string[][]
@@ -147,6 +155,9 @@ export const chipProps = commonComponentProps.extend({
   schPinSpacing: distance.optional(),
   schWidth: distance.optional(),
   schHeight: distance.optional(),
+  schRefAnchorPosition: point.optional(),
+  schRefAnchorAlignment: ninePointAnchor.optional(),
+  schRefRotation: rotation.optional(),
   noSchematicRepresentation: z.boolean().optional(),
   connections: connectionsProp.optional(),
 })

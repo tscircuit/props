@@ -31,13 +31,14 @@ export const layoutConfig = z.object({
 
   flex: z.boolean().or(z.string()).optional(),
   flexDirection: z.enum(["row", "column"]).optional(),
-  alignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
+  alignItems: z
+    .enum(["flex-start", "center", "flex-end", "stretch"])
+    .optional(),
   justifyContent: z
     .enum([
-      "start",
+      "flex-start",
       "center",
-      "end",
-      "stretch",
+      "flex-end",
       "space-between",
       "space-around",
       "space-evenly",
@@ -85,12 +86,11 @@ export interface LayoutConfig {
 
   flex?: boolean | string
   flexDirection?: "row" | "column"
-  alignItems?: "start" | "center" | "end" | "stretch"
+  alignItems?: "flex-start" | "flex-end" | "center" | "stretch"
   justifyContent?:
-    | "start"
+    | "flex-start"
     | "center"
-    | "end"
-    | "stretch"
+    | "flex-end"
     | "space-between"
     | "space-around"
     | "space-evenly"

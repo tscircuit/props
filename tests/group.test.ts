@@ -86,3 +86,27 @@ test("should parse schTitle", () => {
   const parsed = baseGroupProps.parse(raw)
   expect(parsed.schTitle).toBe("My Group")
 })
+
+test("should parse relative flags", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    relative: true,
+    schRelative: true,
+    pcbRelative: true,
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.relative).toBe(true)
+  expect(parsed.schRelative).toBe(true)
+  expect(parsed.pcbRelative).toBe(true)
+})
+
+test("should parse relative layout mode", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    layoutMode: "relative",
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.layoutMode).toBe("relative")
+})

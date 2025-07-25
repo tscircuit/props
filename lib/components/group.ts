@@ -16,7 +16,9 @@ import {
 } from "lib/manual-edits"
 
 export const layoutConfig = z.object({
-  layoutMode: z.enum(["grid", "flex", "match-adapt", "none"]).optional(),
+  layoutMode: z
+    .enum(["grid", "flex", "match-adapt", "relative", "none"])
+    .optional(),
   position: z.enum(["absolute", "relative"]).optional(),
 
   grid: z.boolean().optional(),
@@ -70,7 +72,7 @@ export const layoutConfig = z.object({
 })
 
 export interface LayoutConfig {
-  layoutMode?: "grid" | "flex" | "match-adapt" | "none"
+  layoutMode?: "grid" | "flex" | "match-adapt" | "relative" | "none"
   position?: "absolute" | "relative"
 
   grid?: boolean

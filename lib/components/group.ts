@@ -51,7 +51,13 @@ export const layoutConfig = z.object({
     .boolean()
     .optional()
     .describe("Pack the contents of this group using a packing strategy"),
-  packOrderStrategy: z.enum(["largest_to_smallest"]).optional(),
+  packOrderStrategy: z
+    .enum([
+      "largest_to_smallest",
+      "first_to_last",
+      "highest_to_lowest_pin_count",
+    ])
+    .optional(),
   packPlacementStrategy: z
     .enum(["shortest_connection_along_outline"])
     .optional(),
@@ -99,7 +105,10 @@ export interface LayoutConfig {
   gap?: number | string
 
   pack?: boolean
-  packOrderStrategy?: "largest_to_smallest"
+  packOrderStrategy?:
+    | "largest_to_smallest"
+    | "first_to_last"
+    | "highest_to_lowest_pin_count"
   packPlacementStrategy?: "shortest_connection_along_outline"
 
   padding?: Distance

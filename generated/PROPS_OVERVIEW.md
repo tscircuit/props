@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-24T19:30:46.888Z
+> Generated at 2025-07-26T21:59:11.159Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -80,6 +80,8 @@ export interface BatteryProps<PinLabel extends string = string>
 
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   material?: "fr4" | "fr1"
+  /** Number of layers for the PCB */
+  layers?: 2 | 4
 }
 
 
@@ -491,7 +493,10 @@ export interface LayoutConfig {
   gap?: number | string
 
   pack?: boolean
-  packOrderStrategy?: "largest_to_smallest"
+  packOrderStrategy?:
+    | "largest_to_smallest"
+    | "first_to_last"
+    | "highest_to_lowest_pin_count"
   packPlacementStrategy?: "shortest_connection_along_outline"
 
   padding?: Distance

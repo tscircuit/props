@@ -110,3 +110,19 @@ test("should parse relative layout mode", () => {
   const parsed = baseGroupProps.parse(raw)
   expect(parsed.layoutMode).toBe("relative")
 })
+
+test("should parse new packOrderStrategy enums", () => {
+  const rawFirst: BaseGroupProps = {
+    name: "g",
+    packOrderStrategy: "first_to_last",
+  }
+  const parsedFirst = baseGroupProps.parse(rawFirst)
+  expect(parsedFirst.packOrderStrategy).toBe("first_to_last")
+
+  const rawHighest: BaseGroupProps = {
+    name: "g",
+    packOrderStrategy: "highest_to_lowest_pin_count",
+  }
+  const parsedHighest = baseGroupProps.parse(rawHighest)
+  expect(parsedHighest.packOrderStrategy).toBe("highest_to_lowest_pin_count")
+})

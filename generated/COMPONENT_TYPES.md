@@ -336,9 +336,12 @@ export const batteryProps = commonComponentProps.extend({
 ```typescript
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   material?: "fr4" | "fr1"
+  layers?: 2 | 4
 }
+/** Number of layers for the PCB */
 export const boardProps = subcircuitGroupProps.extend({
   material: z.enum(["fr4", "fr1"]).default("fr4"),
+  layers: z.union([z.literal(2), z.literal(4)]).default(2),
 })
 ```
 
@@ -811,7 +814,9 @@ export const fuseProps = commonComponentProps.extend({
 
 ```typescript
 export const layoutConfig = z.object({
-  layoutMode: z.enum(["grid", "flex", "match-adapt", "relative", "none"]).optional(),
+  layoutMode: z
+    .enum(["grid", "flex", "match-adapt", "relative", "none"])
+    .optional(),
   position: z.enum(["absolute", "relative"]).optional(),
 
   grid: z.boolean().optional(),
@@ -844,7 +849,9 @@ export const layoutConfig = z.object({
     .boolean()
     .optional()
     .describe("Pack the contents of this group using a packing strategy"),
-  packOrderStrategy: z.enum(["largest_to_smallest"]).optional(),
+  packOrderStrategy: z
+    .enum(["largest_to_smallest", "first_to_last", "highest_to_lowest_pin_count"])
+    .optional(),
   packPlacementStrategy: z
     .enum(["shortest_connection_along_outline"])
     .optional(),
@@ -891,7 +898,10 @@ export interface LayoutConfig {
   gap?: number | string
 
   pack?: boolean
-  packOrderStrategy?: "largest_to_smallest"
+  packOrderStrategy?:
+    | "largest_to_smallest"
+    | "first_to_last"
+    | "highest_to_lowest_pin_count"
   packPlacementStrategy?: "shortest_connection_along_outline"
 
   padding?: Distance

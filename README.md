@@ -412,6 +412,34 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingRight?: Distance;
   schPaddingTop?: Distance;
   schPaddingBottom?: Distance;
+
+  /** @deprecated Use `pcbGrid` */
+  grid?: boolean;
+  /** @deprecated Use `pcbFlex` */
+  flex?: boolean | string;
+
+  pcbGrid?: boolean;
+  pcbGridCols?: number | string;
+  pcbGridRows?: number | string;
+  pcbGridTemplateRows?: string;
+  pcbGridTemplateColumns?: string;
+  pcbGridTemplate?: string;
+  pcbGridGap?: number | string;
+
+  pcbFlex?: boolean | string;
+  pcbFlexDirection?: "row" | "column";
+  pcbAlignItems?: "start" | "center" | "end" | "stretch";
+  pcbJustifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly";
+  pcbFlexRow?: boolean;
+  pcbFlexColumn?: boolean;
+  pcbGap?: number | string;
 }
 ```
 

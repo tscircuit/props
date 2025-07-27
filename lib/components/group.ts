@@ -164,6 +164,34 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingRight?: Distance
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
+
+  /** @deprecated Use `pcbGrid` */
+  grid?: boolean
+  /** @deprecated Use `pcbFlex` */
+  flex?: boolean | string
+
+  pcbGrid?: boolean
+  pcbGridCols?: number | string
+  pcbGridRows?: number | string
+  pcbGridTemplateRows?: string
+  pcbGridTemplateColumns?: string
+  pcbGridTemplate?: string
+  pcbGridGap?: number | string
+
+  pcbFlex?: boolean | string
+  pcbFlexDirection?: "row" | "column"
+  pcbAlignItems?: "start" | "center" | "end" | "stretch"
+  pcbJustifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+  pcbFlexRow?: boolean
+  pcbFlexColumn?: boolean
+  pcbGap?: number | string
 }
 
 export type PartsEngine = {
@@ -292,6 +320,32 @@ export const baseGroupProps = commonLayoutProps.extend({
   key: z.any().optional(),
 
   ...layoutConfig.shape,
+  grid: layoutConfig.shape.grid.describe("@deprecated use pcbGrid"),
+  flex: layoutConfig.shape.flex.describe("@deprecated use pcbFlex"),
+  pcbGrid: z.boolean().optional(),
+  pcbGridCols: z.number().or(z.string()).optional(),
+  pcbGridRows: z.number().or(z.string()).optional(),
+  pcbGridTemplateRows: z.string().optional(),
+  pcbGridTemplateColumns: z.string().optional(),
+  pcbGridTemplate: z.string().optional(),
+  pcbGridGap: z.number().or(z.string()).optional(),
+  pcbFlex: z.boolean().or(z.string()).optional(),
+  pcbFlexDirection: z.enum(["row", "column"]).optional(),
+  pcbAlignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
+  pcbJustifyContent: z
+    .enum([
+      "start",
+      "center",
+      "end",
+      "stretch",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ])
+    .optional(),
+  pcbFlexRow: z.boolean().optional(),
+  pcbFlexColumn: z.boolean().optional(),
+  pcbGap: z.number().or(z.string()).optional(),
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
   schWidth: length.optional(),

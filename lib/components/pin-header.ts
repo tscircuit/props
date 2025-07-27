@@ -37,9 +37,9 @@ export interface PinHeaderProps extends CommonComponentProps {
   schFacingDirection?: "up" | "down" | "left" | "right"
 
   /**
-   * Whether the header is male or female
+   * Whether the header is male, female, or unpopulated
    */
-  gender?: "male" | "female"
+  gender?: "male" | "female" | "unpopulated"
 
   /**
    * Whether to show pin labels in silkscreen
@@ -111,7 +111,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   pinCount: z.number(),
   pitch: distance.optional(),
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
-  gender: z.enum(["male", "female"]).optional().default("male"),
+  gender: z.enum(["male", "female", "unpopulated"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),

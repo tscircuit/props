@@ -698,9 +698,9 @@ export interface PinHeaderProps extends CommonComponentProps {
   schFacingDirection?: "up" | "down" | "left" | "right"
 
   /**
-   * Whether the header is male or female
+   * Whether the header is male, female, or unpopulated
    */
-  gender?: "male" | "female"
+  gender?: "male" | "female" | "unpopulated"
 
   /**
    * Whether to show pin labels in silkscreen

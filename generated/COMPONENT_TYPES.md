@@ -826,6 +826,8 @@ export const layoutConfig = z.object({
   gridTemplateColumns: z.string().optional(),
   gridTemplate: z.string().optional(),
   gridGap: z.number().or(z.string()).optional(),
+  gridRowGap: z.number().or(z.string()).optional(),
+  gridColumnGap: z.number().or(z.string()).optional(),
 
   flex: z.boolean().or(z.string()).optional(),
   flexDirection: z.enum(["row", "column"]).optional(),
@@ -885,6 +887,8 @@ export interface LayoutConfig {
   gridTemplateColumns?: string
   gridTemplate?: string
   gridGap?: number | string
+  gridRowGap?: number | string
+  gridColumnGap?: number | string
 
   flex?: boolean | string
   flexDirection?: "row" | "column"
@@ -964,6 +968,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbGridTemplateColumns?: string
   pcbGridTemplate?: string
   pcbGridGap?: number | string
+  pcbGridRowGap?: number | string
+  pcbGridColumnGap?: number | string
 
   pcbFlex?: boolean | string
   pcbFlexDirection?: "row" | "column"
@@ -1080,6 +1086,8 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbGridTemplateColumns: z.string().optional(),
   pcbGridTemplate: z.string().optional(),
   pcbGridGap: z.number().or(z.string()).optional(),
+  pcbGridRowGap: z.number().or(z.string()).optional(),
+  pcbGridColumnGap: z.number().or(z.string()).optional(),
   pcbFlex: z.boolean().or(z.string()).optional(),
   pcbFlexDirection: z.enum(["row", "column"]).optional(),
   pcbAlignItems: z.enum(["start", "center", "end", "stretch"]).optional(),

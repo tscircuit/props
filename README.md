@@ -425,6 +425,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbGridTemplateColumns?: string;
   pcbGridTemplate?: string;
   pcbGridGap?: number | string;
+  pcbGridRowGap?: number | string;
+  pcbGridColumnGap?: number | string;
 
   pcbFlex?: boolean | string;
   pcbFlexDirection?: "row" | "column";

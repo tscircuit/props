@@ -48,6 +48,16 @@ test("should allow optional connections", () => {
   expect(parsed.connections).toBeUndefined()
 })
 
+test("should parse rightAngle property", () => {
+  const rawProps: PinHeaderProps = {
+    name: "header",
+    pinCount: 2,
+    rightAngle: true,
+  }
+  const parsed = pinHeaderProps.parse(rawProps)
+  expect(parsed.rightAngle).toBe(true)
+})
+
 test("should snapshot schematic props for pin header", () => {
   const rawProps: PinHeaderProps = {
     name: "header",

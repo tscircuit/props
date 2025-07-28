@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-28T00:31:57.052Z
+> Generated at 2025-07-28T00:46:56.418Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -74,6 +74,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbGridTemplateColumns?: string
   pcbGridTemplate?: string
   pcbGridGap?: number | string
+  pcbGridRowGap?: number | string
+  pcbGridColumnGap?: number | string
 
   pcbFlex?: boolean | string
   pcbFlexDirection?: "row" | "column"
@@ -504,6 +506,8 @@ export interface LayoutConfig {
   gridTemplateColumns?: string
   gridTemplate?: string
   gridGap?: number | string
+  gridRowGap?: number | string
+  gridColumnGap?: number | string
 
   flex?: boolean | string
   flexDirection?: "row" | "column"

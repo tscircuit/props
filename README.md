@@ -601,6 +601,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   doubleRow?: boolean;
 
   /**
+   * If true, the header is a right-angle style connector
+   */
+  rightAngle?: boolean;
+
+  /**
    * Diameter of the through-hole for each pin
    */
   holeDiameter?: number | string;

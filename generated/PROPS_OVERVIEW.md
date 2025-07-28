@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-26T21:59:11.159Z
+> Generated at 2025-07-28T00:31:57.052Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -61,6 +61,34 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingRight?: Distance
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
+
+  /** @deprecated Use `pcbGrid` */
+  grid?: boolean
+  /** @deprecated Use `pcbFlex` */
+  flex?: boolean | string
+
+  pcbGrid?: boolean
+  pcbGridCols?: number | string
+  pcbGridRows?: number | string
+  pcbGridTemplateRows?: string
+  pcbGridTemplateColumns?: string
+  pcbGridTemplate?: string
+  pcbGridGap?: number | string
+
+  pcbFlex?: boolean | string
+  pcbFlexDirection?: "row" | "column"
+  pcbAlignItems?: "start" | "center" | "end" | "stretch"
+  pcbJustifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+  pcbFlexRow?: boolean
+  pcbFlexColumn?: boolean
+  pcbGap?: number | string
 }
 
 
@@ -716,6 +744,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Whether the header has two rows of pins
    */
   doubleRow?: boolean
+
+  /**
+   * If true, the header is a right-angle style connector
+   */
+  rightAngle?: boolean
 
   /**
    * Diameter of the through-hole for each pin

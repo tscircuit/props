@@ -57,6 +57,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   doubleRow?: boolean
 
   /**
+   * If true, the header is a right-angle style connector
+   */
+  rightAngle?: boolean
+
+  /**
    * Diameter of the through-hole for each pin
    */
   holeDiameter?: number | string
@@ -115,6 +120,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   showSilkscreenPinLabels: z.boolean().optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),
+  rightAngle: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z.array(schematicPinLabel).optional(),

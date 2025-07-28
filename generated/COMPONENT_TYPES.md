@@ -850,7 +850,11 @@ export const layoutConfig = z.object({
     .optional()
     .describe("Pack the contents of this group using a packing strategy"),
   packOrderStrategy: z
-    .enum(["largest_to_smallest", "first_to_last", "highest_to_lowest_pin_count"])
+    .enum([
+      "largest_to_smallest",
+      "first_to_last",
+      "highest_to_lowest_pin_count",
+    ])
     .optional(),
   packPlacementStrategy: z
     .enum(["shortest_connection_along_outline"])
@@ -949,10 +953,34 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingRight?: Distance
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
+
+  grid?: boolean
+  flex?: boolean | string
+
+  pcbGrid?: boolean
+  pcbGridCols?: number | string
+  pcbGridRows?: number | string
+  pcbGridTemplateRows?: string
+  pcbGridTemplateColumns?: string
+  pcbGridTemplate?: string
+  pcbGridGap?: number | string
+
+  pcbFlex?: boolean | string
+  pcbFlexDirection?: "row" | "column"
+  pcbAlignItems?: "start" | "center" | "end" | "stretch"
+  pcbJustifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+  pcbFlexRow?: boolean
+  pcbFlexColumn?: boolean
+  pcbGap?: number | string
 }
-/**
-   * Title to display above this group in the schematic view
-   */
+/** @deprecated Use `pcbFlex` */
 export type PartsEngine = {
   findPart: (params: {
     sourceComponent: AnySourceComponent
@@ -1043,6 +1071,32 @@ export const baseGroupProps = commonLayoutProps.extend({
   key: z.any().optional(),
 
   ...layoutConfig.shape,
+  grid: layoutConfig.shape.grid.describe("@deprecated use pcbGrid"),
+  flex: layoutConfig.shape.flex.describe("@deprecated use pcbFlex"),
+  pcbGrid: z.boolean().optional(),
+  pcbGridCols: z.number().or(z.string()).optional(),
+  pcbGridRows: z.number().or(z.string()).optional(),
+  pcbGridTemplateRows: z.string().optional(),
+  pcbGridTemplateColumns: z.string().optional(),
+  pcbGridTemplate: z.string().optional(),
+  pcbGridGap: z.number().or(z.string()).optional(),
+  pcbFlex: z.boolean().or(z.string()).optional(),
+  pcbFlexDirection: z.enum(["row", "column"]).optional(),
+  pcbAlignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
+  pcbJustifyContent: z
+    .enum([
+      "start",
+      "center",
+      "end",
+      "stretch",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ])
+    .optional(),
+  pcbFlexRow: z.boolean().optional(),
+  pcbFlexColumn: z.boolean().optional(),
+  pcbGap: z.number().or(z.string()).optional(),
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
   schWidth: length.optional(),
@@ -1299,6 +1353,8 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   doubleRow?: boolean
 
+  rightAngle?: boolean
+
   holeDiameter?: number | string
 
   platedDiameter?: number | string
@@ -1326,13 +1382,11 @@ export const pinHeaderProps = commonComponentProps.extend({
   pinCount: z.number(),
   pitch: distance.optional(),
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
-  gender: z
-    .enum(["male", "female", "unpopulated"])
-    .optional()
-    .default("male"),
+  gender: z.enum(["male", "female", "unpopulated"]).optional().default("male"),
   showSilkscreenPinLabels: z.boolean().optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),
+  rightAngle: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z.array(schematicPinLabel).optional(),

@@ -32,8 +32,7 @@ export interface OvalPlatedHoleProps
   innerHeight?: number | string
 }
 
-export interface PillPlatedHoleProps
-  extends Omit<PcbLayoutProps, "layer"> {
+export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   rectPad?: boolean
   connectsTo?: string | string[]

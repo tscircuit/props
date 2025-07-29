@@ -113,7 +113,7 @@ async function generateManualEditsDocs() {
       const interfaceName = nameMatch[1]
 
       // Clean up the block
-      let cleaned = block
+      const cleaned = block
         // Remove export keyword
         .replace(/export\s+(interface|type)\s+/, "$1 ")
         // Clean up JSDoc comments
@@ -209,7 +209,7 @@ async function generateManualEditsDocs() {
   }
 
   // Write the documentation file
-  const output = toc + "\n" + docs
+  const output = `${toc}\n${docs}`
   fs.writeFileSync(
     path.join(process.cwd(), "docs", "manual-edits.generated.md"),
     output,

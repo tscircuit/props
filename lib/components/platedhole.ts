@@ -33,8 +33,9 @@ export interface OvalPlatedHoleProps
 }
 
 export interface PillPlatedHoleProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  extends Omit<PcbLayoutProps, "layer"> {
   name?: string
+  rectPad?: boolean
   connectsTo?: string | string[]
   shape: "pill"
   outerWidth: number | string
@@ -113,10 +114,11 @@ export const platedHoleProps = z
       innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
       portHints: portHints.optional(),
     }),
-    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill"),
+      rectPad: z.boolean().optional(),
       outerWidth: distance,
       outerHeight: distance,
       holeWidth: distanceHiddenUndefined,

@@ -7,10 +7,10 @@ This repo is the source-of-truth for defining the React props, API changes begin
 the user (unlike [circuit-json](https://github.com/tscircuit/circuit-json) which focuses on ergonomics for a renderer)
 
 ```ts
-import type { ResistorProps, ResistorPropsInput } from "@tscircuit/props";
-import { resistorProps } from "@tscircuit/props";
+import type { ResistorProps, ResistorPropsInput } from "@tscircuit/props"
+import { resistorProps } from "@tscircuit/props"
 
-resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
+resistorProps.parse({ resistance: "10k" } as ResistorPropsInput)
 // { resistance: 10_000 }
 ```
 
@@ -65,10 +65,10 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 ## Usage Examples
 
 ```tsx
-import { resistorProps, type ResistorProps } from "@tscircuit/props";
+import { resistorProps, type ResistorProps } from "@tscircuit/props"
 
 // Validate component props
-const validatedProps = resistorProps.parse({ resistance: "10k" });
+const validatedProps = resistorProps.parse({ resistance: "10k" })
 // { resistance: 10000 }
 
 // Type safety
@@ -76,7 +76,7 @@ const myResistor: ResistorProps = {
   name: "R1",
   resistance: 10000,
   footprint: "0805",
-};
+}
 ```
 
 <!-- USAGE_EXAMPLES_END -->
@@ -91,14 +91,14 @@ Below are the TypeScript interface definitions for all component props:
 
 ```ts
 export interface CommonComponentProps extends CommonLayoutProps {
-  key?: any;
-  name: string;
-  pinAttributes?: Record<PinLabel, PinAttributeMap>;
-  supplierPartNumbers?: SupplierPartNumbers;
-  cadModel?: CadModelProp;
-  children?: any;
-  symbolName?: string;
-  doNotPlace?: boolean;
+  key?: any
+  name: string
+  pinAttributes?: Record<PinLabel, PinAttributeMap>
+  supplierPartNumbers?: SupplierPartNumbers
+  cadModel?: CadModelProp
+  children?: any
+  symbolName?: string
+  doNotPlace?: boolean
 }
 ```
 
@@ -108,28 +108,28 @@ export interface CommonComponentProps extends CommonLayoutProps {
 
 ```ts
 export interface SubcircuitGroupProps extends BaseGroupProps {
-  layout?: LayoutBuilder;
-  manualEdits?: ManualEditsFileInput;
-  routingDisabled?: boolean;
-  defaultTraceWidth?: Distance;
-  minTraceWidth?: Distance;
-  pcbRouteCache?: PcbRouteCache;
+  layout?: LayoutBuilder
+  manualEdits?: ManualEditsFileInput
+  routingDisabled?: boolean
+  defaultTraceWidth?: Distance
+  minTraceWidth?: Distance
+  pcbRouteCache?: PcbRouteCache
 
-  autorouter?: AutorouterProp;
+  autorouter?: AutorouterProp
 
   /**
    * If true, we'll automatically layout the schematic for this group. Must be
    * a subcircuit (currently). This is eventually going to be replaced with more
    * sophisticated layout options/modes and will be enabled by default.
    */
-  schAutoLayoutEnabled?: boolean;
+  schAutoLayoutEnabled?: boolean
 
   /**
    * If true, net labels will automatically be created for complex traces
    */
-  schTraceAutoLabelEnabled?: boolean;
+  schTraceAutoLabelEnabled?: boolean
 
-  partsEngine?: PartsEngine;
+  partsEngine?: PartsEngine
 }
 ```
 
@@ -140,8 +140,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 ```ts
 export interface BatteryProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
-  capacity?: number | string;
-  schOrientation?: SchematicOrientation;
+  capacity?: number | string
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -151,9 +151,9 @@ export interface BatteryProps<PinLabel extends string = string>
 
 ```ts
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
-  material?: "fr4" | "fr1";
+  material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
-  layers?: 2 | 4;
+  layers?: 2 | 4
 }
 ```
 
@@ -164,11 +164,11 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
 ```ts
 export interface BreakoutProps
   extends Omit<SubcircuitGroupProps, "subcircuit"> {
-  padding?: Distance;
-  paddingLeft?: Distance;
-  paddingRight?: Distance;
-  paddingTop?: Distance;
-  paddingBottom?: Distance;
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
 }
 ```
 
@@ -179,7 +179,7 @@ export interface BreakoutProps
 ```ts
 export interface BreakoutPointProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
-  connection: string;
+  connection: string
 }
 ```
 
@@ -190,17 +190,17 @@ export interface BreakoutPointProps
 ```ts
 export interface CapacitorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
-  capacitance: number | string;
-  maxVoltageRating?: number | string;
-  schShowRatings?: boolean;
-  polarized?: boolean;
-  decouplingFor?: string;
-  decouplingTo?: string;
-  bypassFor?: string;
-  bypassTo?: string;
-  maxDecouplingTraceLength?: number;
-  schOrientation?: SchematicOrientation;
-  connections?: Connections<CapacitorPinLabels>;
+  capacitance: number | string
+  maxVoltageRating?: number | string
+  schShowRatings?: boolean
+  polarized?: boolean
+  decouplingFor?: string
+  decouplingTo?: string
+  bypassFor?: string
+  bypassTo?: string
+  maxDecouplingTraceLength?: number
+  schOrientation?: SchematicOrientation
+  connections?: Connections<CapacitorPinLabels>
 }
 ```
 
@@ -212,28 +212,28 @@ export interface CapacitorProps<PinLabel extends string = string>
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
-  manufacturerPartNumber?: string;
-  pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>;
+  manufacturerPartNumber?: string
+  pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   /**
    * Whether to show pin aliases in the schematic
    */
-  showPinAliases?: boolean;
+  showPinAliases?: boolean
   /**
    * Labels for PCB pins
    */
-  pcbPinLabels?: Record<string, string>;
-  schPinArrangement?: SchematicPortArrangement;
+  pcbPinLabels?: Record<string, string>
+  schPinArrangement?: SchematicPortArrangement
   /** @deprecated Use schPinArrangement instead. */
-  schPortArrangement?: SchematicPortArrangement;
-  pinCompatibleVariants?: PinCompatibleVariant[];
-  schPinStyle?: SchematicPinStyle;
-  schPinSpacing?: Distance;
-  schWidth?: Distance;
-  schHeight?: Distance;
-  noSchematicRepresentation?: boolean;
-  internallyConnectedPins?: string[][];
-  externallyConnectedPins?: string[][];
-  connections?: Connections<PinLabel>;
+  schPortArrangement?: SchematicPortArrangement
+  pinCompatibleVariants?: PinCompatibleVariant[]
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: Distance
+  schWidth?: Distance
+  schHeight?: Distance
+  noSchematicRepresentation?: boolean
+  internallyConnectedPins?: string[][]
+  externallyConnectedPins?: string[][]
+  connections?: Connections<PinLabel>
 }
 ```
 
@@ -243,26 +243,26 @@ export interface ChipPropsSU<
 
 ```ts
 export interface ConnectorProps extends CommonComponentProps {
-  manufacturerPartNumber?: string;
+  manufacturerPartNumber?: string
   pinLabels?: Record<
     number | SchematicPinLabel,
     SchematicPinLabel | SchematicPinLabel[]
-  >;
-  schPinStyle?: SchematicPinStyle;
-  schPinSpacing?: number | string;
-  schWidth?: number | string;
-  schHeight?: number | string;
-  schDirection?: "left" | "right";
-  schPortArrangement?: SchematicPortArrangement;
+  >
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
   /**
    * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
-  internallyConnectedPins?: string[][];
+  internallyConnectedPins?: string[][]
   /**
    * Connector standard, e.g. usb_c, m2
    */
-  standard?: "usb_c" | "m2";
+  standard?: "usb_c" | "m2"
 }
 ```
 
@@ -272,9 +272,9 @@ export interface ConnectorProps extends CommonComponentProps {
 
 ```ts
 export interface ConstrainedLayoutProps {
-  name?: string;
-  pcbOnly?: boolean;
-  schOnly?: boolean;
+  name?: string
+  pcbOnly?: boolean
+  schOnly?: boolean
 }
 ```
 
@@ -285,10 +285,10 @@ export interface ConstrainedLayoutProps {
 ```ts
 export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
-  frequency: number | string;
-  loadCapacitance: number | string;
-  pinVariant?: PinVariant;
-  schOrientation?: SchematicOrientation;
+  frequency: number | string
+  loadCapacitance: number | string
+  pinVariant?: PinVariant
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -299,10 +299,10 @@ export interface CrystalProps<PinLabel extends string = string>
 ```ts
 export interface RectCutoutProps
   extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
-  name?: string;
-  shape: "rect";
-  width: Distance;
-  height: Distance;
+  name?: string
+  shape: "rect"
+  width: Distance
+  height: Distance
 }
 ```
 
@@ -314,21 +314,21 @@ export interface RectCutoutProps
 export interface DiodeProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections?: {
-    anode?: string | string[] | readonly string[];
-    cathode?: string | string[] | readonly string[];
-    pin1?: string | string[] | readonly string[];
-    pin2?: string | string[] | readonly string[];
-    pos?: string | string[] | readonly string[];
-    neg?: string | string[] | readonly string[];
-  };
-  variant?: "standard" | "schottky" | "zener" | "avalanche" | "photo" | "tvs";
-  standard?: boolean;
-  schottky?: boolean;
-  zener?: boolean;
-  avalanche?: boolean;
-  photo?: boolean;
-  tvs?: boolean;
-  schOrientation?: SchematicOrientation;
+    anode?: string | string[] | readonly string[]
+    cathode?: string | string[] | readonly string[]
+    pin1?: string | string[] | readonly string[]
+    pin2?: string | string[] | readonly string[]
+    pos?: string | string[] | readonly string[]
+    neg?: string | string[] | readonly string[]
+  }
+  variant?: "standard" | "schottky" | "zener" | "avalanche" | "photo" | "tvs"
+  standard?: boolean
+  schottky?: boolean
+  zener?: boolean
+  avalanche?: boolean
+  photo?: boolean
+  tvs?: boolean
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -348,7 +348,7 @@ export interface FootprintProps {
    * confusion because you have a complex multi-layer footprint. Default is
    * "top" and this is most intuitive.
    */
-  originalLayer?: LayerRef;
+  originalLayer?: LayerRef
 }
 ```
 
@@ -362,24 +362,24 @@ export interface FuseProps<PinLabel extends string = string>
   /**
    * Current rating of the fuse in amperes
    */
-  currentRating: number | string;
+  currentRating: number | string
 
   /**
    * Voltage rating of the fuse
    */
-  voltageRating?: number | string;
+  voltageRating?: number | string
 
   /**
    * Whether to show ratings on schematic
    */
-  schShowRatings?: boolean;
+  schShowRatings?: boolean
 
-  schOrientation?: SchematicOrientation;
+  schOrientation?: SchematicOrientation
 
   /**
    * Connections to other components
    */
-  connections?: Connections<PinLabel>;
+  connections?: Connections<PinLabel>
 }
 ```
 
@@ -389,48 +389,48 @@ export interface FuseProps<PinLabel extends string = string>
 
 ```ts
 export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
-  name?: string;
-  key?: any;
-  children?: any;
+  name?: string
+  key?: any
+  children?: any
 
   /**
    * Title to display above this group in the schematic view
    */
-  schTitle?: string;
+  schTitle?: string
 
-  pcbWidth?: Distance;
-  pcbHeight?: Distance;
-  schWidth?: Distance;
-  schHeight?: Distance;
+  pcbWidth?: Distance
+  pcbHeight?: Distance
+  schWidth?: Distance
+  schHeight?: Distance
 
-  pcbLayout?: LayoutConfig;
-  schLayout?: LayoutConfig;
-  cellBorder?: Border | null;
-  border?: Border | null;
-  schPadding?: Distance;
-  schPaddingLeft?: Distance;
-  schPaddingRight?: Distance;
-  schPaddingTop?: Distance;
-  schPaddingBottom?: Distance;
+  pcbLayout?: LayoutConfig
+  schLayout?: LayoutConfig
+  cellBorder?: Border | null
+  border?: Border | null
+  schPadding?: Distance
+  schPaddingLeft?: Distance
+  schPaddingRight?: Distance
+  schPaddingTop?: Distance
+  schPaddingBottom?: Distance
 
   /** @deprecated Use `pcbGrid` */
-  grid?: boolean;
+  grid?: boolean
   /** @deprecated Use `pcbFlex` */
-  flex?: boolean | string;
+  flex?: boolean | string
 
-  pcbGrid?: boolean;
-  pcbGridCols?: number | string;
-  pcbGridRows?: number | string;
-  pcbGridTemplateRows?: string;
-  pcbGridTemplateColumns?: string;
-  pcbGridTemplate?: string;
-  pcbGridGap?: number | string;
-  pcbGridRowGap?: number | string;
-  pcbGridColumnGap?: number | string;
+  pcbGrid?: boolean
+  pcbGridCols?: number | string
+  pcbGridRows?: number | string
+  pcbGridTemplateRows?: string
+  pcbGridTemplateColumns?: string
+  pcbGridTemplate?: string
+  pcbGridGap?: number | string
+  pcbGridRowGap?: number | string
+  pcbGridColumnGap?: number | string
 
-  pcbFlex?: boolean | string;
-  pcbFlexDirection?: "row" | "column";
-  pcbAlignItems?: "start" | "center" | "end" | "stretch";
+  pcbFlex?: boolean | string
+  pcbFlexDirection?: "row" | "column"
+  pcbAlignItems?: "start" | "center" | "end" | "stretch"
   pcbJustifyContent?:
     | "start"
     | "center"
@@ -438,11 +438,12 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
     | "stretch"
     | "space-between"
     | "space-around"
-    | "space-evenly";
-  pcbFlexRow?: boolean;
-  pcbFlexColumn?: boolean;
-  pcbGap?: number | string;
-  pcbPack?: boolean;
+    | "space-evenly"
+  pcbFlexRow?: boolean
+  pcbFlexColumn?: boolean
+  pcbGap?: number | string
+  pcbFlexGap?: number | string
+  pcbPack?: boolean
 }
 ```
 
@@ -452,9 +453,9 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
 ```ts
 export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  name?: string;
-  diameter?: Distance;
-  radius?: Distance;
+  name?: string
+  diameter?: Distance
+  radius?: Distance
 }
 ```
 
@@ -465,9 +466,9 @@ export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 ```ts
 export interface InductorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
-  inductance: number | string;
-  maxCurrentRating?: number | string;
-  schOrientation?: SchematicOrientation;
+  inductance: number | string
+  maxCurrentRating?: number | string
+  schOrientation?: SchematicOrientation
 }
 ```
 
@@ -477,34 +478,34 @@ export interface InductorProps<PinLabel extends string = string>
 
 ```ts
 export interface JumperProps extends CommonComponentProps {
-  manufacturerPartNumber?: string;
+  manufacturerPartNumber?: string
   pinLabels?: Record<
     number | SchematicPinLabel,
     SchematicPinLabel | SchematicPinLabel[]
-  >;
-  schPinStyle?: SchematicPinStyle;
-  schPinSpacing?: number | string;
-  schWidth?: number | string;
-  schHeight?: number | string;
-  schDirection?: "left" | "right";
-  schPortArrangement?: SchematicPortArrangement;
+  >
+  schPinStyle?: SchematicPinStyle
+  schPinSpacing?: number | string
+  schWidth?: number | string
+  schHeight?: number | string
+  schDirection?: "left" | "right"
+  schPortArrangement?: SchematicPortArrangement
   /**
    * Labels for PCB pins
    */
-  pcbPinLabels?: Record<string, string>;
+  pcbPinLabels?: Record<string, string>
   /**
    * Number of pins on the jumper (2 or 3)
    */
-  pinCount?: 2 | 3;
+  pinCount?: 2 | 3
   /**
    * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
-  internallyConnectedPins?: string[][];
+  internallyConnectedPins?: string[][]
   /**
    * Connections to other components
    */
-  connections?: Connections<string>;
+  connections?: Connections<string>
 }
 ```
 
@@ -515,8 +516,8 @@ export interface JumperProps extends CommonComponentProps {
 ```ts
 export interface MosfetProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
-  channelType: "n" | "p";
-  mosfetMode: "enhancement" | "depletion";
+  channelType: "n" | "p"
+  mosfetMode: "enhancement" | "depletion"
 }
 ```
 
@@ -526,8 +527,8 @@ export interface MosfetProps<PinLabel extends string = string>
 
 ```ts
 export interface NetProps {
-  name: string;
-  connectsTo?: string | string[];
+  name: string
+  connectsTo?: string | string[]
 }
 ```
 
@@ -537,12 +538,12 @@ export interface NetProps {
 
 ```ts
 export interface NetAliasProps {
-  net?: string;
-  connection?: string;
-  schX?: number | string;
-  schY?: number | string;
-  schRotation?: number | string;
-  anchorSide?: "left" | "top" | "right" | "bottom";
+  net?: string
+  connection?: string
+  schX?: number | string
+  schY?: number | string
+  schRotation?: number | string
+  anchorSide?: "left" | "top" | "right" | "bottom"
 }
 ```
 
@@ -552,13 +553,13 @@ export interface NetAliasProps {
 
 ```ts
 export interface NetLabelProps {
-  net?: string;
-  connection?: string;
-  connectsTo?: string | string[];
-  schX?: number | string;
-  schY?: number | string;
-  schRotation?: number | string;
-  anchorSide?: "left" | "top" | "right" | "bottom";
+  net?: string
+  connection?: string
+  connectsTo?: string | string[]
+  schX?: number | string
+  schY?: number | string
+  schRotation?: number | string
+  anchorSide?: "left" | "top" | "right" | "bottom"
 }
 ```
 
@@ -571,92 +572,92 @@ export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Number of pins in the header
    */
-  pinCount: number;
+  pinCount: number
 
   /**
    * Distance between pins
    */
-  pitch?: number | string;
+  pitch?: number | string
 
   /**
    * Schematic facing direction
    */
-  schFacingDirection?: "up" | "down" | "left" | "right";
+  schFacingDirection?: "up" | "down" | "left" | "right"
 
   /**
    * Whether the header is male, female, or unpopulated
    */
-  gender?: "male" | "female" | "unpopulated";
+  gender?: "male" | "female" | "unpopulated"
 
   /**
    * Whether to show pin labels in silkscreen
    */
-  showSilkscreenPinLabels?: boolean;
+  showSilkscreenPinLabels?: boolean
 
   /**
    * Labels for PCB pins
    */
-  pcbPinLabels?: Record<string, string>;
+  pcbPinLabels?: Record<string, string>
 
   /**
    * Whether the header has two rows of pins
    */
-  doubleRow?: boolean;
+  doubleRow?: boolean
 
   /**
    * If true, the header is a right-angle style connector
    */
-  rightAngle?: boolean;
+  rightAngle?: boolean
 
   /**
    * Diameter of the through-hole for each pin
    */
-  holeDiameter?: number | string;
+  holeDiameter?: number | string
 
   /**
    * Diameter of the plated area around each hole
    */
-  platedDiameter?: number | string;
+  platedDiameter?: number | string
 
   /**
    * Labels for each pin
    */
-  pinLabels?: SchematicPinLabel[];
+  pinLabels?: SchematicPinLabel[]
 
   /**
    * Connections to other components
    */
-  connections?: Connections<string>;
+  connections?: Connections<string>
 
   /**
    * Direction the header is facing
    */
-  facingDirection?: "left" | "right";
+  facingDirection?: "left" | "right"
 
   /**
    * Pin arrangement in schematic view
    */
-  schPinArrangement?: SchematicPinArrangement;
+  schPinArrangement?: SchematicPinArrangement
 
   /**
    * Schematic pin style (margins, etc)
    */
-  schPinStyle?: SchematicPinStyle;
+  schPinStyle?: SchematicPinStyle
 
   /**
    * Schematic pin spacing
    */
-  schPinSpacing?: number | string;
+  schPinSpacing?: number | string
 
   /**
    * Schematic width
    */
-  schWidth?: number | string;
+  schWidth?: number | string
 
   /**
    * Schematic height
    */
-  schHeight?: number | string;
+  schHeight?: number | string
 }
 ```
 
@@ -667,12 +668,12 @@ export interface PinHeaderProps extends CommonComponentProps {
 ```ts
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
-  name?: string;
-  connectsTo?: string | string[];
-  shape: "circle";
-  holeDiameter: number | string;
-  outerDiameter: number | string;
-  portHints?: PortHints;
+  name?: string
+  connectsTo?: string | string[]
+  shape: "circle"
+  holeDiameter: number | string
+  outerDiameter: number | string
+  portHints?: PortHints
 }
 ```
 
@@ -682,8 +683,8 @@ export interface CirclePlatedHoleProps
 
 ```ts
 export interface PotentiometerProps extends CommonComponentProps {
-  maxResistance: number | string;
-  pinVariant?: PotentiometerPinVariant;
+  maxResistance: number | string
+  pinVariant?: PotentiometerPinVariant
 }
 ```
 
@@ -694,13 +695,13 @@ export interface PotentiometerProps extends CommonComponentProps {
 ```ts
 export interface ResistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
-  resistance: number | string;
-  pullupFor?: string;
-  pullupTo?: string;
-  pulldownFor?: string;
-  pulldownTo?: string;
-  schOrientation?: SchematicOrientation;
-  connections?: Connections<ResistorPinLabels>;
+  resistance: number | string
+  pullupFor?: string
+  pullupTo?: string
+  pulldownFor?: string
+  pulldownTo?: string
+  schOrientation?: SchematicOrientation
+  connections?: Connections<ResistorPinLabels>
 }
 ```
 
@@ -710,9 +711,9 @@ export interface ResistorProps<PinLabel extends string = string>
 
 ```ts
 export interface ResonatorProps extends CommonComponentProps {
-  frequency: number | string;
-  loadCapacitance: number | string;
-  pinVariant?: ResonatorPinVariant;
+  frequency: number | string
+  loadCapacitance: number | string
+  pinVariant?: ResonatorPinVariant
 }
 ```
 
@@ -722,14 +723,14 @@ export interface ResonatorProps extends CommonComponentProps {
 
 ```ts
 export interface SchematicCellProps {
-  children?: string;
-  horizontalAlign?: "left" | "center" | "right";
-  verticalAlign?: "top" | "middle" | "bottom";
-  fontSize?: number | string;
-  rowSpan?: number;
-  colSpan?: number;
-  width?: number | string;
-  text?: string;
+  children?: string
+  horizontalAlign?: "left" | "center" | "right"
+  verticalAlign?: "top" | "middle" | "bottom"
+  fontSize?: number | string
+  rowSpan?: number
+  colSpan?: number
+  width?: number | string
+  text?: string
 }
 ```
 
@@ -739,8 +740,8 @@ export interface SchematicCellProps {
 
 ```ts
 export interface SchematicRowProps {
-  children?: any;
-  height?: number | string;
+  children?: any
+  height?: number | string
 }
 ```
 
@@ -750,13 +751,13 @@ export interface SchematicRowProps {
 
 ```ts
 export interface SchematicTableProps {
-  schX?: number | string;
-  schY?: number | string;
-  children?: any;
-  cellPadding?: number | string;
-  borderWidth?: number | string;
-  anchor?: z.infer<typeof ninePointAnchor>;
-  fontSize?: number | string;
+  schX?: number | string
+  schY?: number | string
+  children?: any
+  cellPadding?: number | string
+  borderWidth?: number | string
+  anchor?: z.infer<typeof ninePointAnchor>
+  fontSize?: number | string
 }
 ```
 
@@ -766,11 +767,11 @@ export interface SchematicTableProps {
 
 ```ts
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  name?: string;
-  shape: "rect";
-  width: Distance;
-  height: Distance;
-  portHints?: PortHints;
+  name?: string
+  shape: "rect"
+  width: Distance
+  height: Distance
+  portHints?: PortHints
 }
 ```
 
@@ -783,11 +784,11 @@ export interface SolderJumperProps extends JumperProps {
   /**
    * Pins that are bridged with solder by default
    */
-  bridgedPins?: string[][];
+  bridgedPins?: string[][]
   /**
    * If true, all pins are connected with cuttable traces
    */
-  bridged?: boolean;
+  bridged?: boolean
 }
 ```
 
@@ -798,9 +799,9 @@ export interface SolderJumperProps extends JumperProps {
 ```ts
 export interface RectSolderPasteProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rect";
-  width: Distance;
-  height: Distance;
+  shape: "rect"
+  width: Distance
+  height: Distance
 }
 ```
 
@@ -810,16 +811,16 @@ export interface RectSolderPasteProps
 
 ```ts
 export interface StampboardProps extends BoardProps {
-  leftPinCount?: number;
-  rightPinCount?: number;
-  topPinCount?: number;
-  bottomPinCount?: number;
-  leftPins?: string[];
-  rightPins?: string[];
-  topPins?: string[];
-  bottomPins?: string[];
-  pinPitch?: number | string;
-  innerHoles?: boolean;
+  leftPinCount?: number
+  rightPinCount?: number
+  topPinCount?: number
+  bottomPinCount?: number
+  leftPins?: string[]
+  rightPins?: string[]
+  topPins?: string[]
+  bottomPins?: string[]
+  pinPitch?: number | string
+  innerHoles?: boolean
 }
 ```
 
@@ -829,12 +830,12 @@ export interface StampboardProps extends BoardProps {
 
 ```ts
 export interface SwitchProps extends CommonComponentProps {
-  type?: "spst" | "spdt" | "dpst" | "dpdt";
-  isNormallyClosed?: boolean;
-  spdt?: boolean;
-  spst?: boolean;
-  dpst?: boolean;
-  dpdt?: boolean;
+  type?: "spst" | "spdt" | "dpst" | "dpdt"
+  isNormallyClosed?: boolean
+  spdt?: boolean
+  spst?: boolean
+  dpst?: boolean
+  dpdt?: boolean
 }
 ```
 
@@ -847,27 +848,27 @@ export interface TestpointProps extends CommonComponentProps {
   /**
    * The footprint variant of the testpoint either a surface pad or through-hole
    */
-  footprintVariant?: "pad" | "through_hole";
+  footprintVariant?: "pad" | "through_hole"
   /**
    * The shape of the pad if using a pad variant
    */
-  padShape?: "rect" | "circle";
+  padShape?: "rect" | "circle"
   /**
    * Diameter of the copper pad (applies to both SMD pads and plated holes)
    */
-  padDiameter?: number | string;
+  padDiameter?: number | string
   /**
    * Diameter of the hole if using a through-hole testpoint
    */
-  holeDiameter?: number | string;
+  holeDiameter?: number | string
   /**
    * Width of the pad when padShape is rect
    */
-  width?: number | string;
+  width?: number | string
   /**
    * Height of the pad when padShape is rect
    */
-  height?: number | string;
+  height?: number | string
 }
 ```
 
@@ -878,8 +879,8 @@ export interface TestpointProps extends CommonComponentProps {
 ```ts
 export interface TransistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
-  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt";
-  connections?: Connections<transistorPinsLabels>;
+  type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
+  connections?: Connections<transistorPinsLabels>
 }
 ```
 
@@ -889,12 +890,12 @@ export interface TransistorProps<PinLabel extends string = string>
 
 ```ts
 export interface ViaProps extends CommonLayoutProps {
-  name?: string;
-  fromLayer: LayerRefInput;
-  toLayer: LayerRefInput;
-  holeDiameter: number | string;
-  outerDiameter: number | string;
-  connectsTo?: string | string[];
+  name?: string
+  fromLayer: LayerRefInput
+  toLayer: LayerRefInput
+  holeDiameter: number | string
+  outerDiameter: number | string
+  connectsTo?: string | string[]
 }
 ```
 
@@ -910,25 +911,25 @@ export interface ViaProps extends CommonLayoutProps {
 
 ```ts
 export interface PlatformConfig {
-  partsEngine?: PartsEngine;
+  partsEngine?: PartsEngine
 
-  autorouter?: AutorouterProp;
+  autorouter?: AutorouterProp
 
   // TODO this follows a subset of the localStorage interface
-  localCacheEngine?: any;
+  localCacheEngine?: any
 
-  registryApiUrl?: string;
+  registryApiUrl?: string
 
-  cloudAutorouterUrl?: string;
+  cloudAutorouterUrl?: string
 
-  projectName?: string;
-  version?: string;
-  url?: string;
-  printBoardInformationToSilkscreen?: boolean;
+  projectName?: string
+  version?: string
+  url?: string
+  printBoardInformationToSilkscreen?: boolean
 
-  pcbDisabled?: boolean;
-  schematicDisabled?: boolean;
-  partsEngineDisabled?: boolean;
+  pcbDisabled?: boolean
+  schematicDisabled?: boolean
+  partsEngineDisabled?: boolean
 
   footprintLibraryMap?: Record<
     string,
@@ -936,10 +937,10 @@ export interface PlatformConfig {
       string,
       | any[]
       | ((path: string) => Promise<{
-          footprintCircuitJson: any[];
+          footprintCircuitJson: any[]
         }>)
     >
-  >;
+  >
 }
 ```
 

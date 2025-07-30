@@ -198,6 +198,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexRow?: boolean
   pcbFlexColumn?: boolean
   pcbGap?: number | string
+  pcbPack?: boolean
 }
 
 export type PartsEngine = {
@@ -354,6 +355,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbFlexRow: z.boolean().optional(),
   pcbFlexColumn: z.boolean().optional(),
   pcbGap: z.number().or(z.string()).optional(),
+  pcbPack: z.boolean().optional(),
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
   schWidth: length.optional(),

@@ -442,6 +442,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexRow?: boolean;
   pcbFlexColumn?: boolean;
   pcbGap?: number | string;
+  pcbPack?: boolean;
 }
 ```
 

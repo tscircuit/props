@@ -185,6 +185,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbGridColumnGap?: number | string
 
   pcbFlex?: boolean | string
+  pcbFlexGap?: number | string
   pcbFlexDirection?: "row" | "column"
   pcbAlignItems?: "start" | "center" | "end" | "stretch"
   pcbJustifyContent?:
@@ -339,6 +340,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbGridRowGap: z.number().or(z.string()).optional(),
   pcbGridColumnGap: z.number().or(z.string()).optional(),
   pcbFlex: z.boolean().or(z.string()).optional(),
+  pcbFlexGap: z.number().or(z.string()).optional(),
   pcbFlexDirection: z.enum(["row", "column"]).optional(),
   pcbAlignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
   pcbJustifyContent: z

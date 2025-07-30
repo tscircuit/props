@@ -11,6 +11,7 @@
   "scripts": {
     "build": "tsup lib/index.ts --format esm --dts --sourcemap",
     "check-circular-deps": "madge --circular --extensions ts ./lib",
+    "typecheck": "bunx tsc --noEmit",
     "format": "biome format . --write",
     "format:check": "biome format .",
     "generate:manual-edits-docs": "tsx scripts/generate-manual-edits-docs.ts",

@@ -1,6 +1,7 @@
 import type { LayerRef } from "circuit-json"
 import type { ReactElement } from "react"
 import { z } from "zod"
+import { type AutocompleteString } from "./autocomplete"
 
 /**
  * This is an abbreviated definition of the soup elements that you can find here:
@@ -19,5 +20,20 @@ export type FootprintSoupElements = {
   portHints?: string[]
 }
 
-export type FootprintProp = string | ReactElement | FootprintSoupElements[]
+export type BasicFootprint =
+  | "0201"
+  | "0402"
+  | "0603"
+  | "0805"
+  | "1206"
+  | "SOT-23"
+  | "SOIC-8"
+  | "QFN-32"
+  | "TQFP-32"
+
+export type FootprintProp =
+  | AutocompleteString<BasicFootprint>
+  | ReactElement
+  | FootprintSoupElements[]
+
 export const footprintProp = z.custom<FootprintProp>((v) => true)

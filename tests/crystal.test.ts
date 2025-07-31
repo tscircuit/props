@@ -26,3 +26,31 @@ test("should parse crystal props with 4pin variant", () => {
   const parsedProps = crystalProps.parse(rawProps)
   expect(parsedProps.pinVariant).toBe("four_pin")
 })
+
+test("should allow optional connections", () => {
+  const rawProps: CrystalProps = {
+    name: "crystal",
+    frequency: "16MHz",
+    loadCapacitance: "20pF",
+  }
+  const parsedProps = crystalProps.parse(rawProps)
+  expect(parsedProps.connections).toBeUndefined()
+})
+
+test("should parse crystal props with connections", () => {
+  const rawProps: CrystalProps = {
+    name: "crystal",
+    frequency: "16MHz",
+    loadCapacitance: "20pF",
+    connections: {
+      left: "net.CLK_IN",
+      right: "net.CLK_OUT",
+    },
+  }
+
+  const parsedProps = crystalProps.parse(rawProps)
+  expect(parsedProps.connections).toEqual({
+    left: "net.CLK_IN",
+    right: "net.CLK_OUT",
+  })
+})

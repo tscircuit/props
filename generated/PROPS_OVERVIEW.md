@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-28T00:46:56.418Z
+> Generated at 2025-07-31T08:19:04.264Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -78,6 +78,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbGridColumnGap?: number | string
 
   pcbFlex?: boolean | string
+  pcbFlexGap?: number | string
   pcbFlexDirection?: "row" | "column"
   pcbAlignItems?: "start" | "center" | "end" | "stretch"
   pcbJustifyContent?:
@@ -91,6 +92,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexRow?: boolean
   pcbFlexColumn?: boolean
   pcbGap?: number | string
+  pcbPack?: boolean
 }
 
 
@@ -338,6 +340,7 @@ export interface CrystalProps<PinLabel extends string = string>
   loadCapacitance: number | string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
+  connections?: Connections<CrystalPinLabels>
 }
 
 
@@ -653,9 +656,9 @@ export interface PcbRouteCache {
 }
 
 
-export interface PillPlatedHoleProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
+  rectPad?: boolean
   connectsTo?: string | string[]
   shape: "pill"
   outerWidth: number | string

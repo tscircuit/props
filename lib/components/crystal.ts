@@ -4,6 +4,8 @@ import {
   commonComponentProps,
   lrPins,
 } from "lib/common/layout"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
+import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   schematicOrientation,
   type SchematicOrientation,
@@ -13,12 +15,16 @@ import { z } from "zod"
 
 export type PinVariant = "two_pin" | "four_pin"
 
+export const crystalPins = lrPins
+export type CrystalPinLabels = (typeof crystalPins)[number]
+
 export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
+  connections?: Connections<CrystalPinLabels>
 }
 
 export const crystalProps = commonComponentProps.extend({
@@ -26,9 +32,8 @@ export const crystalProps = commonComponentProps.extend({
   loadCapacitance: capacitance,
   pinVariant: z.enum(["two_pin", "four_pin"]).optional(),
   schOrientation: schematicOrientation.optional(),
+  connections: createConnectionsProp(crystalPins).optional(),
 })
-export const crystalPins = lrPins
-export type CrystalPinLabels = (typeof crystalPins)[number]
 
 type InferredCrystalProps = z.input<typeof crystalProps>
 expectTypesMatch<CrystalProps, InferredCrystalProps>(true)

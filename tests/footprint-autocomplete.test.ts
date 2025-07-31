@@ -1,10 +1,10 @@
 import { expect, test } from "bun:test"
-import {
-  type FootprintProp,
-  type BasicFootprint,
-  type FootprintSoupElements,
+import type {
+  FootprintProp,
+  BasicFootprint,
+  FootprintSoupElements,
 } from "lib/common/footprintProp"
-import { AutocompleteString } from "lib/common/autocomplete"
+import type { AutocompleteString } from "lib/common/autocomplete"
 import { expectTypesMatch } from "lib/typecheck"
 
 // This test ensures the footprint prop accepts autocomplete strings

@@ -289,6 +289,7 @@ export interface CrystalProps<PinLabel extends string = string>
   loadCapacitance: number | string;
   pinVariant?: PinVariant;
   schOrientation?: SchematicOrientation;
+  connections?: Connections<CrystalPinLabels>;
 }
 ```
 

@@ -1,5 +1,9 @@
 import { expect, test } from "bun:test"
-import type { FootprintProp, BasicFootprint, FootprintSoupElements } from "lib/common/footprintProp"
+import type {
+  FootprintProp,
+  BasicFootprint,
+  FootprintSoupElements,
+} from "lib/common/footprintProp"
 import type { AutocompleteString } from "lib/common/autocomplete"
 import { expectTypesMatch } from "lib/typecheck"
 import type { ResistorProps } from "lib/components/resistor"

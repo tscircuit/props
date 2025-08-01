@@ -960,6 +960,12 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
 
+  pcbPadding?: Distance
+  pcbPaddingLeft?: Distance
+  pcbPaddingRight?: Distance
+  pcbPaddingTop?: Distance
+  pcbPaddingBottom?: Distance
+
   grid?: boolean
   flex?: boolean | string
 
@@ -1124,6 +1130,11 @@ export const baseGroupProps = commonLayoutProps.extend({
   schPaddingRight: length.optional(),
   schPaddingTop: length.optional(),
   schPaddingBottom: length.optional(),
+  pcbPadding: length.optional(),
+  pcbPaddingLeft: length.optional(),
+  pcbPaddingRight: length.optional(),
+  pcbPaddingTop: length.optional(),
+  pcbPaddingBottom: length.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
   manualEdits: manual_edits_file.optional(),

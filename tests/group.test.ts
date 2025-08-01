@@ -61,6 +61,18 @@ test("should parse schPadding", () => {
   expect(parsed.schPaddingLeft).toBe(2)
 })
 
+test("should parse pcbPadding", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    pcbPadding: "1mm",
+    pcbPaddingTop: 2,
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.pcbPadding).toBe(1)
+  expect(parsed.pcbPaddingTop).toBe(2)
+})
+
 test("should parse layout padding", () => {
   const raw: BaseGroupProps = {
     name: "g",

@@ -413,6 +413,12 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingTop?: Distance;
   schPaddingBottom?: Distance;
 
+  pcbPadding?: Distance;
+  pcbPaddingLeft?: Distance;
+  pcbPaddingRight?: Distance;
+  pcbPaddingTop?: Distance;
+  pcbPaddingBottom?: Distance;
+
   /** @deprecated Use `pcbGrid` */
   grid?: boolean;
   /** @deprecated Use `pcbFlex` */

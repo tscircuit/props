@@ -958,6 +958,12 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
 
+  pcbPadding?: Distance
+  pcbPaddingLeft?: Distance
+  pcbPaddingRight?: Distance
+  pcbPaddingTop?: Distance
+  pcbPaddingBottom?: Distance
+
   grid?: boolean
   flex?: boolean | string
 
@@ -972,6 +978,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbGridColumnGap?: number | string
 
   pcbFlex?: boolean | string
+  pcbFlexGap?: number | string
   pcbFlexDirection?: "row" | "column"
   pcbAlignItems?: "start" | "center" | "end" | "stretch"
   pcbJustifyContent?:
@@ -985,6 +992,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexRow?: boolean
   pcbFlexColumn?: boolean
   pcbGap?: number | string
+  pcbPack?: boolean
 }
 /** @deprecated Use `pcbFlex` */
 export type PartsEngine = {
@@ -1089,6 +1097,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbGridRowGap: z.number().or(z.string()).optional(),
   pcbGridColumnGap: z.number().or(z.string()).optional(),
   pcbFlex: z.boolean().or(z.string()).optional(),
+  pcbFlexGap: z.number().or(z.string()).optional(),
   pcbFlexDirection: z.enum(["row", "column"]).optional(),
   pcbAlignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
   pcbJustifyContent: z
@@ -1105,6 +1114,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbFlexRow: z.boolean().optional(),
   pcbFlexColumn: z.boolean().optional(),
   pcbGap: z.number().or(z.string()).optional(),
+  pcbPack: z.boolean().optional(),
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
   schWidth: length.optional(),
@@ -1118,6 +1128,11 @@ export const baseGroupProps = commonLayoutProps.extend({
   schPaddingRight: length.optional(),
   schPaddingTop: length.optional(),
   schPaddingBottom: length.optional(),
+  pcbPadding: length.optional(),
+  pcbPaddingLeft: length.optional(),
+  pcbPaddingRight: length.optional(),
+  pcbPaddingTop: length.optional(),
+  pcbPaddingBottom: length.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
   manualEdits: manual_edits_file.optional(),
@@ -1438,9 +1453,9 @@ export interface OvalPlatedHoleProps
   innerHeight?: number | string
 }
 /** @deprecated use holeHeight */
-export interface PillPlatedHoleProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
+  rectPad?: boolean
   connectsTo?: string | string[]
   shape: "pill"
   outerWidth: number | string
@@ -1512,10 +1527,11 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
       portHints: portHints.optional(),
     }),
-pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill"),
+      rectPad: z.boolean().optional(),
       outerWidth: distance,
       outerHeight: distance,
       holeWidth: distanceHiddenUndefined,

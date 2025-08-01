@@ -169,6 +169,12 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
 
+  pcbPadding?: Distance
+  pcbPaddingLeft?: Distance
+  pcbPaddingRight?: Distance
+  pcbPaddingTop?: Distance
+  pcbPaddingBottom?: Distance
+
   /** @deprecated Use `pcbGrid` */
   grid?: boolean
   /** @deprecated Use `pcbFlex` */
@@ -371,6 +377,11 @@ export const baseGroupProps = commonLayoutProps.extend({
   schPaddingRight: length.optional(),
   schPaddingTop: length.optional(),
   schPaddingBottom: length.optional(),
+  pcbPadding: length.optional(),
+  pcbPaddingLeft: length.optional(),
+  pcbPaddingRight: length.optional(),
+  pcbPaddingTop: length.optional(),
+  pcbPaddingBottom: length.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

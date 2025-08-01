@@ -628,12 +628,14 @@ export interface CrystalProps<PinLabel extends string = string>
   loadCapacitance: number | string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
+  connections?: Connections<CrystalPinLabels>
 }
 export const crystalProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
   pinVariant: z.enum(["two_pin", "four_pin"]).optional(),
   schOrientation: schematicOrientation.optional(),
+  connections: createConnectionsProp(crystalPins).optional(),
 })
 ```
 

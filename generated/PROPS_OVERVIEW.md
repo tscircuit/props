@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-31T02:08:37.131Z
+> Generated at 2025-07-31T08:19:04.264Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -346,6 +346,7 @@ export interface CrystalProps<PinLabel extends string = string>
   loadCapacitance: number | string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
+  connections?: Connections<CrystalPinLabels>
 }
 
 

@@ -169,6 +169,12 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
 
+  pcbPadding?: Distance
+  pcbPaddingLeft?: Distance
+  pcbPaddingRight?: Distance
+  pcbPaddingTop?: Distance
+  pcbPaddingBottom?: Distance
+
   /** @deprecated Use `pcbGrid` */
   grid?: boolean
   /** @deprecated Use `pcbFlex` */
@@ -200,6 +206,34 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexColumn?: boolean
   pcbGap?: number | string
   pcbPack?: boolean
+
+  schGrid?: boolean
+  schGridCols?: number | string
+  schGridRows?: number | string
+  schGridTemplateRows?: string
+  schGridTemplateColumns?: string
+  schGridTemplate?: string
+  schGridGap?: number | string
+  schGridRowGap?: number | string
+  schGridColumnGap?: number | string
+
+  schFlex?: boolean | string
+  schFlexGap?: number | string
+  schFlexDirection?: "row" | "column"
+  schAlignItems?: "start" | "center" | "end" | "stretch"
+  schJustifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+  schFlexRow?: boolean
+  schFlexColumn?: boolean
+  schGap?: number | string
+  schPack?: boolean
+  schMatchAdapt?: boolean
 }
 
 export type PartsEngine = {
@@ -358,6 +392,37 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbFlexColumn: z.boolean().optional(),
   pcbGap: z.number().or(z.string()).optional(),
   pcbPack: z.boolean().optional(),
+
+  schGrid: z.boolean().optional(),
+  schGridCols: z.number().or(z.string()).optional(),
+  schGridRows: z.number().or(z.string()).optional(),
+  schGridTemplateRows: z.string().optional(),
+  schGridTemplateColumns: z.string().optional(),
+  schGridTemplate: z.string().optional(),
+  schGridGap: z.number().or(z.string()).optional(),
+  schGridRowGap: z.number().or(z.string()).optional(),
+  schGridColumnGap: z.number().or(z.string()).optional(),
+
+  schFlex: z.boolean().or(z.string()).optional(),
+  schFlexGap: z.number().or(z.string()).optional(),
+  schFlexDirection: z.enum(["row", "column"]).optional(),
+  schAlignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
+  schJustifyContent: z
+    .enum([
+      "start",
+      "center",
+      "end",
+      "stretch",
+      "space-between",
+      "space-around",
+      "space-evenly",
+    ])
+    .optional(),
+  schFlexRow: z.boolean().optional(),
+  schFlexColumn: z.boolean().optional(),
+  schGap: z.number().or(z.string()).optional(),
+  schPack: z.boolean().optional(),
+  schMatchAdapt: z.boolean().optional(),
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
   schWidth: length.optional(),
@@ -371,6 +436,11 @@ export const baseGroupProps = commonLayoutProps.extend({
   schPaddingRight: length.optional(),
   schPaddingTop: length.optional(),
   schPaddingBottom: length.optional(),
+  pcbPadding: length.optional(),
+  pcbPaddingLeft: length.optional(),
+  pcbPaddingRight: length.optional(),
+  pcbPaddingTop: length.optional(),
+  pcbPaddingBottom: length.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

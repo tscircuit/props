@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-07-31T08:19:04.264Z
+> Generated at 2025-08-01T19:56:01.986Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -62,6 +62,12 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPaddingTop?: Distance
   schPaddingBottom?: Distance
 
+  pcbPadding?: Distance
+  pcbPaddingLeft?: Distance
+  pcbPaddingRight?: Distance
+  pcbPaddingTop?: Distance
+  pcbPaddingBottom?: Distance
+
   /** @deprecated Use `pcbGrid` */
   grid?: boolean
   /** @deprecated Use `pcbFlex` */
@@ -93,6 +99,34 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexColumn?: boolean
   pcbGap?: number | string
   pcbPack?: boolean
+
+  schGrid?: boolean
+  schGridCols?: number | string
+  schGridRows?: number | string
+  schGridTemplateRows?: string
+  schGridTemplateColumns?: string
+  schGridTemplate?: string
+  schGridGap?: number | string
+  schGridRowGap?: number | string
+  schGridColumnGap?: number | string
+
+  schFlex?: boolean | string
+  schFlexGap?: number | string
+  schFlexDirection?: "row" | "column"
+  schAlignItems?: "start" | "center" | "end" | "stretch"
+  schJustifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+  schFlexRow?: boolean
+  schFlexColumn?: boolean
+  schGap?: number | string
+  schPack?: boolean
+  schMatchAdapt?: boolean
 }
 
 

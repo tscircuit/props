@@ -61,6 +61,18 @@ test("should parse schPadding", () => {
   expect(parsed.schPaddingLeft).toBe(2)
 })
 
+test("should parse pcbPadding", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    pcbPadding: "1mm",
+    pcbPaddingTop: 2,
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.pcbPadding).toBe(1)
+  expect(parsed.pcbPaddingTop).toBe(2)
+})
+
 test("should parse layout padding", () => {
   const raw: BaseGroupProps = {
     name: "g",
@@ -157,4 +169,25 @@ test("should parse layout grid gaps", () => {
   const parsed = baseGroupProps.parse(raw)
   expect(parsed.gridRowGap).toBe("1mm")
   expect(parsed.gridColumnGap).toBe(2)
+})
+
+test("should parse schematic layout props", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    schGrid: true,
+    schGridCols: 3,
+    schGridGap: "0.5mm",
+    schFlex: true,
+    schFlexGap: "0.2mm",
+    schPack: true,
+    schMatchAdapt: true,
+  }
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.schGrid).toBe(true)
+  expect(parsed.schGridCols).toBe(3)
+  expect(parsed.schGridGap).toBe("0.5mm")
+  expect(parsed.schFlex).toBe(true)
+  expect(parsed.schFlexGap).toBe("0.2mm")
+  expect(parsed.schPack).toBe(true)
+  expect(parsed.schMatchAdapt).toBe(true)
 })

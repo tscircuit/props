@@ -451,6 +451,34 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexColumn?: boolean;
   pcbGap?: number | string;
   pcbPack?: boolean;
+
+  schGrid?: boolean;
+  schGridCols?: number | string;
+  schGridRows?: number | string;
+  schGridTemplateRows?: string;
+  schGridTemplateColumns?: string;
+  schGridTemplate?: string;
+  schGridGap?: number | string;
+  schGridRowGap?: number | string;
+  schGridColumnGap?: number | string;
+
+  schFlex?: boolean | string;
+  schFlexGap?: number | string;
+  schFlexDirection?: "row" | "column";
+  schAlignItems?: "start" | "center" | "end" | "stretch";
+  schJustifyContent?:
+    | "start"
+    | "center"
+    | "end"
+    | "stretch"
+    | "space-between"
+    | "space-around"
+    | "space-evenly";
+  schFlexRow?: boolean;
+  schFlexColumn?: boolean;
+  schGap?: number | string;
+  schPack?: boolean;
+  schMatchAdapt?: boolean;
 }
 ```
 

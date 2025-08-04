@@ -80,7 +80,7 @@ const myResistor: ResistorProps = {
 ```
 
 The `footprint` prop uses a string union so editors can provide basic
-autocomplete for common footprints like `0603`, `0805`, `SOIC-8`, and
+autocomplete for common footprints like `0603`, `0402`, `tssop`, and
 others while still allowing any custom string.
 
 <!-- USAGE_EXAMPLES_END -->

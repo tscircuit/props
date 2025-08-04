@@ -44,7 +44,10 @@ export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Whether to show pin labels in silkscreen
    */
-  showSilkscreenPinLabels?: boolean
+  /**
+   * Whether to hide pin labels in silkscreen
+   */
+  hideSilkscreenPinLabels?: boolean
 
   /**
    * Labels for PCB pins
@@ -117,7 +120,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   pitch: distance.optional(),
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   gender: z.enum(["male", "female", "unpopulated"]).optional().default("male"),
-  showSilkscreenPinLabels: z.boolean().optional(),
+  hideSilkscreenPinLabels: z.boolean().optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),
   rightAngle: z.boolean().optional(),

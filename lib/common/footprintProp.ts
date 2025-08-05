@@ -37,7 +37,6 @@ export type BasicFootprint =
   | "to92"
   | "to220"
   | "ssop"
-  | "ssop"
   | "qfp"
   | "qfn"
   | "sot23"

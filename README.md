@@ -523,6 +523,10 @@ export interface JumperProps extends CommonComponentProps {
   schWidth?: number | string;
   schHeight?: number | string;
   schDirection?: "left" | "right";
+  schPinArrangement?: SchematicPortArrangement;
+  /**
+   * @deprecated Use schPinArrangement instead.
+   */
   schPortArrangement?: SchematicPortArrangement;
   /**
    * Labels for PCB pins

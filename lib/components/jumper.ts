@@ -4,6 +4,7 @@ import {
   commonComponentProps,
 } from "lib/common/layout"
 import {
+  schematicPinArrangement,
   type SchematicPortArrangement,
   schematicPortArrangement,
 } from "lib/common/schematicPinDefinitions"
@@ -31,6 +32,10 @@ export interface JumperProps extends CommonComponentProps {
   schWidth?: number | string
   schHeight?: number | string
   schDirection?: "left" | "right"
+  schPinArrangement?: SchematicPortArrangement
+  /**
+   * @deprecated Use schPinArrangement instead.
+   */
   schPortArrangement?: SchematicPortArrangement
   /**
    * Labels for PCB pins
@@ -64,6 +69,7 @@ export const jumperProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
+  schPinArrangement: schematicPinArrangement.optional(),
   schPortArrangement: schematicPortArrangement.optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),

@@ -17,6 +17,7 @@ const baseTraceProps = z.object({
   pcbPathRelativeTo: z.string().optional(),
   pcbPath: z.array(point).optional(),
   schDisplayLabel: z.string().optional(),
+  schStroke: z.string().optional(),
   maxLength: distance.optional(),
 })
 

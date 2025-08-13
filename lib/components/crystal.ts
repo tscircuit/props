@@ -22,6 +22,8 @@ export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
+  manufacturerPartNumber?: string
+  mpn?: string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
   connections?: Connections<CrystalPinLabels>
@@ -30,6 +32,8 @@ export interface CrystalProps<PinLabel extends string = string>
 export const crystalProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
+  manufacturerPartNumber: z.string().optional(),
+  mpn: z.string().optional(),
   pinVariant: z.enum(["two_pin", "four_pin"]).optional(),
   schOrientation: schematicOrientation.optional(),
   connections: createConnectionsProp(crystalPins).optional(),

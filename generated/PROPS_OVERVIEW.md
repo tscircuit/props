@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-08-01T19:56:01.986Z
+> Generated at 2025-08-13T02:57:40.359Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -372,6 +372,8 @@ export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
+  manufacturerPartNumber?: string
+  mpn?: string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
   connections?: Connections<CrystalPinLabels>
@@ -511,6 +513,10 @@ export interface JumperProps extends CommonComponentProps {
   schWidth?: number | string
   schHeight?: number | string
   schDirection?: "left" | "right"
+  schPinArrangement?: SchematicPortArrangement
+  /**
+   * @deprecated Use schPinArrangement instead.
+   */
   schPortArrangement?: SchematicPortArrangement
   /**
    * Labels for PCB pins

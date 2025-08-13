@@ -287,6 +287,8 @@ export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string;
   loadCapacitance: number | string;
+  manufacturerPartNumber?: string;
+  mpn?: string;
   pinVariant?: PinVariant;
   schOrientation?: SchematicOrientation;
   connections?: Connections<CrystalPinLabels>;

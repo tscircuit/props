@@ -231,7 +231,7 @@ export interface ChipPropsSU<
   schWidth?: Distance;
   schHeight?: Distance;
   noSchematicRepresentation?: boolean;
-  internallyConnectedPins?: string[][];
+  internallyConnectedPins?: (string | number)[][];
   externallyConnectedPins?: string[][];
   connections?: Connections<PinLabel>;
 }
@@ -258,7 +258,7 @@ export interface ConnectorProps extends CommonComponentProps {
    * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
-  internallyConnectedPins?: string[][];
+  internallyConnectedPins?: (string | number)[][];
   /**
    * Connector standard, e.g. usb_c, m2
    */
@@ -542,7 +542,7 @@ export interface JumperProps extends CommonComponentProps {
    * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
-  internallyConnectedPins?: string[][];
+  internallyConnectedPins?: (string | number)[][];
   /**
    * Connections to other components
    */

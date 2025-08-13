@@ -19,6 +19,16 @@ test("should parse 2-pin jumper with pins 1-2 internally connected", () => {
   expect(parsed.internallyConnectedPins).toEqual([["1", "2"]])
 })
 
+test("should parse 2-pin jumper with numeric internallyConnectedPins", () => {
+  const rawProps: JumperProps = {
+    name: "jumper",
+    pinCount: 2,
+    internallyConnectedPins: [[1, 2]],
+  }
+  const parsed = jumperProps.parse(rawProps)
+  expect(parsed.internallyConnectedPins).toEqual([[1, 2]])
+})
+
 test("should parse 3-pin jumper with pins 1-2 internally connected", () => {
   const rawProps: JumperProps = {
     name: "jumper",

@@ -49,7 +49,7 @@ export interface JumperProps extends CommonComponentProps {
    * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
-  internallyConnectedPins?: string[][]
+  internallyConnectedPins?: (string | number)[][]
   /**
    * Connections to other components
    */
@@ -73,7 +73,9 @@ export const jumperProps = commonComponentProps.extend({
   schPortArrangement: schematicPortArrangement.optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
-  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  internallyConnectedPins: z
+    .array(z.array(z.union([z.string(), z.number()])))
+    .optional(),
   connections: z
     .custom<Connections>()
     .pipe(z.record(z.string(), connectionTarget))

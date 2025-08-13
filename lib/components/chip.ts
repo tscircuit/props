@@ -58,7 +58,7 @@ export interface ChipPropsSU<
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
-  internallyConnectedPins?: string[][]
+  internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
   connections?: Connections<PinLabel>
 }
@@ -138,7 +138,9 @@ export const chipProps = commonComponentProps.extend({
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
-  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  internallyConnectedPins: z
+    .array(z.array(z.union([z.string(), z.number()])))
+    .optional(),
   externallyConnectedPins: z.array(z.array(z.string())).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
   schPortArrangement: schematicPinArrangement.optional(),

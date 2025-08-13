@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-08-13T16:18:37.299Z
+> Generated at 2025-08-13T23:26:56.160Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.

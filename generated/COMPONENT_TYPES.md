@@ -441,7 +441,7 @@ export interface ChipPropsSU<
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
-  internallyConnectedPins?: string[][]
+  internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
   connections?: Connections<PinLabel>
 }
@@ -471,7 +471,9 @@ export const chipProps = commonComponentProps.extend({
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
-  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  internallyConnectedPins: z
+    .array(z.array(z.union([z.string(), z.number()])))
+    .optional(),
   externallyConnectedPins: z.array(z.array(z.string())).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
   schPortArrangement: schematicPinArrangement.optional(),
@@ -500,7 +502,7 @@ export interface ConnectorProps extends CommonComponentProps {
   schHeight?: number | string
   schDirection?: "left" | "right"
   schPortArrangement?: SchematicPortArrangement
-  internallyConnectedPins?: string[][]
+  internallyConnectedPins?: (string | number)[][]
   standard?: "usb_c" | "m2"
 }
 /**
@@ -520,7 +522,9 @@ export const connectorProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
-  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  internallyConnectedPins: z
+    .array(z.array(z.union([z.string(), z.number()])))
+    .optional(),
   standard: z.enum(["usb_c", "m2"]).optional(),
 })
 ```
@@ -1274,7 +1278,7 @@ export interface JumperProps extends CommonComponentProps {
   schPortArrangement?: SchematicPortArrangement
   pcbPinLabels?: Record<string, string>
   pinCount?: 2 | 3
-  internallyConnectedPins?: string[][]
+  internallyConnectedPins?: (string | number)[][]
   connections?: Connections<string>
 }
 /**
@@ -1297,7 +1301,9 @@ export const jumperProps = commonComponentProps.extend({
   schPortArrangement: schematicPortArrangement.optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),
-  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  internallyConnectedPins: z
+    .array(z.array(z.union([z.string(), z.number()])))
+    .optional(),
   connections: z
     .custom<Connections>()
     .pipe(z.record(z.string(), connectionTarget))

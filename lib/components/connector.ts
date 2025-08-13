@@ -34,7 +34,7 @@ export interface ConnectorProps extends CommonComponentProps {
    * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]
    */
-  internallyConnectedPins?: string[][]
+  internallyConnectedPins?: (string | number)[][]
   /**
    * Connector standard, e.g. usb_c, m2
    */
@@ -55,7 +55,9 @@ export const connectorProps = commonComponentProps.extend({
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
   schPortArrangement: schematicPortArrangement.optional(),
-  internallyConnectedPins: z.array(z.array(z.string())).optional(),
+  internallyConnectedPins: z
+    .array(z.array(z.union([z.string(), z.number()])))
+    .optional(),
   standard: z.enum(["usb_c", "m2"]).optional(),
 })
 

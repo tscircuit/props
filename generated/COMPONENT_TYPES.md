@@ -626,6 +626,8 @@ export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
+  manufacturerPartNumber?: string
+  mpn?: string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
   connections?: Connections<CrystalPinLabels>
@@ -633,6 +635,8 @@ export interface CrystalProps<PinLabel extends string = string>
 export const crystalProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
+  manufacturerPartNumber: z.string().optional(),
+  mpn: z.string().optional(),
   pinVariant: z.enum(["two_pin", "four_pin"]).optional(),
   schOrientation: schematicOrientation.optional(),
   connections: createConnectionsProp(crystalPins).optional(),
@@ -1266,6 +1270,7 @@ export interface JumperProps extends CommonComponentProps {
   schWidth?: number | string
   schHeight?: number | string
   schDirection?: "left" | "right"
+  schPinArrangement?: SchematicPortArrangement
   schPortArrangement?: SchematicPortArrangement
   pcbPinLabels?: Record<string, string>
   pinCount?: 2 | 3
@@ -1288,6 +1293,7 @@ export const jumperProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   schDirection: z.enum(["left", "right"]).optional(),
+  schPinArrangement: schematicPinArrangement.optional(),
   schPortArrangement: schematicPortArrangement.optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   pinCount: z.union([z.literal(2), z.literal(3)]).optional(),

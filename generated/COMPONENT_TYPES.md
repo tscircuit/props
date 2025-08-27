@@ -1097,6 +1097,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
   schTraceAutoLabelEnabled?: boolean
 
+  schMaxTraceDistance?: Distance
+
   partsEngine?: PartsEngine
 
   square?: boolean
@@ -1207,6 +1209,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),
+  schMaxTraceDistance: distance.optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
@@ -1897,6 +1900,7 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
   anchorAlignment: ninePointAnchor.default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
+  layers: z.array(layer_ref).optional(),
 })
 ```
 
@@ -2195,6 +2199,27 @@ export const viaProps = commonLayoutProps.extend({
   holeDiameter: distance,
   outerDiameter: distance,
   connectsTo: z.string().or(z.array(z.string())).optional(),
+})
+```
+
+### voltagesource
+
+```typescript
+export interface VoltageSourceProps extends CommonComponentProps {
+  voltage?: number | string
+  frequency?: number | string
+  peakToPeakVoltage?: number | string
+  waveShape?: WaveShape
+  phase?: number | string
+  dutyCycle?: number | string
+}
+export const voltageSourceProps = commonComponentProps.extend({
+  voltage: voltage.optional(),
+  frequency: frequency.optional(),
+  peakToPeakVoltage: voltage.optional(),
+  waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
+  phase: rotation.optional(),
+  dutyCycle: percentage.optional(),
 })
 ```
 

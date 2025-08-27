@@ -147,7 +147,6 @@ function generateInterfaceDefinitions(
       name: "Group",
       props: "SubcircuitGroupProps",
       interfaceDefinition: `export interface SubcircuitGroupProps extends BaseGroupProps {
-  layout?: LayoutBuilder
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
@@ -167,6 +166,9 @@ function generateInterfaceDefinitions(
    * If true, net labels will automatically be created for complex traces
    */
   schTraceAutoLabelEnabled?: boolean
+
+  /** Maximum length a trace can span on the schematic */
+  schMaxTraceDistance?: Distance
 
   partsEngine?: PartsEngine
 }`,

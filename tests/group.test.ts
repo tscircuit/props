@@ -1,5 +1,10 @@
 import { expect, test } from "bun:test"
-import { baseGroupProps, type BaseGroupProps } from "../lib/components/group"
+import {
+  baseGroupProps,
+  subcircuitGroupProps,
+  type BaseGroupProps,
+  type SubcircuitGroupProps,
+} from "../lib/components/group"
 
 test("should parse cellBorder", () => {
   const raw: BaseGroupProps = {
@@ -190,4 +195,13 @@ test("should parse schematic layout props", () => {
   expect(parsed.schFlexGap).toBe("0.2mm")
   expect(parsed.schPack).toBe(true)
   expect(parsed.schMatchAdapt).toBe(true)
+})
+
+test("should parse schMaxTraceDistance", () => {
+  const raw: SubcircuitGroupProps = {
+    name: "g",
+    schMaxTraceDistance: "10mm",
+  }
+  const parsed = subcircuitGroupProps.parse(raw)
+  expect(parsed.schMaxTraceDistance).toBe(10)
 })

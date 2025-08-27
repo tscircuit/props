@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-08-13T23:26:56.160Z
+> Generated at 2025-08-27T22:41:04.139Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -1072,6 +1072,9 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
    */
   schTraceAutoLabelEnabled?: boolean
 
+  /** Maximum length a trace can span on the schematic */
+  schMaxTraceDistance?: Distance
+
   partsEngine?: PartsEngine
 
   /** When autosizing, the board will be made square */
@@ -1151,6 +1154,16 @@ export interface ViaProps extends CommonLayoutProps {
   holeDiameter: number | string
   outerDiameter: number | string
   connectsTo?: string | string[]
+}
+
+
+export interface VoltageSourceProps extends CommonComponentProps {
+  voltage?: number | string
+  frequency?: number | string
+  peakToPeakVoltage?: number | string
+  waveShape?: WaveShape
+  phase?: number | string
+  dutyCycle?: number | string
 }
 
 ```

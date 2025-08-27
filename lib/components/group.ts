@@ -329,6 +329,9 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
    */
   schTraceAutoLabelEnabled?: boolean
 
+  /** Maximum length a trace can span on the schematic */
+  schMaxTraceDistance?: Distance
+
   partsEngine?: PartsEngine
 
   /** When autosizing, the board will be made square */
@@ -449,6 +452,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),
+  schMaxTraceDistance: distance.optional(),
   routingDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),

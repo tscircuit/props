@@ -57,6 +57,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<testpoint />`         | [`TestpointProps`](#testpointprops-testpoint)                         |
 | `<transistor />`        | [`TransistorProps`](#transistorprops-transistor)                      |
 | `<via />`               | [`ViaProps`](#viaprops-via)                                           |
+| `<voltagesource />`     | [`VoltageSourceProps`](#voltagesourceprops-voltagesource)             |
 
 <!-- COMPONENT_TABLE_END -->
 
@@ -941,6 +942,20 @@ export interface ViaProps extends CommonLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/via.ts)
+
+### VoltageSourceProps `<voltagesource />`
+
+```ts
+export interface VoltageSourceProps extends CommonComponentProps {
+  voltage?: number | string;
+  frequency?: number | string;
+  peakToPeakVoltage?: number | string;
+  waveShape?: WaveShape;
+  phase?: number | string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/voltagesource.ts)
 
 <!-- INTERFACE_DEFINITIONS_END -->
 

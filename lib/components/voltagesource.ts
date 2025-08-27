@@ -14,7 +14,26 @@ export interface VoltageSourceProps extends CommonComponentProps {
   peakToPeakVoltage?: number | string
   waveShape?: WaveShape
   phase?: number | string
+  dutyCycle?: number | string
 }
+
+const percentage = z
+  .union([z.string(), z.number()])
+  .transform((val) => {
+    if (typeof val === "string") {
+      if (val.endsWith("%")) {
+        return parseFloat(val.slice(0, -1)) / 100
+      }
+      return parseFloat(val)
+    }
+    return val
+  })
+  .pipe(
+    z
+      .number()
+      .min(0, "Duty cycle must be non-negative")
+      .max(1, "Duty cycle cannot be greater than 100%"),
+  )
 
 export const voltageSourceProps = commonComponentProps.extend({
   voltage: voltage.optional(),
@@ -22,6 +41,7 @@ export const voltageSourceProps = commonComponentProps.extend({
   peakToPeakVoltage: voltage.optional(),
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
+  dutyCycle: percentage.optional(),
 })
 
 type InferredVoltageSourceProps = z.input<typeof voltageSourceProps>

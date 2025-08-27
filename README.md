@@ -952,6 +952,7 @@ export interface VoltageSourceProps extends CommonComponentProps {
   peakToPeakVoltage?: number | string;
   waveShape?: WaveShape;
   phase?: number | string;
+  dutyCycle?: number | string;
 }
 ```
 

@@ -93,3 +93,26 @@ test("should parse AC source with DC offset", () => {
   expect(parsed.frequency).toBe(1000)
   expect(parsed.peakToPeakVoltage).toBe(5)
 })
+
+test("should parse duty cycle", () => {
+  const rawProps: VoltageSourceProps = {
+    name: "vs_duty",
+    dutyCycle: "50%",
+  }
+  const parsed = voltageSourceProps.parse(rawProps)
+  expect(parsed.dutyCycle).toBe(0.5)
+
+  const rawProps2: VoltageSourceProps = {
+    name: "vs_duty",
+    dutyCycle: 0.25,
+  }
+  const parsed2 = voltageSourceProps.parse(rawProps2)
+  expect(parsed2.dutyCycle).toBe(0.25)
+
+  expect(() =>
+    voltageSourceProps.parse({ name: "vs_duty", dutyCycle: "150%" }),
+  ).toThrow()
+  expect(() =>
+    voltageSourceProps.parse({ name: "vs_duty", dutyCycle: 2 }),
+  ).toThrow()
+})

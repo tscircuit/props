@@ -58,6 +58,26 @@ test("should parse rightAngle property", () => {
   expect(parsed.rightAngle).toBe(true)
 })
 
+test("should parse pinLabels as array", () => {
+  const rawProps: PinHeaderProps = {
+    name: "header",
+    pinCount: 2,
+    pinLabels: ["A", "B"],
+  }
+  const parsed = pinHeaderProps.parse(rawProps)
+  expect(parsed.pinLabels).toEqual(["A", "B"])
+})
+
+test("should parse pinLabels as record", () => {
+  const rawProps: PinHeaderProps = {
+    name: "header",
+    pinCount: 2,
+    pinLabels: { 1: "A", 2: "B" },
+  }
+  const parsed = pinHeaderProps.parse(rawProps)
+  expect(parsed.pinLabels).toEqual({ 1: "A", 2: "B" })
+})
+
 test("should snapshot schematic props for pin header", () => {
   const rawProps: PinHeaderProps = {
     name: "header",

@@ -1458,7 +1458,7 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   platedDiameter?: number | string
 
-  pinLabels?: SchematicPinLabel[]
+  pinLabels?: Record<string, SchematicPinLabel> | SchematicPinLabel[]
 
   connections?: Connections<string>
 
@@ -1488,7 +1488,10 @@ export const pinHeaderProps = commonComponentProps.extend({
   rightAngle: z.boolean().optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
-  pinLabels: z.array(schematicPinLabel).optional(),
+  pinLabels: z
+    .record(z.string(), schematicPinLabel)
+    .or(z.array(schematicPinLabel))
+    .optional(),
   connections: z
     .custom<Connections>()
     .pipe(z.record(z.string(), connectionTarget))

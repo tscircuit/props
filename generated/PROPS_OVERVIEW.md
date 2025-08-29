@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-08-27T22:41:04.139Z
+> Generated at 2025-08-29T05:11:45.645Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -810,7 +810,7 @@ export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Labels for each pin
    */
-  pinLabels?: SchematicPinLabel[]
+  pinLabels?: Record<string, SchematicPinLabel> | SchematicPinLabel[]
 
   /**
    * Connections to other components

@@ -23,10 +23,17 @@ test("Schematic pinLabels should reject labels with invalid characters", () => {
   }
   expect(jumperProps.safeParse(invalidJumper).success).toBe(false)
 
-  const invalidHeader = {
+  const invalidHeaderArray = {
     name: "hdr",
     pinCount: 2,
     pinLabels: ["A-B"],
   }
-  expect(pinHeaderProps.safeParse(invalidHeader).success).toBe(false)
+  expect(pinHeaderProps.safeParse(invalidHeaderArray).success).toBe(false)
+
+  const invalidHeaderRecord = {
+    name: "hdr",
+    pinCount: 2,
+    pinLabels: { 1: "A-B" },
+  }
+  expect(pinHeaderProps.safeParse(invalidHeaderRecord).success).toBe(false)
 })

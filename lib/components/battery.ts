@@ -1,3 +1,4 @@
+import { voltage } from "circuit-json"
 import { z } from "zod"
 import {
   commonComponentProps,
@@ -31,11 +32,15 @@ const capacity = z
 export interface BatteryProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   capacity?: number | string
+  voltage?: number | string
+  standard?: "AA" | "AAA" | "9V" | "CR2032" | "18650" | "C"
   schOrientation?: SchematicOrientation
 }
 
 export const batteryProps = commonComponentProps.extend({
   capacity: capacity.optional(),
+  voltage: voltage.optional(),
+  standard: z.enum(["AA", "AAA", "9V", "CR2032", "18650", "C"]).optional(),
   schOrientation: schematicOrientation.optional(),
 })
 export const batteryPins = lrPolarPins

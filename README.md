@@ -666,7 +666,7 @@ export interface PinHeaderProps extends CommonComponentProps {
   /**
    * Labels for each pin
    */
-  pinLabels?: SchematicPinLabel[];
+  pinLabels?: Record<string, SchematicPinLabel> | SchematicPinLabel[];
 
   /**
    * Connections to other components

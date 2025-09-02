@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-08-29T05:11:45.645Z
+> Generated at 2025-09-02T02:59:55.968Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -140,6 +140,8 @@ export interface BaseManualEditEvent {
 export interface BatteryProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   capacity?: number | string
+  voltage?: number | string
+  standard?: "AA" | "AAA" | "9V" | "CR2032" | "18650" | "C"
   schOrientation?: SchematicOrientation
 }
 
@@ -747,6 +749,7 @@ export interface PinAttributeMap {
   requiresGround?: boolean
   providesVoltage?: string | number
   requiresVoltage?: string | number
+  doNotConnect?: boolean
 }
 
 

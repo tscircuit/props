@@ -156,6 +156,7 @@ export interface PinAttributeMap {
   requiresGround?: boolean
   providesVoltage?: string | number
   requiresVoltage?: string | number
+  doNotConnect?: boolean
 }
 export const pinAttributeMap = z.object({
   providesPower: z.boolean().optional(),
@@ -164,6 +165,7 @@ export const pinAttributeMap = z.object({
   requiresGround: z.boolean().optional(),
   providesVoltage: z.union([z.string(), z.number()]).optional(),
   requiresVoltage: z.union([z.string(), z.number()]).optional(),
+  doNotConnect: z.boolean().optional(),
 })
 export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
@@ -330,9 +332,7 @@ export interface BatteryProps<PinLabel extends string = string>
 export const batteryProps = commonComponentProps.extend({
   capacity: capacity.optional(),
   voltage: voltage.optional(),
-  standard: z
-    .enum(["AA", "AAA", "9V", "CR2032", "18650", "C"])
-    .optional(),
+  standard: z.enum(["AA", "AAA", "9V", "CR2032", "18650", "C"]).optional(),
   schOrientation: schematicOrientation.optional(),
 })
 ```

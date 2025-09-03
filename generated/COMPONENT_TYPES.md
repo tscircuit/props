@@ -1511,6 +1511,14 @@ export const pinHeaderProps = commonComponentProps.extend({
 })
 ```
 
+### pinout
+
+```typescript
+export interface PinoutProps<
+  PinLabelMap extends PinLabelsProp | string = string,
+> extends ChipProps<PinLabelMap> {}
+```
+
 ### platedhole
 
 ```typescript

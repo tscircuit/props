@@ -42,6 +42,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<netalias />`          | [`NetAliasProps`](#netaliasprops-netalias)                            |
 | `<netlabel />`          | [`NetLabelProps`](#netlabelprops-netlabel)                            |
 | `<pinheader />`         | [`PinHeaderProps`](#pinheaderprops-pinheader)                         |
+| `<pinout />`            | [`PinoutProps`](#pinoutprops-pinout)                                  |
 | `<platedhole />`        | [`CirclePlatedHoleProps`](#circleplatedholeprops-platedhole)          |
 | `<potentiometer />`     | [`PotentiometerProps`](#potentiometerprops-potentiometer)             |
 | `<resistor />`          | [`ResistorProps`](#resistorprops-resistor)                            |

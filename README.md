@@ -55,6 +55,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<solderpaste />`       | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste)           |
 | `<stampboard />`        | [`StampboardProps`](#stampboardprops-stampboard)                      |
 | `<switch />`            | [`SwitchProps`](#switchprops-switch)                                  |
+| `<symbol />`            | [`SymbolProps`](#symbolprops-symbol)                                  |
 | `<testpoint />`         | [`TestpointProps`](#testpointprops-testpoint)                         |
 | `<transistor />`        | [`TransistorProps`](#transistorprops-transistor)                      |
 | `<via />`               | [`ViaProps`](#viaprops-via)                                           |
@@ -887,6 +888,22 @@ export interface SwitchProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/switch.ts)
+
+### SymbolProps `<symbol />`
+
+```ts
+export interface SymbolProps {
+  /**
+   * The facing direction that the symbol is designed for. If you set this to "right",
+   * then it means the children were intended to represent the symbol facing right.
+   * Generally, you shouldn't set this except where it can help prevent confusion
+   * because you have a complex symbol. Default is "right" and this is most intuitive.
+   */
+  originalFacingDirection?: "up" | "down" | "left" | "right";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/symbol.ts)
 
 ### TestpointProps `<testpoint />`
 

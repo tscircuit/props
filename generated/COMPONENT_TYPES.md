@@ -2103,6 +2103,23 @@ export interface SwitchProps extends CommonComponentProps {
   })
 ```
 
+### symbol
+
+```typescript
+export interface SymbolProps {
+  originalFacingDirection?: "up" | "down" | "left" | "right"
+}
+/**
+   * The facing direction that the symbol is designed for. If you set this to "right",
+   * then it means the children were intended to represent the symbol facing right.
+   * Generally, you shouldn't set this except where it can help prevent confusion
+   * because you have a complex symbol. Default is "right" and this is most intuitive.
+   */
+export const symbolProps = z.object({
+  originalFacingDirection: z.enum(["up", "down", "left", "right"]).default("right").optional(),
+})
+```
+
 ### testpoint
 
 ```typescript

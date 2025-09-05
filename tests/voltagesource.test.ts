@@ -3,6 +3,7 @@ import {
   voltageSourceProps,
   type VoltageSourceProps,
 } from "lib/components/voltagesource"
+import { z } from "zod"
 
 test("should parse voltage source props", () => {
   const rawProps: VoltageSourceProps = {
@@ -115,4 +116,53 @@ test("should parse duty cycle", () => {
   expect(() =>
     voltageSourceProps.parse({ name: "vs_duty", dutyCycle: 2 }),
   ).toThrow()
+})
+
+test("should parse voltage source props with single string connections", () => {
+  const rawProps: VoltageSourceProps = {
+    name: "vs_conn",
+    connections: {
+      pos: "net.VCC",
+      neg: "net.GND",
+    },
+  }
+  const parsed = voltageSourceProps.parse(rawProps)
+  expect(parsed.connections).toEqual({
+    pos: "net.VCC",
+    neg: "net.GND",
+  })
+})
+
+test("should parse voltage source props with array connections", () => {
+  const rawProps: VoltageSourceProps = {
+    name: "vs_conn_arr",
+    connections: {
+      pos: ["net.VCC", "net.5V"],
+      neg: ["net.GND"],
+    },
+  }
+  const parsed = voltageSourceProps.parse(rawProps)
+  expect(parsed.connections).toEqual({
+    pos: ["net.VCC", "net.5V"],
+    neg: ["net.GND"],
+  })
+})
+
+test("should reject connections with invalid keys", () => {
+  expect(() => {
+    voltageSourceProps.parse({
+      name: "vs_invalid_conn",
+      connections: {
+        invalid: "net.X",
+      } as any,
+    })
+  }).toThrow(z.ZodError)
+})
+
+test("should allow optional connections", () => {
+  const rawProps: VoltageSourceProps = {
+    name: "vs_no_conn",
+  }
+  const parsed = voltageSourceProps.parse(rawProps)
+  expect(parsed.connections).toBeUndefined()
 })

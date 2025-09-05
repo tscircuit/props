@@ -161,6 +161,7 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   material?: "fr4" | "fr1";
   /** Number of layers for the PCB */
   layers?: 2 | 4;
+  borderRadius?: Distance;
 }
 ```
 

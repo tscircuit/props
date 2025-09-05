@@ -21,3 +21,9 @@ test("should parse layers prop", () => {
   const parsed = boardProps.parse(raw)
   expect(parsed.layers).toBe(4)
 })
+
+test("should parse borderRadius prop", () => {
+  const raw: BoardProps = { name: "board", borderRadius: 2 }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.borderRadius).toBe(2)
+})

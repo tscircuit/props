@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-02T02:59:55.968Z
+> Generated at 2025-09-04T23:27:14.482Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -150,6 +150,7 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
   layers?: 2 | 4
+  borderRadius?: Distance
 }
 
 
@@ -1112,6 +1113,17 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean
   dpst?: boolean
   dpdt?: boolean
+}
+
+
+export interface SymbolProps {
+  /**
+   * The facing direction that the symbol is designed for. If you set this to "right",
+   * then it means the children were intended to represent the symbol facing right.
+   * Generally, you shouldn't set this except where it can help prevent confusion
+   * because you have a complex symbol. Default is "right" and this is most intuitive.
+   */
+  originalFacingDirection?: "up" | "down" | "left" | "right"
 }
 
 

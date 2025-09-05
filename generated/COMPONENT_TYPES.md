@@ -343,11 +343,13 @@ export const batteryProps = commonComponentProps.extend({
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   material?: "fr4" | "fr1"
   layers?: 2 | 4
+  borderRadius?: Distance
 }
 /** Number of layers for the PCB */
 export const boardProps = subcircuitGroupProps.extend({
   material: z.enum(["fr4", "fr1"]).default("fr4"),
   layers: z.union([z.literal(2), z.literal(4)]).default(2),
+  borderRadius: distance.optional(),
 })
 ```
 
@@ -2116,7 +2118,10 @@ export interface SymbolProps {
    * because you have a complex symbol. Default is "right" and this is most intuitive.
    */
 export const symbolProps = z.object({
-  originalFacingDirection: z.enum(["up", "down", "left", "right"]).default("right").optional(),
+  originalFacingDirection: z
+    .enum(["up", "down", "left", "right"])
+    .default("right")
+    .optional(),
 })
 ```
 

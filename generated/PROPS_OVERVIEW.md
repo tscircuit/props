@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-04T23:27:14.482Z
+> Generated at 2025-09-05T04:02:14.227Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -502,6 +502,7 @@ export interface InductorProps<PinLabel extends string = string>
   inductance: number | string
   maxCurrentRating?: number | string
   schOrientation?: SchematicOrientation
+  connections?: Connections<InductorPinLabels>
 }
 
 

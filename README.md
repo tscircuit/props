@@ -514,6 +514,7 @@ export interface InductorProps<PinLabel extends string = string>
   inductance: number | string;
   maxCurrentRating?: number | string;
   schOrientation?: SchematicOrientation;
+  connections?: Connections<InductorPinLabels>;
 }
 ```
 

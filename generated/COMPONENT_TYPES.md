@@ -1263,11 +1263,13 @@ export interface InductorProps<PinLabel extends string = string>
   inductance: number | string
   maxCurrentRating?: number | string
   schOrientation?: SchematicOrientation
+  connections?: Connections<InductorPinLabels>
 }
 export const inductorProps = commonComponentProps.extend({
   inductance,
   maxCurrentRating: z.union([z.string(), z.number()]).optional(),
   schOrientation: schematicOrientation.optional(),
+  connections: createConnectionsProp(inductorPins).optional(),
 })
 ```
 

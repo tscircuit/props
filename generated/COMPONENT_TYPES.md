@@ -40,6 +40,12 @@ export const cadModelObj = cadModelBase.extend({
   objUrl: z.string(),
   mtlUrl: z.string().optional(),
 })
+export interface CadModelGltf extends CadModelBase {
+  gltfUrl: string
+}
+export const cadModelGltf = cadModelBase.extend({
+  gltfUrl: z.string(),
+})
 export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
 }

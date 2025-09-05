@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-05T04:02:14.227Z
+> Generated at 2025-09-05T06:06:52.079Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -1173,13 +1173,15 @@ export interface ViaProps extends CommonLayoutProps {
 }
 
 
-export interface VoltageSourceProps extends CommonComponentProps {
+export interface VoltageSourceProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   voltage?: number | string
   frequency?: number | string
   peakToPeakVoltage?: number | string
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  connections?: Connections<VoltageSourcePinLabels>
 }
 
 ```

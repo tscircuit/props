@@ -970,13 +970,15 @@ export interface ViaProps extends CommonLayoutProps {
 ### VoltageSourceProps `<voltagesource />`
 
 ```ts
-export interface VoltageSourceProps extends CommonComponentProps {
+export interface VoltageSourceProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   voltage?: number | string;
   frequency?: number | string;
   peakToPeakVoltage?: number | string;
   waveShape?: WaveShape;
   phase?: number | string;
   dutyCycle?: number | string;
+  connections?: Connections<VoltageSourcePinLabels>;
 }
 ```
 

@@ -2246,13 +2246,15 @@ export const viaProps = commonLayoutProps.extend({
 ### voltagesource
 
 ```typescript
-export interface VoltageSourceProps extends CommonComponentProps {
+export interface VoltageSourceProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   voltage?: number | string
   frequency?: number | string
   peakToPeakVoltage?: number | string
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  connections?: Connections<VoltageSourcePinLabels>
 }
 export const voltageSourceProps = commonComponentProps.extend({
   voltage: voltage.optional(),
@@ -2261,6 +2263,7 @@ export const voltageSourceProps = commonComponentProps.extend({
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
   dutyCycle: percentage.optional(),
+  connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 ```
 

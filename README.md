@@ -28,6 +28,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<chip />`              | [`ChipProps`](#chipprops-chip)                                        |
 | `<connector />`         | [`ConnectorProps`](#connectorprops-connector)                         |
 | `<constrainedlayout />` | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout) |
+| `<copperpour />`        | [`RectCopperPourProps`](#rectcopperpourprops-copperpour)              |
 | `<crystal />`           | [`CrystalProps`](#crystalprops-crystal)                               |
 | `<cutout />`            | [`RectCutoutProps`](#rectcutoutprops-cutout)                          |
 | `<diode />`             | [`DiodeProps`](#diodeprops-diode)                                     |
@@ -287,6 +288,20 @@ export interface ConstrainedLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/constrainedlayout.ts)
+
+### RectCopperPourProps `<copperpour />`
+
+```ts
+export interface RectCopperPourProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rect";
+  width: Distance;
+  height: Distance;
+  connectsTo?: string | string[];
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/copper-pour.ts)
 
 ### CrystalProps `<crystal />`
 

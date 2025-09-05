@@ -190,6 +190,11 @@ export interface CadModelBase {
 }
 
 
+export interface CadModelGltf extends CadModelBase {
+  gltfUrl: string
+}
+
+
 export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
 }

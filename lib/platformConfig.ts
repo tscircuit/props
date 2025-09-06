@@ -30,13 +30,11 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    Record<
-      string,
-      | any[]
-      | ((path: string) => Promise<{
-          footprintCircuitJson: any[]
-        }>)
-    >
+    | ((path: string) => Promise<{ footprintCircuitJson: any[] }>)
+    | Record<
+        string,
+        any[] | ((path: string) => Promise<{ footprintCircuitJson: any[] }>)
+      >
   >
 }
 
@@ -63,6 +61,7 @@ export const platformConfig = z.object({
   footprintLibraryMap: z
     .record(
       z.string(),
+      pathToCircuitJsonFn,
       z.record(
         z.string(),
         z.union([unvalidatedCircuitJson, pathToCircuitJsonFn]),

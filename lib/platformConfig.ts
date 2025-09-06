@@ -19,6 +19,8 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string
 
+  kicadFootprintServerUrl?: string
+
   projectName?: string
   version?: string
   url?: string
@@ -52,6 +54,7 @@ export const platformConfig = z.object({
   autorouter: autorouterProp.optional(),
   registryApiUrl: z.string().optional(),
   cloudAutorouterUrl: z.string().optional(),
+  kicadFootprintServerUrl: z.string().optional(),
   projectName: z.string().optional(),
   version: z.string().optional(),
   url: z.string().optional(),

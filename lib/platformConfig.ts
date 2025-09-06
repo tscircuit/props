@@ -61,11 +61,13 @@ export const platformConfig = z.object({
   footprintLibraryMap: z
     .record(
       z.string(),
-      pathToCircuitJsonFn,
-      z.record(
-        z.string(),
-        z.union([unvalidatedCircuitJson, pathToCircuitJsonFn]),
-      ),
+      z.union([
+        pathToCircuitJsonFn,
+        z.record(
+          z.string(),
+          z.union([unvalidatedCircuitJson, pathToCircuitJsonFn]),
+        ),
+      ]),
     )
     .optional(),
 }) as z.ZodType<PlatformConfig>

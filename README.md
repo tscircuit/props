@@ -1031,10 +1031,18 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    | ((path: string) => Promise<{ footprintCircuitJson: any[] }>)
+    | ((
+        path: string,
+      ) => Promise<{ footprintCircuitJson: any[]; cadModel?: CadModelProp }>)
     | Record<
         string,
-        any[] | ((path: string) => Promise<{ footprintCircuitJson: any[] }>)
+        | any[]
+        | ((
+            path: string,
+          ) => Promise<{
+            footprintCircuitJson: any[];
+            cadModel?: CadModelProp;
+          }>)
       >
   >;
 }

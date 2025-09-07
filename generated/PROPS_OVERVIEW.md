@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-05T06:06:52.079Z
+> Generated at 2025-09-07T21:39:56.694Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -252,6 +252,14 @@ export interface ChipPropsSU<
   internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
   connections?: Connections<PinLabel>
+}
+
+
+export interface CircleCopperPourProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "circle"
+  radius: Distance
+  connectsTo?: string | string[]
 }
 
 
@@ -892,14 +900,25 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    Record<
-      string,
-      | any[]
-      | ((path: string) => Promise<{
-          footprintCircuitJson: any[]
-        }>)
-    >
+    | ((
+        path: string,
+      ) => Promise<{ footprintCircuitJson: any[]; cadModel?: CadModelProp }>)
+    | Record<
+        string,
+        | any[]
+        | ((
+            path: string,
+          ) => Promise<{ footprintCircuitJson: any[]; cadModel?: CadModelProp }>)
+      >
   >
+}
+
+
+export interface PolygonCopperPourProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "polygon"
+  points: Point[]
+  connectsTo?: string | string[]
 }
 
 
@@ -923,6 +942,15 @@ export interface PolygonSmtPadProps
 export interface PotentiometerProps extends CommonComponentProps {
   maxResistance: number | string
   pinVariant?: PotentiometerPinVariant
+}
+
+
+export interface RectCopperPourProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rect"
+  width: Distance
+  height: Distance
+  connectsTo?: string | string[]
 }
 
 

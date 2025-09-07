@@ -2,6 +2,7 @@ import type { LayerRef } from "circuit-json"
 import type { ReactElement } from "react"
 import { z } from "zod"
 import { type AutocompleteString } from "./autocomplete"
+import type { KicadAutocompleteStringPath } from "../generated/kicad-autocomplete"
 
 /**
  * This is an abbreviated definition of the soup elements that you can find here:
@@ -46,6 +47,7 @@ export type BasicFootprint =
 
 export type FootprintProp =
   | AutocompleteString<BasicFootprint>
+  | KicadAutocompleteStringPath
   | ReactElement
   | FootprintSoupElements[]
 

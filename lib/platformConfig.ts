@@ -37,9 +37,7 @@ export interface PlatformConfig {
     | Record<
         string,
         | any[]
-        | ((
-            path: string,
-          ) => Promise<{
+        | ((path: string) => Promise<{
             footprintCircuitJson: any[]
             cadModel?: CadModelProp
           }>)

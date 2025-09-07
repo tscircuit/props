@@ -292,12 +292,12 @@ export interface ConstrainedLayoutProps {
 ### RectCopperPourProps `<copperpour />`
 
 ```ts
-export interface RectCopperPourProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface RectCopperPourProps extends Omit<PcbLayoutProps, "layer"> {
   shape: "rect";
   width: Distance;
   height: Distance;
   connectsTo?: string | string[];
+  layer: LayerRefInput;
 }
 ```
 

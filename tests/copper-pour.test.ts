@@ -1,13 +1,13 @@
 import { expect, test } from "bun:test"
 import {
   copperPourProps,
-  type CircleCopperPourProps,
   type CopperPourProps,
   type PolygonCopperPourProps,
   type RectCopperPourProps,
-  circleCopperPourProps,
   polygonCopperPourProps,
   rectCopperPourProps,
+  type BRepCopperPourProps,
+  brepCopperPourProps,
 } from "lib/components/copper-pour"
 import { expectTypeOf } from "expect-type"
 import { z } from "zod"
@@ -21,6 +21,7 @@ test("should parse RectCopperPourProps", () => {
     pcbY: 0,
     layer: "top",
     connectsTo: "gnd",
+    pcbRotation: 90,
   }
   const parsed = rectCopperPourProps.parse(rawProps)
   expect(parsed.shape).toBe("rect")
@@ -30,35 +31,12 @@ test("should parse RectCopperPourProps", () => {
   expect(parsed.pcbY).toBe(0)
   expect(parsed.layer).toBe("top")
   expect(parsed.connectsTo).toBe("gnd")
+  expect(parsed.pcbRotation).toBe(90)
 
   const parsedUnion = copperPourProps.parse(rawProps)
   expect(parsedUnion.shape).toBe("rect")
   if (parsedUnion.shape === "rect") {
     expect(parsedUnion.width).toBe(10)
-  }
-})
-
-test("should parse CircleCopperPourProps", () => {
-  const rawProps: CircleCopperPourProps = {
-    shape: "circle",
-    radius: "2.5mm",
-    pcbX: "1cm",
-    pcbY: -5,
-    layer: "bottom",
-    connectsTo: ["gnd", "vcc"],
-  }
-  const parsed = circleCopperPourProps.parse(rawProps)
-  expect(parsed.shape).toBe("circle")
-  expect(parsed.radius).toBe(2.5)
-  expect(parsed.pcbX).toBe(10)
-  expect(parsed.pcbY).toBe(-5)
-  expect(parsed.layer).toBe("bottom")
-  expect(parsed.connectsTo).toEqual(["gnd", "vcc"])
-
-  const parsedUnion = copperPourProps.parse(rawProps)
-  expect(parsedUnion.shape).toBe("circle")
-  if (parsedUnion.shape === "circle") {
-    expect(parsedUnion.radius).toBe(2.5)
   }
 })
 
@@ -98,18 +76,75 @@ test("type inference for CopperPourProps", () => {
     shape: "rect",
     width: 1,
     height: 1,
+    layer: "top",
   }
   expectTypeOf(rect).toMatchTypeOf<RectCopperPourProps>()
-
-  const circle: CopperPourProps = {
-    shape: "circle",
-    radius: 1,
-  }
-  expectTypeOf(circle).toMatchTypeOf<CircleCopperPourProps>()
 
   const polygon: CopperPourProps = {
     shape: "polygon",
     points: [{ x: 0, y: 0 }],
+    layer: "top",
   }
   expectTypeOf(polygon).toMatchTypeOf<PolygonCopperPourProps>()
+
+  const brep: CopperPourProps = {
+    shape: "brep",
+    brepShape: {
+      outer_ring: {
+        vertices: [{ x: 0, y: 0 }],
+      },
+      inner_rings: [],
+    },
+    layer: "top",
+  }
+  expectTypeOf(brep).toMatchTypeOf<BRepCopperPourProps>()
+})
+
+test("should parse BRepCopperPourProps", () => {
+  const rawProps: BRepCopperPourProps = {
+    shape: "brep",
+    brepShape: {
+      outer_ring: {
+        vertices: [
+          { x: 0, y: 0 },
+          { x: 10, y: 0 },
+          { x: 10, y: 10 },
+          { x: 0, y: 10 },
+        ],
+      },
+      inner_rings: [],
+    },
+    layer: "top",
+    connectsTo: "gnd",
+  }
+  const parsed = brepCopperPourProps.parse(rawProps)
+  expect(parsed.shape).toBe("brep")
+  expect(parsed.brepShape.outer_ring.vertices.length).toBe(4)
+  expect(parsed.layer).toBe("top")
+  expect(parsed.connectsTo).toBe("gnd")
+})
+
+test("should parse BRepCopperPourProps with bulge", () => {
+  const rawProps: BRepCopperPourProps = {
+    shape: "brep",
+    brepShape: {
+      outer_ring: {
+        vertices: [
+          { x: 0, y: 0, bulge: 0.5 },
+          { x: 10, y: 0 },
+          { x: 10, y: 10 },
+          { x: 0, y: 10 },
+        ],
+      },
+      inner_rings: [],
+    },
+    layer: "top",
+    connectsTo: "gnd",
+  }
+  const parsed = brepCopperPourProps.parse(rawProps)
+  expect(parsed.shape).toBe("brep")
+  expect(parsed.brepShape.outer_ring.vertices.length).toBe(4)
+  expect(parsed.brepShape.outer_ring.vertices[0]?.bulge).toBe(0.5)
+  expect(parsed.layer).toBe("top")
+  expect(parsed.connectsTo).toBe("gnd")
 })

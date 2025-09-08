@@ -45,6 +45,13 @@ export interface CommonLayoutProps {
   pcbMarginX?: string | number
   pcbMarginY?: string | number
 
+  schMarginTop?: string | number
+  schMarginRight?: string | number
+  schMarginBottom?: string | number
+  schMarginLeft?: string | number
+  schMarginX?: string | number
+  schMarginY?: string | number
+
   schX?: string | number
   schY?: string | number
   schRotation?: string | number
@@ -97,6 +104,12 @@ export const commonLayoutProps = z.object({
   pcbMarginLeft: distance.optional(),
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
+  schMarginTop: distance.optional(),
+  schMarginRight: distance.optional(),
+  schMarginBottom: distance.optional(),
+  schMarginLeft: distance.optional(),
+  schMarginX: distance.optional(),
+  schMarginY: distance.optional(),
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),

@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-08T20:09:16.903Z
+> Generated at 2025-09-08T21:44:45.218Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -365,6 +365,7 @@ export interface CommonLayoutProps {
 
   layer?: LayerRefInput
   footprint?: FootprintProp
+  symbol?: SymbolProp
 
   /**
    * If true, X/Y coordinates will be interpreted relative to the parent group

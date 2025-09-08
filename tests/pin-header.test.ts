@@ -58,6 +58,16 @@ test("should parse rightAngle property", () => {
   expect(parsed.rightAngle).toBe(true)
 })
 
+test("should parse pcbOrientation property", () => {
+  const rawProps: PinHeaderProps = {
+    name: "header",
+    pinCount: 2,
+    pcbOrientation: "horizontal",
+  }
+  const parsed = pinHeaderProps.parse(rawProps)
+  expect(parsed.pcbOrientation).toBe("horizontal")
+})
+
 test("should parse pinLabels as array", () => {
   const rawProps: PinHeaderProps = {
     name: "header",

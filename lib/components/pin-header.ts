@@ -16,6 +16,10 @@ import {
   schematicPinLabel,
   type SchematicPinLabel,
 } from "lib/common/schematicPinLabel"
+import {
+  pcbOrientation as pcbOrientationProp,
+  type PcbOrientation,
+} from "lib/common/pcbOrientation"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
@@ -60,6 +64,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * If true, the header is a right-angle style connector
    */
   rightAngle?: boolean
+
+  /**
+   * Orientation of the header on the PCB
+   */
+  pcbOrientation?: PcbOrientation
 
   /**
    * Diameter of the through-hole for each pin
@@ -121,6 +130,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),
   rightAngle: z.boolean().optional(),
+  pcbOrientation: pcbOrientationProp.optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z

@@ -1540,6 +1540,8 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   rightAngle?: boolean
 
+  pcbOrientation?: PcbOrientation
+
   holeDiameter?: number | string
 
   platedDiameter?: number | string
@@ -1572,6 +1574,7 @@ export const pinHeaderProps = commonComponentProps.extend({
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
   doubleRow: z.boolean().optional(),
   rightAngle: z.boolean().optional(),
+  pcbOrientation: pcbOrientationProp.optional(),
   holeDiameter: distance.optional(),
   platedDiameter: distance.optional(),
   pinLabels: z

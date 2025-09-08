@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-08T13:45:01.668Z
+> Generated at 2025-09-08T17:03:36.951Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -829,6 +829,11 @@ export interface PinHeaderProps extends CommonComponentProps {
    * If true, the header is a right-angle style connector
    */
   rightAngle?: boolean
+
+  /**
+   * Orientation of the header on the PCB
+   */
+  pcbOrientation?: PcbOrientation
 
   /**
    * Diameter of the through-hole for each pin

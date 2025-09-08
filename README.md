@@ -675,6 +675,11 @@ export interface PinHeaderProps extends CommonComponentProps {
   rightAngle?: boolean;
 
   /**
+   * Orientation of the header on the PCB
+   */
+  pcbOrientation?: PcbOrientation;
+
+  /**
    * Diameter of the through-hole for each pin
    */
   holeDiameter?: number | string;

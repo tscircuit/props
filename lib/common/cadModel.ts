@@ -51,27 +51,6 @@ export const cadModelGltf = cadModelBase.extend({
   gltfUrl: z.string(),
 })
 
-export interface CadModelGlb extends CadModelBase {
-  glbUrl: string
-}
-export const cadModelGlb = cadModelBase.extend({
-  glbUrl: z.string(),
-})
-
-export interface CadModelStep extends CadModelBase {
-  stepUrl: string
-}
-export const cadModelStep = cadModelBase.extend({
-  stepUrl: z.string(),
-})
-
-export interface CadModelWrl extends CadModelBase {
-  wrlUrl: string
-}
-export const cadModelWrl = cadModelBase.extend({
-  wrlUrl: z.string(),
-})
-
 export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
 }
@@ -85,9 +64,6 @@ export type CadModelProp =
   | CadModelStl
   | CadModelObj
   | CadModelGltf
-  | CadModelGlb
-  | CadModelStep
-  | CadModelWrl
   | CadModelJscad
 
 export const cadModelProp = z.union([
@@ -96,9 +72,6 @@ export const cadModelProp = z.union([
   cadModelStl,
   cadModelObj,
   cadModelGltf,
-  cadModelGlb,
-  cadModelStep,
-  cadModelWrl,
   cadModelJscad,
 ])
 

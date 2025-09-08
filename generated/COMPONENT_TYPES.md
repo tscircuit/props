@@ -158,6 +158,7 @@ export interface CommonLayoutProps {
 
   layer?: LayerRefInput
   footprint?: FootprintProp
+  symbol?: SymbolProp
 
   relative?: boolean
 
@@ -205,6 +206,7 @@ export const commonLayoutProps = z.object({
   schRotation: rotation.optional(),
   layer: layer_ref.optional(),
   footprint: footprintProp.optional(),
+  symbol: symbolProp.optional(),
   relative: z.boolean().optional(),
   schRelative: z.boolean().optional(),
   pcbRelative: z.boolean().optional(),

@@ -9,6 +9,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
 import { type FootprintProp, footprintProp } from "./footprintProp"
+import { type SymbolProp, symbolProp } from "./symbolProp"
 
 export interface PcbLayoutProps {
   pcbX?: string | number
@@ -58,6 +59,7 @@ export interface CommonLayoutProps {
 
   layer?: LayerRefInput
   footprint?: FootprintProp
+  symbol?: SymbolProp
 
   /**
    * If true, X/Y coordinates will be interpreted relative to the parent group
@@ -115,6 +117,7 @@ export const commonLayoutProps = z.object({
   schRotation: rotation.optional(),
   layer: layer_ref.optional(),
   footprint: footprintProp.optional(),
+  symbol: symbolProp.optional(),
   relative: z.boolean().optional(),
   schRelative: z.boolean().optional(),
   pcbRelative: z.boolean().optional(),

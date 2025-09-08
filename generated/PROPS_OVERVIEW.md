@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-07T21:39:56.694Z
+> Generated at 2025-09-08T13:45:01.668Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -190,6 +190,11 @@ export interface CadModelBase {
 }
 
 
+export interface CadModelGlb extends CadModelBase {
+  glbUrl: string
+}
+
+
 export interface CadModelGltf extends CadModelBase {
   gltfUrl: string
 }
@@ -206,8 +211,18 @@ export interface CadModelObj extends CadModelBase {
 }
 
 
+export interface CadModelStep extends CadModelBase {
+  stepUrl: string
+}
+
+
 export interface CadModelStl extends CadModelBase {
   stlUrl: string
+}
+
+
+export interface CadModelWrl extends CadModelBase {
+  wrlUrl: string
 }
 
 
@@ -906,9 +921,10 @@ export interface PlatformConfig {
     | Record<
         string,
         | any[]
-        | ((
-            path: string,
-          ) => Promise<{ footprintCircuitJson: any[]; cadModel?: CadModelProp }>)
+        | ((path: string) => Promise<{
+            footprintCircuitJson: any[]
+            cadModel?: CadModelProp
+          }>)
       >
   >
 }

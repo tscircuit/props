@@ -19,7 +19,10 @@ async function main() {
 
   const typeEntries = sanitizedFiles.map((p) => `  | "${p}"`).join("\n")
 
-  const content = `import type { AutocompleteString } from "../common/autocomplete"\n\nexport type KicadAutocompleteStringPath = AutocompleteString<\n${typeEntries}\n>\n`
+  const content =
+    `import type { AutocompleteString } from "../common/autocomplete"\n\n` +
+    `export type KicadFootprint =\n${typeEntries}\n\n` +
+    `export type KicadAutocompleteStringPath = AutocompleteString<\`kicad:\${KicadFootprint}\`>\n`
 
   const outDir = path.join(__dirname, "../lib/generated")
   fs.mkdirSync(outDir, { recursive: true })

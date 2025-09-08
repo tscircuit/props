@@ -46,6 +46,24 @@ export interface CadModelGltf extends CadModelBase {
 export const cadModelGltf = cadModelBase.extend({
   gltfUrl: z.string(),
 })
+export interface CadModelGlb extends CadModelBase {
+  glbUrl: string
+}
+export const cadModelGlb = cadModelBase.extend({
+  glbUrl: z.string(),
+})
+export interface CadModelStep extends CadModelBase {
+  stepUrl: string
+}
+export const cadModelStep = cadModelBase.extend({
+  stepUrl: z.string(),
+})
+export interface CadModelWrl extends CadModelBase {
+  wrlUrl: string
+}
+export const cadModelWrl = cadModelBase.extend({
+  wrlUrl: z.string(),
+})
 export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
 }
@@ -635,6 +653,58 @@ export const pcbSameXConstraintProps = z.object({
   sameX: z.literal(true).optional(),
   for: z.array(z.string()),
 })
+```
+
+### copper-pour
+
+```typescript
+export interface RectCopperPourProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "rect"
+  width: Distance
+  height: Distance
+  connectsTo?: string | string[]
+}
+export const rectCopperPourProps = pcbLayoutProps
+  .omit({
+    pcbRotation: true,
+  })
+  .extend({
+    shape: z.literal("rect"),
+    width: distance,
+    height: distance,
+    connectsTo: z.string().or(z.array(z.string())).optional(),
+  })
+export interface CircleCopperPourProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "circle"
+  radius: Distance
+  connectsTo?: string | string[]
+}
+export const circleCopperPourProps = pcbLayoutProps
+  .omit({
+    pcbRotation: true,
+  })
+  .extend({
+    shape: z.literal("circle"),
+    radius: distance,
+    connectsTo: z.string().or(z.array(z.string())).optional(),
+  })
+export interface PolygonCopperPourProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  shape: "polygon"
+  points: Point[]
+  connectsTo?: string | string[]
+}
+export const polygonCopperPourProps = pcbLayoutProps
+  .omit({
+    pcbRotation: true,
+  })
+  .extend({
+    shape: z.literal("polygon"),
+    points: z.array(point),
+    connectsTo: z.string().or(z.array(z.string())).optional(),
+  })
 ```
 
 ### crystal

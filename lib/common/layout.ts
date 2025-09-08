@@ -14,6 +14,7 @@ export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
   pcbRotation?: string | number
+  pcbPositionAnchor?: string
   layer?: LayerRefInput
   /**
    * If true, pcbX/pcbY will be interpreted relative to the parent group
@@ -29,6 +30,7 @@ export interface CommonLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
   pcbRotation?: string | number
+  pcbPositionAnchor?: string
 
   schX?: string | number
   schY?: string | number
@@ -57,6 +59,7 @@ export const pcbLayoutProps = z.object({
   pcbX: distance.optional(),
   pcbY: distance.optional(),
   pcbRotation: rotation.optional(),
+  pcbPositionAnchor: z.string().optional(),
   layer: layer_ref.optional(),
   pcbRelative: z.boolean().optional(),
   relative: z.boolean().optional(),
@@ -68,6 +71,7 @@ export const commonLayoutProps = z.object({
   pcbX: distance.optional(),
   pcbY: distance.optional(),
   pcbRotation: rotation.optional(),
+  pcbPositionAnchor: z.string().optional(),
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),

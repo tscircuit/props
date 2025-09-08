@@ -1,6 +1,6 @@
 import type { AutocompleteString } from "../common/autocomplete"
 
-export type KicadAutocompleteStringPath = AutocompleteString<
+export type KicadPath =
   | "Audio_Module/Reverb_BTDR-1H"
   | "Audio_Module/Reverb_BTDR-1V"
   | "Battery/Battery_CR1225"
@@ -13806,4 +13806,6 @@ export type KicadAutocompleteStringPath = AutocompleteString<
   | "Varistor/RV_Disc_D9mm_W6.1mm_P5mm"
   | "Varistor/RV_Rect_V25S440P_L26.5mm_W8.2mm_P12.7mm"
   | "Varistor/Varistor_Panasonic_VF"
->
+
+export type KicadAutocompleteStringPath =
+  AutocompleteString<`kicad:${KicadPath}`>

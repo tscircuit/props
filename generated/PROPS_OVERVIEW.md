@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-08T17:03:36.951Z
+> Generated at 2025-09-08T20:09:16.903Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -343,6 +343,21 @@ export interface CommonLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
   pcbRotation?: string | number
+  pcbPositionAnchor?: string
+
+  pcbMarginTop?: string | number
+  pcbMarginRight?: string | number
+  pcbMarginBottom?: string | number
+  pcbMarginLeft?: string | number
+  pcbMarginX?: string | number
+  pcbMarginY?: string | number
+
+  schMarginTop?: string | number
+  schMarginRight?: string | number
+  schMarginBottom?: string | number
+  schMarginLeft?: string | number
+  schMarginX?: string | number
+  schMarginY?: string | number
 
   schX?: string | number
   schY?: string | number
@@ -710,7 +725,14 @@ export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
   pcbRotation?: string | number
+  pcbPositionAnchor?: string
   layer?: LayerRefInput
+  pcbMarginTop?: string | number
+  pcbMarginRight?: string | number
+  pcbMarginBottom?: string | number
+  pcbMarginLeft?: string | number
+  pcbMarginX?: string | number
+  pcbMarginY?: string | number
   /**
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */

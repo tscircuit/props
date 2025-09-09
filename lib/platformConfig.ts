@@ -6,8 +6,8 @@ import {
 } from "./components/group"
 import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
-import { type CadModelProp, cadModelProp } from "./common/cadModel"
 import type { CadComponent } from "circuit-json"
+import { cad_component } from "circuit-json"
 
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]
@@ -48,7 +48,7 @@ export interface PlatformConfig {
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
 const footprintLibraryResult = z.object({
   footprintCircuitJson: z.array(z.any()),
-  cadModel: cadModelProp.optional(),
+  cadComponent: cad_component.partial().optional(),
 })
 const pathToCircuitJsonFn = z
   .function()

@@ -7,10 +7,11 @@ import {
 import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
+import type { CadComponent } from "circuit-json"
 
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]
-  cadModel?: CadModelProp
+  cadComponent?: Partial<CadComponent>
 }
 
 export interface PlatformConfig {

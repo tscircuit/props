@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-08T21:44:45.218Z
+> Generated at 2025-09-09T00:49:12.874Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -493,6 +493,12 @@ export interface EditTraceHintEvent extends BaseManualEditEvent {
 }
 
 
+export interface FootprintLibraryResult {
+  footprintCircuitJson: any[]
+  cadModel?: CadModelProp
+}
+
+
 export interface FootprintProps {
   /**
    * The layer that the footprint is designed for. If you set this to "top"
@@ -943,17 +949,8 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    | ((
-        path: string,
-      ) => Promise<{ footprintCircuitJson: any[]; cadModel?: CadModelProp }>)
-    | Record<
-        string,
-        | any[]
-        | ((path: string) => Promise<{
-            footprintCircuitJson: any[]
-            cadModel?: CadModelProp
-          }>)
-      >
+    | ((path: string) => Promise<FootprintLibraryResult>)
+    | Record<string, any[] | ((path: string) => Promise<FootprintLibraryResult>)>
   >
 }
 

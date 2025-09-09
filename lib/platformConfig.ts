@@ -8,6 +8,11 @@ import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
 
+export interface FootprintLibraryResult {
+  footprintCircuitJson: any[]
+  cadModel?: CadModelProp
+}
+
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
@@ -31,32 +36,23 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    | ((
-        path: string,
-      ) => Promise<{ footprintCircuitJson: any[]; cadModel?: CadModelProp }>)
+    | ((path: string) => Promise<FootprintLibraryResult>)
     | Record<
         string,
-        | any[]
-        | ((path: string) => Promise<{
-            footprintCircuitJson: any[]
-            cadModel?: CadModelProp
-          }>)
+        any[] | ((path: string) => Promise<FootprintLibraryResult>)
       >
   >
 }
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
+const footprintLibraryResult = z.object({
+  footprintCircuitJson: z.array(z.any()),
+  cadModel: cadModelProp.optional(),
+})
 const pathToCircuitJsonFn = z
   .function()
   .args(z.string())
-  .returns(
-    z.promise(
-      z.object({
-        footprintCircuitJson: z.array(z.any()),
-        cadModel: cadModelProp.optional(),
-      }),
-    ),
-  )
+  .returns(z.promise(footprintLibraryResult))
   .describe("A function that takes a path and returns Circuit JSON")
 
 export const platformConfig = z.object({

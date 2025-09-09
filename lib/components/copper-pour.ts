@@ -1,80 +1,76 @@
 import { z } from "zod"
 import { distance, type Distance } from "lib/common/distance"
-import { point, type Point } from "lib/common/point"
-import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { layer_ref, type LayerRefInput } from "circuit-json"
-import { brep_shape, type BRepShape } from "lib/common/brep"
+import { point } from "lib/common/point"
 
-export interface RectCopperPourProps extends Omit<PcbLayoutProps, "layer"> {
-  shape: "rect"
-  width: Distance
-  height: Distance
-  connectsTo?: string | string[]
-  layer: LayerRefInput
-}
-
-export const rectCopperPourProps = pcbLayoutProps.extend({
-  shape: z.literal("rect"),
-  width: distance,
-  height: distance,
-  connectsTo: z.string().or(z.array(z.string())).optional(),
-  layer: layer_ref,
-})
-expectTypesMatch<RectCopperPourProps, z.input<typeof rectCopperPourProps>>(true)
-
-export interface PolygonCopperPourProps
-  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
-  shape: "polygon"
-  points: Point[]
-  connectsTo?: string | string[]
-  layer: LayerRefInput
-}
-
-export const polygonCopperPourProps = pcbLayoutProps
-  .omit({
-    pcbRotation: true,
-  })
-  .extend({
-    shape: z.literal("polygon"),
+export const pourRegion = z.discriminatedUnion("strategy", [
+  z.object({
+    strategy: z.literal("polygon"),
     points: z.array(point),
-    connectsTo: z.string().or(z.array(z.string())).optional(),
-    layer: layer_ref,
-  })
-expectTypesMatch<
-  PolygonCopperPourProps,
-  z.input<typeof polygonCopperPourProps>
->(true)
+  }),
+  z.object({
+    strategy: z.literal("rect"),
+    x: distance,
+    y: distance,
+    width: distance,
+    height: distance,
+  }),
+  z.object({
+    strategy: z.literal("boardOutline"),
+  }),
+  z.object({
+    strategy: z.literal("aroundComponents"),
+    refDes: z.array(z.string()),
+  }),
+])
 
-export interface BRepCopperPourProps
-  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
-  shape: "brep"
-  brepShape: BRepShape
-  connectsTo?: string | string[]
+export type PourRegion = z.input<typeof pourRegion>
+
+export const pourCutout = z.discriminatedUnion("strategy", [
+  z.object({
+    strategy: z.literal("polygon"),
+    points: z.array(point),
+  }),
+  z.object({
+    strategy: z.literal("circle"),
+    cx: distance,
+    cy: distance,
+    r: distance,
+  }),
+  z.object({
+    strategy: z.literal("rect"),
+    x: distance,
+    y: distance,
+    width: distance,
+    height: distance,
+  }),
+])
+
+export type PourCutout = z.input<typeof pourCutout>
+
+export interface CopperPourProps {
+  name?: string
   layer: LayerRefInput
+  connectsTo: string
+  padMargin?: Distance
+  traceMargin?: Distance
+  pourablePortSelectors?: string[]
+  region: PourRegion
+  cutouts?: PourCutout[]
 }
 
-export const brepCopperPourProps = pcbLayoutProps
-  .omit({
-    pcbRotation: true,
-  })
-  .extend({
-    shape: z.literal("brep"),
-    brepShape: brep_shape,
-    connectsTo: z.string().or(z.array(z.string())).optional(),
-    layer: layer_ref,
-  })
-expectTypesMatch<BRepCopperPourProps, z.input<typeof brepCopperPourProps>>(true)
+export const copperPourProps = z.object({
+  name: z.string().optional(),
+  layer: layer_ref,
+  connectsTo: z.string(),
+  padMargin: distance.optional(),
+  traceMargin: distance.optional(),
+  pourablePortSelectors: z.array(z.string()).optional(),
+  region: pourRegion,
+  cutouts: z.array(pourCutout).optional(),
+})
 
-export type CopperPourProps =
-  | RectCopperPourProps
-  | PolygonCopperPourProps
-  | BRepCopperPourProps
-
-export const copperPourProps = z.discriminatedUnion("shape", [
-  rectCopperPourProps,
-  polygonCopperPourProps,
-  brepCopperPourProps,
-])
+expectTypesMatch<CopperPourProps, z.input<typeof copperPourProps>>(true)
 
 export type CopperPourPropsInput = z.input<typeof copperPourProps>

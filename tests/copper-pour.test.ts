@@ -2,149 +2,115 @@ import { expect, test } from "bun:test"
 import {
   copperPourProps,
   type CopperPourProps,
-  type PolygonCopperPourProps,
-  type RectCopperPourProps,
-  polygonCopperPourProps,
-  rectCopperPourProps,
-  type BRepCopperPourProps,
-  brepCopperPourProps,
 } from "lib/components/copper-pour"
 import { expectTypeOf } from "expect-type"
-import { z } from "zod"
 
-test("should parse RectCopperPourProps", () => {
-  const rawProps: RectCopperPourProps = {
-    shape: "rect",
-    width: 10,
-    height: "5mm",
-    pcbX: 0,
-    pcbY: 0,
-    layer: "top",
+test("should parse copper pour with boardOutline region", () => {
+  const rawProps: CopperPourProps = {
     connectsTo: "gnd",
-    pcbRotation: 90,
+    layer: "top",
+    region: { strategy: "boardOutline" },
   }
-  const parsed = rectCopperPourProps.parse(rawProps)
-  expect(parsed.shape).toBe("rect")
-  expect(parsed.width).toBe(10)
-  expect(parsed.height).toBe(5)
-  expect(parsed.pcbX).toBe(0)
-  expect(parsed.pcbY).toBe(0)
-  expect(parsed.layer).toBe("top")
-  expect(parsed.connectsTo).toBe("gnd")
-  expect(parsed.pcbRotation).toBe(90)
+  const parsed = copperPourProps.parse(rawProps)
 
-  const parsedUnion = copperPourProps.parse(rawProps)
-  expect(parsedUnion.shape).toBe("rect")
-  if (parsedUnion.shape === "rect") {
-    expect(parsedUnion.width).toBe(10)
+  expect(parsed.connectsTo).toBe("gnd")
+  expect(parsed.layer).toBe("top")
+  expect(parsed.region.strategy).toBe("boardOutline")
+})
+
+test("should parse copper pour with rect region", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    region: { strategy: "rect", x: 0, y: 0, width: 10, height: 10 },
+  }
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.region.strategy).toBe("rect")
+  if (parsed.region.strategy === "rect") {
+    expect(parsed.region.width).toBe(10)
   }
 })
 
-test("should parse PolygonCopperPourProps with pcbX and pcbY", () => {
-  const rawProps: PolygonCopperPourProps = {
-    shape: "polygon",
-    points: [
-      { x: 0, y: 0 },
-      { x: 10, y: 0 },
-      { x: 5, y: 5 },
-    ],
-    pcbX: "1mm",
-    pcbY: 2,
+test("should parse copper pour with polygon region", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
     layer: "top",
+    region: {
+      strategy: "polygon",
+      points: [
+        { x: 0, y: 0 },
+        { x: 10, y: 0 },
+        { x: 10, y: 10 },
+      ],
+    },
   }
-  const parsed = polygonCopperPourProps.parse(rawProps)
-  expect(parsed.shape).toBe("polygon")
-  expect(parsed.points).toEqual([
-    { x: 0, y: 0 },
-    { x: 10, y: 0 },
-    { x: 5, y: 5 },
-  ])
-  expect(parsed.pcbX).toBe(1)
-  expect(parsed.pcbY).toBe(2)
+  const parsed = copperPourProps.parse(rawProps)
 
-  const parsedUnion = copperPourProps.parse(rawProps)
-  expect(parsedUnion.shape).toBe("polygon")
-  if (parsedUnion.shape === "polygon") {
-    expect(parsedUnion.points?.length).toBe(3)
-    expect(parsedUnion.pcbX).toBe(1)
-    expect(parsedUnion.pcbY).toBe(2)
+  expect(parsed.region.strategy).toBe("polygon")
+  if (parsed.region.strategy === "polygon") {
+    expect(parsed.region.points).toHaveLength(3)
   }
+})
+
+test("should parse copper pour with aroundComponents region", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    region: {
+      strategy: "aroundComponents",
+      refDes: ["U1", "U2"],
+    },
+  }
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.region.strategy).toBe("aroundComponents")
+  if (parsed.region.strategy === "aroundComponents") {
+    expect(parsed.region.refDes).toEqual(["U1", "U2"])
+  }
+})
+
+test("should parse copper pour with cutouts", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    region: { strategy: "boardOutline" },
+    cutouts: [
+      { strategy: "rect", x: 1, y: 1, width: 2, height: 2 },
+      { strategy: "circle", cx: 5, cy: 5, r: 1 },
+      {
+        strategy: "polygon",
+        points: [
+          { x: 8, y: 8 },
+          { x: 9, y: 8 },
+          { x: 9, y: 9 },
+        ],
+      },
+    ],
+  }
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.cutouts).toBeDefined()
+  expect(parsed.cutouts!).toHaveLength(3)
+  expect(parsed.cutouts![0]!.strategy).toBe("rect")
+  expect(parsed.cutouts![1]!.strategy).toBe("circle")
+  expect(parsed.cutouts![2]!.strategy).toBe("polygon")
 })
 
 test("type inference for CopperPourProps", () => {
-  const rect: CopperPourProps = {
-    shape: "rect",
-    width: 1,
-    height: 1,
-    layer: "top",
+  const props: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "bottom",
+    padMargin: 1,
+    region: { strategy: "boardOutline" },
   }
-  expectTypeOf(rect).toMatchTypeOf<RectCopperPourProps>()
-
-  const polygon: CopperPourProps = {
-    shape: "polygon",
-    points: [{ x: 0, y: 0 }],
-    layer: "top",
-  }
-  expectTypeOf(polygon).toMatchTypeOf<PolygonCopperPourProps>()
-
-  const brep: CopperPourProps = {
-    shape: "brep",
-    brepShape: {
-      outer_ring: {
-        vertices: [{ x: 0, y: 0 }],
-      },
-      inner_rings: [],
-    },
-    layer: "top",
-  }
-  expectTypeOf(brep).toMatchTypeOf<BRepCopperPourProps>()
+  expectTypeOf(props).toMatchTypeOf<CopperPourProps>()
 })
 
-test("should parse BRepCopperPourProps", () => {
-  const rawProps: BRepCopperPourProps = {
-    shape: "brep",
-    brepShape: {
-      outer_ring: {
-        vertices: [
-          { x: 0, y: 0 },
-          { x: 10, y: 0 },
-          { x: 10, y: 10 },
-          { x: 0, y: 10 },
-        ],
-      },
-      inner_rings: [],
-    },
-    layer: "top",
+test("should fail without region", () => {
+  const rawProps: any = {
     connectsTo: "gnd",
-  }
-  const parsed = brepCopperPourProps.parse(rawProps)
-  expect(parsed.shape).toBe("brep")
-  expect(parsed.brepShape.outer_ring.vertices.length).toBe(4)
-  expect(parsed.layer).toBe("top")
-  expect(parsed.connectsTo).toBe("gnd")
-})
-
-test("should parse BRepCopperPourProps with bulge", () => {
-  const rawProps: BRepCopperPourProps = {
-    shape: "brep",
-    brepShape: {
-      outer_ring: {
-        vertices: [
-          { x: 0, y: 0, bulge: 0.5 },
-          { x: 10, y: 0 },
-          { x: 10, y: 10 },
-          { x: 0, y: 10 },
-        ],
-      },
-      inner_rings: [],
-    },
     layer: "top",
-    connectsTo: "gnd",
   }
-  const parsed = brepCopperPourProps.parse(rawProps)
-  expect(parsed.shape).toBe("brep")
-  expect(parsed.brepShape.outer_ring.vertices.length).toBe(4)
-  expect(parsed.brepShape.outer_ring.vertices[0]?.bulge).toBe(0.5)
-  expect(parsed.layer).toBe("top")
-  expect(parsed.connectsTo).toBe("gnd")
+  expect(() => copperPourProps.parse(rawProps)).toThrow()
 })

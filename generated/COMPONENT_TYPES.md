@@ -20,11 +20,13 @@ export interface CadModelBase {
     z: number | string
   }
   size?: { x: number | string; y: number | string; z: number | string }
+  modelUnitToMmScale?: Distance
 }
 export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
   positionOffset: point3.optional(),
   size: point3.optional(),
+  modelUnitToMmScale: distance.optional(),
 })
 export interface CadModelStl extends CadModelBase {
   stlUrl: string

@@ -298,9 +298,6 @@ export interface CopperPourProps {
   connectsTo: string;
   padMargin?: Distance;
   traceMargin?: Distance;
-  pourablePortSelectors?: string[];
-  region: PourRegion;
-  cutouts?: PourCutout[];
 }
 ```
 

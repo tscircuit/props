@@ -12,14 +12,11 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
    * If true, text will knock out underlying silkscreen
    */
   isKnockout: z.boolean().optional(),
-  knockoutPadding: z
-    .object({
-      left: length,
-      top: length,
-      bottom: length,
-      right: length,
-    })
-    .optional(),
+  knockoutPadding: length.optional(),
+  knockoutPaddingLeft: length.optional(),
+  knockoutPaddingRight: length.optional(),
+  knockoutPaddingTop: length.optional(),
+  knockoutPaddingBottom: length.optional(),
   layers: z.array(layer_ref).optional(),
 })
 export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>

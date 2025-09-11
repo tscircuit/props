@@ -26,6 +26,7 @@ export interface PlatformConfig {
   cloudAutorouterUrl?: string
 
   projectName?: string
+  projectBaseUrl?: string
   version?: string
   url?: string
   printBoardInformationToSilkscreen?: boolean
@@ -61,6 +62,7 @@ export const platformConfig = z.object({
   registryApiUrl: z.string().optional(),
   cloudAutorouterUrl: z.string().optional(),
   projectName: z.string().optional(),
+  projectBaseUrl: z.string().optional(),
   version: z.string().optional(),
   url: z.string().optional(),
   printBoardInformationToSilkscreen: z.boolean().optional(),

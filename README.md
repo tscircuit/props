@@ -1026,6 +1026,7 @@ export interface PlatformConfig {
   cloudAutorouterUrl?: string;
 
   projectName?: string;
+  projectBaseUrl?: string;
   version?: string;
   url?: string;
   printBoardInformationToSilkscreen?: boolean;

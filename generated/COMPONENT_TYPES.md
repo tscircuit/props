@@ -487,17 +487,9 @@ export interface CadModelProps extends CadModelBase {
   pcbY?: Distance
   pcbZ?: Distance
 }
-export const cadmodelProps = z.union([
-  z.null(),
-  z.string(),
-  cadModelBase.extend({ modelUrl: z.string() }).merge(
-    z.object({
-      pcbX: distance.optional(),
-      pcbY: distance.optional(),
-      pcbZ: distance.optional(),
-    }),
-  ),
-])
+const cadModelBaseWithUrl = cadModelBase.extend({
+  modelUrl: z.string(),
+})
 ```
 
 ### capacitor

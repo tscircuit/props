@@ -11,7 +11,10 @@ test("cadmodel accepts pcb coordinates", () => {
     pcbY: 2,
     pcbZ: 3,
   }
-  const parsed = cadmodelProps.parse(raw)
+  const parsed = cadmodelProps.parse(raw) as Exclude<
+    CadModelPropsInput,
+    null | string
+  >
   expect(parsed.pcbX).toBe(1)
   expect(parsed.pcbY).toBe(2)
   expect(parsed.pcbZ).toBe(3)

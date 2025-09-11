@@ -457,6 +457,41 @@ export const breakoutPointProps = pcbLayoutProps
   })
 ```
 
+### cadassembly
+
+```typescript
+export interface CadAssemblyProps {
+  originalLayer?: LayerRef
+}
+/**
+   * The layer that the CAD assembly is designed for. If you set this to "top"
+   * then it means the children were intended to represent the top layer. If
+   * the <chip /> with this assembly is moved to the bottom layer, then the
+   * components will be mirrored.
+   *
+   * Generally, you shouldn't set this except where it can help prevent
+   * confusion because you have a complex multi-layer assembly. Default is
+   * "top" and this is most intuitive.
+   */
+export const cadassemblyProps = z.object({
+  originalLayer: layer_ref.default("top").optional(),
+})
+```
+
+### cadmodel
+
+```typescript
+export interface CadModelProps extends CadModelBase {
+  modelUrl: string
+  pcbX?: Distance
+  pcbY?: Distance
+  pcbZ?: Distance
+}
+const cadModelBaseWithUrl = cadModelBase.extend({
+  modelUrl: z.string(),
+})
+```
+
 ### capacitor
 
 ```typescript
@@ -704,53 +739,20 @@ export const pcbSameXConstraintProps = z.object({
 ### copper-pour
 
 ```typescript
-export interface RectCopperPourProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rect"
-  width: Distance
-  height: Distance
-  connectsTo?: string | string[]
+export interface CopperPourProps {
+  name?: string
+  layer: LayerRefInput
+  connectsTo: string
+  padMargin?: Distance
+  traceMargin?: Distance
 }
-export const rectCopperPourProps = pcbLayoutProps
-  .omit({
-    pcbRotation: true,
-  })
-  .extend({
-    shape: z.literal("rect"),
-    width: distance,
-    height: distance,
-    connectsTo: z.string().or(z.array(z.string())).optional(),
-  })
-export interface CircleCopperPourProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "circle"
-  radius: Distance
-  connectsTo?: string | string[]
-}
-export const circleCopperPourProps = pcbLayoutProps
-  .omit({
-    pcbRotation: true,
-  })
-  .extend({
-    shape: z.literal("circle"),
-    radius: distance,
-    connectsTo: z.string().or(z.array(z.string())).optional(),
-  })
-export interface PolygonCopperPourProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "polygon"
-  points: Point[]
-  connectsTo?: string | string[]
-}
-export const polygonCopperPourProps = pcbLayoutProps
-  .omit({
-    pcbRotation: true,
-  })
-  .extend({
-    shape: z.literal("polygon"),
-    points: z.array(point),
-    connectsTo: z.string().or(z.array(z.string())).optional(),
-  })
+export const copperPourProps = z.object({
+  name: z.string().optional(),
+  layer: layer_ref,
+  connectsTo: z.string(),
+  padMargin: distance.optional(),
+  traceMargin: distance.optional(),
+})
 ```
 
 ### crystal
@@ -1702,6 +1704,8 @@ export interface CircularHoleWithRectPlatedProps
   holeShape?: "circle"
   padShape?: "rect"
   portHints?: PortHints
+  pcbHoleOffsetX?: number | string
+  pcbHoleOffsetY?: number | string
 }
 export interface PillWithRectPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
@@ -1772,6 +1776,8 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       holeShape: z.literal("circle").optional(),
       padShape: z.literal("rect").optional(),
       portHints: portHints.optional(),
+      pcbHoleOffsetX: distance.optional(),
+      pcbHoleOffsetY: distance.optional(),
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -2046,6 +2052,12 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
   anchorAlignment: ninePointAnchor.default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
+  isKnockout: z.boolean().optional(),
+  knockoutPadding: length.optional(),
+  knockoutPaddingLeft: length.optional(),
+  knockoutPaddingRight: length.optional(),
+  knockoutPaddingTop: length.optional(),
+  knockoutPaddingBottom: length.optional(),
   layers: z.array(layer_ref).optional(),
 })
 ```

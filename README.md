@@ -24,6 +24,8 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<board />`             | [`BoardProps`](#boardprops-board)                                     |
 | `<breakout />`          | [`BreakoutProps`](#breakoutprops-breakout)                            |
 | `<breakoutpoint />`     | [`BreakoutPointProps`](#breakoutpointprops-breakoutpoint)             |
+| `<cadassembly />`       | [`CadAssemblyProps`](#cadassemblyprops-cadassembly)                   |
+| `<cadmodel />`          | [`CadModelProps`](#cadmodelprops-cadmodel)                            |
 | `<capacitor />`         | [`CapacitorProps`](#capacitorprops-capacitor)                         |
 | `<chip />`              | [`ChipProps`](#chipprops-chip)                                        |
 | `<connector />`         | [`ConnectorProps`](#connectorprops-connector)                         |
@@ -193,6 +195,39 @@ export interface BreakoutPointProps
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/breakoutpoint.ts)
+
+### CadAssemblyProps `<cadassembly />`
+
+```ts
+export interface CadAssemblyProps {
+  /**
+   * The layer that the CAD assembly is designed for. If you set this to "top"
+   * then it means the children were intended to represent the top layer. If
+   * the <chip /> with this assembly is moved to the bottom layer, then the
+   * components will be mirrored.
+   *
+   * Generally, you shouldn't set this except where it can help prevent
+   * confusion because you have a complex multi-layer assembly. Default is
+   * "top" and this is most intuitive.
+   */
+  originalLayer?: LayerRef;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/cadassembly.ts)
+
+### CadModelProps `<cadmodel />`
+
+```ts
+export interface CadModelProps extends CadModelBase {
+  modelUrl: string;
+  pcbX?: Distance;
+  pcbY?: Distance;
+  pcbZ?: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/cadmodel.ts)
 
 ### CapacitorProps `<capacitor />`
 

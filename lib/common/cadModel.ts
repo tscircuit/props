@@ -2,6 +2,7 @@ import { z } from "zod"
 import { expectTypesMatch } from "lib/typecheck"
 import { distance, type Distance } from "./distance"
 import { point3 } from "./point3"
+import type { ReactElement } from "react"
 
 export const rotationPoint3 = z.object({
   x: z.union([z.number(), z.string()]),
@@ -85,6 +86,7 @@ export const cadModelJscad = cadModelBase.extend({
 export type CadModelProp =
   | null
   | string
+  | ReactElement
   | CadModelStl
   | CadModelObj
   | CadModelGltf
@@ -96,6 +98,9 @@ export type CadModelProp =
 export const cadModelProp = z.union([
   z.null(),
   z.string(),
+  z.custom<ReactElement>((v) => {
+    return v && typeof v === "object" && "type" in v && "props" in v
+  }),
   cadModelStl,
   cadModelObj,
   cadModelGltf,

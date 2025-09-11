@@ -14,10 +14,13 @@ export interface CadAssemblyProps {
    * "top" and this is most intuitive.
    */
   originalLayer?: LayerRef
+
+  children?: any
 }
 
 export const cadassemblyProps = z.object({
   originalLayer: layer_ref.default("top").optional(),
+  children: z.any().optional(),
 })
 
 export type CadAssemblyPropsInput = z.input<typeof cadassemblyProps>

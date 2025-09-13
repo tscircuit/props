@@ -72,6 +72,12 @@ export interface CadModelJscad extends CadModelBase {
 export const cadModelJscad = cadModelBase.extend({
   jscad: z.record(z.any()),
 })
+export const cadModelProp = z.union([
+  z.null(),
+  z.string(),
+  z.custom<ReactElement>((v) => {
+    return v && typeof v === "object" && "type" in v && "props" in v
+  }),
 ```
 
 ### connectionsProp
@@ -462,6 +468,8 @@ export const breakoutPointProps = pcbLayoutProps
 ```typescript
 export interface CadAssemblyProps {
   originalLayer?: LayerRef
+
+  children?: any
 }
 /**
    * The layer that the CAD assembly is designed for. If you set this to "top"
@@ -475,6 +483,7 @@ export interface CadAssemblyProps {
    */
 export const cadassemblyProps = z.object({
   originalLayer: layer_ref.default("top").optional(),
+  children: z.any().optional(),
 })
 ```
 
@@ -1182,15 +1191,22 @@ export interface AutorouterConfig {
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
   traceClearance?: Distance
-  groupMode?: "sequential-trace" | "subcircuit"
+  groupMode?:
+    | "sequential_trace"
+    | "subcircuit"
+    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   preset?:
-    | "sequential-trace"
+    | "sequential_trace"
     | "subcircuit"
     | "auto"
-    | "auto-local"
-    | "auto-cloud"
+    | "auto_local"
+    | "auto_cloud"
+    | "freerouting"
+    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Use "auto_local" */ "auto-local"
+    | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 export const autorouterConfig = z.object({
   serverUrl: z.string().optional(),
@@ -1199,7 +1215,9 @@ export const autorouterConfig = z.object({
   serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
-  groupMode: z.enum(["sequential-trace", "subcircuit"]).optional(),
+  groupMode: z
+    .enum(["sequential_trace", "subcircuit", "sequential-trace"])
+    .optional(),
   algorithmFn: z
     .custom<(simpleRouteJson: any) => Promise<any>>(
       (v) => typeof v === "function" || v === undefined,
@@ -1207,9 +1225,13 @@ export const autorouterConfig = z.object({
     .optional(),
   preset: z
     .enum([
-      "sequential-trace",
+      "sequential_trace",
       "subcircuit",
       "auto",
+      "auto_local",
+      "auto_cloud",
+      "freerouting",
+      "sequential-trace",
       "auto-local",
       "auto-cloud",
     ])

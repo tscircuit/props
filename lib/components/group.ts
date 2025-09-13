@@ -255,22 +255,33 @@ export interface AutorouterConfig {
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
   traceClearance?: Distance
-  groupMode?: "sequential-trace" | "subcircuit"
+  groupMode?:
+    | "sequential_trace"
+    | "subcircuit"
+    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   preset?:
-    | "sequential-trace"
+    | "sequential_trace"
     | "subcircuit"
     | "auto"
-    | "auto-local"
-    | "auto-cloud"
+    | "auto_local"
+    | "auto_cloud"
+    | "freerouting"
+    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Use "auto_local" */ "auto-local"
+    | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 
 export type AutorouterProp =
   | AutorouterConfig
-  | "sequential-trace"
+  | "sequential_trace"
   | "subcircuit"
   | "auto"
+  | "auto_local"
+  | "auto_cloud"
+  | "freerouting"
+  | "sequential-trace"
   | "auto-local"
   | "auto-cloud"
 
@@ -281,7 +292,9 @@ export const autorouterConfig = z.object({
   serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
-  groupMode: z.enum(["sequential-trace", "subcircuit"]).optional(),
+  groupMode: z
+    .enum(["sequential_trace", "subcircuit", "sequential-trace"])
+    .optional(),
   algorithmFn: z
     .custom<(simpleRouteJson: any) => Promise<any>>(
       (v) => typeof v === "function" || v === undefined,
@@ -289,9 +302,13 @@ export const autorouterConfig = z.object({
     .optional(),
   preset: z
     .enum([
-      "sequential-trace",
+      "sequential_trace",
       "subcircuit",
       "auto",
+      "auto_local",
+      "auto_cloud",
+      "freerouting",
+      "sequential-trace",
       "auto-local",
       "auto-cloud",
     ])
@@ -301,9 +318,13 @@ export const autorouterConfig = z.object({
 
 export const autorouterProp = z.union([
   autorouterConfig,
-  z.literal("sequential-trace"),
+  z.literal("sequential_trace"),
   z.literal("subcircuit"),
   z.literal("auto"),
+  z.literal("auto_local"),
+  z.literal("auto_cloud"),
+  z.literal("freerouting"),
+  z.literal("sequential-trace"),
   z.literal("auto-local"),
   z.literal("auto-cloud"),
 ])

@@ -143,6 +143,10 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/group.ts)
 
+> **Note:** Autorouter preset strings now use `snake_case` (e.g., `auto_cloud`).
+> Kebab-case forms like `auto-cloud` are deprecated but remain supported for
+> backward compatibility.
+
 ### BatteryProps `<battery />`
 
 ```ts
@@ -211,6 +215,8 @@ export interface CadAssemblyProps {
    * "top" and this is most intuitive.
    */
   originalLayer?: LayerRef;
+
+  children?: any;
 }
 ```
 

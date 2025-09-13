@@ -143,10 +143,6 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/group.ts)
 
-> **Note:** Autorouter preset strings now use `snake_case` (e.g., `auto_cloud`).
-> Kebab-case forms like `auto-cloud` are deprecated but remain supported for
-> backward compatibility.
-
 ### BatteryProps `<battery />`
 
 ```ts
@@ -1090,3 +1086,25 @@ export interface PlatformConfig {
 [Source](https://github.com/tscircuit/props/blob/main/lib/platformConfig.ts)
 
 <!-- PLATFORM_CONFIG_END -->
+
+<!-- PROJECT_CONFIG_START -->
+
+## tscircuit Project Configuration
+
+### ProjectConfig
+
+```ts
+export interface ProjectConfig
+  extends Pick<
+    PlatformConfig,
+    | "projectName"
+    | "projectBaseUrl"
+    | "version"
+    | "url"
+    | "printBoardInformationToSilkscreen"
+  > {}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/projectConfig.ts)
+
+<!-- PROJECT_CONFIG_END -->

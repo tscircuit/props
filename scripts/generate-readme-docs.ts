@@ -232,6 +232,29 @@ ${interfaceDefinition}
 `
 }
 
+function generateProjectConfigSection(): string {
+  const projectConfigPath = path.join(__dirname, "../lib/projectConfig.ts")
+  const content = fs.readFileSync(projectConfigPath, "utf8")
+  const interfaceMatch = content.match(
+    /export interface ProjectConfig[\s\S]+?}\n/,
+  )
+  const interfaceDefinition = interfaceMatch ? interfaceMatch[0] : ""
+  const githubPath =
+    "https://github.com/tscircuit/props/blob/main/lib/projectConfig.ts"
+
+  return `
+## tscircuit Project Configuration
+
+### ProjectConfig
+
+\`\`\`ts
+${interfaceDefinition}
+\`\`\`
+
+[Source](${githubPath})
+`
+}
+
 // Main execution
 const componentsDir = path.join(__dirname, "../lib/components")
 const files = getComponentFiles(componentsDir)
@@ -244,6 +267,7 @@ const componentsTable = generateComponentsTable(components)
 const usageExamples = generateUsageExamples()
 const interfaceDefinitions = generateInterfaceDefinitions(components)
 const platformConfigSection = generatePlatformConfigSection()
+const projectConfigSection = generateProjectConfigSection()
 
 // Read current README
 const readmePath = path.join(__dirname, "../README.md")
@@ -273,6 +297,11 @@ if (!readmeContent.includes("<!-- PLATFORM_CONFIG_START -->")) {
     "\n\n<!-- PLATFORM_CONFIG_START -->\n<!-- PLATFORM_CONFIG_END -->\n"
 }
 
+if (!readmeContent.includes("<!-- PROJECT_CONFIG_START -->")) {
+  readmeContent +=
+    "\n\n<!-- PROJECT_CONFIG_START -->\n<!-- PROJECT_CONFIG_END -->\n"
+}
+
 // Replace the content between the markers
 readmeContent = readmeContent.replace(
   /<!-- COMPONENT_TABLE_START -->[\s\S]*?<!-- COMPONENT_TABLE_END -->/,
@@ -292,6 +321,11 @@ readmeContent = readmeContent.replace(
 readmeContent = readmeContent.replace(
   /<!-- PLATFORM_CONFIG_START -->[\s\S]*?<!-- PLATFORM_CONFIG_END -->/,
   `<!-- PLATFORM_CONFIG_START -->${platformConfigSection}<!-- PLATFORM_CONFIG_END -->`,
+)
+
+readmeContent = readmeContent.replace(
+  /<!-- PROJECT_CONFIG_START -->[\s\S]*?<!-- PROJECT_CONFIG_END -->/,
+  `<!-- PROJECT_CONFIG_START -->${projectConfigSection}<!-- PROJECT_CONFIG_END -->`,
 )
 
 // Write back to README

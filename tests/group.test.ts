@@ -154,6 +154,8 @@ test("should parse pcb layout props", () => {
     pcbGridColumnGap: "2mm",
     pcbFlex: true,
     pcbGap: "2mm",
+    pcbPack: true,
+    pcbPackGap: "0.5mm",
   }
   const parsed = baseGroupProps.parse(raw)
   expect(parsed.pcbGrid).toBe(true)
@@ -163,6 +165,8 @@ test("should parse pcb layout props", () => {
   expect(parsed.pcbGridColumnGap).toBe("2mm")
   expect(parsed.pcbFlex).toBe(true)
   expect(parsed.pcbGap).toBe("2mm")
+  expect(parsed.pcbPack).toBe(true)
+  expect(parsed.pcbPackGap).toBe("0.5mm")
 })
 
 test("should parse layout grid gaps", () => {

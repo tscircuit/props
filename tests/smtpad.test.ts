@@ -19,6 +19,7 @@ test("should parse PolygonSmtPadProps", () => {
     ],
     pcbX: 0,
     pcbY: "1mm",
+    coveredWithSolderMask: true,
   }
 
   expectTypeOf(rawProps).toMatchTypeOf<z.input<typeof polygonSmtPadProps>>()
@@ -27,11 +28,13 @@ test("should parse PolygonSmtPadProps", () => {
   expect(parsed.name).toBe("pad1")
   expect(parsed.points.length).toBe(3)
   expect(parsed.pcbY).toBe(1)
+  expect(parsed.coveredWithSolderMask).toBe(true)
 
   const parsedUnion = smtPadProps.parse(rawProps)
   if (parsedUnion.shape === "polygon") {
     expect(parsedUnion.name).toBe("pad1")
     expect(parsedUnion.points.length).toBe(3)
+    expect(parsedUnion.coveredWithSolderMask).toBe(true)
   } else {
     throw new Error("Expected PolygonSmtPadProps")
   }

@@ -879,6 +879,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   width: Distance;
   height: Distance;
   portHints?: PortHints;
+  coveredWithSolderMask?: boolean;
 }
 ```
 

@@ -245,6 +245,7 @@ export interface PcbSmtPadCircle {
   radius: number
   layer: LayerRef
   port_hints?: string[]
+  covered_with_solder_mask?: boolean
   pcb_component_id?: string
   pcb_port_id?: string
 }
@@ -260,6 +261,7 @@ export interface PcbSmtPadRect {
   height: number
   layer: LayerRef
   port_hints?: string[]
+  covered_with_solder_mask?: boolean
   pcb_component_id?: string
   pcb_port_id?: string
 }

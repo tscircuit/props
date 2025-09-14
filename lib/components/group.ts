@@ -206,6 +206,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexColumn?: boolean
   pcbGap?: number | string
   pcbPack?: boolean
+  pcbPackGap?: number | string
 
   schGrid?: boolean
   schGridCols?: number | string
@@ -416,6 +417,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbFlexColumn: z.boolean().optional(),
   pcbGap: z.number().or(z.string()).optional(),
   pcbPack: z.boolean().optional(),
+  pcbPackGap: z.number().or(z.string()).optional(),
 
   schGrid: z.boolean().optional(),
   schGridCols: z.number().or(z.string()).optional(),

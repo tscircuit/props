@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-09T00:49:12.874Z
+> Generated at 2025-09-14T18:16:33.787Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -25,15 +25,22 @@ export interface AutorouterConfig {
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
   traceClearance?: Distance
-  groupMode?: "sequential-trace" | "subcircuit"
+  groupMode?:
+    | "sequential_trace"
+    | "subcircuit"
+    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   preset?:
-    | "sequential-trace"
+    | "sequential_trace"
     | "subcircuit"
     | "auto"
-    | "auto-local"
-    | "auto-cloud"
+    | "auto_local"
+    | "auto_cloud"
+    | "freerouting"
+    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Use "auto_local" */ "auto-local"
+    | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 
 
@@ -99,6 +106,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexColumn?: boolean
   pcbGap?: number | string
   pcbPack?: boolean
+  pcbPackGap?: number | string
 
   schGrid?: boolean
   schGridCols?: number | string
@@ -177,6 +185,23 @@ export interface BreakoutProps
 }
 
 
+export interface CadAssemblyProps {
+  /**
+   * The layer that the CAD assembly is designed for. If you set this to "top"
+   * then it means the children were intended to represent the top layer. If
+   * the <chip /> with this assembly is moved to the bottom layer, then the
+   * components will be mirrored.
+   *
+   * Generally, you shouldn't set this except where it can help prevent
+   * confusion because you have a complex multi-layer assembly. Default is
+   * "top" and this is most intuitive.
+   */
+  originalLayer?: LayerRef
+
+  children?: any
+}
+
+
 export interface CadModelBase {
   rotationOffset?:
     | number
@@ -187,6 +212,7 @@ export interface CadModelBase {
     z: number | string
   }
   size?: { x: number | string; y: number | string; z: number | string }
+  modelUnitToMmScale?: Distance
 }
 
 
@@ -208,6 +234,14 @@ export interface CadModelJscad extends CadModelBase {
 export interface CadModelObj extends CadModelBase {
   objUrl: string
   mtlUrl?: string
+}
+
+
+export interface CadModelProps extends CadModelBase {
+  modelUrl: string
+  pcbX?: Distance
+  pcbY?: Distance
+  pcbZ?: Distance
 }
 
 
@@ -270,14 +304,6 @@ export interface ChipPropsSU<
 }
 
 
-export interface CircleCopperPourProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "circle"
-  radius: Distance
-  connectsTo?: string | string[]
-}
-
-
 export interface CircleCutoutProps
   extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
   name?: string
@@ -323,6 +349,8 @@ export interface CircularHoleWithRectPlatedProps
   holeShape?: "circle"
   padShape?: "rect"
   portHints?: PortHints
+  pcbHoleOffsetX?: number | string
+  pcbHoleOffsetY?: number | string
 }
 
 
@@ -412,6 +440,15 @@ export interface ConstrainedLayoutProps {
   name?: string
   pcbOnly?: boolean
   schOnly?: boolean
+}
+
+
+export interface CopperPourProps {
+  name?: string
+  layer: LayerRefInput
+  connectsTo: string
+  padMargin?: Distance
+  traceMargin?: Distance
 }
 
 
@@ -939,6 +976,7 @@ export interface PlatformConfig {
   cloudAutorouterUrl?: string
 
   projectName?: string
+  projectBaseUrl?: string
   version?: string
   url?: string
   printBoardInformationToSilkscreen?: boolean
@@ -950,16 +988,11 @@ export interface PlatformConfig {
   footprintLibraryMap?: Record<
     string,
     | ((path: string) => Promise<FootprintLibraryResult>)
-    | Record<string, any[] | ((path: string) => Promise<FootprintLibraryResult>)>
+    | Record<
+        string,
+        any[] | ((path: string) => Promise<FootprintLibraryResult>)
+      >
   >
-}
-
-
-export interface PolygonCopperPourProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "polygon"
-  points: Point[]
-  connectsTo?: string | string[]
 }
 
 
@@ -983,15 +1016,6 @@ export interface PolygonSmtPadProps
 export interface PotentiometerProps extends CommonComponentProps {
   maxResistance: number | string
   pinVariant?: PotentiometerPinVariant
-}
-
-
-export interface RectCopperPourProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
-  shape: "rect"
-  width: Distance
-  height: Distance
-  connectsTo?: string | string[]
 }
 
 

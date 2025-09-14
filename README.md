@@ -513,6 +513,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexColumn?: boolean;
   pcbGap?: number | string;
   pcbPack?: boolean;
+  pcbPackGap?: number | string;
 
   schGrid?: boolean;
   schGridCols?: number | string;
@@ -879,6 +880,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   width: Distance;
   height: Distance;
   portHints?: PortHints;
+  coveredWithSolderMask?: boolean;
 }
 ```
 

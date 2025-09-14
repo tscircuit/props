@@ -1144,6 +1144,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexColumn?: boolean
   pcbGap?: number | string
   pcbPack?: boolean
+  pcbPackGap?: number | string
 
   schGrid?: boolean
   schGridCols?: number | string
@@ -1309,6 +1310,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbFlexColumn: z.boolean().optional(),
   pcbGap: z.number().or(z.string()).optional(),
   pcbPack: z.boolean().optional(),
+  pcbPackGap: z.number().or(z.string()).optional(),
 
   schGrid: z.boolean().optional(),
   schGridCols: z.number().or(z.string()).optional(),
@@ -2093,6 +2095,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   width: Distance
   height: Distance
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -2102,12 +2105,14 @@ export interface RotatedRectSmtPadProps
   height: Distance
   ccwRotation: number
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
   shape: "circle"
   radius: Distance
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -2116,6 +2121,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   height: Distance
   radius: Distance
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 export interface PolygonSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -2123,6 +2129,7 @@ export interface PolygonSmtPadProps
   shape: "polygon"
   points: Point[]
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 export const rectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2132,6 +2139,7 @@ export const rectSmtPadProps = pcbLayoutProps
     width: distance,
     height: distance,
     portHints: portHints.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
   })
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2142,6 +2150,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     height: distance,
     ccwRotation: z.number(),
     portHints: portHints.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
   })
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2150,6 +2159,7 @@ export const circleSmtPadProps = pcbLayoutProps
     shape: z.literal("circle"),
     radius: distance,
     portHints: portHints.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
   })
 export const pillSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2160,6 +2170,7 @@ export const pillSmtPadProps = pcbLayoutProps
     height: distance,
     radius: distance,
     portHints: portHints.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
   })
 export const polygonSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2168,6 +2179,7 @@ export const polygonSmtPadProps = pcbLayoutProps
     shape: z.literal("polygon"),
     points: z.array(point),
     portHints: portHints.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
   })
 ```
 

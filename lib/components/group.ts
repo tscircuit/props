@@ -201,26 +201,27 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
     | "stretch"
     | "space-between"
     | "space-around"
-    | "space-evenly";
-  pcbFlexRow?: boolean;
-  pcbFlexColumn?: boolean;
-  pcbGap?: number | string;
-  pcbPack?: boolean;
+    | "space-evenly"
+  pcbFlexRow?: boolean
+  pcbFlexColumn?: boolean
+  pcbGap?: number | string
+  pcbPack?: boolean
+  pcbPackGap?: number | string
 
-  schGrid?: boolean;
-  schGridCols?: number | string;
-  schGridRows?: number | string;
-  schGridTemplateRows?: string;
-  schGridTemplateColumns?: string;
-  schGridTemplate?: string;
-  schGridGap?: number | string;
-  schGridRowGap?: number | string;
-  schGridColumnGap?: number | string;
+  schGrid?: boolean
+  schGridCols?: number | string
+  schGridRows?: number | string
+  schGridTemplateRows?: string
+  schGridTemplateColumns?: string
+  schGridTemplate?: string
+  schGridGap?: number | string
+  schGridRowGap?: number | string
+  schGridColumnGap?: number | string
 
-  schFlex?: boolean | string;
-  schFlexGap?: number | string;
-  schFlexDirection?: "row" | "column";
-  schAlignItems?: "start" | "center" | "end" | "stretch";
+  schFlex?: boolean | string
+  schFlexGap?: number | string
+  schFlexDirection?: "row" | "column"
+  schAlignItems?: "start" | "center" | "end" | "stretch"
   schJustifyContent?:
     | "start"
     | "center"
@@ -464,6 +465,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbFlexColumn: z.boolean().optional(),
   pcbGap: z.number().or(z.string()).optional(),
   pcbPack: z.boolean().optional(),
+  pcbPackGap: z.number().or(z.string()).optional(),
 
   schGrid: z.boolean().optional(),
   schGridCols: z.number().or(z.string()).optional(),

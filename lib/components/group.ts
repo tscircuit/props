@@ -1,19 +1,19 @@
-import { layer_ref, length, distance } from "circuit-json"
-import type { Distance } from "lib/common/distance"
+import { layer_ref, length, distance } from "circuit-json";
+import type { Distance } from "lib/common/distance";
 import {
   type CommonLayoutProps,
   commonLayoutProps,
   type SupplierPartNumbers,
-} from "lib/common/layout"
-import { type Point, point } from "lib/common/point"
-import { expectTypesMatch } from "lib/typecheck"
-import { z } from "zod"
-import type { AnySourceComponent, PcbTrace } from "circuit-json"
+} from "lib/common/layout";
+import { type Point, point } from "lib/common/point";
+import { expectTypesMatch } from "lib/typecheck";
+import { z } from "zod";
+import type { AnySourceComponent, PcbTrace } from "circuit-json";
 import {
   manual_edits_file,
   type ManualEditsFile,
   type ManualEditsFileInput,
-} from "lib/manual-edits"
+} from "lib/manual-edits";
 
 export const layoutConfig = z.object({
   layoutMode: z
@@ -77,25 +77,25 @@ export const layoutConfig = z.object({
 
   matchAdapt: z.boolean().optional(),
   matchAdaptTemplate: z.any().optional(),
-})
+});
 
 export interface LayoutConfig {
-  layoutMode?: "grid" | "flex" | "match-adapt" | "relative" | "none"
-  position?: "absolute" | "relative"
+  layoutMode?: "grid" | "flex" | "match-adapt" | "relative" | "none";
+  position?: "absolute" | "relative";
 
-  grid?: boolean
-  gridCols?: number | string
-  gridRows?: number | string
-  gridTemplateRows?: string
-  gridTemplateColumns?: string
-  gridTemplate?: string
-  gridGap?: number | string
-  gridRowGap?: number | string
-  gridColumnGap?: number | string
+  grid?: boolean;
+  gridCols?: number | string;
+  gridRows?: number | string;
+  gridTemplateRows?: string;
+  gridTemplateColumns?: string;
+  gridTemplate?: string;
+  gridGap?: number | string;
+  gridRowGap?: number | string;
+  gridColumnGap?: number | string;
 
-  flex?: boolean | string
-  flexDirection?: "row" | "column"
-  alignItems?: "start" | "center" | "end" | "stretch"
+  flex?: boolean | string;
+  flexDirection?: "row" | "column";
+  alignItems?: "start" | "center" | "end" | "stretch";
   justifyContent?:
     | "start"
     | "center"
@@ -103,97 +103,97 @@ export interface LayoutConfig {
     | "stretch"
     | "space-between"
     | "space-around"
-    | "space-evenly"
-  flexRow?: boolean
-  flexColumn?: boolean
-  gap?: number | string
+    | "space-evenly";
+  flexRow?: boolean;
+  flexColumn?: boolean;
+  gap?: number | string;
 
-  pack?: boolean
+  pack?: boolean;
   packOrderStrategy?:
     | "largest_to_smallest"
     | "first_to_last"
-    | "highest_to_lowest_pin_count"
-  packPlacementStrategy?: "shortest_connection_along_outline"
+    | "highest_to_lowest_pin_count";
+  packPlacementStrategy?: "shortest_connection_along_outline";
 
-  padding?: Distance
-  paddingLeft?: Distance
-  paddingRight?: Distance
-  paddingTop?: Distance
-  paddingBottom?: Distance
-  paddingX?: Distance
-  paddingY?: Distance
+  padding?: Distance;
+  paddingLeft?: Distance;
+  paddingRight?: Distance;
+  paddingTop?: Distance;
+  paddingBottom?: Distance;
+  paddingX?: Distance;
+  paddingY?: Distance;
 
-  width?: Distance
-  height?: Distance
+  width?: Distance;
+  height?: Distance;
 
-  matchAdapt?: boolean
-  matchAdaptTemplate?: any
+  matchAdapt?: boolean;
+  matchAdaptTemplate?: any;
 }
 
-expectTypesMatch<LayoutConfig, z.input<typeof layoutConfig>>(true)
+expectTypesMatch<LayoutConfig, z.input<typeof layoutConfig>>(true);
 
 export interface Border {
-  strokeWidth?: Distance
-  dashed?: boolean
-  solid?: boolean
+  strokeWidth?: Distance;
+  dashed?: boolean;
+  solid?: boolean;
 }
 
 export const border = z.object({
   strokeWidth: length.optional(),
   dashed: z.boolean().optional(),
   solid: z.boolean().optional(),
-})
+});
 
 export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
-  name?: string
-  key?: any
-  children?: any
+  name?: string;
+  key?: any;
+  children?: any;
 
   /**
    * Title to display above this group in the schematic view
    */
-  schTitle?: string
+  schTitle?: string;
 
-  pcbWidth?: Distance
-  pcbHeight?: Distance
-  schWidth?: Distance
-  schHeight?: Distance
+  pcbWidth?: Distance;
+  pcbHeight?: Distance;
+  schWidth?: Distance;
+  schHeight?: Distance;
 
-  pcbLayout?: LayoutConfig
-  schLayout?: LayoutConfig
-  cellBorder?: Border | null
-  border?: Border | null
-  schPadding?: Distance
-  schPaddingLeft?: Distance
-  schPaddingRight?: Distance
-  schPaddingTop?: Distance
-  schPaddingBottom?: Distance
+  pcbLayout?: LayoutConfig;
+  schLayout?: LayoutConfig;
+  cellBorder?: Border | null;
+  border?: Border | null;
+  schPadding?: Distance;
+  schPaddingLeft?: Distance;
+  schPaddingRight?: Distance;
+  schPaddingTop?: Distance;
+  schPaddingBottom?: Distance;
 
-  pcbPadding?: Distance
-  pcbPaddingLeft?: Distance
-  pcbPaddingRight?: Distance
-  pcbPaddingTop?: Distance
-  pcbPaddingBottom?: Distance
+  pcbPadding?: Distance;
+  pcbPaddingLeft?: Distance;
+  pcbPaddingRight?: Distance;
+  pcbPaddingTop?: Distance;
+  pcbPaddingBottom?: Distance;
 
   /** @deprecated Use `pcbGrid` */
-  grid?: boolean
+  grid?: boolean;
   /** @deprecated Use `pcbFlex` */
-  flex?: boolean | string
+  flex?: boolean | string;
 
-  pcbGrid?: boolean
-  pcbGridCols?: number | string
-  pcbGridRows?: number | string
-  pcbGridTemplateRows?: string
-  pcbGridTemplateColumns?: string
-  pcbGridTemplate?: string
-  pcbGridGap?: number | string
-  pcbGridRowGap?: number | string
-  pcbGridColumnGap?: number | string
+  pcbGrid?: boolean;
+  pcbGridCols?: number | string;
+  pcbGridRows?: number | string;
+  pcbGridTemplateRows?: string;
+  pcbGridTemplateColumns?: string;
+  pcbGridTemplate?: string;
+  pcbGridGap?: number | string;
+  pcbGridRowGap?: number | string;
+  pcbGridColumnGap?: number | string;
 
-  pcbFlex?: boolean | string
-  pcbFlexGap?: number | string
-  pcbFlexDirection?: "row" | "column"
-  pcbAlignItems?: "start" | "center" | "end" | "stretch"
+  pcbFlex?: boolean | string;
+  pcbFlexGap?: number | string;
+  pcbFlexDirection?: "row" | "column";
+  pcbAlignItems?: "start" | "center" | "end" | "stretch";
   pcbJustifyContent?:
     | "start"
     | "center"
@@ -201,26 +201,26 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
     | "stretch"
     | "space-between"
     | "space-around"
-    | "space-evenly"
-  pcbFlexRow?: boolean
-  pcbFlexColumn?: boolean
-  pcbGap?: number | string
-  pcbPack?: boolean
+    | "space-evenly";
+  pcbFlexRow?: boolean;
+  pcbFlexColumn?: boolean;
+  pcbGap?: number | string;
+  pcbPack?: boolean;
 
-  schGrid?: boolean
-  schGridCols?: number | string
-  schGridRows?: number | string
-  schGridTemplateRows?: string
-  schGridTemplateColumns?: string
-  schGridTemplate?: string
-  schGridGap?: number | string
-  schGridRowGap?: number | string
-  schGridColumnGap?: number | string
+  schGrid?: boolean;
+  schGridCols?: number | string;
+  schGridRows?: number | string;
+  schGridTemplateRows?: string;
+  schGridTemplateColumns?: string;
+  schGridTemplate?: string;
+  schGridGap?: number | string;
+  schGridRowGap?: number | string;
+  schGridColumnGap?: number | string;
 
-  schFlex?: boolean | string
-  schFlexGap?: number | string
-  schFlexDirection?: "row" | "column"
-  schAlignItems?: "start" | "center" | "end" | "stretch"
+  schFlex?: boolean | string;
+  schFlexGap?: number | string;
+  schFlexDirection?: "row" | "column";
+  schAlignItems?: "start" | "center" | "end" | "stretch";
   schJustifyContent?:
     | "start"
     | "center"
@@ -228,39 +228,39 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
     | "stretch"
     | "space-between"
     | "space-around"
-    | "space-evenly"
-  schFlexRow?: boolean
-  schFlexColumn?: boolean
-  schGap?: number | string
-  schPack?: boolean
-  schMatchAdapt?: boolean
+    | "space-evenly";
+  schFlexRow?: boolean;
+  schFlexColumn?: boolean;
+  schGap?: number | string;
+  schPack?: boolean;
+  schMatchAdapt?: boolean;
 }
 
 export type PartsEngine = {
   findPart: (params: {
-    sourceComponent: AnySourceComponent
-    footprinterString?: string
-  }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
-}
+    sourceComponent: AnySourceComponent;
+    footprinterString?: string;
+  }) => Promise<SupplierPartNumbers> | SupplierPartNumbers;
+};
 
 export interface PcbRouteCache {
-  pcbTraces: PcbTrace[]
-  cacheKey: string
+  pcbTraces: PcbTrace[];
+  cacheKey: string;
 }
 
 export interface AutorouterConfig {
-  serverUrl?: string
-  inputFormat?: "simplified" | "circuit-json"
-  serverMode?: "job" | "solve-endpoint"
-  serverCacheEnabled?: boolean
-  cache?: PcbRouteCache
-  traceClearance?: Distance
+  serverUrl?: string;
+  inputFormat?: "simplified" | "circuit-json";
+  serverMode?: "job" | "solve-endpoint";
+  serverCacheEnabled?: boolean;
+  cache?: PcbRouteCache;
+  traceClearance?: Distance;
   groupMode?:
     | "sequential_trace"
     | "subcircuit"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
-  local?: boolean
-  algorithmFn?: (simpleRouteJson: any) => Promise<any>
+    | /** @deprecated Use "sequential_trace" */ "sequential-trace";
+  local?: boolean;
+  algorithmFn?: (simpleRouteJson: any) => Promise<any>;
   preset?:
     | "sequential_trace"
     | "subcircuit"
@@ -270,7 +270,7 @@ export interface AutorouterConfig {
     | "freerouting"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
-    | /** @deprecated Use "auto_cloud" */ "auto-cloud"
+    | /** @deprecated Use "auto_cloud" */ "auto-cloud";
 }
 
 export type AutorouterProp =
@@ -283,7 +283,7 @@ export type AutorouterProp =
   | "freerouting"
   | "sequential-trace"
   | "auto-local"
-  | "auto-cloud"
+  | "auto-cloud";
 
 export const autorouterConfig = z.object({
   serverUrl: z.string().optional(),
@@ -296,9 +296,9 @@ export const autorouterConfig = z.object({
     .enum(["sequential_trace", "subcircuit", "sequential-trace"])
     .optional(),
   algorithmFn: z
-    .custom<(simpleRouteJson: any) => Promise<any>>(
-      (v) => typeof v === "function" || v === undefined,
-    )
+    .custom<
+      (simpleRouteJson: any) => Promise<any>
+    >((v) => typeof v === "function" || v === undefined)
     .optional(),
   preset: z
     .enum([
@@ -314,7 +314,7 @@ export const autorouterConfig = z.object({
     ])
     .optional(),
   local: z.boolean().optional(),
-})
+});
 
 export const autorouterProp = z.union([
   autorouterConfig,
@@ -327,57 +327,105 @@ export const autorouterProp = z.union([
   z.literal("sequential-trace"),
   z.literal("auto-local"),
   z.literal("auto-cloud"),
-])
+]);
 
 export interface SubcircuitGroupProps extends BaseGroupProps {
-  manualEdits?: ManualEditsFileInput
-  routingDisabled?: boolean
-  defaultTraceWidth?: Distance
-  minTraceWidth?: Distance
-  pcbRouteCache?: PcbRouteCache
+  manualEdits?: ManualEditsFileInput;
+  routingDisabled?: boolean;
+  defaultTraceWidth?: Distance;
+  minTraceWidth?: Distance;
+  pcbRouteCache?: PcbRouteCache;
 
-  autorouter?: AutorouterProp
+  autorouter?: AutorouterProp;
 
   /**
    * If true, we'll automatically layout the schematic for this group. Must be
    * a subcircuit (currently). This is eventually going to be replaced with more
    * sophisticated layout options/modes and will be enabled by default.
    */
-  schAutoLayoutEnabled?: boolean
+  schAutoLayoutEnabled?: boolean;
 
   /**
    * If true, net labels will automatically be created for complex traces
    */
-  schTraceAutoLabelEnabled?: boolean
+  schTraceAutoLabelEnabled?: boolean;
 
   /** Maximum length a trace can span on the schematic */
-  schMaxTraceDistance?: Distance
+  schMaxTraceDistance?: Distance;
 
-  partsEngine?: PartsEngine
+  partsEngine?: PartsEngine;
 
   /** When autosizing, the board will be made square */
-  square?: boolean
+  square?: boolean;
   /** Desired empty area of the board e.g. "22mm^2" or "20%" */
-  emptyArea?: string
+  emptyArea?: string;
   /** Desired filled area of the board e.g. "22mm^2" or "20%" */
-  filledArea?: string
+  filledArea?: string;
 
-  width?: number | string
-  height?: number | string
-  outline?: Point[]
-  outlineOffsetX?: number | string
-  outlineOffsetY?: number | string
+  width?: number | string;
+  height?: number | string;
+  outline?: Point[];
+  outlineOffsetX?: number | string;
+  outlineOffsetY?: number | string;
+  showAsSchematicBox?: boolean;
+  connections?: Record<string, string>;
+  schPinArrangement?: {
+    leftSide?: {
+      direction?:
+        | "top-to-bottom"
+        | "bottom-to-top"
+        | "left-to-right"
+        | "right-to-left";
+      pins?: string[];
+      gapAfterPins?: string[];
+    };
+    rightSide?: {
+      direction?:
+        | "top-to-bottom"
+        | "bottom-to-top"
+        | "left-to-right"
+        | "right-to-left";
+      pins?: string[];
+      gapAfterPins?: string[];
+    };
+    topSide?: {
+      direction?:
+        | "left-to-right"
+        | "right-to-left"
+        | "top-to-bottom"
+        | "bottom-to-top";
+      pins?: string[];
+      gapAfterPins?: string[];
+    };
+    bottomSide?: {
+      direction?:
+        | "left-to-right"
+        | "right-to-left"
+        | "top-to-bottom"
+        | "bottom-to-top";
+      pins?: string[];
+      gapAfterPins?: string[];
+    };
+  };
+  schBox?: {
+    title?: string;
+    shape?: "rect" | "rounded";
+    pinLength?: number;
+    width?: number;
+    height?: number;
+    refdes?: string;
+  };
 }
 
 export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
-  subcircuit: true
+  subcircuit: true;
 }
 
 export interface NonSubcircuitGroupProps extends BaseGroupProps {
-  subcircuit?: false | undefined
+  subcircuit?: false | undefined;
 }
 
-export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps
+export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps;
 
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),
@@ -465,9 +513,9 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbPaddingRight: length.optional(),
   pcbPaddingTop: length.optional(),
   pcbPaddingBottom: length.optional(),
-})
+});
 
-export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
+export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v);
 
 export const subcircuitGroupProps = baseGroupProps.extend({
   manualEdits: manual_edits_file.optional(),
@@ -488,27 +536,103 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   outline: z.array(point).optional(),
   outlineOffsetX: distance.optional(),
   outlineOffsetY: distance.optional(),
-})
+  // inside: export const subcircuitGroupProps = baseGroupProps.extend({
+  showAsSchematicBox: z.boolean().optional(),
+
+  connections: z.record(z.string(), z.string()).optional(),
+
+  schPinArrangement: z
+    .object({
+      leftSide: z
+        .object({
+          direction: z
+            .enum([
+              "top-to-bottom",
+              "bottom-to-top",
+              "left-to-right",
+              "right-to-left",
+            ])
+            .optional(),
+          pins: z.array(z.string()).default([]),
+          gapAfterPins: z.array(z.string()).optional(),
+        })
+        .optional(),
+      rightSide: z
+        .object({
+          direction: z
+            .enum([
+              "top-to-bottom",
+              "bottom-to-top",
+              "left-to-right",
+              "right-to-left",
+            ])
+            .optional(),
+          pins: z.array(z.string()).default([]),
+          gapAfterPins: z.array(z.string()).optional(),
+        })
+        .optional(),
+      topSide: z
+        .object({
+          direction: z
+            .enum([
+              "left-to-right",
+              "right-to-left",
+              "top-to-bottom",
+              "bottom-to-top",
+            ])
+            .optional(),
+          pins: z.array(z.string()).default([]),
+          gapAfterPins: z.array(z.string()).optional(),
+        })
+        .optional(),
+      bottomSide: z
+        .object({
+          direction: z
+            .enum([
+              "left-to-right",
+              "right-to-left",
+              "top-to-bottom",
+              "bottom-to-top",
+            ])
+            .optional(),
+          pins: z.array(z.string()).default([]),
+          gapAfterPins: z.array(z.string()).optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+
+  schBox: z
+    .object({
+      title: z.string().optional(),
+      shape: z.enum(["rect", "rounded"]).optional(),
+      pinLength: z.number().optional(),
+      width: z.number().optional(),
+      height: z.number().optional(),
+      refdes: z.string().optional(),
+    })
+    .optional(),
+});
 
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
   subcircuit: z.literal(true),
-})
+});
 
 export const groupProps = z.discriminatedUnion("subcircuit", [
   baseGroupProps.extend({ subcircuit: z.literal(false).optional() }),
   subcircuitGroupPropsWithBool,
-])
+]);
 
-type InferredBaseGroupProps = z.input<typeof baseGroupProps>
+type InferredBaseGroupProps = z.input<typeof baseGroupProps>;
 type InferredSubcircuitGroupPropsWithBool = z.input<
   typeof subcircuitGroupPropsWithBool
->
+>;
 
-expectTypesMatch<BaseGroupProps, InferredBaseGroupProps>(true)
+expectTypesMatch<BaseGroupProps, InferredBaseGroupProps>(true);
 expectTypesMatch<
   SubcircuitGroupPropsWithBool,
   InferredSubcircuitGroupPropsWithBool
->(true)
+>(true);
 
-type InferredGroupProps = z.input<typeof groupProps>
-expectTypesMatch<GroupProps, InferredGroupProps>(true)
+type InferredGroupProps = z.input<typeof groupProps>;
+expectTypesMatch<GroupProps, InferredGroupProps>(true);

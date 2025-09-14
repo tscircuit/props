@@ -58,6 +58,7 @@ export interface CircularHoleWithRectPlatedProps
   holeDiameter: number | string
   rectPadWidth: number | string
   rectPadHeight: number | string
+  rectBorderRadius?: number | string
   holeShape?: "circle"
   padShape?: "rect"
   portHints?: PortHints
@@ -135,6 +136,7 @@ export const platedHoleProps = z
       holeDiameter: distance,
       rectPadWidth: distance,
       rectPadHeight: distance,
+      rectBorderRadius: distance.optional(),
       holeShape: z.literal("circle").optional(),
       padShape: z.literal("rect").optional(),
       portHints: portHints.optional(),

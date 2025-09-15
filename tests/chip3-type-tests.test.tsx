@@ -147,7 +147,11 @@ test("[typetest] pinAttributes type matches pin labels", () => {
       pinLabels={pinLabels1}
       pinAttributes={{
         VCC: { providesPower: true },
-        GND: { requiresPower: true, doNotConnect: true },
+        GND: {
+          requiresPower: true,
+          doNotConnect: true,
+          includeInBoardPinout: true,
+        },
         // @ts-expect-error
         INVALID: { foo: true },
       }}

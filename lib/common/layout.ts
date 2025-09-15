@@ -151,6 +151,7 @@ export interface PinAttributeMap {
   providesVoltage?: string | number
   requiresVoltage?: string | number
   doNotConnect?: boolean
+  includeInBoardPinout?: boolean
 }
 
 export const pinAttributeMap = z.object({
@@ -161,6 +162,7 @@ export const pinAttributeMap = z.object({
   providesVoltage: z.union([z.string(), z.number()]).optional(),
   requiresVoltage: z.union([z.string(), z.number()]).optional(),
   doNotConnect: z.boolean().optional(),
+  includeInBoardPinout: z.boolean().optional(),
 })
 
 expectTypesMatch<PinAttributeMap, z.input<typeof pinAttributeMap>>(true)

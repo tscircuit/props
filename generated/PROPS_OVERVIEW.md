@@ -846,6 +846,7 @@ export interface PinAttributeMap {
   providesVoltage?: string | number
   requiresVoltage?: string | number
   doNotConnect?: boolean
+  includeInBoardPinout?: boolean
 }
 
 

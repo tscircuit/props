@@ -233,6 +233,7 @@ export interface PinAttributeMap {
   providesVoltage?: string | number
   requiresVoltage?: string | number
   doNotConnect?: boolean
+  includeInBoardPinout?: boolean
 }
 export const pinAttributeMap = z.object({
   providesPower: z.boolean().optional(),
@@ -242,6 +243,7 @@ export const pinAttributeMap = z.object({
   providesVoltage: z.union([z.string(), z.number()]).optional(),
   requiresVoltage: z.union([z.string(), z.number()]).optional(),
   doNotConnect: z.boolean().optional(),
+  includeInBoardPinout: z.boolean().optional(),
 })
 export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {

@@ -550,10 +550,32 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 ### HoleProps `<hole />`
 
 ```ts
-export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+export type HoleProps = CircleHoleProps | PillHoleProps;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
+
+### CircleHoleProps `<hole />`
+
+```ts
+export interface CircleHoleProps extends PcbLayoutProps {
   name?: string;
+  shape?: "circle";
   diameter?: Distance;
   radius?: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
+
+### PillHoleProps `<hole />`
+
+```ts
+export interface PillHoleProps extends PcbLayoutProps {
+  name?: string;
+  shape: "pill";
+  width: Distance;
+  height: Distance;
 }
 ```
 

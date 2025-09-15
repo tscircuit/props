@@ -61,8 +61,8 @@ export interface CircularHoleWithRectPlatedProps
   holeShape?: "circle"
   padShape?: "rect"
   portHints?: PortHints
-  pcbHoleOffsetX?: number | string
-  pcbHoleOffsetY?: number | string
+  holeOffsetX?: number | string
+  holeOffsetY?: number | string
 }
 
 export interface PillWithRectPadPlatedHoleProps
@@ -77,6 +77,8 @@ export interface PillWithRectPadPlatedHoleProps
   rectPadWidth: number | string
   rectPadHeight: number | string
   portHints?: PortHints
+  holeOffsetX?: number | string
+  holeOffsetY?: number | string
 }
 
 export type PlatedHoleProps =
@@ -139,8 +141,8 @@ export const platedHoleProps = z
       holeShape: z.literal("circle").optional(),
       padShape: z.literal("rect").optional(),
       portHints: portHints.optional(),
-      pcbHoleOffsetX: distance.optional(),
-      pcbHoleOffsetY: distance.optional(),
+      holeOffsetX: distance.optional(),
+      holeOffsetY: distance.optional(),
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -153,6 +155,8 @@ export const platedHoleProps = z
       rectPadWidth: distance,
       rectPadHeight: distance,
       portHints: portHints.optional(),
+      holeOffsetX: distance.optional(),
+      holeOffsetY: distance.optional(),
     }),
   ])
   .refine((a) => {

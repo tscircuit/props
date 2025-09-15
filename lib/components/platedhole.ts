@@ -15,8 +15,7 @@ export interface CirclePlatedHoleProps
   portHints?: PortHints
 }
 
-export interface OvalPlatedHoleProps
-  extends Omit<PcbLayoutProps, "layer"> {
+export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "oval"

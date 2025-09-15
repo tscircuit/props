@@ -1391,18 +1391,38 @@ export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
 ### hole
 
 ```typescript
-export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface CircleHoleProps extends PcbLayoutProps {
   name?: string
+  shape?: "circle"
   diameter?: Distance
   radius?: Distance
 }
-export const holeProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
+export interface PillHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "pill"
+  width: Distance
+  height: Distance
+}
+export type HoleProps = CircleHoleProps | PillHoleProps
+const circleHoleProps = pcbLayoutProps
   .extend({
     name: z.string().optional(),
+    shape: z.literal("circle").optional(),
     diameter: distance.optional(),
     radius: distance.optional(),
   })
+  .transform((d) => ({
+    ...d,
+    diameter: d.diameter ?? 2 * d.radius!,
+    radius: d.radius ?? d.diameter! / 2,
+  }))
+const pillHoleProps = pcbLayoutProps.extend({
+  name: z.string().optional(),
+  shape: z.literal("pill"),
+  width: distance,
+  height: distance,
+})
+export const holeProps = z.union([circleHoleProps, pillHoleProps])
 ```
 
 ### inductor

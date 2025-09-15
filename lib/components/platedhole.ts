@@ -15,8 +15,7 @@ export interface CirclePlatedHoleProps
   portHints?: PortHints
 }
 
-export interface OvalPlatedHoleProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "oval"
@@ -104,7 +103,7 @@ export const platedHoleProps = z
       outerDiameter: distance,
       portHints: portHints.optional(),
     }),
-    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("oval"),

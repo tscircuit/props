@@ -544,6 +544,11 @@ export interface FootprintLibraryResult {
 }
 
 
+export interface FootprintFileParserEntry {
+  loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
+}
+
+
 export interface FootprintProps {
   /**
    * The layer that the footprint is designed for. If you set this to "top"
@@ -1006,6 +1011,8 @@ export interface PlatformConfig {
         any[] | ((path: string) => Promise<FootprintLibraryResult>)
       >
   >
+
+  footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 }
 
 

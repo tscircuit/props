@@ -14,6 +14,12 @@ import {
   type ManualEditsFile,
   type ManualEditsFileInput,
 } from "lib/manual-edits"
+import { connectionTarget } from "lib/common/connectionsProp"
+import {
+  schematicPinArrangement,
+  type SchematicPinArrangement,
+} from "lib/common/schematicPinDefinitions"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 
 export const layoutConfig = z.object({
   layoutMode: z
@@ -153,6 +159,21 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
    * Title to display above this group in the schematic view
    */
   schTitle?: string
+
+  /**
+   * If true, render this group as a single schematic box
+   */
+  showAsSchematicBox?: boolean
+
+  /**
+   * Mapping of external pin names to internal connection targets
+   */
+  connections?: Connections
+
+  /**
+   * Arrangement for pins when rendered as a schematic box
+   */
+  schPinArrangement?: SchematicPinArrangement
 
   pcbWidth?: Distance
   pcbHeight?: Distance
@@ -433,6 +454,9 @@ export const baseGroupProps = commonLayoutProps.extend({
   children: z.any().optional(),
   schTitle: z.string().optional(),
   key: z.any().optional(),
+  showAsSchematicBox: z.boolean().optional(),
+  connections: z.record(z.string(), connectionTarget.optional()).optional(),
+  schPinArrangement: schematicPinArrangement.optional(),
 
   ...layoutConfig.shape,
   grid: layoutConfig.shape.grid.describe("@deprecated use pcbGrid"),

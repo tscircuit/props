@@ -37,7 +37,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<footprint />`         | [`FootprintProps`](#footprintprops-footprint)                         |
 | `<fuse />`              | [`FuseProps`](#fuseprops-fuse)                                        |
 | `<group />`             | [`BaseGroupProps`](#basegroupprops-group)                             |
-| `<hole />`              | [`HoleProps`](#holeprops-hole)                                        |
+| `<hole />`              | [`CircleHoleProps`](#circleholeprops-hole)                            |
 | `<inductor />`          | [`InductorProps`](#inductorprops-inductor)                            |
 | `<jumper />`            | [`JumperProps`](#jumperprops-jumper)                                  |
 | `<mosfet />`            | [`MosfetProps`](#mosfetprops-mosfet)                                  |
@@ -461,6 +461,21 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
    */
   schTitle?: string;
 
+  /**
+   * If true, render this group as a single schematic box
+   */
+  showAsSchematicBox?: boolean;
+
+  /**
+   * Mapping of external pin names to internal connection targets
+   */
+  connections?: Connections;
+
+  /**
+   * Arrangement for pins when rendered as a schematic box
+   */
+  schPinArrangement?: SchematicPinArrangement;
+
   pcbWidth?: Distance;
   pcbHeight?: Distance;
   schWidth?: Distance;
@@ -547,11 +562,12 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/group.ts)
 
-### HoleProps `<hole />`
+### CircleHoleProps `<hole />`
 
 ```ts
-export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface CircleHoleProps extends PcbLayoutProps {
   name?: string;
+  shape?: "circle";
   diameter?: Distance;
   radius?: Distance;
 }
@@ -879,6 +895,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "rect";
   width: Distance;
   height: Distance;
+  rectBorderRadius?: Distance;
   portHints?: PortHints;
   coveredWithSolderMask?: boolean;
 }

@@ -323,6 +323,14 @@ export interface CirclePlatedHoleProps
 }
 
 
+export interface CircleHoleProps extends PcbLayoutProps {
+  name?: string
+  shape?: "circle"
+  diameter?: Distance
+  radius?: Distance
+}
+
+
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
   shape: "circle"
@@ -577,11 +585,7 @@ export interface FuseProps<PinLabel extends string = string>
 }
 
 
-export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  name?: string
-  diameter?: Distance
-  radius?: Distance
-}
+export type HoleProps = CircleHoleProps | PillHoleProps
 
 
 export interface InductorProps<PinLabel extends string = string>
@@ -794,6 +798,14 @@ export interface PcbRouteCache {
 }
 
 
+export interface PillHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "pill"
+  width: Distance
+  height: Distance
+}
+
+
 export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   rectPad?: boolean
@@ -846,6 +858,7 @@ export interface PinAttributeMap {
   providesVoltage?: string | number
   requiresVoltage?: string | number
   doNotConnect?: boolean
+  includeInBoardPinout?: boolean
 }
 
 

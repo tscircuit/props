@@ -165,7 +165,8 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   /** Number of layers for the PCB */
   layers?: 2 | 4;
   borderRadius?: Distance;
-  boardOrigin?: z.infer<typeof ninePointAnchor>;
+  boardAnchorPosition?: Point;
+  boardAnchorAlignment?: z.infer<typeof ninePointAnchor>;
 }
 ```
 

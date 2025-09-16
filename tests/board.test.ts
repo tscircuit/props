@@ -27,3 +27,9 @@ test("should parse borderRadius prop", () => {
   const parsed = boardProps.parse(raw)
   expect(parsed.borderRadius).toBe(2)
 })
+
+test("should parse boardOrigin prop", () => {
+  const raw: BoardProps = { name: "board", boardOrigin: "bottom_right" }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.boardOrigin).toBe("bottom_right")
+})

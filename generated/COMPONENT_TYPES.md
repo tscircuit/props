@@ -1967,6 +1967,37 @@ export interface SchematicCellProps {
 }
 ```
 
+### schematic-arc
+
+```typescript
+export const schematicArcProps = z.object({
+  center: point,
+  radius: distance,
+  startAngleDegrees: rotation,
+  endAngleDegrees: rotation,
+  direction: z.enum(["clockwise", "counterclockwise"]).default(
+    "counterclockwise",
+  ),
+  strokeWidth: distance.optional(),
+  color: z.string().optional().default("#000000"),
+  isDashed: z.boolean().optional().default(false),
+})
+```
+
+### schematic-circle
+
+```typescript
+export const schematicCircleProps = z.object({
+  center: point,
+  radius: distance,
+  strokeWidth: distance.optional(),
+  color: z.string().optional().default("#000000"),
+  isFilled: z.boolean().optional().default(false),
+  fillColor: z.string().optional(),
+  isDashed: z.boolean().optional().default(false),
+})
+```
+
 ### schematic-line
 
 ```typescript
@@ -1975,6 +2006,25 @@ export const schematicLineProps = z.object({
   y1: distance,
   x2: distance,
   y2: distance,
+  strokeWidth: distance.optional(),
+  color: z.string().optional().default("#000000"),
+  isDashed: z.boolean().optional().default(false),
+})
+```
+
+### schematic-rect
+
+```typescript
+export const schematicRectProps = z.object({
+  center: point,
+  width: distance,
+  height: distance,
+  rotation: rotation.default(0),
+  strokeWidth: distance.optional(),
+  color: z.string().optional().default("#000000"),
+  isFilled: z.boolean().optional().default(false),
+  fillColor: z.string().optional(),
+  isDashed: z.boolean().optional().default(false),
 })
 ```
 

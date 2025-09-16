@@ -28,8 +28,20 @@ test("should parse borderRadius prop", () => {
   expect(parsed.borderRadius).toBe(2)
 })
 
-test("should parse boardOrigin prop", () => {
-  const raw: BoardProps = { name: "board", boardOrigin: "bottom_right" }
+test("should parse boardAnchorPosition prop", () => {
+  const raw: BoardProps = {
+    name: "board",
+    boardAnchorPosition: { x: 1, y: 2 },
+  }
   const parsed = boardProps.parse(raw)
-  expect(parsed.boardOrigin).toBe("bottom_right")
+  expect(parsed.boardAnchorPosition).toEqual({ x: 1, y: 2 })
+})
+
+test("should parse boardAnchorAlignment prop", () => {
+  const raw: BoardProps = {
+    name: "board",
+    boardAnchorAlignment: "bottom_right",
+  }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.boardAnchorAlignment).toBe("bottom_right")
 })

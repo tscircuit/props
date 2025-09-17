@@ -159,6 +159,8 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   /** Number of layers for the PCB */
   layers?: 2 | 4
   borderRadius?: Distance
+  boardAnchorPosition?: Point
+  boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
 }
 
 
@@ -320,6 +322,14 @@ export interface CirclePlatedHoleProps
   holeDiameter: number | string
   outerDiameter: number | string
   portHints?: PortHints
+}
+
+
+export interface CircleHoleProps extends PcbLayoutProps {
+  name?: string
+  shape?: "circle"
+  diameter?: Distance
+  radius?: Distance
 }
 
 
@@ -536,6 +546,11 @@ export interface FootprintLibraryResult {
 }
 
 
+export interface FootprintFileParserEntry {
+  loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
+}
+
+
 export interface FootprintProps {
   /**
    * The layer that the footprint is designed for. If you set this to "top"
@@ -577,11 +592,7 @@ export interface FuseProps<PinLabel extends string = string>
 }
 
 
-export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
-  name?: string
-  diameter?: Distance
-  radius?: Distance
-}
+export type HoleProps = CircleHoleProps | PillHoleProps
 
 
 export interface InductorProps<PinLabel extends string = string>
@@ -794,6 +805,14 @@ export interface PcbRouteCache {
 }
 
 
+export interface PillHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "pill"
+  width: Distance
+  height: Distance
+}
+
+
 export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   rectPad?: boolean
@@ -994,6 +1013,8 @@ export interface PlatformConfig {
         any[] | ((path: string) => Promise<FootprintLibraryResult>)
       >
   >
+
+  footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 }
 
 

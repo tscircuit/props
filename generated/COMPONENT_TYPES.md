@@ -422,12 +422,16 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   material?: "fr4" | "fr1"
   layers?: 2 | 4
   borderRadius?: Distance
+  boardAnchorPosition?: Point
+  boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
 }
 /** Number of layers for the PCB */
 export const boardProps = subcircuitGroupProps.extend({
   material: z.enum(["fr4", "fr1"]).default("fr4"),
   layers: z.union([z.literal(2), z.literal(4)]).default(2),
   borderRadius: distance.optional(),
+  boardAnchorPosition: point.optional(),
+  boardAnchorAlignment: ninePointAnchor.optional(),
 })
 ```
 
@@ -1391,18 +1395,38 @@ export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
 ### hole
 
 ```typescript
-export interface HoleProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface CircleHoleProps extends PcbLayoutProps {
   name?: string
+  shape?: "circle"
   diameter?: Distance
   radius?: Distance
 }
-export const holeProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
+export interface PillHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "pill"
+  width: Distance
+  height: Distance
+}
+export type HoleProps = CircleHoleProps | PillHoleProps
+const circleHoleProps = pcbLayoutProps
   .extend({
     name: z.string().optional(),
+    shape: z.literal("circle").optional(),
     diameter: distance.optional(),
     radius: distance.optional(),
   })
+  .transform((d) => ({
+    ...d,
+    diameter: d.diameter ?? 2 * d.radius!,
+    radius: d.radius ?? d.diameter! / 2,
+  }))
+const pillHoleProps = pcbLayoutProps.extend({
+  name: z.string().optional(),
+  shape: z.literal("pill"),
+  width: distance,
+  height: distance,
+})
+export const holeProps = z.union([circleHoleProps, pillHoleProps])
 ```
 
 ### inductor
@@ -1945,6 +1969,37 @@ export interface SchematicCellProps {
 }
 ```
 
+### schematic-arc
+
+```typescript
+export const schematicArcProps = z.object({
+  center: point,
+  radius: distance,
+  startAngleDegrees: rotation,
+  endAngleDegrees: rotation,
+  direction: z.enum(["clockwise", "counterclockwise"]).default(
+    "counterclockwise",
+  ),
+  strokeWidth: distance.optional(),
+  color: z.string().optional().default("#000000"),
+  isDashed: z.boolean().optional().default(false),
+})
+```
+
+### schematic-circle
+
+```typescript
+export const schematicCircleProps = z.object({
+  center: point,
+  radius: distance,
+  strokeWidth: distance.optional(),
+  color: z.string().optional().default("#000000"),
+  isFilled: z.boolean().optional().default(false),
+  fillColor: z.string().optional(),
+  isDashed: z.boolean().optional().default(false),
+})
+```
+
 ### schematic-line
 
 ```typescript
@@ -1953,6 +2008,25 @@ export const schematicLineProps = z.object({
   y1: distance,
   x2: distance,
   y2: distance,
+  strokeWidth: distance.optional(),
+  color: z.string().optional().default("#000000"),
+  isDashed: z.boolean().optional().default(false),
+})
+```
+
+### schematic-rect
+
+```typescript
+export const schematicRectProps = z.object({
+  center: point,
+  width: distance,
+  height: distance,
+  rotation: rotation.default(0),
+  strokeWidth: distance.optional(),
+  color: z.string().optional().default("#000000"),
+  isFilled: z.boolean().optional().default(false),
+  fillColor: z.string().optional(),
+  isDashed: z.boolean().optional().default(false),
 })
 ```
 

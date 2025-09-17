@@ -38,7 +38,10 @@ export const symbolProps = z.object({
    * Generally, you shouldn't set this except where it can help prevent confusion
    * because you have a complex symbol. Default is "right" and this is most intuitive.
    */
-  originalFacingDirection: z.enum(["up", "down", "left", "right"]).default("right").optional(),
+  originalFacingDirection: z
+    .enum(["up", "down", "left", "right"])
+    .default("right")
+    .optional(),
   width: z.number().optional(),
   height: z.number().optional(),
   /** Children primitives that make up this symbol (line, rect, circle, arc, text). */

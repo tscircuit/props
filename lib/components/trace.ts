@@ -19,6 +19,9 @@ const baseTraceProps = z.object({
   schDisplayLabel: z.string().optional(),
   schStroke: z.string().optional(),
   maxLength: distance.optional(),
+  color: z.string().optional(),
+  schematicColor: z.string().optional(),
+  pcbColor: z.string().optional(),
 })
 
 export const traceProps = z.union([

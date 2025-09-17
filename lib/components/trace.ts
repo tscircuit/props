@@ -20,6 +20,9 @@ const baseTraceProps = z.object({
   schStroke: z.string().optional(),
   ratsNestColor: z.string().optional(),
   maxLength: distance.optional(),
+  color: z.string().optional(),
+  schematicColor: z.string().optional(),
+  pcbColor: z.string().optional(),
 })
 
 export const traceProps = z.union([

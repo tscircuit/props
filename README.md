@@ -1071,15 +1071,6 @@ export interface VoltageSourceProps<PinLabel extends string = string>
 ### PlatformConfig
 
 ```ts
-export interface FootprintLibraryResult {
-  footprintCircuitJson: any[];
-  cadModel?: CadModelProp;
-}
-
-export interface FootprintFileParserEntry {
-  loadFromUrl: (url: string) => Promise<FootprintLibraryResult>;
-}
-
 export interface PlatformConfig {
   partsEngine?: PartsEngine;
 

@@ -40,6 +40,8 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   outerHeight: number | string
   holeWidth: number | string
   holeHeight: number | string
+  holeOffsetX?: number | string
+  holeOffsetY?: number | string
 
   /** @deprecated use holeWidth */
   innerWidth?: number | string
@@ -129,6 +131,8 @@ export const platedHoleProps = z
       innerWidth: distance.optional().describe("DEPRECATED use holeWidth"),
       innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
       portHints: portHints.optional(),
+      holeOffsetX: distance.optional(),
+      holeOffsetY: distance.optional(),
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),

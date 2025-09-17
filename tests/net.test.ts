@@ -7,6 +7,7 @@ test("should parse NetProps with connectsTo", () => {
   const raw: NetProps = {
     name: "N1",
     connectsTo: ["U1.1", "U2.2"],
+    ratsNestColor: "blue",
   }
 
   expectTypeOf(raw).toMatchTypeOf<z.input<typeof netProps>>()
@@ -14,4 +15,5 @@ test("should parse NetProps with connectsTo", () => {
   const parsed = netProps.parse(raw)
   expect(parsed.name).toBe("N1")
   expect(parsed.connectsTo).toEqual(["U1.1", "U2.2"])
+  expect(parsed.ratsNestColor).toBe("blue")
 })

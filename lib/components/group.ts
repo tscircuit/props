@@ -391,44 +391,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   outlineOffsetY?: number | string
   showAsSchematicBox?: boolean
   connections?: Record<string, string>
-  schPinArrangement?: {
-    leftSide?: {
-      direction?:
-        | "top-to-bottom"
-        | "bottom-to-top"
-        | "left-to-right"
-        | "right-to-left"
-      pins?: string[]
-      gapAfterPins?: string[]
-    }
-    rightSide?: {
-      direction?:
-        | "top-to-bottom"
-        | "bottom-to-top"
-        | "left-to-right"
-        | "right-to-left"
-      pins?: string[]
-      gapAfterPins?: string[]
-    }
-    topSide?: {
-      direction?:
-        | "left-to-right"
-        | "right-to-left"
-        | "top-to-bottom"
-        | "bottom-to-top"
-      pins?: string[]
-      gapAfterPins?: string[]
-    }
-    bottomSide?: {
-      direction?:
-        | "left-to-right"
-        | "right-to-left"
-        | "top-to-bottom"
-        | "bottom-to-top"
-      pins?: string[]
-      gapAfterPins?: string[]
-    }
-  }
+  schPinArrangement?: SchematicPinArrangement
+
   schBox?: {
     title?: string
     shape?: "rect" | "rounded"
@@ -566,66 +530,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
 
   connections: z.record(z.string(), z.string()).optional(),
 
-  schPinArrangement: z
-    .object({
-      leftSide: z
-        .object({
-          direction: z
-            .enum([
-              "top-to-bottom",
-              "bottom-to-top",
-              "left-to-right",
-              "right-to-left",
-            ])
-            .optional(),
-          pins: z.array(z.string()).default([]),
-          gapAfterPins: z.array(z.string()).optional(),
-        })
-        .optional(),
-      rightSide: z
-        .object({
-          direction: z
-            .enum([
-              "top-to-bottom",
-              "bottom-to-top",
-              "left-to-right",
-              "right-to-left",
-            ])
-            .optional(),
-          pins: z.array(z.string()).default([]),
-          gapAfterPins: z.array(z.string()).optional(),
-        })
-        .optional(),
-      topSide: z
-        .object({
-          direction: z
-            .enum([
-              "left-to-right",
-              "right-to-left",
-              "top-to-bottom",
-              "bottom-to-top",
-            ])
-            .optional(),
-          pins: z.array(z.string()).default([]),
-          gapAfterPins: z.array(z.string()).optional(),
-        })
-        .optional(),
-      bottomSide: z
-        .object({
-          direction: z
-            .enum([
-              "left-to-right",
-              "right-to-left",
-              "top-to-bottom",
-              "bottom-to-top",
-            ])
-            .optional(),
-          pins: z.array(z.string()).default([]),
-          gapAfterPins: z.array(z.string()).optional(),
-        })
-        .optional(),
-    })
-    .optional(),
+  schPinArrangement: schematicPinArrangement.optional(),
 
   schBox: z
     .object({

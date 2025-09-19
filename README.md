@@ -165,6 +165,8 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   /** Number of layers for the PCB */
   layers?: 2 | 4;
   borderRadius?: Distance;
+  boardAnchorPosition?: Point;
+  boardAnchorAlignment?: z.infer<typeof ninePointAnchor>;
 }
 ```
 
@@ -1099,6 +1101,8 @@ export interface PlatformConfig {
         any[] | ((path: string) => Promise<FootprintLibraryResult>)
       >
   >;
+
+  footprintFileParserMap?: Record<string, FootprintFileParserEntry>;
 }
 ```
 

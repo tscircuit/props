@@ -151,6 +151,7 @@ test("[typetest] pinAttributes type matches pin labels", () => {
           requiresPower: true,
           doNotConnect: true,
           includeInBoardPinout: true,
+          ratsNestColor: "#00ff00",
         },
         // @ts-expect-error
         INVALID: { foo: true },

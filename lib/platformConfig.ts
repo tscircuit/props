@@ -13,6 +13,10 @@ export interface FootprintLibraryResult {
   cadModel?: CadModelProp
 }
 
+export interface FootprintFileParserEntry {
+  loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
+}
+
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
@@ -43,6 +47,8 @@ export interface PlatformConfig {
         any[] | ((path: string) => Promise<FootprintLibraryResult>)
       >
   >
+
+  footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 }
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
@@ -55,6 +61,16 @@ const pathToCircuitJsonFn = z
   .args(z.string())
   .returns(z.promise(footprintLibraryResult))
   .describe("A function that takes a path and returns Circuit JSON")
+
+const footprintFileParserEntry = z.object({
+  loadFromUrl: z
+    .function()
+    .args(z.string())
+    .returns(z.promise(footprintLibraryResult))
+    .describe(
+      "A function that takes a footprint file URL and returns Circuit JSON",
+    ),
+})
 
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
@@ -81,6 +97,9 @@ export const platformConfig = z.object({
         ),
       ]),
     )
+    .optional(),
+  footprintFileParserMap: z
+    .record(z.string(), footprintFileParserEntry)
     .optional(),
 }) as z.ZodType<PlatformConfig>
 

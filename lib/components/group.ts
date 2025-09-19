@@ -389,6 +389,18 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   outline?: Point[]
   outlineOffsetX?: number | string
   outlineOffsetY?: number | string
+  showAsSchematicBox?: boolean
+  connections?: Record<string, string>
+  schPinArrangement?: SchematicPinArrangement
+
+  schBox?: {
+    title?: string
+    shape?: "rect" | "rounded"
+    pinLength?: number
+    width?: number
+    height?: number
+    refdes?: string
+  }
 }
 
 export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
@@ -514,6 +526,22 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   outline: z.array(point).optional(),
   outlineOffsetX: distance.optional(),
   outlineOffsetY: distance.optional(),
+  showAsSchematicBox: z.boolean().optional(),
+
+  connections: z.record(z.string(), z.string()).optional(),
+
+  schPinArrangement: schematicPinArrangement.optional(),
+
+  schBox: z
+    .object({
+      title: z.string().optional(),
+      shape: z.enum(["rect", "rounded"]).optional(),
+      pinLength: z.number().optional(),
+      width: z.number().optional(),
+      height: z.number().optional(),
+      refdes: z.string().optional(),
+    })
+    .optional(),
 })
 
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({

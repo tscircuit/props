@@ -478,6 +478,31 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
    */
   schPinArrangement?: SchematicPinArrangement;
 
+  /**
+   * Spacing between pins when rendered as a schematic box
+   */
+  schPinSpacing?: Distance;
+
+  /**
+   * Styles to apply to individual pins in the schematic box representation
+   */
+  schPinStyle?: SchematicPinStyle;
+
+  /**
+   * Override labels for schematic ports when rendered as a box
+   */
+  schPortLabels?: Record<string, string>;
+
+  /**
+   * Override the symbol name used for the schematic box representation
+   */
+  schSymbolName?: string;
+
+  /**
+   * Override the display value shown on the schematic box
+   */
+  schSymbolDisplayValue?: string;
+
   pcbWidth?: Distance;
   pcbHeight?: Distance;
   schWidth?: Distance;

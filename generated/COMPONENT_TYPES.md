@@ -1100,6 +1100,22 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   schTitle?: string
 
+  showAsSchematicBox?: boolean
+
+  connections?: Connections
+
+  schPinArrangement?: SchematicPinArrangement
+
+  schPinSpacing?: Distance
+
+  schPinStyle?: SchematicPinStyle
+
+  schPortLabels?: Record<string, string>
+
+  schSymbolName?: string
+
+  schSymbolDisplayValue?: string
+
   pcbWidth?: Distance
   pcbHeight?: Distance
   schWidth?: Distance
@@ -1284,6 +1300,14 @@ export const baseGroupProps = commonLayoutProps.extend({
   children: z.any().optional(),
   schTitle: z.string().optional(),
   key: z.any().optional(),
+  showAsSchematicBox: z.boolean().optional(),
+  connections: z.record(z.string(), connectionTarget.optional()).optional(),
+  schPinArrangement: schematicPinArrangement.optional(),
+  schPinSpacing: length.optional(),
+  schPinStyle: schematicPinStyle.optional(),
+  schPortLabels: z.record(z.string(), z.string()).optional(),
+  schSymbolName: z.string().optional(),
+  schSymbolDisplayValue: z.string().optional(),
 
   ...layoutConfig.shape,
   grid: layoutConfig.shape.grid.describe("@deprecated use pcbGrid"),

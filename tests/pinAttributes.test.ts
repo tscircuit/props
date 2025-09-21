@@ -8,7 +8,7 @@ test("pinAttributes allows doNotConnect", () => {
       pin1: {
         doNotConnect: true,
         includeInBoardPinout: false,
-        ratsNestColor: "#ff0000",
+        highlightColor: "#ff0000",
       },
     },
   }
@@ -16,5 +16,5 @@ test("pinAttributes allows doNotConnect", () => {
   const parsed = chipProps.parse(rawProps)
   expect(parsed.pinAttributes?.pin1?.doNotConnect).toBe(true)
   expect(parsed.pinAttributes?.pin1?.includeInBoardPinout).toBe(false)
-  expect(parsed.pinAttributes?.pin1?.ratsNestColor).toBe("#ff0000")
+  expect(parsed.pinAttributes?.pin1?.highlightColor).toBe("#ff0000")
 })

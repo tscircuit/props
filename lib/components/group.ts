@@ -19,6 +19,10 @@ import {
   schematicPinArrangement,
   type SchematicPinArrangement,
 } from "lib/common/schematicPinDefinitions"
+import {
+  schematicPinStyle,
+  type SchematicPinStyle,
+} from "lib/common/schematicPinStyle"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 
 export const layoutConfig = z.object({
@@ -174,6 +178,16 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
    * Arrangement for pins when rendered as a schematic box
    */
   schPinArrangement?: SchematicPinArrangement
+
+  /**
+   * Spacing between pins when rendered as a schematic box
+   */
+  schPinSpacing?: Distance
+
+  /**
+   * Styles to apply to individual pins in the schematic box representation
+   */
+  schPinStyle?: SchematicPinStyle
 
   pcbWidth?: Distance
   pcbHeight?: Distance
@@ -409,6 +423,8 @@ export const baseGroupProps = commonLayoutProps.extend({
   showAsSchematicBox: z.boolean().optional(),
   connections: z.record(z.string(), connectionTarget.optional()).optional(),
   schPinArrangement: schematicPinArrangement.optional(),
+  schPinSpacing: length.optional(),
+  schPinStyle: schematicPinStyle.optional(),
 
   ...layoutConfig.shape,
   grid: layoutConfig.shape.grid.describe("@deprecated use pcbGrid"),

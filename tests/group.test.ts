@@ -201,6 +201,20 @@ test("should parse schematic layout props", () => {
   expect(parsed.schMatchAdapt).toBe(true)
 })
 
+test("should parse schematic box customizations", () => {
+  const raw: BaseGroupProps = {
+    name: "g",
+    schPinSpacing: "2mm",
+    schPinStyle: {
+      D1: { marginLeft: "0.5mm" },
+    },
+  }
+
+  const parsed = baseGroupProps.parse(raw)
+  expect(parsed.schPinSpacing).toBe(2)
+  expect(parsed.schPinStyle?.D1?.marginLeft).toBe(0.5)
+})
+
 test("should parse schMaxTraceDistance", () => {
   const raw: SubcircuitGroupProps = {
     name: "g",

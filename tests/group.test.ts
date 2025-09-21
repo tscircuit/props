@@ -208,13 +208,11 @@ test("should parse schematic box customizations", () => {
     schPinStyle: {
       D1: { marginLeft: "0.5mm" },
     },
-    schPortLabels: { D1: "DATA 1" },
   }
 
   const parsed = baseGroupProps.parse(raw)
   expect(parsed.schPinSpacing).toBe(2)
   expect(parsed.schPinStyle?.D1?.marginLeft).toBe(0.5)
-  expect(parsed.schPortLabels?.D1).toBe("DATA 1")
 })
 
 test("should parse schMaxTraceDistance", () => {

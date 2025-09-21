@@ -189,11 +189,6 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
    */
   schPinStyle?: SchematicPinStyle
 
-  /**
-   * Override labels for schematic ports when rendered as a box
-   */
-  schPortLabels?: Record<string, string>
-
   pcbWidth?: Distance
   pcbHeight?: Distance
   schWidth?: Distance
@@ -430,7 +425,6 @@ export const baseGroupProps = commonLayoutProps.extend({
   schPinArrangement: schematicPinArrangement.optional(),
   schPinSpacing: length.optional(),
   schPinStyle: schematicPinStyle.optional(),
-  schPortLabels: z.record(z.string(), z.string()).optional(),
 
   ...layoutConfig.shape,
   grid: layoutConfig.shape.grid.describe("@deprecated use pcbGrid"),

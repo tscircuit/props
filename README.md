@@ -493,16 +493,6 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
    */
   schPortLabels?: Record<string, string>;
 
-  /**
-   * Override the symbol name used for the schematic box representation
-   */
-  schSymbolName?: string;
-
-  /**
-   * Override the display value shown on the schematic box
-   */
-  schSymbolDisplayValue?: string;
-
   pcbWidth?: Distance;
   pcbHeight?: Distance;
   schWidth?: Distance;

@@ -194,16 +194,6 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
    */
   schPortLabels?: Record<string, string>
 
-  /**
-   * Override the symbol name used for the schematic box representation
-   */
-  schSymbolName?: string
-
-  /**
-   * Override the display value shown on the schematic box
-   */
-  schSymbolDisplayValue?: string
-
   pcbWidth?: Distance
   pcbHeight?: Distance
   schWidth?: Distance
@@ -441,8 +431,6 @@ export const baseGroupProps = commonLayoutProps.extend({
   schPinSpacing: length.optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPortLabels: z.record(z.string(), z.string()).optional(),
-  schSymbolName: z.string().optional(),
-  schSymbolDisplayValue: z.string().optional(),
 
   ...layoutConfig.shape,
   grid: layoutConfig.shape.grid.describe("@deprecated use pcbGrid"),

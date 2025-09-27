@@ -7,5 +7,6 @@ export const portProps = commonLayoutProps.extend({
   pinNumber: z.number().optional(),
   aliases: z.array(z.string()).optional(),
   direction: direction,
+  connectsTo: z.string().or(z.array(z.string())).optional(),
 })
 export type PortProps = z.input<typeof portProps>

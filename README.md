@@ -1,7 +1,9 @@
 # @tscircuit/props
 
-This repo contains all the prop definitions and zod parsers for tscircuit builtin components, e.g. `<resistor />`, `<diode />`,
-`<capacitor />` etc.
+This repo contains all the prop definitions and zod parsers for tscircuit builtin TSX components, e.g. `<resistor />`, `<diode />`,
+`<capacitor />` etc. All tscircuit features typically start with a new props definition.
+
+[Contributor Getting Started Video](https://share.cleanshot.com/jLkhVjDj)
 
 This repo is the source-of-truth for defining the React props, API changes begin here. The focus of the API is on ergonomics for
 the user (unlike [circuit-json](https://github.com/tscircuit/circuit-json) which focuses on ergonomics for a renderer)

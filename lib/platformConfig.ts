@@ -17,6 +17,17 @@ export interface FootprintFileParserEntry {
   loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
 }
 
+export type CircuitJson = any[]
+
+export interface SpiceEngineSimulationResult {
+  engineVersionString?: string
+  simulationResultCircuitJson: CircuitJson
+}
+
+export interface SpiceEngine {
+  simulate: (spiceString: string) => Promise<SpiceEngineSimulationResult>
+}
+
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
@@ -38,6 +49,8 @@ export interface PlatformConfig {
   pcbDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
+
+  spiceEngine?: SpiceEngine
 
   footprintLibraryMap?: Record<
     string,
@@ -72,6 +85,21 @@ const footprintFileParserEntry = z.object({
     ),
 })
 
+const spiceEngineSimulationResult = z.object({
+  engineVersionString: z.string().optional(),
+  simulationResultCircuitJson: unvalidatedCircuitJson,
+})
+
+const spiceEngineZod = z.object({
+  simulate: z
+    .function()
+    .args(z.string())
+    .returns(z.promise(spiceEngineSimulationResult))
+    .describe(
+      "A function that takes a SPICE string and returns a simulation result",
+    ),
+})
+
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
   autorouter: autorouterProp.optional(),
@@ -86,6 +114,7 @@ export const platformConfig = z.object({
   pcbDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),
   partsEngineDisabled: z.boolean().optional(),
+  spiceEngine: spiceEngineZod.optional(),
   footprintLibraryMap: z
     .record(
       z.string(),

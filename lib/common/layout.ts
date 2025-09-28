@@ -179,6 +179,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  /**
+   * Does this component take up all the space within its bounds on a layer. This is generally true
+   * except for when separated pin headers are being represented by a single component (in which case,
+   * chips can be placed between the pin headers) or for tall modules where chips fit underneath.
+   */
+  obstructsWithinBounds?: boolean
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -190,6 +196,12 @@ export const commonComponentProps = commonLayoutProps
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    obstructsWithinBounds: z
+      .boolean()
+      .optional()
+      .describe(
+        "Does this component take up all the space within its bounds on a layer. This is generally true except for when separated pin headers are being represented by a single component (in which case, chips can be placed between the pin headers) or for tall modules where chips fit underneath",
+      ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
   })
 

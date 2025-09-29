@@ -662,6 +662,7 @@ export interface MosfetProps<PinLabel extends string = string>
 export interface NetProps {
   name: string;
   connectsTo?: string | string[];
+  highlightColor?: string;
 }
 ```
 
@@ -1104,6 +1105,8 @@ export interface PlatformConfig {
   pcbDisabled?: boolean;
   schematicDisabled?: boolean;
   partsEngineDisabled?: boolean;
+
+  spiceEngine?: SpiceEngine;
 
   footprintLibraryMap?: Record<
     string,

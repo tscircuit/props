@@ -50,7 +50,7 @@ export interface PlatformConfig {
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
 
-  spiceEngine?: SpiceEngine
+  spiceEngineMap?: Record<string, SpiceEngine>
 
   footprintLibraryMap?: Record<
     string,
@@ -114,7 +114,7 @@ export const platformConfig = z.object({
   pcbDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),
   partsEngineDisabled: z.boolean().optional(),
-  spiceEngine: spiceEngineZod.optional(),
+  spiceEngineMap: z.record(z.string(), spiceEngineZod).optional(),
   footprintLibraryMap: z
     .record(
       z.string(),

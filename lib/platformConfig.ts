@@ -7,6 +7,7 @@ import {
 import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
+import { frequency, time } from "circuit-json"
 
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]
@@ -62,6 +63,12 @@ export interface PlatformConfig {
   >
 
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
+
+  simSwitchFrequency?: number | string
+  simCloseAt?: number | string
+  simOpenAt?: number | string
+  simStartClosed?: boolean
+  simStartOpen?: boolean
 }
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
@@ -130,6 +137,11 @@ export const platformConfig = z.object({
   footprintFileParserMap: z
     .record(z.string(), footprintFileParserEntry)
     .optional(),
+  simSwitchFrequency: frequency.optional(),
+  simCloseAt: time.optional(),
+  simOpenAt: time.optional(),
+  simStartClosed: z.boolean().optional(),
+  simStartOpen: z.boolean().optional(),
 }) as z.ZodType<PlatformConfig>
 
 expectTypesMatch<PlatformConfig, z.infer<typeof platformConfig>>(true)

@@ -45,3 +45,22 @@ test("should parse boardAnchorAlignment prop", () => {
   const parsed = boardProps.parse(raw)
   expect(parsed.boardAnchorAlignment).toBe("bottom_right")
 })
+
+test("should parse board color customization props", () => {
+  const raw: BoardProps = {
+    name: "board",
+    solderMaskColor: "green",
+    topSolderMaskColor: "matte_black",
+    bottomSolderMaskColor: "kicad:custom_solder_mask",
+    silkscreenColor: "white",
+    topSilkscreenColor: "kicad:silkscreen_special",
+    bottomSilkscreenColor: "ghost_white",
+  }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.solderMaskColor).toBe("green")
+  expect(parsed.topSolderMaskColor).toBe("matte_black")
+  expect(parsed.bottomSolderMaskColor).toBe("kicad:custom_solder_mask")
+  expect(parsed.silkscreenColor).toBe("white")
+  expect(parsed.topSilkscreenColor).toBe("kicad:silkscreen_special")
+  expect(parsed.bottomSilkscreenColor).toBe("ghost_white")
+})

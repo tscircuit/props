@@ -418,12 +418,30 @@ export const batteryProps = commonComponentProps.extend({
 ### board
 
 ```typescript
+import type { AutocompleteString } from "lib/common/autocomplete"
+export type BoardColorPreset =
+  | "not_specified"
+  | "green"
+  | "red"
+  | "blue"
+  | "purple"
+  | "black"
+  | "white"
+  | "yellow"
+export type BoardColor = AutocompleteString<BoardColorPreset>
+const boardColor = z.custom<BoardColor>((value) => typeof value === "string")
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   material?: "fr4" | "fr1"
   layers?: 2 | 4
   borderRadius?: Distance
   boardAnchorPosition?: Point
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  solderMaskColor?: BoardColor
+  topSolderMaskColor?: BoardColor
+  bottomSolderMaskColor?: BoardColor
+  silkscreenColor?: BoardColor
+  topSilkscreenColor?: BoardColor
+  bottomSilkscreenColor?: BoardColor
 }
 /** Number of layers for the PCB */
 export const boardProps = subcircuitGroupProps.extend({
@@ -432,6 +450,12 @@ export const boardProps = subcircuitGroupProps.extend({
   borderRadius: distance.optional(),
   boardAnchorPosition: point.optional(),
   boardAnchorAlignment: ninePointAnchor.optional(),
+  solderMaskColor: boardColor.optional(),
+  topSolderMaskColor: boardColor.optional(),
+  bottomSolderMaskColor: boardColor.optional(),
+  silkscreenColor: boardColor.optional(),
+  topSilkscreenColor: boardColor.optional(),
+  bottomSilkscreenColor: boardColor.optional(),
 })
 ```
 

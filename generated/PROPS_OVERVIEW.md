@@ -161,6 +161,18 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   borderRadius?: Distance
   boardAnchorPosition?: Point
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  /** Color applied to both top and bottom solder masks */
+  solderMaskColor?: BoardColor
+  /** Color of the top solder mask */
+  topSolderMaskColor?: BoardColor
+  /** Color of the bottom solder mask */
+  bottomSolderMaskColor?: BoardColor
+  /** Color applied to both top and bottom silkscreens */
+  silkscreenColor?: BoardColor
+  /** Color of the top silkscreen */
+  topSilkscreenColor?: BoardColor
+  /** Color of the bottom silkscreen */
+  bottomSilkscreenColor?: BoardColor
 }
 
 

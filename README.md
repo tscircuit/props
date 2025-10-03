@@ -1118,7 +1118,7 @@ export interface PlatformConfig {
   schematicDisabled?: boolean;
   partsEngineDisabled?: boolean;
 
-  spiceEngine?: SpiceEngine;
+  spiceEngineMap?: Record<string, SpiceEngine>;
 
   footprintLibraryMap?: Record<
     string,

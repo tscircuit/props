@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-09-14T18:16:33.787Z
+> Generated at 2025-10-03T23:04:08.599Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -18,6 +18,11 @@ const validatedProps = chipProps.parse(unknownProps)
 ## Available Props
 
 ```ts
+export interface AnalogSimulationProps {
+  simulationType?: "spice_transient_analysis"
+}
+
+
 export interface AutorouterConfig {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
@@ -53,6 +58,31 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
    * Title to display above this group in the schematic view
    */
   schTitle?: string
+
+  /**
+   * If true, render this group as a single schematic box
+   */
+  showAsSchematicBox?: boolean
+
+  /**
+   * Mapping of external pin names to internal connection targets
+   */
+  connections?: Connections
+
+  /**
+   * Arrangement for pins when rendered as a schematic box
+   */
+  schPinArrangement?: SchematicPinArrangement
+
+  /**
+   * Spacing between pins when rendered as a schematic box
+   */
+  schPinSpacing?: Distance
+
+  /**
+   * Styles to apply to individual pins in the schematic box representation
+   */
+  schPinStyle?: SchematicPinStyle
 
   pcbWidth?: Distance
   pcbHeight?: Distance
@@ -326,6 +356,14 @@ export interface CircleCutoutProps
 }
 
 
+export interface CircleHoleProps extends PcbLayoutProps {
+  name?: string
+  shape?: "circle"
+  diameter?: Distance
+  radius?: Distance
+}
+
+
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
@@ -337,19 +375,12 @@ export interface CirclePlatedHoleProps
 }
 
 
-export interface CircleHoleProps extends PcbLayoutProps {
-  name?: string
-  shape?: "circle"
-  diameter?: Distance
-  radius?: Distance
-}
-
-
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
   shape: "circle"
   radius: Distance
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -368,11 +399,12 @@ export interface CircularHoleWithRectPlatedProps
   holeDiameter: number | string
   rectPadWidth: number | string
   rectPadHeight: number | string
+  rectBorderRadius?: number | string
   holeShape?: "circle"
   padShape?: "rect"
   portHints?: PortHints
-  pcbHoleOffsetX?: number | string
-  pcbHoleOffsetY?: number | string
+  holeOffsetX?: number | string
+  holeOffsetY?: number | string
 }
 
 
@@ -386,6 +418,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  /**
+   * Does this component take up all the space within its bounds on a layer. This is generally true
+   * except for when separated pin headers are being represented by a single component (in which case,
+   * chips can be placed between the pin headers) or for tall modules where chips fit underneath.
+   */
+  obstructsWithinBounds?: boolean
 }
 
 
@@ -552,14 +590,14 @@ export interface EditTraceHintEvent extends BaseManualEditEvent {
 }
 
 
-export interface FootprintLibraryResult {
-  footprintCircuitJson: any[]
-  cadModel?: CadModelProp
+export interface FootprintFileParserEntry {
+  loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
 }
 
 
-export interface FootprintFileParserEntry {
-  loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
+export interface FootprintLibraryResult {
+  footprintCircuitJson: any[]
+  cadModel?: CadModelProp
 }
 
 
@@ -602,9 +640,6 @@ export interface FuseProps<PinLabel extends string = string>
    */
   connections?: Connections<PinLabel>
 }
-
-
-export type HoleProps = CircleHoleProps | PillHoleProps
 
 
 export interface InductorProps<PinLabel extends string = string>
@@ -762,6 +797,7 @@ export interface NetLabelProps {
 export interface NetProps {
   name: string
   connectsTo?: string | string[]
+  highlightColor?: string
 }
 
 
@@ -770,8 +806,7 @@ export interface NonSubcircuitGroupProps extends BaseGroupProps {
 }
 
 
-export interface OvalPlatedHoleProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "oval"
@@ -834,6 +869,8 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   outerHeight: number | string
   holeWidth: number | string
   holeHeight: number | string
+  holeOffsetX?: number | string
+  holeOffsetY?: number | string
 
   /** @deprecated use holeWidth */
   innerWidth?: number | string
@@ -851,6 +888,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   height: Distance
   radius: Distance
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -866,6 +904,8 @@ export interface PillWithRectPadPlatedHoleProps
   rectPadWidth: number | string
   rectPadHeight: number | string
   portHints?: PortHints
+  holeOffsetX?: number | string
+  holeOffsetY?: number | string
 }
 
 
@@ -878,6 +918,7 @@ export interface PinAttributeMap {
   requiresVoltage?: string | number
   doNotConnect?: boolean
   includeInBoardPinout?: boolean
+  highlightColor?: string
 }
 
 
@@ -1017,6 +1058,8 @@ export interface PlatformConfig {
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
 
+  spiceEngineMap?: Record<string, SpiceEngine>
+
   footprintLibraryMap?: Record<
     string,
     | ((path: string) => Promise<FootprintLibraryResult>)
@@ -1044,6 +1087,7 @@ export interface PolygonSmtPadProps
   shape: "polygon"
   points: Point[]
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -1067,7 +1111,9 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "rect"
   width: Distance
   height: Distance
+  rectBorderRadius?: Distance
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -1106,6 +1152,7 @@ export interface RotatedRectSmtPadProps
   height: Distance
   ccwRotation: number
   portHints?: PortHints
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -1171,6 +1218,17 @@ export interface SolderJumperProps extends JumperProps {
    * If true, all pins are connected with cuttable traces
    */
   bridged?: boolean
+}
+
+
+export interface SpiceEngine {
+  simulate: (spiceString: string) => Promise<SpiceEngineSimulationResult>
+}
+
+
+export interface SpiceEngineSimulationResult {
+  engineVersionString?: string
+  simulationResultCircuitJson: CircuitJson
 }
 
 
@@ -1246,6 +1304,7 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean
   dpst?: boolean
   dpdt?: boolean
+  connections?: Connections<string>
 }
 
 

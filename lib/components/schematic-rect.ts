@@ -2,7 +2,8 @@ import { distance, point, rotation } from "circuit-json"
 import { z } from "zod"
 
 export const schematicRectProps = z.object({
-  center: point,
+  schX: distance.optional(),
+  schY: distance.optional(),
   width: distance,
   height: distance,
   rotation: rotation.default(0),

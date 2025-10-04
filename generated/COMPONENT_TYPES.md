@@ -2550,6 +2550,17 @@ export const viaProps = commonLayoutProps.extend({
 })
 ```
 
+### voltageprobe
+
+```typescript
+export interface VoltageProbeProps extends CommonComponentProps {
+  connectsTo: string | string[]
+}
+export const voltageProbeProps = commonComponentProps.extend({
+  connectsTo: z.string().or(z.array(z.string())),
+})
+```
+
 ### voltagesource
 
 ```typescript

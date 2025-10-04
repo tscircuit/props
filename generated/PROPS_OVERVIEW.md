@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-10-04T18:42:43.137Z
+> Generated at 2025-10-04T20:26:07.139Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -1367,6 +1367,11 @@ export interface ViaProps extends CommonLayoutProps {
   holeDiameter: number | string
   outerDiameter: number | string
   connectsTo?: string | string[]
+}
+
+
+export interface VoltageProbeProps extends CommonComponentProps {
+  connectsTo: string | string[]
 }
 
 

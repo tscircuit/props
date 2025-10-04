@@ -1370,6 +1370,11 @@ export interface ViaProps extends CommonLayoutProps {
 }
 
 
+export interface VoltageProbeProps extends CommonComponentProps {
+  connectsTo: string | string[]
+}
+
+
 export interface VoltageSourceProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   voltage?: number | string

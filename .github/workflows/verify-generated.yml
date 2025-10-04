@@ -1,0 +1,36 @@
+name: Verify Generated Artifacts
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify-generated-content:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run generation scripts
+        run: |
+          bun scripts/generate-component-types.ts
+          bun scripts/generate-manual-edits-docs.ts
+          bun scripts/generate-readme-docs.ts
+          bun scripts/generate-props-overview.ts
+
+      - name: Ensure working tree is clean
+        run: |
+          if ! git diff --quiet; then
+            echo "Generated files are out of date. Please run the generation scripts and commit the results." >&2
+            git status --short
+            exit 1
+          fi

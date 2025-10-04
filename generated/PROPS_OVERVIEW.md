@@ -1,6 +1,6 @@
 # @tscircuit/props Overview
 
-> Generated at 2025-10-03T23:04:08.599Z
+> Generated at 2025-10-04T18:42:43.137Z
 > Latest version: https://github.com/tscircuit/props/blob/main/generated/PROPS_OVERVIEW.md
 
 This document provides an overview of all the prop types available in @tscircuit/props.
@@ -1070,6 +1070,12 @@ export interface PlatformConfig {
   >
 
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
+
+  simSwitchFrequency?: number | string
+  simCloseAt?: number | string
+  simOpenAt?: number | string
+  simStartClosed?: boolean
+  simStartOpen?: boolean
 }
 
 

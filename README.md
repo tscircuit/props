@@ -22,6 +22,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 
 | Component               | Props Interface                                                       |
 | ----------------------- | --------------------------------------------------------------------- |
+| `<analogsimulation />`  | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)    |
 | `<battery />`           | [`BatteryProps`](#batteryprops-battery)                               |
 | `<board />`             | [`BoardProps`](#boardprops-board)                                     |
 | `<breakout />`          | [`BreakoutProps`](#breakoutprops-breakout)                            |
@@ -144,6 +145,16 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/group.ts)
+
+### AnalogSimulationProps `<analogsimulation />`
+
+```ts
+export interface AnalogSimulationProps {
+  simulationType?: "spice_transient_analysis";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogsimulation.ts)
 
 ### BatteryProps `<battery />`
 
@@ -989,6 +1000,7 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean;
   dpst?: boolean;
   dpdt?: boolean;
+  connections?: Connections<string>;
 }
 ```
 

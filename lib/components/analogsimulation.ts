@@ -1,4 +1,4 @@
-import { time } from "../common/time"
+import { ms } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
@@ -12,8 +12,8 @@ export const analogSimulationProps = z.object({
   simulationType: z
     .literal("spice_transient_analysis")
     .default("spice_transient_analysis"),
-  duration: time.optional(),
-  timePerStep: time.optional(),
+  duration: ms.optional(),
+  timePerStep: ms.optional(),
 })
 
 expectTypesMatch<AnalogSimulationProps, z.input<typeof analogSimulationProps>>(

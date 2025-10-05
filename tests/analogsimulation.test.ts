@@ -24,6 +24,6 @@ test("analog simulation accepts time parameters", () => {
   expectTypeOf(raw).toMatchTypeOf<z.input<typeof analogSimulationProps>>()
 
   const parsed = analogSimulationProps.parse(raw)
-  expect(parsed.duration).toBe(0.001)
-  expect(parsed.timePerStep).toBe(0.000001)
+  expect(parsed.duration).toBe(1)
+  expect(parsed.timePerStep).toBe(0.001)
 })

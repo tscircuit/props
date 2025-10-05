@@ -12,7 +12,6 @@ export * from "./common/schematicPinDefinitions"
 export * from "./common/schematicPinStyle"
 export * from "./common/cadModel"
 export * from "./common/schematicPinLabel"
-export * from "./common/time"
 
 export * from "./components/board"
 export * from "./components/breakout"

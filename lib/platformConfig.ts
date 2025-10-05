@@ -7,7 +7,8 @@ import {
 import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
-import { frequency, time } from "circuit-json"
+import { frequency } from "circuit-json"
+import { time } from "./common/time"
 
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]

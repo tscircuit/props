@@ -22,6 +22,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 
 | Component               | Props Interface                                                       |
 | ----------------------- | --------------------------------------------------------------------- |
+| `<analogsimulation />`  | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)    |
 | `<battery />`           | [`BatteryProps`](#batteryprops-battery)                               |
 | `<board />`             | [`BoardProps`](#boardprops-board)                                     |
 | `<breakout />`          | [`BreakoutProps`](#breakoutprops-breakout)                            |
@@ -64,6 +65,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<testpoint />`         | [`TestpointProps`](#testpointprops-testpoint)                         |
 | `<transistor />`        | [`TransistorProps`](#transistorprops-transistor)                      |
 | `<via />`               | [`ViaProps`](#viaprops-via)                                           |
+| `<voltageprobe />`      | [`VoltageProbeProps`](#voltageprobeprops-voltageprobe)                |
 | `<voltagesource />`     | [`VoltageSourceProps`](#voltagesourceprops-voltagesource)             |
 
 <!-- COMPONENT_TABLE_END -->
@@ -145,6 +147,16 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/group.ts)
 
+### AnalogSimulationProps `<analogsimulation />`
+
+```ts
+export interface AnalogSimulationProps {
+  simulationType?: "spice_transient_analysis";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogsimulation.ts)
+
 ### BatteryProps `<battery />`
 
 ```ts
@@ -169,6 +181,18 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   borderRadius?: Distance;
   boardAnchorPosition?: Point;
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>;
+  /** Color applied to both top and bottom solder masks */
+  solderMaskColor?: BoardColor;
+  /** Color of the top solder mask */
+  topSolderMaskColor?: BoardColor;
+  /** Color of the bottom solder mask */
+  bottomSolderMaskColor?: BoardColor;
+  /** Color applied to both top and bottom silkscreens */
+  silkscreenColor?: BoardColor;
+  /** Color of the top silkscreen */
+  topSilkscreenColor?: BoardColor;
+  /** Color of the bottom silkscreen */
+  bottomSilkscreenColor?: BoardColor;
 }
 ```
 
@@ -662,6 +686,7 @@ export interface MosfetProps<PinLabel extends string = string>
 export interface NetProps {
   name: string;
   connectsTo?: string | string[];
+  highlightColor?: string;
 }
 ```
 
@@ -976,6 +1001,7 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean;
   dpst?: boolean;
   dpdt?: boolean;
+  connections?: Connections<string>;
 }
 ```
 
@@ -1057,6 +1083,16 @@ export interface ViaProps extends CommonLayoutProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/via.ts)
 
+### VoltageProbeProps `<voltageprobe />`
+
+```ts
+export interface VoltageProbeProps extends CommonComponentProps {
+  connectsTo: string | string[];
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/voltageprobe.ts)
+
 ### VoltageSourceProps `<voltagesource />`
 
 ```ts
@@ -1105,6 +1141,8 @@ export interface PlatformConfig {
   schematicDisabled?: boolean;
   partsEngineDisabled?: boolean;
 
+  spiceEngineMap?: Record<string, SpiceEngine>;
+
   footprintLibraryMap?: Record<
     string,
     | ((path: string) => Promise<FootprintLibraryResult>)
@@ -1115,6 +1153,12 @@ export interface PlatformConfig {
   >;
 
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>;
+
+  simSwitchFrequency?: number | string;
+  simCloseAt?: number | string;
+  simOpenAt?: number | string;
+  simStartClosed?: boolean;
+  simStartOpen?: boolean;
 }
 ```
 

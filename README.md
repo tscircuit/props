@@ -152,6 +152,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 ```ts
 export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis";
+  duration?: number | string;
+  timePerStep?: number | string;
 }
 ```
 

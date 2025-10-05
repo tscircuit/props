@@ -29,10 +29,26 @@ export interface SpiceEngine {
   simulate: (spiceString: string) => Promise<SpiceEngineSimulationResult>
 }
 
+export type SimpleRouteJson = any
+
+export interface AutorouterInstance {
+  run: () => Promise<void>
+  getOutputSimpleRouteJson: () => Promise<SimpleRouteJson>
+}
+
+export interface AutorouterDefinition {
+  createAutorouter: (
+    simpleRouteJson: SimpleRouteJson,
+    opts?: Record<string, unknown>,
+  ) => AutorouterInstance | Promise<AutorouterInstance>
+}
+
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
   autorouter?: AutorouterProp
+
+  autorouterMap?: Record<string, AutorouterDefinition>
 
   // TODO this follows a subset of the localStorage interface
   localCacheEngine?: any
@@ -107,9 +123,31 @@ const spiceEngineZod = z.object({
     ),
 })
 
+const autorouterInstance = z.object({
+  run: z
+    .function()
+    .args()
+    .returns(z.promise(z.unknown()))
+    .describe("Run the autorouter"),
+  getOutputSimpleRouteJson: z
+    .function()
+    .args()
+    .returns(z.promise(z.any()))
+    .describe("Get the resulting SimpleRouteJson"),
+})
+
+const autorouterDefinition = z.object({
+  createAutorouter: z
+    .function()
+    .args(z.any(), z.any().optional())
+    .returns(z.union([autorouterInstance, z.promise(autorouterInstance)]))
+    .describe("Create an autorouter instance"),
+})
+
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
   autorouter: autorouterProp.optional(),
+  autorouterMap: z.record(z.string(), autorouterDefinition).optional(),
   registryApiUrl: z.string().optional(),
   cloudAutorouterUrl: z.string().optional(),
   projectName: z.string().optional(),

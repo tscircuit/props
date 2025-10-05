@@ -24,7 +24,7 @@ export type BoardColor = AutocompleteString<BoardColorPreset>
 const boardColor = z.custom<BoardColor>((value) => typeof value === "string")
 
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
-  title?: string,
+  title?: string
   material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
   layers?: 2 | 4

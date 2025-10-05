@@ -12,6 +12,7 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   borderRadius?: Distance
   boardAnchorPosition?: Point
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  title?: string
 }
 
 export const boardProps = subcircuitGroupProps.extend({
@@ -20,6 +21,7 @@ export const boardProps = subcircuitGroupProps.extend({
   borderRadius: distance.optional(),
   boardAnchorPosition: point.optional(),
   boardAnchorAlignment: ninePointAnchor.optional(),
+  title: z.string().optional(),
 })
 
 type InferredBoardProps = z.input<typeof boardProps>

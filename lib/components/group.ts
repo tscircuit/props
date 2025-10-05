@@ -1,4 +1,5 @@
 import { layer_ref, length, distance } from "circuit-json"
+import type { AutocompleteString } from "lib/common/autocomplete"
 import type { Distance } from "lib/common/distance"
 import {
   type CommonLayoutProps,
@@ -309,8 +310,7 @@ export interface AutorouterConfig {
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 
-export type AutorouterProp =
-  | AutorouterConfig
+export type AutorouterPreset =
   | "sequential_trace"
   | "subcircuit"
   | "auto"
@@ -320,6 +320,10 @@ export type AutorouterProp =
   | "sequential-trace"
   | "auto-local"
   | "auto-cloud"
+
+export type AutorouterProp =
+  | AutorouterConfig
+  | AutocompleteString<AutorouterPreset>
 
 export const autorouterConfig = z.object({
   serverUrl: z.string().optional(),
@@ -352,8 +356,7 @@ export const autorouterConfig = z.object({
   local: z.boolean().optional(),
 })
 
-export const autorouterProp = z.union([
-  autorouterConfig,
+export const autorouterPreset = z.union([
   z.literal("sequential_trace"),
   z.literal("subcircuit"),
   z.literal("auto"),
@@ -363,6 +366,16 @@ export const autorouterProp = z.union([
   z.literal("sequential-trace"),
   z.literal("auto-local"),
   z.literal("auto-cloud"),
+])
+
+const autorouterString = z.string() as z.ZodType<
+  AutocompleteString<AutorouterPreset>
+>
+
+export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
+  autorouterConfig,
+  autorouterPreset,
+  autorouterString,
 ])
 
 export interface SubcircuitGroupProps extends BaseGroupProps {
@@ -545,6 +558,8 @@ type InferredBaseGroupProps = z.input<typeof baseGroupProps>
 type InferredSubcircuitGroupPropsWithBool = z.input<
   typeof subcircuitGroupPropsWithBool
 >
+
+expectTypesMatch<AutorouterProp, z.input<typeof autorouterProp>>(true)
 
 expectTypesMatch<BaseGroupProps, InferredBaseGroupProps>(true)
 expectTypesMatch<

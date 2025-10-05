@@ -1126,6 +1126,8 @@ export interface PlatformConfig {
 
   autorouter?: AutorouterProp;
 
+  autorouterMap?: Record<string, AutorouterDefinition>;
+
   // TODO this follows a subset of the localStorage interface
   localCacheEngine?: any;
 

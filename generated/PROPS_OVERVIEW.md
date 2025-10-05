@@ -20,6 +20,8 @@ const validatedProps = chipProps.parse(unknownProps)
 ```ts
 export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis"
+  duration?: number | string
+  timePerStep?: number | string
 }
 
 
@@ -46,6 +48,20 @@ export interface AutorouterConfig {
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
+}
+
+
+export interface AutorouterDefinition {
+  createAutorouter: (
+    simpleRouteJson: SimpleRouteJson,
+    opts?: Record<string, unknown>,
+  ) => AutorouterInstance | Promise<AutorouterInstance>
+}
+
+
+export interface AutorouterInstance {
+  run: () => Promise<void>
+  getOutputSimpleRouteJson: () => Promise<SimpleRouteJson>
 }
 
 
@@ -1040,6 +1056,8 @@ export interface PlatformConfig {
   partsEngine?: PartsEngine
 
   autorouter?: AutorouterProp
+
+  autorouterMap?: Record<string, AutorouterDefinition>
 
   // TODO this follows a subset of the localStorage interface
   localCacheEngine?: any

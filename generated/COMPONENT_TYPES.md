@@ -410,11 +410,15 @@ export const schematicPinStyle = z.record(
 ```typescript
 export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis"
+  duration?: number | string
+  timePerStep?: number | string
 }
 export const analogSimulationProps = z.object({
   simulationType: z
     .literal("spice_transient_analysis")
     .default("spice_transient_analysis"),
+  duration: ms.optional(),
+  timePerStep: ms.optional(),
 })
 ```
 
@@ -2081,7 +2085,8 @@ export const schematicPathProps = z.object({
 
 ```typescript
 export const schematicRectProps = z.object({
-  center: point,
+  schX: distance.optional(),
+  schY: distance.optional(),
   width: distance,
   height: distance,
   rotation: rotation.default(0),

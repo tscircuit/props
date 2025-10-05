@@ -30,6 +30,8 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   borderRadius?: Distance
   boardAnchorPosition?: Point
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  /** Title to display above the board in pinout view */
+  title?: string
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor
   /** Color of the top solder mask */
@@ -50,6 +52,7 @@ export const boardProps = subcircuitGroupProps.extend({
   borderRadius: distance.optional(),
   boardAnchorPosition: point.optional(),
   boardAnchorAlignment: ninePointAnchor.optional(),
+  title: z.string().optional(),
   solderMaskColor: boardColor.optional(),
   topSolderMaskColor: boardColor.optional(),
   bottomSolderMaskColor: boardColor.optional(),

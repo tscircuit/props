@@ -1088,7 +1088,8 @@ export interface ViaProps extends CommonLayoutProps {
 ### VoltageProbeProps `<voltageprobe />`
 
 ```ts
-export interface VoltageProbeProps extends CommonComponentProps {
+export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
+  name?: string;
   connectsTo: string | string[];
 }
 ```

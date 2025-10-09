@@ -445,9 +445,11 @@ export const batteryProps = commonComponentProps.extend({
 
 ```typescript
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  title?: string
   material?: "fr4" | "fr1"
   layers?: 2 | 4
   borderRadius?: Distance
+  thickness?: Distance
   boardAnchorPosition?: Point
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
   solderMaskColor?: BoardColor
@@ -462,8 +464,10 @@ export const boardProps = subcircuitGroupProps.extend({
   material: z.enum(["fr4", "fr1"]).default("fr4"),
   layers: z.union([z.literal(2), z.literal(4)]).default(2),
   borderRadius: distance.optional(),
+  thickness: distance.optional(),
   boardAnchorPosition: point.optional(),
   boardAnchorAlignment: ninePointAnchor.optional(),
+  title: z.string().optional(),
   solderMaskColor: boardColor.optional(),
   topSolderMaskColor: boardColor.optional(),
   bottomSolderMaskColor: boardColor.optional(),
@@ -2558,12 +2562,16 @@ export const viaProps = commonLayoutProps.extend({
 ### voltageprobe
 
 ```typescript
-export interface VoltageProbeProps extends CommonComponentProps {
+export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
+  name?: string
   connectsTo: string | string[]
 }
-export const voltageProbeProps = commonComponentProps.extend({
-  connectsTo: z.string().or(z.array(z.string())),
-})
+export const voltageProbeProps = commonComponentProps
+  .omit({ name: true })
+  .extend({
+    name: z.string().optional(),
+    connectsTo: z.string().or(z.array(z.string())),
+  })
 ```
 
 ### voltagesource

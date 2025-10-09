@@ -29,6 +29,7 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   /** Number of layers for the PCB */
   layers?: 2 | 4
   borderRadius?: Distance
+  thickness?: Distance
   boardAnchorPosition?: Point
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
   /** Color applied to both top and bottom solder masks */
@@ -49,6 +50,7 @@ export const boardProps = subcircuitGroupProps.extend({
   material: z.enum(["fr4", "fr1"]).default("fr4"),
   layers: z.union([z.literal(2), z.literal(4)]).default(2),
   borderRadius: distance.optional(),
+  thickness: distance.optional(),
   boardAnchorPosition: point.optional(),
   boardAnchorAlignment: ninePointAnchor.optional(),
   title: z.string().optional(),

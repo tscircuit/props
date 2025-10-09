@@ -177,10 +177,12 @@ export interface BatteryProps<PinLabel extends string = string>
 
 ```ts
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  title?: string;
   material?: "fr4" | "fr1";
   /** Number of layers for the PCB */
   layers?: 2 | 4;
   borderRadius?: Distance;
+  thickness?: Distance;
   boardAnchorPosition?: Point;
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>;
   /** Color applied to both top and bottom solder masks */

@@ -201,10 +201,12 @@ export interface BatteryProps<PinLabel extends string = string>
 
 
 export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  title?: string
   material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
   layers?: 2 | 4
   borderRadius?: Distance
+  thickness?: Distance
   boardAnchorPosition?: Point
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
   /** Color applied to both top and bottom solder masks */
@@ -1388,7 +1390,8 @@ export interface ViaProps extends CommonLayoutProps {
 }
 
 
-export interface VoltageProbeProps extends CommonComponentProps {
+export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
+  name?: string
   connectsTo: string | string[]
 }
 

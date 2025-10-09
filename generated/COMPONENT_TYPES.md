@@ -812,6 +812,36 @@ export const copperPourProps = z.object({
 })
 ```
 
+### courtyard-outline
+
+```typescript
+export const courtyardOutlineProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    outline: z.array(point),
+    strokeWidth: length.optional(),
+    isClosed: z.boolean().optional(),
+    isStrokeDashed: z.boolean().optional(),
+    color: z.string().optional(),
+  })
+```
+
+### courtyard-rect
+
+```typescript
+export const courtyardRectProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    width: distance,
+    height: distance,
+    strokeWidth: distance.optional(),
+    isFilled: z.boolean().optional(),
+    hasStroke: z.boolean().optional(),
+    isStrokeDashed: z.boolean().optional(),
+    color: z.string().optional(),
+  })
+```
+
 ### crystal
 
 ```typescript
@@ -934,6 +964,22 @@ export const fabricationNotePathProps = pcbLayoutProps
   .extend({
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),
+    color: z.string().optional(),
+  })
+```
+
+### fabrication-note-rect
+
+```typescript
+export const fabricationNoteRectProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    width: distance,
+    height: distance,
+    strokeWidth: distance.optional(),
+    isFilled: z.boolean().optional(),
+    hasStroke: z.boolean().optional(),
+    isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
   })
 ```

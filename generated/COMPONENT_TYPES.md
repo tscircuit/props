@@ -540,12 +540,14 @@ export const cadassemblyProps = z.object({
 ```typescript
 export interface CadModelProps extends CadModelBase {
   modelUrl: string
+  stepUrl?: string
   pcbX?: Distance
   pcbY?: Distance
   pcbZ?: Distance
 }
 const cadModelBaseWithUrl = cadModelBase.extend({
   modelUrl: z.string(),
+  stepUrl: z.string().optional(),
 })
 ```
 

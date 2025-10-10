@@ -5,6 +5,7 @@ import { z } from "zod"
 
 export interface CadModelProps extends CadModelBase {
   modelUrl: string
+  stepUrl?: string
   pcbX?: Distance
   pcbY?: Distance
   pcbZ?: Distance
@@ -18,6 +19,7 @@ const pcbPosition = z.object({
 
 const cadModelBaseWithUrl = cadModelBase.extend({
   modelUrl: z.string(),
+  stepUrl: z.string().optional(),
 })
 
 const cadModelObject = cadModelBaseWithUrl.merge(pcbPosition)

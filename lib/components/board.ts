@@ -23,7 +23,8 @@ export type BoardColor = AutocompleteString<BoardColorPreset>
 
 const boardColor = z.custom<BoardColor>((value) => typeof value === "string")
 
-export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
+export interface BoardProps
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string
   material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
@@ -46,21 +47,23 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   bottomSilkscreenColor?: BoardColor
 }
 
-export const boardProps = subcircuitGroupProps.extend({
-  material: z.enum(["fr4", "fr1"]).default("fr4"),
-  layers: z.union([z.literal(2), z.literal(4)]).default(2),
-  borderRadius: distance.optional(),
-  thickness: distance.optional(),
-  boardAnchorPosition: point.optional(),
-  boardAnchorAlignment: ninePointAnchor.optional(),
-  title: z.string().optional(),
-  solderMaskColor: boardColor.optional(),
-  topSolderMaskColor: boardColor.optional(),
-  bottomSolderMaskColor: boardColor.optional(),
-  silkscreenColor: boardColor.optional(),
-  topSilkscreenColor: boardColor.optional(),
-  bottomSilkscreenColor: boardColor.optional(),
-})
+export const boardProps = subcircuitGroupProps
+  .omit({ connections: true })
+  .extend({
+    material: z.enum(["fr4", "fr1"]).default("fr4"),
+    layers: z.union([z.literal(2), z.literal(4)]).default(2),
+    borderRadius: distance.optional(),
+    thickness: distance.optional(),
+    boardAnchorPosition: point.optional(),
+    boardAnchorAlignment: ninePointAnchor.optional(),
+    title: z.string().optional(),
+    solderMaskColor: boardColor.optional(),
+    topSolderMaskColor: boardColor.optional(),
+    bottomSolderMaskColor: boardColor.optional(),
+    silkscreenColor: boardColor.optional(),
+    topSilkscreenColor: boardColor.optional(),
+    bottomSilkscreenColor: boardColor.optional(),
+  })
 
 type InferredBoardProps = z.input<typeof boardProps>
 expectTypesMatch<BoardProps, InferredBoardProps>(true)

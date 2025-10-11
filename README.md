@@ -20,53 +20,80 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 
 ## Available Components
 
-| Component               | Props Interface                                                       |
-| ----------------------- | --------------------------------------------------------------------- |
-| `<analogsimulation />`  | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)    |
-| `<battery />`           | [`BatteryProps`](#batteryprops-battery)                               |
-| `<board />`             | [`BoardProps`](#boardprops-board)                                     |
-| `<breakout />`          | [`BreakoutProps`](#breakoutprops-breakout)                            |
-| `<breakoutpoint />`     | [`BreakoutPointProps`](#breakoutpointprops-breakoutpoint)             |
-| `<cadassembly />`       | [`CadAssemblyProps`](#cadassemblyprops-cadassembly)                   |
-| `<cadmodel />`          | [`CadModelProps`](#cadmodelprops-cadmodel)                            |
-| `<capacitor />`         | [`CapacitorProps`](#capacitorprops-capacitor)                         |
-| `<chip />`              | [`ChipProps`](#chipprops-chip)                                        |
-| `<connector />`         | [`ConnectorProps`](#connectorprops-connector)                         |
-| `<constrainedlayout />` | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout) |
-| `<copperpour />`        | [`CopperPourProps`](#copperpourprops-copperpour)                      |
-| `<crystal />`           | [`CrystalProps`](#crystalprops-crystal)                               |
-| `<cutout />`            | [`RectCutoutProps`](#rectcutoutprops-cutout)                          |
-| `<diode />`             | [`DiodeProps`](#diodeprops-diode)                                     |
-| `<footprint />`         | [`FootprintProps`](#footprintprops-footprint)                         |
-| `<fuse />`              | [`FuseProps`](#fuseprops-fuse)                                        |
-| `<group />`             | [`BaseGroupProps`](#basegroupprops-group)                             |
-| `<hole />`              | [`CircleHoleProps`](#circleholeprops-hole)                            |
-| `<inductor />`          | [`InductorProps`](#inductorprops-inductor)                            |
-| `<jumper />`            | [`JumperProps`](#jumperprops-jumper)                                  |
-| `<mosfet />`            | [`MosfetProps`](#mosfetprops-mosfet)                                  |
-| `<net />`               | [`NetProps`](#netprops-net)                                           |
-| `<netalias />`          | [`NetAliasProps`](#netaliasprops-netalias)                            |
-| `<netlabel />`          | [`NetLabelProps`](#netlabelprops-netlabel)                            |
-| `<pinheader />`         | [`PinHeaderProps`](#pinheaderprops-pinheader)                         |
-| `<pinout />`            | [`PinoutProps`](#pinoutprops-pinout)                                  |
-| `<platedhole />`        | [`CirclePlatedHoleProps`](#circleplatedholeprops-platedhole)          |
-| `<potentiometer />`     | [`PotentiometerProps`](#potentiometerprops-potentiometer)             |
-| `<resistor />`          | [`ResistorProps`](#resistorprops-resistor)                            |
-| `<resonator />`         | [`ResonatorProps`](#resonatorprops-resonator)                         |
-| `<schematiccell />`     | [`SchematicCellProps`](#schematiccellprops-schematiccell)             |
-| `<schematicrow />`      | [`SchematicRowProps`](#schematicrowprops-schematicrow)                |
-| `<schematictable />`    | [`SchematicTableProps`](#schematictableprops-schematictable)          |
-| `<smtpad />`            | [`RectSmtPadProps`](#rectsmtpadprops-smtpad)                          |
-| `<solderjumper />`      | [`SolderJumperProps`](#solderjumperprops-solderjumper)                |
-| `<solderpaste />`       | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste)           |
-| `<stampboard />`        | [`StampboardProps`](#stampboardprops-stampboard)                      |
-| `<switch />`            | [`SwitchProps`](#switchprops-switch)                                  |
-| `<symbol />`            | [`SymbolProps`](#symbolprops-symbol)                                  |
-| `<testpoint />`         | [`TestpointProps`](#testpointprops-testpoint)                         |
-| `<transistor />`        | [`TransistorProps`](#transistorprops-transistor)                      |
-| `<via />`               | [`ViaProps`](#viaprops-via)                                           |
-| `<voltageprobe />`      | [`VoltageProbeProps`](#voltageprobeprops-voltageprobe)                |
-| `<voltagesource />`     | [`VoltageSourceProps`](#voltagesourceprops-voltagesource)             |
+| Component                 | Props Interface                                                             |
+| ------------------------- | --------------------------------------------------------------------------- |
+| `<analogsimulation />`    | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)          |
+| `<battery />`             | [`BatteryProps`](#batteryprops-battery)                                     |
+| `<board />`               | [`BoardProps`](#boardprops-board)                                           |
+| `<breakout />`            | [`BreakoutProps`](#breakoutprops-breakout)                                  |
+| `<breakoutpoint />`       | [`BreakoutPointProps`](#breakoutpointprops-breakoutpoint)                   |
+| `<cadassembly />`         | [`CadAssemblyProps`](#cadassemblyprops-cadassembly)                         |
+| `<cadmodel />`            | [`CadModelProps`](#cadmodelprops-cadmodel)                                  |
+| `<capacitor />`           | [`CapacitorProps`](#capacitorprops-capacitor)                               |
+| `<chip />`                | [`ChipProps`](#chipprops-chip)                                              |
+| `<connector />`           | [`ConnectorProps`](#connectorprops-connector)                               |
+| `<constrainedlayout />`   | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout)       |
+| `<constraint />`          | [`ConstraintProps`](#constraintprops-constraint)                            |
+| `<copperpour />`          | [`CopperPourProps`](#copperpourprops-copperpour)                            |
+| `<courtyardoutline />`    | [`CourtyardOutlineProps`](#courtyardoutlineprops-courtyardoutline)          |
+| `<courtyardrect />`       | [`CourtyardRectProps`](#courtyardrectprops-courtyardrect)                   |
+| `<crystal />`             | [`CrystalProps`](#crystalprops-crystal)                                     |
+| `<cutout />`              | [`RectCutoutProps`](#rectcutoutprops-cutout)                                |
+| `<diode />`               | [`DiodeProps`](#diodeprops-diode)                                           |
+| `<fabricationnotepath />` | [`FabricationNotePathProps`](#fabricationnotepathprops-fabricationnotepath) |
+| `<fabricationnoterect />` | [`FabricationNoteRectProps`](#fabricationnoterectprops-fabricationnoterect) |
+| `<fabricationnotetext />` | [`FabricationNoteTextProps`](#fabricationnotetextprops-fabricationnotetext) |
+| `<footprint />`           | [`FootprintProps`](#footprintprops-footprint)                               |
+| `<fuse />`                | [`FuseProps`](#fuseprops-fuse)                                              |
+| `<group />`               | [`BaseGroupProps`](#basegroupprops-group)                                   |
+| `<hole />`                | [`CircleHoleProps`](#circleholeprops-hole)                                  |
+| `<inductor />`            | [`InductorProps`](#inductorprops-inductor)                                  |
+| `<jumper />`              | [`JumperProps`](#jumperprops-jumper)                                        |
+| `<led />`                 | [`LedProps`](#ledprops-led)                                                 |
+| `<mosfet />`              | [`MosfetProps`](#mosfetprops-mosfet)                                        |
+| `<net />`                 | [`NetProps`](#netprops-net)                                                 |
+| `<netalias />`            | [`NetAliasProps`](#netaliasprops-netalias)                                  |
+| `<netlabel />`            | [`NetLabelProps`](#netlabelprops-netlabel)                                  |
+| `<pcbkeepout />`          | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                            |
+| `<pcbtrace />`            | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                  |
+| `<pinheader />`           | [`PinHeaderProps`](#pinheaderprops-pinheader)                               |
+| `<pinout />`              | [`PinoutProps`](#pinoutprops-pinout)                                        |
+| `<platedhole />`          | [`CirclePlatedHoleProps`](#circleplatedholeprops-platedhole)                |
+| `<port />`                | [`PortProps`](#portprops-port)                                              |
+| `<potentiometer />`       | [`PotentiometerProps`](#potentiometerprops-potentiometer)                   |
+| `<powersource />`         | [`PowerSourceProps`](#powersourceprops-powersource)                         |
+| `<pushbutton />`          | [`PushButtonProps`](#pushbuttonprops-pushbutton)                            |
+| `<resistor />`            | [`ResistorProps`](#resistorprops-resistor)                                  |
+| `<resonator />`           | [`ResonatorProps`](#resonatorprops-resonator)                               |
+| `<schematicarc />`        | [`SchematicArcProps`](#schematicarcprops-schematicarc)                      |
+| `<schematicbox />`        | [`SchematicBoxProps`](#schematicboxprops-schematicbox)                      |
+| `<schematiccell />`       | [`SchematicCellProps`](#schematiccellprops-schematiccell)                   |
+| `<schematiccircle />`     | [`SchematicCircleProps`](#schematiccircleprops-schematiccircle)             |
+| `<schematicline />`       | [`SchematicLineProps`](#schematiclineprops-schematicline)                   |
+| `<schematicpath />`       | [`SchematicPathProps`](#schematicpathprops-schematicpath)                   |
+| `<schematicrect />`       | [`SchematicRectProps`](#schematicrectprops-schematicrect)                   |
+| `<schematicrow />`        | [`SchematicRowProps`](#schematicrowprops-schematicrow)                      |
+| `<schematictable />`      | [`SchematicTableProps`](#schematictableprops-schematictable)                |
+| `<schematictext />`       | [`SchematicTextProps`](#schematictextprops-schematictext)                   |
+| `<silkscreencircle />`    | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)          |
+| `<silkscreenline />`      | [`SilkscreenLineProps`](#silkscreenlineprops-silkscreenline)                |
+| `<silkscreenpath />`      | [`SilkscreenPathProps`](#silkscreenpathprops-silkscreenpath)                |
+| `<silkscreenrect />`      | [`SilkscreenRectProps`](#silkscreenrectprops-silkscreenrect)                |
+| `<silkscreentext />`      | [`SilkscreenTextProps`](#silkscreentextprops-silkscreentext)                |
+| `<smtpad />`              | [`RectSmtPadProps`](#rectsmtpadprops-smtpad)                                |
+| `<solderjumper />`        | [`SolderJumperProps`](#solderjumperprops-solderjumper)                      |
+| `<solderpaste />`         | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste)                 |
+| `<stampboard />`          | [`StampboardProps`](#stampboardprops-stampboard)                            |
+| `<subcircuit />`          | [`SubcircuitProps`](#subcircuitprops-subcircuit)                            |
+| `<switch />`              | [`SwitchProps`](#switchprops-switch)                                        |
+| `<symbol />`              | [`SymbolProps`](#symbolprops-symbol)                                        |
+| `<testpoint />`           | [`TestpointProps`](#testpointprops-testpoint)                               |
+| `<trace />`               | [`TraceProps`](#traceprops-trace)                                           |
+| `<tracehint />`           | [`TraceHintProps`](#tracehintprops-tracehint)                               |
+| `<transistor />`          | [`TransistorProps`](#transistorprops-transistor)                            |
+| `<via />`                 | [`ViaProps`](#viaprops-via)                                                 |
+| `<voltageprobe />`        | [`VoltageProbeProps`](#voltageprobeprops-voltageprobe)                      |
+| `<voltagesource />`       | [`VoltageSourceProps`](#voltagesourceprops-voltagesource)                   |
 
 <!-- COMPONENT_TABLE_END -->
 
@@ -176,7 +203,8 @@ export interface BatteryProps<PinLabel extends string = string>
 ### BoardProps `<board />`
 
 ```ts
-export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
+export interface BoardProps
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string;
   material?: "fr4" | "fr1";
   /** Number of layers for the PCB */
@@ -359,6 +387,22 @@ export interface ConstrainedLayoutProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/constrainedlayout.ts)
 
+### ConstraintProps `<constraint />`
+
+```ts
+export type ConstraintProps =
+  | PcbXDistConstraint
+  | PcbYDistConstraint
+  | PcbSameYConstraint
+  | PcbSameXConstraint;
+
+// -----------------------------------------------------------------------------
+// Zod
+// -----------------------------------------------------------------------------
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/constraint.ts)
+
 ### CopperPourProps `<copperpour />`
 
 ```ts
@@ -372,6 +416,22 @@ export interface CopperPourProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/copper-pour.ts)
+
+### CourtyardOutlineProps `<courtyardoutline />`
+
+```ts
+export type CourtyardOutlineProps = z.input<typeof courtyardOutlineProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-outline.ts)
+
+### CourtyardRectProps `<courtyardrect />`
+
+```ts
+export type CourtyardRectProps = z.input<typeof courtyardRectProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-rect.ts)
 
 ### CrystalProps `<crystal />`
 
@@ -429,6 +489,30 @@ export interface DiodeProps<PinLabel extends string = string>
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/diode.ts)
+
+### FabricationNotePathProps `<fabricationnotepath />`
+
+```ts
+export type FabricationNotePathProps = z.input<typeof fabricationNotePathProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-path.ts)
+
+### FabricationNoteRectProps `<fabricationnoterect />`
+
+```ts
+export type FabricationNoteRectProps = z.input<typeof fabricationNoteRectProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-rect.ts)
+
+### FabricationNoteTextProps `<fabricationnotetext />`
+
+```ts
+export type FabricationNoteTextProps = z.input<typeof fabricationNoteTextProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-text.ts)
 
 ### FootprintProps `<footprint />`
 
@@ -673,6 +757,14 @@ export interface JumperProps extends CommonComponentProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts)
 
+### LedProps `<led />`
+
+```ts
+export type LedProps = z.input<typeof ledProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/led.ts)
+
 ### MosfetProps `<mosfet />`
 
 ```ts
@@ -727,6 +819,22 @@ export interface NetLabelProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/netlabel.ts)
+
+### PcbKeepoutProps `<pcbkeepout />`
+
+```ts
+export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-keepout.ts)
+
+### PcbTraceProps `<pcbtrace />`
+
+```ts
+export type PcbTraceProps = z.input<typeof pcbTraceProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-trace.ts)
 
 ### PinHeaderProps `<pinheader />`
 
@@ -847,6 +955,14 @@ export interface CirclePlatedHoleProps
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/platedhole.ts)
 
+### PortProps `<port />`
+
+```ts
+export type PortProps = z.input<typeof portProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/port.ts)
+
 ### PotentiometerProps `<potentiometer />`
 
 ```ts
@@ -857,6 +973,23 @@ export interface PotentiometerProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/potentiometer.ts)
+
+### PowerSourceProps `<powersource />`
+
+```ts
+export type PowerSourceProps = z.input<typeof powerSourceProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/power-source.ts)
+
+### PushButtonProps `<pushbutton />`
+
+```ts
+export type PushButtonProps<T extends PinLabelsProp | string = string> =
+  ChipProps<T>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/push-button.ts)
 
 ### ResistorProps `<resistor />`
 
@@ -887,6 +1020,22 @@ export interface ResonatorProps extends CommonComponentProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/resonator.ts)
 
+### SchematicArcProps `<schematicarc />`
+
+```ts
+export type SchematicArcProps = z.input<typeof schematicArcProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-arc.ts)
+
+### SchematicBoxProps `<schematicbox />`
+
+```ts
+export type SchematicBoxProps = z.input<typeof schematicBoxProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-box.ts)
+
 ### SchematicCellProps `<schematiccell />`
 
 ```ts
@@ -903,6 +1052,38 @@ export interface SchematicCellProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-cell.ts)
+
+### SchematicCircleProps `<schematiccircle />`
+
+```ts
+export type SchematicCircleProps = z.input<typeof schematicCircleProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-circle.ts)
+
+### SchematicLineProps `<schematicline />`
+
+```ts
+export type SchematicLineProps = z.input<typeof schematicLineProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-line.ts)
+
+### SchematicPathProps `<schematicpath />`
+
+```ts
+export type SchematicPathProps = z.input<typeof schematicPathProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-path.ts)
+
+### SchematicRectProps `<schematicrect />`
+
+```ts
+export type SchematicRectProps = z.input<typeof schematicRectProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-rect.ts)
 
 ### SchematicRowProps `<schematicrow />`
 
@@ -930,6 +1111,54 @@ export interface SchematicTableProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-table.ts)
+
+### SchematicTextProps `<schematictext />`
+
+```ts
+export type SchematicTextProps = z.input<typeof schematicTextProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)
+
+### SilkscreenCircleProps `<silkscreencircle />`
+
+```ts
+export type SilkscreenCircleProps = z.input<typeof silkscreenCircleProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-circle.ts)
+
+### SilkscreenLineProps `<silkscreenline />`
+
+```ts
+export type SilkscreenLineProps = z.input<typeof silkscreenLineProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-line.ts)
+
+### SilkscreenPathProps `<silkscreenpath />`
+
+```ts
+export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-path.ts)
+
+### SilkscreenRectProps `<silkscreenrect />`
+
+```ts
+export type SilkscreenRectProps = z.input<typeof silkscreenRectProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-rect.ts)
+
+### SilkscreenTextProps `<silkscreentext />`
+
+```ts
+export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-text.ts)
 
 ### RectSmtPadProps `<smtpad />`
 
@@ -996,6 +1225,14 @@ export interface StampboardProps extends BoardProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/stampboard.ts)
 
+### SubcircuitProps `<subcircuit />`
+
+```ts
+export type SubcircuitProps = SubcircuitGroupProps;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/subcircuit.ts)
+
 ### SwitchProps `<switch />`
 
 ```ts
@@ -1060,6 +1297,22 @@ export interface TestpointProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/testpoint.ts)
+
+### TraceProps `<trace />`
+
+```ts
+export type TraceProps = z.input<typeof traceProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/trace.ts)
+
+### TraceHintProps `<tracehint />`
+
+```ts
+export type TraceHintProps = z.input<typeof traceHintProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/trace-hint.ts)
 
 ### TransistorProps `<transistor />`
 

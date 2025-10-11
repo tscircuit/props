@@ -44,28 +44,72 @@ function extractComponentInfo(files: string[]): {
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
       .join("")
 
-    // Find the props interface
-    const propsMatch = content.match(/export interface (\w+Props)/)
+    const expectedPropsName = `${componentName}Props`
 
-    if (propsMatch) {
-      const propsName = propsMatch[1]
+    const interfaceMatches = [
+      ...content.matchAll(/export interface (\w+Props)/g),
+    ]
+    const matchedInterface =
+      interfaceMatches.find((match) => match[1] === expectedPropsName) ??
+      interfaceMatches[0]
 
-      // Extract the interface definition
-      // This regex finds the interface starting with "export interface PropsName" and captures everything until the closing brace
+    let propsName: string | undefined
+    let interfaceDefinition = ""
+
+    if (matchedInterface) {
+      propsName = matchedInterface[1]
+
       const interfaceRegex = new RegExp(
         `export interface ${propsName}[\\s\\S]+?\\n}`,
         "m",
       )
       const interfaceMatch = content.match(interfaceRegex)
-      const interfaceDefinition = interfaceMatch ? interfaceMatch[0] : ""
-
-      components.push({
-        name: componentName,
-        props: propsName,
-        filePath: relativePath,
-        interfaceDefinition,
-      })
+      interfaceDefinition = interfaceMatch ? interfaceMatch[0] : ""
     }
+
+    if (!propsName) {
+      const typeRegex = new RegExp(`export type ${expectedPropsName}[^\\n]*`)
+      const typeMatch = content.match(typeRegex)
+
+      if (typeMatch) {
+        propsName = expectedPropsName
+        const startIndex = typeMatch.index ?? content.indexOf(typeMatch[0])
+        if (startIndex !== -1) {
+          const after = content.slice(startIndex)
+          const terminatorIndex = after.search(/\nexport /)
+          const definitionSlice =
+            terminatorIndex === -1 ? after : after.slice(0, terminatorIndex)
+          interfaceDefinition = definitionSlice.trimEnd()
+        }
+      }
+    }
+
+    if (!propsName) {
+      const genericTypeMatches = [
+        ...content.matchAll(/export type (\w+Props)/g),
+      ]
+      const matchedType = genericTypeMatches[0]
+
+      if (matchedType) {
+        propsName = matchedType[1]
+        const typeDefRegex = new RegExp(
+          `export type ${propsName}[\\s\\S]*?(?=\\nexport |$)`,
+        )
+        const typeDefMatch = content.match(typeDefRegex)
+        interfaceDefinition = typeDefMatch ? typeDefMatch[0].trimEnd() : ""
+      }
+    }
+
+    if (!propsName) {
+      propsName = expectedPropsName
+    }
+
+    components.push({
+      name: componentName,
+      props: propsName,
+      filePath: relativePath,
+      interfaceDefinition,
+    })
   }
 
   return components

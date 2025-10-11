@@ -6,6 +6,7 @@ import {
   commonLayoutProps,
   type SupplierPartNumbers,
 } from "lib/common/layout"
+import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
@@ -210,6 +211,10 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbPaddingRight?: Distance
   pcbPaddingTop?: Distance
   pcbPaddingBottom?: Distance
+  /**
+   * Anchor to use when interpreting pcbX/pcbY relative to pcbPosition
+   */
+  pcbPositionAnchor?: AutocompleteString<z.infer<typeof ninePointAnchor>>
 
   /** @deprecated Use `pcbGrid` */
   grid?: boolean
@@ -324,6 +329,10 @@ export type AutorouterPreset =
 export type AutorouterProp =
   | AutorouterConfig
   | AutocompleteString<AutorouterPreset>
+
+const pcbPositionAnchorAutocomplete = z.custom<
+  AutocompleteString<z.infer<typeof ninePointAnchor>>
+>((value) => typeof value === "string")
 
 export const autorouterConfig = z.object({
   serverUrl: z.string().optional(),
@@ -520,6 +529,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbPaddingRight: length.optional(),
   pcbPaddingTop: length.optional(),
   pcbPaddingBottom: length.optional(),
+  pcbPositionAnchor: pcbPositionAnchorAutocomplete.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

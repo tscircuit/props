@@ -623,6 +623,10 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbPaddingRight?: Distance;
   pcbPaddingTop?: Distance;
   pcbPaddingBottom?: Distance;
+  /**
+   * Anchor to use when interpreting pcbX/pcbY relative to pcbPosition
+   */
+  pcbPositionAnchor?: AutocompleteString<z.infer<typeof ninePointAnchor>>;
 
   /** @deprecated Use `pcbGrid` */
   grid?: boolean;

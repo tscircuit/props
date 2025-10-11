@@ -1223,6 +1223,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbPaddingRight?: Distance
   pcbPaddingTop?: Distance
   pcbPaddingBottom?: Distance
+  pcbPositionAnchor?: AutocompleteString<z.infer<typeof ninePointAnchor>>
 
   grid?: boolean
   flex?: boolean | string
@@ -1474,6 +1475,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbPaddingRight: length.optional(),
   pcbPaddingTop: length.optional(),
   pcbPaddingBottom: length.optional(),
+  pcbPositionAnchor: pcbPositionAnchorAutocomplete.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
   manualEdits: manual_edits_file.optional(),

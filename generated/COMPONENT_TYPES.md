@@ -444,7 +444,8 @@ export const batteryProps = commonComponentProps.extend({
 ### board
 
 ```typescript
-export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
+export interface BoardProps
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string
   material?: "fr4" | "fr1"
   layers?: 2 | 4
@@ -460,21 +461,23 @@ export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
   bottomSilkscreenColor?: BoardColor
 }
 /** Color of the bottom silkscreen */
-export const boardProps = subcircuitGroupProps.extend({
-  material: z.enum(["fr4", "fr1"]).default("fr4"),
-  layers: z.union([z.literal(2), z.literal(4)]).default(2),
-  borderRadius: distance.optional(),
-  thickness: distance.optional(),
-  boardAnchorPosition: point.optional(),
-  boardAnchorAlignment: ninePointAnchor.optional(),
-  title: z.string().optional(),
-  solderMaskColor: boardColor.optional(),
-  topSolderMaskColor: boardColor.optional(),
-  bottomSolderMaskColor: boardColor.optional(),
-  silkscreenColor: boardColor.optional(),
-  topSilkscreenColor: boardColor.optional(),
-  bottomSilkscreenColor: boardColor.optional(),
-})
+export const boardProps = subcircuitGroupProps
+  .omit({ connections: true })
+  .extend({
+    material: z.enum(["fr4", "fr1"]).default("fr4"),
+    layers: z.union([z.literal(2), z.literal(4)]).default(2),
+    borderRadius: distance.optional(),
+    thickness: distance.optional(),
+    boardAnchorPosition: point.optional(),
+    boardAnchorAlignment: ninePointAnchor.optional(),
+    title: z.string().optional(),
+    solderMaskColor: boardColor.optional(),
+    topSolderMaskColor: boardColor.optional(),
+    bottomSolderMaskColor: boardColor.optional(),
+    silkscreenColor: boardColor.optional(),
+    topSilkscreenColor: boardColor.optional(),
+    bottomSilkscreenColor: boardColor.optional(),
+  })
 ```
 
 ### breakout

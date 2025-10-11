@@ -200,7 +200,8 @@ export interface BatteryProps<PinLabel extends string = string>
 }
 
 
-export interface BoardProps extends Omit<SubcircuitGroupProps, "subcircuit"> {
+export interface BoardProps
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string
   material?: "fr4" | "fr1"
   /** Number of layers for the PCB */

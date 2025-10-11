@@ -961,6 +961,23 @@ export interface DiodeProps<PinLabel extends string = string>
 }
 ```
 
+### fabrication-note-dimension
+
+```typescript
+export const fabricationNoteDimensionProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    from: dimensionTarget,
+    to: dimensionTarget,
+    text: z.string().optional(),
+    offset: distance.optional(),
+    font: z.enum(["tscircuit2024"]).optional(),
+    fontSize: length.optional(),
+    color: z.string().optional(),
+    arrowSize: distance.optional(),
+  })
+```
+
 ### fabrication-note-path
 
 ```typescript
@@ -1708,6 +1725,81 @@ pcbLayoutProps.extend({
     width: distance,
     height: distance,
   }),
+```
+
+### pcb-note-dimension
+
+```typescript
+export const pcbNoteDimensionProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    from: dimensionTarget,
+    to: dimensionTarget,
+    text: z.string().optional(),
+    offset: distance.optional(),
+    font: z.enum(["tscircuit2024"]).optional(),
+    fontSize: length.optional(),
+    color: z.string().optional(),
+    arrowSize: distance.optional(),
+  })
+```
+
+### pcb-note-line
+
+```typescript
+export const pcbNoteLineProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    x1: distance,
+    y1: distance,
+    x2: distance,
+    y2: distance,
+    strokeWidth: distance.optional(),
+    color: z.string().optional(),
+    isDashed: z.boolean().optional(),
+  })
+```
+
+### pcb-note-path
+
+```typescript
+export const pcbNotePathProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    route: z.array(route_hint_point),
+    strokeWidth: length.optional(),
+    color: z.string().optional(),
+  })
+```
+
+### pcb-note-rect
+
+```typescript
+export const pcbNoteRectProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    width: distance,
+    height: distance,
+    strokeWidth: distance.optional(),
+    isFilled: z.boolean().optional(),
+    hasStroke: z.boolean().optional(),
+    isStrokeDashed: z.boolean().optional(),
+    color: z.string().optional(),
+  })
+```
+
+### pcb-note-text
+
+```typescript
+export const pcbNoteTextProps = pcbLayoutProps.extend({
+  text: z.string(),
+  anchorAlignment: z
+    .enum(["center", "top_left", "top_right", "bottom_left", "bottom_right"])
+    .default("center"),
+  font: z.enum(["tscircuit2024"]).optional(),
+  fontSize: length.optional(),
+  color: z.string().optional(),
+})
 ```
 
 ### pcb-trace

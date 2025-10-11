@@ -964,6 +964,17 @@ export interface DiodeProps<PinLabel extends string = string>
 ### fabrication-note-dimension
 
 ```typescript
+export interface FabricationNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point
+  to: string | Point
+  text?: string
+  offset?: string | number
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+  arrowSize?: string | number
+}
 export const fabricationNoteDimensionProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
   .extend({
@@ -1009,6 +1020,18 @@ export const fabricationNoteRectProps = pcbLayoutProps
 ### fabrication-note-text
 
 ```typescript
+export interface FabricationNoteTextProps extends PcbLayoutProps {
+  text: string
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right"
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+}
 export const fabricationNoteTextProps = pcbLayoutProps.extend({
   text: z.string(),
   anchorAlignment: z
@@ -1730,6 +1753,17 @@ pcbLayoutProps.extend({
 ### pcb-note-dimension
 
 ```typescript
+export interface PcbNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point
+  to: string | Point
+  text?: string
+  offset?: string | number
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+  arrowSize?: string | number
+}
 export const pcbNoteDimensionProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
   .extend({
@@ -1747,6 +1781,16 @@ export const pcbNoteDimensionProps = pcbLayoutProps
 ### pcb-note-line
 
 ```typescript
+export interface PcbNoteLineProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  x1: string | number
+  y1: string | number
+  x2: string | number
+  y2: string | number
+  strokeWidth?: string | number
+  color?: string
+  isDashed?: boolean
+}
 export const pcbNoteLineProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
   .extend({
@@ -1763,6 +1807,12 @@ export const pcbNoteLineProps = pcbLayoutProps
 ### pcb-note-path
 
 ```typescript
+export interface PcbNotePathProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  route: RouteHintPointInput[]
+  strokeWidth?: string | number
+  color?: string
+}
 export const pcbNotePathProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
   .extend({
@@ -1775,6 +1825,16 @@ export const pcbNotePathProps = pcbLayoutProps
 ### pcb-note-rect
 
 ```typescript
+export interface PcbNoteRectProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  width: string | number
+  height: string | number
+  strokeWidth?: string | number
+  isFilled?: boolean
+  hasStroke?: boolean
+  isStrokeDashed?: boolean
+  color?: string
+}
 export const pcbNoteRectProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
@@ -1791,6 +1851,18 @@ export const pcbNoteRectProps = pcbLayoutProps
 ### pcb-note-text
 
 ```typescript
+export interface PcbNoteTextProps extends PcbLayoutProps {
+  text: string
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right"
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+}
 export const pcbNoteTextProps = pcbLayoutProps.extend({
   text: z.string(),
   anchorAlignment: z

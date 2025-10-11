@@ -499,9 +499,17 @@ export interface DiodeProps<PinLabel extends string = string>
 ### FabricationNoteDimensionProps `<fabricationnotedimension />`
 
 ```ts
-export type FabricationNoteDimensionProps = z.input<
-  typeof fabricationNoteDimensionProps
->;
+export interface FabricationNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point;
+  to: string | Point;
+  text?: string;
+  offset?: string | number;
+  font?: "tscircuit2024";
+  fontSize?: string | number;
+  color?: string;
+  arrowSize?: string | number;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-dimension.ts)
@@ -525,7 +533,18 @@ export type FabricationNoteRectProps = z.input<typeof fabricationNoteRectProps>;
 ### FabricationNoteTextProps `<fabricationnotetext />`
 
 ```ts
-export type FabricationNoteTextProps = z.input<typeof fabricationNoteTextProps>;
+export interface FabricationNoteTextProps extends PcbLayoutProps {
+  text: string;
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right";
+  font?: "tscircuit2024";
+  fontSize?: string | number;
+  color?: string;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-text.ts)
@@ -847,7 +866,17 @@ export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
 ### PcbNoteDimensionProps `<pcbnotedimension />`
 
 ```ts
-export type PcbNoteDimensionProps = z.input<typeof pcbNoteDimensionProps>;
+export interface PcbNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point;
+  to: string | Point;
+  text?: string;
+  offset?: string | number;
+  font?: "tscircuit2024";
+  fontSize?: string | number;
+  color?: string;
+  arrowSize?: string | number;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-dimension.ts)
@@ -855,7 +884,16 @@ export type PcbNoteDimensionProps = z.input<typeof pcbNoteDimensionProps>;
 ### PcbNoteLineProps `<pcbnoteline />`
 
 ```ts
-export type PcbNoteLineProps = z.input<typeof pcbNoteLineProps>;
+export interface PcbNoteLineProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  x1: string | number;
+  y1: string | number;
+  x2: string | number;
+  y2: string | number;
+  strokeWidth?: string | number;
+  color?: string;
+  isDashed?: boolean;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-line.ts)
@@ -863,7 +901,12 @@ export type PcbNoteLineProps = z.input<typeof pcbNoteLineProps>;
 ### PcbNotePathProps `<pcbnotepath />`
 
 ```ts
-export type PcbNotePathProps = z.input<typeof pcbNotePathProps>;
+export interface PcbNotePathProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  route: RouteHintPointInput[];
+  strokeWidth?: string | number;
+  color?: string;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-path.ts)
@@ -871,7 +914,15 @@ export type PcbNotePathProps = z.input<typeof pcbNotePathProps>;
 ### PcbNoteRectProps `<pcbnoterect />`
 
 ```ts
-export type PcbNoteRectProps = z.input<typeof pcbNoteRectProps>;
+export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
+  width: string | number;
+  height: string | number;
+  strokeWidth?: string | number;
+  isFilled?: boolean;
+  hasStroke?: boolean;
+  isStrokeDashed?: boolean;
+  color?: string;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-rect.ts)
@@ -879,7 +930,18 @@ export type PcbNoteRectProps = z.input<typeof pcbNoteRectProps>;
 ### PcbNoteTextProps `<pcbnotetext />`
 
 ```ts
-export type PcbNoteTextProps = z.input<typeof pcbNoteTextProps>;
+export interface PcbNoteTextProps extends PcbLayoutProps {
+  text: string;
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right";
+  font?: "tscircuit2024";
+  fontSize?: string | number;
+  color?: string;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-text.ts)

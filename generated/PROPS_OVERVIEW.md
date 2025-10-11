@@ -610,6 +610,33 @@ export interface EditTraceHintEvent extends BaseManualEditEvent {
 }
 
 
+export interface FabricationNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point
+  to: string | Point
+  text?: string
+  offset?: string | number
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+  arrowSize?: string | number
+}
+
+
+export interface FabricationNoteTextProps extends PcbLayoutProps {
+  text: string
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right"
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+}
+
+
 export interface FootprintFileParserEntry {
   loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
 }
@@ -863,6 +890,65 @@ export interface PcbLayoutProps {
    * If true, both pcb and schematic coordinates will be interpreted relative to the parent group
    */
   relative?: boolean
+}
+
+
+export interface PcbNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point
+  to: string | Point
+  text?: string
+  offset?: string | number
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+  arrowSize?: string | number
+}
+
+
+export interface PcbNoteLineProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  x1: string | number
+  y1: string | number
+  x2: string | number
+  y2: string | number
+  strokeWidth?: string | number
+  color?: string
+  isDashed?: boolean
+}
+
+
+export interface PcbNotePathProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  route: RouteHintPointInput[]
+  strokeWidth?: string | number
+  color?: string
+}
+
+
+export interface PcbNoteRectProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  width: string | number
+  height: string | number
+  strokeWidth?: string | number
+  isFilled?: boolean
+  hasStroke?: boolean
+  isStrokeDashed?: boolean
+  color?: string
+}
+
+
+export interface PcbNoteTextProps extends PcbLayoutProps {
+  text: string
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right"
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
 }
 
 

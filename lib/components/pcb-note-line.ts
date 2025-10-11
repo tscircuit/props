@@ -1,6 +1,18 @@
 import { distance } from "circuit-json"
-import { pcbLayoutProps } from "lib/common/layout"
+import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
+import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+
+export interface PcbNoteLineProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  x1: string | number
+  y1: string | number
+  x2: string | number
+  y2: string | number
+  strokeWidth?: string | number
+  color?: string
+  isDashed?: boolean
+}
 
 export const pcbNoteLineProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
@@ -13,4 +25,7 @@ export const pcbNoteLineProps = pcbLayoutProps
     color: z.string().optional(),
     isDashed: z.boolean().optional(),
   })
-export type PcbNoteLineProps = z.input<typeof pcbNoteLineProps>
+
+expectTypesMatch<PcbNoteLineProps, z.input<typeof pcbNoteLineProps>>(true)
+
+export type PcbNoteLinePropsInput = z.input<typeof pcbNoteLineProps>

@@ -1,6 +1,18 @@
-import { length, route_hint_point } from "circuit-json"
-import { pcbLayoutProps } from "lib/common/layout"
+import {
+  length,
+  route_hint_point,
+  type RouteHintPointInput,
+} from "circuit-json"
+import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
+import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+
+export interface PcbNotePathProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  route: RouteHintPointInput[]
+  strokeWidth?: string | number
+  color?: string
+}
 
 export const pcbNotePathProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
@@ -9,4 +21,7 @@ export const pcbNotePathProps = pcbLayoutProps
     strokeWidth: length.optional(),
     color: z.string().optional(),
   })
-export type PcbNotePathProps = z.input<typeof pcbNotePathProps>
+
+expectTypesMatch<PcbNotePathProps, z.input<typeof pcbNotePathProps>>(true)
+
+export type PcbNotePathPropsInput = z.input<typeof pcbNotePathProps>

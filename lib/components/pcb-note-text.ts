@@ -1,6 +1,20 @@
 import { length } from "circuit-json"
-import { pcbLayoutProps } from "lib/common/layout"
+import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
+import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+
+export interface PcbNoteTextProps extends PcbLayoutProps {
+  text: string
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right"
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+}
 
 export const pcbNoteTextProps = pcbLayoutProps.extend({
   text: z.string(),
@@ -11,4 +25,7 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
   fontSize: length.optional(),
   color: z.string().optional(),
 })
-export type PcbNoteTextProps = z.input<typeof pcbNoteTextProps>
+
+expectTypesMatch<PcbNoteTextProps, z.input<typeof pcbNoteTextProps>>(true)
+
+export type PcbNoteTextPropsInput = z.input<typeof pcbNoteTextProps>

@@ -1,9 +1,22 @@
 import { distance, length } from "circuit-json"
-import { pcbLayoutProps } from "lib/common/layout"
-import { point } from "lib/common/point"
+import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
+import { point, type Point } from "lib/common/point"
+import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 const dimensionTarget = z.union([z.string(), point])
+
+export interface PcbNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point
+  to: string | Point
+  text?: string
+  offset?: string | number
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+  arrowSize?: string | number
+}
 
 export const pcbNoteDimensionProps = pcbLayoutProps
   .omit({ pcbX: true, pcbY: true, pcbRotation: true })
@@ -17,4 +30,9 @@ export const pcbNoteDimensionProps = pcbLayoutProps
     color: z.string().optional(),
     arrowSize: distance.optional(),
   })
-export type PcbNoteDimensionProps = z.input<typeof pcbNoteDimensionProps>
+
+expectTypesMatch<PcbNoteDimensionProps, z.input<typeof pcbNoteDimensionProps>>(
+  true,
+)
+
+export type PcbNoteDimensionPropsInput = z.input<typeof pcbNoteDimensionProps>

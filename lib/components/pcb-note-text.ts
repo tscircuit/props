@@ -3,7 +3,7 @@ import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface FabricationNoteTextProps extends PcbLayoutProps {
+export interface PcbNoteTextProps extends PcbLayoutProps {
   text: string
   anchorAlignment?:
     | "center"
@@ -16,7 +16,7 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
   color?: string
 }
 
-export const fabricationNoteTextProps = pcbLayoutProps.extend({
+export const pcbNoteTextProps = pcbLayoutProps.extend({
   text: z.string(),
   anchorAlignment: z
     .enum(["center", "top_left", "top_right", "bottom_left", "bottom_right"])
@@ -26,11 +26,6 @@ export const fabricationNoteTextProps = pcbLayoutProps.extend({
   color: z.string().optional(),
 })
 
-expectTypesMatch<
-  FabricationNoteTextProps,
-  z.input<typeof fabricationNoteTextProps>
->(true)
+expectTypesMatch<PcbNoteTextProps, z.input<typeof pcbNoteTextProps>>(true)
 
-export type FabricationNoteTextPropsInput = z.input<
-  typeof fabricationNoteTextProps
->
+export type PcbNoteTextPropsInput = z.input<typeof pcbNoteTextProps>

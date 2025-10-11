@@ -961,6 +961,34 @@ export interface DiodeProps<PinLabel extends string = string>
 }
 ```
 
+### fabrication-note-dimension
+
+```typescript
+export interface FabricationNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point
+  to: string | Point
+  text?: string
+  offset?: string | number
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+  arrowSize?: string | number
+}
+export const fabricationNoteDimensionProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    from: dimensionTarget,
+    to: dimensionTarget,
+    text: z.string().optional(),
+    offset: distance.optional(),
+    font: z.enum(["tscircuit2024"]).optional(),
+    fontSize: length.optional(),
+    color: z.string().optional(),
+    arrowSize: distance.optional(),
+  })
+```
+
 ### fabrication-note-path
 
 ```typescript
@@ -992,6 +1020,18 @@ export const fabricationNoteRectProps = pcbLayoutProps
 ### fabrication-note-text
 
 ```typescript
+export interface FabricationNoteTextProps extends PcbLayoutProps {
+  text: string
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right"
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+}
 export const fabricationNoteTextProps = pcbLayoutProps.extend({
   text: z.string(),
   anchorAlignment: z
@@ -1710,6 +1750,130 @@ pcbLayoutProps.extend({
     width: distance,
     height: distance,
   }),
+```
+
+### pcb-note-dimension
+
+```typescript
+export interface PcbNoteDimensionProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  from: string | Point
+  to: string | Point
+  text?: string
+  offset?: string | number
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+  arrowSize?: string | number
+}
+export const pcbNoteDimensionProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    from: dimensionTarget,
+    to: dimensionTarget,
+    text: z.string().optional(),
+    offset: distance.optional(),
+    font: z.enum(["tscircuit2024"]).optional(),
+    fontSize: length.optional(),
+    color: z.string().optional(),
+    arrowSize: distance.optional(),
+  })
+```
+
+### pcb-note-line
+
+```typescript
+export interface PcbNoteLineProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  x1: string | number
+  y1: string | number
+  x2: string | number
+  y2: string | number
+  strokeWidth?: string | number
+  color?: string
+  isDashed?: boolean
+}
+export const pcbNoteLineProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    x1: distance,
+    y1: distance,
+    x2: distance,
+    y2: distance,
+    strokeWidth: distance.optional(),
+    color: z.string().optional(),
+    isDashed: z.boolean().optional(),
+  })
+```
+
+### pcb-note-path
+
+```typescript
+export interface PcbNotePathProps
+  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  route: RouteHintPointInput[]
+  strokeWidth?: string | number
+  color?: string
+}
+export const pcbNotePathProps = pcbLayoutProps
+  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .extend({
+    route: z.array(route_hint_point),
+    strokeWidth: length.optional(),
+    color: z.string().optional(),
+  })
+```
+
+### pcb-note-rect
+
+```typescript
+export interface PcbNoteRectProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  width: string | number
+  height: string | number
+  strokeWidth?: string | number
+  isFilled?: boolean
+  hasStroke?: boolean
+  isStrokeDashed?: boolean
+  color?: string
+}
+export const pcbNoteRectProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    width: distance,
+    height: distance,
+    strokeWidth: distance.optional(),
+    isFilled: z.boolean().optional(),
+    hasStroke: z.boolean().optional(),
+    isStrokeDashed: z.boolean().optional(),
+    color: z.string().optional(),
+  })
+```
+
+### pcb-note-text
+
+```typescript
+export interface PcbNoteTextProps extends PcbLayoutProps {
+  text: string
+  anchorAlignment?:
+    | "center"
+    | "top_left"
+    | "top_right"
+    | "bottom_left"
+    | "bottom_right"
+  font?: "tscircuit2024"
+  fontSize?: string | number
+  color?: string
+}
+export const pcbNoteTextProps = pcbLayoutProps.extend({
+  text: z.string(),
+  anchorAlignment: z
+    .enum(["center", "top_left", "top_right", "bottom_left", "bottom_right"])
+    .default("center"),
+  font: z.enum(["tscircuit2024"]).optional(),
+  fontSize: length.optional(),
+  color: z.string().optional(),
+})
 ```
 
 ### pcb-trace

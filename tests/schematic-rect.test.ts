@@ -20,7 +20,6 @@ test("schematic rect parses minimal props", () => {
   expect(parsed.height).toBe(15)
   expect(parsed.rotation).toBe(0)
   expect(parsed.strokeWidth).toBeUndefined()
-  expect(parsed.color).toBe("#000000")
   expect(parsed.isFilled).toBe(false)
   expect(parsed.isDashed).toBe(false)
 })

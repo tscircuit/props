@@ -10,7 +10,7 @@ export const schematicArcProps = z.object({
     .enum(["clockwise", "counterclockwise"])
     .default("counterclockwise"),
   strokeWidth: distance.optional(),
-  color: z.string().optional().default("#000000"),
+  color: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
 })
 

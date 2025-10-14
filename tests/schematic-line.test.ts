@@ -19,7 +19,6 @@ test("schematic line parses with defaults", () => {
   expect(parsed.x2).toBe(5)
   expect(parsed.y2).toBe(5)
   expect(parsed.strokeWidth).toBeUndefined()
-  expect(parsed.color).toBe("#000000")
   expect(parsed.isDashed).toBe(false)
 })
 

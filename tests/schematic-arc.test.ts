@@ -17,7 +17,6 @@ test("schematic arc parses defaults", () => {
   expect(parsed.center).toEqual({ x: 0, y: 0 })
   expect(parsed.radius).toBe(1)
   expect(parsed.direction).toBe("counterclockwise")
-  expect(parsed.color).toBe("#000000")
   expect(parsed.isDashed).toBe(false)
 })
 

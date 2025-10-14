@@ -9,6 +9,7 @@ export interface CadModelProps extends CadModelBase {
   pcbX?: Distance
   pcbY?: Distance
   pcbZ?: Distance
+  modelUnitToMmScale?: Distance
 }
 
 const pcbPosition = z.object({

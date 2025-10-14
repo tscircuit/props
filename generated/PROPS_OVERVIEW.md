@@ -310,6 +310,7 @@ export interface CadModelProps extends CadModelBase {
   pcbX?: Distance
   pcbY?: Distance
   pcbZ?: Distance
+  modelUnitToMmScale?: Distance
 }
 
 
@@ -930,8 +931,7 @@ export interface PcbNotePathProps
 }
 
 
-export interface PcbNoteRectProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   width: string | number
   height: string | number
   strokeWidth?: string | number

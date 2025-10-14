@@ -547,6 +547,7 @@ export interface CadModelProps extends CadModelBase {
   pcbX?: Distance
   pcbY?: Distance
   pcbZ?: Distance
+  modelUnitToMmScale?: Distance
 }
 const cadModelBaseWithUrl = cadModelBase.extend({
   modelUrl: z.string(),
@@ -1827,8 +1828,7 @@ export const pcbNotePathProps = pcbLayoutProps
 ### pcb-note-rect
 
 ```typescript
-export interface PcbNoteRectProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   width: string | number
   height: string | number
   strokeWidth?: string | number

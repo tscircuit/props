@@ -10,6 +10,7 @@ export interface ProjectConfig
     | "version"
     | "url"
     | "printBoardInformationToSilkscreen"
+    | "includeBoardFiles"
   > {}
 
 const platformConfigObject = platformConfig as z.ZodObject<any>
@@ -20,6 +21,7 @@ export const projectConfig = platformConfigObject.pick({
   version: true,
   url: true,
   printBoardInformationToSilkscreen: true,
+  includeBoardFiles: true,
 }) as z.ZodType<ProjectConfig>
 
 expectTypesMatch<ProjectConfig, z.infer<typeof projectConfig>>(true)

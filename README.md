@@ -1519,6 +1519,7 @@ export interface PlatformConfig {
   version?: string;
   url?: string;
   printBoardInformationToSilkscreen?: boolean;
+  includeBoardFiles?: string[];
 
   pcbDisabled?: boolean;
   schematicDisabled?: boolean;
@@ -1558,6 +1559,7 @@ export interface ProjectConfig
     | "version"
     | "url"
     | "printBoardInformationToSilkscreen"
+    | "includeBoardFiles"
   > {}
 ```
 

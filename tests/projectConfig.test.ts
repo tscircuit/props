@@ -8,6 +8,7 @@ test("projectConfig only includes project-specific fields", () => {
     version: "1.2.3",
     url: "https://example.com/docs",
     printBoardInformationToSilkscreen: true,
+    includeBoards: ["boards/main.circuit.tsx"],
     pcbDisabled: true,
     schematicDisabled: true,
     partsEngineDisabled: true,
@@ -20,5 +21,6 @@ test("projectConfig only includes project-specific fields", () => {
     version: "1.2.3",
     url: "https://example.com/docs",
     printBoardInformationToSilkscreen: true,
+    includeBoards: ["boards/main.circuit.tsx"],
   })
 })

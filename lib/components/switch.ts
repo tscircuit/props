@@ -15,6 +15,11 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean
   dpst?: boolean
   dpdt?: boolean
+  simSwitchFrequency?: number | string
+  simCloseAt?: number | string
+  simOpenAt?: number | string
+  simStartClosed?: boolean
+  simStartOpen?: boolean
   connections?: Connections<string>
 }
 
@@ -26,6 +31,11 @@ export const switchProps = commonComponentProps
     spdt: z.boolean().optional(),
     dpst: z.boolean().optional(),
     dpdt: z.boolean().optional(),
+    simSwitchFrequency: z.union([z.number(), z.string()]).optional(),
+    simCloseAt: z.union([z.number(), z.string()]).optional(),
+    simOpenAt: z.union([z.number(), z.string()]).optional(),
+    simStartClosed: z.boolean().optional(),
+    simStartOpen: z.boolean().optional(),
     connections: z
       .custom<Connections<string>>()
       .pipe(z.record(z.string(), connectionTarget))

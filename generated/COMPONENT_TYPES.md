@@ -2639,9 +2639,9 @@ export interface SwitchProps extends CommonComponentProps {
     spdt: z.boolean().optional(),
     dpst: z.boolean().optional(),
     dpdt: z.boolean().optional(),
-    simSwitchFrequency: z.union([z.number(), z.string()]).optional(),
-    simCloseAt: z.union([z.number(), z.string()]).optional(),
-    simOpenAt: z.union([z.number(), z.string()]).optional(),
+    simSwitchFrequency: frequency.optional(),
+    simCloseAt: ms.optional(),
+    simOpenAt: ms.optional(),
     simStartClosed: z.boolean().optional(),
     simStartOpen: z.boolean().optional(),
     connections: z

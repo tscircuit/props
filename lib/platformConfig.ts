@@ -62,6 +62,7 @@ export interface PlatformConfig {
   version?: string
   url?: string
   printBoardInformationToSilkscreen?: boolean
+  includeBoardFiles?: string[]
 
   pcbDisabled?: boolean
   schematicDisabled?: boolean
@@ -155,6 +156,12 @@ export const platformConfig = z.object({
   version: z.string().optional(),
   url: z.string().optional(),
   printBoardInformationToSilkscreen: z.boolean().optional(),
+  includeBoardFiles: z
+    .array(z.string())
+    .describe(
+      'The board files to automatically build with "tsci build", defaults to ["**/*.circuit.tsx"]. Can be an array of files or globs',
+    )
+    .optional(),
   localCacheEngine: z.any().optional(),
   pcbDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),

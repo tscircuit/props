@@ -1165,6 +1165,7 @@ export interface PlatformConfig {
   version?: string
   url?: string
   printBoardInformationToSilkscreen?: boolean
+  includeBoardFiles?: string[]
 
   pcbDisabled?: boolean
   schematicDisabled?: boolean

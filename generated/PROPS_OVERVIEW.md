@@ -1183,11 +1183,6 @@ export interface PlatformConfig {
 
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 
-  simSwitchFrequency?: number | string
-  simCloseAt?: number | string
-  simOpenAt?: number | string
-  simStartClosed?: boolean
-  simStartOpen?: boolean
 }
 
 

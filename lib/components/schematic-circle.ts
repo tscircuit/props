@@ -5,7 +5,7 @@ export const schematicCircleProps = z.object({
   center: point,
   radius: distance,
   strokeWidth: distance.optional(),
-  color: z.string().optional().default("#000000"),
+  color: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.string().optional(),
   isDashed: z.boolean().optional().default(false),

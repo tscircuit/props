@@ -8,7 +8,7 @@ export const schematicRectProps = z.object({
   height: distance,
   rotation: rotation.default(0),
   strokeWidth: distance.optional(),
-  color: z.string().optional().default("#000000"),
+  color: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.string().optional(),
   isDashed: z.boolean().optional().default(false),

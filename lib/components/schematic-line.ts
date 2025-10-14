@@ -7,7 +7,7 @@ export const schematicLineProps = z.object({
   x2: distance,
   y2: distance,
   strokeWidth: distance.optional(),
-  color: z.string().optional().default("#000000"),
+  color: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
 })
 export type SchematicLineProps = z.input<typeof schematicLineProps>

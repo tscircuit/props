@@ -280,6 +280,7 @@ export interface CadModelBase {
   }
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
+  zOffsetFromSurface?: Distance
 }
 
 
@@ -930,8 +931,7 @@ export interface PcbNotePathProps
 }
 
 
-export interface PcbNoteRectProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   width: string | number
   height: string | number
   strokeWidth?: string | number

@@ -21,12 +21,14 @@ export interface CadModelBase {
   }
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
+  zOffsetFromSurface?: Distance
 }
 export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
   positionOffset: point3.optional(),
   size: point3.optional(),
   modelUnitToMmScale: distance.optional(),
+  zOffsetFromSurface: distance.optional(),
 })
 export interface CadModelStl extends CadModelBase {
   stlUrl: string
@@ -1827,8 +1829,7 @@ export const pcbNotePathProps = pcbLayoutProps
 ### pcb-note-rect
 
 ```typescript
-export interface PcbNoteRectProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   width: string | number
   height: string | number
   strokeWidth?: string | number
@@ -2208,7 +2209,7 @@ export const schematicArcProps = z.object({
     .enum(["clockwise", "counterclockwise"])
     .default("counterclockwise"),
   strokeWidth: distance.optional(),
-  color: z.string().optional().default("#000000"),
+  color: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
 })
 ```
@@ -2271,7 +2272,7 @@ export const schematicCircleProps = z.object({
   center: point,
   radius: distance,
   strokeWidth: distance.optional(),
-  color: z.string().optional().default("#000000"),
+  color: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
@@ -2287,7 +2288,7 @@ export const schematicLineProps = z.object({
   x2: distance,
   y2: distance,
   strokeWidth: distance.optional(),
-  color: z.string().optional().default("#000000"),
+  color: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
 })
 ```
@@ -2312,7 +2313,7 @@ export const schematicRectProps = z.object({
   height: distance,
   rotation: rotation.default(0),
   strokeWidth: distance.optional(),
-  color: z.string().optional().default("#000000"),
+  color: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.string().optional(),
   isDashed: z.boolean().optional().default(false),

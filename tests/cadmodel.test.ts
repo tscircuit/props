@@ -33,3 +33,17 @@ test("cadmodel accepts optional stepUrl", () => {
 
   expect(parsed.stepUrl).toBe("https://example.com/model.step")
 })
+
+test("cadmodel accepts zOffsetFromSurface", () => {
+  const raw: CadModelPropsInput = {
+    modelUrl: "https://example.com/model.stl",
+    zOffsetFromSurface: 0,
+  }
+
+  const parsed = cadmodelProps.parse(raw) as Exclude<
+    CadModelPropsInput,
+    null | string
+  >
+
+  expect(parsed.zOffsetFromSurface).toBe(0)
+})

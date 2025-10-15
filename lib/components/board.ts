@@ -45,6 +45,8 @@ export interface BoardProps
   topSilkscreenColor?: BoardColor
   /** Color of the bottom silkscreen */
   bottomSilkscreenColor?: BoardColor
+  /** Whether the board should be assembled on both sides */
+  doubleSidedAssembly?: boolean
 }
 
 export const boardProps = subcircuitGroupProps
@@ -63,6 +65,7 @@ export const boardProps = subcircuitGroupProps
     silkscreenColor: boardColor.optional(),
     topSilkscreenColor: boardColor.optional(),
     bottomSilkscreenColor: boardColor.optional(),
+    doubleSidedAssembly: z.boolean().optional().default(false),
   })
 
 type InferredBoardProps = z.input<typeof boardProps>

@@ -231,6 +231,8 @@ export interface BoardProps
   topSilkscreenColor?: BoardColor;
   /** Color of the bottom silkscreen */
   bottomSilkscreenColor?: BoardColor;
+  /** Whether the board should be assembled on both sides */
+  doubleSidedAssembly?: boolean;
 }
 ```
 

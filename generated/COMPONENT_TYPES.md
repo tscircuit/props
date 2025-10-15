@@ -461,8 +461,9 @@ export interface BoardProps
   silkscreenColor?: BoardColor
   topSilkscreenColor?: BoardColor
   bottomSilkscreenColor?: BoardColor
+  doubleSidedAssembly?: boolean
 }
-/** Color of the bottom silkscreen */
+/** Whether the board should be assembled on both sides */
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
@@ -479,6 +480,7 @@ export const boardProps = subcircuitGroupProps
     silkscreenColor: boardColor.optional(),
     topSilkscreenColor: boardColor.optional(),
     bottomSilkscreenColor: boardColor.optional(),
+    doubleSidedAssembly: z.boolean().optional().default(false),
   })
 ```
 

@@ -1418,6 +1418,11 @@ export interface SwitchProps extends CommonComponentProps {
   spst?: boolean
   dpst?: boolean
   dpdt?: boolean
+  simSwitchFrequency?: number | string
+  simCloseAt?: number | string
+  simOpenAt?: number | string
+  simStartClosed?: boolean
+  simStartOpen?: boolean
   connections?: Connections<string>
 }
 

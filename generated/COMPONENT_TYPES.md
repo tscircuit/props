@@ -2479,6 +2479,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   width: Distance
   height: Distance
   rectBorderRadius?: Distance
+  cornerRadius?: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
 }
@@ -2488,6 +2489,7 @@ export interface RotatedRectSmtPadProps
   shape: "rotated_rect"
   width: Distance
   height: Distance
+  cornerRadius?: Distance
   ccwRotation: number
   portHints?: PortHints
   coveredWithSolderMask?: boolean
@@ -2524,6 +2526,7 @@ export const rectSmtPadProps = pcbLayoutProps
     width: distance,
     height: distance,
     rectBorderRadius: distance.optional(),
+    cornerRadius: distance.optional(),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
   })
@@ -2535,6 +2538,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     width: distance,
     height: distance,
     ccwRotation: z.number(),
+    cornerRadius: distance.optional(),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
   })

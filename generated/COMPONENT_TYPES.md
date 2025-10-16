@@ -1742,6 +1742,32 @@ export const netLabelProps = z.object({
 })
 ```
 
+### panel
+
+```typescript
+export interface PanelProps extends BaseGroupProps {
+  width: Distance
+  height: Distance
+  children?: BaseGroupProps["children"]
+  noSolderMask?: boolean
+}
+/**
+   * If true, prevent a solder mask from being applied to this panel.
+   */
+export const panelProps = baseGroupProps
+  .omit({
+    width: true,
+    height: true,
+    children: true,
+  })
+  .extend({
+    width: distance,
+    height: distance,
+    children: z.any().optional(),
+    noSolderMask: z.boolean().optional(),
+  })
+```
+
 ### pcb-keepout
 
 ```typescript

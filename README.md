@@ -55,6 +55,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<net />`                      | [`NetProps`](#netprops-net)                                                                |
 | `<netalias />`                 | [`NetAliasProps`](#netaliasprops-netalias)                                                 |
 | `<netlabel />`                 | [`NetLabelProps`](#netlabelprops-netlabel)                                                 |
+| `<panel />`                    | [`PanelProps`](#panelprops-panel)                                                          |
 | `<pcbkeepout />`               | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                           |
 | `<pcbnotedimension />`         | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                         |
 | `<pcbnoteline />`              | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                        |
@@ -860,6 +861,22 @@ export interface NetLabelProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/netlabel.ts)
+
+### PanelProps `<panel />`
+
+```ts
+export interface PanelProps extends BaseGroupProps {
+  width: Distance;
+  height: Distance;
+  children?: BaseGroupProps["children"];
+  /**
+   * If true, prevent a solder mask from being applied to this panel.
+   */
+  noSolderMask?: boolean;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/panel.ts)
 
 ### PcbKeepoutProps `<pcbkeepout />`
 

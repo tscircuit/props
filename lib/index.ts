@@ -14,6 +14,7 @@ export * from "./common/cadModel"
 export * from "./common/schematicPinLabel"
 
 export * from "./components/board"
+export * from "./components/panel"
 export * from "./components/breakout"
 export * from "./components/chip"
 export * from "./components/pinout"

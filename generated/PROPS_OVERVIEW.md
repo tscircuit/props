@@ -877,6 +877,17 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
 }
 
 
+export interface PanelProps extends BaseGroupProps {
+  width: Distance
+  height: Distance
+  children?: BaseGroupProps["children"]
+  /**
+   * If true, prevent a solder mask from being applied to this panel.
+   */
+  noSolderMask?: boolean
+}
+
+
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number

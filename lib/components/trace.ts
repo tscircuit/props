@@ -15,7 +15,7 @@ const baseTraceProps = z.object({
   schematicRouteHints: z.array(point).optional(),
   pcbRouteHints: z.array(route_hint_point).optional(),
   pcbPathRelativeTo: z.string().optional(),
-  pcbPath: z.array(point).optional(),
+  pcbPath: z.array(z.union([point, z.string()])).optional(),
   schDisplayLabel: z.string().optional(),
   schStroke: z.string().optional(),
   highlightColor: z.string().optional(),

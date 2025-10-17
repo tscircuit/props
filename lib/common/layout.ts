@@ -11,11 +11,23 @@ import { type CadModelProp, cadModelProp } from "./cadModel"
 import { type FootprintProp, footprintProp } from "./footprintProp"
 import { type SymbolProp, symbolProp } from "./symbolProp"
 
+export type PcbPositionMode =
+  | "relative_to_group_anchor"
+  | "auto"
+  | "relative_to_board_anchor"
+  | "relative_to_component_anchor"
+
+/** @deprecated Use {@link PcbPositionMode} instead. */
+export type PositionMode = PcbPositionMode
+
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  pcbOffsetX?: string | number
+  pcbOffsetY?: string | number
   pcbRotation?: string | number
   pcbPositionAnchor?: string
+  pcbPositionMode?: PcbPositionMode
   layer?: LayerRefInput
   pcbMarginTop?: string | number
   pcbMarginRight?: string | number
@@ -36,8 +48,11 @@ export interface PcbLayoutProps {
 export interface CommonLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  pcbOffsetX?: string | number
+  pcbOffsetY?: string | number
   pcbRotation?: string | number
   pcbPositionAnchor?: string
+  pcbPositionMode?: PcbPositionMode
 
   pcbMarginTop?: string | number
   pcbMarginRight?: string | number
@@ -80,8 +95,18 @@ export interface CommonLayoutProps {
 export const pcbLayoutProps = z.object({
   pcbX: distance.optional(),
   pcbY: distance.optional(),
+  pcbOffsetX: distance.optional(),
+  pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),
   pcbPositionAnchor: z.string().optional(),
+  pcbPositionMode: z
+    .enum([
+      "relative_to_group_anchor",
+      "auto",
+      "relative_to_board_anchor",
+      "relative_to_component_anchor",
+    ])
+    .optional(),
   layer: layer_ref.optional(),
   pcbMarginTop: distance.optional(),
   pcbMarginRight: distance.optional(),
@@ -98,8 +123,18 @@ expectTypesMatch<PcbLayoutProps, InferredPcbLayoutProps>(true)
 export const commonLayoutProps = z.object({
   pcbX: distance.optional(),
   pcbY: distance.optional(),
+  pcbOffsetX: distance.optional(),
+  pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),
   pcbPositionAnchor: z.string().optional(),
+  pcbPositionMode: z
+    .enum([
+      "relative_to_group_anchor",
+      "auto",
+      "relative_to_board_anchor",
+      "relative_to_component_anchor",
+    ])
+    .optional(),
   pcbMarginTop: distance.optional(),
   pcbMarginRight: distance.optional(),
   pcbMarginBottom: distance.optional(),

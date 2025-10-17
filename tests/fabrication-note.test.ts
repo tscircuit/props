@@ -29,6 +29,22 @@ test("fabrication note rect parses minimal props", () => {
   expect(parsed.color).toBeUndefined()
 })
 
+test("fabrication note rect accepts pcb offsets and position mode", () => {
+  const rect = {
+    pcbOffsetX: "2mm",
+    pcbOffsetY: 3,
+    pcbPositionMode: "relative_to_group_anchor" as const,
+    width: 5,
+    height: 4,
+  }
+
+  const parsed = fabricationNoteRectProps.parse(rect)
+
+  expect(parsed.pcbOffsetX).toBeCloseTo(2)
+  expect(parsed.pcbOffsetY).toBe(3)
+  expect(parsed.pcbPositionMode).toBe("relative_to_group_anchor")
+})
+
 test("fabrication note rect allows styling overrides", () => {
   const parsed = fabricationNoteRectProps.parse({
     width: "3mm",

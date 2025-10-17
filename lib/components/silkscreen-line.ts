@@ -3,7 +3,13 @@ import { pcbLayoutProps } from "lib/common/layout"
 import type { z } from "zod"
 
 export const silkscreenLineProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .omit({
+    pcbX: true,
+    pcbY: true,
+    pcbOffsetX: true,
+    pcbOffsetY: true,
+    pcbRotation: true,
+  })
   .extend({
     strokeWidth: distance,
     x1: distance,

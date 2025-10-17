@@ -4,7 +4,13 @@ import { point } from "lib/common/point"
 import { z } from "zod"
 
 export const courtyardOutlineProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .omit({
+    pcbX: true,
+    pcbY: true,
+    pcbOffsetX: true,
+    pcbOffsetY: true,
+    pcbRotation: true,
+  })
   .extend({
     outline: z.array(point),
     strokeWidth: length.optional(),

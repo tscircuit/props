@@ -9,6 +9,7 @@ test("projectConfig only includes project-specific fields", () => {
     url: "https://example.com/docs",
     printBoardInformationToSilkscreen: true,
     includeBoardFiles: ["boards/main.circuit.tsx"],
+    snapshotsDir: "custom/snapshots",
     pcbDisabled: true,
     schematicDisabled: true,
     partsEngineDisabled: true,
@@ -22,5 +23,14 @@ test("projectConfig only includes project-specific fields", () => {
     url: "https://example.com/docs",
     printBoardInformationToSilkscreen: true,
     includeBoardFiles: ["boards/main.circuit.tsx"],
+    snapshotsDir: "custom/snapshots",
   })
+})
+
+test("projectConfig includes snapshotsDir when provided", () => {
+  const config = projectConfig.parse({
+    snapshotsDir: "tests/__snapshots__",
+  })
+
+  expect(config.snapshotsDir).toBe("tests/__snapshots__")
 })

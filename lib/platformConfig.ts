@@ -62,6 +62,7 @@ export interface PlatformConfig {
   url?: string
   printBoardInformationToSilkscreen?: boolean
   includeBoardFiles?: string[]
+  snapshotsDir?: string
 
   pcbDisabled?: boolean
   schematicDisabled?: boolean
@@ -153,6 +154,12 @@ export const platformConfig = z.object({
     .array(z.string())
     .describe(
       'The board files to automatically build with "tsci build", defaults to ["**/*.circuit.tsx"]. Can be an array of files or globs',
+    )
+    .optional(),
+  snapshotsDir: z
+    .string()
+    .describe(
+      'The directory where snapshots are stored for "tsci snapshot", defaults to "tests/__snapshots__"',
     )
     .optional(),
   localCacheEngine: z.any().optional(),

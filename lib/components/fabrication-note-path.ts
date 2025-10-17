@@ -3,7 +3,13 @@ import { pcbLayoutProps } from "lib/common/layout"
 import { z } from "zod"
 
 export const fabricationNotePathProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .omit({
+    pcbX: true,
+    pcbY: true,
+    pcbOffsetX: true,
+    pcbOffsetY: true,
+    pcbRotation: true,
+  })
   .extend({
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),

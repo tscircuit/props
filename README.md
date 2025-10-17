@@ -295,6 +295,8 @@ export interface CadModelProps extends CadModelBase {
   stepUrl?: string;
   pcbX?: Distance;
   pcbY?: Distance;
+  pcbOffsetX?: Distance;
+  pcbOffsetY?: Distance;
   pcbZ?: Distance;
 }
 ```
@@ -503,7 +505,10 @@ export interface DiodeProps<PinLabel extends string = string>
 
 ```ts
 export interface FabricationNoteDimensionProps
-  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  extends Omit<
+    PcbLayoutProps,
+    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  > {
   from: string | Point;
   to: string | Point;
   text?: string;
@@ -662,7 +667,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbPaddingTop?: Distance;
   pcbPaddingBottom?: Distance;
   /**
-   * Anchor to use when interpreting pcbX/pcbY relative to pcbPosition
+   * Anchor to use when interpreting pcbX/pcbY/pcbOffsetX/pcbOffsetY relative to pcbPosition
    */
   pcbPositionAnchor?: AutocompleteString<z.infer<typeof ninePointAnchor>>;
 
@@ -890,7 +895,10 @@ export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
 
 ```ts
 export interface PcbNoteDimensionProps
-  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  extends Omit<
+    PcbLayoutProps,
+    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  > {
   from: string | Point;
   to: string | Point;
   text?: string;
@@ -908,7 +916,10 @@ export interface PcbNoteDimensionProps
 
 ```ts
 export interface PcbNoteLineProps
-  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  extends Omit<
+    PcbLayoutProps,
+    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  > {
   x1: string | number;
   y1: string | number;
   x2: string | number;
@@ -925,7 +936,10 @@ export interface PcbNoteLineProps
 
 ```ts
 export interface PcbNotePathProps
-  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  extends Omit<
+    PcbLayoutProps,
+    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  > {
   route: RouteHintPointInput[];
   strokeWidth?: string | number;
   color?: string;
@@ -1545,6 +1559,7 @@ export interface PlatformConfig {
   url?: string;
   printBoardInformationToSilkscreen?: boolean;
   includeBoardFiles?: string[];
+  snapshotsDir?: string;
 
   pcbDisabled?: boolean;
   schematicDisabled?: boolean;
@@ -1585,6 +1600,7 @@ export interface ProjectConfig
     | "url"
     | "printBoardInformationToSilkscreen"
     | "includeBoardFiles"
+    | "snapshotsDir"
   > {}
 ```
 

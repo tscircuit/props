@@ -8,14 +8,23 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface PcbNotePathProps
-  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  extends Omit<
+    PcbLayoutProps,
+    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  > {
   route: RouteHintPointInput[]
   strokeWidth?: string | number
   color?: string
 }
 
 export const pcbNotePathProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .omit({
+    pcbX: true,
+    pcbY: true,
+    pcbOffsetX: true,
+    pcbOffsetY: true,
+    pcbRotation: true,
+  })
   .extend({
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),

@@ -7,7 +7,10 @@ import { z } from "zod"
 const dimensionTarget = z.union([z.string(), point])
 
 export interface FabricationNoteDimensionProps
-  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  extends Omit<
+    PcbLayoutProps,
+    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  > {
   from: string | Point
   to: string | Point
   text?: string
@@ -19,7 +22,13 @@ export interface FabricationNoteDimensionProps
 }
 
 export const fabricationNoteDimensionProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .omit({
+    pcbX: true,
+    pcbY: true,
+    pcbOffsetX: true,
+    pcbOffsetY: true,
+    pcbRotation: true,
+  })
   .extend({
     from: dimensionTarget,
     to: dimensionTarget,

@@ -29,3 +29,17 @@ test("should parse breakout point props", () => {
   expect(parsed.pcbY).toBe(2)
   expect(parsed.connection).toBe(".R1 > .pin1")
 })
+
+test("should parse breakout point offsets and position mode", () => {
+  const raw = {
+    pcbOffsetX: 1,
+    pcbOffsetY: "3mm",
+    pcbPositionMode: "relative_to_board_anchor" as const,
+    connection: ".R2 > .pin1",
+  }
+
+  const parsed = breakoutPointProps.parse(raw)
+  expect(parsed.pcbOffsetX).toBe(1)
+  expect(parsed.pcbOffsetY).toBeCloseTo(3)
+  expect(parsed.pcbPositionMode).toBe("relative_to_board_anchor")
+})

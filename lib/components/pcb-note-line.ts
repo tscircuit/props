@@ -4,7 +4,10 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface PcbNoteLineProps
-  extends Omit<PcbLayoutProps, "pcbX" | "pcbY" | "pcbRotation"> {
+  extends Omit<
+    PcbLayoutProps,
+    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  > {
   x1: string | number
   y1: string | number
   x2: string | number
@@ -15,7 +18,13 @@ export interface PcbNoteLineProps
 }
 
 export const pcbNoteLineProps = pcbLayoutProps
-  .omit({ pcbX: true, pcbY: true, pcbRotation: true })
+  .omit({
+    pcbX: true,
+    pcbY: true,
+    pcbOffsetX: true,
+    pcbOffsetY: true,
+    pcbRotation: true,
+  })
   .extend({
     x1: distance,
     y1: distance,

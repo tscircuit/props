@@ -20,6 +20,22 @@ test("cadmodel accepts pcb coordinates", () => {
   expect(parsed.pcbZ).toBe(3)
 })
 
+test("cadmodel accepts pcb offsets", () => {
+  const raw: CadModelPropsInput = {
+    modelUrl: "https://example.com/model.stl",
+    pcbOffsetX: "1mm",
+    pcbOffsetY: 2,
+  }
+
+  const parsed = cadmodelProps.parse(raw) as Exclude<
+    CadModelPropsInput,
+    null | string
+  >
+
+  expect(parsed.pcbOffsetX).toBeCloseTo(1)
+  expect(parsed.pcbOffsetY).toBe(2)
+})
+
 test("cadmodel accepts optional stepUrl", () => {
   const raw: CadModelPropsInput = {
     modelUrl: "https://example.com/model.stl",

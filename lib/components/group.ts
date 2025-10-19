@@ -397,6 +397,11 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   autorouter?: AutorouterProp
 
   /**
+   * Serialized circuit JSON describing a precompiled subcircuit
+   */
+  circuitJson?: any[]
+
+  /**
    * If true, we'll automatically layout the schematic for this group. Must be
    * a subcircuit (currently). This is eventually going to be replaced with more
    * sophisticated layout options/modes and will be enabled by default.
@@ -553,6 +558,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   outline: z.array(point).optional(),
   outlineOffsetX: distance.optional(),
   outlineOffsetY: distance.optional(),
+  circuitJson: z.array(z.any()).optional(),
 })
 
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({

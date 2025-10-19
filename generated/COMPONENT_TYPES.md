@@ -1451,6 +1451,8 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
   autorouter?: AutorouterProp
 
+  circuitJson?: any[]
+
   schAutoLayoutEnabled?: boolean
 
   schTraceAutoLabelEnabled?: boolean
@@ -1589,6 +1591,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   outline: z.array(point).optional(),
   outlineOffsetX: distance.optional(),
   outlineOffsetY: distance.optional(),
+  circuitJson: z.array(z.any()).optional(),
 })
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
   subcircuit: z.literal(true),

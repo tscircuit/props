@@ -2804,6 +2804,7 @@ export interface TestpointProps extends CommonComponentProps {
   holeDiameter?: number | string
   width?: number | string
   height?: number | string
+  withouthole?: boolean
 }
 .extend({
     footprintVariant: z.enum(["pad", "through_hole"]).optional(),
@@ -2812,6 +2813,7 @@ export interface TestpointProps extends CommonComponentProps {
     holeDiameter: distance.optional(),
     width: distance.optional(),
     height: distance.optional(),
+    withouthole: z.boolean().optional(),
   })
 ```
 

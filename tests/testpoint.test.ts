@@ -37,6 +37,19 @@ test("should parse through_hole testpoint", () => {
   expect(parsed.holeDiameter).toBe(1)
 })
 
+test("should allow through_hole testpoint without hole when withouthole is true", () => {
+  const rawProps: TestpointProps = {
+    name: "tp2a",
+    footprintVariant: "through_hole",
+    padDiameter: 2,
+    withouthole: true,
+  }
+  const parsed = testpointProps.parse(rawProps)
+  expect(parsed.footprintVariant).toBe("through_hole")
+  expect(parsed.withouthole).toBe(true)
+  expect(parsed.holeDiameter).toBeUndefined()
+})
+
 test("should require holeDiameter for through_hole variant", () => {
   expect(() =>
     testpointProps.parse({

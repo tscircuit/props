@@ -31,6 +31,10 @@ export interface TestpointProps extends CommonComponentProps {
    * Height of the pad when padShape is rect
    */
   height?: number | string
+  /**
+   * When true, do not include a drilled hole even if using a through-hole footprint
+   */
+  withouthole?: boolean
 }
 
 export const testpointProps = commonComponentProps
@@ -41,10 +45,12 @@ export const testpointProps = commonComponentProps
     holeDiameter: distance.optional(),
     width: distance.optional(),
     height: distance.optional(),
+    withouthole: z.boolean().optional(),
   })
   .refine(
     (props) =>
       props.footprintVariant !== "through_hole" ||
+      props.withouthole === true ||
       props.holeDiameter !== undefined,
     { message: "holeDiameter is required for through_hole testpoints" },
   )

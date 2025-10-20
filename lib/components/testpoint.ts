@@ -47,13 +47,37 @@ export const testpointProps = commonComponentProps
     height: distance.optional(),
     withouthole: z.boolean().optional(),
   })
-  .refine(
-    (props) =>
-      props.footprintVariant !== "through_hole" ||
-      props.withouthole === true ||
-      props.holeDiameter !== undefined,
-    { message: "holeDiameter is required for through_hole testpoints" },
-  )
+  .superRefine((props, ctx) => {
+    if (props.footprintVariant === "through_hole") {
+      const hasHole = props.holeDiameter !== undefined
+      const wantsNoHole = props.withouthole === true
+
+      if (hasHole && wantsNoHole) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "withouthole cannot be used alongside holeDiameter",
+          path: ["withouthole"],
+        })
+      }
+
+      if (!hasHole && !wantsNoHole) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            "holeDiameter is required for through_hole testpoints unless withouthole is true",
+          path: ["holeDiameter"],
+        })
+      }
+    }
+
+    if (props.withouthole && props.footprintVariant !== "through_hole") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "withouthole can only be used with the through_hole footprint",
+        path: ["withouthole"],
+      })
+    }
+  })
 
 export type InferredTestpointProps = z.input<typeof testpointProps>
 expectTypesMatch<TestpointProps, InferredTestpointProps>(true)

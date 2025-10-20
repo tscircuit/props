@@ -59,3 +59,25 @@ test("should require holeDiameter for through_hole variant", () => {
     } as TestpointProps),
   ).toThrow(z.ZodError)
 })
+
+test("should reject withouthole when holeDiameter is provided", () => {
+  expect(() =>
+    testpointProps.parse({
+      name: "tp4",
+      footprintVariant: "through_hole",
+      padDiameter: 2,
+      holeDiameter: 1,
+      withouthole: true,
+    } as TestpointProps),
+  ).toThrow(z.ZodError)
+})
+
+test("should reject withouthole for non through_hole footprint", () => {
+  expect(() =>
+    testpointProps.parse({
+      name: "tp5",
+      footprintVariant: "pad",
+      withouthole: true,
+    } as TestpointProps),
+  ).toThrow(z.ZodError)
+})

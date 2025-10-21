@@ -1455,6 +1455,7 @@ export interface TestpointProps extends CommonComponentProps {
    * Height of the pad when padShape is rect
    */
   height?: number | string;
+  connections?: TestpointConnections;
 }
 ```
 

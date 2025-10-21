@@ -31,10 +31,14 @@ test("should parse through_hole testpoint", () => {
     footprintVariant: "through_hole",
     padDiameter: 2,
     holeDiameter: 1,
+    connections: {
+      pin1: ".U1 > .pin1",
+    },
   }
   const parsed = testpointProps.parse(rawProps)
   expect(parsed.footprintVariant).toBe("through_hole")
   expect(parsed.holeDiameter).toBe(1)
+  expect(parsed.connections?.pin1).toBe(".U1 > .pin1")
 })
 
 test("should require holeDiameter for through_hole variant", () => {
@@ -44,5 +48,26 @@ test("should require holeDiameter for through_hole variant", () => {
       footprintVariant: "through_hole",
       padDiameter: 2,
     } as TestpointProps),
+  ).toThrow(z.ZodError)
+})
+
+test("should require pin1 connection when connections provided", () => {
+  expect(() =>
+    testpointProps.parse({
+      name: "tp4",
+      connections: {} as TestpointProps["connections"],
+    }),
+  ).toThrow(z.ZodError)
+})
+
+test("should reject unknown connection labels", () => {
+  expect(() =>
+    testpointProps.parse({
+      name: "tp5",
+      connections: {
+        pin1: ".U1 > .pin1",
+        pin2: ".U1 > .pin2",
+      } as unknown as TestpointProps["connections"],
+    }),
   ).toThrow(z.ZodError)
 })

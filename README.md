@@ -188,6 +188,7 @@ export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis";
   duration?: number | string;
   timePerStep?: number | string;
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">;
 }
 ```
 
@@ -1561,6 +1562,8 @@ export interface PlatformConfig {
   includeBoardFiles?: string[];
   snapshotsDir?: string;
 
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">;
+
   pcbDisabled?: boolean;
   schematicDisabled?: boolean;
   partsEngineDisabled?: boolean;
@@ -1601,6 +1604,7 @@ export interface ProjectConfig
     | "printBoardInformationToSilkscreen"
     | "includeBoardFiles"
     | "snapshotsDir"
+    | "defaultSpiceEngine"
   > {}
 ```
 

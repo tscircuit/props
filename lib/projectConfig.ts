@@ -12,6 +12,7 @@ export interface ProjectConfig
     | "printBoardInformationToSilkscreen"
     | "includeBoardFiles"
     | "snapshotsDir"
+    | "defaultSpiceEngine"
   > {}
 
 const platformConfigObject = platformConfig as z.ZodObject<any>
@@ -24,6 +25,7 @@ export const projectConfig = platformConfigObject.pick({
   printBoardInformationToSilkscreen: true,
   includeBoardFiles: true,
   snapshotsDir: true,
+  defaultSpiceEngine: true,
 }) as z.ZodType<ProjectConfig>
 
 expectTypesMatch<ProjectConfig, z.infer<typeof projectConfig>>(true)

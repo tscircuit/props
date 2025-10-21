@@ -440,6 +440,7 @@ export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis"
   duration?: number | string
   timePerStep?: number | string
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
 }
 export const analogSimulationProps = z.object({
   simulationType: z
@@ -447,6 +448,7 @@ export const analogSimulationProps = z.object({
     .default("spice_transient_analysis"),
   duration: ms.optional(),
   timePerStep: ms.optional(),
+  spiceEngine: spiceEngine.optional(),
 })
 ```
 

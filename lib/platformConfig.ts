@@ -4,6 +4,7 @@ import {
   type PartsEngine,
   partsEngine,
 } from "./components/group"
+import type { AutocompleteString } from "./common/autocomplete"
 import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
@@ -64,6 +65,8 @@ export interface PlatformConfig {
   includeBoardFiles?: string[]
   snapshotsDir?: string
 
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
+
   pcbDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
@@ -118,6 +121,10 @@ const spiceEngineZod = z.object({
     ),
 })
 
+const defaultSpiceEngine = z.custom<AutocompleteString<"spicey" | "ngspice">>(
+  (value) => typeof value === "string",
+)
+
 const autorouterInstance = z.object({
   run: z
     .function()
@@ -162,6 +169,7 @@ export const platformConfig = z.object({
       'The directory where snapshots are stored for "tsci snapshot", defaults to "tests/__snapshots__"',
     )
     .optional(),
+  defaultSpiceEngine: defaultSpiceEngine.optional(),
   localCacheEngine: z.any().optional(),
   pcbDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),

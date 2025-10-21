@@ -10,6 +10,7 @@ test("projectConfig only includes project-specific fields", () => {
     printBoardInformationToSilkscreen: true,
     includeBoardFiles: ["boards/main.circuit.tsx"],
     snapshotsDir: "custom/snapshots",
+    defaultSpiceEngine: "spicey",
     pcbDisabled: true,
     schematicDisabled: true,
     partsEngineDisabled: true,
@@ -24,6 +25,7 @@ test("projectConfig only includes project-specific fields", () => {
     printBoardInformationToSilkscreen: true,
     includeBoardFiles: ["boards/main.circuit.tsx"],
     snapshotsDir: "custom/snapshots",
+    defaultSpiceEngine: "spicey",
   })
 })
 

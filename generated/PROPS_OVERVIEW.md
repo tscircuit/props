@@ -22,6 +22,7 @@ export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis"
   duration?: number | string
   timePerStep?: number | string
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
 }
 
 
@@ -1200,6 +1201,8 @@ export interface PlatformConfig {
   printBoardInformationToSilkscreen?: boolean
   includeBoardFiles?: string[]
   snapshotsDir?: string
+
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
 
   pcbDisabled?: boolean
   schematicDisabled?: boolean

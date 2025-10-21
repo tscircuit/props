@@ -27,3 +27,14 @@ test("analog simulation accepts time parameters", () => {
   expect(parsed.duration).toBe(1)
   expect(parsed.timePerStep).toBe(0.001)
 })
+
+test("analog simulation accepts spice engine selection", () => {
+  const raw: AnalogSimulationProps = {
+    spiceEngine: "spicey",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof analogSimulationProps>>()
+
+  const parsed = analogSimulationProps.parse(raw)
+  expect(parsed.spiceEngine).toBe("spicey")
+})

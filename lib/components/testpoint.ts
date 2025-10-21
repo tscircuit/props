@@ -5,6 +5,18 @@ import {
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import { connectionTarget } from "lib/common/connectionsProp"
+
+export const testpointPins = ["pin1"] as const
+export type TestpointPinLabels = (typeof testpointPins)[number]
+
+const testpointConnectionsProp = z
+  .object({
+    pin1: connectionTarget,
+  })
+  .strict()
+
+export type TestpointConnections = z.infer<typeof testpointConnectionsProp>
 
 export interface TestpointProps extends CommonComponentProps {
   /**
@@ -31,10 +43,12 @@ export interface TestpointProps extends CommonComponentProps {
    * Height of the pad when padShape is rect
    */
   height?: number | string
+  connections?: TestpointConnections
 }
 
 export const testpointProps = commonComponentProps
   .extend({
+    connections: testpointConnectionsProp.optional(),
     footprintVariant: z.enum(["pad", "through_hole"]).optional(),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),
     padDiameter: distance.optional(),

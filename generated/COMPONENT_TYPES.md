@@ -2799,6 +2799,12 @@ export const symbolProps = z.object({
 ### testpoint
 
 ```typescript
+export type TestpointPinLabels = (typeof testpointPins)[number]
+
+const testpointConnectionsProp = z
+  .object({
+    pin1: connectionTarget,
+  })
 export interface TestpointProps extends CommonComponentProps {
   footprintVariant?: "pad" | "through_hole"
   padShape?: "rect" | "circle"
@@ -2806,8 +2812,10 @@ export interface TestpointProps extends CommonComponentProps {
   holeDiameter?: number | string
   width?: number | string
   height?: number | string
+  connections?: TestpointConnections
 }
 .extend({
+    connections: testpointConnectionsProp.optional(),
     footprintVariant: z.enum(["pad", "through_hole"]).optional(),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),
     padDiameter: distance.optional(),

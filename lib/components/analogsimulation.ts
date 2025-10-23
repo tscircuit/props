@@ -20,7 +20,7 @@ export const analogSimulationProps = z.object({
     .default("spice_transient_analysis"),
   duration: ms.optional(),
   timePerStep: ms.optional(),
-  spiceEngine: spiceEngine.optional(),
+  spiceEngine: spiceEngine.optional().default("spicey"),
 })
 
 expectTypesMatch<AnalogSimulationProps, z.input<typeof analogSimulationProps>>(

@@ -6,13 +6,14 @@ import {
 import { expectTypeOf } from "expect-type"
 import { z } from "zod"
 
-test("analog simulation defaults to spice transient analysis", () => {
+test("analog simulation defaults to spice transient analysis and spicey engine", () => {
   const raw: AnalogSimulationProps = {}
 
   expectTypeOf(raw).toMatchTypeOf<z.input<typeof analogSimulationProps>>()
 
   const parsed = analogSimulationProps.parse(raw)
   expect(parsed.simulationType).toBe("spice_transient_analysis")
+  expect(parsed.spiceEngine).toBe("spicey")
 })
 
 test("analog simulation accepts time parameters", () => {
@@ -37,4 +38,13 @@ test("analog simulation accepts spice engine selection", () => {
 
   const parsed = analogSimulationProps.parse(raw)
   expect(parsed.spiceEngine).toBe("spicey")
+})
+
+test("analog simulation accepts ngspice engine selection", () => {
+  const raw: AnalogSimulationProps = {
+    spiceEngine: "ngspice",
+  }
+
+  const parsed = analogSimulationProps.parse(raw)
+  expect(parsed.spiceEngine).toBe("ngspice")
 })

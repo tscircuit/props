@@ -2862,12 +2862,12 @@ export const portRef = z.union([
   z.string(),
   z.custom<{ getPortSelector: () => string }>((v) =>
 baseTraceProps.extend({
-    path: z.array(portRef),
-  }),
+      path: z.array(portRef),
+    }),
 baseTraceProps.extend({
-    from: portRef,
-    to: portRef,
-  }),
+      from: portRef,
+      to: portRef,
+    }),
 ```
 
 ### transistor

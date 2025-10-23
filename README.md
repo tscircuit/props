@@ -518,6 +518,7 @@ export interface FabricationNoteDimensionProps
   fontSize?: string | number;
   color?: string;
   arrowSize?: string | number;
+  units?: "in" | "mm";
 }
 ```
 
@@ -908,6 +909,7 @@ export interface PcbNoteDimensionProps
   fontSize?: string | number;
   color?: string;
   arrowSize?: string | number;
+  units?: "in" | "mm";
 }
 ```
 

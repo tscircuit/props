@@ -1017,6 +1017,7 @@ export interface FabricationNoteDimensionProps
   fontSize?: string | number
   color?: string
   arrowSize?: string | number
+  units?: "in" | "mm"
 }
 export const fabricationNoteDimensionProps = pcbLayoutProps
   .omit({
@@ -1035,6 +1036,7 @@ export const fabricationNoteDimensionProps = pcbLayoutProps
     fontSize: length.optional(),
     color: z.string().optional(),
     arrowSize: distance.optional(),
+    units: z.enum(["in", "mm"]).optional(),
   })
 ```
 
@@ -1852,6 +1854,7 @@ export interface PcbNoteDimensionProps
   fontSize?: string | number
   color?: string
   arrowSize?: string | number
+  units?: "in" | "mm"
 }
 export const pcbNoteDimensionProps = pcbLayoutProps
   .omit({
@@ -1870,6 +1873,7 @@ export const pcbNoteDimensionProps = pcbLayoutProps
     fontSize: length.optional(),
     color: z.string().optional(),
     arrowSize: distance.optional(),
+    units: z.enum(["in", "mm"]).optional(),
   })
 ```
 

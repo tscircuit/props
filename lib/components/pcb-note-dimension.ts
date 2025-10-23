@@ -19,6 +19,7 @@ export interface PcbNoteDimensionProps
   fontSize?: string | number
   color?: string
   arrowSize?: string | number
+  units?: "in" | "mm"
 }
 
 export const pcbNoteDimensionProps = pcbLayoutProps
@@ -38,6 +39,7 @@ export const pcbNoteDimensionProps = pcbLayoutProps
     fontSize: length.optional(),
     color: z.string().optional(),
     arrowSize: distance.optional(),
+    units: z.enum(["in", "mm"]).optional(),
   })
 
 expectTypesMatch<PcbNoteDimensionProps, z.input<typeof pcbNoteDimensionProps>>(

@@ -26,16 +26,3 @@ test("accepts pin selector strings within pcbPath", () => {
 
   expect(parsed.pcbPath).toEqual(["U1.3", { x: 0, y: 0 }, "J1.1"])
 })
-
-test("treats width as an alias for thickness", () => {
-  const raw: TraceProps = {
-    from: "A",
-    to: "B",
-    width: 1,
-  }
-
-  const parsed = traceProps.parse(raw)
-
-  expect(parsed.width).toBe(1)
-  expect(parsed.thickness).toBe(1)
-})

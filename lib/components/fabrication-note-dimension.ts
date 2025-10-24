@@ -20,6 +20,9 @@ export interface FabricationNoteDimensionProps
   color?: string
   arrowSize?: string | number
   units?: "in" | "mm"
+  outerEdgeToEdge?: true
+  centerToCenter?: true
+  innerEdgeToEdge?: true
 }
 
 export const fabricationNoteDimensionProps = pcbLayoutProps
@@ -40,6 +43,9 @@ export const fabricationNoteDimensionProps = pcbLayoutProps
     color: z.string().optional(),
     arrowSize: distance.optional(),
     units: z.enum(["in", "mm"]).optional(),
+    outerEdgeToEdge: z.literal(true).optional(),
+    centerToCenter: z.literal(true).optional(),
+    innerEdgeToEdge: z.literal(true).optional(),
   })
 
 expectTypesMatch<

@@ -1228,6 +1228,8 @@ export interface PlatformConfig {
   >
 
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
+
+  resolveProjectStaticFileImportUrl?: (path: string) => string
 }
 
 

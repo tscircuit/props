@@ -519,6 +519,9 @@ export interface FabricationNoteDimensionProps
   color?: string;
   arrowSize?: string | number;
   units?: "in" | "mm";
+  outerEdgeToEdge?: true;
+  centerToCenter?: true;
+  innerEdgeToEdge?: true;
 }
 ```
 
@@ -910,6 +913,9 @@ export interface PcbNoteDimensionProps
   color?: string;
   arrowSize?: string | number;
   units?: "in" | "mm";
+  outerEdgeToEdge?: true;
+  centerToCenter?: true;
+  innerEdgeToEdge?: true;
 }
 ```
 

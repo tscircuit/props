@@ -84,7 +84,7 @@ export interface PlatformConfig {
 
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 
-  resolveProjectStaticFileImportUrl?: (path: string) => string
+  resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
 }
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
@@ -195,7 +195,7 @@ export const platformConfig = z.object({
   resolveProjectStaticFileImportUrl: z
     .function()
     .args(z.string())
-    .returns(z.string())
+    .returns(z.promise(z.string()))
     .describe(
       "A function that returns a string URL for static files for the project",
     )

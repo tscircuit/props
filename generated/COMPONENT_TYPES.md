@@ -851,6 +851,18 @@ export const copperPourProps = z.object({
 })
 ```
 
+### copper-text
+
+```typescript
+export const copperTextProps = pcbLayoutProps.extend({
+  text: z.string(),
+  anchorAlignment: ninePointAnchor.default("center"),
+  font: z.enum(["tscircuit2024"]).optional(),
+  fontSize: length.optional(),
+  layers: z.array(layer_ref).optional(),
+})
+```
+
 ### courtyard-outline
 
 ```typescript

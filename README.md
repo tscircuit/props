@@ -35,6 +35,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<constrainedlayout />`        | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout)                      |
 | `<constraint />`               | [`ConstraintProps`](#constraintprops-constraint)                                           |
 | `<copperpour />`               | [`CopperPourProps`](#copperpourprops-copperpour)                                           |
+| `<coppertext />`               | [`CopperTextProps`](#coppertextprops-coppertext)                                           |
 | `<courtyardoutline />`         | [`CourtyardOutlineProps`](#courtyardoutlineprops-courtyardoutline)                         |
 | `<courtyardrect />`            | [`CourtyardRectProps`](#courtyardrectprops-courtyardrect)                                  |
 | `<crystal />`                  | [`CrystalProps`](#crystalprops-crystal)                                                    |
@@ -428,6 +429,14 @@ export interface CopperPourProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/copper-pour.ts)
+
+### CopperTextProps `<coppertext />`
+
+```ts
+export type CopperTextProps = z.input<typeof copperTextProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/copper-text.ts)
 
 ### CourtyardOutlineProps `<courtyardoutline />`
 

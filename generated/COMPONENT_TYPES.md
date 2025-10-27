@@ -139,6 +139,9 @@ export interface PcbLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
+  pcbStyle?: {
+    silkscreenFontSize?: string | number
+  }
   pcbRelative?: boolean
   relative?: boolean
 }
@@ -160,6 +163,9 @@ export interface CommonLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
+  pcbStyle?: {
+    silkscreenFontSize?: string | number
+  }
 
   schMarginTop?: string | number
   schMarginRight?: string | number
@@ -207,6 +213,11 @@ export const pcbLayoutProps = z.object({
   pcbMarginLeft: distance.optional(),
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
+  pcbStyle: z
+    .object({
+      silkscreenFontSize: distance.optional(),
+    })
+    .optional(),
   pcbRelative: z.boolean().optional(),
   relative: z.boolean().optional(),
 })
@@ -231,6 +242,11 @@ export const commonLayoutProps = z.object({
   pcbMarginLeft: distance.optional(),
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
+  pcbStyle: z
+    .object({
+      silkscreenFontSize: distance.optional(),
+    })
+    .optional(),
   schMarginTop: distance.optional(),
   schMarginRight: distance.optional(),
   schMarginBottom: distance.optional(),

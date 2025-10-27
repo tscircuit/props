@@ -472,6 +472,9 @@ export interface CommonLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
+  pcbStyle?: {
+    silkscreenFontSize?: string | number
+  }
 
   schMarginTop?: string | number
   schMarginRight?: string | number
@@ -916,6 +919,9 @@ export interface PcbLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
+  pcbStyle?: {
+    silkscreenFontSize?: string | number
+  }
   /**
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */

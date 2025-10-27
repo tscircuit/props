@@ -6,6 +6,7 @@ import {
   commonLayoutProps,
   type SupplierPartNumbers,
 } from "lib/common/layout"
+import type { PcbStyle } from "lib/common/pcbStyle"
 import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
@@ -160,6 +161,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   name?: string
   key?: any
   children?: any
+
+  pcbStyle?: PcbStyle
 
   /**
    * Title to display above this group in the schematic view

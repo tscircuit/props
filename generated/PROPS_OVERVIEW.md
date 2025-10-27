@@ -71,6 +71,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   key?: any
   children?: any
 
+  pcbStyle?: PcbStyle
+
   /**
    * Title to display above this group in the schematic view
    */
@@ -472,9 +474,7 @@ export interface CommonLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
-  pcbStyle?: {
-    silkscreenFontSize?: string | number
-  }
+  pcbStyle?: PcbStyle
 
   schMarginTop?: string | number
   schMarginRight?: string | number
@@ -919,9 +919,7 @@ export interface PcbLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
-  pcbStyle?: {
-    silkscreenFontSize?: string | number
-  }
+  pcbStyle?: PcbStyle
   /**
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */
@@ -1007,6 +1005,11 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 export interface PcbRouteCache {
   pcbTraces: PcbTrace[]
   cacheKey: string
+}
+
+
+export interface PcbStyle {
+  silkscreenFontSize?: string | number
 }
 
 

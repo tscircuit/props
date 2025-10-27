@@ -9,6 +9,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
 import { type FootprintProp, footprintProp } from "./footprintProp"
+import { pcbStyle, type PcbStyle } from "./pcbStyle"
 import { type SymbolProp, symbolProp } from "./symbolProp"
 
 export type PcbPositionMode =
@@ -35,9 +36,7 @@ export interface PcbLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
-  pcbStyle?: {
-    silkscreenFontSize?: string | number
-  }
+  pcbStyle?: PcbStyle
   /**
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */
@@ -63,9 +62,7 @@ export interface CommonLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
-  pcbStyle?: {
-    silkscreenFontSize?: string | number
-  }
+  pcbStyle?: PcbStyle
 
   schMarginTop?: string | number
   schMarginRight?: string | number
@@ -120,11 +117,7 @@ export const pcbLayoutProps = z.object({
   pcbMarginLeft: distance.optional(),
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
-  pcbStyle: z
-    .object({
-      silkscreenFontSize: distance.optional(),
-    })
-    .optional(),
+  pcbStyle: pcbStyle.optional(),
   pcbRelative: z.boolean().optional(),
   relative: z.boolean().optional(),
 })
@@ -152,11 +145,7 @@ export const commonLayoutProps = z.object({
   pcbMarginLeft: distance.optional(),
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
-  pcbStyle: z
-    .object({
-      silkscreenFontSize: distance.optional(),
-    })
-    .optional(),
+  pcbStyle: pcbStyle.optional(),
   schMarginTop: distance.optional(),
   schMarginRight: distance.optional(),
   schMarginBottom: distance.optional(),

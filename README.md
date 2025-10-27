@@ -630,6 +630,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   key?: any;
   children?: any;
 
+  pcbStyle?: PcbStyle;
+
   /**
    * Title to display above this group in the schematic view
    */

@@ -139,9 +139,7 @@ export interface PcbLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
-  pcbStyle?: {
-    silkscreenFontSize?: string | number
-  }
+  pcbStyle?: PcbStyle
   pcbRelative?: boolean
   relative?: boolean
 }
@@ -163,9 +161,7 @@ export interface CommonLayoutProps {
   pcbMarginLeft?: string | number
   pcbMarginX?: string | number
   pcbMarginY?: string | number
-  pcbStyle?: {
-    silkscreenFontSize?: string | number
-  }
+  pcbStyle?: PcbStyle
 
   schMarginTop?: string | number
   schMarginRight?: string | number
@@ -213,11 +209,7 @@ export const pcbLayoutProps = z.object({
   pcbMarginLeft: distance.optional(),
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
-  pcbStyle: z
-    .object({
-      silkscreenFontSize: distance.optional(),
-    })
-    .optional(),
+  pcbStyle: pcbStyle.optional(),
   pcbRelative: z.boolean().optional(),
   relative: z.boolean().optional(),
 })
@@ -242,11 +234,7 @@ export const commonLayoutProps = z.object({
   pcbMarginLeft: distance.optional(),
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
-  pcbStyle: z
-    .object({
-      silkscreenFontSize: distance.optional(),
-    })
-    .optional(),
+  pcbStyle: pcbStyle.optional(),
   schMarginTop: distance.optional(),
   schMarginRight: distance.optional(),
   schMarginBottom: distance.optional(),
@@ -328,6 +316,17 @@ export const lrPolarPins = [
   "cathode",
   "neg",
 ] as const
+```
+
+### pcbStyle
+
+```typescript
+export interface PcbStyle {
+  silkscreenFontSize?: string | number
+}
+export const pcbStyle = z.object({
+  silkscreenFontSize: distance.optional(),
+})
 ```
 
 ### point
@@ -1321,6 +1320,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   name?: string
   key?: any
   children?: any
+
+  pcbStyle?: PcbStyle
 
   schTitle?: string
 

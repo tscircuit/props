@@ -1010,6 +1010,15 @@ export interface PcbRouteCache {
 
 export interface PcbStyle {
   silkscreenFontSize?: string | number
+  silkscreenTextPosition?:
+    | "centered"
+    | "outside"
+    | "none"
+    | {
+        offsetX: number
+        offsetY: number
+      }
+  silkscreenTextVisibility?: "hidden" | "visible" | "inherit"
 }
 
 

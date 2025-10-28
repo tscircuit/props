@@ -26,3 +26,16 @@ test("accepts pin selector strings within pcbPath", () => {
 
   expect(parsed.pcbPath).toEqual(["U1.3", { x: 0, y: 0 }, "J1.1"])
 })
+
+test("accepts portRef-like objects within pcbPath", () => {
+  const ref = { getPortSelector: () => "R1.pin1" }
+  const raw: TraceProps = {
+    from: "U1.1",
+    to: "U1.2",
+    pcbPath: [ref, { x: 1, y: 2 }],
+  }
+
+  const parsed = traceProps.parse(raw)
+
+  expect(parsed.pcbPath).toEqual([ref, { x: 1, y: 2 }])
+})

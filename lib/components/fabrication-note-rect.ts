@@ -12,5 +12,6 @@ export const fabricationNoteRectProps = pcbLayoutProps
     hasStroke: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
+    cornerRadius: distance.optional(),
   })
 export type FabricationNoteRectProps = z.input<typeof fabricationNoteRectProps>

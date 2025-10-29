@@ -12,6 +12,7 @@ export const schematicRectProps = z.object({
   isFilled: z.boolean().optional().default(false),
   fillColor: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
+  cornerRadius: distance.optional(),
 })
 
 export type SchematicRectProps = z.input<typeof schematicRectProps>

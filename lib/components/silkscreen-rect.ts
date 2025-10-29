@@ -10,5 +10,6 @@ export const silkscreenRectProps = pcbLayoutProps
     strokeWidth: distance.optional(),
     width: distance,
     height: distance,
+    cornerRadius: distance.optional(),
   })
 export type SilkscreenRectProps = z.input<typeof silkscreenRectProps>

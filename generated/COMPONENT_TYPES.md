@@ -1123,6 +1123,7 @@ export const fabricationNoteRectProps = pcbLayoutProps
     hasStroke: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
+    cornerRadius: distance.optional(),
   })
 ```
 
@@ -1466,6 +1467,7 @@ export interface AutorouterConfig {
     | "auto_local"
     | "auto_cloud"
     | "freerouting"
+    | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
@@ -1493,6 +1495,7 @@ export const autorouterConfig = z.object({
       "auto_local",
       "auto_cloud",
       "freerouting",
+      "laser_prefab",
       "sequential-trace",
       "auto-local",
       "auto-cloud",
@@ -2010,6 +2013,7 @@ export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   hasStroke?: boolean
   isStrokeDashed?: boolean
   color?: string
+  cornerRadius?: string | number
 }
 export const pcbNoteRectProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2021,6 +2025,7 @@ export const pcbNoteRectProps = pcbLayoutProps
     hasStroke: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
+    cornerRadius: distance.optional(),
   })
 ```
 
@@ -2490,6 +2495,7 @@ export const schematicRectProps = z.object({
   isFilled: z.boolean().optional().default(false),
   fillColor: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
+  cornerRadius: distance.optional(),
 })
 ```
 
@@ -2606,6 +2612,7 @@ export const silkscreenRectProps = pcbLayoutProps
     strokeWidth: distance.optional(),
     width: distance,
     height: distance,
+    cornerRadius: distance.optional(),
   })
 ```
 

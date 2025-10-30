@@ -46,6 +46,7 @@ export interface AutorouterConfig {
     | "auto_local"
     | "auto_cloud"
     | "freerouting"
+    | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
@@ -985,6 +986,7 @@ export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   hasStroke?: boolean
   isStrokeDashed?: boolean
   color?: string
+  cornerRadius?: string | number
 }
 
 

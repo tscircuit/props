@@ -11,6 +11,11 @@ test("supports snake_case presets", () => {
   expect(result).toBe("auto_cloud")
 })
 
+test("supports laser prefab preset", () => {
+  const result = autorouterProp.parse("laser_prefab")
+  expect(result).toBe("laser_prefab")
+})
+
 test("still supports deprecated kebab-case presets", () => {
   const result = autorouterProp.parse("auto-cloud")
   expect(result).toBe("auto-cloud")

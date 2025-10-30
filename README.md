@@ -1519,6 +1519,7 @@ export interface ViaProps extends CommonLayoutProps {
   holeDiameter: number | string;
   outerDiameter: number | string;
   connectsTo?: string | string[];
+  netIsAssignable?: boolean;
 }
 ```
 

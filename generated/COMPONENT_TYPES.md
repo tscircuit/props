@@ -2980,6 +2980,7 @@ export interface ViaProps extends CommonLayoutProps {
   holeDiameter: number | string
   outerDiameter: number | string
   connectsTo?: string | string[]
+  netIsAssignable?: boolean
 }
 export const viaProps = commonLayoutProps.extend({
   name: z.string().optional(),
@@ -2988,6 +2989,7 @@ export const viaProps = commonLayoutProps.extend({
   holeDiameter: distance,
   outerDiameter: distance,
   connectsTo: z.string().or(z.array(z.string())).optional(),
+  netIsAssignable: z.boolean().optional(),
 })
 ```
 

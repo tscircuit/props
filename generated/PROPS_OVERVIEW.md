@@ -869,6 +869,8 @@ export interface NetProps {
   name: string
   connectsTo?: string | string[]
   highlightColor?: string
+  isPowerNet?: boolean
+  isGroundNet?: boolean
 }
 
 

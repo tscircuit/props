@@ -1799,11 +1799,15 @@ export interface NetProps {
   name: string
   connectsTo?: string | string[]
   highlightColor?: string
+  isPowerNet?: boolean
+  isGroundNet?: boolean
 }
 export const netProps = z.object({
   name: z.string(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   highlightColor: z.string().optional(),
+  isPowerNet: z.boolean().optional(),
+  isGroundNet: z.boolean().optional(),
 })
 ```
 

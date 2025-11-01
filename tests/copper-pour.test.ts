@@ -14,7 +14,7 @@ test("should parse a valid copper pour", () => {
 
   expect(parsed.connectsTo).toBe("gnd")
   expect(parsed.layer).toBe("top")
-  expect(parsed.coveredWithSolderMask).toBe(false)
+  expect(parsed.coveredWithSolderMask).toBe(true)
 })
 
 test("type inference for CopperPourProps", () => {

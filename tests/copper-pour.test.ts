@@ -14,6 +14,7 @@ test("should parse a valid copper pour", () => {
 
   expect(parsed.connectsTo).toBe("gnd")
   expect(parsed.layer).toBe("top")
+  expect(parsed.coveredWithSolderMask).toBe(true)
 })
 
 test("type inference for CopperPourProps", () => {
@@ -21,6 +22,19 @@ test("type inference for CopperPourProps", () => {
     connectsTo: "gnd",
     layer: "bottom",
     padMargin: 1,
+    coveredWithSolderMask: true,
   }
   expectTypeOf(props).toMatchTypeOf<CopperPourProps>()
+})
+
+test("should parse coveredWithSolderMask when true", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    coveredWithSolderMask: true,
+  }
+
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.coveredWithSolderMask).toBe(true)
 })

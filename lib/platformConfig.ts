@@ -8,6 +8,7 @@ import type { AutocompleteString } from "./common/autocomplete"
 import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
+import { type PcbStyle, pcbStyle } from "./common/pcbStyle"
 
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]
@@ -75,10 +76,17 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    | ((path: string) => Promise<FootprintLibraryResult>)
+    | ((
+        path: string,
+        options?: { resolvedPcbStyle?: PcbStyle },
+      ) => Promise<FootprintLibraryResult>)
     | Record<
         string,
-        any[] | ((path: string) => Promise<FootprintLibraryResult>)
+        | any[]
+        | ((
+            path: string,
+            options?: { resolvedPcbStyle?: PcbStyle },
+          ) => Promise<FootprintLibraryResult>)
       >
   >
 
@@ -96,6 +104,15 @@ const pathToCircuitJsonFn = z
   .function()
   .args(z.string())
   .returns(z.promise(footprintLibraryResult))
+  .or(
+    z
+      .function()
+      .args(
+        z.string(),
+        z.object({ resolvedPcbStyle: pcbStyle.optional() }).optional(),
+      )
+      .returns(z.promise(footprintLibraryResult)),
+  )
   .describe("A function that takes a path and returns Circuit JSON")
 
 const footprintFileParserEntry = z.object({

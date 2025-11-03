@@ -8,10 +8,7 @@ import type { AutocompleteString } from "./common/autocomplete"
 import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
-
-export interface ResolvedPcbStyleInput {
-  silkscreenFontSize?: number
-}
+import { type PcbStyle, pcbStyle } from "./common/pcbStyle"
 
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]
@@ -81,14 +78,14 @@ export interface PlatformConfig {
     string,
     | ((
         path: string,
-        options?: { resolvedPcbStyle?: ResolvedPcbStyleInput },
+        options?: { resolvedPcbStyle?: PcbStyle },
       ) => Promise<FootprintLibraryResult>)
     | Record<
         string,
         | any[]
         | ((
             path: string,
-            options?: { resolvedPcbStyle?: ResolvedPcbStyleInput },
+            options?: { resolvedPcbStyle?: PcbStyle },
           ) => Promise<FootprintLibraryResult>)
       >
   >
@@ -99,9 +96,6 @@ export interface PlatformConfig {
 }
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
-const resolvedPcbStyleInput = z.object({
-  silkscreenFontSize: z.number().optional(),
-})
 const footprintLibraryResult = z.object({
   footprintCircuitJson: z.array(z.any()),
   cadModel: cadModelProp.optional(),
@@ -115,9 +109,7 @@ const pathToCircuitJsonFn = z
       .function()
       .args(
         z.string(),
-        z
-          .object({ resolvedPcbStyle: resolvedPcbStyleInput.optional() })
-          .optional(),
+        z.object({ resolvedPcbStyle: pcbStyle.optional() }).optional(),
       )
       .returns(z.promise(footprintLibraryResult)),
   )

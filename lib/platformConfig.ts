@@ -108,11 +108,19 @@ const footprintLibraryResult = z.object({
 })
 const pathToCircuitJsonFn = z
   .function()
-  .args(
-    z.string(),
-    z.object({ resolvedPcbStyle: resolvedPcbStyleInput.optional() }).optional(),
-  )
+  .args(z.string())
   .returns(z.promise(footprintLibraryResult))
+  .or(
+    z
+      .function()
+      .args(
+        z.string(),
+        z
+          .object({ resolvedPcbStyle: resolvedPcbStyleInput.optional() })
+          .optional(),
+      )
+      .returns(z.promise(footprintLibraryResult)),
+  )
   .describe("A function that takes a path and returns Circuit JSON")
 
 const footprintFileParserEntry = z.object({

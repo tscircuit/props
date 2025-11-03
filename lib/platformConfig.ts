@@ -9,6 +9,10 @@ import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
 
+export interface ResolvedPcbStyleInput {
+  silkscreenFontSize?: number
+}
+
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]
   cadModel?: CadModelProp
@@ -75,10 +79,17 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    | ((path: string) => Promise<FootprintLibraryResult>)
+    | ((
+        path: string,
+        options?: { resolvedPcbStyle?: ResolvedPcbStyleInput },
+      ) => Promise<FootprintLibraryResult>)
     | Record<
         string,
-        any[] | ((path: string) => Promise<FootprintLibraryResult>)
+        | any[]
+        | ((
+            path: string,
+            options?: { resolvedPcbStyle?: ResolvedPcbStyleInput },
+          ) => Promise<FootprintLibraryResult>)
       >
   >
 
@@ -88,13 +99,19 @@ export interface PlatformConfig {
 }
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
+const resolvedPcbStyleInput = z.object({
+  silkscreenFontSize: z.number().optional(),
+})
 const footprintLibraryResult = z.object({
   footprintCircuitJson: z.array(z.any()),
   cadModel: cadModelProp.optional(),
 })
 const pathToCircuitJsonFn = z
   .function()
-  .args(z.string())
+  .args(
+    z.string(),
+    z.object({ resolvedPcbStyle: resolvedPcbStyleInput.optional() }).optional(),
+  )
   .returns(z.promise(footprintLibraryResult))
   .describe("A function that takes a path and returns Circuit JSON")
 

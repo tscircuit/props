@@ -38,3 +38,15 @@ test("should parse coveredWithSolderMask when true", () => {
 
   expect(parsed.coveredWithSolderMask).toBe(true)
 })
+
+test("should parse clearance", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    clearance: "0.5mm",
+  }
+
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.clearance).toBe(0.5)
+})

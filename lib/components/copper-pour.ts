@@ -9,6 +9,7 @@ export interface CopperPourProps {
   connectsTo: string
   padMargin?: Distance
   traceMargin?: Distance
+  clearance?: Distance
   coveredWithSolderMask?: boolean
 }
 
@@ -18,6 +19,7 @@ export const copperPourProps = z.object({
   connectsTo: z.string(),
   padMargin: distance.optional(),
   traceMargin: distance.optional(),
+  clearance: distance.optional(),
   coveredWithSolderMask: z.boolean().optional().default(true),
 })
 

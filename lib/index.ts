@@ -23,6 +23,7 @@ export * from "./components/solderjumper"
 export * from "./components/connector"
 export * from "./components/fuse"
 export * from "./components/platedhole"
+export * from "./common/pcbStyle"
 
 export * from "./components/resistor"
 export * from "./components/potentiometer"

@@ -106,6 +106,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbWidth?: Distance
   pcbHeight?: Distance
+  minTraceWidth?: Distance
   schWidth?: Distance
   schHeight?: Distance
 
@@ -546,6 +547,9 @@ export interface CopperPourProps {
   connectsTo: string
   padMargin?: Distance
   traceMargin?: Distance
+  clearance?: Distance
+  boardEdgeMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -1242,10 +1246,17 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    | ((path: string) => Promise<FootprintLibraryResult>)
+    | ((
+        path: string,
+        options?: { resolvedPcbStyle?: PcbStyle },
+      ) => Promise<FootprintLibraryResult>)
     | Record<
         string,
-        any[] | ((path: string) => Promise<FootprintLibraryResult>)
+        | any[]
+        | ((
+            path: string,
+            options?: { resolvedPcbStyle?: PcbStyle },
+          ) => Promise<FootprintLibraryResult>)
       >
   >
 

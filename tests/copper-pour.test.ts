@@ -50,3 +50,15 @@ test("should parse clearance", () => {
 
   expect(parsed.clearance).toBe(0.5)
 })
+
+test("should parse boardEdgeMargin", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    boardEdgeMargin: "1mm",
+  }
+
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.boardEdgeMargin).toBe(1)
+})

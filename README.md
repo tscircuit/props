@@ -426,6 +426,7 @@ export interface CopperPourProps {
   padMargin?: Distance;
   traceMargin?: Distance;
   clearance?: Distance;
+  boardEdgeMargin?: Distance;
   coveredWithSolderMask?: boolean;
 }
 ```

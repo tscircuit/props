@@ -1598,10 +1598,17 @@ export interface PlatformConfig {
 
   footprintLibraryMap?: Record<
     string,
-    | ((path: string) => Promise<FootprintLibraryResult>)
+    | ((
+        path: string,
+        options?: { resolvedPcbStyle?: PcbStyle },
+      ) => Promise<FootprintLibraryResult>)
     | Record<
         string,
-        any[] | ((path: string) => Promise<FootprintLibraryResult>)
+        | any[]
+        | ((
+            path: string,
+            options?: { resolvedPcbStyle?: PcbStyle },
+          ) => Promise<FootprintLibraryResult>)
       >
   >;
 

@@ -196,6 +196,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbWidth?: Distance
   pcbHeight?: Distance
+  minTraceWidth?: Distance
   schWidth?: Distance
   schHeight?: Distance
 
@@ -525,6 +526,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   schMatchAdapt: z.boolean().optional(),
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
+  minTraceWidth: length.optional(),
   schWidth: length.optional(),
   schHeight: length.optional(),
   pcbLayout: layoutConfig.optional(),

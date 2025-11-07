@@ -667,6 +667,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbWidth?: Distance;
   pcbHeight?: Distance;
+  minTraceWidth?: Distance;
   schWidth?: Distance;
   schHeight?: Distance;
 

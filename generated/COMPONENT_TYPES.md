@@ -875,6 +875,9 @@ export interface CopperPourProps {
   connectsTo: string
   padMargin?: Distance
   traceMargin?: Distance
+  clearance?: Distance
+  boardEdgeMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 export const copperPourProps = z.object({
   name: z.string().optional(),
@@ -882,6 +885,9 @@ export const copperPourProps = z.object({
   connectsTo: z.string(),
   padMargin: distance.optional(),
   traceMargin: distance.optional(),
+  clearance: distance.optional(),
+  boardEdgeMargin: distance.optional(),
+  coveredWithSolderMask: z.boolean().optional().default(true),
 })
 ```
 
@@ -1357,6 +1363,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   pcbWidth?: Distance
   pcbHeight?: Distance
+  minTraceWidth?: Distance
   schWidth?: Distance
   schHeight?: Distance
 
@@ -1615,6 +1622,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   schMatchAdapt: z.boolean().optional(),
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
+  minTraceWidth: length.optional(),
   schWidth: length.optional(),
   schHeight: length.optional(),
   pcbLayout: layoutConfig.optional(),

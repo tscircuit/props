@@ -62,3 +62,15 @@ test("should parse boardEdgeMargin", () => {
 
   expect(parsed.boardEdgeMargin).toBe(1)
 })
+
+test("should parse cutoutMargin", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    cutoutMargin: "2mm",
+  }
+
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.cutoutMargin).toBe(2)
+})

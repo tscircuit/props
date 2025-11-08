@@ -17,7 +17,14 @@ export interface PillHoleProps extends PcbLayoutProps {
   height: Distance
 }
 
-export type HoleProps = CircleHoleProps | PillHoleProps
+export interface RectHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "rect"
+  width: Distance
+  height: Distance
+}
+
+export type HoleProps = CircleHoleProps | PillHoleProps | RectHoleProps
 
 const circleHoleProps = pcbLayoutProps
   .extend({
@@ -39,7 +46,18 @@ const pillHoleProps = pcbLayoutProps.extend({
   height: distance,
 })
 
-export const holeProps = z.union([circleHoleProps, pillHoleProps])
+const rectHoleProps = pcbLayoutProps.extend({
+  name: z.string().optional(),
+  shape: z.literal("rect"),
+  width: distance,
+  height: distance,
+})
+
+export const holeProps = z.union([
+  circleHoleProps,
+  pillHoleProps,
+  rectHoleProps,
+])
 
 export type InferredHoleProps = z.input<typeof holeProps>
 

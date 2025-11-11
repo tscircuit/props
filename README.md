@@ -236,6 +236,8 @@ export interface BoardProps
   bottomSilkscreenColor?: BoardColor;
   /** Whether the board should be assembled on both sides */
   doubleSidedAssembly?: boolean;
+  /** Whether this board should be omitted from the schematic view */
+  schematicDisabled?: boolean;
 }
 ```
 

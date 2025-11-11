@@ -524,8 +524,9 @@ export interface BoardProps
   topSilkscreenColor?: BoardColor
   bottomSilkscreenColor?: BoardColor
   doubleSidedAssembly?: boolean
+  schematicDisabled?: boolean
 }
-/** Whether the board should be assembled on both sides */
+/** Whether this board should be omitted from the schematic view */
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
@@ -543,6 +544,7 @@ export const boardProps = subcircuitGroupProps
     topSilkscreenColor: boardColor.optional(),
     bottomSilkscreenColor: boardColor.optional(),
     doubleSidedAssembly: z.boolean().optional().default(false),
+    schematicDisabled: z.boolean().optional(),
   })
 ```
 
@@ -877,6 +879,7 @@ export interface CopperPourProps {
   traceMargin?: Distance
   clearance?: Distance
   boardEdgeMargin?: Distance
+  cutoutMargin?: Distance
   coveredWithSolderMask?: boolean
 }
 export const copperPourProps = z.object({
@@ -887,6 +890,7 @@ export const copperPourProps = z.object({
   traceMargin: distance.optional(),
   clearance: distance.optional(),
   boardEdgeMargin: distance.optional(),
+  cutoutMargin: distance.optional(),
   coveredWithSolderMask: z.boolean().optional().default(true),
 })
 ```
@@ -1682,6 +1686,12 @@ export interface PillHoleProps extends PcbLayoutProps {
   width: Distance
   height: Distance
 }
+export interface RectHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "rect"
+  width: Distance
+  height: Distance
+}
 .extend({
     name: z.string().optional(),
     shape: z.literal("circle").optional(),
@@ -1691,6 +1701,12 @@ export interface PillHoleProps extends PcbLayoutProps {
 const pillHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),
   shape: z.literal("pill"),
+  width: distance,
+  height: distance,
+})
+const rectHoleProps = pcbLayoutProps.extend({
+  name: z.string().optional(),
+  shape: z.literal("rect"),
   width: distance,
   height: distance,
 })

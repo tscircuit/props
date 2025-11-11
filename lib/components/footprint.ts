@@ -3,6 +3,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface FootprintProps {
+  children?: any
   /**
    * The layer that the footprint is designed for. If you set this to "top"
    * then it means the children were intended to represent the top layer. If
@@ -17,6 +18,7 @@ export interface FootprintProps {
 }
 
 export const footprintProps = z.object({
+  children: z.any().optional(),
   originalLayer: layer_ref.default("top").optional(),
 })
 

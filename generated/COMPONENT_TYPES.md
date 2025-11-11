@@ -1167,6 +1167,7 @@ export const fabricationNoteTextProps = pcbLayoutProps.extend({
 
 ```typescript
 export interface FootprintProps {
+  children?: any
   originalLayer?: LayerRef
 }
 /**
@@ -1180,6 +1181,7 @@ export interface FootprintProps {
    * "top" and this is most intuitive.
    */
 export const footprintProps = z.object({
+  children: z.any().optional(),
   originalLayer: layer_ref.default("top").optional(),
 })
 ```

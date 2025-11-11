@@ -233,6 +233,8 @@ export interface BoardProps
   bottomSilkscreenColor?: BoardColor
   /** Whether the board should be assembled on both sides */
   doubleSidedAssembly?: boolean
+  /** Whether this board should be omitted from the schematic view */
+  schematicDisabled?: boolean
 }
 
 
@@ -549,6 +551,7 @@ export interface CopperPourProps {
   traceMargin?: Distance
   clearance?: Distance
   boardEdgeMargin?: Distance
+  cutoutMargin?: Distance
   coveredWithSolderMask?: boolean
 }
 
@@ -1292,6 +1295,14 @@ export interface PotentiometerProps extends CommonComponentProps {
 
 export interface RectCutoutProps
   extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
+  name?: string
+  shape: "rect"
+  width: Distance
+  height: Distance
+}
+
+
+export interface RectHoleProps extends PcbLayoutProps {
   name?: string
   shape: "rect"
   width: Distance

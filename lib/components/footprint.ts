@@ -15,11 +15,16 @@ export interface FootprintProps {
    * "top" and this is most intuitive.
    */
   originalLayer?: LayerRef
+  /**
+   * Serialized circuit JSON describing a precompiled footprint
+   */
+  circuitJson?: any[]
 }
 
 export const footprintProps = z.object({
   children: z.any().optional(),
   originalLayer: layer_ref.default("top").optional(),
+  circuitJson: z.array(z.any()).optional(),
 })
 
 export type FootprintPropsInput = z.input<typeof footprintProps>

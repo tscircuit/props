@@ -593,6 +593,10 @@ export interface FootprintProps {
    * "top" and this is most intuitive.
    */
   originalLayer?: LayerRef;
+  /**
+   * Serialized circuit JSON describing a precompiled footprint
+   */
+  circuitJson?: any[];
 }
 ```
 

@@ -2,6 +2,7 @@ import { distance } from "circuit-json"
 import type { PcbLayoutProps } from "lib/common/layout"
 import { pcbLayoutProps } from "lib/common/layout"
 import { type PortHints, portHints } from "lib/common/portHints"
+import { point, type Point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
@@ -83,12 +84,28 @@ export interface PillWithRectPadPlatedHoleProps
   holeOffsetY?: number | string
 }
 
+export interface HoleWithPolygonPadPlatedHoleProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  name?: string
+  connectsTo?: string | string[]
+  shape: "hole_with_polygon_pad"
+  holeShape: "circle" | "oval" | "pill" | "rotated_pill"
+  holeDiameter?: number | string
+  holeWidth?: number | string
+  holeHeight?: number | string
+  padOutline: Point[]
+  holeOffsetX: number | string
+  holeOffsetY: number | string
+  portHints?: PortHints
+}
+
 export type PlatedHoleProps =
   | CirclePlatedHoleProps
   | OvalPlatedHoleProps
   | PillPlatedHoleProps
   | CircularHoleWithRectPlatedProps
   | PillWithRectPadPlatedHoleProps
+  | HoleWithPolygonPadPlatedHoleProps
 
 const distanceHiddenUndefined = z
   .custom<z.input<typeof distance>>()
@@ -161,6 +178,19 @@ export const platedHoleProps = z
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
+    }),
+    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
+      shape: z.literal("hole_with_polygon_pad"),
+      holeShape: z.enum(["circle", "oval", "pill", "rotated_pill"]),
+      holeDiameter: distance.optional(),
+      holeWidth: distance.optional(),
+      holeHeight: distance.optional(),
+      padOutline: z.array(point),
+      holeOffsetX: distance,
+      holeOffsetY: distance,
+      portHints: portHints.optional(),
     }),
   ])
   .refine((a) => {

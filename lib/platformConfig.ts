@@ -93,33 +93,8 @@ export interface PlatformConfig {
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
-  nodeModulesResolver?: NodeModulesResolver
+  nodeModulesResolver?: (modulePath: string) => Promise<string>
 }
-
-export interface NodeModulesResolverOptions {
-  /**
-   * The package name being imported
-   * For scoped packages: "@tscircuit/core"
-   * For regular packages: "react"
-   */
-  packageName: string
-
-  /**
-   * The subpath within the package (if any)
-   * e.g., "dist/index.js" or "hooks/useState"
-   */
-  subpath?: string
-}
-
-export type NodeModulesResolver =
-  | ((
-      modulePath: string,
-      options?: NodeModulesResolverOptions,
-    ) => Promise<string | null>)
-  | ((
-      modulePath: string,
-      options?: NodeModulesResolverOptions,
-    ) => Promise<string | null>)
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
 const footprintLibraryResult = z.object({

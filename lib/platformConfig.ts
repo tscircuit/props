@@ -93,7 +93,7 @@ export interface PlatformConfig {
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
-  nodeModulesResolver?: (modulePath: string) => Promise<string>
+  nodeModulesResolver?: (modulePath: string) => Promise<string | null>
 }
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")

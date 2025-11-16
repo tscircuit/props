@@ -22,3 +22,13 @@ test("should parse voltageprobe without name", () => {
   expect(parsed.name).toBeUndefined()
   expect(parsed.connectsTo).toBe("net.VOUT")
 })
+
+test("should parse voltageprobe with color", () => {
+  const raw: VoltageProbeProps = {
+    connectsTo: "C1.pin1",
+    color: "red",
+  }
+  const parsed = voltageProbeProps.parse(raw)
+  expect(parsed.color).toBe("red")
+  expect(parsed.connectsTo).toBe("C1.pin1")
+})

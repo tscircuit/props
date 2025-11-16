@@ -8,6 +8,7 @@ import { z } from "zod"
 export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   name?: string
   connectsTo: string | string[]
+  color?: string
 }
 
 export const voltageProbeProps = commonComponentProps
@@ -15,6 +16,7 @@ export const voltageProbeProps = commonComponentProps
   .extend({
     name: z.string().optional(),
     connectsTo: z.string().or(z.array(z.string())),
+    color: z.string().optional(),
   })
 
 expectTypesMatch<VoltageProbeProps, z.input<typeof voltageProbeProps>>(true)

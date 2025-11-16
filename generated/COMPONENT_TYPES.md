@@ -3052,12 +3052,14 @@ export const viaProps = commonLayoutProps.extend({
 export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   name?: string
   connectsTo: string | string[]
+  color?: string
 }
 export const voltageProbeProps = commonComponentProps
   .omit({ name: true })
   .extend({
     name: z.string().optional(),
     connectsTo: z.string().or(z.array(z.string())),
+    color: z.string().optional(),
   })
 ```
 

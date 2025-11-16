@@ -3,6 +3,7 @@ import type { ReactElement } from "react"
 import { z } from "zod"
 import { type AutocompleteString } from "./autocomplete"
 import type { KicadAutocompleteStringPath } from "../generated/kicad-autocomplete"
+import type { FootprinterStringExample } from "../generated/footprinter-autocomplete"
 
 /**
  * This is an abbreviated definition of the soup elements that you can find here:
@@ -45,8 +46,10 @@ export type BasicFootprint =
   | "sot223"
   | "pinrow"
 
+type FootprinterStringAutocomplete = BasicFootprint | FootprinterStringExample
+
 export type FootprintProp =
-  | AutocompleteString<BasicFootprint>
+  | AutocompleteString<FootprinterStringAutocomplete>
   | KicadAutocompleteStringPath
   | ReactElement
   | FootprintSoupElements[]

@@ -725,6 +725,22 @@ export interface FuseProps<PinLabel extends string = string>
 }
 
 
+export interface HoleWithPolygonPadPlatedHoleProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  name?: string
+  connectsTo?: string | string[]
+  shape: "hole_with_polygon_pad"
+  holeShape: "circle" | "oval" | "pill" | "rotated_pill"
+  holeDiameter?: number | string
+  holeWidth?: number | string
+  holeHeight?: number | string
+  padOutline: Point[]
+  holeOffsetX: number | string
+  holeOffsetY: number | string
+  portHints?: PortHints
+}
+
+
 export interface InductorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   inductance: number | string
@@ -1271,6 +1287,7 @@ export interface PlatformConfig {
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
+  nodeModulesResolver?: (modulePath: string) => Promise<string | null>
 }
 
 

@@ -6,13 +6,14 @@ import type {
 } from "lib/common/footprintProp"
 import type { AutocompleteString } from "lib/common/autocomplete"
 import type { KicadAutocompleteStringPath } from "lib/generated/kicad-autocomplete"
+import type { FootprinterStringExample } from "lib/generated/footprinter-autocomplete"
 import { expectTypesMatch } from "lib/typecheck"
 
 // This test ensures the footprint prop accepts autocomplete strings
 
 expectTypesMatch<
   FootprintProp,
-  | AutocompleteString<BasicFootprint>
+  | AutocompleteString<BasicFootprint | FootprinterStringExample>
   | KicadAutocompleteStringPath
   | React.ReactElement
   | FootprintSoupElements[]

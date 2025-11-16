@@ -2246,12 +2246,27 @@ export interface PillWithRectPadPlatedHoleProps
   holeOffsetX?: number | string
   holeOffsetY?: number | string
 }
+export interface HoleWithPolygonPadPlatedHoleProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  name?: string
+  connectsTo?: string | string[]
+  shape: "hole_with_polygon_pad"
+  holeShape: "circle" | "oval" | "pill" | "rotated_pill"
+  holeDiameter?: number | string
+  holeWidth?: number | string
+  holeHeight?: number | string
+  padOutline: Point[]
+  holeOffsetX: number | string
+  holeOffsetY: number | string
+  portHints?: PortHints
+}
 export type PlatedHoleProps =
   | CirclePlatedHoleProps
   | OvalPlatedHoleProps
   | PillPlatedHoleProps
   | CircularHoleWithRectPlatedProps
   | PillWithRectPadPlatedHoleProps
+  | HoleWithPolygonPadPlatedHoleProps
 
 const distanceHiddenUndefined = z
   .custom<z.input<typeof distance>>()
@@ -2321,6 +2336,19 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
+    }),
+pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+      name: z.string().optional(),
+      connectsTo: z.string().or(z.array(z.string())).optional(),
+      shape: z.literal("hole_with_polygon_pad"),
+      holeShape: z.enum(["circle", "oval", "pill", "rotated_pill"]),
+      holeDiameter: distance.optional(),
+      holeWidth: distance.optional(),
+      holeHeight: distance.optional(),
+      padOutline: z.array(point),
+      holeOffsetX: distance,
+      holeOffsetY: distance,
+      portHints: portHints.optional(),
     }),
 ```
 

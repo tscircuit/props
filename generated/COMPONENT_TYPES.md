@@ -1887,11 +1887,18 @@ export interface PanelProps extends BaseGroupProps {
   width: Distance
   height: Distance
   children?: BaseGroupProps["children"]
+  depanelizationMethod?: DepanelizationMethod
   noSolderMask?: boolean
+  tabRouting?: {
+    tabCount?: number
+    tabWidth?: Distance
+    mouseBites?: {
+      holeDiameter?: Distance
+      holeSpacing?: Distance
+    }
+  }
 }
-/**
-   * If true, prevent a solder mask from being applied to this panel.
-   */
+/** Mouse-bite configuration */
 export const panelProps = baseGroupProps
   .omit({
     width: true,
@@ -1902,7 +1909,20 @@ export const panelProps = baseGroupProps
     width: distance,
     height: distance,
     children: z.any().optional(),
+    depanelizationMethod: z.literal("tab-routing").optional(),
     noSolderMask: z.boolean().optional(),
+    tabRouting: z
+      .object({
+        tabCount: z.number().optional(),
+        tabWidth: distance.optional(),
+        mouseBites: z
+          .object({
+            holeDiameter: distance.optional(),
+            holeSpacing: distance.optional(),
+          })
+          .optional(),
+      })
+      .optional(),
   })
 ```
 

@@ -929,9 +929,28 @@ export interface PanelProps extends BaseGroupProps {
   height: Distance
   children?: BaseGroupProps["children"]
   /**
+   * Depanelization method. Currently only "tab-routing" is supported.
+   * Defaults to "tab-routing".
+   */
+  depanelizationMethod?: DepanelizationMethod
+  /**
    * If true, prevent a solder mask from being applied to this panel.
    */
   noSolderMask?: boolean
+  /**
+   * Configuration options for tab routing.
+   */
+  tabRouting?: {
+    /** Number of tabs around the board */
+    tabCount?: number
+    /** Width of each tab (mm) */
+    tabWidth?: Distance
+    /** Mouse-bite configuration */
+    mouseBites?: {
+      holeDiameter?: Distance
+      holeSpacing?: Distance
+    }
+  }
 }
 
 

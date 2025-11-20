@@ -772,6 +772,8 @@ export interface CircleHoleProps extends PcbLayoutProps {
   shape?: "circle";
   diameter?: Distance;
   radius?: Distance;
+  solderMaskMargin?: Distance;
+  coveredWithSolderMask?: boolean;
 }
 ```
 
@@ -908,6 +910,13 @@ export interface PanelProps extends BaseGroupProps {
    * If true, prevent a solder mask from being applied to this panel.
    */
   noSolderMask?: boolean;
+  /** Method for panelization */
+  panelizationMethod?: "tab-routing" | "none";
+  /** Gap between boards in a panel */
+  boardGap?: Distance;
+  tabWidth?: Distance;
+  tabLength?: Distance;
+  mouseBites?: boolean;
 }
 ```
 
@@ -1140,6 +1149,8 @@ export interface CirclePlatedHoleProps
   holeDiameter: number | string;
   outerDiameter: number | string;
   portHints?: PortHints;
+  solderMaskMargin?: Distance;
+  coveredWithSolderMask?: boolean;
 }
 ```
 
@@ -1362,6 +1373,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   cornerRadius?: Distance;
   portHints?: PortHints;
   coveredWithSolderMask?: boolean;
+  solderMaskMargin?: Distance;
 }
 ```
 

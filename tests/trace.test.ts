@@ -26,3 +26,15 @@ test("accepts pin selector strings within pcbPath", () => {
 
   expect(parsed.pcbPath).toEqual(["U1.3", { x: 0, y: 0 }, "J1.1"])
 })
+
+test("supports pcbStraightLine flag", () => {
+  const raw: TraceProps = {
+    from: "A",
+    to: "B",
+    pcbStraightLine: true,
+  }
+
+  const parsed = traceProps.parse(raw)
+
+  expect(parsed.pcbStraightLine).toBe(true)
+})

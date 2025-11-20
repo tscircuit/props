@@ -5,6 +5,7 @@ import { type PortHints, portHints } from "lib/common/portHints"
 import { point, type Point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import type { Distance } from "lib/common/distance"
 
 export interface CirclePlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
@@ -14,6 +15,7 @@ export interface CirclePlatedHoleProps
   holeDiameter: number | string
   outerDiameter: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
 }
 
 export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
@@ -25,6 +27,7 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   holeWidth: number | string
   holeHeight: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
 
   /** @deprecated use holeWidth */
   innerWidth?: number | string
@@ -50,6 +53,7 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   innerHeight?: number | string
 
   portHints?: PortHints
+  solderMaskMargin?: Distance
 }
 
 export interface CircularHoleWithRectPlatedProps
@@ -66,6 +70,7 @@ export interface CircularHoleWithRectPlatedProps
   portHints?: PortHints
   holeOffsetX?: number | string
   holeOffsetY?: number | string
+  solderMaskMargin?: Distance
 }
 
 export interface PillWithRectPadPlatedHoleProps
@@ -82,6 +87,7 @@ export interface PillWithRectPadPlatedHoleProps
   portHints?: PortHints
   holeOffsetX?: number | string
   holeOffsetY?: number | string
+  solderMaskMargin?: Distance
 }
 
 export interface HoleWithPolygonPadPlatedHoleProps
@@ -97,6 +103,7 @@ export interface HoleWithPolygonPadPlatedHoleProps
   holeOffsetX: number | string
   holeOffsetY: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
 }
 
 export type PlatedHoleProps =
@@ -123,6 +130,7 @@ export const platedHoleProps = z
       holeDiameter: distance,
       outerDiameter: distance,
       portHints: portHints.optional(),
+      solderMaskMargin: distance.optional(),
     }),
     pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
@@ -135,6 +143,7 @@ export const platedHoleProps = z
       innerWidth: distance.optional().describe("DEPRECATED use holeWidth"),
       innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
       portHints: portHints.optional(),
+      solderMaskMargin: distance.optional(),
     }),
     pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
@@ -150,6 +159,7 @@ export const platedHoleProps = z
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
+      solderMaskMargin: distance.optional(),
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -164,6 +174,7 @@ export const platedHoleProps = z
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
+      solderMaskMargin: distance.optional(),
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -178,6 +189,7 @@ export const platedHoleProps = z
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
+      solderMaskMargin: distance.optional(),
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -191,6 +203,7 @@ export const platedHoleProps = z
       holeOffsetX: distance,
       holeOffsetY: distance,
       portHints: portHints.optional(),
+      solderMaskMargin: distance.optional(),
     }),
   ])
   .refine((a) => {

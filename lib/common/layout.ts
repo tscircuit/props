@@ -193,6 +193,7 @@ export interface PinAttributeMap {
   doNotConnect?: boolean
   includeInBoardPinout?: boolean
   highlightColor?: string
+  mustBeConnected?: boolean
 }
 
 export const pinAttributeMap = z.object({
@@ -205,6 +206,7 @@ export const pinAttributeMap = z.object({
   doNotConnect: z.boolean().optional(),
   includeInBoardPinout: z.boolean().optional(),
   highlightColor: z.string().optional(),
+  mustBeConnected: z.boolean().optional(),
 })
 
 expectTypesMatch<PinAttributeMap, z.input<typeof pinAttributeMap>>(true)

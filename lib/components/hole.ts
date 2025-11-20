@@ -9,6 +9,7 @@ export interface CircleHoleProps extends PcbLayoutProps {
   diameter?: Distance
   radius?: Distance
   solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 export interface PillHoleProps extends PcbLayoutProps {
@@ -17,6 +18,7 @@ export interface PillHoleProps extends PcbLayoutProps {
   width: Distance
   height: Distance
   solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 export interface RectHoleProps extends PcbLayoutProps {
@@ -25,6 +27,7 @@ export interface RectHoleProps extends PcbLayoutProps {
   width: Distance
   height: Distance
   solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 export type HoleProps = CircleHoleProps | PillHoleProps | RectHoleProps
@@ -36,6 +39,7 @@ const circleHoleProps = pcbLayoutProps
     diameter: distance.optional(),
     radius: distance.optional(),
     solderMaskMargin: distance.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
   })
   .transform((d) => ({
     ...d,
@@ -49,6 +53,7 @@ const pillHoleProps = pcbLayoutProps.extend({
   width: distance,
   height: distance,
   solderMaskMargin: distance.optional(),
+  coveredWithSolderMask: z.boolean().optional(),
 })
 
 const rectHoleProps = pcbLayoutProps.extend({
@@ -57,6 +62,7 @@ const rectHoleProps = pcbLayoutProps.extend({
   width: distance,
   height: distance,
   solderMaskMargin: distance.optional(),
+  coveredWithSolderMask: z.boolean().optional(),
 })
 
 export const holeProps = z.union([

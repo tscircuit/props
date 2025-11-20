@@ -18,6 +18,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   cornerRadius?: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 export interface RotatedRectSmtPadProps
@@ -30,6 +31,7 @@ export interface RotatedRectSmtPadProps
   ccwRotation: number
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -38,6 +40,7 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   radius: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -48,6 +51,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   radius: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 export interface PolygonSmtPadProps
@@ -57,6 +61,7 @@ export interface PolygonSmtPadProps
   points: Point[]
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 export type SmtPadProps =
@@ -81,6 +86,7 @@ export const rectSmtPadProps = pcbLayoutProps
     cornerRadius: distance.optional(),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 type InferredRectSmtPadProps = z.input<typeof rectSmtPadProps>
 expectTypesMatch<InferredRectSmtPadProps, RectSmtPadProps>(true)
@@ -96,6 +102,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     cornerRadius: distance.optional(),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 type InferredRotatedRectSmtPadProps = z.input<typeof rotatedRectSmtPadProps>
 expectTypesMatch<InferredRotatedRectSmtPadProps, RotatedRectSmtPadProps>(true)
@@ -108,6 +115,7 @@ export const circleSmtPadProps = pcbLayoutProps
     radius: distance,
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 type InferredCircleSmtPadProps = z.input<typeof circleSmtPadProps>
 expectTypesMatch<InferredCircleSmtPadProps, CircleSmtPadProps>(true)
@@ -122,6 +130,7 @@ export const pillSmtPadProps = pcbLayoutProps
     radius: distance,
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 type InferredPillSmtPadProps = z.input<typeof pillSmtPadProps>
 expectTypesMatch<InferredPillSmtPadProps, PillSmtPadProps>(true)
@@ -134,6 +143,7 @@ export const polygonSmtPadProps = pcbLayoutProps
     points: z.array(point),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 type InferredPolygonSmtPadProps = z.input<typeof polygonSmtPadProps>
 expectTypesMatch<InferredPolygonSmtPadProps, PolygonSmtPadProps>(true)

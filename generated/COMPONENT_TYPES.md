@@ -267,6 +267,7 @@ export interface PinAttributeMap {
   doNotConnect?: boolean
   includeInBoardPinout?: boolean
   highlightColor?: string
+  mustBeConnected?: boolean
 }
 export const pinAttributeMap = z.object({
   providesPower: z.boolean().optional(),
@@ -278,6 +279,7 @@ export const pinAttributeMap = z.object({
   doNotConnect: z.boolean().optional(),
   includeInBoardPinout: z.boolean().optional(),
   highlightColor: z.string().optional(),
+  mustBeConnected: z.boolean().optional(),
 })
 export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
@@ -1676,36 +1678,48 @@ export interface CircleHoleProps extends PcbLayoutProps {
   shape?: "circle"
   diameter?: Distance
   radius?: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 export interface PillHoleProps extends PcbLayoutProps {
   name?: string
   shape: "pill"
   width: Distance
   height: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 export interface RectHoleProps extends PcbLayoutProps {
   name?: string
   shape: "rect"
   width: Distance
   height: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 .extend({
     name: z.string().optional(),
     shape: z.literal("circle").optional(),
     diameter: distance.optional(),
     radius: distance.optional(),
+    solderMaskMargin: distance.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
   })
 const pillHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),
   shape: z.literal("pill"),
   width: distance,
   height: distance,
+  solderMaskMargin: distance.optional(),
+  coveredWithSolderMask: z.boolean().optional(),
 })
 const rectHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),
   shape: z.literal("rect"),
   width: distance,
   height: distance,
+  solderMaskMargin: distance.optional(),
+  coveredWithSolderMask: z.boolean().optional(),
 })
 ```
 
@@ -1888,10 +1902,13 @@ export interface PanelProps extends BaseGroupProps {
   height: Distance
   children?: BaseGroupProps["children"]
   noSolderMask?: boolean
+  panelizationMethod?: "tab-routing" | "none"
+  boardGap?: Distance
+  tabWidth?: Distance
+  tabLength?: Distance
+  mouseBites?: boolean
 }
-/**
-   * If true, prevent a solder mask from being applied to this panel.
-   */
+/** Gap between boards in a panel */
 export const panelProps = baseGroupProps
   .omit({
     width: true,
@@ -1903,6 +1920,11 @@ export const panelProps = baseGroupProps
     height: distance,
     children: z.any().optional(),
     noSolderMask: z.boolean().optional(),
+    panelizationMethod: z.enum(["tab-routing", "none"]).optional(),
+    boardGap: distance.optional(),
+    tabWidth: distance.optional(),
+    tabLength: distance.optional(),
+    mouseBites: z.boolean().optional(),
   })
 ```
 
@@ -2183,6 +2205,8 @@ export interface CirclePlatedHoleProps
   holeDiameter: number | string
   outerDiameter: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
@@ -2193,9 +2217,11 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   holeWidth: number | string
   holeHeight: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
 
   innerWidth?: number | string
   innerHeight?: number | string
+  coveredWithSolderMask?: boolean
 }
 /** @deprecated use holeHeight */
 export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
@@ -2214,6 +2240,8 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   innerHeight?: number | string
 
   portHints?: PortHints
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 /** @deprecated use holeHeight */
 export interface CircularHoleWithRectPlatedProps
@@ -2230,6 +2258,8 @@ export interface CircularHoleWithRectPlatedProps
   portHints?: PortHints
   holeOffsetX?: number | string
   holeOffsetY?: number | string
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 export interface PillWithRectPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
@@ -2245,6 +2275,8 @@ export interface PillWithRectPadPlatedHoleProps
   portHints?: PortHints
   holeOffsetX?: number | string
   holeOffsetY?: number | string
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 export interface HoleWithPolygonPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
@@ -2259,6 +2291,8 @@ export interface HoleWithPolygonPadPlatedHoleProps
   holeOffsetX: number | string
   holeOffsetY: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 export type PlatedHoleProps =
   | CirclePlatedHoleProps
@@ -2281,6 +2315,8 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       holeDiameter: distance,
       outerDiameter: distance,
       portHints: portHints.optional(),
+      solderMaskMargin: distance.optional(),
+      coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
@@ -2293,6 +2329,8 @@ pcbLayoutProps.omit({ layer: true }).extend({
       innerWidth: distance.optional().describe("DEPRECATED use holeWidth"),
       innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
       portHints: portHints.optional(),
+      solderMaskMargin: distance.optional(),
+      coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
@@ -2308,6 +2346,8 @@ pcbLayoutProps.omit({ layer: true }).extend({
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
+      solderMaskMargin: distance.optional(),
+      coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -2322,6 +2362,8 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
+      solderMaskMargin: distance.optional(),
+      coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -2336,6 +2378,8 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
+      solderMaskMargin: distance.optional(),
+      coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -2349,6 +2393,8 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       holeOffsetX: distance,
       holeOffsetY: distance,
       portHints: portHints.optional(),
+      solderMaskMargin: distance.optional(),
+      coveredWithSolderMask: z.boolean().optional(),
     }),
 ```
 
@@ -2699,6 +2745,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   cornerRadius?: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -2710,6 +2757,7 @@ export interface RotatedRectSmtPadProps
   ccwRotation: number
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -2717,6 +2765,7 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   radius: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -2726,6 +2775,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   radius: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 export interface PolygonSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -2734,6 +2784,7 @@ export interface PolygonSmtPadProps
   points: Point[]
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 export const rectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2746,6 +2797,7 @@ export const rectSmtPadProps = pcbLayoutProps
     cornerRadius: distance.optional(),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2758,6 +2810,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     cornerRadius: distance.optional(),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2767,6 +2820,7 @@ export const circleSmtPadProps = pcbLayoutProps
     radius: distance,
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 export const pillSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2778,6 +2832,7 @@ export const pillSmtPadProps = pcbLayoutProps
     radius: distance,
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 export const polygonSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -2787,6 +2842,7 @@ export const polygonSmtPadProps = pcbLayoutProps
     points: z.array(point),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
   })
 ```
 

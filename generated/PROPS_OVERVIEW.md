@@ -397,6 +397,8 @@ export interface CircleHoleProps extends PcbLayoutProps {
   shape?: "circle"
   diameter?: Distance
   radius?: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -408,6 +410,8 @@ export interface CirclePlatedHoleProps
   holeDiameter: number | string
   outerDiameter: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -417,6 +421,7 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   radius: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 
@@ -441,6 +446,8 @@ export interface CircularHoleWithRectPlatedProps
   portHints?: PortHints
   holeOffsetX?: number | string
   holeOffsetY?: number | string
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -738,6 +745,8 @@ export interface HoleWithPolygonPadPlatedHoleProps
   holeOffsetX: number | string
   holeOffsetY: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -916,11 +925,13 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   holeWidth: number | string
   holeHeight: number | string
   portHints?: PortHints
+  solderMaskMargin?: Distance
 
   /** @deprecated use holeWidth */
   innerWidth?: number | string
   /** @deprecated use holeHeight */
   innerHeight?: number | string
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -932,6 +943,13 @@ export interface PanelProps extends BaseGroupProps {
    * If true, prevent a solder mask from being applied to this panel.
    */
   noSolderMask?: boolean
+  /** Method for panelization */
+  panelizationMethod?: "tab-routing" | "none"
+  /** Gap between boards in a panel */
+  boardGap?: Distance
+  tabWidth?: Distance
+  tabLength?: Distance
+  mouseBites?: boolean
 }
 
 
@@ -1059,6 +1077,8 @@ export interface PillHoleProps extends PcbLayoutProps {
   shape: "pill"
   width: Distance
   height: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -1080,6 +1100,8 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   innerHeight?: number | string
 
   portHints?: PortHints
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -1091,6 +1113,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   radius: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 
@@ -1108,6 +1131,8 @@ export interface PillWithRectPadPlatedHoleProps
   portHints?: PortHints
   holeOffsetX?: number | string
   holeOffsetY?: number | string
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -1121,6 +1146,7 @@ export interface PinAttributeMap {
   doNotConnect?: boolean
   includeInBoardPinout?: boolean
   highlightColor?: string
+  mustBeConnected?: boolean
 }
 
 
@@ -1306,6 +1332,7 @@ export interface PolygonSmtPadProps
   points: Point[]
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 
@@ -1329,6 +1356,8 @@ export interface RectHoleProps extends PcbLayoutProps {
   shape: "rect"
   width: Distance
   height: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
 }
 
 
@@ -1341,6 +1370,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   cornerRadius?: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 
@@ -1381,6 +1411,7 @@ export interface RotatedRectSmtPadProps
   ccwRotation: number
   portHints?: PortHints
   coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
 }
 
 

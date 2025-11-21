@@ -17,6 +17,10 @@ const baseTraceProps = z.object({
   pcbRouteHints: z.array(route_hint_point).optional(),
   pcbPathRelativeTo: z.string().optional(),
   pcbPath: z.array(z.union([point, z.string()])).optional(),
+  pcbStraightLine: z
+    .boolean()
+    .optional()
+    .describe("Draw a straight pcb trace between the connected points"),
   schDisplayLabel: z.string().optional(),
   schStroke: z.string().optional(),
   highlightColor: z.string().optional(),

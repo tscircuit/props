@@ -214,7 +214,7 @@ export interface BoardProps
   title?: string
   material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
-  layers?: 2 | 4
+  layers?: 1 | 2 | 4
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point

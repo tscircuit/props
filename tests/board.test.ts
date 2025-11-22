@@ -22,6 +22,12 @@ test("should parse layers prop", () => {
   expect(parsed.layers).toBe(4)
 })
 
+test("should allow single-layer boards", () => {
+  const raw: BoardProps = { name: "board", layers: 1 }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.layers).toBe(1)
+})
+
 test("should parse borderRadius prop", () => {
   const raw: BoardProps = { name: "board", borderRadius: 2 }
   const parsed = boardProps.parse(raw)

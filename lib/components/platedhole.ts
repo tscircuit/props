@@ -14,6 +14,7 @@ export interface CirclePlatedHoleProps
   shape: "circle"
   holeDiameter: number | string
   outerDiameter: number | string
+  padDiameter?: number | string
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
@@ -135,6 +136,7 @@ export const platedHoleProps = z
       shape: z.literal("circle"),
       holeDiameter: distance,
       outerDiameter: distance,
+      padDiameter: distance.optional().describe("Diameter of the copper pad"),
       portHints: portHints.optional(),
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),

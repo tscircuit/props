@@ -409,6 +409,7 @@ export interface CirclePlatedHoleProps
   shape: "circle"
   holeDiameter: number | string
   outerDiameter: number | string
+  padDiameter?: number | string
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean

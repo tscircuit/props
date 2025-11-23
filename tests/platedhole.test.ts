@@ -105,6 +105,7 @@ test("should parse PlatedHoleProps with name and connectsTo", () => {
     name: "H1",
     holeDiameter: "1mm",
     outerDiameter: "2mm",
+    padDiameter: "2mm",
     connectsTo: ["net1"],
   }
 
@@ -115,6 +116,7 @@ test("should parse PlatedHoleProps with name and connectsTo", () => {
     expect(parsed.name).toBe("H1")
     expect(parsed.connectsTo).toEqual(["net1"])
     expect(parsed.outerDiameter).toBe(2)
+    expect(parsed.padDiameter).toBe(2)
   } else {
     throw new Error("Expected CirclePlatedHoleProps, but got a different shape")
   }

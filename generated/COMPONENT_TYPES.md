@@ -2204,6 +2204,7 @@ export interface CirclePlatedHoleProps
   shape: "circle"
   holeDiameter: number | string
   outerDiameter: number | string
+  padDiameter?: number | string
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
@@ -2314,6 +2315,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       shape: z.literal("circle"),
       holeDiameter: distance,
       outerDiameter: distance,
+      padDiameter: distance.optional().describe("Diameter of the copper pad"),
       portHints: portHints.optional(),
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),

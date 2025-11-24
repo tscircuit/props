@@ -1629,8 +1629,8 @@ export interface ViaProps extends CommonLayoutProps {
   name?: string
   fromLayer: LayerRefInput
   toLayer: LayerRefInput
-  holeDiameter: number | string
-  outerDiameter: number | string
+  holeDiameter?: number | string
+  outerDiameter?: number | string
   connectsTo?: string | string[]
   netIsAssignable?: boolean
 }
@@ -1638,7 +1638,8 @@ export interface ViaProps extends CommonLayoutProps {
 
 export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   name?: string
-  connectsTo: string | string[]
+  connectsTo: string
+  referenceTo?: string
   color?: string
 }
 

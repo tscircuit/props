@@ -1543,8 +1543,8 @@ export interface ViaProps extends CommonLayoutProps {
   name?: string;
   fromLayer: LayerRefInput;
   toLayer: LayerRefInput;
-  holeDiameter: number | string;
-  outerDiameter: number | string;
+  holeDiameter?: number | string;
+  outerDiameter?: number | string;
   connectsTo?: string | string[];
   netIsAssignable?: boolean;
 }

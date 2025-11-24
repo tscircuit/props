@@ -32,3 +32,20 @@ test("should parse voltageprobe with color", () => {
   expect(parsed.color).toBe("red")
   expect(parsed.connectsTo).toBe("C1.pin1")
 })
+
+test("should parse voltageprobe with referenceTo", () => {
+  const raw: VoltageProbeProps = {
+    connectsTo: ".R1 > .p1",
+    referenceTo: ".R1 > .p2",
+  }
+  const parsed = voltageProbeProps.parse(raw)
+  expect(parsed.connectsTo).toBe(".R1 > .p1")
+  expect(parsed.referenceTo).toBe(".R1 > .p2")
+})
+
+test("should not parse voltageprobe with array connectsTo", () => {
+  const raw: any = {
+    connectsTo: ["C1.pin1"],
+  }
+  expect(() => voltageProbeProps.parse(raw)).toThrow()
+})

@@ -1557,7 +1557,8 @@ export interface ViaProps extends CommonLayoutProps {
 ```ts
 export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   name?: string;
-  connectsTo: string | string[];
+  connectsTo: string;
+  referenceTo?: string;
   color?: string;
 }
 ```

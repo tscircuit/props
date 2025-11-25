@@ -50,6 +50,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<group />`                    | [`BaseGroupProps`](#basegroupprops-group)                                                  |
 | `<hole />`                     | [`CircleHoleProps`](#circleholeprops-hole)                                                 |
 | `<inductor />`                 | [`InductorProps`](#inductorprops-inductor)                                                 |
+| `<interconnect />`             | [`InterconnectProps`](#interconnectprops-interconnect)                                     |
 | `<jumper />`                   | [`JumperProps`](#jumperprops-jumper)                                                       |
 | `<led />`                      | [`LedProps`](#ledprops-led)                                                                |
 | `<mosfet />`                   | [`MosfetProps`](#mosfetprops-mosfet)                                                       |
@@ -792,6 +793,16 @@ export interface InductorProps<PinLabel extends string = string>
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/inductor.ts)
+
+### InterconnectProps `<interconnect />`
+
+```ts
+export interface InterconnectProps extends CommonComponentProps {
+  standard?: "TSC0001_36P_XALT_2025_11";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/interconnect.ts)
 
 ### JumperProps `<jumper />`
 

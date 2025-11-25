@@ -760,6 +760,11 @@ export interface InductorProps<PinLabel extends string = string>
 }
 
 
+export interface InterconnectProps extends CommonComponentProps {
+  standard?: "TSC0001_36P_XALT_2025_11"
+}
+
+
 export interface JumperProps extends CommonComponentProps {
   manufacturerPartNumber?: string
   pinLabels?: Record<
@@ -1638,7 +1643,8 @@ export interface ViaProps extends CommonLayoutProps {
 
 export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   name?: string
-  connectsTo: string | string[]
+  connectsTo: string
+  referenceTo?: string
   color?: string
 }
 

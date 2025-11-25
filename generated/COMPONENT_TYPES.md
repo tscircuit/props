@@ -1741,6 +1741,17 @@ export const inductorProps = commonComponentProps.extend({
 })
 ```
 
+### interconnect
+
+```typescript
+export interface InterconnectProps extends CommonComponentProps {
+  standard?: "TSC0001_36P_XALT_2025_11"
+}
+export const interconnectProps = commonComponentProps.extend({
+  standard: z.enum(["TSC0001_36P_XALT_2025_11"]).optional(),
+})
+```
+
 ### jumper
 
 ```typescript
@@ -3109,14 +3120,16 @@ export const viaProps = commonLayoutProps.extend({
 ```typescript
 export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   name?: string
-  connectsTo: string | string[]
+  connectsTo: string
+  referenceTo?: string
   color?: string
 }
 export const voltageProbeProps = commonComponentProps
   .omit({ name: true })
   .extend({
     name: z.string().optional(),
-    connectsTo: z.string().or(z.array(z.string())),
+    connectsTo: z.string(),
+    referenceTo: z.string().optional(),
     color: z.string().optional(),
   })
 ```

@@ -3099,8 +3099,8 @@ export interface ViaProps extends CommonLayoutProps {
   name?: string
   fromLayer: LayerRefInput
   toLayer: LayerRefInput
-  holeDiameter: number | string
-  outerDiameter: number | string
+  holeDiameter?: number | string
+  outerDiameter?: number | string
   connectsTo?: string | string[]
   netIsAssignable?: boolean
 }
@@ -3108,8 +3108,8 @@ export const viaProps = commonLayoutProps.extend({
   name: z.string().optional(),
   fromLayer: layer_ref,
   toLayer: layer_ref,
-  holeDiameter: distance,
-  outerDiameter: distance,
+  holeDiameter: distance.optional(),
+  outerDiameter: distance.optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   netIsAssignable: z.boolean().optional(),
 })

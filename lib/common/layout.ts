@@ -252,7 +252,7 @@ export const commonComponentProps = commonLayoutProps
       .boolean()
       .optional()
       .describe(
-        "Whether to show this component's CAD model as translucent in the 3D viewer. When true, the component can be toggled with the 'v' key in the 3D viewer.",
+        "Whether to show this component's CAD model as translucent in the 3D viewer.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
   })

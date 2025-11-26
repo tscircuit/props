@@ -11,6 +11,7 @@ export interface ViaProps extends CommonLayoutProps {
   outerDiameter?: number | string
   connectsTo?: string | string[]
   netIsAssignable?: boolean
+  isTened?: boolean
 }
 
 export const viaProps = commonLayoutProps.extend({
@@ -21,6 +22,7 @@ export const viaProps = commonLayoutProps.extend({
   outerDiameter: distance.optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   netIsAssignable: z.boolean().optional(),
+  isTened: z.boolean().optional(),
 })
 export type InferredViaProps = z.input<typeof viaProps>
 expectTypesMatch<ViaProps, InferredViaProps>(true)

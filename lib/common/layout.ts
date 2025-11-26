@@ -227,6 +227,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * chips can be placed between the pin headers) or for tall modules where chips fit underneath.
    */
   obstructsWithinBounds?: boolean
+  /**
+   * Whether to show this component's CAD model as translucent in the 3D viewer.
+   */
+  showAsTranslucentModel?: boolean
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -243,6 +247,12 @@ export const commonComponentProps = commonLayoutProps
       .optional()
       .describe(
         "Does this component take up all the space within its bounds on a layer. This is generally true except for when separated pin headers are being represented by a single component (in which case, chips can be placed between the pin headers) or for tall modules where chips fit underneath",
+      ),
+    showAsTranslucentModel: z
+      .boolean()
+      .optional()
+      .describe(
+        "Whether to show this component's CAD model as translucent in the 3D viewer. When true, the component can be toggled with the 'v' key in the 3D viewer.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
   })

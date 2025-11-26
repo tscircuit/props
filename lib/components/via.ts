@@ -17,8 +17,8 @@ export const viaProps = commonLayoutProps.extend({
   name: z.string().optional(),
   fromLayer: layer_ref,
   toLayer: layer_ref,
-  holeDiameter: distance.optional(),
-  outerDiameter: distance.optional(),
+  holeDiameter: distance.default(0.3).optional(),
+  outerDiameter: distance.default(0.6).optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   netIsAssignable: z.boolean().optional(),
 })

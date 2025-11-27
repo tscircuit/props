@@ -468,6 +468,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * chips can be placed between the pin headers) or for tall modules where chips fit underneath.
    */
   obstructsWithinBounds?: boolean
+  /**
+   * Whether to show this component's CAD model as translucent in the 3D viewer.
+   */
+  showAsTranslucentModel?: boolean
 }
 
 
@@ -1066,6 +1070,8 @@ export interface PcbRouteCache {
 
 export interface PcbStyle {
   silkscreenFontSize?: string | number
+  viaPadDiameter?: string | number
+  viaHoleDiameter?: string | number
   silkscreenTextPosition?:
     | "centered"
     | "outside"

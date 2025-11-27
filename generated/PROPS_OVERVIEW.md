@@ -1070,6 +1070,8 @@ export interface PcbRouteCache {
 
 export interface PcbStyle {
   silkscreenFontSize?: string | number
+  viaPadDiameter?: string | number
+  viaHoleDiameter?: string | number
   silkscreenTextPosition?:
     | "centered"
     | "outside"

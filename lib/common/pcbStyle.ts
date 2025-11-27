@@ -4,6 +4,8 @@ import { z } from "zod"
 
 export interface PcbStyle {
   silkscreenFontSize?: string | number
+  viaPadDiameter?: string | number
+  viaHoleDiameter?: string | number
   silkscreenTextPosition?:
     | "centered"
     | "outside"
@@ -17,6 +19,8 @@ export interface PcbStyle {
 
 export const pcbStyle = z.object({
   silkscreenFontSize: distance.optional(),
+  viaPadDiameter: distance.optional(),
+  viaHoleDiameter: distance.optional(),
   silkscreenTextPosition: z
     .union([
       z.enum(["centered", "outside", "none"]),

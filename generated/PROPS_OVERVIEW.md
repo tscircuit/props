@@ -214,7 +214,7 @@ export interface BoardProps
   title?: string
   material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
-  layers?: 1 | 2 | 4
+  layers?: 1 | 2 | 4 | 6 | 8
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -468,6 +468,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * chips can be placed between the pin headers) or for tall modules where chips fit underneath.
    */
   obstructsWithinBounds?: boolean
+  /**
+   * Whether to show this component's CAD model as translucent in the 3D viewer.
+   */
+  showAsTranslucentModel?: boolean
 }
 
 

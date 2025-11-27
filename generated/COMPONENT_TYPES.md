@@ -292,6 +292,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   symbolName?: string
   doNotPlace?: boolean
   obstructsWithinBounds?: boolean
+  showAsTranslucentModel?: boolean
 }
 .extend({
     key: z.any().optional(),
@@ -305,6 +306,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
       .optional()
       .describe(
         "Does this component take up all the space within its bounds on a layer. This is generally true except for when separated pin headers are being represented by a single component (in which case, chips can be placed between the pin headers) or for tall modules where chips fit underneath",
+      ),
+    showAsTranslucentModel: z
+      .boolean()
+      .optional()
+      .describe(
+        "Whether to show this component's CAD model as translucent in the 3D viewer.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
   })
@@ -514,7 +521,7 @@ export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string
   material?: "fr4" | "fr1"
-  layers?: 1 | 2 | 4
+  layers?: 1 | 2 | 4 | 6 | 8
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -533,7 +540,9 @@ export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
     material: z.enum(["fr4", "fr1"]).default("fr4"),
-    layers: z.union([z.literal(1), z.literal(2), z.literal(4)]).default(2),
+    layers: z
+      .union([z.literal(1), z.literal(2), z.literal(4), z.literal(6), z.literal(8)])
+      .default(2),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),

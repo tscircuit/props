@@ -28,6 +28,14 @@ test("should allow single-layer boards", () => {
   expect(parsed.layers).toBe(1)
 })
 
+test("should allow 6 and 8 layer boards", () => {
+  const sixLayer: BoardProps = { name: "board", layers: 6 }
+  const eightLayer: BoardProps = { name: "board", layers: 8 }
+
+  expect(boardProps.parse(sixLayer).layers).toBe(6)
+  expect(boardProps.parse(eightLayer).layers).toBe(8)
+})
+
 test("should parse borderRadius prop", () => {
   const raw: BoardProps = { name: "board", borderRadius: 2 }
   const parsed = boardProps.parse(raw)

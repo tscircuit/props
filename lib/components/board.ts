@@ -28,7 +28,7 @@ export interface BoardProps
   title?: string
   material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
-  layers?: 1 | 2 | 4
+  layers?: 1 | 2 | 4 | 6 | 8
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -55,7 +55,15 @@ export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
     material: z.enum(["fr4", "fr1"]).default("fr4"),
-    layers: z.union([z.literal(1), z.literal(2), z.literal(4)]).default(2),
+    layers: z
+      .union([
+        z.literal(1),
+        z.literal(2),
+        z.literal(4),
+        z.literal(6),
+        z.literal(8),
+      ])
+      .default(2),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),

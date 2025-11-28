@@ -352,6 +352,7 @@ export interface CapacitorProps<PinLabel extends string = string>
   bypassTo?: string
   maxDecouplingTraceLength?: number
   schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
   connections?: Connections<CapacitorPinLabels>
 }
 
@@ -1402,6 +1403,7 @@ export interface ResistorProps<PinLabel extends string = string>
   pulldownFor?: string
   pulldownTo?: string
   schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
   connections?: Connections<ResistorPinLabels>
 }
 

@@ -6,6 +6,10 @@ import {
   lrPolarPins,
 } from "lib/common/layout"
 import {
+  schematicSymbolSize,
+  type SchematicSymbolSize,
+} from "lib/common/schematicSize"
+import {
   schematicOrientation,
   type SchematicOrientation,
 } from "lib/common/schematicOrientation"
@@ -35,6 +39,7 @@ export interface CapacitorProps<PinLabel extends string = string>
   bypassTo?: string
   maxDecouplingTraceLength?: number
   schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
   connections?: Connections<CapacitorPinLabels>
 }
 
@@ -49,6 +54,7 @@ export const capacitorProps = commonComponentProps.extend({
   bypassTo: z.string().optional(),
   maxDecouplingTraceLength: z.number().optional(),
   schOrientation: schematicOrientation.optional(),
+  schSize: schematicSymbolSize.optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),
 })
 export const capacitorPins = lrPolarPins

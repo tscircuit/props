@@ -545,7 +545,13 @@ export const boardProps = subcircuitGroupProps
   .extend({
     material: z.enum(["fr4", "fr1"]).default("fr4"),
     layers: z
-      .union([z.literal(1), z.literal(2), z.literal(4), z.literal(6), z.literal(8)])
+      .union([
+        z.literal(1),
+        z.literal(2),
+        z.literal(4),
+        z.literal(6),
+        z.literal(8),
+      ])
       .default(2),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
@@ -662,6 +668,7 @@ export interface CapacitorProps<PinLabel extends string = string>
   bypassTo?: string
   maxDecouplingTraceLength?: number
   schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
   connections?: Connections<CapacitorPinLabels>
 }
 export const capacitorProps = commonComponentProps.extend({
@@ -675,6 +682,7 @@ export const capacitorProps = commonComponentProps.extend({
   bypassTo: z.string().optional(),
   maxDecouplingTraceLength: z.number().optional(),
   schOrientation: schematicOrientation.optional(),
+  schSize: schematicSymbolSize.optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),
 })
 ```
@@ -2468,6 +2476,7 @@ export interface ResistorProps<PinLabel extends string = string>
   pulldownFor?: string
   pulldownTo?: string
   schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
   connections?: Connections<ResistorPinLabels>
 }
 export const resistorProps = commonComponentProps.extend({
@@ -2480,6 +2489,7 @@ export const resistorProps = commonComponentProps.extend({
   pulldownTo: z.string().optional(),
 
   schOrientation: schematicOrientation.optional(),
+  schSize: schematicSymbolSize.optional(),
 
   connections: createConnectionsProp(resistorPinLabels).optional(),
 })

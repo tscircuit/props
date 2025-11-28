@@ -6,6 +6,10 @@ import {
   lrPins,
 } from "lib/common/layout"
 import {
+  schematicSymbolSize,
+  type SchematicSymbolSize,
+} from "lib/common/schematicSize"
+import {
   schematicOrientation,
   type SchematicOrientation,
 } from "lib/common/schematicOrientation"
@@ -24,6 +28,7 @@ export interface ResistorProps<PinLabel extends string = string>
   pulldownFor?: string
   pulldownTo?: string
   schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
   connections?: Connections<ResistorPinLabels>
 }
 
@@ -37,6 +42,7 @@ export const resistorProps = commonComponentProps.extend({
   pulldownTo: z.string().optional(),
 
   schOrientation: schematicOrientation.optional(),
+  schSize: schematicSymbolSize.optional(),
 
   connections: createConnectionsProp(resistorPinLabels).optional(),
 })

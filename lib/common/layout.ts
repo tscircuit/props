@@ -6,6 +6,7 @@ import {
   supplier_name,
 } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
+import { pcbCoordinate } from "./distance"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
 import { type FootprintProp, footprintProp } from "./footprintProp"
@@ -98,8 +99,8 @@ export interface CommonLayoutProps {
 }
 
 export const pcbLayoutProps = z.object({
-  pcbX: distance.optional(),
-  pcbY: distance.optional(),
+  pcbX: pcbCoordinate.optional(),
+  pcbY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),
@@ -127,8 +128,8 @@ type InferredPcbLayoutProps = z.input<typeof pcbLayoutProps>
 expectTypesMatch<PcbLayoutProps, InferredPcbLayoutProps>(true)
 
 export const commonLayoutProps = z.object({
-  pcbX: distance.optional(),
-  pcbY: distance.optional(),
+  pcbX: pcbCoordinate.optional(),
+  pcbY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),

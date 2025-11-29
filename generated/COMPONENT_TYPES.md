@@ -95,9 +95,9 @@ export const createConnectionsProp = <T extends readonly [string, ...string[]]>(
 ### distance
 
 ```typescript
-export type Distance = number | string
+export const pcbCoordinate = calcString.or(baseDistance)
 
-export { distance, length } from "circuit-json"
+export { length }
 ```
 
 ### footprintProp
@@ -189,8 +189,8 @@ export interface CommonLayoutProps {
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */
 export const pcbLayoutProps = z.object({
-  pcbX: distance.optional(),
-  pcbY: distance.optional(),
+  pcbX: pcbCoordinate.optional(),
+  pcbY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),
@@ -215,8 +215,8 @@ export const pcbLayoutProps = z.object({
   relative: z.boolean().optional(),
 })
 export const commonLayoutProps = z.object({
-  pcbX: distance.optional(),
-  pcbY: distance.optional(),
+  pcbX: pcbCoordinate.optional(),
+  pcbY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),

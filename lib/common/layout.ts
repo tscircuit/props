@@ -10,6 +10,7 @@ import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
 import { type FootprintProp, footprintProp } from "./footprintProp"
 import { pcbStyle, type PcbStyle } from "./pcbStyle"
+import { schStyle, type SchStyle } from "./schStyle"
 import { type SymbolProp, symbolProp } from "./symbolProp"
 
 export type PcbPositionMode =
@@ -78,6 +79,7 @@ export interface CommonLayoutProps {
   layer?: LayerRefInput
   footprint?: FootprintProp
   symbol?: SymbolProp
+  schStyle?: SchStyle
 
   /**
    * If true, X/Y coordinates will be interpreted relative to the parent group
@@ -158,6 +160,7 @@ export const commonLayoutProps = z.object({
   layer: layer_ref.optional(),
   footprint: footprintProp.optional(),
   symbol: symbolProp.optional(),
+  schStyle: schStyle.optional(),
   relative: z.boolean().optional(),
   schRelative: z.boolean().optional(),
   pcbRelative: z.boolean().optional(),

@@ -177,6 +177,7 @@ export interface CommonLayoutProps {
   layer?: LayerRefInput
   footprint?: FootprintProp
   symbol?: SymbolProp
+  schStyle?: SchStyle
 
   relative?: boolean
 
@@ -247,6 +248,7 @@ export const commonLayoutProps = z.object({
   layer: layer_ref.optional(),
   footprint: footprintProp.optional(),
   symbol: symbolProp.optional(),
+  schStyle: schStyle.optional(),
   relative: z.boolean().optional(),
   schRelative: z.boolean().optional(),
   pcbRelative: z.boolean().optional(),
@@ -377,6 +379,21 @@ export const point3 = z.object({
   x: distance,
   y: distance,
   z: distance,
+})
+```
+
+### schStyle
+
+```typescript
+export interface SchStyle {
+  defaultPassiveSize?: "xs" | "sm" | "md" | string | number
+  defaultCapacitorOrientation?: "vertical" | "none"
+}
+export const schStyle = z.object({
+  defaultPassiveSize: z
+    .union([z.enum(["xs", "sm", "md"]), distance])
+    .optional(),
+  defaultCapacitorOrientation: z.enum(["vertical", "none"]).optional(),
 })
 ```
 

@@ -507,6 +507,7 @@ export interface CommonLayoutProps {
   layer?: LayerRefInput
   footprint?: FootprintProp
   symbol?: SymbolProp
+  schStyle?: SchStyle
 
   /**
    * If true, X/Y coordinates will be interpreted relative to the parent group
@@ -1479,6 +1480,12 @@ export interface SchematicTableProps {
   borderWidth?: number | string
   anchor?: z.infer<typeof ninePointAnchor>
   fontSize?: number | string
+}
+
+
+export interface SchStyle {
+  defaultPassiveSize?: "xs" | "sm" | "md" | string | number
+  defaultCapacitorOrientation?: "vertical" | "none"
 }
 
 

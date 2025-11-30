@@ -6,7 +6,15 @@ import { z } from "zod"
 export interface PcbNoteLineProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbX"
+    | "pcbY"
+    | "pcbLeftX"
+    | "pcbRightX"
+    | "pcbTopY"
+    | "pcbBottomY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   x1: string | number
   y1: string | number
@@ -21,6 +29,10 @@ export const pcbNoteLineProps = pcbLayoutProps
   .omit({
     pcbX: true,
     pcbY: true,
+    pcbLeftX: true,
+    pcbRightX: true,
+    pcbTopY: true,
+    pcbBottomY: true,
     pcbOffsetX: true,
     pcbOffsetY: true,
     pcbRotation: true,

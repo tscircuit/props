@@ -26,6 +26,10 @@ export type PositionMode = PcbPositionMode
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  pcbLeftX?: string | number
+  pcbRightX?: string | number
+  pcbTopY?: string | number
+  pcbBottomY?: string | number
   pcbOffsetX?: string | number
   pcbOffsetY?: string | number
   pcbRotation?: string | number
@@ -52,6 +56,10 @@ export interface PcbLayoutProps {
 export interface CommonLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  pcbLeftX?: string | number
+  pcbRightX?: string | number
+  pcbTopY?: string | number
+  pcbBottomY?: string | number
   pcbOffsetX?: string | number
   pcbOffsetY?: string | number
   pcbRotation?: string | number
@@ -101,6 +109,10 @@ export interface CommonLayoutProps {
 export const pcbLayoutProps = z.object({
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
+  pcbLeftX: pcbCoordinate.optional(),
+  pcbRightX: pcbCoordinate.optional(),
+  pcbTopY: pcbCoordinate.optional(),
+  pcbBottomY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),
@@ -130,6 +142,10 @@ expectTypesMatch<PcbLayoutProps, InferredPcbLayoutProps>(true)
 export const commonLayoutProps = z.object({
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
+  pcbLeftX: pcbCoordinate.optional(),
+  pcbRightX: pcbCoordinate.optional(),
+  pcbTopY: pcbCoordinate.optional(),
+  pcbBottomY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),

@@ -9,7 +9,15 @@ const dimensionTarget = z.union([z.string(), point])
 export interface PcbNoteDimensionProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbX"
+    | "pcbY"
+    | "pcbLeftX"
+    | "pcbRightX"
+    | "pcbTopY"
+    | "pcbBottomY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   from: string | Point
   to: string | Point
@@ -29,6 +37,10 @@ export const pcbNoteDimensionProps = pcbLayoutProps
   .omit({
     pcbX: true,
     pcbY: true,
+    pcbLeftX: true,
+    pcbRightX: true,
+    pcbTopY: true,
+    pcbBottomY: true,
     pcbOffsetX: true,
     pcbOffsetY: true,
     pcbRotation: true,

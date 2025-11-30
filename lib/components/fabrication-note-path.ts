@@ -6,6 +6,10 @@ export const fabricationNotePathProps = pcbLayoutProps
   .omit({
     pcbX: true,
     pcbY: true,
+    pcbLeftX: true,
+    pcbRightX: true,
+    pcbTopY: true,
+    pcbBottomY: true,
     pcbOffsetX: true,
     pcbOffsetY: true,
     pcbRotation: true,

@@ -10,7 +10,15 @@ import { z } from "zod"
 export interface PcbNotePathProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbX"
+    | "pcbY"
+    | "pcbLeftX"
+    | "pcbRightX"
+    | "pcbTopY"
+    | "pcbBottomY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   route: RouteHintPointInput[]
   strokeWidth?: string | number
@@ -21,6 +29,10 @@ export const pcbNotePathProps = pcbLayoutProps
   .omit({
     pcbX: true,
     pcbY: true,
+    pcbLeftX: true,
+    pcbRightX: true,
+    pcbTopY: true,
+    pcbBottomY: true,
     pcbOffsetX: true,
     pcbOffsetY: true,
     pcbRotation: true,

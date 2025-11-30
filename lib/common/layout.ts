@@ -26,6 +26,14 @@ export type PositionMode = PcbPositionMode
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  /**
+   * Position the left, right, top, or bottom edge of the component. Setting any of these
+   * properties changes the anchor used for pcb positioning to the specified edge.
+   */
+  pcbLeftEdgeX?: string | number
+  pcbRightEdgeX?: string | number
+  pcbTopEdgeY?: string | number
+  pcbBottomEdgeY?: string | number
   pcbOffsetX?: string | number
   pcbOffsetY?: string | number
   pcbRotation?: string | number
@@ -52,6 +60,14 @@ export interface PcbLayoutProps {
 export interface CommonLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  /**
+   * Position the left, right, top, or bottom edge of the component. Setting any of these
+   * properties changes the anchor used for pcb positioning to the specified edge.
+   */
+  pcbLeftEdgeX?: string | number
+  pcbRightEdgeX?: string | number
+  pcbTopEdgeY?: string | number
+  pcbBottomEdgeY?: string | number
   pcbOffsetX?: string | number
   pcbOffsetY?: string | number
   pcbRotation?: string | number
@@ -101,6 +117,10 @@ export interface CommonLayoutProps {
 export const pcbLayoutProps = z.object({
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
+  pcbLeftEdgeX: pcbCoordinate.optional(),
+  pcbRightEdgeX: pcbCoordinate.optional(),
+  pcbTopEdgeY: pcbCoordinate.optional(),
+  pcbBottomEdgeY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),
@@ -130,6 +150,10 @@ expectTypesMatch<PcbLayoutProps, InferredPcbLayoutProps>(true)
 export const commonLayoutProps = z.object({
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
+  pcbLeftEdgeX: pcbCoordinate.optional(),
+  pcbRightEdgeX: pcbCoordinate.optional(),
+  pcbTopEdgeY: pcbCoordinate.optional(),
+  pcbBottomEdgeY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),

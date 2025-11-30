@@ -5,6 +5,10 @@ import { z } from "zod"
 
 export const courtyardOutlineProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,

@@ -307,6 +307,10 @@ export interface CadModelProps extends CadModelBase {
   stepUrl?: string;
   pcbX?: Distance;
   pcbY?: Distance;
+  pcbLeftEdgeX?: Distance;
+  pcbRightEdgeX?: Distance;
+  pcbTopEdgeY?: Distance;
+  pcbBottomEdgeY?: Distance;
   pcbOffsetX?: Distance;
   pcbOffsetY?: Distance;
   pcbZ?: Distance;
@@ -536,7 +540,15 @@ export interface DiodeProps<
 ```ts
 export interface FabricationNoteDimensionProps extends Omit<
   PcbLayoutProps,
-  "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  | "pcbLeftEdgeX"
+  | "pcbRightEdgeX"
+  | "pcbTopEdgeY"
+  | "pcbBottomEdgeY"
+  | "pcbX"
+  | "pcbY"
+  | "pcbOffsetX"
+  | "pcbOffsetY"
+  | "pcbRotation"
 > {
   from: string | Point;
   to: string | Point;
@@ -961,7 +973,15 @@ export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
 ```ts
 export interface PcbNoteDimensionProps extends Omit<
   PcbLayoutProps,
-  "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  | "pcbLeftEdgeX"
+  | "pcbRightEdgeX"
+  | "pcbTopEdgeY"
+  | "pcbBottomEdgeY"
+  | "pcbX"
+  | "pcbY"
+  | "pcbOffsetX"
+  | "pcbOffsetY"
+  | "pcbRotation"
 > {
   from: string | Point;
   to: string | Point;
@@ -985,7 +1005,15 @@ export interface PcbNoteDimensionProps extends Omit<
 ```ts
 export interface PcbNoteLineProps extends Omit<
   PcbLayoutProps,
-  "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  | "pcbLeftEdgeX"
+  | "pcbRightEdgeX"
+  | "pcbTopEdgeY"
+  | "pcbBottomEdgeY"
+  | "pcbX"
+  | "pcbY"
+  | "pcbOffsetX"
+  | "pcbOffsetY"
+  | "pcbRotation"
 > {
   x1: string | number;
   y1: string | number;
@@ -1004,7 +1032,15 @@ export interface PcbNoteLineProps extends Omit<
 ```ts
 export interface PcbNotePathProps extends Omit<
   PcbLayoutProps,
-  "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+  | "pcbLeftEdgeX"
+  | "pcbRightEdgeX"
+  | "pcbTopEdgeY"
+  | "pcbBottomEdgeY"
+  | "pcbX"
+  | "pcbY"
+  | "pcbOffsetX"
+  | "pcbOffsetY"
+  | "pcbRotation"
 > {
   route: RouteHintPointInput[];
   strokeWidth?: string | number;

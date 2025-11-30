@@ -1,4 +1,4 @@
-import { distance, type Distance } from "lib/common/distance"
+import { distance, pcbCoordinate, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { cadModelBase, type CadModelBase } from "../common/cadModel"
 import { z } from "zod"
@@ -14,8 +14,8 @@ export interface CadModelProps extends CadModelBase {
 }
 
 const pcbPosition = z.object({
-  pcbX: distance.optional(),
-  pcbY: distance.optional(),
+  pcbX: pcbCoordinate.optional(),
+  pcbY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbZ: distance.optional(),

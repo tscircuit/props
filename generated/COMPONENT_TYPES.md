@@ -127,6 +127,10 @@ export type FootprintSoupElements = {
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  pcbLeftEdgeX?: string | number
+  pcbRightEdgeX?: string | number
+  pcbTopEdgeY?: string | number
+  pcbBottomEdgeY?: string | number
   pcbOffsetX?: string | number
   pcbOffsetY?: string | number
   pcbRotation?: string | number
@@ -149,6 +153,10 @@ export interface PcbLayoutProps {
 export interface CommonLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  pcbLeftEdgeX?: string | number
+  pcbRightEdgeX?: string | number
+  pcbTopEdgeY?: string | number
+  pcbBottomEdgeY?: string | number
   pcbOffsetX?: string | number
   pcbOffsetY?: string | number
   pcbRotation?: string | number
@@ -191,6 +199,10 @@ export interface CommonLayoutProps {
 export const pcbLayoutProps = z.object({
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
+  pcbLeftEdgeX: pcbCoordinate.optional(),
+  pcbRightEdgeX: pcbCoordinate.optional(),
+  pcbTopEdgeY: pcbCoordinate.optional(),
+  pcbBottomEdgeY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),
@@ -217,6 +229,10 @@ export const pcbLayoutProps = z.object({
 export const commonLayoutProps = z.object({
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
+  pcbLeftEdgeX: pcbCoordinate.optional(),
+  pcbRightEdgeX: pcbCoordinate.optional(),
+  pcbTopEdgeY: pcbCoordinate.optional(),
+  pcbBottomEdgeY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbRotation: rotation.optional(),
@@ -652,6 +668,10 @@ export interface CadModelProps extends CadModelBase {
   stepUrl?: string
   pcbX?: Distance
   pcbY?: Distance
+  pcbLeftEdgeX?: Distance
+  pcbRightEdgeX?: Distance
+  pcbTopEdgeY?: Distance
+  pcbBottomEdgeY?: Distance
   pcbOffsetX?: Distance
   pcbOffsetY?: Distance
   pcbZ?: Distance
@@ -952,6 +972,10 @@ export const copperTextProps = pcbLayoutProps.extend({
 ```typescript
 export const courtyardOutlineProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,
@@ -1103,7 +1127,15 @@ export interface DiodeProps<PinLabel extends string = string>
 export interface FabricationNoteDimensionProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   from: string | Point
   to: string | Point
@@ -1120,6 +1152,10 @@ export interface FabricationNoteDimensionProps
 }
 export const fabricationNoteDimensionProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,
@@ -1147,6 +1183,10 @@ export const fabricationNoteDimensionProps = pcbLayoutProps
 ```typescript
 export const fabricationNotePathProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,
@@ -1997,7 +2037,15 @@ pcbLayoutProps.extend({
 export interface PcbNoteDimensionProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   from: string | Point
   to: string | Point
@@ -2014,6 +2062,10 @@ export interface PcbNoteDimensionProps
 }
 export const pcbNoteDimensionProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,
@@ -2042,7 +2094,15 @@ export const pcbNoteDimensionProps = pcbLayoutProps
 export interface PcbNoteLineProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   x1: string | number
   y1: string | number
@@ -2054,6 +2114,10 @@ export interface PcbNoteLineProps
 }
 export const pcbNoteLineProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,
@@ -2077,7 +2141,15 @@ export const pcbNoteLineProps = pcbLayoutProps
 export interface PcbNotePathProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   route: RouteHintPointInput[]
   strokeWidth?: string | number
@@ -2085,6 +2157,10 @@ export interface PcbNotePathProps
 }
 export const pcbNotePathProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,
@@ -2741,6 +2817,10 @@ export const silkscreenLineProps = pcbLayoutProps
 ```typescript
 export const silkscreenPathProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,

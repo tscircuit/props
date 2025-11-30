@@ -8,6 +8,10 @@ export interface CadModelProps extends CadModelBase {
   stepUrl?: string
   pcbX?: Distance
   pcbY?: Distance
+  pcbLeftEdgeX?: Distance
+  pcbRightEdgeX?: Distance
+  pcbTopEdgeY?: Distance
+  pcbBottomEdgeY?: Distance
   pcbOffsetX?: Distance
   pcbOffsetY?: Distance
   pcbZ?: Distance
@@ -16,6 +20,10 @@ export interface CadModelProps extends CadModelBase {
 const pcbPosition = z.object({
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
+  pcbLeftEdgeX: pcbCoordinate.optional(),
+  pcbRightEdgeX: pcbCoordinate.optional(),
+  pcbTopEdgeY: pcbCoordinate.optional(),
+  pcbBottomEdgeY: pcbCoordinate.optional(),
   pcbOffsetX: distance.optional(),
   pcbOffsetY: distance.optional(),
   pcbZ: distance.optional(),

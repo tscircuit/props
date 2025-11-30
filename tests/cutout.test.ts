@@ -102,6 +102,25 @@ test("should parse PolygonCutoutProps without optional pcbX/pcbY", () => {
   expect(parsed.shape).toBe("polygon")
 })
 
+test("should parse cutout edge-positioned coordinates", () => {
+  const rawProps: RectCutoutProps = {
+    shape: "rect",
+    width: 5,
+    height: 5,
+    pcbLeftEdgeX: "2mm",
+    pcbTopEdgeY: "4mm",
+    pcbRightEdgeX: 15,
+    pcbBottomEdgeY: -3,
+  }
+
+  const parsed = rectCutoutProps.parse(rawProps)
+
+  expect(parsed.pcbLeftEdgeX).toBe(2)
+  expect(parsed.pcbTopEdgeY).toBe(4)
+  expect(parsed.pcbRightEdgeX).toBe(15)
+  expect(parsed.pcbBottomEdgeY).toBe(-3)
+})
+
 test("type inference for CutoutProps", () => {
   const rect: CutoutProps = {
     shape: "rect",

@@ -319,6 +319,10 @@ export interface CadModelProps extends CadModelBase {
   stepUrl?: string
   pcbX?: Distance
   pcbY?: Distance
+  pcbLeftEdgeX?: Distance
+  pcbRightEdgeX?: Distance
+  pcbTopEdgeY?: Distance
+  pcbBottomEdgeY?: Distance
   pcbOffsetX?: Distance
   pcbOffsetY?: Distance
   pcbZ?: Distance
@@ -479,6 +483,14 @@ export interface CommonComponentProps<PinLabel extends string = string>
 export interface CommonLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  /**
+   * Position the left, right, top, or bottom edge of the component. Setting any of these
+   * properties changes the anchor used for pcb positioning to the specified edge.
+   */
+  pcbLeftEdgeX?: string | number
+  pcbRightEdgeX?: string | number
+  pcbTopEdgeY?: string | number
+  pcbBottomEdgeY?: string | number
   pcbOffsetX?: string | number
   pcbOffsetY?: string | number
   pcbRotation?: string | number
@@ -651,7 +663,15 @@ export interface EditTraceHintEvent extends BaseManualEditEvent {
 export interface FabricationNoteDimensionProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   from: string | Point
   to: string | Point
@@ -968,6 +988,14 @@ export interface PanelProps extends BaseGroupProps {
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
+  /**
+   * Position the left, right, top, or bottom edge of the component. Setting any of these
+   * properties changes the anchor used for pcb positioning to the specified edge.
+   */
+  pcbLeftEdgeX?: string | number
+  pcbRightEdgeX?: string | number
+  pcbTopEdgeY?: string | number
+  pcbBottomEdgeY?: string | number
   pcbOffsetX?: string | number
   pcbOffsetY?: string | number
   pcbRotation?: string | number
@@ -995,7 +1023,15 @@ export interface PcbLayoutProps {
 export interface PcbNoteDimensionProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   from: string | Point
   to: string | Point
@@ -1015,7 +1051,15 @@ export interface PcbNoteDimensionProps
 export interface PcbNoteLineProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   x1: string | number
   y1: string | number
@@ -1030,7 +1074,15 @@ export interface PcbNoteLineProps
 export interface PcbNotePathProps
   extends Omit<
     PcbLayoutProps,
-    "pcbX" | "pcbY" | "pcbOffsetX" | "pcbOffsetY" | "pcbRotation"
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
   > {
   route: RouteHintPointInput[]
   strokeWidth?: string | number

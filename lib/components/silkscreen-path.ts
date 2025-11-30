@@ -4,6 +4,10 @@ import { z } from "zod"
 
 export const silkscreenPathProps = pcbLayoutProps
   .omit({
+    pcbLeftEdgeX: true,
+    pcbRightEdgeX: true,
+    pcbTopEdgeY: true,
+    pcbBottomEdgeY: true,
     pcbX: true,
     pcbY: true,
     pcbOffsetX: true,

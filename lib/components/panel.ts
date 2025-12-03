@@ -4,8 +4,8 @@ import { z } from "zod"
 import { baseGroupProps, type BaseGroupProps } from "./group"
 
 export interface PanelProps extends BaseGroupProps {
-  width: Distance
-  height: Distance
+  width?: Distance
+  height?: Distance
   children?: BaseGroupProps["children"]
   /**
    * If true, prevent a solder mask from being applied to this panel.
@@ -27,8 +27,8 @@ export const panelProps = baseGroupProps
     children: true,
   })
   .extend({
-    width: distance,
-    height: distance,
+    width: distance.optional(),
+    height: distance.optional(),
     children: z.any().optional(),
     noSolderMask: z.boolean().optional(),
     panelizationMethod: z.enum(["tab-routing", "none"]).optional(),

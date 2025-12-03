@@ -941,8 +941,8 @@ export interface NetLabelProps {
 
 ```ts
 export interface PanelProps extends BaseGroupProps {
-  width: Distance;
-  height: Distance;
+  width?: Distance;
+  height?: Distance;
   children?: BaseGroupProps["children"];
   /**
    * If true, prevent a solder mask from being applied to this panel.

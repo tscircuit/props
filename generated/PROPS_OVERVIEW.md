@@ -702,6 +702,12 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
 }
 
 
+export interface FiducialProps extends CommonComponentProps {
+  soldermaskPullback?: Distance
+  padDiameter?: Distance
+}
+
+
 export interface FootprintFileParserEntry {
   loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
 }
@@ -787,11 +793,7 @@ export interface InductorProps<PinLabel extends string = string>
 
 
 export interface InterconnectProps extends CommonComponentProps {
-  standard?:
-    | "TSC0001_36P_XALT_2025_11"
-    | "0805"
-    | "0603"
-    | "1206"
+  standard?: "TSC0001_36P_XALT_2025_11" | "0805" | "0603" | "1206"
 }
 
 
@@ -971,9 +973,10 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
 }
 
 
-export interface PanelProps extends BaseGroupProps {
-  width: Distance
-  height: Distance
+export interface PanelProps
+  extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
+  width?: Distance
+  height?: Distance
   children?: BaseGroupProps["children"]
   /**
    * If true, prevent a solder mask from being applied to this panel.
@@ -983,6 +986,13 @@ export interface PanelProps extends BaseGroupProps {
   panelizationMethod?: "tab-routing" | "none"
   /** Gap between boards in a panel */
   boardGap?: Distance
+  boardAreaWidth?: Distance
+  boardAreaHeight?: Distance
+  layoutMode?: "grid" | "pack" | "none"
+  row?: number
+  col?: number
+  cellWidth?: Distance
+  cellHeight?: Distance
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
@@ -1691,6 +1701,11 @@ export interface TestpointProps extends CommonComponentProps {
    */
   height?: number | string
   connections?: TestpointConnections
+}
+
+
+export interface ToolingrailProps {
+  children?: any
 }
 
 

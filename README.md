@@ -45,6 +45,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<fabricationnotepath />`      | [`FabricationNotePathProps`](#fabricationnotepathprops-fabricationnotepath)                |
 | `<fabricationnoterect />`      | [`FabricationNoteRectProps`](#fabricationnoterectprops-fabricationnoterect)                |
 | `<fabricationnotetext />`      | [`FabricationNoteTextProps`](#fabricationnotetextprops-fabricationnotetext)                |
+| `<fiducial />`                 | [`FiducialProps`](#fiducialprops-fiducial)                                                 |
 | `<footprint />`                | [`FootprintProps`](#footprintprops-footprint)                                              |
 | `<fuse />`                     | [`FuseProps`](#fuseprops-fuse)                                                             |
 | `<group />`                    | [`BaseGroupProps`](#basegroupprops-group)                                                  |
@@ -94,9 +95,11 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<solderpaste />`              | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste)                                |
 | `<stampboard />`               | [`StampboardProps`](#stampboardprops-stampboard)                                           |
 | `<subcircuit />`               | [`SubcircuitProps`](#subcircuitprops-subcircuit)                                           |
+| `<subpanel />`                 | [`SubpanelProps`](#subpanelprops-subpanel)                                                 |
 | `<switch />`                   | [`SwitchProps`](#switchprops-switch)                                                       |
 | `<symbol />`                   | [`SymbolProps`](#symbolprops-symbol)                                                       |
 | `<testpoint />`                | [`TestpointProps`](#testpointprops-testpoint)                                              |
+| `<toolingrail />`              | [`ToolingrailProps`](#toolingrailprops-toolingrail)                                        |
 | `<trace />`                    | [`TraceProps`](#traceprops-trace)                                                          |
 | `<tracehint />`                | [`TraceHintProps`](#tracehintprops-tracehint)                                              |
 | `<transistor />`               | [`TransistorProps`](#transistorprops-transistor)                                           |
@@ -602,6 +605,17 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-text.ts)
 
+### FiducialProps `<fiducial />`
+
+```ts
+export interface FiducialProps extends CommonComponentProps {
+  soldermaskPullback?: Distance;
+  padDiameter?: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/fiducial.ts)
+
 ### FootprintProps `<footprint />`
 
 ```ts
@@ -940,9 +954,12 @@ export interface NetLabelProps {
 ### PanelProps `<panel />`
 
 ```ts
-export interface PanelProps extends BaseGroupProps {
-  width: Distance;
-  height: Distance;
+export interface PanelProps extends Omit<
+  BaseGroupProps,
+  "height" | "layoutMode" | "width"
+> {
+  width?: Distance;
+  height?: Distance;
   children?: BaseGroupProps["children"];
   /**
    * If true, prevent a solder mask from being applied to this panel.
@@ -952,6 +969,13 @@ export interface PanelProps extends BaseGroupProps {
   panelizationMethod?: "tab-routing" | "none";
   /** Gap between boards in a panel */
   boardGap?: Distance;
+  boardAreaWidth?: Distance;
+  boardAreaHeight?: Distance;
+  layoutMode?: "grid" | "pack" | "none";
+  row?: number;
+  col?: number;
+  cellWidth?: Distance;
+  cellHeight?: Distance;
   tabWidth?: Distance;
   tabLength?: Distance;
   mouseBites?: boolean;
@@ -1572,6 +1596,16 @@ export interface TestpointProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/testpoint.ts)
+
+### ToolingrailProps `<toolingrail />`
+
+```ts
+export interface ToolingrailProps {
+  children?: any;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/toolingrail.ts)
 
 ### TraceProps `<trace />`
 

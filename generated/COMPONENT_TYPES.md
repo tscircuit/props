@@ -1243,6 +1243,19 @@ export const fabricationNoteTextProps = pcbLayoutProps.extend({
 })
 ```
 
+### fiducial
+
+```typescript
+export interface FiducialProps extends CommonComponentProps {
+  soldermaskPullback?: Distance
+  padDiameter?: Distance
+}
+export const fiducialProps = commonComponentProps.extend({
+  soldermaskPullback: distance.optional(),
+  padDiameter: distance.optional(),
+})
+```
+
 ### footprint
 
 ```typescript
@@ -1823,11 +1836,7 @@ export const inductorProps = commonComponentProps.extend({
 
 ```typescript
 export interface InterconnectProps extends CommonComponentProps {
-  standard?:
-    | "TSC0001_36P_XALT_2025_11"
-    | "0805"
-    | "0603"
-    | "1206"
+  standard?: "TSC0001_36P_XALT_2025_11" | "0805" | "0603" | "1206"
 }
 export const interconnectProps = commonComponentProps.extend({
   standard: z
@@ -1992,13 +2001,21 @@ export const netLabelProps = z.object({
 ### panel
 
 ```typescript
-export interface PanelProps extends BaseGroupProps {
-  width: Distance
-  height: Distance
+export interface PanelProps
+  extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
+  width?: Distance
+  height?: Distance
   children?: BaseGroupProps["children"]
   noSolderMask?: boolean
   panelizationMethod?: "tab-routing" | "none"
   boardGap?: Distance
+  boardAreaWidth?: Distance
+  boardAreaHeight?: Distance
+  layoutMode?: "grid" | "pack" | "none"
+  row?: number
+  col?: number
+  cellWidth?: Distance
+  cellHeight?: Distance
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
@@ -2008,15 +2025,23 @@ export const panelProps = baseGroupProps
   .omit({
     width: true,
     height: true,
+    layoutMode: true,
     children: true,
   })
   .extend({
-    width: distance,
-    height: distance,
+    width: distance.optional(),
+    height: distance.optional(),
     children: z.any().optional(),
     noSolderMask: z.boolean().optional(),
     panelizationMethod: z.enum(["tab-routing", "none"]).optional(),
     boardGap: distance.optional(),
+    boardAreaWidth: distance.optional(),
+    boardAreaHeight: distance.optional(),
+    layoutMode: z.enum(["grid", "pack", "none"]).optional(),
+    row: z.number().optional(),
+    col: z.number().optional(),
+    cellWidth: distance.optional(),
+    cellHeight: distance.optional(),
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
@@ -3142,6 +3167,17 @@ export interface TestpointProps extends CommonComponentProps {
     width: distance.optional(),
     height: distance.optional(),
   })
+```
+
+### toolingrail
+
+```typescript
+export interface ToolingrailProps {
+  children?: any
+}
+export const toolingrailProps = z.object({
+  children: z.any().optional(),
+})
 ```
 
 ### trace-hint

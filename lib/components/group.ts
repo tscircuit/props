@@ -282,11 +282,41 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schMatchAdapt?: boolean
 }
 
+/**
+ * Result from findStandardPart containing part info with footprint
+ */
+export interface StandardPartResult {
+  supplierPartNumbers: SupplierPartNumbers
+  /**
+   * Footprint string for the selected part (e.g., "usb_c_16pin")
+   */
+  footprint?: string
+  /**
+   * Pin mapping from standard pin names to actual part pin numbers
+   * e.g., { "DP": 1, "DM": 2, "CC1": 3, ... }
+   */
+  pinMapping?: Record<string, number | string>
+}
+
 export type PartsEngine = {
   findPart: (params: {
     sourceComponent: AnySourceComponent
     footprinterString?: string
   }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+
+  /**
+   * Find a part that implements a standard connector (e.g., USB-C).
+   * This method is used when a component specifies a `standard` prop,
+   * and returns not just supplier part numbers but also footprint and pin mapping info.
+   *
+   * @param params.standard - The connector standard (e.g., "usb_c", "m2")
+   * @param params.sourceComponent - The source component requesting the part
+   * @returns Part info including supplier numbers, footprint, and pin mapping
+   */
+  findStandardPart?: (params: {
+    standard: string
+    sourceComponent: AnySourceComponent
+  }) => Promise<StandardPartResult | null> | StandardPartResult | null
 }
 
 export interface PcbRouteCache {

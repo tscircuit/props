@@ -11,7 +11,11 @@ import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import type { AnySourceComponent, PcbTrace } from "circuit-json"
+import type {
+  AnyCircuitElement,
+  AnySourceComponent,
+  PcbTrace,
+} from "circuit-json"
 import {
   manual_edits_file,
   type ManualEditsFile,
@@ -282,11 +286,38 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schMatchAdapt?: boolean
 }
 
+/**
+ * Result from findStandardPart containing part info with footprint
+ */
+export interface StandardPartResult {
+  supplierPartNumbers: SupplierPartNumbers
+  /**
+   * Circuit JSON array describing the footprint for the selected part.
+   * Pin mapping is implicit in the circuit JSON elements (e.g., pcb_smtpad, pcb_plated_hole)
+   * which contain pin_number and port_hints properties.
+   */
+  footprint?: AnyCircuitElement[]
+}
+
 export type PartsEngine = {
   findPart: (params: {
     sourceComponent: AnySourceComponent
     footprinterString?: string
   }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+
+  /**
+   * Find a part that implements a standard connector (e.g., USB-C).
+   * This method is used when a component specifies a `standard` prop,
+   * and returns supplier part numbers along with the footprint as Circuit JSON.
+   *
+   * @param params.standard - The connector standard (e.g., "usb_c", "m2")
+   * @param params.sourceComponent - The source component requesting the part
+   * @returns Part info including supplier numbers and footprint Circuit JSON
+   */
+  findStandardPart?: (params: {
+    standard: string
+    sourceComponent: AnySourceComponent
+  }) => Promise<StandardPartResult | null> | StandardPartResult | null
 }
 
 export interface PcbRouteCache {

@@ -2009,8 +2009,6 @@ export interface PanelProps
   noSolderMask?: boolean
   panelizationMethod?: "tab-routing" | "none"
   boardGap?: Distance
-  boardAreaWidth?: Distance
-  boardAreaHeight?: Distance
   layoutMode?: "grid" | "pack" | "none"
   row?: number
   col?: number
@@ -2035,8 +2033,6 @@ export const panelProps = baseGroupProps
     noSolderMask: z.boolean().optional(),
     panelizationMethod: z.enum(["tab-routing", "none"]).optional(),
     boardGap: distance.optional(),
-    boardAreaWidth: distance.optional(),
-    boardAreaHeight: distance.optional(),
     layoutMode: z.enum(["grid", "pack", "none"]).optional(),
     row: z.number().optional(),
     col: z.number().optional(),

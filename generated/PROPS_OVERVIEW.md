@@ -986,8 +986,6 @@ export interface PanelProps
   panelizationMethod?: "tab-routing" | "none"
   /** Gap between boards in a panel */
   boardGap?: Distance
-  boardAreaWidth?: Distance
-  boardAreaHeight?: Distance
   layoutMode?: "grid" | "pack" | "none"
   row?: number
   col?: number

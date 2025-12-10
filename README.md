@@ -977,6 +977,11 @@ export interface PanelProps extends Omit<
   tabWidth?: Distance;
   tabLength?: Distance;
   mouseBites?: boolean;
+  edgePadding?: Distance;
+  edgePaddingLeft?: Distance;
+  edgePaddingRight?: Distance;
+  edgePaddingTop?: Distance;
+  edgePaddingBottom?: Distance;
 }
 ```
 

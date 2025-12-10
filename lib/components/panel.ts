@@ -24,6 +24,11 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  edgePadding?: Distance
+  edgePaddingLeft?: Distance
+  edgePaddingRight?: Distance
+  edgePaddingTop?: Distance
+  edgePaddingBottom?: Distance
 }
 
 export const panelProps = baseGroupProps
@@ -48,6 +53,11 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    edgePadding: distance.optional(),
+    edgePaddingLeft: distance.optional(),
+    edgePaddingRight: distance.optional(),
+    edgePaddingTop: distance.optional(),
+    edgePaddingBottom: distance.optional(),
   })
 
 type InferredPanelProps = z.input<typeof panelProps>

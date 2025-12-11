@@ -60,6 +60,22 @@ test("should parse boardAnchorAlignment prop", () => {
   expect(parsed.boardAnchorAlignment).toBe("bottom_right")
 })
 
+test("should parse anchorAlignment prop", () => {
+  const raw: BoardProps = {
+    name: "board",
+    anchorAlignment: "top_left",
+  }
+
+  const parsed = boardProps.parse(raw)
+  expect(parsed.anchorAlignment).toBe("top_left")
+})
+
+test("should prefer anchorAlignment over boardAnchorAlignment", () => {
+  const description = boardProps.shape.boardAnchorAlignment.description
+
+  expect(description).toContain("Prefer using anchorAlignment")
+})
+
 test("should parse board color customization props", () => {
   const raw: BoardProps = {
     name: "board",

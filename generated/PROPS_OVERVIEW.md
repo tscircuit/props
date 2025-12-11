@@ -218,6 +218,7 @@ export interface BoardProps
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
+  anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor
@@ -978,6 +979,7 @@ export interface PanelProps
   width?: Distance
   height?: Distance
   children?: BaseGroupProps["children"]
+  anchorAlignment?: z.infer<typeof ninePointAnchor>
   /**
    * If true, prevent a solder mask from being applied to this panel.
    */
@@ -994,6 +996,11 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  edgePadding?: Distance
+  edgePaddingLeft?: Distance
+  edgePaddingRight?: Distance
+  edgePaddingTop?: Distance
+  edgePaddingBottom?: Distance
 }
 
 

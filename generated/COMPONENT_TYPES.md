@@ -562,6 +562,7 @@ export interface BoardProps
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
+  anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
   solderMaskColor?: BoardColor
   topSolderMaskColor?: BoardColor
@@ -589,7 +590,10 @@ export const boardProps = subcircuitGroupProps
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),
-    boardAnchorAlignment: ninePointAnchor.optional(),
+    anchorAlignment: ninePointAnchor.optional(),
+    boardAnchorAlignment: ninePointAnchor
+      .optional()
+      .describe("Prefer using anchorAlignment when possible"),
     title: z.string().optional(),
     solderMaskColor: boardColor.optional(),
     topSolderMaskColor: boardColor.optional(),
@@ -2006,6 +2010,7 @@ export interface PanelProps
   width?: Distance
   height?: Distance
   children?: BaseGroupProps["children"]
+  anchorAlignment?: z.infer<typeof ninePointAnchor>
   noSolderMask?: boolean
   panelizationMethod?: "tab-routing" | "none"
   boardGap?: Distance
@@ -2017,6 +2022,11 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  edgePadding?: Distance
+  edgePaddingLeft?: Distance
+  edgePaddingRight?: Distance
+  edgePaddingTop?: Distance
+  edgePaddingBottom?: Distance
 }
 /** Gap between boards in a panel */
 export const panelProps = baseGroupProps
@@ -2030,6 +2040,7 @@ export const panelProps = baseGroupProps
     width: distance.optional(),
     height: distance.optional(),
     children: z.any().optional(),
+    anchorAlignment: ninePointAnchor.optional(),
     noSolderMask: z.boolean().optional(),
     panelizationMethod: z.enum(["tab-routing", "none"]).optional(),
     boardGap: distance.optional(),
@@ -2041,6 +2052,11 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    edgePadding: distance.optional(),
+    edgePaddingLeft: distance.optional(),
+    edgePaddingRight: distance.optional(),
+    edgePaddingTop: distance.optional(),
+    edgePaddingBottom: distance.optional(),
   })
 ```
 

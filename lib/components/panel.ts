@@ -1,4 +1,5 @@
 import { distance, type Distance } from "lib/common/distance"
+import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { baseGroupProps, type BaseGroupProps } from "./group"
@@ -8,6 +9,7 @@ export interface PanelProps
   width?: Distance
   height?: Distance
   children?: BaseGroupProps["children"]
+  anchorAlignment?: z.infer<typeof ninePointAnchor>
   /**
    * If true, prevent a solder mask from being applied to this panel.
    */
@@ -42,6 +44,7 @@ export const panelProps = baseGroupProps
     width: distance.optional(),
     height: distance.optional(),
     children: z.any().optional(),
+    anchorAlignment: ninePointAnchor.optional(),
     noSolderMask: z.boolean().optional(),
     panelizationMethod: z.enum(["tab-routing", "none"]).optional(),
     boardGap: distance.optional(),

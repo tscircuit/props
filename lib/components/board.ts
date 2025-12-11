@@ -32,6 +32,7 @@ export interface BoardProps
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
+  anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor
@@ -67,7 +68,10 @@ export const boardProps = subcircuitGroupProps
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),
-    boardAnchorAlignment: ninePointAnchor.optional(),
+    anchorAlignment: ninePointAnchor.optional(),
+    boardAnchorAlignment: ninePointAnchor
+      .optional()
+      .describe("Prefer using anchorAlignment when possible"),
     title: z.string().optional(),
     solderMaskColor: boardColor.optional(),
     topSolderMaskColor: boardColor.optional(),

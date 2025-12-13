@@ -1686,6 +1686,10 @@ export interface TestpointProps extends CommonComponentProps {
    */
   footprintVariant?: "pad" | "through_hole"
   /**
+   * Net name(s) that this testpoint should connect to
+   */
+  connectsTo?: string | string[]
+  /**
    * The shape of the pad if using a pad variant
    */
   padShape?: "rect" | "circle"

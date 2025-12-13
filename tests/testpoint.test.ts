@@ -9,10 +9,12 @@ test("should parse pad testpoint", () => {
   const rawProps: TestpointProps = {
     name: "tp1",
     padDiameter: 1,
+    connectsTo: "GND",
   }
   const parsed = testpointProps.parse(rawProps)
   expect(parsed.footprintVariant).toBeUndefined()
   expect(parsed.padDiameter).toBe(1)
+  expect(parsed.connectsTo).toBe("GND")
   expect(parsed.holeDiameter).toBeUndefined()
 })
 
@@ -39,6 +41,15 @@ test("should parse through_hole testpoint", () => {
   expect(parsed.footprintVariant).toBe("through_hole")
   expect(parsed.holeDiameter).toBe(1)
   expect(parsed.connections?.pin1).toBe(".U1 > .pin1")
+})
+
+test("should parse connectsTo as string array", () => {
+  const rawProps: TestpointProps = {
+    name: "tp-array",
+    connectsTo: ["GND", "TP_BUS"],
+  }
+  const parsed = testpointProps.parse(rawProps)
+  expect(parsed.connectsTo).toEqual(["GND", "TP_BUS"])
 })
 
 test("should require holeDiameter for through_hole variant", () => {

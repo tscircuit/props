@@ -24,6 +24,10 @@ export interface TestpointProps extends CommonComponentProps {
    */
   footprintVariant?: "pad" | "through_hole"
   /**
+   * Net name(s) that this testpoint should connect to
+   */
+  connectsTo?: string | string[]
+  /**
    * The shape of the pad if using a pad variant
    */
   padShape?: "rect" | "circle"
@@ -48,6 +52,7 @@ export interface TestpointProps extends CommonComponentProps {
 
 export const testpointProps = commonComponentProps
   .extend({
+    connectsTo: z.string().or(z.array(z.string())).optional(),
     connections: testpointConnectionsProp.optional(),
     footprintVariant: z.enum(["pad", "through_hole"]).optional(),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),

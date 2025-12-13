@@ -9,5 +9,7 @@ export const copperTextProps = pcbLayoutProps.extend({
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
   layers: z.array(layer_ref).optional(),
+  knockout: z.boolean().optional(),
+  mirrored: z.boolean().optional(),
 })
 export type CopperTextProps = z.input<typeof copperTextProps>

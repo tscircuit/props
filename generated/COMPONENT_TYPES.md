@@ -968,6 +968,8 @@ export const copperTextProps = pcbLayoutProps.extend({
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
   layers: z.array(layer_ref).optional(),
+  knockout: z.boolean().optional(),
+  mirrored: z.boolean().optional(),
 })
 ```
 
@@ -3163,6 +3165,7 @@ const testpointConnectionsProp = z
   })
 export interface TestpointProps extends CommonComponentProps {
   footprintVariant?: "pad" | "through_hole"
+  connectsTo?: string | string[]
   padShape?: "rect" | "circle"
   padDiameter?: number | string
   holeDiameter?: number | string
@@ -3171,6 +3174,7 @@ export interface TestpointProps extends CommonComponentProps {
   connections?: TestpointConnections
 }
 .extend({
+    connectsTo: z.string().or(z.array(z.string())).optional(),
     connections: testpointConnectionsProp.optional(),
     footprintVariant: z.enum(["pad", "through_hole"]).optional(),
     padShape: z.enum(["rect", "circle"]).optional().default("circle"),

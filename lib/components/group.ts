@@ -11,7 +11,11 @@ import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import type { AnySourceComponent, PcbTrace } from "circuit-json"
+import type {
+  AnySourceComponent,
+  NinePointAnchor,
+  PcbTrace,
+} from "circuit-json"
 import {
   manual_edits_file,
   type ManualEditsFile,
@@ -239,6 +243,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexGap?: number | string
   pcbFlexDirection?: "row" | "column"
   pcbAlignItems?: "start" | "center" | "end" | "stretch"
+  pcbAnchorPosition?: NinePointAnchor
   pcbJustifyContent?:
     | "start"
     | "center"
@@ -477,6 +482,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbFlexGap: z.number().or(z.string()).optional(),
   pcbFlexDirection: z.enum(["row", "column"]).optional(),
   pcbAlignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
+  pcbAnchorPosition: ninePointAnchor.default("center"),
   pcbJustifyContent: z
     .enum([
       "start",

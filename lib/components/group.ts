@@ -11,11 +11,7 @@ import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import type {
-  AnySourceComponent,
-  NinePointAnchor,
-  PcbTrace,
-} from "circuit-json"
+import type { AnySourceComponent, PcbTrace } from "circuit-json"
 import {
   manual_edits_file,
   type ManualEditsFile,

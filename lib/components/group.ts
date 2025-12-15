@@ -222,7 +222,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   /**
    * Anchor to use when interpreting pcbX/pcbY/pcbOffsetX/pcbOffsetY relative to pcbPosition
    */
-  pcbPositionAnchor?: AutocompleteString<z.infer<typeof ninePointAnchor>>
+  pcbAnchorPosition?: AutocompleteString<z.infer<typeof ninePointAnchor>>
 
   /** @deprecated Use `pcbGrid` */
   grid?: boolean
@@ -243,7 +243,6 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbFlexGap?: number | string
   pcbFlexDirection?: "row" | "column"
   pcbAlignItems?: "start" | "center" | "end" | "stretch"
-  pcbAnchorPosition?: NinePointAnchor
   pcbJustifyContent?:
     | "start"
     | "center"
@@ -341,7 +340,7 @@ export type AutorouterProp =
   | AutorouterConfig
   | AutocompleteString<AutorouterPreset>
 
-const pcbPositionAnchorAutocomplete = z.custom<
+const pcbAnchorPositionAutocomplete = z.custom<
   AutocompleteString<z.infer<typeof ninePointAnchor>>
 >((value) => typeof value === "string")
 
@@ -482,7 +481,6 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbFlexGap: z.number().or(z.string()).optional(),
   pcbFlexDirection: z.enum(["row", "column"]).optional(),
   pcbAlignItems: z.enum(["start", "center", "end", "stretch"]).optional(),
-  pcbAnchorPosition: ninePointAnchor.default("center"),
   pcbJustifyContent: z
     .enum([
       "start",
@@ -549,7 +547,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbPaddingRight: length.optional(),
   pcbPaddingTop: length.optional(),
   pcbPaddingBottom: length.optional(),
-  pcbPositionAnchor: pcbPositionAnchorAutocomplete.optional(),
+  pcbAnchorPosition: pcbAnchorPositionAutocomplete.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

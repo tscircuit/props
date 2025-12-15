@@ -218,7 +218,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   /**
    * Anchor to use when interpreting pcbX/pcbY/pcbOffsetX/pcbOffsetY relative to pcbPosition
    */
-  pcbAnchorPosition?: AutocompleteString<z.infer<typeof ninePointAnchor>>
+  pcbAnchorAlignment?: AutocompleteString<z.infer<typeof ninePointAnchor>>
 
   /** @deprecated Use `pcbGrid` */
   grid?: boolean
@@ -336,7 +336,7 @@ export type AutorouterProp =
   | AutorouterConfig
   | AutocompleteString<AutorouterPreset>
 
-const pcbAnchorPositionAutocomplete = z.custom<
+const pcbAnchorAlignmentAutocomplete = z.custom<
   AutocompleteString<z.infer<typeof ninePointAnchor>>
 >((value) => typeof value === "string")
 
@@ -543,7 +543,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbPaddingRight: length.optional(),
   pcbPaddingTop: length.optional(),
   pcbPaddingBottom: length.optional(),
-  pcbAnchorPosition: pcbAnchorPositionAutocomplete.optional(),
+  pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)

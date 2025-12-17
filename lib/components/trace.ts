@@ -25,6 +25,7 @@ const baseTraceProps = z.object({
   schStroke: z.string().optional(),
   highlightColor: z.string().optional(),
   maxLength: distance.optional(),
+  connectsTo: z.string().or(z.array(z.string())).optional(),
 })
 
 export const traceProps = z.union([

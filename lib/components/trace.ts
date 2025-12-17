@@ -9,6 +9,8 @@ export const portRef = z.union([
   ),
 ])
 
+const pcbPath = z.array(z.union([point, z.string()]))
+
 const baseTraceProps = z.object({
   key: z.string().optional(),
   thickness: distance.optional(),
@@ -16,7 +18,8 @@ const baseTraceProps = z.object({
   schematicRouteHints: z.array(point).optional(),
   pcbRouteHints: z.array(route_hint_point).optional(),
   pcbPathRelativeTo: z.string().optional(),
-  pcbPath: z.array(z.union([point, z.string()])).optional(),
+  pcbPath: pcbPath.optional(),
+  pcbPaths: z.array(pcbPath).optional(),
   pcbStraightLine: z
     .boolean()
     .optional()

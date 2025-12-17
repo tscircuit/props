@@ -968,6 +968,8 @@ export const copperTextProps = pcbLayoutProps.extend({
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
   layers: z.array(layer_ref).optional(),
+  knockout: z.boolean().optional(),
+  mirrored: z.boolean().optional(),
 })
 ```
 
@@ -1480,7 +1482,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbPaddingRight?: Distance
   pcbPaddingTop?: Distance
   pcbPaddingBottom?: Distance
-  pcbPositionAnchor?: AutocompleteString<z.infer<typeof ninePointAnchor>>
+  pcbAnchorAlignment?: AutocompleteString<z.infer<typeof ninePointAnchor>>
 
   grid?: boolean
   flex?: boolean | string
@@ -1737,7 +1739,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbPaddingRight: length.optional(),
   pcbPaddingTop: length.optional(),
   pcbPaddingBottom: length.optional(),
-  pcbPositionAnchor: pcbPositionAnchorAutocomplete.optional(),
+  pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
   manualEdits: manual_edits_file.optional(),

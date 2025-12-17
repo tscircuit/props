@@ -128,7 +128,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   /**
    * Anchor to use when interpreting pcbX/pcbY/pcbOffsetX/pcbOffsetY relative to pcbPosition
    */
-  pcbPositionAnchor?: AutocompleteString<z.infer<typeof ninePointAnchor>>
+  pcbAnchorAlignment?: AutocompleteString<z.infer<typeof ninePointAnchor>>
 
   /** @deprecated Use `pcbGrid` */
   grid?: boolean

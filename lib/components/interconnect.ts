@@ -7,11 +7,19 @@ import { z } from "zod"
 
 export interface InterconnectProps extends CommonComponentProps {
   standard?: "TSC0001_36P_XALT_2025_11" | "0805" | "0603" | "1206"
+  /**
+   * Groups of pins that are internally connected
+   * e.g., [["1","2"], ["2","3"]]
+   */
+  internallyConnectedPins?: (string | number)[][]
 }
 
 export const interconnectProps = commonComponentProps.extend({
   standard: z
     .enum(["TSC0001_36P_XALT_2025_11", "0805", "0603", "1206"])
+    .optional(),
+  internallyConnectedPins: z
+    .array(z.array(z.union([z.string(), z.number()])))
     .optional(),
 })
 

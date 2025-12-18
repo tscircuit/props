@@ -29,3 +29,29 @@ test("rejects unsupported interconnect standards", () => {
     }),
   ).toThrow()
 })
+
+test("allows internallyConnectedPins", () => {
+  const parsed = interconnectProps.parse({
+    name: "IC3",
+    internallyConnectedPins: [
+      ["1", "2"],
+      ["3", "4"],
+      [5, 6],
+    ],
+  })
+
+  expect(parsed.internallyConnectedPins).toEqual([
+    ["1", "2"],
+    ["3", "4"],
+    [5, 6],
+  ])
+})
+
+test("rejects invalid internallyConnectedPins shape", () => {
+  expect(() =>
+    interconnectProps.parse({
+      name: "IC4",
+      internallyConnectedPins: ["1", "2"] as any,
+    }),
+  ).toThrow()
+})

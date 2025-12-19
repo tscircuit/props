@@ -1843,6 +1843,10 @@ export const inductorProps = commonComponentProps.extend({
 ```typescript
 export interface InterconnectProps extends CommonComponentProps {
   standard?: "TSC0001_36P_XALT_2025_11" | "0805" | "0603" | "1206"
+  pinLabels?: Record<
+    number | SchematicPinLabel,
+    SchematicPinLabel | SchematicPinLabel[]
+  >
   internallyConnectedPins?: (string | number)[][]
 }
 /**
@@ -1852,6 +1856,12 @@ export interface InterconnectProps extends CommonComponentProps {
 export const interconnectProps = commonComponentProps.extend({
   standard: z
     .enum(["TSC0001_36P_XALT_2025_11", "0805", "0603", "1206"])
+    .optional(),
+  pinLabels: z
+    .record(
+      z.number().or(schematicPinLabel),
+      schematicPinLabel.or(z.array(schematicPinLabel)),
+    )
     .optional(),
   internallyConnectedPins: z
     .array(z.array(z.union([z.string(), z.number()])))

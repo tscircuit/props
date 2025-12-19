@@ -55,3 +55,18 @@ test("rejects invalid internallyConnectedPins shape", () => {
     }),
   ).toThrow()
 })
+
+test("allows pinLabels", () => {
+  const parsed = interconnectProps.parse({
+    name: "IC5",
+    pinLabels: {
+      1: "VCC",
+      2: ["GND", "SHIELD"],
+    },
+  })
+
+  expect(parsed.pinLabels).toEqual({
+    1: "VCC",
+    2: ["GND", "SHIELD"],
+  })
+})

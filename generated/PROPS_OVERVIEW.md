@@ -795,6 +795,10 @@ export interface InductorProps<PinLabel extends string = string>
 
 export interface InterconnectProps extends CommonComponentProps {
   standard?: "TSC0001_36P_XALT_2025_11" | "0805" | "0603" | "1206"
+  pinLabels?: Record<
+    number | SchematicPinLabel,
+    SchematicPinLabel | SchematicPinLabel[]
+  >
   /**
    * Groups of pins that are internally connected
    * e.g., [["1","2"], ["2","3"]]

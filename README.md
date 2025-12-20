@@ -1784,5 +1784,3 @@ export interface ProjectConfig extends Pick<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/projectConfig.ts)
-
-<!-- PROJECT_CONFIG_END -->

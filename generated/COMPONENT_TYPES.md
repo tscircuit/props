@@ -2896,6 +2896,17 @@ export const silkscreenPathProps = pcbLayoutProps
   })
 ```
 
+### silkscreen-pill
+
+```typescript
+export const silkscreenPillProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    width: distance,
+    height: distance,
+  })
+```
+
 ### silkscreen-rect
 
 ```typescript

@@ -2455,8 +2455,8 @@ export interface PillWithRectPadPlatedHoleProps
   name?: string
   connectsTo?: string | string[]
   shape: "pill_hole_with_rect_pad"
-  holeShape: "pill"
-  padShape: "rect"
+  holeShape?: "pill"
+  padShape?: "rect"
   holeWidth: number | string
   holeHeight: number | string
   rectPadWidth: number | string
@@ -2559,8 +2559,8 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill_hole_with_rect_pad"),
-      holeShape: z.literal("pill"),
-      padShape: z.literal("rect"),
+      holeShape: z.literal("pill").optional(),
+      padShape: z.literal("rect").optional(),
       holeWidth: distance,
       holeHeight: distance,
       rectPadWidth: distance,

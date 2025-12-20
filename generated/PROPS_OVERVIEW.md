@@ -1216,8 +1216,8 @@ export interface PillWithRectPadPlatedHoleProps
   name?: string
   connectsTo?: string | string[]
   shape: "pill_hole_with_rect_pad"
-  holeShape: "pill"
-  padShape: "rect"
+  holeShape?: "pill"
+  padShape?: "rect"
   holeWidth: number | string
   holeHeight: number | string
   rectPadWidth: number | string

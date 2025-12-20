@@ -9,7 +9,11 @@ export const portRef = z.union([
   ),
 ])
 
-const pcbPath = z.array(z.union([point, z.string()]))
+const pcbPathPoint = point.extend({
+  layer: z.string().optional(),
+})
+
+const pcbPath = z.array(z.union([pcbPathPoint, z.string()]))
 
 const baseTraceProps = z.object({
   key: z.string().optional(),

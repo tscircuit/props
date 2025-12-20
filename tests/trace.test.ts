@@ -27,21 +27,33 @@ test("accepts pin selector strings within pcbPath", () => {
   expect(parsed.pcbPath).toEqual(["U1.3", { x: 0, y: 0 }, "J1.1"])
 })
 
+test("accepts pcbPath points with layer", () => {
+  const raw: TraceProps = {
+    from: "U1.1",
+    to: "U1.2",
+    pcbPath: ["U1.3", { x: 0, y: 0, layer: "top" }, "J1.1"],
+  }
+
+  const parsed = traceProps.parse(raw)
+
+  expect(parsed.pcbPath).toEqual(["U1.3", { x: 0, y: 0, layer: "top" }, "J1.1"])
+})
+
 test("accepts multiple pcbPaths", () => {
   const raw: TraceProps = {
     from: "U1.1",
     to: "U1.2",
     pcbPaths: [
-      ["U1.3", { x: 0, y: 0 }, "J1.1"],
-      [{ x: 1, y: 2 }, "J1.2", { x: 3, y: 4 }],
+      ["U1.3", { x: 0, y: 0, layer: "bottom" }, "J1.1"],
+      [{ x: 1, y: 2 }, "J1.2", { x: 3, y: 4, layer: "top" }],
     ],
   }
 
   const parsed = traceProps.parse(raw)
 
   expect(parsed.pcbPaths).toEqual([
-    ["U1.3", { x: 0, y: 0 }, "J1.1"],
-    [{ x: 1, y: 2 }, "J1.2", { x: 3, y: 4 }],
+    ["U1.3", { x: 0, y: 0, layer: "bottom" }, "J1.1"],
+    [{ x: 1, y: 2 }, "J1.2", { x: 3, y: 4, layer: "top" }],
   ])
 })
 

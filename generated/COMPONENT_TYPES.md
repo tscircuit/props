@@ -3244,6 +3244,9 @@ export const traceHintProps = z.object({
 export const portRef = z.union([
   z.string(),
   z.custom<{ getPortSelector: () => string }>((v) =>
+const pcbPathPoint = point.extend({
+  layer: z.string().optional(),
+})
 baseTraceProps.extend({
     path: z.array(portRef),
   }),

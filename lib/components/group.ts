@@ -398,6 +398,7 @@ export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
 export interface SubcircuitGroupProps extends BaseGroupProps {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
+  bomDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
@@ -554,6 +555,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   schTraceAutoLabelEnabled: z.boolean().optional(),
   schMaxTraceDistance: distance.optional(),
   routingDisabled: z.boolean().optional(),
+  bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),

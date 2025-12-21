@@ -1609,6 +1609,7 @@ export interface StampboardProps extends BoardProps {
 export interface SubcircuitGroupProps extends BaseGroupProps {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
+  bomDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache

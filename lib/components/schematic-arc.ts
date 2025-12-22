@@ -1,5 +1,8 @@
 import { distance, point, rotation } from "circuit-json"
 import { z } from "zod"
+import { expectTypesMatch } from "lib/typecheck"
+import type { Point } from "lib/common/point"
+import type { Distance } from "lib/common/distance"
 
 export const schematicArcProps = z.object({
   center: point,
@@ -14,4 +17,17 @@ export const schematicArcProps = z.object({
   isDashed: z.boolean().optional().default(false),
 })
 
-export type SchematicArcProps = z.input<typeof schematicArcProps>
+export interface SchematicArcProps {
+  center: Point
+  radius: Distance
+  startAngleDegrees: number | string
+  endAngleDegrees: number | string
+  direction?: "clockwise" | "counterclockwise"
+  strokeWidth?: Distance
+  color?: string
+  isDashed?: boolean
+}
+
+export type InferredSchematicArcProps = z.input<typeof schematicArcProps>
+
+expectTypesMatch<SchematicArcProps, z.input<typeof schematicArcProps>>(true)

@@ -1,5 +1,8 @@
 import { distance, point } from "circuit-json"
 import { z } from "zod"
+import { expectTypesMatch } from "lib/typecheck"
+import type { Point } from "lib/common/point"
+import type { Distance } from "lib/common/distance"
 
 export const schematicCircleProps = z.object({
   center: point,
@@ -11,4 +14,18 @@ export const schematicCircleProps = z.object({
   isDashed: z.boolean().optional().default(false),
 })
 
-export type SchematicCircleProps = z.input<typeof schematicCircleProps>
+export interface SchematicCircleProps {
+  center: Point
+  radius: Distance
+  strokeWidth?: Distance
+  color?: string
+  isFilled?: boolean
+  fillColor?: string
+  isDashed?: boolean
+}
+
+export type InferredSchematicCircleProps = z.input<typeof schematicCircleProps>
+
+expectTypesMatch<SchematicCircleProps, z.input<typeof schematicCircleProps>>(
+  true,
+)

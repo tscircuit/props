@@ -1,5 +1,7 @@
 import { distance, point, rotation } from "circuit-json"
 import { z } from "zod"
+import { expectTypesMatch } from "lib/typecheck"
+import type { Distance } from "lib/common/distance"
 
 export const schematicRectProps = z.object({
   schX: distance.optional(),
@@ -15,4 +17,20 @@ export const schematicRectProps = z.object({
   cornerRadius: distance.optional(),
 })
 
-export type SchematicRectProps = z.input<typeof schematicRectProps>
+export interface SchematicRectProps {
+  schX?: Distance
+  schY?: Distance
+  width: Distance
+  height: Distance
+  rotation?: number | string
+  strokeWidth?: Distance
+  color?: string
+  isFilled?: boolean
+  fillColor?: string
+  isDashed?: boolean
+  cornerRadius?: Distance
+}
+
+export type InferredSchematicRectProps = z.input<typeof schematicRectProps>
+
+expectTypesMatch<SchematicRectProps, z.input<typeof schematicRectProps>>(true)

@@ -1,6 +1,8 @@
 import { distance } from "circuit-json"
 import { z } from "zod"
 import { ninePointAnchor } from "lib/common/ninePointAnchor"
+import { expectTypesMatch } from "lib/typecheck"
+import type { Distance } from "lib/common/distance"
 
 export const schematicBoxProps = z
   .object({
@@ -45,4 +47,26 @@ export const schematicBoxProps = z
         "Cannot provide both `width`/`height` and `overlay` at the same time.",
     },
   )
-export type SchematicBoxProps = z.input<typeof schematicBoxProps>
+
+export interface SchematicBoxProps {
+  schX?: Distance
+  schY?: Distance
+  width?: Distance
+  height?: Distance
+  overlay?: string[]
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+  title?: string
+  titleAlignment?: z.infer<typeof ninePointAnchor>
+  titleColor?: string
+  titleFontSize?: Distance
+  titleInside?: boolean
+  strokeStyle?: "solid" | "dashed"
+}
+
+export type InferredSchematicBoxProps = z.input<typeof schematicBoxProps>
+
+expectTypesMatch<SchematicBoxProps, z.input<typeof schematicBoxProps>>(true)

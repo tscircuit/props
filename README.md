@@ -1326,7 +1326,16 @@ export interface ResonatorProps extends CommonComponentProps {
 ### SchematicArcProps `<schematicarc />`
 
 ```ts
-export type SchematicArcProps = z.input<typeof schematicArcProps>;
+export interface SchematicArcProps {
+  center: Point;
+  radius: Distance;
+  startAngleDegrees: number | string;
+  endAngleDegrees: number | string;
+  direction?: "clockwise" | "counterclockwise";
+  strokeWidth?: Distance;
+  color?: string;
+  isDashed?: boolean;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-arc.ts)
@@ -1334,7 +1343,24 @@ export type SchematicArcProps = z.input<typeof schematicArcProps>;
 ### SchematicBoxProps `<schematicbox />`
 
 ```ts
-export type SchematicBoxProps = z.input<typeof schematicBoxProps>;
+export interface SchematicBoxProps {
+  schX?: Distance;
+  schY?: Distance;
+  width?: Distance;
+  height?: Distance;
+  overlay?: string[];
+  padding?: Distance;
+  paddingLeft?: Distance;
+  paddingRight?: Distance;
+  paddingTop?: Distance;
+  paddingBottom?: Distance;
+  title?: string;
+  titleAlignment?: z.infer<typeof ninePointAnchor>;
+  titleColor?: string;
+  titleFontSize?: Distance;
+  titleInside?: boolean;
+  strokeStyle?: "solid" | "dashed";
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-box.ts)
@@ -1359,7 +1385,15 @@ export interface SchematicCellProps {
 ### SchematicCircleProps `<schematiccircle />`
 
 ```ts
-export type SchematicCircleProps = z.input<typeof schematicCircleProps>;
+export interface SchematicCircleProps {
+  center: Point;
+  radius: Distance;
+  strokeWidth?: Distance;
+  color?: string;
+  isFilled?: boolean;
+  fillColor?: string;
+  isDashed?: boolean;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-circle.ts)
@@ -1367,7 +1401,15 @@ export type SchematicCircleProps = z.input<typeof schematicCircleProps>;
 ### SchematicLineProps `<schematicline />`
 
 ```ts
-export type SchematicLineProps = z.input<typeof schematicLineProps>;
+export interface SchematicLineProps {
+  x1: Distance;
+  y1: Distance;
+  x2: Distance;
+  y2: Distance;
+  strokeWidth?: Distance;
+  color?: string;
+  isDashed?: boolean;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-line.ts)
@@ -1375,7 +1417,11 @@ export type SchematicLineProps = z.input<typeof schematicLineProps>;
 ### SchematicPathProps `<schematicpath />`
 
 ```ts
-export type SchematicPathProps = z.input<typeof schematicPathProps>;
+export interface SchematicPathProps {
+  points: Point[];
+  isFilled?: boolean;
+  fillColor?: "red" | "blue";
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-path.ts)
@@ -1383,7 +1429,19 @@ export type SchematicPathProps = z.input<typeof schematicPathProps>;
 ### SchematicRectProps `<schematicrect />`
 
 ```ts
-export type SchematicRectProps = z.input<typeof schematicRectProps>;
+export interface SchematicRectProps {
+  schX?: Distance;
+  schY?: Distance;
+  width: Distance;
+  height: Distance;
+  rotation?: number | string;
+  strokeWidth?: Distance;
+  color?: string;
+  isFilled?: boolean;
+  fillColor?: string;
+  isDashed?: boolean;
+  cornerRadius?: Distance;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-rect.ts)
@@ -1418,7 +1476,15 @@ export interface SchematicTableProps {
 ### SchematicTextProps `<schematictext />`
 
 ```ts
-export type SchematicTextProps = z.input<typeof schematicTextProps>;
+export interface SchematicTextProps {
+  schX?: Distance;
+  schY?: Distance;
+  text: string;
+  fontSize?: number;
+  anchor?: z.infer<typeof fivePointAnchor> | z.infer<typeof ninePointAnchor>;
+  color?: string;
+  schRotation?: number | string;
+}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)

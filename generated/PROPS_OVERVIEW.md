@@ -1510,6 +1510,38 @@ export interface RotatedRectSmtPadProps
 }
 
 
+export interface SchematicArcProps {
+  center: Point
+  radius: Distance
+  startAngleDegrees: number | string
+  endAngleDegrees: number | string
+  direction?: "clockwise" | "counterclockwise"
+  strokeWidth?: Distance
+  color?: string
+  isDashed?: boolean
+}
+
+
+export interface SchematicBoxProps {
+  schX?: Distance
+  schY?: Distance
+  width?: Distance
+  height?: Distance
+  overlay?: string[]
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+  title?: string
+  titleAlignment?: z.infer<typeof ninePointAnchor>
+  titleColor?: string
+  titleFontSize?: Distance
+  titleInside?: boolean
+  strokeStyle?: "solid" | "dashed"
+}
+
+
 export interface SchematicCellProps {
   children?: string
   horizontalAlign?: "left" | "center" | "right"
@@ -1519,6 +1551,35 @@ export interface SchematicCellProps {
   colSpan?: number
   width?: number | string
   text?: string
+}
+
+
+export interface SchematicCircleProps {
+  center: Point
+  radius: Distance
+  strokeWidth?: Distance
+  color?: string
+  isFilled?: boolean
+  fillColor?: string
+  isDashed?: boolean
+}
+
+
+export interface SchematicLineProps {
+  x1: Distance
+  y1: Distance
+  x2: Distance
+  y2: Distance
+  strokeWidth?: Distance
+  color?: string
+  isDashed?: boolean
+}
+
+
+export interface SchematicPathProps {
+  points: Point[]
+  isFilled?: boolean
+  fillColor?: "red" | "blue"
 }
 
 
@@ -1546,6 +1607,21 @@ export interface SchematicPortArrangementWithSizes {
 }
 
 
+export interface SchematicRectProps {
+  schX?: Distance
+  schY?: Distance
+  width: Distance
+  height: Distance
+  rotation?: number | string
+  strokeWidth?: Distance
+  color?: string
+  isFilled?: boolean
+  fillColor?: string
+  isDashed?: boolean
+  cornerRadius?: Distance
+}
+
+
 export interface SchematicRowProps {
   children?: any
   height?: number | string
@@ -1560,6 +1636,17 @@ export interface SchematicTableProps {
   borderWidth?: number | string
   anchor?: z.infer<typeof ninePointAnchor>
   fontSize?: number | string
+}
+
+
+export interface SchematicTextProps {
+  schX?: Distance
+  schY?: Distance
+  text: string
+  fontSize?: number
+  anchor?: z.infer<typeof fivePointAnchor> | z.infer<typeof ninePointAnchor>
+  color?: string
+  schRotation?: number | string
 }
 
 
@@ -1615,6 +1702,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit

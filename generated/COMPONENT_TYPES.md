@@ -1619,6 +1619,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
 
   circuitJson?: any[]
 
@@ -1754,6 +1755,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   partsEngine: partsEngine.optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  autorouterEffortLevel: autorouterEffortLevel.optional(),
   square: z.boolean().optional(),
   emptyArea: z.string().optional(),
   filledArea: z.string().optional(),
@@ -2683,6 +2685,16 @@ export const schematicArcProps = z.object({
   color: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
 })
+export interface SchematicArcProps {
+  center: Point
+  radius: Distance
+  startAngleDegrees: number | string
+  endAngleDegrees: number | string
+  direction?: "clockwise" | "counterclockwise"
+  strokeWidth?: Distance
+  color?: string
+  isDashed?: boolean
+}
 ```
 
 ### schematic-box
@@ -2709,6 +2721,24 @@ export const schematicBoxProps = z
     titleInside: z.boolean().default(false),
     strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
   })
+export interface SchematicBoxProps {
+  schX?: Distance
+  schY?: Distance
+  width?: Distance
+  height?: Distance
+  overlay?: string[]
+  padding?: Distance
+  paddingLeft?: Distance
+  paddingRight?: Distance
+  paddingTop?: Distance
+  paddingBottom?: Distance
+  title?: string
+  titleAlignment?: z.infer<typeof ninePointAnchor>
+  titleColor?: string
+  titleFontSize?: Distance
+  titleInside?: boolean
+  strokeStyle?: "solid" | "dashed"
+}
 ```
 
 ### schematic-cell
@@ -2748,6 +2778,15 @@ export const schematicCircleProps = z.object({
   fillColor: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
 })
+export interface SchematicCircleProps {
+  center: Point
+  radius: Distance
+  strokeWidth?: Distance
+  color?: string
+  isFilled?: boolean
+  fillColor?: string
+  isDashed?: boolean
+}
 ```
 
 ### schematic-line
@@ -2762,6 +2801,15 @@ export const schematicLineProps = z.object({
   color: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
 })
+export interface SchematicLineProps {
+  x1: Distance
+  y1: Distance
+  x2: Distance
+  y2: Distance
+  strokeWidth?: Distance
+  color?: string
+  isDashed?: boolean
+}
 ```
 
 ### schematic-path
@@ -2772,6 +2820,11 @@ export const schematicPathProps = z.object({
   isFilled: z.boolean().optional().default(false),
   fillColor: z.enum(["red", "blue"]).optional(),
 })
+export interface SchematicPathProps {
+  points: Point[]
+  isFilled?: boolean
+  fillColor?: "red" | "blue"
+}
 ```
 
 ### schematic-rect
@@ -2790,6 +2843,19 @@ export const schematicRectProps = z.object({
   isDashed: z.boolean().optional().default(false),
   cornerRadius: distance.optional(),
 })
+export interface SchematicRectProps {
+  schX?: Distance
+  schY?: Distance
+  width: Distance
+  height: Distance
+  rotation?: number | string
+  strokeWidth?: Distance
+  color?: string
+  isFilled?: boolean
+  fillColor?: string
+  isDashed?: boolean
+  cornerRadius?: Distance
+}
 ```
 
 ### schematic-row
@@ -2842,6 +2908,15 @@ export const schematicTextProps = z.object({
   color: z.string().default("#000000"),
   schRotation: rotation.default(0),
 })
+export interface SchematicTextProps {
+  schX?: Distance
+  schY?: Distance
+  text: string
+  fontSize?: number
+  anchor?: z.infer<typeof fivePointAnchor> | z.infer<typeof ninePointAnchor>
+  color?: string
+  schRotation?: number | string
+}
 ```
 
 ### silkscreen-circle

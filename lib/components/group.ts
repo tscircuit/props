@@ -395,6 +395,8 @@ export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
   autorouterString,
 ])
 
+export const autorouterEffortLevel = z.enum(["1x", "2x", "5x", "10x", "100x"])
+
 export interface SubcircuitGroupProps extends BaseGroupProps {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
@@ -404,6 +406,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit
@@ -561,6 +564,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   partsEngine: partsEngine.optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  autorouterEffortLevel: autorouterEffortLevel.optional(),
   square: z.boolean().optional(),
   emptyArea: z.string().optional(),
   filledArea: z.string().optional(),

@@ -16,6 +16,11 @@ test("supports laser prefab preset", () => {
   expect(result).toBe("laser_prefab")
 })
 
+test("supports tscircuit beta preset", () => {
+  const result = autorouterProp.parse("tscircuit_beta")
+  expect(result).toBe("tscircuit_beta")
+})
+
 test("still supports deprecated kebab-case presets", () => {
   const result = autorouterProp.parse("auto-cloud")
   expect(result).toBe("auto-cloud")

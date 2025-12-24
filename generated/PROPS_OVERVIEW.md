@@ -45,6 +45,7 @@ export interface AutorouterConfig {
     | "auto"
     | "auto_local"
     | "auto_cloud"
+    | "tscircuit_beta"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"

@@ -39,6 +39,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<courtyardoutline />`         | [`CourtyardOutlineProps`](#courtyardoutlineprops-courtyardoutline)                         |
 | `<courtyardrect />`            | [`CourtyardRectProps`](#courtyardrectprops-courtyardrect)                                  |
 | `<crystal />`                  | [`CrystalProps`](#crystalprops-crystal)                                                    |
+| `<currentsource />`            | [`CurrentSourceProps`](#currentsourceprops-currentsource)                                  |
 | `<cutout />`                   | [`RectCutoutProps`](#rectcutoutprops-cutout)                                               |
 | `<diode />`                    | [`DiodeProps`](#diodeprops-diode)                                                          |
 | `<fabricationnotedimension />` | [`FabricationNoteDimensionProps`](#fabricationnotedimensionprops-fabricationnotedimension) |
@@ -495,6 +496,24 @@ export interface CrystalProps<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/crystal.ts)
+
+### CurrentSourceProps `<currentsource />`
+
+```ts
+export interface CurrentSourceProps<
+  PinLabel extends string = string,
+> extends CommonComponentProps<PinLabel> {
+  current?: number | string;
+  frequency?: number | string;
+  peakToPeakCurrent?: number | string;
+  waveShape?: WaveShape;
+  phase?: number | string;
+  dutyCycle?: number | string;
+  connections?: Connections<CurrentSourcePinLabels>;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/currentsource.ts)
 
 ### RectCutoutProps `<cutout />`
 

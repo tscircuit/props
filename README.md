@@ -59,6 +59,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<net />`                      | [`NetProps`](#netprops-net)                                                                |
 | `<netalias />`                 | [`NetAliasProps`](#netaliasprops-netalias)                                                 |
 | `<netlabel />`                 | [`NetLabelProps`](#netlabelprops-netlabel)                                                 |
+| `<opamp />`                    | [`OpAmpProps`](#opampprops-opamp)                                                          |
 | `<panel />`                    | [`PanelProps`](#panelprops-panel)                                                          |
 | `<pcbkeepout />`               | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                           |
 | `<pcbnotedimension />`         | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                         |
@@ -979,6 +980,18 @@ export interface NetLabelProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/netlabel.ts)
+
+### OpAmpProps `<opamp />`
+
+```ts
+export interface OpAmpProps<
+  PinLabel extends string = string,
+> extends CommonComponentProps<PinLabel> {
+  connections?: Connections<OpAmpPinLabels>;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/opamp.ts)
 
 ### PanelProps `<panel />`
 

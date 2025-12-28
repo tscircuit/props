@@ -28,27 +28,6 @@ test("should parse opamp props with connections", () => {
   })
 })
 
-test("should parse opamp props with aliases", () => {
-  const rawProps: OpAmpProps = {
-    name: "opamp",
-    connections: {
-      in_neg: "net.IN-",
-      in_pos: "net.IN+",
-      out: "net.OUT",
-      vcc: "net.V+",
-      gnd: "net.GND",
-    },
-  }
-  const parsedProps = opampProps.parse(rawProps)
-  expect(parsedProps.connections).toEqual({
-    in_neg: "net.IN-",
-    in_pos: "net.IN+",
-    out: "net.OUT",
-    vcc: "net.V+",
-    gnd: "net.GND",
-  })
-})
-
 test("should reject connections with invalid keys", () => {
   expect(() => {
     opampProps.parse({

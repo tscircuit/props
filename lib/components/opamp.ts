@@ -13,18 +13,6 @@ export const opampPinLabels = [
   "output",
   "positive_supply",
   "negative_supply",
-  "vcc",
-  "gnd",
-  "vee",
-  "vss",
-  "vdd",
-  "in_neg",
-  "in_pos",
-  "out",
-  "vs+",
-  "v+",
-  "vs-",
-  "v-",
 ] as const
 
 /**
@@ -48,13 +36,7 @@ export const opampProps = commonComponentProps.extend({
  * The standard five pins for an op-amp.
  * Used for building schematic symbols.
  */
-export const opampPins = [
-  "inverting_input",
-  "non_inverting_input",
-  "output",
-  "positive_supply",
-  "negative_supply",
-] as const
+export const opampPins = opampPinLabels
 
 type InferredOpAmpProps = z.input<typeof opampProps>
 expectTypesMatch<OpAmpProps, InferredOpAmpProps>(true)

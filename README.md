@@ -163,6 +163,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   routingDisabled?: boolean;
   defaultTraceWidth?: Distance;
   minTraceWidth?: Distance;
+  nominalTraceWidth?: Distance;
   pcbRouteCache?: PcbRouteCache;
 
   autorouter?: AutorouterProp;
@@ -737,6 +738,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbWidth?: Distance;
   pcbHeight?: Distance;
   minTraceWidth?: Distance;
+  nominalTraceWidth?: Distance;
   schWidth?: Distance;
   schHeight?: Distance;
 

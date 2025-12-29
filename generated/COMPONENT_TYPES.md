@@ -1037,6 +1037,30 @@ export const crystalProps = commonComponentProps.extend({
 })
 ```
 
+### currentsource
+
+```typescript
+export interface CurrentSourceProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
+  current?: number | string
+  frequency?: number | string
+  peakToPeakCurrent?: number | string
+  waveShape?: WaveShape
+  phase?: number | string
+  dutyCycle?: number | string
+  connections?: Connections<CurrentSourcePinLabels>
+}
+export const currentSourceProps = commonComponentProps.extend({
+  current: current.optional(),
+  frequency: frequency.optional(),
+  peakToPeakCurrent: current.optional(),
+  waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
+  phase: rotation.optional(),
+  dutyCycle: percentage.optional(),
+  connections: createConnectionsProp(currentSourcePinLabels).optional(),
+})
+```
+
 ### cutout
 
 ```typescript
@@ -1464,6 +1488,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbWidth?: Distance
   pcbHeight?: Distance
   minTraceWidth?: Distance
+  nominalTraceWidth?: Distance
   schWidth?: Distance
   schHeight?: Distance
 
@@ -1618,6 +1643,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
+  nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
@@ -1727,6 +1753,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
   minTraceWidth: length.optional(),
+  nominalTraceWidth: length.optional(),
   schWidth: length.optional(),
   schHeight: length.optional(),
   pcbLayout: layoutConfig.optional(),
@@ -1754,6 +1781,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
+  nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
@@ -2025,6 +2053,28 @@ export const netLabelProps = z.object({
   schY: distance.optional(),
   schRotation: rotation.optional(),
   anchorSide: z.enum(["left", "top", "right", "bottom"]).optional(),
+})
+```
+
+### opamp
+
+```typescript
+export const opampPinLabels = [
+  "inverting_input",
+  "non_inverting_input",
+  "output",
+  "positive_supply",
+  "negative_supply",
+] as const
+export interface OpAmpProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
+  connections?: Connections<OpAmpPinLabels>
+}
+/**
+ * Zod schema for validating op-amp props.
+ */
+export const opampProps = commonComponentProps.extend({
+  connections: createConnectionsProp(opampPinLabels).optional(),
 })
 ```
 

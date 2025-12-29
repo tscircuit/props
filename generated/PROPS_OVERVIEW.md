@@ -108,6 +108,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbWidth?: Distance
   pcbHeight?: Distance
   minTraceWidth?: Distance
+  nominalTraceWidth?: Distance
   schWidth?: Distance
   schHeight?: Distance
 
@@ -596,6 +597,18 @@ export interface CrystalProps<PinLabel extends string = string>
 }
 
 
+export interface CurrentSourceProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
+  current?: number | string
+  frequency?: number | string
+  peakToPeakCurrent?: number | string
+  waveShape?: WaveShape
+  phase?: number | string
+  dutyCycle?: number | string
+  connections?: Connections<CurrentSourcePinLabels>
+}
+
+
 export interface DiodeProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections?: {
@@ -962,6 +975,12 @@ export interface NetProps {
 
 export interface NonSubcircuitGroupProps extends BaseGroupProps {
   subcircuit?: false | undefined
+}
+
+
+export interface OpAmpProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
+  connections?: Connections<OpAmpPinLabels>
 }
 
 
@@ -1700,6 +1719,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
+  nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp

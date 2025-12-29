@@ -197,6 +197,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   pcbWidth?: Distance
   pcbHeight?: Distance
   minTraceWidth?: Distance
+  nominalTraceWidth?: Distance
   schWidth?: Distance
   schHeight?: Distance
 
@@ -407,6 +408,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
+  nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
@@ -535,6 +537,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbWidth: length.optional(),
   pcbHeight: length.optional(),
   minTraceWidth: length.optional(),
+  nominalTraceWidth: length.optional(),
   schWidth: length.optional(),
   schHeight: length.optional(),
   pcbLayout: layoutConfig.optional(),
@@ -565,6 +568,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
+  nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),

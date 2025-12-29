@@ -195,6 +195,7 @@ function generateInterfaceDefinitions(
   routingDisabled?: boolean
   defaultTraceWidth?: Distance
   minTraceWidth?: Distance
+  nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp

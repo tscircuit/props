@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { route_hint_point, type RouteHintPointInput } from "circuit-json"
 import { distance, type Distance } from "lib/common/distance"
 import { point, type Point } from "lib/common/point"
 import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
@@ -63,15 +64,36 @@ export const polygonCutoutProps = pcbLayoutProps
   })
 expectTypesMatch<PolygonCutoutProps, z.input<typeof polygonCutoutProps>>(true)
 
+export interface PathCutoutProps
+  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
+  name?: string
+  shape: "path"
+  route: RouteHintPointInput[]
+}
+
+export const pathCutoutProps = pcbLayoutProps
+  .omit({
+    layer: true,
+    pcbRotation: true,
+  })
+  .extend({
+    name: z.string().optional(),
+    shape: z.literal("path"),
+    route: z.array(route_hint_point),
+  })
+expectTypesMatch<PathCutoutProps, z.input<typeof pathCutoutProps>>(true)
+
 export type CutoutProps =
   | RectCutoutProps
   | CircleCutoutProps
   | PolygonCutoutProps
+  | PathCutoutProps
 
 export const cutoutProps = z.discriminatedUnion("shape", [
   rectCutoutProps,
   circleCutoutProps,
   polygonCutoutProps,
+  pathCutoutProps,
 ])
 
 export type CutoutPropsInput = z.input<typeof cutoutProps>

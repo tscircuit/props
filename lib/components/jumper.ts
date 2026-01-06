@@ -54,6 +54,10 @@ export interface JumperProps extends CommonComponentProps {
    * Connections to other components
    */
   connections?: Connections<string>
+  pullupFor?: string
+  pullupTo?: string
+  pulldownFor?: string
+  pulldownTo?: string
 }
 
 export const jumperProps = commonComponentProps.extend({
@@ -80,6 +84,10 @@ export const jumperProps = commonComponentProps.extend({
     .custom<Connections>()
     .pipe(z.record(z.string(), connectionTarget))
     .optional(),
+  pullupFor: z.string().optional(),
+  pullupTo: z.string().optional(),
+  pulldownFor: z.string().optional(),
+  pulldownTo: z.string().optional(),
 })
 
 type InferredJumperProps = z.input<typeof jumperProps>

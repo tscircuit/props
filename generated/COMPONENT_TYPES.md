@@ -1598,9 +1598,11 @@ export interface AutorouterConfig {
     | "auto"
     | "auto_local"
     | "auto_cloud"
+    | "auto_jumper"
     | "tscircuit_beta"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
+    | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
@@ -1627,9 +1629,11 @@ export const autorouterConfig = z.object({
       "auto",
       "auto_local",
       "auto_cloud",
+      "auto_jumper",
       "tscircuit_beta",
       "freerouting",
       "laser_prefab",
+      "auto-jumper",
       "sequential-trace",
       "auto-local",
       "auto-cloud",

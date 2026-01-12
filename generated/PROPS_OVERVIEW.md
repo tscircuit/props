@@ -1726,6 +1726,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
+  autorouterVersion?: "v1" | "v2" | "latest"
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit

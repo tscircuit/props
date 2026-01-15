@@ -54,6 +54,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<inductor />`                 | [`InductorProps`](#inductorprops-inductor)                                                 |
 | `<interconnect />`             | [`InterconnectProps`](#interconnectprops-interconnect)                                     |
 | `<jumper />`                   | [`JumperProps`](#jumperprops-jumper)                                                       |
+| `<ldr />`                      | [`LightDependentResistorProps`](#lightdependentresistorprops-ldr)                          |
 | `<led />`                      | [`LedProps`](#ledprops-led)                                                                |
 | `<mosfet />`                   | [`MosfetProps`](#mosfetprops-mosfet)                                                       |
 | `<net />`                      | [`NetProps`](#netprops-net)                                                                |
@@ -205,9 +206,8 @@ export interface AnalogSimulationProps {
 ### BatteryProps `<battery />`
 
 ```ts
-export interface BatteryProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface BatteryProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   capacity?: number | string;
   voltage?: number | string;
   standard?: "AA" | "AAA" | "9V" | "CR2032" | "18650" | "C";
@@ -220,10 +220,8 @@ export interface BatteryProps<
 ### BoardProps `<board />`
 
 ```ts
-export interface BoardProps extends Omit<
-  SubcircuitGroupProps,
-  "subcircuit" | "connections"
-> {
+export interface BoardProps
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string;
   material?: "fr4" | "fr1";
   /** Number of layers for the PCB */
@@ -257,10 +255,8 @@ export interface BoardProps extends Omit<
 ### BreakoutProps `<breakout />`
 
 ```ts
-export interface BreakoutProps extends Omit<
-  SubcircuitGroupProps,
-  "subcircuit"
-> {
+export interface BreakoutProps
+  extends Omit<SubcircuitGroupProps, "subcircuit"> {
   padding?: Distance;
   paddingLeft?: Distance;
   paddingRight?: Distance;
@@ -274,10 +270,8 @@ export interface BreakoutProps extends Omit<
 ### BreakoutPointProps `<breakoutpoint />`
 
 ```ts
-export interface BreakoutPointProps extends Omit<
-  PcbLayoutProps,
-  "pcbRotation" | "layer"
-> {
+export interface BreakoutPointProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   connection: string;
 }
 ```
@@ -329,9 +323,8 @@ export interface CadModelProps extends CadModelBase {
 ### CapacitorProps `<capacitor />`
 
 ```ts
-export interface CapacitorProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface CapacitorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   capacitance: number | string;
   maxVoltageRating?: number | string;
   schShowRatings?: boolean;
@@ -484,9 +477,8 @@ export type CourtyardRectProps = z.input<typeof courtyardRectProps>;
 ### CrystalProps `<crystal />`
 
 ```ts
-export interface CrystalProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface CrystalProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   frequency: number | string;
   loadCapacitance: number | string;
   manufacturerPartNumber?: string;
@@ -502,9 +494,8 @@ export interface CrystalProps<
 ### CurrentSourceProps `<currentsource />`
 
 ```ts
-export interface CurrentSourceProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface CurrentSourceProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   current?: number | string;
   frequency?: number | string;
   peakToPeakCurrent?: number | string;
@@ -520,10 +511,8 @@ export interface CurrentSourceProps<
 ### RectCutoutProps `<cutout />`
 
 ```ts
-export interface RectCutoutProps extends Omit<
-  PcbLayoutProps,
-  "layer" | "pcbRotation"
-> {
+export interface RectCutoutProps
+  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
   name?: string;
   shape: "rect";
   width: Distance;
@@ -536,9 +525,8 @@ export interface RectCutoutProps extends Omit<
 ### DiodeProps `<diode />`
 
 ```ts
-export interface DiodeProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface DiodeProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   connections?: {
     anode?: string | string[] | readonly string[];
     cathode?: string | string[] | readonly string[];
@@ -563,18 +551,19 @@ export interface DiodeProps<
 ### FabricationNoteDimensionProps `<fabricationnotedimension />`
 
 ```ts
-export interface FabricationNoteDimensionProps extends Omit<
-  PcbLayoutProps,
-  | "pcbLeftEdgeX"
-  | "pcbRightEdgeX"
-  | "pcbTopEdgeY"
-  | "pcbBottomEdgeY"
-  | "pcbX"
-  | "pcbY"
-  | "pcbOffsetX"
-  | "pcbOffsetY"
-  | "pcbRotation"
-> {
+export interface FabricationNoteDimensionProps
+  extends Omit<
+    PcbLayoutProps,
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
+  > {
   from: string | Point;
   to: string | Point;
   text?: string;
@@ -666,9 +655,8 @@ export interface FootprintProps {
 ### FuseProps `<fuse />`
 
 ```ts
-export interface FuseProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface FuseProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   /**
    * Current rating of the fuse in amperes
    */
@@ -845,9 +833,8 @@ export interface CircleHoleProps extends PcbLayoutProps {
 ### InductorProps `<inductor />`
 
 ```ts
-export interface InductorProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface InductorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   inductance: number | string;
   maxCurrentRating?: number | string;
   schOrientation?: SchematicOrientation;
@@ -917,6 +904,21 @@ export interface JumperProps extends CommonComponentProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts)
 
+### LightDependentResistorProps `<ldr />`
+
+```ts
+export interface LightDependentResistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
+  darkResistance?: number | string;
+  lightResistance?: number | string;
+  schOrientation?: SchematicOrientation;
+  schSize?: SchematicSymbolSize;
+  connections?: Connections<LightDependentResistorPinLabels>;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/ldr.ts)
+
 ### LedProps `<led />`
 
 ```ts
@@ -928,9 +930,8 @@ export type LedProps = z.input<typeof ledProps>;
 ### MosfetProps `<mosfet />`
 
 ```ts
-export interface MosfetProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface MosfetProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   channelType: "n" | "p";
   mosfetMode: "enhancement" | "depletion";
 }
@@ -986,9 +987,8 @@ export interface NetLabelProps {
 ### OpAmpProps `<opamp />`
 
 ```ts
-export interface OpAmpProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface OpAmpProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   connections?: Connections<OpAmpPinLabels>;
 }
 ```
@@ -998,10 +998,8 @@ export interface OpAmpProps<
 ### PanelProps `<panel />`
 
 ```ts
-export interface PanelProps extends Omit<
-  BaseGroupProps,
-  "height" | "layoutMode" | "width"
-> {
+export interface PanelProps
+  extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
   width?: Distance;
   height?: Distance;
   children?: BaseGroupProps["children"];
@@ -1043,18 +1041,19 @@ export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
 ### PcbNoteDimensionProps `<pcbnotedimension />`
 
 ```ts
-export interface PcbNoteDimensionProps extends Omit<
-  PcbLayoutProps,
-  | "pcbLeftEdgeX"
-  | "pcbRightEdgeX"
-  | "pcbTopEdgeY"
-  | "pcbBottomEdgeY"
-  | "pcbX"
-  | "pcbY"
-  | "pcbOffsetX"
-  | "pcbOffsetY"
-  | "pcbRotation"
-> {
+export interface PcbNoteDimensionProps
+  extends Omit<
+    PcbLayoutProps,
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
+  > {
   from: string | Point;
   to: string | Point;
   text?: string;
@@ -1075,18 +1074,19 @@ export interface PcbNoteDimensionProps extends Omit<
 ### PcbNoteLineProps `<pcbnoteline />`
 
 ```ts
-export interface PcbNoteLineProps extends Omit<
-  PcbLayoutProps,
-  | "pcbLeftEdgeX"
-  | "pcbRightEdgeX"
-  | "pcbTopEdgeY"
-  | "pcbBottomEdgeY"
-  | "pcbX"
-  | "pcbY"
-  | "pcbOffsetX"
-  | "pcbOffsetY"
-  | "pcbRotation"
-> {
+export interface PcbNoteLineProps
+  extends Omit<
+    PcbLayoutProps,
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
+  > {
   x1: string | number;
   y1: string | number;
   x2: string | number;
@@ -1102,18 +1102,19 @@ export interface PcbNoteLineProps extends Omit<
 ### PcbNotePathProps `<pcbnotepath />`
 
 ```ts
-export interface PcbNotePathProps extends Omit<
-  PcbLayoutProps,
-  | "pcbLeftEdgeX"
-  | "pcbRightEdgeX"
-  | "pcbTopEdgeY"
-  | "pcbBottomEdgeY"
-  | "pcbX"
-  | "pcbY"
-  | "pcbOffsetX"
-  | "pcbOffsetY"
-  | "pcbRotation"
-> {
+export interface PcbNotePathProps
+  extends Omit<
+    PcbLayoutProps,
+    | "pcbLeftEdgeX"
+    | "pcbRightEdgeX"
+    | "pcbTopEdgeY"
+    | "pcbBottomEdgeY"
+    | "pcbX"
+    | "pcbY"
+    | "pcbOffsetX"
+    | "pcbOffsetY"
+    | "pcbRotation"
+  > {
   route: RouteHintPointInput[];
   strokeWidth?: string | number;
   color?: string;
@@ -1272,10 +1273,8 @@ export interface PinHeaderProps extends CommonComponentProps {
 ### CirclePlatedHoleProps `<platedhole />`
 
 ```ts
-export interface CirclePlatedHoleProps extends Omit<
-  PcbLayoutProps,
-  "pcbRotation" | "layer"
-> {
+export interface CirclePlatedHoleProps
+  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string;
   connectsTo?: string | string[];
   shape: "circle";
@@ -1329,9 +1328,8 @@ export type PushButtonProps<T extends PinLabelsProp | string = string> =
 ### ResistorProps `<resistor />`
 
 ```ts
-export interface ResistorProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface ResistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   resistance: number | string;
   pullupFor?: string;
   pullupTo?: string;
@@ -1601,10 +1599,8 @@ export interface SolderJumperProps extends JumperProps {
 ### RectSolderPasteProps `<solderpaste />`
 
 ```ts
-export interface RectSolderPasteProps extends Omit<
-  PcbLayoutProps,
-  "pcbRotation"
-> {
+export interface RectSolderPasteProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "rect";
   width: Distance;
   height: Distance;
@@ -1740,9 +1736,8 @@ export type TraceHintProps = z.input<typeof traceHintProps>;
 ### TransistorProps `<transistor />`
 
 ```ts
-export interface TransistorProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface TransistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt";
   connections?: Connections<transistorPinsLabels>;
 }
@@ -1782,9 +1777,8 @@ export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
 ### VoltageSourceProps `<voltagesource />`
 
 ```ts
-export interface VoltageSourceProps<
-  PinLabel extends string = string,
-> extends CommonComponentProps<PinLabel> {
+export interface VoltageSourceProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   voltage?: number | string;
   frequency?: number | string;
   peakToPeakVoltage?: number | string;
@@ -1870,17 +1864,18 @@ export interface PlatformConfig {
 ### ProjectConfig
 
 ```ts
-export interface ProjectConfig extends Pick<
-  PlatformConfig,
-  | "projectName"
-  | "projectBaseUrl"
-  | "version"
-  | "url"
-  | "printBoardInformationToSilkscreen"
-  | "includeBoardFiles"
-  | "snapshotsDir"
-  | "defaultSpiceEngine"
-> {}
+export interface ProjectConfig
+  extends Pick<
+    PlatformConfig,
+    | "projectName"
+    | "projectBaseUrl"
+    | "version"
+    | "url"
+    | "printBoardInformationToSilkscreen"
+    | "includeBoardFiles"
+    | "snapshotsDir"
+    | "defaultSpiceEngine"
+  > {}
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/projectConfig.ts)

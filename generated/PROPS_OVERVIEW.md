@@ -911,6 +911,16 @@ export interface LayoutConfig {
 }
 
 
+export interface LightDependentResistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
+  darkResistance?: number | string
+  lightResistance?: number | string
+  schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
+  connections?: Connections<LightDependentResistorPinLabels>
+}
+
+
 export interface ManualEditsFile {
   pcb_placements?: ManualPcbPlacement[]
   manual_trace_hints?: ManualTraceHint[]

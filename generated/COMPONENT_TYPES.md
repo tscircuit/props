@@ -1960,6 +1960,36 @@ export const jumperProps = commonComponentProps.extend({
 })
 ```
 
+### ldr
+
+```typescript
+export const lightDependentResistorPinLabels = [
+  "pin1",
+  "pin2",
+  "pos",
+  "neg",
+] as const
+export interface LightDependentResistorProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
+  darkResistance?: number | string
+  lightResistance?: number | string
+  schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
+  connections?: Connections<LightDependentResistorPinLabels>
+}
+.extend({
+    darkResistance: resistance.optional(),
+    lightResistance: resistance.optional(),
+
+    schOrientation: schematicOrientation.optional(),
+    schSize: schematicSymbolSize.optional(),
+
+    connections: createConnectionsProp(
+      lightDependentResistorPinLabels,
+    ).optional(),
+  })
+```
+
 ### led
 
 ```typescript

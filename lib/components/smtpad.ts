@@ -19,6 +19,10 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 
 export interface RotatedRectSmtPadProps
@@ -32,6 +36,10 @@ export interface RotatedRectSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -87,6 +95,10 @@ export const rectSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderMaskMarginLeft: distance.optional(),
+    solderMaskMarginRight: distance.optional(),
+    solderMaskMarginTop: distance.optional(),
+    solderMaskMarginBottom: distance.optional(),
   })
 type InferredRectSmtPadProps = z.input<typeof rectSmtPadProps>
 expectTypesMatch<InferredRectSmtPadProps, RectSmtPadProps>(true)
@@ -103,6 +115,10 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderMaskMarginLeft: distance.optional(),
+    solderMaskMarginRight: distance.optional(),
+    solderMaskMarginTop: distance.optional(),
+    solderMaskMarginBottom: distance.optional(),
   })
 type InferredRotatedRectSmtPadProps = z.input<typeof rotatedRectSmtPadProps>
 expectTypesMatch<InferredRotatedRectSmtPadProps, RotatedRectSmtPadProps>(true)

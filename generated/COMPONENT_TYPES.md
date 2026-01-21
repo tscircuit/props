@@ -303,6 +303,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
   key?: any
   name: string
+  displayName?: string
   pinAttributes?: Record<PinLabel, PinAttributeMap>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
@@ -315,6 +316,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
 .extend({
     key: z.any().optional(),
     name: z.string(),
+    displayName: z.string().optional(),
     cadModel: cadModelProp.optional(),
     children: z.any().optional(),
     symbolName: z.string().optional(),
@@ -3077,6 +3079,10 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -3089,6 +3095,10 @@ export interface RotatedRectSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -3129,6 +3139,10 @@ export const rectSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderMaskMarginLeft: distance.optional(),
+    solderMaskMarginRight: distance.optional(),
+    solderMaskMarginTop: distance.optional(),
+    solderMaskMarginBottom: distance.optional(),
   })
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -3142,6 +3156,10 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderMaskMarginLeft: distance.optional(),
+    solderMaskMarginRight: distance.optional(),
+    solderMaskMarginTop: distance.optional(),
+    solderMaskMarginBottom: distance.optional(),
   })
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })

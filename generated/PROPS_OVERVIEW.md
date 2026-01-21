@@ -466,6 +466,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
   key?: any
   name: string
+  displayName?: string
   pinAttributes?: Record<PinLabel, PinAttributeMap>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
@@ -1487,6 +1488,10 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 
 
@@ -1529,6 +1534,10 @@ export interface RotatedRectSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 
 

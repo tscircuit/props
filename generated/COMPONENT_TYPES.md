@@ -1588,6 +1588,7 @@ export interface AutorouterConfig {
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
   traceClearance?: Distance
+  availableJumperTypes?: Array<"1206x4" | "0603">
   groupMode?:
     | "sequential_trace"
     | "subcircuit"
@@ -1616,6 +1617,7 @@ export const autorouterConfig = z.object({
   serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
+  availableJumperTypes: z.array(z.enum(["1206x4", "0603"])).optional(),
   groupMode: z
     .enum(["sequential_trace", "subcircuit", "sequential-trace"])
     .optional(),

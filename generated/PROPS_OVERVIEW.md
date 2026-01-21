@@ -33,6 +33,7 @@ export interface AutorouterConfig {
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
   traceClearance?: Distance
+  availableJumperTypes?: Array<"1206x4" | "0603">
   groupMode?:
     | "sequential_trace"
     | "subcircuit"

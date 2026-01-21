@@ -1586,6 +1586,7 @@ export interface AutorouterConfig {
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
   traceClearance?: Distance
+  availableJumperTypes?: Array<"1206x4" | "0603">
   groupMode?:
     | "sequential_trace"
     | "subcircuit"
@@ -1614,6 +1615,7 @@ export const autorouterConfig = z.object({
   serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
+  availableJumperTypes: z.array(z.enum(["1206x4", "0603"])).optional(),
   groupMode: z
     .enum(["sequential_trace", "subcircuit", "sequential-trace"])
     .optional(),
@@ -3077,6 +3079,10 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -3089,6 +3095,10 @@ export interface RotatedRectSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -3129,6 +3139,10 @@ export const rectSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderMaskMarginLeft: distance.optional(),
+    solderMaskMarginRight: distance.optional(),
+    solderMaskMarginTop: distance.optional(),
+    solderMaskMarginBottom: distance.optional(),
   })
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -3142,6 +3156,10 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderMaskMarginLeft: distance.optional(),
+    solderMaskMarginRight: distance.optional(),
+    solderMaskMarginTop: distance.optional(),
+    solderMaskMarginBottom: distance.optional(),
   })
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })

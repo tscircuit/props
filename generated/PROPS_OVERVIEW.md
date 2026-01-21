@@ -33,6 +33,7 @@ export interface AutorouterConfig {
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
   traceClearance?: Distance
+  availableJumperTypes?: Array<"1206x4" | "0603">
   groupMode?:
     | "sequential_trace"
     | "subcircuit"
@@ -1487,6 +1488,10 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 
 
@@ -1529,6 +1534,10 @@ export interface RotatedRectSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderMaskMarginLeft?: Distance
+  solderMaskMarginRight?: Distance
+  solderMaskMarginTop?: Distance
+  solderMaskMarginBottom?: Distance
 }
 
 

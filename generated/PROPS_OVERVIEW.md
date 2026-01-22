@@ -468,6 +468,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   key?: any
   name: string
   displayName?: string
+  datasheetUrl?: string
   pinAttributes?: Record<PinLabel, PinAttributeMap>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp

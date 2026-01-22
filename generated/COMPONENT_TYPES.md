@@ -304,6 +304,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   key?: any
   name: string
   displayName?: string
+  datasheetUrl?: string
   pinAttributes?: Record<PinLabel, PinAttributeMap>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
@@ -317,6 +318,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
+    datasheetUrl: z.string().optional(),
     cadModel: cadModelProp.optional(),
     children: z.any().optional(),
     symbolName: z.string().optional(),

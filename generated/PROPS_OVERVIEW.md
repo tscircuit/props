@@ -472,6 +472,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   pinAttributes?: Record<PinLabel, PinAttributeMap>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
+  kicadFootprintMetadata?: KicadFootprintMetadata
   children?: any
   symbolName?: string
   doNotPlace?: boolean
@@ -860,6 +861,85 @@ export interface JumperProps extends CommonComponentProps {
    * Connections to other components
    */
   connections?: Connections<string>
+}
+
+
+export interface KicadAt {
+  x: number | string
+  y: number | string
+  rotation?: number | string
+}
+
+
+export interface KicadEffects {
+  font?: KicadFont
+}
+
+
+export interface KicadFont {
+  size?: { x: number | string; y: number | string }
+  thickness?: number | string
+}
+
+
+export interface KicadFootprintAttributes {
+  through_hole?: boolean
+  smd?: boolean
+  exclude_from_pos_files?: boolean
+  exclude_from_bom?: boolean
+}
+
+
+export interface KicadFootprintMetadata {
+  footprintName?: string
+  version?: number | string
+  generator?: string
+  generatorVersion?: number | string
+  layer?: string
+  properties?: KicadFootprintProperties
+  attributes?: KicadFootprintAttributes
+  pads?: KicadFootprintPad[]
+  embeddedFonts?: boolean
+  model?: KicadFootprintModel
+}
+
+
+export interface KicadFootprintModel {
+  path: string
+  offset?: { x: number | string; y: number | string; z: number | string }
+  scale?: { x: number | string; y: number | string; z: number | string }
+  rotate?: { x: number | string; y: number | string; z: number | string }
+}
+
+
+export interface KicadFootprintPad {
+  name: string
+  type: string
+  shape?: string
+  at?: KicadAt
+  size?: { x: number | string; y: number | string }
+  drill?: number | string
+  layers?: string[]
+  removeUnusedLayers?: boolean
+  uuid?: string
+}
+
+
+export interface KicadFootprintProperties {
+  Reference?: KicadProperty
+  Value?: KicadProperty
+  Datasheet?: KicadProperty
+  Description?: KicadProperty
+}
+
+
+export interface KicadProperty {
+  value: string
+  at?: KicadAt
+  layer?: string
+  uuid?: string
+  hide?: boolean
+  effects?: KicadEffects
 }
 
 

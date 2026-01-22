@@ -10,6 +10,10 @@ import { pcbCoordinate } from "./distance"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
 import { type FootprintProp, footprintProp } from "./footprintProp"
+import {
+  type KicadFootprintMetadata,
+  kicadFootprintMetadata,
+} from "./kicadFootprintMetadata"
 import { pcbStyle, type PcbStyle } from "./pcbStyle"
 import { schStyle, type SchStyle } from "./schStyle"
 import { type SymbolProp, symbolProp } from "./symbolProp"
@@ -248,6 +252,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   pinAttributes?: Record<PinLabel, PinAttributeMap>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
+  kicadFootprintMetadata?: KicadFootprintMetadata
   children?: any
   symbolName?: string
   doNotPlace?: boolean
@@ -271,6 +276,7 @@ export const commonComponentProps = commonLayoutProps
     displayName: z.string().optional(),
     datasheetUrl: z.string().optional(),
     cadModel: cadModelProp.optional(),
+    kicadFootprintMetadata: kicadFootprintMetadata.optional(),
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),

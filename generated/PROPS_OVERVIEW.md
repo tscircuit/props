@@ -473,6 +473,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   kicadFootprintMetadata?: KicadFootprintMetadata
+  kicadSymbolMetadata?: KicadSymbolMetadata
   children?: any
   symbolName?: string
   doNotPlace?: boolean
@@ -940,6 +941,56 @@ export interface KicadProperty {
   uuid?: string
   hide?: boolean
   effects?: KicadEffects
+}
+
+
+export interface KicadSymbolEffects {
+  font?: KicadFont
+  justify?: string | string[]
+  hide?: boolean
+}
+
+
+export interface KicadSymbolMetadata {
+  symbolName?: string
+  extends?: string
+  pinNumbers?: KicadSymbolPinNumbers
+  pinNames?: KicadSymbolPinNames
+  excludeFromSim?: boolean
+  inBom?: boolean
+  onBoard?: boolean
+  properties?: KicadSymbolProperties
+  embeddedFonts?: boolean
+}
+
+
+export interface KicadSymbolPinNames {
+  offset?: number | string
+  hide?: boolean
+}
+
+
+export interface KicadSymbolPinNumbers {
+  hide?: boolean
+}
+
+
+export interface KicadSymbolProperties {
+  Reference?: KicadSymbolProperty
+  Value?: KicadSymbolProperty
+  Footprint?: KicadSymbolProperty
+  Datasheet?: KicadSymbolProperty
+  Description?: KicadSymbolProperty
+  ki_keywords?: KicadSymbolProperty
+  ki_fp_filters?: KicadSymbolProperty
+}
+
+
+export interface KicadSymbolProperty {
+  value: string
+  id?: number | string
+  at?: KicadAt
+  effects?: KicadSymbolEffects
 }
 
 

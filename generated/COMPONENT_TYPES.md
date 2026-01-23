@@ -246,6 +246,87 @@ export const kicadFootprintMetadata = z.object({
 })
 ```
 
+### kicadSymbolMetadata
+
+```typescript
+export interface KicadSymbolPinNumbers {
+  hide?: boolean
+}
+export const kicadSymbolPinNumbers = z.object({
+  hide: z.boolean().optional(),
+})
+export interface KicadSymbolPinNames {
+  offset?: number | string
+  hide?: boolean
+}
+export const kicadSymbolPinNames = z.object({
+  offset: distance.optional(),
+  hide: z.boolean().optional(),
+})
+export interface KicadSymbolEffects {
+  font?: KicadFont
+  justify?: string | string[]
+  hide?: boolean
+}
+export const kicadSymbolEffects = z.object({
+  font: kicadFont.optional(),
+  justify: z.union([z.string(), z.array(z.string())]).optional(),
+  hide: z.boolean().optional(),
+})
+export interface KicadSymbolProperty {
+  value: string
+  id?: number | string
+  at?: KicadAt
+  effects?: KicadSymbolEffects
+}
+export const kicadSymbolProperty = z.object({
+  value: z.string(),
+  id: z.union([z.number(), z.string()]).optional(),
+  at: kicadAt.optional(),
+  effects: kicadSymbolEffects.optional(),
+})
+export interface KicadSymbolProperties {
+  Reference?: KicadSymbolProperty
+  Value?: KicadSymbolProperty
+  Footprint?: KicadSymbolProperty
+  Datasheet?: KicadSymbolProperty
+  Description?: KicadSymbolProperty
+  ki_keywords?: KicadSymbolProperty
+  ki_fp_filters?: KicadSymbolProperty
+}
+export const kicadSymbolProperties = z.object({
+  Reference: kicadSymbolProperty.optional(),
+  Value: kicadSymbolProperty.optional(),
+  Footprint: kicadSymbolProperty.optional(),
+  Datasheet: kicadSymbolProperty.optional(),
+  Description: kicadSymbolProperty.optional(),
+  ki_keywords: kicadSymbolProperty.optional(),
+  ki_fp_filters: kicadSymbolProperty.optional(),
+})
+export interface KicadSymbolMetadata {
+  symbolName?: string
+  extends?: string
+  pinNumbers?: KicadSymbolPinNumbers
+  pinNames?: KicadSymbolPinNames
+  excludeFromSim?: boolean
+  inBom?: boolean
+  onBoard?: boolean
+  properties?: KicadSymbolProperties
+  embeddedFonts?: boolean
+}
+export const kicadSymbolMetadata = z.object({
+  symbolName: z.string().optional(),
+  extends: z.string().optional(),
+  pinNumbers: kicadSymbolPinNumbers.optional(),
+  pinNames: kicadSymbolPinNames.optional(),
+  excludeFromSim: z.boolean().optional(),
+  inBom: z.boolean().optional(),
+  onBoard: z.boolean().optional(),
+  properties: kicadSymbolProperties.optional(),
+  embeddedFonts: z.boolean().optional(),
+})
+```
+
 ### layout
 
 ```typescript
@@ -434,6 +515,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   kicadFootprintMetadata?: KicadFootprintMetadata
+  kicadSymbolMetadata?: KicadSymbolMetadata
   children?: any
   symbolName?: string
   doNotPlace?: boolean
@@ -447,6 +529,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
     datasheetUrl: z.string().optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),
+    kicadSymbolMetadata: kicadSymbolMetadata.optional(),
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),

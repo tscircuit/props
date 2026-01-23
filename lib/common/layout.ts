@@ -14,6 +14,10 @@ import {
   type KicadFootprintMetadata,
   kicadFootprintMetadata,
 } from "./kicadFootprintMetadata"
+import {
+  type KicadSymbolMetadata,
+  kicadSymbolMetadata,
+} from "./kicadSymbolMetadata"
 import { pcbStyle, type PcbStyle } from "./pcbStyle"
 import { schStyle, type SchStyle } from "./schStyle"
 import { type SymbolProp, symbolProp } from "./symbolProp"
@@ -253,6 +257,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   supplierPartNumbers?: SupplierPartNumbers
   cadModel?: CadModelProp
   kicadFootprintMetadata?: KicadFootprintMetadata
+  kicadSymbolMetadata?: KicadSymbolMetadata
   children?: any
   symbolName?: string
   doNotPlace?: boolean
@@ -277,6 +282,7 @@ export const commonComponentProps = commonLayoutProps
     datasheetUrl: z.string().optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),
+    kicadSymbolMetadata: kicadSymbolMetadata.optional(),
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),

@@ -120,6 +120,7 @@ export interface CommonLayoutProps {
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */
   pcbRelative?: boolean
+  mnf?: string
 }
 
 export const pcbLayoutProps = z.object({
@@ -197,6 +198,7 @@ export const commonLayoutProps = z.object({
   relative: z.boolean().optional(),
   schRelative: z.boolean().optional(),
   pcbRelative: z.boolean().optional(),
+  mnf: z.string().optional(),
 })
 
 type InferredCommonLayoutProps = z.input<typeof commonLayoutProps>

@@ -300,7 +300,7 @@ export const commonComponentProps = commonLayoutProps
         "Whether to show this component's CAD model as translucent in the 3D viewer.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
-    mfn: z.string().optional(),
+    mfn: z.string().describe("Manufacturer Part Number").optional(),
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

@@ -30,6 +30,7 @@ export interface ResistorProps<PinLabel extends string = string>
   schOrientation?: SchematicOrientation
   schSize?: SchematicSymbolSize
   connections?: Connections<ResistorPinLabels>
+  mfn?: string
 }
 
 export const resistorProps = commonComponentProps.extend({
@@ -45,6 +46,8 @@ export const resistorProps = commonComponentProps.extend({
   schSize: schematicSymbolSize.optional(),
 
   connections: createConnectionsProp(resistorPinLabels).optional(),
+
+  mfn: z.string().optional(),
 })
 export const resistorPins = lrPins
 

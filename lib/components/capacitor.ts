@@ -41,6 +41,7 @@ export interface CapacitorProps<PinLabel extends string = string>
   schOrientation?: SchematicOrientation
   schSize?: SchematicSymbolSize
   connections?: Connections<CapacitorPinLabels>
+  mfn?: string
 }
 
 export const capacitorProps = commonComponentProps.extend({
@@ -56,6 +57,7 @@ export const capacitorProps = commonComponentProps.extend({
   schOrientation: schematicOrientation.optional(),
   schSize: schematicSymbolSize.optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),
+  mfn: z.string().optional(),
 })
 export const capacitorPins = lrPolarPins
 

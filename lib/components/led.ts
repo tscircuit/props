@@ -12,6 +12,7 @@ export const ledProps = commonComponentProps.extend({
   schOrientation: schematicOrientation.optional(),
   connections: createConnectionsProp(lrPolarPins).optional(),
   laser: z.boolean().optional(),
+  mfn: z.string().optional(),
 })
 export const ledPins = lrPolarPins
 export type LedProps = z.input<typeof ledProps>

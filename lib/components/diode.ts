@@ -46,6 +46,7 @@ export const diodeProps = commonComponentProps
     photo: z.boolean().optional(),
     tvs: z.boolean().optional(),
     schOrientation: schematicOrientation.optional(),
+    mfn: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     // Check if multiple boolean flags are set directly
@@ -133,6 +134,7 @@ export interface DiodeProps<PinLabel extends string = string>
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation
+  mfn?: string
 }
 
 export type InferredDiodeProps = z.input<typeof diodeProps>

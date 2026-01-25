@@ -272,6 +272,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
    */
   showAsTranslucentModel?: boolean
   mfn?: string
+  manufacturerPartNumber?: string
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -301,6 +302,7 @@ export const commonComponentProps = commonLayoutProps
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
     mfn: z.string().describe("Manufacturer Part Number").optional(),
+    manufacturerPartNumber: z.string().optional(),
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

@@ -487,6 +487,8 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * Whether to show this component's CAD model as translucent in the 3D viewer.
    */
   showAsTranslucentModel?: boolean
+  mfn?: string
+  manufacturerPartNumber?: string
 }
 
 
@@ -1743,6 +1745,7 @@ export interface SchematicLineProps {
 
 export interface SchematicPathProps {
   points: Point[]
+  svgPath?: string
   isFilled?: boolean
   fillColor?: "red" | "blue"
 }

@@ -521,6 +521,8 @@ export interface CommonComponentProps<PinLabel extends string = string>
   doNotPlace?: boolean
   obstructsWithinBounds?: boolean
   showAsTranslucentModel?: boolean
+  mfn?: string
+  manufacturerPartNumber?: string
 }
 .extend({
     key: z.any().optional(),
@@ -546,6 +548,8 @@ export interface CommonComponentProps<PinLabel extends string = string>
         "Whether to show this component's CAD model as translucent in the 3D viewer.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
+    mfn: z.string().describe("Manufacturer Part Number").optional(),
+    manufacturerPartNumber: z.string().optional(),
   })
 export const lrPolarPins = [
   "pin1",
@@ -3093,11 +3097,13 @@ export interface SchematicLineProps {
 ```typescript
 export const schematicPathProps = z.object({
   points: z.array(point),
+  svgPath: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.enum(["red", "blue"]).optional(),
 })
 export interface SchematicPathProps {
   points: Point[]
+  svgPath?: string
   isFilled?: boolean
   fillColor?: "red" | "blue"
 }

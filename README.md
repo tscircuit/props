@@ -1454,6 +1454,7 @@ export interface SchematicLineProps {
 ```ts
 export interface SchematicPathProps {
   points: Point[];
+  svgPath?: string;
   isFilled?: boolean;
   fillColor?: "red" | "blue";
 }

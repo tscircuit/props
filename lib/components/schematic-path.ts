@@ -5,12 +5,14 @@ import type { Point } from "lib/common/point"
 
 export const schematicPathProps = z.object({
   points: z.array(point),
+  svgPath: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.enum(["red", "blue"]).optional(),
 })
 
 export interface SchematicPathProps {
   points: Point[]
+  svgPath?: string
   isFilled?: boolean
   fillColor?: "red" | "blue"
 }

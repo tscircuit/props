@@ -5,7 +5,7 @@ import type { Distance } from "lib/common/distance"
 import type { Point } from "lib/common/point"
 
 export const schematicPathProps = z.object({
-  points: z.array(point),
+  points: z.array(point).optional(),
   svgPath: z.string().optional(),
   strokeWidth: distance.optional(),
   strokeColor: z.string().optional(),
@@ -14,7 +14,7 @@ export const schematicPathProps = z.object({
 })
 
 export interface SchematicPathProps {
-  points: Point[]
+  points?: Point[]
   svgPath?: string
   strokeWidth?: Distance
   strokeColor?: string

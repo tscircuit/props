@@ -1455,6 +1455,8 @@ export interface SchematicLineProps {
 export interface SchematicPathProps {
   points: Point[];
   svgPath?: string;
+  strokeWidth?: Distance;
+  strokeColor?: string;
   isFilled?: boolean;
   fillColor?: "red" | "blue";
 }

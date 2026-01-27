@@ -3098,12 +3098,16 @@ export interface SchematicLineProps {
 export const schematicPathProps = z.object({
   points: z.array(point),
   svgPath: z.string().optional(),
+  strokeWidth: distance.optional(),
+  strokeColor: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.enum(["red", "blue"]).optional(),
 })
 export interface SchematicPathProps {
   points: Point[]
   svgPath?: string
+  strokeWidth?: Distance
+  strokeColor?: string
   isFilled?: boolean
   fillColor?: "red" | "blue"
 }

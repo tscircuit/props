@@ -1,3 +1,4 @@
+import { distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
@@ -9,6 +10,9 @@ export interface SymbolProps {
    * because you have a complex symbol. Default is "right" and this is most intuitive.
    */
   originalFacingDirection?: "up" | "down" | "left" | "right"
+  width?: string | number
+  height?: string | number
+  name?: string
 }
 
 export const symbolProps = z.object({
@@ -16,8 +20,11 @@ export const symbolProps = z.object({
     .enum(["up", "down", "left", "right"])
     .default("right")
     .optional(),
+  width: distance.optional(),
+  height: distance.optional(),
+  name: z.string().optional(),
 })
 
 export type SymbolPropsInput = z.input<typeof symbolProps>
-type InferredSymbolProps = z.infer<typeof symbolProps>
+type InferredSymbolProps = z.input<typeof symbolProps>
 expectTypesMatch<InferredSymbolProps, SymbolProps>(true)

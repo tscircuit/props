@@ -75,6 +75,44 @@ test("should parse chip props (string)", () => {
   expect(parsedProps.noSchematicRepresentation).toBe(false)
 })
 
+test("should apply default directions for pin arrays", () => {
+  const rawProps: ChipProps = {
+    name: "chip",
+    manufacturerPartNumber: "1234",
+    pinLabels: {
+      1: "1",
+      2: "2",
+      3: "3",
+      4: "4",
+    },
+    schPortArrangement: {
+      leftSide: ["1", "2"],
+      topSide: ["A", "B"],
+      rightSide: ["3"],
+      bottomSide: ["C"],
+    },
+  }
+
+  const parsedProps = chipProps.parse(rawProps)
+
+  expect((parsedProps.schPortArrangement as any)?.leftSide).toEqual({
+    pins: ["1", "2"],
+    direction: "top-to-bottom",
+  })
+  expect((parsedProps.schPortArrangement as any)?.rightSide).toEqual({
+    pins: ["3"],
+    direction: "top-to-bottom",
+  })
+  expect((parsedProps.schPortArrangement as any)?.topSide).toEqual({
+    pins: ["A", "B"],
+    direction: "left-to-right",
+  })
+  expect((parsedProps.schPortArrangement as any)?.bottomSide).toEqual({
+    pins: ["C"],
+    direction: "left-to-right",
+  })
+})
+
 // Test with generic type parameter
 test("should work with string literal pin labels", () => {
   type PinLabels = "CLK" | "RST" | "DATA" | "VCC" | "GND"

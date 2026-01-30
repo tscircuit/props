@@ -680,10 +680,10 @@ export interface PinSideDefinition {
     | "right-to-left"
 }
 export interface SchematicPortArrangementWithSides {
-  leftSide?: PinSideDefinition
-  topSide?: PinSideDefinition
-  rightSide?: PinSideDefinition
-  bottomSide?: PinSideDefinition
+  leftSide?: PinSideDefinitionInput
+  topSide?: PinSideDefinitionInput
+  rightSide?: PinSideDefinitionInput
+  bottomSide?: PinSideDefinitionInput
 }
 export interface SchematicPortArrangement
   extends SchematicPortArrangementWithSizes,
@@ -710,10 +710,10 @@ export const schematicPortArrangement = z.object({
   rightPinCount: z.number().optional(),
   topPinCount: z.number().optional(),
   bottomPinCount: z.number().optional(),
-  leftSide: explicitPinSideDefinition.optional(),
-  rightSide: explicitPinSideDefinition.optional(),
-  topSide: explicitPinSideDefinition.optional(),
-  bottomSide: explicitPinSideDefinition.optional(),
+  leftSide: pinSideDefinitionWithDefaultDirection("top-to-bottom").optional(),
+  rightSide: pinSideDefinitionWithDefaultDirection("top-to-bottom").optional(),
+  topSide: pinSideDefinitionWithDefaultDirection("left-to-right").optional(),
+  bottomSide: pinSideDefinitionWithDefaultDirection("left-to-right").optional(),
 })
 ```
 

@@ -30,11 +30,13 @@ export interface PinSideDefinition {
     | "right-to-left"
 }
 
+export type PinSideDefinitionInput = PinSideDefinition | Array<number | string>
+
 export interface SchematicPortArrangementWithSides {
-  leftSide?: PinSideDefinition
-  topSide?: PinSideDefinition
-  rightSide?: PinSideDefinition
-  bottomSide?: PinSideDefinition
+  leftSide?: PinSideDefinitionInput
+  topSide?: PinSideDefinitionInput
+  rightSide?: PinSideDefinitionInput
+  bottomSide?: PinSideDefinitionInput
 }
 
 export interface SchematicPortArrangement
@@ -58,6 +60,22 @@ export const explicitPinSideDefinition = z.object({
   ]),
 })
 
+const pinSideDefinitionInput = z.array(z.union([z.number(), z.string()]))
+
+const pinSideDefinitionWithDefaultDirection = (
+  direction: PinSideDefinition["direction"],
+) =>
+  z
+    .union([explicitPinSideDefinition, pinSideDefinitionInput])
+    .transform((value) =>
+      Array.isArray(value)
+        ? {
+            pins: value,
+            direction,
+          }
+        : value,
+    )
+
 /**
  * @deprecated Use schematicPinArrangement instead.
  */
@@ -70,10 +88,10 @@ export const schematicPortArrangement = z.object({
   rightPinCount: z.number().optional(),
   topPinCount: z.number().optional(),
   bottomPinCount: z.number().optional(),
-  leftSide: explicitPinSideDefinition.optional(),
-  rightSide: explicitPinSideDefinition.optional(),
-  topSide: explicitPinSideDefinition.optional(),
-  bottomSide: explicitPinSideDefinition.optional(),
+  leftSide: pinSideDefinitionWithDefaultDirection("top-to-bottom").optional(),
+  rightSide: pinSideDefinitionWithDefaultDirection("top-to-bottom").optional(),
+  topSide: pinSideDefinitionWithDefaultDirection("left-to-right").optional(),
+  bottomSide: pinSideDefinitionWithDefaultDirection("left-to-right").optional(),
 })
 
 export const schematicPinArrangement = schematicPortArrangement

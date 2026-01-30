@@ -939,9 +939,9 @@ export interface KicadFootprintProperties {
 export interface KicadPinMetadata {
   electricalType?: KicadPinElectricalType
   graphicStyle?: KicadPinGraphicStyle
-  pinLength?: number | string
-  nameTextSize?: number | string
-  numberTextSize?: number | string
+  pinLength?: Distance
+  nameTextSize?: Distance
+  numberTextSize?: Distance
 }
 
 

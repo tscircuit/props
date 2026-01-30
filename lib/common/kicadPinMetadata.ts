@@ -1,3 +1,4 @@
+import { type Distance, distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
@@ -35,17 +36,17 @@ export type KicadPinGraphicStyle = z.infer<typeof kicadPinGraphicStyle>
 export interface KicadPinMetadata {
   electricalType?: KicadPinElectricalType
   graphicStyle?: KicadPinGraphicStyle
-  pinLength?: number | string
-  nameTextSize?: number | string
-  numberTextSize?: number | string
+  pinLength?: Distance
+  nameTextSize?: Distance
+  numberTextSize?: Distance
 }
 
 export const kicadPinMetadata = z.object({
   electricalType: kicadPinElectricalType.optional(),
   graphicStyle: kicadPinGraphicStyle.optional(),
-  pinLength: z.union([z.number(), z.string()]).optional(),
-  nameTextSize: z.union([z.number(), z.string()]).optional(),
-  numberTextSize: z.union([z.number(), z.string()]).optional(),
+  pinLength: distance.optional(),
+  nameTextSize: distance.optional(),
+  numberTextSize: distance.optional(),
 })
 
 type InferredKicadPinMetadata = z.input<typeof kicadPinMetadata>

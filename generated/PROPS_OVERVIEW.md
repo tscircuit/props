@@ -1771,10 +1771,10 @@ export interface SchematicPortArrangementWithPinCounts {
 
 
 export interface SchematicPortArrangementWithSides {
-  leftSide?: PinSideDefinition
-  topSide?: PinSideDefinition
-  rightSide?: PinSideDefinition
-  bottomSide?: PinSideDefinition
+  leftSide?: PinSideDefinitionInput
+  topSide?: PinSideDefinitionInput
+  rightSide?: PinSideDefinitionInput
+  bottomSide?: PinSideDefinitionInput
 }
 
 

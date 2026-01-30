@@ -246,6 +246,19 @@ export const kicadFootprintMetadata = z.object({
 })
 ```
 
+### kicadPinMetadata
+
+```typescript
+export interface KicadPinMetadata {
+  electricalType?: KicadPinElectricalType
+  graphicStyle?: KicadPinGraphicStyle
+}
+export const kicadPinMetadata = z.object({
+  electricalType: kicadPinElectricalType.optional(),
+  graphicStyle: kicadPinGraphicStyle.optional(),
+})
+```
+
 ### kicadSymbolMetadata
 
 ```typescript
@@ -2881,6 +2894,7 @@ export const portProps = commonLayoutProps.extend({
   aliases: z.array(z.string()).optional(),
   direction: direction,
   connectsTo: z.string().or(z.array(z.string())).optional(),
+  kicadPinMetadata: kicadPinMetadata.optional(),
 })
 ```
 
@@ -3096,7 +3110,7 @@ export interface SchematicLineProps {
 
 ```typescript
 export const schematicPathProps = z.object({
-  points: z.array(point),
+  points: z.array(point).optional(),
   svgPath: z.string().optional(),
   strokeWidth: distance.optional(),
   strokeColor: z.string().optional(),
@@ -3104,7 +3118,7 @@ export const schematicPathProps = z.object({
   fillColor: z.enum(["red", "blue"]).optional(),
 })
 export interface SchematicPathProps {
-  points: Point[]
+  points?: Point[]
   svgPath?: string
   strokeWidth?: Distance
   strokeColor?: string
@@ -3536,6 +3550,9 @@ export interface SwitchProps extends CommonComponentProps {
 ```typescript
 export interface SymbolProps {
   originalFacingDirection?: "up" | "down" | "left" | "right"
+  width?: string | number
+  height?: string | number
+  name?: string
 }
 /**
    * The facing direction that the symbol is designed for. If you set this to "right",
@@ -3548,6 +3565,9 @@ export const symbolProps = z.object({
     .enum(["up", "down", "left", "right"])
     .default("right")
     .optional(),
+  width: distance.optional(),
+  height: distance.optional(),
+  name: z.string().optional(),
 })
 ```
 

@@ -936,6 +936,12 @@ export interface KicadFootprintProperties {
 }
 
 
+export interface KicadPinMetadata {
+  electricalType?: KicadPinElectricalType
+  graphicStyle?: KicadPinGraphicStyle
+}
+
+
 export interface KicadProperty {
   value: string
   at?: KicadAt
@@ -1744,7 +1750,7 @@ export interface SchematicLineProps {
 
 
 export interface SchematicPathProps {
-  points: Point[]
+  points?: Point[]
   svgPath?: string
   strokeWidth?: Distance
   strokeColor?: string
@@ -1947,6 +1953,9 @@ export interface SymbolProps {
    * because you have a complex symbol. Default is "right" and this is most intuitive.
    */
   originalFacingDirection?: "up" | "down" | "left" | "right"
+  width?: string | number
+  height?: string | number
+  name?: string
 }
 
 

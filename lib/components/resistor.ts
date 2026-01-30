@@ -23,6 +23,7 @@ export type ResistorPinLabels = (typeof resistorPinLabels)[number]
 export interface ResistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   resistance: number | string
+  tolerance?: number | string
   pullupFor?: string
   pullupTo?: string
   pulldownFor?: string
@@ -34,6 +35,24 @@ export interface ResistorProps<PinLabel extends string = string>
 
 export const resistorProps = commonComponentProps.extend({
   resistance,
+  tolerance: z
+    .union([z.string(), z.number()])
+    .transform((val) => {
+      if (typeof val === "string") {
+        if (val.endsWith("%")) {
+          return parseFloat(val.slice(0, -1)) / 100
+        }
+        return parseFloat(val)
+      }
+      return val
+    })
+    .pipe(
+      z
+        .number()
+        .min(0, "Tolerance must be non-negative")
+        .max(1, "Tolerance cannot be greater than 100%"),
+    )
+    .optional(),
 
   pullupFor: z.string().optional(),
   pullupTo: z.string().optional(),

@@ -1651,6 +1651,7 @@ export interface RectSolderPasteProps
 export interface ResistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   resistance: number | string
+  tolerance?: number | string
   pullupFor?: string
   pullupTo?: string
   pulldownFor?: string

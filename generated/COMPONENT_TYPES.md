@@ -252,10 +252,16 @@ export const kicadFootprintMetadata = z.object({
 export interface KicadPinMetadata {
   electricalType?: KicadPinElectricalType
   graphicStyle?: KicadPinGraphicStyle
+  pinLength?: number | string
+  nameTextSize?: number | string
+  numberTextSize?: number | string
 }
 export const kicadPinMetadata = z.object({
   electricalType: kicadPinElectricalType.optional(),
   graphicStyle: kicadPinGraphicStyle.optional(),
+  pinLength: z.union([z.number(), z.string()]).optional(),
+  nameTextSize: z.union([z.number(), z.string()]).optional(),
+  numberTextSize: z.union([z.number(), z.string()]).optional(),
 })
 ```
 

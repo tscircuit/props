@@ -16,6 +16,7 @@ export * from "./common/schematicPinLabel"
 export * from "./common/schematicSize"
 export * from "./common/kicadFootprintMetadata"
 export * from "./common/kicadSymbolMetadata"
+export * from "./common/kicadPinMetadata"
 
 export * from "./components/board"
 export * from "./components/panel"

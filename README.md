@@ -1453,7 +1453,7 @@ export interface SchematicLineProps {
 
 ```ts
 export interface SchematicPathProps {
-  points: Point[];
+  points?: Point[];
   svgPath?: string;
   strokeWidth?: Distance;
   strokeColor?: string;
@@ -1680,6 +1680,9 @@ export interface SymbolProps {
    * because you have a complex symbol. Default is "right" and this is most intuitive.
    */
   originalFacingDirection?: "up" | "down" | "left" | "right";
+  width?: string | number;
+  height?: string | number;
+  name?: string;
 }
 ```
 

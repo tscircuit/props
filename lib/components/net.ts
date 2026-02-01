@@ -7,6 +7,7 @@ export interface NetProps {
   highlightColor?: string
   isPowerNet?: boolean
   isGroundNet?: boolean
+  isDrawnWithInversionCircle?: boolean
 }
 
 export const netProps = z.object({
@@ -15,6 +16,7 @@ export const netProps = z.object({
   highlightColor: z.string().optional(),
   isPowerNet: z.boolean().optional(),
   isGroundNet: z.boolean().optional(),
+  isDrawnWithInversionCircle: z.boolean().optional(),
 })
 
 type InferredNetProps = z.input<typeof netProps>

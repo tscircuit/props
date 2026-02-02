@@ -7,6 +7,14 @@ import {
   courtyardOutlineProps,
   type CourtyardOutlineProps,
 } from "lib/components/courtyard-outline"
+import {
+  courtyardCircleProps,
+  type CourtyardCircleProps,
+} from "lib/components/courtyard-circle"
+import {
+  courtyardPillProps,
+  type CourtyardPillProps,
+} from "lib/components/courtyard-pill"
 
 test("courtyard rect parses dimensions", () => {
   const rect: CourtyardRectProps = {
@@ -66,4 +74,38 @@ test("courtyard outline parses outline points", () => {
   expect(parsed.isClosed).toBe(true)
   expect(parsed.isStrokeDashed).toBe(true)
   expect(parsed.color).toBe("#123456")
+})
+
+test("courtyard circle parses radius", () => {
+  const circle: CourtyardCircleProps = {
+    radius: 3,
+  }
+
+  const parsed = courtyardCircleProps.parse(circle)
+
+  expect(parsed.radius).toBe(3)
+  expect(parsed.strokeWidth).toBeUndefined()
+  expect(parsed.isFilled).toBeUndefined()
+  expect(parsed.hasStroke).toBeUndefined()
+  expect(parsed.isStrokeDashed).toBeUndefined()
+  expect(parsed.color).toBeUndefined()
+})
+
+test("courtyard pill parses dimensions", () => {
+  const pill: CourtyardPillProps = {
+    width: 6,
+    height: 2,
+    radius: 1,
+  }
+
+  const parsed = courtyardPillProps.parse(pill)
+
+  expect(parsed.width).toBe(6)
+  expect(parsed.height).toBe(2)
+  expect(parsed.radius).toBe(1)
+  expect(parsed.strokeWidth).toBeUndefined()
+  expect(parsed.isFilled).toBeUndefined()
+  expect(parsed.hasStroke).toBeUndefined()
+  expect(parsed.isStrokeDashed).toBeUndefined()
+  expect(parsed.color).toBeUndefined()
 })

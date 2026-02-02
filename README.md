@@ -36,7 +36,9 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<constraint />`               | [`ConstraintProps`](#constraintprops-constraint)                                           |
 | `<copperpour />`               | [`CopperPourProps`](#copperpourprops-copperpour)                                           |
 | `<coppertext />`               | [`CopperTextProps`](#coppertextprops-coppertext)                                           |
+| `<courtyardcircle />`          | [`CourtyardCircleProps`](#courtyardcircleprops-courtyardcircle)                            |
 | `<courtyardoutline />`         | [`CourtyardOutlineProps`](#courtyardoutlineprops-courtyardoutline)                         |
+| `<courtyardpill />`            | [`CourtyardPillProps`](#courtyardpillprops-courtyardpill)                                  |
 | `<courtyardrect />`            | [`CourtyardRectProps`](#courtyardrectprops-courtyardrect)                                  |
 | `<crystal />`                  | [`CrystalProps`](#crystalprops-crystal)                                                    |
 | `<currentsource />`            | [`CurrentSourceProps`](#currentsourceprops-currentsource)                                  |
@@ -466,6 +468,14 @@ export type CopperTextProps = z.input<typeof copperTextProps>;
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/copper-text.ts)
 
+### CourtyardCircleProps `<courtyardcircle />`
+
+```ts
+export type CourtyardCircleProps = z.input<typeof courtyardCircleProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-circle.ts)
+
 ### CourtyardOutlineProps `<courtyardoutline />`
 
 ```ts
@@ -473,6 +483,14 @@ export type CourtyardOutlineProps = z.input<typeof courtyardOutlineProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-outline.ts)
+
+### CourtyardPillProps `<courtyardpill />`
+
+```ts
+export type CourtyardPillProps = z.input<typeof courtyardPillProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-pill.ts)
 
 ### CourtyardRectProps `<courtyardrect />`
 

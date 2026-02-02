@@ -1212,6 +1212,21 @@ export const copperTextProps = pcbLayoutProps.extend({
 })
 ```
 
+### courtyard-circle
+
+```typescript
+export const courtyardCircleProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    radius: distance,
+    strokeWidth: distance.optional(),
+    isFilled: z.boolean().optional(),
+    hasStroke: z.boolean().optional(),
+    isStrokeDashed: z.boolean().optional(),
+    color: z.string().optional(),
+  })
+```
+
 ### courtyard-outline
 
 ```typescript
@@ -1231,6 +1246,23 @@ export const courtyardOutlineProps = pcbLayoutProps
     outline: z.array(point),
     strokeWidth: length.optional(),
     isClosed: z.boolean().optional(),
+    isStrokeDashed: z.boolean().optional(),
+    color: z.string().optional(),
+  })
+```
+
+### courtyard-pill
+
+```typescript
+export const courtyardPillProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    width: distance,
+    height: distance,
+    radius: distance,
+    strokeWidth: distance.optional(),
+    isFilled: z.boolean().optional(),
+    hasStroke: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
   })

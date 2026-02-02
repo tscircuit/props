@@ -84,11 +84,6 @@ test("courtyard circle parses radius", () => {
   const parsed = courtyardCircleProps.parse(circle)
 
   expect(parsed.radius).toBe(3)
-  expect(parsed.strokeWidth).toBeUndefined()
-  expect(parsed.isFilled).toBeUndefined()
-  expect(parsed.hasStroke).toBeUndefined()
-  expect(parsed.isStrokeDashed).toBeUndefined()
-  expect(parsed.color).toBeUndefined()
 })
 
 test("courtyard pill parses dimensions", () => {
@@ -103,9 +98,4 @@ test("courtyard pill parses dimensions", () => {
   expect(parsed.width).toBe(6)
   expect(parsed.height).toBe(2)
   expect(parsed.radius).toBe(1)
-  expect(parsed.strokeWidth).toBeUndefined()
-  expect(parsed.isFilled).toBeUndefined()
-  expect(parsed.hasStroke).toBeUndefined()
-  expect(parsed.isStrokeDashed).toBeUndefined()
-  expect(parsed.color).toBeUndefined()
 })

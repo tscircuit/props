@@ -1219,11 +1219,6 @@ export const courtyardCircleProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
     radius: distance,
-    strokeWidth: distance.optional(),
-    isFilled: z.boolean().optional(),
-    hasStroke: z.boolean().optional(),
-    isStrokeDashed: z.boolean().optional(),
-    color: z.string().optional(),
   })
 ```
 
@@ -1260,11 +1255,6 @@ export const courtyardPillProps = pcbLayoutProps
     width: distance,
     height: distance,
     radius: distance,
-    strokeWidth: distance.optional(),
-    isFilled: z.boolean().optional(),
-    hasStroke: z.boolean().optional(),
-    isStrokeDashed: z.boolean().optional(),
-    color: z.string().optional(),
   })
 ```
 

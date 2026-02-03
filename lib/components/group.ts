@@ -446,6 +446,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   schMaxTraceDistance?: Distance
 
   partsEngine?: PartsEngine
+  _subcircuitCachingEnabled?: boolean
 
   /** When autosizing, the board will be made square */
   square?: boolean
@@ -581,6 +582,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   minTraceWidth: length.optional(),
   nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
+  _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),

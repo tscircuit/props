@@ -1926,6 +1926,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   schMaxTraceDistance?: Distance
 
   partsEngine?: PartsEngine
+  _subcircuitCachingEnabled?: boolean
 
   square?: boolean
   emptyArea?: string
@@ -2051,6 +2052,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   minTraceWidth: length.optional(),
   nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
+  _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),

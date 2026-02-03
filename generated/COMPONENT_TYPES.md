@@ -2258,6 +2258,19 @@ export const mosfetPins = [
 ] as const
 ```
 
+### mountedboard
+
+```typescript
+export interface MountedBoardProps extends SubcircuitGroupProps {
+  boardToBoardDistance?: Distance
+  mountOrientation?: "faceDown" | "faceUp"
+}
+export const mountedboardProps = subcircuitGroupProps.extend({
+  boardToBoardDistance: distance.optional(),
+  mountOrientation: z.enum(["faceDown", "faceUp"]).optional(),
+})
+```
+
 ### net
 
 ```typescript

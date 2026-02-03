@@ -45,6 +45,26 @@ test("accepts multiple pcbPaths", () => {
   ])
 })
 
+test("accepts pcbPath via entries with toLayer", () => {
+  const raw: TraceProps = {
+    from: "U1.1",
+    to: "U1.2",
+    pcbPath: [
+      { x: 0, y: 0 },
+      { x: 1, y: 2, via: true, toLayer: "bottom" },
+      { x: 3, y: 4 },
+    ],
+  }
+
+  const parsed = traceProps.parse(raw)
+
+  expect(parsed.pcbPath).toEqual([
+    { x: 0, y: 0 },
+    { x: 1, y: 2, via: true, toLayer: "bottom" },
+    { x: 3, y: 4 },
+  ])
+})
+
 test("supports pcbStraightLine flag", () => {
   const raw: TraceProps = {
     from: "A",

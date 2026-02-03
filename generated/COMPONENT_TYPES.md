@@ -3703,6 +3703,11 @@ export const traceHintProps = z.object({
 export const portRef = z.union([
   z.string(),
   z.custom<{ getPortSelector: () => string }>((v) =>
+.extend({
+    via: z.boolean().optional(),
+    fromLayer: layer_ref.optional(),
+    toLayer: layer_ref.optional(),
+  })
 baseTraceProps.extend({
     path: z.array(portRef),
   }),

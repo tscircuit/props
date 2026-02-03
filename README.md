@@ -58,6 +58,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<jumper />`                   | [`JumperProps`](#jumperprops-jumper)                                                       |
 | `<led />`                      | [`LedProps`](#ledprops-led)                                                                |
 | `<mosfet />`                   | [`MosfetProps`](#mosfetprops-mosfet)                                                       |
+| `<mountedboard />`             | [`MountedBoardProps`](#mountedboardprops-mountedboard)                                     |
 | `<net />`                      | [`NetProps`](#netprops-net)                                                                |
 | `<netalias />`                 | [`NetAliasProps`](#netaliasprops-netalias)                                                 |
 | `<netlabel />`                 | [`NetLabelProps`](#netlabelprops-netlabel)                                                 |
@@ -956,6 +957,17 @@ export interface MosfetProps<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/mosfet.ts)
+
+### MountedBoardProps `<mountedboard />`
+
+```ts
+export interface MountedBoardProps extends SubcircuitGroupProps {
+  boardToBoardDistance?: Distance;
+  mountOrientation?: "faceDown" | "faceUp";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/mountedboard.ts)
 
 ### NetProps `<net />`
 

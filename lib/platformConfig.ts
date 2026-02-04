@@ -94,6 +94,7 @@ export interface PlatformConfig {
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
   nodeModulesResolver?: (modulePath: string) => Promise<string | null>
+  platformFetch?: typeof fetch
 }
 
 const unvalidatedCircuitJson = z.array(z.any()).describe("Circuit JSON")
@@ -166,6 +167,10 @@ const autorouterDefinition = z.object({
     .describe("Create an autorouter instance"),
 })
 
+const platformFetch = z
+  .custom<typeof fetch>((value) => typeof value === "function")
+  .describe("A fetch-like function to use for platform requests")
+
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
   autorouter: autorouterProp.optional(),
@@ -218,6 +223,7 @@ export const platformConfig = z.object({
       "A function that returns a string URL for static files for the project",
     )
     .optional(),
+  platformFetch: platformFetch.optional(),
 }) as z.ZodType<PlatformConfig>
 
 expectTypesMatch<PlatformConfig, z.infer<typeof platformConfig>>(true)

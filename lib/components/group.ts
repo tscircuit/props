@@ -26,6 +26,7 @@ import {
   schematicPinStyle,
   type SchematicPinStyle,
 } from "lib/common/schematicPinStyle"
+import { url } from "lib/common/url"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 
 export const layoutConfig = z.object({
@@ -349,7 +350,7 @@ const pcbAnchorAlignmentAutocomplete = z.custom<
 >((value) => typeof value === "string")
 
 export const autorouterConfig = z.object({
-  serverUrl: z.string().optional(),
+  serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
   serverCacheEnabled: z.boolean().optional(),

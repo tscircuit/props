@@ -21,6 +21,7 @@ import {
 import { pcbStyle, type PcbStyle } from "./pcbStyle"
 import { schStyle, type SchStyle } from "./schStyle"
 import { type SymbolProp, symbolProp } from "./symbolProp"
+import { url } from "./url"
 
 export type PcbPositionMode =
   | "relative_to_group_anchor"
@@ -281,7 +282,7 @@ export const commonComponentProps = commonLayoutProps
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
-    datasheetUrl: z.string().optional(),
+    datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),
     kicadSymbolMetadata: kicadSymbolMetadata.optional(),

@@ -9,6 +9,7 @@ import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
 import { type PcbStyle, pcbStyle } from "./common/pcbStyle"
+import { url } from "./common/url"
 
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]
@@ -175,12 +176,12 @@ export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
   autorouter: autorouterProp.optional(),
   autorouterMap: z.record(z.string(), autorouterDefinition).optional(),
-  registryApiUrl: z.string().optional(),
-  cloudAutorouterUrl: z.string().optional(),
+  registryApiUrl: url.optional(),
+  cloudAutorouterUrl: url.optional(),
   projectName: z.string().optional(),
-  projectBaseUrl: z.string().optional(),
+  projectBaseUrl: url.optional(),
   version: z.string().optional(),
-  url: z.string().optional(),
+  url: url.optional(),
   printBoardInformationToSilkscreen: z.boolean().optional(),
   includeBoardFiles: z
     .array(z.string())

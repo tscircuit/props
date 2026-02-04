@@ -2,6 +2,7 @@ import { z } from "zod"
 import { expectTypesMatch } from "lib/typecheck"
 import { distance, type Distance } from "./distance"
 import { point3 } from "./point3"
+import { url } from "./url"
 import type { ReactElement } from "react"
 
 export const rotationPoint3 = z.object({
@@ -38,7 +39,7 @@ export interface CadModelStl extends CadModelBase {
   stlUrl: string
 }
 export const cadModelStl = cadModelBase.extend({
-  stlUrl: z.string(),
+  stlUrl: url,
 })
 
 export interface CadModelObj extends CadModelBase {
@@ -46,36 +47,36 @@ export interface CadModelObj extends CadModelBase {
   mtlUrl?: string
 }
 export const cadModelObj = cadModelBase.extend({
-  objUrl: z.string(),
-  mtlUrl: z.string().optional(),
+  objUrl: url,
+  mtlUrl: url.optional(),
 })
 
 export interface CadModelGltf extends CadModelBase {
   gltfUrl: string
 }
 export const cadModelGltf = cadModelBase.extend({
-  gltfUrl: z.string(),
+  gltfUrl: url,
 })
 
 export interface CadModelGlb extends CadModelBase {
   glbUrl: string
 }
 export const cadModelGlb = cadModelBase.extend({
-  glbUrl: z.string(),
+  glbUrl: url,
 })
 
 export interface CadModelStep extends CadModelBase {
   stepUrl: string
 }
 export const cadModelStep = cadModelBase.extend({
-  stepUrl: z.string(),
+  stepUrl: url,
 })
 
 export interface CadModelWrl extends CadModelBase {
   wrlUrl: string
 }
 export const cadModelWrl = cadModelBase.extend({
-  wrlUrl: z.string(),
+  wrlUrl: url,
 })
 
 export interface CadModelJscad extends CadModelBase {
@@ -99,7 +100,7 @@ export type CadModelProp =
 
 export const cadModelProp = z.union([
   z.null(),
-  z.string(),
+  url,
   z.custom<ReactElement>((v) => {
     return v && typeof v === "object" && "type" in v && "props" in v
   }),

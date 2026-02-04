@@ -34,39 +34,39 @@ export interface CadModelStl extends CadModelBase {
   stlUrl: string
 }
 export const cadModelStl = cadModelBase.extend({
-  stlUrl: z.string(),
+  stlUrl: url,
 })
 export interface CadModelObj extends CadModelBase {
   objUrl: string
   mtlUrl?: string
 }
 export const cadModelObj = cadModelBase.extend({
-  objUrl: z.string(),
-  mtlUrl: z.string().optional(),
+  objUrl: url,
+  mtlUrl: url.optional(),
 })
 export interface CadModelGltf extends CadModelBase {
   gltfUrl: string
 }
 export const cadModelGltf = cadModelBase.extend({
-  gltfUrl: z.string(),
+  gltfUrl: url,
 })
 export interface CadModelGlb extends CadModelBase {
   glbUrl: string
 }
 export const cadModelGlb = cadModelBase.extend({
-  glbUrl: z.string(),
+  glbUrl: url,
 })
 export interface CadModelStep extends CadModelBase {
   stepUrl: string
 }
 export const cadModelStep = cadModelBase.extend({
-  stepUrl: z.string(),
+  stepUrl: url,
 })
 export interface CadModelWrl extends CadModelBase {
   wrlUrl: string
 }
 export const cadModelWrl = cadModelBase.extend({
-  wrlUrl: z.string(),
+  wrlUrl: url,
 })
 export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
@@ -76,7 +76,7 @@ export const cadModelJscad = cadModelBase.extend({
 })
 export const cadModelProp = z.union([
   z.null(),
-  z.string(),
+  url,
   z.custom<ReactElement>((v) => {
     return v && typeof v === "object" && "type" in v && "props" in v
   }),
@@ -547,7 +547,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
-    datasheetUrl: z.string().optional(),
+    datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),
     kicadSymbolMetadata: kicadSymbolMetadata.optional(),
@@ -748,6 +748,18 @@ export const schematicPinStyle = z.record(
   }),
 ```
 
+### url
+
+```typescript
+export const url = z.preprocess((value) => {
+  if (value && typeof value === "object" && "default" in value) {
+    return (value as { default?: unknown }).default
+  }
+
+  return value
+}, z.string()) as z.ZodType<string, z.ZodTypeDef, string>
+```
+
 ## Available Component Types
 
 ### analogsimulation
@@ -918,8 +930,8 @@ export interface CadModelProps extends CadModelBase {
   pcbZ?: Distance
 }
 const cadModelBaseWithUrl = cadModelBase.extend({
-  modelUrl: z.string(),
-  stepUrl: z.string().optional(),
+  modelUrl: url,
+  stepUrl: url.optional(),
 })
 ```
 
@@ -1870,7 +1882,7 @@ export interface AutorouterConfig {
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 export const autorouterConfig = z.object({
-  serverUrl: z.string().optional(),
+  serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
   serverCacheEnabled: z.boolean().optional(),

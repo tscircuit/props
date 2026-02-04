@@ -1,6 +1,7 @@
 import { distance, pcbCoordinate, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { cadModelBase, type CadModelBase } from "../common/cadModel"
+import { url } from "lib/common/url"
 import { z } from "zod"
 
 export interface CadModelProps extends CadModelBase {
@@ -30,13 +31,13 @@ const pcbPosition = z.object({
 })
 
 const cadModelBaseWithUrl = cadModelBase.extend({
-  modelUrl: z.string(),
-  stepUrl: z.string().optional(),
+  modelUrl: url,
+  stepUrl: url.optional(),
 })
 
 const cadModelObject = cadModelBaseWithUrl.merge(pcbPosition)
 expectTypesMatch<CadModelProps, z.input<typeof cadModelObject>>(true)
 
-export const cadmodelProps = z.union([z.null(), z.string(), cadModelObject])
+export const cadmodelProps = z.union([z.null(), url, cadModelObject])
 
 export type CadModelPropsInput = z.input<typeof cadmodelProps>

@@ -1898,6 +1898,7 @@ export interface PlatformConfig {
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>;
   nodeModulesResolver?: (modulePath: string) => Promise<string | null>;
+  platformFetch?: typeof fetch;
 }
 ```
 

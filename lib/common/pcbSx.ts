@@ -14,10 +14,7 @@ export interface PcbSxValue {
   pcbY?: string | number
 }
 
-export type PcbSx = Record<
-  AutocompleteString<PcbSxSelector>,
-  PcbSxValue
->
+export type PcbSx = Record<AutocompleteString<PcbSxSelector>, PcbSxValue>
 
 export const pcbSxValue = z.object({
   fontSize: length.optional(),

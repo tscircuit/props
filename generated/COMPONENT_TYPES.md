@@ -641,12 +641,14 @@ export const point3 = z.object({
 export interface SchStyle {
   defaultPassiveSize?: "xs" | "sm" | "md" | string | number
   defaultCapacitorOrientation?: "vertical" | "none"
+  inversionCircle?: boolean
 }
 export const schStyle = z.object({
   defaultPassiveSize: z
     .union([z.enum(["xs", "sm", "md"]), distance])
     .optional(),
   defaultCapacitorOrientation: z.enum(["vertical", "none"]).optional(),
+  inversionCircle: z.boolean().optional(),
 })
 ```
 
@@ -2950,7 +2952,6 @@ export const portProps = commonLayoutProps.extend({
   direction: direction,
   connectsTo: z.string().or(z.array(z.string())).optional(),
   kicadPinMetadata: kicadPinMetadata.optional(),
-  isDrawnWithInversionCircle: z.boolean().optional(),
 })
 ```
 

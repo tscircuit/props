@@ -369,6 +369,7 @@ export interface PcbLayoutProps {
   pcbMarginX?: string | number
   pcbMarginY?: string | number
   pcbStyle?: PcbStyle
+  pcbSx?: PcbSx
   pcbRelative?: boolean
   relative?: boolean
 }
@@ -395,6 +396,7 @@ export interface CommonLayoutProps {
   pcbMarginX?: string | number
   pcbMarginY?: string | number
   pcbStyle?: PcbStyle
+  pcbSx?: PcbSx
 
   schMarginTop?: string | number
   schMarginRight?: string | number
@@ -448,6 +450,7 @@ export const pcbLayoutProps = z.object({
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
   pcbStyle: pcbStyle.optional(),
+  pcbSx: pcbSx.optional(),
   pcbRelative: z.boolean().optional(),
   relative: z.boolean().optional(),
 })
@@ -477,6 +480,7 @@ export const commonLayoutProps = z.object({
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
   pcbStyle: pcbStyle.optional(),
+  pcbSx: pcbSx.optional(),
   schMarginTop: distance.optional(),
   schMarginRight: distance.optional(),
   schMarginBottom: distance.optional(),
@@ -613,6 +617,24 @@ export const pcbStyle = z.object({
     ])
     .optional(),
   silkscreenTextVisibility: z.enum(["hidden", "visible", "inherit"]).optional(),
+})
+```
+
+### pcbSx
+
+```typescript
+export interface PcbSxValue {
+  fontSize?: string | number
+  pcbX?: string | number
+  pcbY?: string | number
+}
+export type PcbSx = PcbSxBase & {
+  [K in PcbSxSelector]?: PcbSxValue
+}
+export const pcbSxValue = z.object({
+  fontSize: length.optional(),
+  pcbX: pcbCoordinate.optional(),
+  pcbY: pcbCoordinate.optional(),
 })
 ```
 
@@ -1566,14 +1588,16 @@ export interface FootprintProps {
   children?: any
   originalLayer?: LayerRef
   circuitJson?: any[]
+  src?: FootprintProp
 }
 /**
-   * Serialized circuit JSON describing a precompiled footprint
+   * Can be a footprint or kicad string
    */
 export const footprintProps = z.object({
   children: z.any().optional(),
   originalLayer: layer_ref.default("top").optional(),
   circuitJson: z.array(z.any()).optional(),
+  src: footprintProp.describe("Can be a footprint or kicad string").optional(),
 })
 ```
 
@@ -3189,7 +3213,7 @@ export const schematicPathProps = z.object({
   strokeWidth: distance.optional(),
   strokeColor: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
-  fillColor: z.enum(["red", "blue"]).optional(),
+  fillColor: z.string().optional(),
 })
 export interface SchematicPathProps {
   points?: Point[]
@@ -3197,7 +3221,7 @@ export interface SchematicPathProps {
   strokeWidth?: Distance
   strokeColor?: string
   isFilled?: boolean
-  fillColor?: "red" | "blue"
+  fillColor?: string
 }
 ```
 

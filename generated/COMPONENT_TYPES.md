@@ -987,6 +987,7 @@ export interface PinCompatibleVariant {
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
+  pcbStyle?: PcbStyle
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   showPinAliases?: boolean

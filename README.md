@@ -358,6 +358,10 @@ export interface CapacitorProps<
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
+  /**
+   * PCB styling overrides, for example: pcbStyle: { silkscreenFontSize: "2mm" }
+   */
+  pcbStyle?: PcbStyle;
   manufacturerPartNumber?: string;
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>;
   /**

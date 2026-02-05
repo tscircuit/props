@@ -1,5 +1,6 @@
 import { distance, supplier_name } from "circuit-json"
 import type { Distance } from "lib/common/distance"
+import type { PcbStyle } from "lib/common/pcbStyle"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -39,6 +40,10 @@ export interface PinCompatibleVariant {
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
+  /**
+   * PCB styling overrides, for example: pcbStyle: { silkscreenFontSize: "2mm" }
+   */
+  pcbStyle?: PcbStyle
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   /**

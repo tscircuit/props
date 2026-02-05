@@ -19,6 +19,7 @@ import {
   kicadSymbolMetadata,
 } from "./kicadSymbolMetadata"
 import { pcbStyle, type PcbStyle } from "./pcbStyle"
+import { pcbSx, type PcbSx } from "./pcbSx"
 import { schStyle, type SchStyle } from "./schStyle"
 import { type SymbolProp, symbolProp } from "./symbolProp"
 import { url } from "./url"
@@ -56,6 +57,7 @@ export interface PcbLayoutProps {
   pcbMarginX?: string | number
   pcbMarginY?: string | number
   pcbStyle?: PcbStyle
+  pcbSx?: PcbSx
   /**
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */
@@ -90,6 +92,7 @@ export interface CommonLayoutProps {
   pcbMarginX?: string | number
   pcbMarginY?: string | number
   pcbStyle?: PcbStyle
+  pcbSx?: PcbSx
 
   schMarginTop?: string | number
   schMarginRight?: string | number
@@ -150,6 +153,7 @@ export const pcbLayoutProps = z.object({
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
   pcbStyle: pcbStyle.optional(),
+  pcbSx: pcbSx.optional(),
   pcbRelative: z.boolean().optional(),
   relative: z.boolean().optional(),
 })
@@ -182,6 +186,7 @@ export const commonLayoutProps = z.object({
   pcbMarginX: distance.optional(),
   pcbMarginY: distance.optional(),
   pcbStyle: pcbStyle.optional(),
+  pcbSx: pcbSx.optional(),
   schMarginTop: distance.optional(),
   schMarginRight: distance.optional(),
   schMarginBottom: distance.optional(),

@@ -25,6 +25,9 @@ export const pcbSxValue = z.object({
   pcbY: pcbCoordinate.optional(),
 })
 
-export const pcbSx = z.record(z.string(), pcbSxValue)
+export const pcbSx = z.record(
+  z.string(),
+  pcbSxValue,
+) as unknown as z.ZodType<PcbSx>
 
-expectTypesMatch<PcbSxBase, z.input<typeof pcbSx>>(true)
+expectTypesMatch<PcbSx, z.input<typeof pcbSx>>(true)

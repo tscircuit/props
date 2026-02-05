@@ -2,7 +2,6 @@ import { length } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
 import { pcbCoordinate } from "./distance"
 import { z } from "zod"
-import type { AutocompleteString } from "./autocomplete"
 
 export type PcbSxSelector =
   | "& footprint[src^='kicad:'] silkscreentext"
@@ -14,7 +13,11 @@ export interface PcbSxValue {
   pcbY?: string | number
 }
 
-export type PcbSx = Record<AutocompleteString<PcbSxSelector>, PcbSxValue>
+type PcbSxBase = Record<string, PcbSxValue>
+
+export type PcbSx = PcbSxBase & {
+  [K in PcbSxSelector]?: PcbSxValue
+}
 
 export const pcbSxValue = z.object({
   fontSize: length.optional(),
@@ -22,9 +25,6 @@ export const pcbSxValue = z.object({
   pcbY: pcbCoordinate.optional(),
 })
 
-export const pcbSx = z.record(
-  z.string() as z.ZodType<AutocompleteString<PcbSxSelector>>,
-  pcbSxValue,
-)
+export const pcbSx = z.record(z.string(), pcbSxValue)
 
-expectTypesMatch<PcbSx, z.input<typeof pcbSx>>(true)
+expectTypesMatch<PcbSxBase, z.input<typeof pcbSx>>(true)

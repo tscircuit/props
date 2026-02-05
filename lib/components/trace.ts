@@ -1,4 +1,4 @@
-import { distance, route_hint_point } from "circuit-json"
+import { distance, layer_ref, route_hint_point } from "circuit-json"
 import { z } from "zod"
 import { point } from "../common/point"
 
@@ -9,7 +9,31 @@ export const portRef = z.union([
   ),
 ])
 
-const pcbPath = z.array(z.union([point, z.string()]))
+const pcbPathPoint = point
+  .extend({
+    via: z.boolean().optional(),
+    fromLayer: layer_ref.optional(),
+    toLayer: layer_ref.optional(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.via) {
+      if (!value.toLayer) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "toLayer is required when via is true",
+          path: ["toLayer"],
+        })
+      }
+    } else if (value.fromLayer || value.toLayer) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "fromLayer/toLayer are only allowed when via is true",
+        path: ["via"],
+      })
+    }
+  })
+
+const pcbPath = z.array(z.union([pcbPathPoint, z.string()]))
 
 const baseTraceProps = z.object({
   key: z.string().optional(),

@@ -36,7 +36,9 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<constraint />`               | [`ConstraintProps`](#constraintprops-constraint)                                           |
 | `<copperpour />`               | [`CopperPourProps`](#copperpourprops-copperpour)                                           |
 | `<coppertext />`               | [`CopperTextProps`](#coppertextprops-coppertext)                                           |
+| `<courtyardcircle />`          | [`CourtyardCircleProps`](#courtyardcircleprops-courtyardcircle)                            |
 | `<courtyardoutline />`         | [`CourtyardOutlineProps`](#courtyardoutlineprops-courtyardoutline)                         |
+| `<courtyardpill />`            | [`CourtyardPillProps`](#courtyardpillprops-courtyardpill)                                  |
 | `<courtyardrect />`            | [`CourtyardRectProps`](#courtyardrectprops-courtyardrect)                                  |
 | `<crystal />`                  | [`CrystalProps`](#crystalprops-crystal)                                                    |
 | `<currentsource />`            | [`CurrentSourceProps`](#currentsourceprops-currentsource)                                  |
@@ -56,6 +58,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<jumper />`                   | [`JumperProps`](#jumperprops-jumper)                                                       |
 | `<led />`                      | [`LedProps`](#ledprops-led)                                                                |
 | `<mosfet />`                   | [`MosfetProps`](#mosfetprops-mosfet)                                                       |
+| `<mountedboard />`             | [`MountedBoardProps`](#mountedboardprops-mountedboard)                                     |
 | `<net />`                      | [`NetProps`](#netprops-net)                                                                |
 | `<netalias />`                 | [`NetAliasProps`](#netaliasprops-netalias)                                                 |
 | `<netlabel />`                 | [`NetLabelProps`](#netlabelprops-netlabel)                                                 |
@@ -466,6 +469,14 @@ export type CopperTextProps = z.input<typeof copperTextProps>;
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/copper-text.ts)
 
+### CourtyardCircleProps `<courtyardcircle />`
+
+```ts
+export type CourtyardCircleProps = z.input<typeof courtyardCircleProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-circle.ts)
+
 ### CourtyardOutlineProps `<courtyardoutline />`
 
 ```ts
@@ -473,6 +484,14 @@ export type CourtyardOutlineProps = z.input<typeof courtyardOutlineProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-outline.ts)
+
+### CourtyardPillProps `<courtyardpill />`
+
+```ts
+export type CourtyardPillProps = z.input<typeof courtyardPillProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-pill.ts)
 
 ### CourtyardRectProps `<courtyardrect />`
 
@@ -938,6 +957,17 @@ export interface MosfetProps<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/mosfet.ts)
+
+### MountedBoardProps `<mountedboard />`
+
+```ts
+export interface MountedBoardProps extends SubcircuitGroupProps {
+  boardToBoardDistance?: Distance;
+  mountOrientation?: "faceDown" | "faceUp";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/mountedboard.ts)
 
 ### NetProps `<net />`
 
@@ -1868,6 +1898,7 @@ export interface PlatformConfig {
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>;
   nodeModulesResolver?: (modulePath: string) => Promise<string | null>;
+  platformFetch?: typeof fetch;
 }
 ```
 

@@ -34,39 +34,39 @@ export interface CadModelStl extends CadModelBase {
   stlUrl: string
 }
 export const cadModelStl = cadModelBase.extend({
-  stlUrl: z.string(),
+  stlUrl: url,
 })
 export interface CadModelObj extends CadModelBase {
   objUrl: string
   mtlUrl?: string
 }
 export const cadModelObj = cadModelBase.extend({
-  objUrl: z.string(),
-  mtlUrl: z.string().optional(),
+  objUrl: url,
+  mtlUrl: url.optional(),
 })
 export interface CadModelGltf extends CadModelBase {
   gltfUrl: string
 }
 export const cadModelGltf = cadModelBase.extend({
-  gltfUrl: z.string(),
+  gltfUrl: url,
 })
 export interface CadModelGlb extends CadModelBase {
   glbUrl: string
 }
 export const cadModelGlb = cadModelBase.extend({
-  glbUrl: z.string(),
+  glbUrl: url,
 })
 export interface CadModelStep extends CadModelBase {
   stepUrl: string
 }
 export const cadModelStep = cadModelBase.extend({
-  stepUrl: z.string(),
+  stepUrl: url,
 })
 export interface CadModelWrl extends CadModelBase {
   wrlUrl: string
 }
 export const cadModelWrl = cadModelBase.extend({
-  wrlUrl: z.string(),
+  wrlUrl: url,
 })
 export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
@@ -76,7 +76,7 @@ export const cadModelJscad = cadModelBase.extend({
 })
 export const cadModelProp = z.union([
   z.null(),
-  z.string(),
+  url,
   z.custom<ReactElement>((v) => {
     return v && typeof v === "object" && "type" in v && "props" in v
   }),
@@ -547,7 +547,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
-    datasheetUrl: z.string().optional(),
+    datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),
     kicadSymbolMetadata: kicadSymbolMetadata.optional(),
@@ -748,6 +748,18 @@ export const schematicPinStyle = z.record(
   }),
 ```
 
+### url
+
+```typescript
+export const url = z.preprocess((value) => {
+  if (value && typeof value === "object" && "default" in value) {
+    return (value as { default?: unknown }).default
+  }
+
+  return value
+}, z.string()) as z.ZodType<string, z.ZodTypeDef, string>
+```
+
 ## Available Component Types
 
 ### analogsimulation
@@ -918,8 +930,8 @@ export interface CadModelProps extends CadModelBase {
   pcbZ?: Distance
 }
 const cadModelBaseWithUrl = cadModelBase.extend({
-  modelUrl: z.string(),
-  stepUrl: z.string().optional(),
+  modelUrl: url,
+  stepUrl: url.optional(),
 })
 ```
 
@@ -1212,6 +1224,16 @@ export const copperTextProps = pcbLayoutProps.extend({
 })
 ```
 
+### courtyard-circle
+
+```typescript
+export const courtyardCircleProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    radius: distance,
+  })
+```
+
 ### courtyard-outline
 
 ```typescript
@@ -1233,6 +1255,18 @@ export const courtyardOutlineProps = pcbLayoutProps
     isClosed: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
+  })
+```
+
+### courtyard-pill
+
+```typescript
+export const courtyardPillProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    width: distance,
+    height: distance,
+    radius: distance,
   })
 ```
 
@@ -1848,7 +1882,7 @@ export interface AutorouterConfig {
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 export const autorouterConfig = z.object({
-  serverUrl: z.string().optional(),
+  serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
   serverCacheEnabled: z.boolean().optional(),
@@ -1904,6 +1938,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   schMaxTraceDistance?: Distance
 
   partsEngine?: PartsEngine
+  _subcircuitCachingEnabled?: boolean
 
   square?: boolean
   emptyArea?: string
@@ -2029,6 +2064,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   minTraceWidth: length.optional(),
   nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
+  _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
@@ -2234,6 +2270,19 @@ export const mosfetPins = [
   "pin3",
   "gate",
 ] as const
+```
+
+### mountedboard
+
+```typescript
+export interface MountedBoardProps extends SubcircuitGroupProps {
+  boardToBoardDistance?: Distance
+  mountOrientation?: "faceDown" | "faceUp"
+}
+export const mountedboardProps = subcircuitGroupProps.extend({
+  boardToBoardDistance: distance.optional(),
+  mountOrientation: z.enum(["faceDown", "faceUp"]).optional(),
+})
 ```
 
 ### net
@@ -3669,6 +3718,11 @@ export const traceHintProps = z.object({
 export const portRef = z.union([
   z.string(),
   z.custom<{ getPortSelector: () => string }>((v) =>
+.extend({
+    via: z.boolean().optional(),
+    fromLayer: layer_ref.optional(),
+    toLayer: layer_ref.optional(),
+  })
 baseTraceProps.extend({
     path: z.array(portRef),
   }),

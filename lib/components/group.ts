@@ -26,6 +26,7 @@ import {
   schematicPinStyle,
   type SchematicPinStyle,
 } from "lib/common/schematicPinStyle"
+import { url } from "lib/common/url"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 
 export const layoutConfig = z.object({
@@ -349,7 +350,7 @@ const pcbAnchorAlignmentAutocomplete = z.custom<
 >((value) => typeof value === "string")
 
 export const autorouterConfig = z.object({
-  serverUrl: z.string().optional(),
+  serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
   serverCacheEnabled: z.boolean().optional(),
@@ -446,6 +447,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   schMaxTraceDistance?: Distance
 
   partsEngine?: PartsEngine
+  _subcircuitCachingEnabled?: boolean
 
   /** When autosizing, the board will be made square */
   square?: boolean
@@ -581,6 +583,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   minTraceWidth: length.optional(),
   nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
+  _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),

@@ -1091,6 +1091,12 @@ export interface MosfetProps<PinLabel extends string = string>
 }
 
 
+export interface MountedBoardProps extends SubcircuitGroupProps {
+  boardToBoardDistance?: Distance
+  mountOrientation?: "faceDown" | "faceUp"
+}
+
+
 export interface NetAliasProps {
   net?: string
   connection?: string
@@ -1576,6 +1582,7 @@ export interface PlatformConfig {
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
   nodeModulesResolver?: (modulePath: string) => Promise<string | null>
+  platformFetch?: typeof fetch
 }
 
 
@@ -1907,6 +1914,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   schMaxTraceDistance?: Distance
 
   partsEngine?: PartsEngine
+  _subcircuitCachingEnabled?: boolean
 
   /** When autosizing, the board will be made square */
   square?: boolean

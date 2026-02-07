@@ -516,6 +516,7 @@ export interface CommonLayoutProps {
   pcbMarginX?: string | number
   pcbMarginY?: string | number
   pcbStyle?: PcbStyle
+  pcbSx?: PcbSx
 
   schMarginTop?: string | number
   schMarginRight?: string | number
@@ -761,6 +762,10 @@ export interface FootprintProps {
    * Serialized circuit JSON describing a precompiled footprint
    */
   circuitJson?: any[]
+  /**
+   * Can be a footprint or kicad string
+   */
+  src?: FootprintProp
 }
 
 
@@ -1211,6 +1216,7 @@ export interface PcbLayoutProps {
   pcbMarginX?: string | number
   pcbMarginY?: string | number
   pcbStyle?: PcbStyle
+  pcbSx?: PcbSx
   /**
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */
@@ -1337,6 +1343,13 @@ export interface PcbStyle {
         offsetY: number
       }
   silkscreenTextVisibility?: "hidden" | "visible" | "inherit"
+}
+
+
+export interface PcbSxValue {
+  fontSize?: string | number
+  pcbX?: string | number
+  pcbY?: string | number
 }
 
 
@@ -1766,7 +1779,7 @@ export interface SchematicPathProps {
   strokeWidth?: Distance
   strokeColor?: string
   isFilled?: boolean
-  fillColor?: "red" | "blue"
+  fillColor?: string
 }
 
 

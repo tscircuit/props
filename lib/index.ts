@@ -31,6 +31,7 @@ export * from "./components/interconnect"
 export * from "./components/fuse"
 export * from "./components/platedhole"
 export * from "./common/pcbStyle"
+export * from "./common/pcbSx"
 export * from "./common/schStyle"
 
 export * from "./components/resistor"

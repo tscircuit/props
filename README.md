@@ -678,6 +678,10 @@ export interface FootprintProps {
    * Serialized circuit JSON describing a precompiled footprint
    */
   circuitJson?: any[];
+  /**
+   * Can be a footprint or kicad string
+   */
+  src?: FootprintProp;
 }
 ```
 
@@ -1489,7 +1493,7 @@ export interface SchematicPathProps {
   strokeWidth?: Distance;
   strokeColor?: string;
   isFilled?: boolean;
-  fillColor?: "red" | "blue";
+  fillColor?: string;
 }
 ```
 

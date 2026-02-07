@@ -1,6 +1,7 @@
 import { type LayerRef, layer_ref } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import { type FootprintProp, footprintProp } from "../common/footprintProp"
 
 export interface FootprintProps {
   children?: any
@@ -19,12 +20,17 @@ export interface FootprintProps {
    * Serialized circuit JSON describing a precompiled footprint
    */
   circuitJson?: any[]
+  /**
+   * Can be a footprint or kicad string
+   */
+  src?: FootprintProp
 }
 
 export const footprintProps = z.object({
   children: z.any().optional(),
   originalLayer: layer_ref.default("top").optional(),
   circuitJson: z.array(z.any()).optional(),
+  src: footprintProp.describe("Can be a footprint or kicad string").optional(),
 })
 
 export type FootprintPropsInput = z.input<typeof footprintProps>

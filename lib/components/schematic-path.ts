@@ -10,7 +10,7 @@ export const schematicPathProps = z.object({
   strokeWidth: distance.optional(),
   strokeColor: z.string().optional(),
   isFilled: z.boolean().optional().default(false),
-  fillColor: z.enum(["red", "blue"]).optional(),
+  fillColor: z.string().optional(),
 })
 
 export interface SchematicPathProps {
@@ -19,7 +19,7 @@ export interface SchematicPathProps {
   strokeWidth?: Distance
   strokeColor?: string
   isFilled?: boolean
-  fillColor?: "red" | "blue"
+  fillColor?: string
 }
 
 export type InferredSchematicPathProps = z.input<typeof schematicPathProps>

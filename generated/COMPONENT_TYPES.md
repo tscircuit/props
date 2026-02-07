@@ -2974,6 +2974,7 @@ export const portProps = commonLayoutProps.extend({
   direction: direction,
   connectsTo: z.string().or(z.array(z.string())).optional(),
   kicadPinMetadata: kicadPinMetadata.optional(),
+  hasInversionCircle: z.boolean().optional(),
 })
 ```
 

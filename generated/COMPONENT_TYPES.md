@@ -542,6 +542,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  allowOffBoard?: boolean
   obstructsWithinBounds?: boolean
   showAsTranslucentModel?: boolean
   mfn?: string
@@ -558,6 +559,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    allowOffBoard: z
+      .boolean()
+      .optional()
+      .describe(
+        "Allows the PCB component to hang off the board (e.g. for USB ports or displays)",
+      ),
     obstructsWithinBounds: z
       .boolean()
       .optional()

@@ -965,7 +965,8 @@ export interface MosfetProps<
 ### MountedBoardProps `<mountedboard />`
 
 ```ts
-export interface MountedBoardProps extends SubcircuitGroupProps {
+export interface MountedBoardProps
+  extends SubcircuitGroupProps, MountedBoardChipProps {
   boardToBoardDistance?: Distance;
   mountOrientation?: "faceDown" | "faceUp";
 }

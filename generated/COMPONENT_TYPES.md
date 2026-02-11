@@ -2981,6 +2981,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
 export const portProps = commonLayoutProps.extend({
   name: z.string(),
   pinNumber: z.number().optional(),
+  schStemLength: z.number().optional(),
   aliases: z.array(z.string()).optional(),
   direction: direction,
   connectsTo: z.string().or(z.array(z.string())).optional(),

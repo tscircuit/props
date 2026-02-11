@@ -478,6 +478,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
   symbolName?: string
   doNotPlace?: boolean
   /**
+   * Allows the PCB component to hang off the board (e.g. for USB ports or displays)
+   */
+  allowOffBoard?: boolean
+  /**
    * Does this component take up all the space within its bounds on a layer. This is generally true
    * except for when separated pin headers are being represented by a single component (in which case,
    * chips can be placed between the pin headers) or for tall modules where chips fit underneath.

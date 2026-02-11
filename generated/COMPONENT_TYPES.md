@@ -2299,11 +2299,22 @@ export const mosfetPins = [
 ### mountedboard
 
 ```typescript
-export interface MountedBoardProps extends SubcircuitGroupProps {
+export interface MountedBoardProps
+  extends SubcircuitGroupProps,
+    MountedBoardChipProps {
   boardToBoardDistance?: Distance
   mountOrientation?: "faceDown" | "faceUp"
 }
 export const mountedboardProps = subcircuitGroupProps.extend({
+  manufacturerPartNumber: chipProps.shape.manufacturerPartNumber,
+  pinLabels: chipProps.shape.pinLabels,
+  showPinAliases: chipProps.shape.showPinAliases,
+  pcbPinLabels: chipProps.shape.pcbPinLabels,
+  schPortArrangement: chipProps.shape.schPortArrangement,
+  pinCompatibleVariants: chipProps.shape.pinCompatibleVariants,
+  noSchematicRepresentation: chipProps.shape.noSchematicRepresentation,
+  internallyConnectedPins: chipProps.shape.internallyConnectedPins,
+  externallyConnectedPins: chipProps.shape.externallyConnectedPins,
   boardToBoardDistance: distance.optional(),
   mountOrientation: z.enum(["faceDown", "faceUp"]).optional(),
 })

@@ -1096,7 +1096,9 @@ export interface MosfetProps<PinLabel extends string = string>
 }
 
 
-export interface MountedBoardProps extends SubcircuitGroupProps {
+export interface MountedBoardProps
+  extends SubcircuitGroupProps,
+    MountedBoardChipProps {
   boardToBoardDistance?: Distance
   mountOrientation?: "faceDown" | "faceUp"
 }

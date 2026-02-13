@@ -542,6 +542,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  allowOffBoard?: boolean
   obstructsWithinBounds?: boolean
   showAsTranslucentModel?: boolean
   mfn?: string
@@ -558,6 +559,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    allowOffBoard: z
+      .boolean()
+      .optional()
+      .describe(
+        "Allows the PCB component to hang off the board (e.g. for USB ports or displays)",
+      ),
     obstructsWithinBounds: z
       .boolean()
       .optional()
@@ -2299,11 +2306,22 @@ export const mosfetPins = [
 ### mountedboard
 
 ```typescript
-export interface MountedBoardProps extends SubcircuitGroupProps {
+export interface MountedBoardProps
+  extends SubcircuitGroupProps,
+    MountedBoardChipProps {
   boardToBoardDistance?: Distance
   mountOrientation?: "faceDown" | "faceUp"
 }
 export const mountedboardProps = subcircuitGroupProps.extend({
+  manufacturerPartNumber: chipProps.shape.manufacturerPartNumber,
+  pinLabels: chipProps.shape.pinLabels,
+  showPinAliases: chipProps.shape.showPinAliases,
+  pcbPinLabels: chipProps.shape.pcbPinLabels,
+  schPortArrangement: chipProps.shape.schPortArrangement,
+  pinCompatibleVariants: chipProps.shape.pinCompatibleVariants,
+  noSchematicRepresentation: chipProps.shape.noSchematicRepresentation,
+  internallyConnectedPins: chipProps.shape.internallyConnectedPins,
+  externallyConnectedPins: chipProps.shape.externallyConnectedPins,
   boardToBoardDistance: distance.optional(),
   mountOrientation: z.enum(["faceDown", "faceUp"]).optional(),
 })
@@ -2970,6 +2988,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
 export const portProps = commonLayoutProps.extend({
   name: z.string(),
   pinNumber: z.number().optional(),
+  schStemLength: z.number().optional(),
   aliases: z.array(z.string()).optional(),
   direction: direction,
   connectsTo: z.string().or(z.array(z.string())).optional(),

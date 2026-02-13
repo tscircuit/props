@@ -21,7 +21,8 @@ export const resistorPinLabels = ["pin1", "pin2", "pos", "neg"] as const
 export type ResistorPinLabels = (typeof resistorPinLabels)[number]
 
 export interface ResistorProps<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
+  extends Omit<CommonComponentProps<PinLabel>, "name"> {
+  name?: string
   resistance: number | string
   tolerance?: number | string
   pullupFor?: string
@@ -34,6 +35,7 @@ export interface ResistorProps<PinLabel extends string = string>
 }
 
 export const resistorProps = commonComponentProps.extend({
+  name: z.string().optional(),
   resistance,
   tolerance: z
     .union([z.string(), z.number()])

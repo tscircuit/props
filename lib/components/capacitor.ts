@@ -44,23 +44,21 @@ export interface CapacitorProps<PinLabel extends string = string>
   connections?: Connections<CapacitorPinLabels>
 }
 
-export const capacitorProps = commonComponentProps
-  .omit({ name: true })
-  .extend({
-    capacitance,
-    name: z.string().optional(),
-    maxVoltageRating: voltage.optional(),
-    schShowRatings: z.boolean().optional().default(false),
-    polarized: z.boolean().optional().default(false),
-    decouplingFor: z.string().optional(),
-    decouplingTo: z.string().optional(),
-    bypassFor: z.string().optional(),
-    bypassTo: z.string().optional(),
-    maxDecouplingTraceLength: z.number().optional(),
-    schOrientation: schematicOrientation.optional(),
-    schSize: schematicSymbolSize.optional(),
-    connections: createConnectionsProp(capacitorPinLabels).optional(),
-  })
+export const capacitorProps = commonComponentProps.omit({ name: true }).extend({
+  capacitance,
+  name: z.string().optional(),
+  maxVoltageRating: voltage.optional(),
+  schShowRatings: z.boolean().optional().default(false),
+  polarized: z.boolean().optional().default(false),
+  decouplingFor: z.string().optional(),
+  decouplingTo: z.string().optional(),
+  bypassFor: z.string().optional(),
+  bypassTo: z.string().optional(),
+  maxDecouplingTraceLength: z.number().optional(),
+  schOrientation: schematicOrientation.optional(),
+  schSize: schematicSymbolSize.optional(),
+  connections: createConnectionsProp(capacitorPinLabels).optional(),
+})
 export const capacitorPins = lrPolarPins
 
 expectTypesMatch<CapacitorProps, z.input<typeof capacitorProps>>(true)

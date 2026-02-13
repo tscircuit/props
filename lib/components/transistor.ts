@@ -1,11 +1,11 @@
+import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
 } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
-import { z } from "zod"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
-import { createConnectionsProp } from "lib/common/connectionsProp"
+import { z } from "zod"
 
 export const transistorPinsLabels = [
   "pin1",
@@ -21,15 +21,19 @@ export const transistorPinsLabels = [
 export type transistorPinsLabels = (typeof transistorPinsLabels)[number]
 
 export interface TransistorProps<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
+  extends Omit<CommonComponentProps<PinLabel>, "name"> {
+  name?: string
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
   connections?: Connections<transistorPinsLabels>
 }
 
-export const transistorProps = commonComponentProps.extend({
-  type: z.enum(["npn", "pnp", "bjt", "jfet", "mosfet", "igbt"]),
-  connections: createConnectionsProp(transistorPinsLabels).optional(),
-})
+export const transistorProps = commonComponentProps
+  .omit({ name: true })
+  .extend({
+    name: z.string().optional(),
+    type: z.enum(["npn", "pnp", "bjt", "jfet", "mosfet", "igbt"]),
+    connections: createConnectionsProp(transistorPinsLabels).optional(),
+  })
 
 export const transistorPins = [
   "pin1",

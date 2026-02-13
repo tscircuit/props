@@ -3,12 +3,12 @@ import {
   commonComponentProps,
   lrPolarPins,
 } from "lib/common/layout"
-import { z } from "zod"
-import { expectTypesMatch } from "lib/typecheck"
 import {
-  schematicOrientation,
   type SchematicOrientation,
+  schematicOrientation,
 } from "lib/common/schematicOrientation"
+import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 const diodeConnectionKeys = z.enum([
   "anode",
@@ -36,7 +36,9 @@ const diodeVariant = z.enum([
 ])
 
 export const diodeProps = commonComponentProps
+  .omit({ name: true })
   .extend({
+    name: z.string().optional(),
     connections: connectionsProp.optional(),
     variant: diodeVariant.optional().default("standard"),
     standard: z.boolean().optional(),
@@ -116,7 +118,8 @@ export const diodePins = lrPolarPins
 export type DiodePinLabels = (typeof diodePins)[number]
 
 export interface DiodeProps<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
+  extends Omit<CommonComponentProps<PinLabel>, "name"> {
+  name?: string
   connections?: {
     anode?: string | string[] | readonly string[]
     cathode?: string | string[] | readonly string[]

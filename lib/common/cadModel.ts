@@ -23,6 +23,7 @@ export interface CadModelBase {
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
   zOffsetFromSurface?: Distance
+  showAsTranslucent?: boolean
 }
 
 export const cadModelBase = z.object({
@@ -31,6 +32,7 @@ export const cadModelBase = z.object({
   size: point3.optional(),
   modelUnitToMmScale: distance.optional(),
   zOffsetFromSurface: distance.optional(),
+  showAsTranslucent: z.boolean().optional(),
 })
 
 expectTypesMatch<CadModelBase, z.input<typeof cadModelBase>>(true)

@@ -100,10 +100,10 @@ test("cadmodel accepts zOffsetFromSurface", () => {
   expect(parsed.zOffsetFromSurface).toBe(0)
 })
 
-test("cadmodel accepts showAsTranslucent", () => {
+test("cadmodel accepts showAsTranslucentModel", () => {
   const raw: CadModelPropsInput = {
     modelUrl: "https://example.com/model.stl",
-    showAsTranslucent: true,
+    showAsTranslucentModel: true,
   }
 
   const parsed = cadmodelProps.parse(raw) as Exclude<
@@ -111,5 +111,5 @@ test("cadmodel accepts showAsTranslucent", () => {
     null | string
   >
 
-  expect(parsed.showAsTranslucent).toBe(true)
+  expect(parsed.showAsTranslucentModel).toBe(true)
 })

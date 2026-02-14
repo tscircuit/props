@@ -1,15 +1,16 @@
-import { ms, frequency } from "circuit-json"
+import { frequency, ms } from "circuit-json"
+import { connectionTarget } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
 } from "lib/common/layout"
-import { connectionTarget } from "lib/common/connectionsProp"
-import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 
 import { z } from "zod"
 
-export interface SwitchProps extends CommonComponentProps {
+export interface SwitchProps extends Omit<CommonComponentProps, "name"> {
+  name?: string
   type?: "spst" | "spdt" | "dpst" | "dpdt"
   isNormallyClosed?: boolean
   spdt?: boolean
@@ -25,7 +26,9 @@ export interface SwitchProps extends CommonComponentProps {
 }
 
 export const switchProps = commonComponentProps
+  .omit({ name: true })
   .extend({
+    name: z.string().optional(),
     type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
     isNormallyClosed: z.boolean().optional().default(false),
     spst: z.boolean().optional(),

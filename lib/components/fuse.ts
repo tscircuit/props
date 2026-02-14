@@ -1,13 +1,13 @@
-import { z } from "zod"
 import {
   type CommonComponentProps,
   commonComponentProps,
 } from "lib/common/layout"
 import {
-  schematicOrientation,
   type SchematicOrientation,
+  schematicOrientation,
 } from "lib/common/schematicOrientation"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
+import { z } from "zod"
 
 /**
  * Pin labels for fuse component
@@ -17,7 +17,8 @@ export const fusePinLabels = ["pin1", "pin2"] as const
 export type FusePinLabels = (typeof fusePinLabels)[number]
 
 export interface FuseProps<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
+  extends Omit<CommonComponentProps<PinLabel>, "name"> {
+  name?: string
   /**
    * Current rating of the fuse in amperes
    */
@@ -44,7 +45,8 @@ export interface FuseProps<PinLabel extends string = string>
 /**
  * Schema for validating fuse props
  */
-export const fuseProps = commonComponentProps.extend({
+export const fuseProps = commonComponentProps.omit({ name: true }).extend({
+  name: z.string().optional(),
   currentRating: z.union([z.number(), z.string()]),
   voltageRating: z.union([z.number(), z.string()]).optional(),
   schShowRatings: z.boolean().optional(),

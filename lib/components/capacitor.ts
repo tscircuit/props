@@ -28,7 +28,8 @@ export const capacitorPinLabels = [
 export type CapacitorPinLabels = (typeof capacitorPinLabels)[number]
 
 export interface CapacitorProps<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
+  extends Omit<CommonComponentProps<PinLabel>, "name"> {
+  name?: string
   capacitance: number | string
   maxVoltageRating?: number | string
   schShowRatings?: boolean
@@ -43,8 +44,9 @@ export interface CapacitorProps<PinLabel extends string = string>
   connections?: Connections<CapacitorPinLabels>
 }
 
-export const capacitorProps = commonComponentProps.extend({
+export const capacitorProps = commonComponentProps.omit({ name: true }).extend({
   capacitance,
+  name: z.string().optional(),
   maxVoltageRating: voltage.optional(),
   schShowRatings: z.boolean().optional().default(false),
   polarized: z.boolean().optional().default(false),

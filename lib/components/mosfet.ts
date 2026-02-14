@@ -1,17 +1,19 @@
+import { z } from "zod"
 import {
   type CommonComponentProps,
   commonComponentProps,
 } from "../common/layout"
 import { expectTypesMatch } from "../typecheck"
-import { z } from "zod"
 
 export interface MosfetProps<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
+  extends Omit<CommonComponentProps<PinLabel>, "name"> {
+  name?: string
   channelType: "n" | "p"
   mosfetMode: "enhancement" | "depletion"
 }
 
-export const mosfetProps = commonComponentProps.extend({
+export const mosfetProps = commonComponentProps.omit({ name: true }).extend({
+  name: z.string().optional(),
   channelType: z.enum(["n", "p"]),
   mosfetMode: z.enum(["enhancement", "depletion"]),
 })

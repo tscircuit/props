@@ -1,27 +1,28 @@
 import { distance } from "circuit-json"
+import { connectionTarget } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
 } from "lib/common/layout"
 import {
-  schematicPinArrangement,
   type SchematicPortArrangement,
+  schematicPinArrangement,
   schematicPortArrangement,
 } from "lib/common/schematicPinDefinitions"
+import {
+  type SchematicPinLabel,
+  schematicPinLabel,
+} from "lib/common/schematicPinLabel"
 import {
   type SchematicPinStyle,
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
-import { connectionTarget } from "lib/common/connectionsProp"
-import {
-  schematicPinLabel,
-  type SchematicPinLabel,
-} from "lib/common/schematicPinLabel"
-import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
 
-export interface JumperProps extends CommonComponentProps {
+export interface JumperProps extends Omit<CommonComponentProps, "name"> {
+  name?: string
   manufacturerPartNumber?: string
   pinLabels?: Record<
     number | SchematicPinLabel,
@@ -56,7 +57,8 @@ export interface JumperProps extends CommonComponentProps {
   connections?: Connections<string>
 }
 
-export const jumperProps = commonComponentProps.extend({
+export const jumperProps = commonComponentProps.omit({ name: true }).extend({
+  name: z.string().optional(),
   manufacturerPartNumber: z.string().optional(),
   pinLabels: z
     .record(

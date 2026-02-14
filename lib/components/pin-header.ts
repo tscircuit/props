@@ -1,30 +1,31 @@
 import { distance } from "circuit-json"
+import { connectionTarget } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
 } from "lib/common/layout"
 import {
-  schematicPinArrangement,
+  type PcbOrientation,
+  pcbOrientation as pcbOrientationProp,
+} from "lib/common/pcbOrientation"
+import {
   type SchematicPinArrangement,
+  schematicPinArrangement,
 } from "lib/common/schematicPinDefinitions"
+import {
+  type SchematicPinLabel,
+  schematicPinLabel,
+} from "lib/common/schematicPinLabel"
 import {
   type SchematicPinStyle,
   schematicPinStyle,
 } from "lib/common/schematicPinStyle"
-import { connectionTarget } from "lib/common/connectionsProp"
-import {
-  schematicPinLabel,
-  type SchematicPinLabel,
-} from "lib/common/schematicPinLabel"
-import {
-  pcbOrientation as pcbOrientationProp,
-  type PcbOrientation,
-} from "lib/common/pcbOrientation"
-import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
 
-export interface PinHeaderProps extends CommonComponentProps {
+export interface PinHeaderProps extends Omit<CommonComponentProps, "name"> {
+  name?: string
   /**
    * Number of pins in the header
    */
@@ -121,7 +122,8 @@ export interface PinHeaderProps extends CommonComponentProps {
   schHeight?: number | string
 }
 
-export const pinHeaderProps = commonComponentProps.extend({
+export const pinHeaderProps = commonComponentProps.omit({ name: true }).extend({
+  name: z.string().optional(),
   pinCount: z.number(),
   pitch: distance.optional(),
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),

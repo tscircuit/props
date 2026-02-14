@@ -1,10 +1,14 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import { chipProps, type ChipProps, type PinLabelsProp } from "./chip"
+import { type ChipProps, type PinLabelsProp, chipProps } from "./chip"
 
-export type PushButtonProps<T extends PinLabelsProp | string = string> =
-  ChipProps<T>
+export interface PushButtonProps<T extends PinLabelsProp | string = string>
+  extends Omit<ChipProps<T>, "name"> {
+  name?: string
+}
 
-export const pushButtonProps = chipProps.extend({})
+export const pushButtonProps = chipProps.omit({ name: true }).extend({
+  name: z.string().optional(),
+})
 
 expectTypesMatch<PushButtonProps, z.input<typeof pushButtonProps>>(true)

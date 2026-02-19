@@ -1,3 +1,4 @@
+import { test } from "bun:test"
 import type {
   ChipConnections,
   ChipPinLabels,
@@ -6,7 +7,6 @@ import type {
   PinLabelFromPinLabelMap,
 } from "lib"
 import { expectTypesMatch } from "lib/typecheck"
-import { test } from "bun:test"
 
 const pinLabels1 = {
   pin1: "CUSTOM_DATA_1",
@@ -152,6 +152,11 @@ test("[typetest] pinAttributes type matches pin labels", () => {
           doNotConnect: true,
           includeInBoardPinout: true,
           highlightColor: "#00ff00",
+          isI2cScl: true,
+          canUseInternalPullup: true,
+          isUsingInternalPullup: true,
+          canUseOpenDrain: true,
+          isUsingOpenDrain: true,
         },
         // @ts-expect-error
         INVALID: { foo: true },

@@ -22,6 +22,7 @@ export interface CadModelBase {
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
   zOffsetFromSurface?: Distance
+  showAsTranslucentModel?: boolean
 }
 export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
@@ -29,6 +30,7 @@ export const cadModelBase = z.object({
   size: point3.optional(),
   modelUnitToMmScale: distance.optional(),
   zOffsetFromSurface: distance.optional(),
+  showAsTranslucentModel: z.boolean().optional(),
 })
 export interface CadModelStl extends CadModelBase {
   stlUrl: string
@@ -515,6 +517,24 @@ export interface PinAttributeMap {
   includeInBoardPinout?: boolean
   highlightColor?: string
   mustBeConnected?: boolean
+  isI2cSda?: boolean
+  isI2cScl?: boolean
+  isSpiMosi?: boolean
+  isSpiMiso?: boolean
+  isSpiSck?: boolean
+  isSpiCs?: boolean
+  isUartTx?: boolean
+  isUartRx?: boolean
+  canUseInternalPullup?: boolean
+  isUsingInternalPullup?: boolean
+  needsExternalPullup?: boolean
+  canUseInternalPulldown?: boolean
+  isUsingInternalPulldown?: boolean
+  needsExternalPulldown?: boolean
+  canUseOpenDrain?: boolean
+  isUsingOpenDrain?: boolean
+  canUsePushPull?: boolean
+  isUsingPushPull?: boolean
 }
 export const pinAttributeMap = z.object({
   providesPower: z.boolean().optional(),
@@ -527,6 +547,24 @@ export const pinAttributeMap = z.object({
   includeInBoardPinout: z.boolean().optional(),
   highlightColor: z.string().optional(),
   mustBeConnected: z.boolean().optional(),
+  isI2cSda: z.boolean().optional(),
+  isI2cScl: z.boolean().optional(),
+  isSpiMosi: z.boolean().optional(),
+  isSpiMiso: z.boolean().optional(),
+  isSpiSck: z.boolean().optional(),
+  isSpiCs: z.boolean().optional(),
+  isUartTx: z.boolean().optional(),
+  isUartRx: z.boolean().optional(),
+  canUseInternalPullup: z.boolean().optional(),
+  isUsingInternalPullup: z.boolean().optional(),
+  needsExternalPullup: z.boolean().optional(),
+  canUseInternalPulldown: z.boolean().optional(),
+  isUsingInternalPulldown: z.boolean().optional(),
+  needsExternalPulldown: z.boolean().optional(),
+  canUseOpenDrain: z.boolean().optional(),
+  isUsingOpenDrain: z.boolean().optional(),
+  canUsePushPull: z.boolean().optional(),
+  isUsingPushPull: z.boolean().optional(),
 })
 export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
@@ -3004,13 +3042,16 @@ export const portProps = commonLayoutProps.extend({
 ### potentiometer
 
 ```typescript
-export interface PotentiometerProps extends CommonComponentProps {
+export interface PotentiometerProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   maxResistance: number | string
   pinVariant?: PotentiometerPinVariant
+  connections?: Connections<PotentiometerPinLabels>
 }
 export const potentiometerProps = commonComponentProps.extend({
   maxResistance: resistance,
   pinVariant: z.enum(["two_pin", "three_pin"]).optional(),
+  connections: createConnectionsProp(potentiometerPinLabels).optional(),
 })
 ```
 

@@ -6,9 +6,9 @@ import {
   supplier_name,
 } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
-import { pcbCoordinate } from "./distance"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
+import { pcbCoordinate } from "./distance"
 import { type FootprintProp, footprintProp } from "./footprintProp"
 import {
   type KicadFootprintMetadata,
@@ -18,9 +18,9 @@ import {
   type KicadSymbolMetadata,
   kicadSymbolMetadata,
 } from "./kicadSymbolMetadata"
-import { pcbStyle, type PcbStyle } from "./pcbStyle"
-import { pcbSx, type PcbSx } from "./pcbSx"
-import { schStyle, type SchStyle } from "./schStyle"
+import { type PcbStyle, pcbStyle } from "./pcbStyle"
+import { type PcbSx, pcbSx } from "./pcbSx"
+import { type SchStyle, schStyle } from "./schStyle"
 import { type SymbolProp, symbolProp } from "./symbolProp"
 import { url } from "./url"
 
@@ -236,6 +236,24 @@ export interface PinAttributeMap {
   includeInBoardPinout?: boolean
   highlightColor?: string
   mustBeConnected?: boolean
+  isI2cSda?: boolean
+  isI2cScl?: boolean
+  isSpiMosi?: boolean
+  isSpiMiso?: boolean
+  isSpiSck?: boolean
+  isSpiCs?: boolean
+  isUartTx?: boolean
+  isUartRx?: boolean
+  canUseInternalPullup?: boolean
+  isUsingInternalPullup?: boolean
+  needsExternalPullup?: boolean
+  canUseInternalPulldown?: boolean
+  isUsingInternalPulldown?: boolean
+  needsExternalPulldown?: boolean
+  canUseOpenDrain?: boolean
+  isUsingOpenDrain?: boolean
+  canUsePushPull?: boolean
+  isUsingPushPull?: boolean
 }
 
 export const pinAttributeMap = z.object({
@@ -249,6 +267,24 @@ export const pinAttributeMap = z.object({
   includeInBoardPinout: z.boolean().optional(),
   highlightColor: z.string().optional(),
   mustBeConnected: z.boolean().optional(),
+  isI2cSda: z.boolean().optional(),
+  isI2cScl: z.boolean().optional(),
+  isSpiMosi: z.boolean().optional(),
+  isSpiMiso: z.boolean().optional(),
+  isSpiSck: z.boolean().optional(),
+  isSpiCs: z.boolean().optional(),
+  isUartTx: z.boolean().optional(),
+  isUartRx: z.boolean().optional(),
+  canUseInternalPullup: z.boolean().optional(),
+  isUsingInternalPullup: z.boolean().optional(),
+  needsExternalPullup: z.boolean().optional(),
+  canUseInternalPulldown: z.boolean().optional(),
+  isUsingInternalPulldown: z.boolean().optional(),
+  needsExternalPulldown: z.boolean().optional(),
+  canUseOpenDrain: z.boolean().optional(),
+  isUsingOpenDrain: z.boolean().optional(),
+  canUsePushPull: z.boolean().optional(),
+  isUsingPushPull: z.boolean().optional(),
 })
 
 expectTypesMatch<PinAttributeMap, z.input<typeof pinAttributeMap>>(true)

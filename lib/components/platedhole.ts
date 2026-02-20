@@ -61,7 +61,7 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
 }
 
 export interface CircularHoleWithRectPlatedProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "circular_hole_with_rect_pad"
@@ -79,7 +79,7 @@ export interface CircularHoleWithRectPlatedProps
 }
 
 export interface PillWithRectPadPlatedHoleProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "pill_hole_with_rect_pad"
@@ -172,7 +172,7 @@ export const platedHoleProps = z
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
-    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("circular_hole_with_rect_pad"),
@@ -188,7 +188,7 @@ export const platedHoleProps = z
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
-    pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+    pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill_hole_with_rect_pad"),

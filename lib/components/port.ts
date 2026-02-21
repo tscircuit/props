@@ -12,7 +12,7 @@ export const portProps = commonLayoutProps.extend({
   layers: z.array(z.string()).optional(),
   schX: z.number().optional(),
   schY: z.number().optional(),
-  direction: direction,
+  direction: direction.optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   kicadPinMetadata: kicadPinMetadata.optional(),
   hasInversionCircle: z.boolean().optional(),

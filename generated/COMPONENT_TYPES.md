@@ -507,6 +507,35 @@ export const supplierProps = z.object({
   supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
 })
 export interface PinAttributeMap {
+  capabilities?: Array<
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
+  >
+  activeCapabilities?: Array<
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
+  >
+  activeCapability?:
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
   providesPower?: boolean
   requiresPower?: boolean
   providesGround?: boolean
@@ -517,14 +546,6 @@ export interface PinAttributeMap {
   includeInBoardPinout?: boolean
   highlightColor?: string
   mustBeConnected?: boolean
-  isI2cSda?: boolean
-  isI2cScl?: boolean
-  isSpiMosi?: boolean
-  isSpiMiso?: boolean
-  isSpiSck?: boolean
-  isSpiCs?: boolean
-  isUartTx?: boolean
-  isUartRx?: boolean
   canUseInternalPullup?: boolean
   isUsingInternalPullup?: boolean
   needsExternalPullup?: boolean
@@ -537,6 +558,46 @@ export interface PinAttributeMap {
   isUsingPushPull?: boolean
 }
 export const pinAttributeMap = z.object({
+  capabilities: z
+    .array(
+      z.enum([
+        "i2c_sda",
+        "i2c_scl",
+        "spi_cs",
+        "spi_sck",
+        "spi_mosi",
+        "spi_miso",
+        "uart_tx",
+        "uart_rx",
+      ]),
+    )
+    .optional(),
+  activeCapabilities: z
+    .array(
+      z.enum([
+        "i2c_sda",
+        "i2c_scl",
+        "spi_cs",
+        "spi_sck",
+        "spi_mosi",
+        "spi_miso",
+        "uart_tx",
+        "uart_rx",
+      ]),
+    )
+    .optional(),
+  activeCapability: z
+    .enum([
+      "i2c_sda",
+      "i2c_scl",
+      "spi_cs",
+      "spi_sck",
+      "spi_mosi",
+      "spi_miso",
+      "uart_tx",
+      "uart_rx",
+    ])
+    .optional(),
   providesPower: z.boolean().optional(),
   requiresPower: z.boolean().optional(),
   providesGround: z.boolean().optional(),
@@ -547,14 +608,6 @@ export const pinAttributeMap = z.object({
   includeInBoardPinout: z.boolean().optional(),
   highlightColor: z.string().optional(),
   mustBeConnected: z.boolean().optional(),
-  isI2cSda: z.boolean().optional(),
-  isI2cScl: z.boolean().optional(),
-  isSpiMosi: z.boolean().optional(),
-  isSpiMiso: z.boolean().optional(),
-  isSpiSck: z.boolean().optional(),
-  isSpiCs: z.boolean().optional(),
-  isUartTx: z.boolean().optional(),
-  isUartRx: z.boolean().optional(),
   canUseInternalPullup: z.boolean().optional(),
   isUsingInternalPullup: z.boolean().optional(),
   needsExternalPullup: z.boolean().optional(),
@@ -2866,7 +2919,7 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
 }
 /** @deprecated use holeHeight */
 export interface CircularHoleWithRectPlatedProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "circular_hole_with_rect_pad"
@@ -2883,7 +2936,7 @@ export interface CircularHoleWithRectPlatedProps
   coveredWithSolderMask?: boolean
 }
 export interface PillWithRectPadPlatedHoleProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "pill_hole_with_rect_pad"
@@ -2971,7 +3024,7 @@ pcbLayoutProps.omit({ layer: true }).extend({
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
-pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("circular_hole_with_rect_pad"),
@@ -2987,7 +3040,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
-pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
+pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
       shape: z.literal("pill_hole_with_rect_pad"),

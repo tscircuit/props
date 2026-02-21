@@ -296,6 +296,7 @@ export interface CadModelBase {
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
   zOffsetFromSurface?: Distance
+  showAsTranslucentModel?: boolean
 }
 
 
@@ -1434,6 +1435,24 @@ export interface PinAttributeMap {
   includeInBoardPinout?: boolean
   highlightColor?: string
   mustBeConnected?: boolean
+  isI2cSda?: boolean
+  isI2cScl?: boolean
+  isSpiMosi?: boolean
+  isSpiMiso?: boolean
+  isSpiSck?: boolean
+  isSpiCs?: boolean
+  isUartTx?: boolean
+  isUartRx?: boolean
+  canUseInternalPullup?: boolean
+  isUsingInternalPullup?: boolean
+  needsExternalPullup?: boolean
+  canUseInternalPulldown?: boolean
+  isUsingInternalPulldown?: boolean
+  needsExternalPulldown?: boolean
+  canUseOpenDrain?: boolean
+  isUsingOpenDrain?: boolean
+  canUsePushPull?: boolean
+  isUsingPushPull?: boolean
 }
 
 
@@ -1624,9 +1643,11 @@ export interface PolygonSmtPadProps
 }
 
 
-export interface PotentiometerProps extends CommonComponentProps {
+export interface PotentiometerProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
   maxResistance: number | string
   pinVariant?: PotentiometerPinVariant
+  connections?: Connections<PotentiometerPinLabels>
 }
 
 

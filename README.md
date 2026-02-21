@@ -1337,9 +1337,12 @@ export type PortProps = z.input<typeof portProps>;
 ### PotentiometerProps `<potentiometer />`
 
 ```ts
-export interface PotentiometerProps extends CommonComponentProps {
+export interface PotentiometerProps<
+  PinLabel extends string = string,
+> extends CommonComponentProps<PinLabel> {
   maxResistance: number | string;
   pinVariant?: PotentiometerPinVariant;
+  connections?: Connections<PotentiometerPinLabels>;
 }
 ```
 

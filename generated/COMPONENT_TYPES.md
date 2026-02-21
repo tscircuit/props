@@ -363,6 +363,7 @@ export interface PcbLayoutProps {
   pcbRotation?: string | number
   pcbPositionAnchor?: string
   pcbPositionMode?: PcbPositionMode
+  shouldBeOnEdgeOfBoard?: boolean
   layer?: LayerRefInput
   pcbMarginTop?: string | number
   pcbMarginRight?: string | number
@@ -390,6 +391,7 @@ export interface CommonLayoutProps {
   pcbRotation?: string | number
   pcbPositionAnchor?: string
   pcbPositionMode?: PcbPositionMode
+  shouldBeOnEdgeOfBoard?: boolean
 
   pcbMarginTop?: string | number
   pcbMarginRight?: string | number
@@ -444,6 +446,7 @@ export const pcbLayoutProps = z.object({
       "relative_to_component_anchor",
     ])
     .optional(),
+  shouldBeOnEdgeOfBoard: z.boolean().optional(),
   layer: layer_ref.optional(),
   pcbMarginTop: distance.optional(),
   pcbMarginRight: distance.optional(),
@@ -475,6 +478,7 @@ export const commonLayoutProps = z.object({
       "relative_to_component_anchor",
     ])
     .optional(),
+  shouldBeOnEdgeOfBoard: z.boolean().optional(),
   pcbMarginTop: distance.optional(),
   pcbMarginRight: distance.optional(),
   pcbMarginBottom: distance.optional(),

@@ -513,6 +513,7 @@ export interface CommonLayoutProps {
   pcbRotation?: string | number
   pcbPositionAnchor?: string
   pcbPositionMode?: PcbPositionMode
+  shouldBeOnEdgeOfBoard?: boolean
 
   pcbMarginTop?: string | number
   pcbMarginRight?: string | number
@@ -1215,6 +1216,7 @@ export interface PcbLayoutProps {
   pcbRotation?: string | number
   pcbPositionAnchor?: string
   pcbPositionMode?: PcbPositionMode
+  shouldBeOnEdgeOfBoard?: boolean
   layer?: LayerRefInput
   pcbMarginTop?: string | number
   pcbMarginRight?: string | number

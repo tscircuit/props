@@ -446,7 +446,7 @@ export interface CircleSolderPasteProps
 
 
 export interface CircularHoleWithRectPlatedProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "circular_hole_with_rect_pad"
@@ -1406,7 +1406,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 
 
 export interface PillWithRectPadPlatedHoleProps
-  extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
+  extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
   shape: "pill_hole_with_rect_pad"
@@ -1425,6 +1425,35 @@ export interface PillWithRectPadPlatedHoleProps
 
 
 export interface PinAttributeMap {
+  capabilities?: Array<
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
+  >
+  activeCapabilities?: Array<
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
+  >
+  activeCapability?:
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
   providesPower?: boolean
   requiresPower?: boolean
   providesGround?: boolean
@@ -1435,14 +1464,6 @@ export interface PinAttributeMap {
   includeInBoardPinout?: boolean
   highlightColor?: string
   mustBeConnected?: boolean
-  isI2cSda?: boolean
-  isI2cScl?: boolean
-  isSpiMosi?: boolean
-  isSpiMiso?: boolean
-  isSpiSck?: boolean
-  isSpiCs?: boolean
-  isUartTx?: boolean
-  isUartRx?: boolean
   canUseInternalPullup?: boolean
   isUsingInternalPullup?: boolean
   needsExternalPullup?: boolean

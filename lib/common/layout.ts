@@ -226,6 +226,35 @@ export const supplierProps = z.object({
 expectTypesMatch<SupplierProps, z.input<typeof supplierProps>>(true)
 
 export interface PinAttributeMap {
+  capabilities?: Array<
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
+  >
+  activeCapabilities?: Array<
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
+  >
+  activeCapability?:
+    | "i2c_sda"
+    | "i2c_scl"
+    | "spi_cs"
+    | "spi_sck"
+    | "spi_mosi"
+    | "spi_miso"
+    | "uart_tx"
+    | "uart_rx"
   providesPower?: boolean
   requiresPower?: boolean
   providesGround?: boolean
@@ -236,14 +265,6 @@ export interface PinAttributeMap {
   includeInBoardPinout?: boolean
   highlightColor?: string
   mustBeConnected?: boolean
-  isI2cSda?: boolean
-  isI2cScl?: boolean
-  isSpiMosi?: boolean
-  isSpiMiso?: boolean
-  isSpiSck?: boolean
-  isSpiCs?: boolean
-  isUartTx?: boolean
-  isUartRx?: boolean
   canUseInternalPullup?: boolean
   isUsingInternalPullup?: boolean
   needsExternalPullup?: boolean
@@ -257,6 +278,46 @@ export interface PinAttributeMap {
 }
 
 export const pinAttributeMap = z.object({
+  capabilities: z
+    .array(
+      z.enum([
+        "i2c_sda",
+        "i2c_scl",
+        "spi_cs",
+        "spi_sck",
+        "spi_mosi",
+        "spi_miso",
+        "uart_tx",
+        "uart_rx",
+      ]),
+    )
+    .optional(),
+  activeCapabilities: z
+    .array(
+      z.enum([
+        "i2c_sda",
+        "i2c_scl",
+        "spi_cs",
+        "spi_sck",
+        "spi_mosi",
+        "spi_miso",
+        "uart_tx",
+        "uart_rx",
+      ]),
+    )
+    .optional(),
+  activeCapability: z
+    .enum([
+      "i2c_sda",
+      "i2c_scl",
+      "spi_cs",
+      "spi_sck",
+      "spi_mosi",
+      "spi_miso",
+      "uart_tx",
+      "uart_rx",
+    ])
+    .optional(),
   providesPower: z.boolean().optional(),
   requiresPower: z.boolean().optional(),
   providesGround: z.boolean().optional(),
@@ -267,14 +328,6 @@ export const pinAttributeMap = z.object({
   includeInBoardPinout: z.boolean().optional(),
   highlightColor: z.string().optional(),
   mustBeConnected: z.boolean().optional(),
-  isI2cSda: z.boolean().optional(),
-  isI2cScl: z.boolean().optional(),
-  isSpiMosi: z.boolean().optional(),
-  isSpiMiso: z.boolean().optional(),
-  isSpiSck: z.boolean().optional(),
-  isSpiCs: z.boolean().optional(),
-  isUartTx: z.boolean().optional(),
-  isUartRx: z.boolean().optional(),
   canUseInternalPullup: z.boolean().optional(),
   isUsingInternalPullup: z.boolean().optional(),
   needsExternalPullup: z.boolean().optional(),

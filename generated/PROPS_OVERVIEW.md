@@ -1476,6 +1476,8 @@ export interface PinAttributeMap {
   isUsingOpenDrain?: boolean
   canUsePushPull?: boolean
   isUsingPushPull?: boolean
+  shouldHaveDecouplingCapacitor?: boolean
+  recommendedDecouplingCapacitorCapacitance?: string | number
 }
 
 

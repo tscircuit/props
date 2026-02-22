@@ -279,6 +279,8 @@ export interface PinAttributeMap {
   isUsingOpenDrain?: boolean
   canUsePushPull?: boolean
   isUsingPushPull?: boolean
+  shouldHaveDecouplingCapacitor?: boolean
+  recommendedDecouplingCapacitorCapacitance?: string | number
 }
 
 export const pinAttributeMap = z.object({
@@ -342,6 +344,10 @@ export const pinAttributeMap = z.object({
   isUsingOpenDrain: z.boolean().optional(),
   canUsePushPull: z.boolean().optional(),
   isUsingPushPull: z.boolean().optional(),
+  shouldHaveDecouplingCapacitor: z.boolean().optional(),
+  recommendedDecouplingCapacitorCapacitance: z
+    .union([z.string(), z.number()])
+    .optional(),
 })
 
 expectTypesMatch<PinAttributeMap, z.input<typeof pinAttributeMap>>(true)

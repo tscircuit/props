@@ -24,6 +24,10 @@ test("pinAttributes allows mustBeConnected", () => {
         canUsePushPull: true,
         isUsingPushPull: true,
       },
+      pin3: {
+        shouldHaveDecouplingCapacitor: true,
+        recommendedDecouplingCapacitorCapacitance: "100nF",
+      },
     },
   }
 
@@ -51,4 +55,8 @@ test("pinAttributes allows mustBeConnected", () => {
   expect(parsed.pinAttributes?.pin2?.needsExternalPulldown).toBe(true)
   expect(parsed.pinAttributes?.pin2?.canUsePushPull).toBe(true)
   expect(parsed.pinAttributes?.pin2?.isUsingPushPull).toBe(true)
+  expect(parsed.pinAttributes?.pin3?.shouldHaveDecouplingCapacitor).toBe(true)
+  expect(
+    parsed.pinAttributes?.pin3?.recommendedDecouplingCapacitorCapacitance,
+  ).toBe("100nF")
 })

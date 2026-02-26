@@ -2542,6 +2542,7 @@ export interface PanelProps
   edgePaddingRight?: Distance
   edgePaddingTop?: Distance
   edgePaddingBottom?: Distance
+  _subcircuitCachingEnabled?: boolean
 }
 /** Gap between boards in a panel */
 export const panelProps = baseGroupProps
@@ -2572,6 +2573,7 @@ export const panelProps = baseGroupProps
     edgePaddingRight: distance.optional(),
     edgePaddingTop: distance.optional(),
     edgePaddingBottom: distance.optional(),
+    _subcircuitCachingEnabled: z.boolean().optional(),
   })
 ```
 

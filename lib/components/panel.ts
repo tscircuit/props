@@ -31,6 +31,7 @@ export interface PanelProps
   edgePaddingRight?: Distance
   edgePaddingTop?: Distance
   edgePaddingBottom?: Distance
+  _subcircuitCachingEnabled?: boolean
 }
 
 export const panelProps = baseGroupProps
@@ -61,6 +62,7 @@ export const panelProps = baseGroupProps
     edgePaddingRight: distance.optional(),
     edgePaddingTop: distance.optional(),
     edgePaddingBottom: distance.optional(),
+    _subcircuitCachingEnabled: z.boolean().optional(),
   })
 
 type InferredPanelProps = z.input<typeof panelProps>

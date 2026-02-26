@@ -1063,6 +1063,7 @@ export interface PanelProps extends Omit<
   edgePaddingRight?: Distance;
   edgePaddingTop?: Distance;
   edgePaddingBottom?: Distance;
+  _subcircuitCachingEnabled?: boolean;
 }
 ```
 

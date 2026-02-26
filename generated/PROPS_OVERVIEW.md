@@ -1197,6 +1197,7 @@ export interface PanelProps
   edgePaddingRight?: Distance
   edgePaddingTop?: Distance
   edgePaddingBottom?: Distance
+  _subcircuitCachingEnabled?: boolean
 }
 
 

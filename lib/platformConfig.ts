@@ -1,15 +1,15 @@
-import {
-  autorouterProp,
-  type AutorouterProp,
-  type PartsEngine,
-  partsEngine,
-} from "./components/group"
-import type { AutocompleteString } from "./common/autocomplete"
-import { expectTypesMatch } from "./typecheck"
 import { z } from "zod"
+import type { AutocompleteString } from "./common/autocomplete"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
 import { type PcbStyle, pcbStyle } from "./common/pcbStyle"
 import { url } from "./common/url"
+import {
+  type AutorouterProp,
+  type PartsEngine,
+  autorouterProp,
+  partsEngine,
+} from "./components/group"
+import { expectTypesMatch } from "./typecheck"
 
 export interface FootprintLibraryResult {
   footprintCircuitJson: any[]
@@ -70,6 +70,7 @@ export interface PlatformConfig {
   defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
 
   pcbDisabled?: boolean
+  routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
 
@@ -198,6 +199,7 @@ export const platformConfig = z.object({
   defaultSpiceEngine: defaultSpiceEngine.optional(),
   localCacheEngine: z.any().optional(),
   pcbDisabled: z.boolean().optional(),
+  routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),
   partsEngineDisabled: z.boolean().optional(),
   spiceEngineMap: z.record(z.string(), spiceEngineZod).optional(),

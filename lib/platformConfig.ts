@@ -75,6 +75,9 @@ export interface PlatformConfig {
   routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
+  netlistDrcChecksDisabled?: boolean
+  routingDrcChecksDisabled?: boolean
+  placementDrcChecksDisabled?: boolean
 
   spiceEngineMap?: Record<string, SpiceEngine>
 
@@ -205,6 +208,9 @@ export const platformConfig = z.object({
   routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),
   partsEngineDisabled: z.boolean().optional(),
+  netlistDrcChecksDisabled: z.boolean().optional(),
+  routingDrcChecksDisabled: z.boolean().optional(),
+  placementDrcChecksDisabled: z.boolean().optional(),
   spiceEngineMap: z.record(z.string(), spiceEngineZod).optional(),
   footprintLibraryMap: z
     .record(

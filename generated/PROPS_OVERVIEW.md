@@ -1620,7 +1620,10 @@ export interface PlatformConfig {
 
   defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
 
+  unitPreference?: "mm" | "in" | "mil"
+
   pcbDisabled?: boolean
+  routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
 

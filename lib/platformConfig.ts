@@ -69,6 +69,8 @@ export interface PlatformConfig {
 
   defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
 
+  unitPreference?: "mm" | "in" | "mil"
+
   pcbDisabled?: boolean
   routingDisabled?: boolean
   schematicDisabled?: boolean
@@ -197,6 +199,7 @@ export const platformConfig = z.object({
     )
     .optional(),
   defaultSpiceEngine: defaultSpiceEngine.optional(),
+  unitPreference: z.enum(["mm", "in", "mil"]).optional(),
   localCacheEngine: z.any().optional(),
   pcbDisabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),

@@ -1626,6 +1626,9 @@ export interface PlatformConfig {
   routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
+  netlistDrcChecksDisabled?: boolean
+  routingDrcChecksDisabled?: boolean
+  placementDrcChecksDisabled?: boolean
 
   spiceEngineMap?: Record<string, SpiceEngine>
 

@@ -14,7 +14,7 @@ export interface PcbStyle {
         offsetX: number
         offsetY: number
       }
-  silkscreenTextVisibility?: "hidden" | "visible" | "inherit"
+  silkscreenTextVisibility?: "hidden" | "visible"
 }
 
 export const pcbStyle = z.object({
@@ -30,7 +30,7 @@ export const pcbStyle = z.object({
       }),
     ])
     .optional(),
-  silkscreenTextVisibility: z.enum(["hidden", "visible", "inherit"]).optional(),
+  silkscreenTextVisibility: z.enum(["hidden", "visible"]).optional(),
 })
 
 expectTypesMatch<PcbStyle, z.input<typeof pcbStyle>>(true)

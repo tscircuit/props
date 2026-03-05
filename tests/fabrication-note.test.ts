@@ -89,10 +89,10 @@ test("fabrication note text accepts pcbSx fabrication note text visibility", () 
     text: "FAB NOTE",
     pcbSx: {
       "& fabricationnotetext": {
-        visible: true,
+        visibility: "hidden",
       },
     },
   })
 
-  expect(parsed.pcbSx?.["& fabricationnotetext"]?.visible).toBe(true)
+  expect(parsed.pcbSx?.["& fabricationnotetext"]?.visibility).toBe("hidden")
 })

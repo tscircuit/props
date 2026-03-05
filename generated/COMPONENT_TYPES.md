@@ -735,7 +735,7 @@ export interface PcbSxValue {
   fontSize?: string | number
   pcbX?: string | number
   pcbY?: string | number
-  visible?: boolean
+  visibility?: "hidden" | "visible" | "inherit"
 }
 export type PcbSx = PcbSxBase & {
   [K in PcbSxSelector]?: PcbSxValue
@@ -744,7 +744,7 @@ export const pcbSxValue = z.object({
   fontSize: length.optional(),
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
-  visible: z.boolean().optional(),
+  visibility: z.enum(["hidden", "visible", "inherit"]).optional(),
 })
 ```
 

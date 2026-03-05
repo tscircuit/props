@@ -709,7 +709,7 @@ export interface PcbStyle {
         offsetX: number
         offsetY: number
       }
-  silkscreenTextVisibility?: "hidden" | "visible"
+  silkscreenTextVisibility?: "hidden" | "visible" | "inherit"
 }
 export const pcbStyle = z.object({
   silkscreenFontSize: distance.optional(),
@@ -724,7 +724,7 @@ export const pcbStyle = z.object({
       }),
     ])
     .optional(),
-  silkscreenTextVisibility: z.enum(["hidden", "visible"]).optional(),
+  silkscreenTextVisibility: z.enum(["hidden", "visible", "inherit"]).optional(),
 })
 ```
 
@@ -735,7 +735,7 @@ export interface PcbSxValue {
   fontSize?: string | number
   pcbX?: string | number
   pcbY?: string | number
-  visibility?: "hidden" | "visible"
+  visibility?: "hidden" | "visible" | "inherit"
 }
 export type PcbSx = PcbSxBase & {
   [K in PcbSxSelector]?: PcbSxValue
@@ -744,7 +744,7 @@ export const pcbSxValue = z.object({
   fontSize: length.optional(),
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
-  visibility: z.enum(["hidden", "visible"]).optional(),
+  visibility: z.enum(["hidden", "visible", "inherit"]).optional(),
 })
 ```
 

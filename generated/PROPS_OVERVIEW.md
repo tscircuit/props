@@ -1352,7 +1352,7 @@ export interface PcbStyle {
         offsetX: number
         offsetY: number
       }
-  silkscreenTextVisibility?: "hidden" | "visible"
+  silkscreenTextVisibility?: "hidden" | "visible" | "inherit"
 }
 
 
@@ -1360,7 +1360,7 @@ export interface PcbSxValue {
   fontSize?: string | number
   pcbX?: string | number
   pcbY?: string | number
-  visibility?: "hidden" | "visible"
+  visibility?: "hidden" | "visible" | "inherit"
 }
 
 

@@ -7,6 +7,7 @@ import {
   fabricationNotePathProps,
   type FabricationNotePathProps,
 } from "lib/components/fabrication-note-path"
+import { fabricationNoteTextProps } from "lib/components/fabrication-note-text"
 
 test("fabrication note rect parses minimal props", () => {
   const rect: FabricationNoteRectProps = {
@@ -81,4 +82,17 @@ test("fabrication note path parses route points", () => {
   expect(parsed.route).toHaveLength(3)
   expect(parsed.strokeWidth).toBe(0.5)
   expect(parsed.color).toBe("#0000ff")
+})
+
+test("fabrication note text accepts pcbSx fabrication note text visibility", () => {
+  const parsed = fabricationNoteTextProps.parse({
+    text: "FAB NOTE",
+    pcbSx: {
+      "& fabricationnotetext": {
+        visible: true,
+      },
+    },
+  })
+
+  expect(parsed.pcbSx?.["& fabricationnotetext"]?.visible).toBe(true)
 })

@@ -6,11 +6,13 @@ import { z } from "zod"
 export type PcbSxSelector =
   | "& footprint[src^='kicad:'] silkscreentext"
   | "& silkscreentext"
+  | "& fabricationnotetext"
 
 export interface PcbSxValue {
   fontSize?: string | number
   pcbX?: string | number
   pcbY?: string | number
+  visible?: boolean
 }
 
 type PcbSxBase = Record<string, PcbSxValue>
@@ -23,6 +25,7 @@ export const pcbSxValue = z.object({
   fontSize: length.optional(),
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
+  visible: z.boolean().optional(),
 })
 
 export const pcbSx = z.record(

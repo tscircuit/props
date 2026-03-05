@@ -1360,6 +1360,7 @@ export interface PcbSxValue {
   fontSize?: string | number
   pcbX?: string | number
   pcbY?: string | number
+  visible?: boolean
 }
 
 

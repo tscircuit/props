@@ -121,6 +121,51 @@ export type PlatedHoleProps =
   | PillWithRectPadPlatedHoleProps
   | HoleWithPolygonPadPlatedHoleProps
 
+const DEFAULT_PIN_HEADER_HOLE_DIAMETER = "0.04in"
+const DEFAULT_PIN_HEADER_OUTER_DIAMETER = "0.1in"
+
+const inferPlatedHoleShapeAndDefaults = (rawProps: unknown): unknown => {
+  if (!rawProps || typeof rawProps !== "object") return rawProps
+
+  const props = { ...(rawProps as Record<string, unknown>) }
+
+  if (props.shape !== undefined) return props
+
+  if (props.padOutline !== undefined) {
+    props.shape = "hole_with_polygon_pad"
+    return props
+  }
+
+  if (props.rectPadWidth !== undefined || props.rectPadHeight !== undefined) {
+    if (props.holeDiameter !== undefined) {
+      props.shape = "circular_hole_with_rect_pad"
+      return props
+    }
+
+    props.shape = "pill_hole_with_rect_pad"
+    return props
+  }
+
+  if (
+    props.outerDiameter !== undefined ||
+    props.holeDiameter !== undefined ||
+    props.padDiameter !== undefined
+  ) {
+    props.shape = "circle"
+    return props
+  }
+
+  if (props.outerWidth !== undefined || props.outerHeight !== undefined) {
+    props.shape = props.rectPad === true ? "pill" : "oval"
+    return props
+  }
+
+  props.shape = "circle"
+  props.holeDiameter = DEFAULT_PIN_HEADER_HOLE_DIAMETER
+  props.outerDiameter = DEFAULT_PIN_HEADER_OUTER_DIAMETER
+  return props
+}
+
 const distanceHiddenUndefined = z
   .custom<z.input<typeof distance>>()
   .transform((a) => {
@@ -128,7 +173,7 @@ const distanceHiddenUndefined = z
     return distance.parse(a)
   })
 
-export const platedHoleProps = z
+const platedHolePropsByShape = z
   .discriminatedUnion("shape", [
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -220,7 +265,7 @@ export const platedHoleProps = z
       coveredWithSolderMask: z.boolean().optional(),
     }),
   ])
-  .refine((a) => {
+  .transform((a) => {
     if ("innerWidth" in a && a.innerWidth !== undefined) {
       a.holeWidth ??= a.innerWidth
     }
@@ -230,6 +275,11 @@ export const platedHoleProps = z
     return a
   })
 
-type InferredPlatedHoleProps = z.input<typeof platedHoleProps>
+export const platedHoleProps = z.preprocess(
+  inferPlatedHoleShapeAndDefaults,
+  platedHolePropsByShape,
+)
+
+type InferredPlatedHoleProps = z.input<typeof platedHolePropsByShape>
 
 expectTypesMatch<PlatedHoleProps, InferredPlatedHoleProps>(true)

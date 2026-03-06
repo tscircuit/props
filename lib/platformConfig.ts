@@ -75,6 +75,7 @@ export interface PlatformConfig {
   routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
+  drcChecksDisabled?: boolean
   netlistDrcChecksDisabled?: boolean
   routingDrcChecksDisabled?: boolean
   placementDrcChecksDisabled?: boolean
@@ -208,6 +209,7 @@ export const platformConfig = z.object({
   routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),
   partsEngineDisabled: z.boolean().optional(),
+  drcChecksDisabled: z.boolean().optional(),
   netlistDrcChecksDisabled: z.boolean().optional(),
   routingDrcChecksDisabled: z.boolean().optional(),
   placementDrcChecksDisabled: z.boolean().optional(),

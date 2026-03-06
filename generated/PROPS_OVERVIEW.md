@@ -1627,6 +1627,7 @@ export interface PlatformConfig {
   routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
+  drcChecksDisabled?: boolean
   netlistDrcChecksDisabled?: boolean
   routingDrcChecksDisabled?: boolean
   placementDrcChecksDisabled?: boolean

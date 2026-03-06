@@ -121,3 +121,43 @@ test("should parse PlatedHoleProps with name and connectsTo", () => {
     throw new Error("Expected CirclePlatedHoleProps, but got a different shape")
   }
 })
+
+test("should infer circle shape when plated hole diameter props are provided", () => {
+  const parsed = platedHoleProps.parse({
+    holeDiameter: "1mm",
+    outerDiameter: "2mm",
+  })
+
+  expect(parsed.shape).toBe("circle")
+  if (parsed.shape === "circle") {
+    expect(parsed.holeDiameter).toBe(1)
+    expect(parsed.outerDiameter).toBe(2)
+  }
+})
+
+test("should default to pinheader circle plated hole when shape is omitted", () => {
+  const parsed = platedHoleProps.parse({})
+
+  expect(parsed.shape).toBe("circle")
+  if (parsed.shape === "circle") {
+    expect(parsed.holeDiameter).toBeCloseTo(1.016)
+    expect(parsed.outerDiameter).toBeCloseTo(2.54)
+  }
+})
+
+test("should infer pill_hole_with_rect_pad when rect pad props are provided", () => {
+  const parsed = platedHoleProps.parse({
+    holeWidth: "1mm",
+    holeHeight: "2mm",
+    rectPadWidth: "3mm",
+    rectPadHeight: "4mm",
+  })
+
+  expect(parsed.shape).toBe("pill_hole_with_rect_pad")
+  if (parsed.shape === "pill_hole_with_rect_pad") {
+    expect(parsed.holeWidth).toBe(1)
+    expect(parsed.holeHeight).toBe(2)
+    expect(parsed.rectPadWidth).toBe(3)
+    expect(parsed.rectPadHeight).toBe(4)
+  }
+})

@@ -1429,35 +1429,9 @@ export interface PillWithRectPadPlatedHoleProps
 
 
 export interface PinAttributeMap {
-  capabilities?: Array<
-    | "i2c_sda"
-    | "i2c_scl"
-    | "spi_cs"
-    | "spi_sck"
-    | "spi_mosi"
-    | "spi_miso"
-    | "uart_tx"
-    | "uart_rx"
-  >
-  activeCapabilities?: Array<
-    | "i2c_sda"
-    | "i2c_scl"
-    | "spi_cs"
-    | "spi_sck"
-    | "spi_mosi"
-    | "spi_miso"
-    | "uart_tx"
-    | "uart_rx"
-  >
-  activeCapability?:
-    | "i2c_sda"
-    | "i2c_scl"
-    | "spi_cs"
-    | "spi_sck"
-    | "spi_mosi"
-    | "spi_miso"
-    | "uart_tx"
-    | "uart_rx"
+  capabilities?: Array<PinCapability>
+  activeCapabilities?: Array<PinCapability>
+  activeCapability?: PinCapability
   providesPower?: boolean
   requiresPower?: boolean
   providesGround?: boolean
@@ -1480,6 +1454,7 @@ export interface PinAttributeMap {
   isUsingPushPull?: boolean
   shouldHaveDecouplingCapacitor?: boolean
   recommendedDecouplingCapacitorCapacitance?: string | number
+  isGpio?: boolean
 }
 
 

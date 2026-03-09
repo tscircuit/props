@@ -1,6 +1,7 @@
 export * from "./common/direction"
 export * from "./common/portHints"
 export * from "./common/layout"
+export * from "./common/pinAttributeMap"
 export * from "./common/point3"
 export * from "./common/portHints"
 export * from "./common/footprintProp"

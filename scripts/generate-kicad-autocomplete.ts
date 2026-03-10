@@ -21,17 +21,11 @@ async function main() {
 
   const autocompleteContent = `import type { AutocompleteString } from "../common/autocomplete"\n\nexport const kicadFootprintKeys = [\n${keyEntries},\n] as const\n\nexport type KicadPath = typeof kicadFootprintKeys[number]\n\nexport type KicadAutocompleteStringPath = AutocompleteString<\`kicad:\${KicadPath}\`>\n`
 
-  const footprintStringsContent = `import { kicadFootprintKeys } from "./kicad-autocomplete"\nimport type { KicadPath } from "./kicad-autocomplete"\n\nexport const kicadFootprintStrings = Object.fromEntries(\n  kicadFootprintKeys.map((key) => [key, \`kicad:\${key}\`]),\n) as Record<KicadPath, \`kicad:\${KicadPath}\`>\n`
-
   const outDir = path.join(__dirname, "../lib/generated")
   fs.mkdirSync(outDir, { recursive: true })
   fs.writeFileSync(
     path.join(outDir, "kicad-autocomplete.ts"),
     autocompleteContent,
-  )
-  fs.writeFileSync(
-    path.join(outDir, "kicad-footprint-strings.ts"),
-    footprintStringsContent,
   )
 }
 

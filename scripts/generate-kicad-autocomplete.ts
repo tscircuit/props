@@ -17,13 +17,16 @@ async function main() {
     ),
   )
 
-  const typeEntries = sanitizedFiles.map((p) => `  | "${p}"`).join("\n")
+  const keyEntries = sanitizedFiles.map((p) => `  "${p}"`).join(",\n")
 
-  const content = `import type { AutocompleteString } from "../common/autocomplete"\n\nexport type KicadPath = ${typeEntries}\n\nexport type KicadAutocompleteStringPath = AutocompleteString<\n\`kicad:\${KicadPath}\`\n>\n`
+  const autocompleteContent = `import type { AutocompleteString } from "../common/autocomplete"\n\nexport const kicadFootprintKeys = [\n${keyEntries},\n] as const\n\nexport type KicadPath = typeof kicadFootprintKeys[number]\n\nexport type KicadAutocompleteStringPath = AutocompleteString<\`kicad:\${KicadPath}\`>\n`
 
   const outDir = path.join(__dirname, "../lib/generated")
   fs.mkdirSync(outDir, { recursive: true })
-  fs.writeFileSync(path.join(outDir, "kicad-autocomplete.ts"), content)
+  fs.writeFileSync(
+    path.join(outDir, "kicad-autocomplete.ts"),
+    autocompleteContent,
+  )
 }
 
 main().catch((err) => {

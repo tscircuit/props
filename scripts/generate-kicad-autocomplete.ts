@@ -19,9 +19,9 @@ async function main() {
 
   const keyEntries = sanitizedFiles.map((p) => `  "${p}"`).join(",\n")
 
-  const footprintStringsContent = `const kicadFootprintKeys = [\n${keyEntries},\n] as const\n\nexport type KicadPath = typeof kicadFootprintKeys[number]\n\nexport const kicadFootprintStrings = Object.fromEntries(\n  kicadFootprintKeys.map((key) => [key, \`kicad:\${key}\`]),\n) as Record<KicadPath, \`kicad:\${KicadPath}\`>\n`
+  const autocompleteContent = `import type { AutocompleteString } from "../common/autocomplete"\n\nexport const kicadFootprintKeys = [\n${keyEntries},\n] as const\n\nexport type KicadPath = typeof kicadFootprintKeys[number]\n\nexport type KicadAutocompleteStringPath = AutocompleteString<\`kicad:\${KicadPath}\`>\n`
 
-  const autocompleteContent = `import type { AutocompleteString } from "../common/autocomplete"\nexport type { KicadPath } from "./kicad-footprint-strings"\nimport type { KicadPath } from "./kicad-footprint-strings"\n\nexport type KicadAutocompleteStringPath = AutocompleteString<\`kicad:\${KicadPath}\`>\n`
+  const footprintStringsContent = `import { kicadFootprintKeys } from "./kicad-autocomplete"\nimport type { KicadPath } from "./kicad-autocomplete"\n\nexport const kicadFootprintStrings = Object.fromEntries(\n  kicadFootprintKeys.map((key) => [key, \`kicad:\${key}\`]),\n) as Record<KicadPath, \`kicad:\${KicadPath}\`>\n`
 
   const outDir = path.join(__dirname, "../lib/generated")
   fs.mkdirSync(outDir, { recursive: true })

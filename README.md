@@ -1891,6 +1891,7 @@ export interface PlatformConfig {
   netlistDrcChecksDisabled?: boolean;
   routingDrcChecksDisabled?: boolean;
   placementDrcChecksDisabled?: boolean;
+  pinSpecificationDrcChecksDisabled?: boolean;
 
   spiceEngineMap?: Record<string, SpiceEngine>;
 

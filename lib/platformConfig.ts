@@ -79,6 +79,7 @@ export interface PlatformConfig {
   netlistDrcChecksDisabled?: boolean
   routingDrcChecksDisabled?: boolean
   placementDrcChecksDisabled?: boolean
+  pinSpecificationDrcChecksDisabled?: boolean
 
   spiceEngineMap?: Record<string, SpiceEngine>
 
@@ -213,6 +214,7 @@ export const platformConfig = z.object({
   netlistDrcChecksDisabled: z.boolean().optional(),
   routingDrcChecksDisabled: z.boolean().optional(),
   placementDrcChecksDisabled: z.boolean().optional(),
+  pinSpecificationDrcChecksDisabled: z.boolean().optional(),
   spiceEngineMap: z.record(z.string(), spiceEngineZod).optional(),
   footprintLibraryMap: z
     .record(

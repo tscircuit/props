@@ -7,10 +7,12 @@ test("platformConfig accepts optional DRC check disable flags", () => {
     netlistDrcChecksDisabled: true,
     routingDrcChecksDisabled: false,
     placementDrcChecksDisabled: true,
+    pinSpecificationDrcChecksDisabled: true,
   })
 
   expect(config.drcChecksDisabled).toBe(true)
   expect(config.netlistDrcChecksDisabled).toBe(true)
   expect(config.routingDrcChecksDisabled).toBe(false)
   expect(config.placementDrcChecksDisabled).toBe(true)
+  expect(config.pinSpecificationDrcChecksDisabled).toBe(true)
 })

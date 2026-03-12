@@ -113,3 +113,19 @@ test("cadmodel accepts showAsTranslucentModel", () => {
 
   expect(parsed.showAsTranslucentModel).toBe(true)
 })
+
+test("cadmodel accepts modelBoardNormalDirection and pcbRotationOffset", () => {
+  const raw: CadModelPropsInput = {
+    modelUrl: "https://example.com/model.stl",
+    modelBoardNormalDirection: "z+",
+    pcbRotationOffset: 90,
+  }
+
+  const parsed = cadmodelProps.parse(raw) as Exclude<
+    CadModelPropsInput,
+    null | string
+  >
+
+  expect(parsed.modelBoardNormalDirection).toBe("z+")
+  expect(parsed.pcbRotationOffset).toBe(90)
+})

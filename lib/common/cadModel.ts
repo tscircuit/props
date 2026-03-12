@@ -11,6 +11,19 @@ export const rotationPoint3 = z.object({
   z: z.union([z.number(), z.string()]),
 })
 
+export const cadModelAxisDirections = [
+  "x+",
+  "x-",
+  "y+",
+  "y-",
+  "z+",
+  "z-",
+] as const
+
+export type CadModelAxisDirection = (typeof cadModelAxisDirections)[number]
+
+export const cadModelAxisDirection = z.enum(cadModelAxisDirections)
+
 export interface CadModelBase {
   rotationOffset?:
     | number
@@ -22,6 +35,8 @@ export interface CadModelBase {
   }
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
+  modelBoardNormalDirection?: CadModelAxisDirection
+  pcbRotationOffset?: number
   zOffsetFromSurface?: Distance
   showAsTranslucentModel?: boolean
 }
@@ -31,6 +46,8 @@ export const cadModelBase = z.object({
   positionOffset: point3.optional(),
   size: point3.optional(),
   modelUnitToMmScale: distance.optional(),
+  modelBoardNormalDirection: cadModelAxisDirection.optional(),
+  pcbRotationOffset: z.number().optional(),
   zOffsetFromSurface: distance.optional(),
   showAsTranslucentModel: z.boolean().optional(),
 })

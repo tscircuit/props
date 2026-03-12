@@ -295,6 +295,8 @@ export interface CadModelBase {
   }
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
+  modelBoardNormalDirection?: CadModelAxisDirection
+  pcbRotationOffset?: number
   zOffsetFromSurface?: Distance
   showAsTranslucentModel?: boolean
 }

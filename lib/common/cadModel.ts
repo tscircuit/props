@@ -26,18 +26,18 @@ export const cadModelAxisDirection = z.enum(cadModelAxisDirections)
 
 export interface CadModelBase {
   rotationOffset?:
-  | number
-  | { x: number | string; y: number | string; z: number | string }
+    | number
+    | { x: number | string; y: number | string; z: number | string }
   positionOffset?: {
     x: number | string
     y: number | string
     z: number | string
-  },
+  }
   modelOriginPosition?: {
     x: number | string
     y: number | string
     z: number | string
-  },
+  }
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
   modelBoardNormalDirection?: CadModelAxisDirection

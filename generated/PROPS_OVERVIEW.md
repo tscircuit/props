@@ -293,6 +293,11 @@ export interface CadModelBase {
     y: number | string
     z: number | string
   }
+  modelOriginPosition?: {
+    x: number | string
+    y: number | string
+    z: number | string
+  }
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
   modelBoardNormalDirection?: CadModelAxisDirection
@@ -1943,7 +1948,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
-  autorouterVersion?: "v1" | "v2" | "v3" | "latest"
+  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "latest"
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit

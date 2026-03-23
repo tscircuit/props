@@ -424,7 +424,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
-  autorouterVersion?: "v1" | "v2" | "v3" | "latest"
+  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "latest"
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit
@@ -587,7 +587,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
-  autorouterVersion: z.enum(["v1", "v2", "v3", "latest"]).optional(),
+  autorouterVersion: z.enum(["v1", "v2", "v3", "v4", "latest"]).optional(),
   square: z.boolean().optional(),
   emptyArea: z.string().optional(),
   filledArea: z.string().optional(),

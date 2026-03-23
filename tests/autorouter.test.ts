@@ -1,5 +1,8 @@
 import { expect, test } from "bun:test"
-import { autorouterProp } from "../lib/components/group"
+import {
+  autorouterProp,
+  subcircuitGroupPropsWithBool,
+} from "../lib/components/group"
 
 test("supports freerouting preset", () => {
   const result = autorouterProp.parse("freerouting")
@@ -29,4 +32,12 @@ test("supports tscircuit beta preset", () => {
 test("still supports deprecated kebab-case presets", () => {
   const result = autorouterProp.parse("auto-cloud")
   expect(result).toBe("auto-cloud")
+})
+
+test("supports autorouter version v4", () => {
+  const result = subcircuitGroupPropsWithBool.parse({
+    subcircuit: true,
+    autorouterVersion: "v4",
+  })
+  expect(result.autorouterVersion).toBe("v4")
 })

@@ -304,6 +304,7 @@ export interface CadModelBase {
   pcbRotationOffset?: number
   zOffsetFromSurface?: Distance
   showAsTranslucentModel?: boolean
+  stepUrl?: string
 }
 
 

@@ -65,6 +65,7 @@ test("courtyard outline parses outline points", () => {
     isClosed: true,
     isStrokeDashed: true,
     color: "#123456",
+    anchorAlignment: "bottom_left",
   }
 
   const parsed = courtyardOutlineProps.parse(outline)
@@ -74,6 +75,7 @@ test("courtyard outline parses outline points", () => {
   expect(parsed.isClosed).toBe(true)
   expect(parsed.isStrokeDashed).toBe(true)
   expect(parsed.color).toBe("#123456")
+  expect(parsed.anchorAlignment).toBe("bottom_left")
 })
 
 test("courtyard circle parses radius", () => {

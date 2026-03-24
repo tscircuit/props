@@ -38,6 +38,7 @@ export interface CadModelBase {
   pcbRotationOffset?: number
   zOffsetFromSurface?: Distance
   showAsTranslucentModel?: boolean
+  stepUrl?: string
 }
 export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
@@ -49,6 +50,7 @@ export const cadModelBase = z.object({
   pcbRotationOffset: z.number().optional(),
   zOffsetFromSurface: distance.optional(),
   showAsTranslucentModel: z.boolean().optional(),
+  stepUrl: url.optional(),
 })
 export interface CadModelStl extends CadModelBase {
   stlUrl: string
@@ -1325,6 +1327,7 @@ export const courtyardCircleProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
     radius: distance,
+    anchorAlignment: ninePointAnchor.optional(),
   })
 ```
 
@@ -1349,6 +1352,7 @@ export const courtyardOutlineProps = pcbLayoutProps
     isClosed: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
+    anchorAlignment: ninePointAnchor.optional(),
   })
 ```
 
@@ -1361,6 +1365,7 @@ export const courtyardPillProps = pcbLayoutProps
     width: distance,
     height: distance,
     radius: distance,
+    anchorAlignment: ninePointAnchor.optional(),
   })
 ```
 
@@ -1377,6 +1382,7 @@ export const courtyardRectProps = pcbLayoutProps
     hasStroke: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
+    anchorAlignment: ninePointAnchor.optional(),
   })
 ```
 

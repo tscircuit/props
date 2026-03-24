@@ -1,5 +1,6 @@
 import { length } from "circuit-json"
 import { pcbLayoutProps } from "lib/common/layout"
+import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { point } from "lib/common/point"
 import { z } from "zod"
 
@@ -21,5 +22,6 @@ export const courtyardOutlineProps = pcbLayoutProps
     isClosed: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
+    anchorAlignment: ninePointAnchor.optional(),
   })
 export type CourtyardOutlineProps = z.input<typeof courtyardOutlineProps>

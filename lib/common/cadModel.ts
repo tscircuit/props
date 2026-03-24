@@ -44,6 +44,7 @@ export interface CadModelBase {
   pcbRotationOffset?: number
   zOffsetFromSurface?: Distance
   showAsTranslucentModel?: boolean
+  stepUrl?: string
 }
 
 export const cadModelBase = z.object({
@@ -56,6 +57,7 @@ export const cadModelBase = z.object({
   pcbRotationOffset: z.number().optional(),
   zOffsetFromSurface: distance.optional(),
   showAsTranslucentModel: z.boolean().optional(),
+  stepUrl: url.optional(),
 })
 
 expectTypesMatch<CadModelBase, z.input<typeof cadModelBase>>(true)

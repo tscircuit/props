@@ -97,6 +97,17 @@ export const cadModelStep = cadModelBase.extend({
   stepUrl: url,
 })
 
+export interface CadModelObjStep extends CadModelBase {
+  objUrl: string
+  mtlUrl?: string
+  stepUrl: string
+}
+export const cadModelObjStep = cadModelBase.extend({
+  objUrl: url,
+  mtlUrl: url.optional(),
+  stepUrl: url,
+})
+
 export interface CadModelWrl extends CadModelBase {
   wrlUrl: string
 }
@@ -116,6 +127,7 @@ export type CadModelProp =
   | string
   | ReactElement
   | CadModelStl
+  | CadModelObjStep
   | CadModelObj
   | CadModelGltf
   | CadModelGlb
@@ -130,6 +142,7 @@ export const cadModelProp = z.union([
     return v && typeof v === "object" && "type" in v && "props" in v
   }),
   cadModelStl,
+  cadModelObjStep,
   cadModelObj,
   cadModelGltf,
   cadModelGlb,

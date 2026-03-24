@@ -34,3 +34,26 @@ test("footprintLibraryMap function may return cadModel", async () => {
   })
   expect(Array.isArray(result.footprintCircuitJson)).toBe(true)
 })
+
+test("cadModel with both objUrl and stepUrl preserves stepUrl", async () => {
+  const config = platformConfig.parse({
+    footprintLibraryMap: {
+      lib: async (_path: string) => ({
+        footprintCircuitJson: [],
+        cadModel: {
+          objUrl: "model.obj",
+          stepUrl: "model.step",
+        },
+      }),
+    },
+  })
+  const entry = config.footprintLibraryMap?.lib
+  if (typeof entry !== "function") {
+    throw new Error("footprintLibraryMap.lib is not a function")
+  }
+  const result = await entry("myfootprint")
+  expect(result.cadModel).toMatchObject({
+    objUrl: "model.obj",
+    stepUrl: "model.step",
+  })
+})

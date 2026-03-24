@@ -97,16 +97,8 @@ export const cadModelStep = cadModelBase.extend({
   stepUrl: url,
 })
 
-export interface CadModelObjStep extends CadModelBase {
-  objUrl: string
-  mtlUrl?: string
-  stepUrl: string
-}
-export const cadModelObjStep = cadModelBase.extend({
-  objUrl: url,
-  mtlUrl: url.optional(),
-  stepUrl: url,
-})
+export interface CadModelObjStep extends CadModelObj, CadModelStep {}
+export const cadModelObjStep = cadModelObj.merge(cadModelStep)
 
 export interface CadModelWrl extends CadModelBase {
   wrlUrl: string

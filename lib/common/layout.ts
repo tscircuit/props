@@ -127,6 +127,24 @@ export interface CommonLayoutProps {
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */
   pcbRelative?: boolean
+
+  /**
+   * Selector for a pin/pad this component should be placed near on the PCB.
+   * e.g. "U1.pin17", ".MCU > .VCC"
+   */
+  placeNear?: string
+
+  /**
+   * Selector for the pad of THIS component that should face the placeNear
+   * target. e.g. ".pin1"
+   */
+  facingPad?: string
+
+  /**
+   * Maximum center-to-center distance from this component to the placeNear
+   * target pin. Default: 5mm.
+   */
+  placeNearMaxDistance?: string | number
 }
 
 export const pcbLayoutProps = z.object({
@@ -208,6 +226,9 @@ export const commonLayoutProps = z.object({
   relative: z.boolean().optional(),
   schRelative: z.boolean().optional(),
   pcbRelative: z.boolean().optional(),
+  placeNear: z.string().optional(),
+  facingPad: z.string().optional(),
+  placeNearMaxDistance: distance.optional(),
 })
 
 type InferredCommonLayoutProps = z.input<typeof commonLayoutProps>

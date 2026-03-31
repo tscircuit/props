@@ -284,11 +284,15 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schMatchAdapt?: boolean
 }
 
+export type PartsEngineResult = SupplierPartNumbers & {
+  footprint?: string
+}
+
 export type PartsEngine = {
   findPart: (params: {
     sourceComponent: AnySourceComponent
     footprinterString?: string
-  }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+  }) => Promise<PartsEngineResult> | PartsEngineResult
 }
 
 export interface PcbRouteCache {

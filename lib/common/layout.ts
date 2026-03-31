@@ -142,7 +142,7 @@ export interface CommonLayoutProps {
 
   /**
    * Maximum center-to-center distance from this component to the placeNear
-   * target pin. Default: 5mm.
+   * target pin.
    */
   placeNearMaxDistance?: string | number
 }

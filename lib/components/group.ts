@@ -1,4 +1,4 @@
-import { layer_ref, length, distance } from "circuit-json"
+import { layer_ref, length, distance, type AnyCircuitElement } from "circuit-json"
 import type { AutocompleteString } from "lib/common/autocomplete"
 import type { Distance } from "lib/common/distance"
 import {
@@ -289,6 +289,9 @@ export type PartsEngine = {
     sourceComponent: AnySourceComponent
     footprinterString?: string
   }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+  fetchPartCircuitJson?: (params: {
+    supplierPartNumbers: SupplierPartNumbers
+  }) => Promise<AnyCircuitElement[] | undefined> | AnyCircuitElement[] | undefined
 }
 
 export interface PcbRouteCache {

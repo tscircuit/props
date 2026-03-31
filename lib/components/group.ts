@@ -295,7 +295,8 @@ export type PartsEngine = {
     footprinterString?: string
   }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
   fetchPartCircuitJson?: (params: {
-    supplierPartNumbers: SupplierPartNumbers
+    supplierPartNumber?: string
+    manufacturerPartNumber?: string
   }) =>
     | Promise<AnyCircuitElement[] | undefined>
     | AnyCircuitElement[]

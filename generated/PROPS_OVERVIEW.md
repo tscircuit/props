@@ -304,6 +304,7 @@ export interface CadModelBase {
   pcbRotationOffset?: number
   zOffsetFromSurface?: Distance
   showAsTranslucentModel?: boolean
+  stepUrl?: string
 }
 
 
@@ -564,23 +565,7 @@ export interface CommonLayoutProps {
 }
 
 
-export interface ConnectorProps extends CommonComponentProps {
-  manufacturerPartNumber?: string
-  pinLabels?: Record<
-    number | SchematicPinLabel,
-    SchematicPinLabel | SchematicPinLabel[]
-  >
-  schPinStyle?: SchematicPinStyle
-  schPinSpacing?: number | string
-  schWidth?: number | string
-  schHeight?: number | string
-  schDirection?: "left" | "right"
-  schPortArrangement?: SchematicPortArrangement
-  /**
-   * Groups of pins that are internally connected
-   * e.g., [["1","2"], ["2","3"]]
-   */
-  internallyConnectedPins?: (string | number)[][]
+export interface ConnectorProps extends ChipPropsSU {
   /**
    * Connector standard, e.g. usb_c, m2
    */
@@ -1948,7 +1933,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
-  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "latest"
+  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "v5" | "latest"
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit

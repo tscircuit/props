@@ -40,6 +40,7 @@ export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string
+  standard?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   /**
    * Whether to show pin aliases in the schematic
@@ -135,6 +136,7 @@ export const pinCompatibleVariant = z.object({
 
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
+  standard: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),

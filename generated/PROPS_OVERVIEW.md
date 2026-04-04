@@ -304,6 +304,7 @@ export interface CadModelBase {
   pcbRotationOffset?: number
   zOffsetFromSurface?: Distance
   showAsTranslucentModel?: boolean
+  stepUrl?: string
 }
 
 
@@ -379,6 +380,7 @@ export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string
+  standard?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   /**
    * Whether to show pin aliases in the schematic
@@ -564,23 +566,7 @@ export interface CommonLayoutProps {
 }
 
 
-export interface ConnectorProps extends CommonComponentProps {
-  manufacturerPartNumber?: string
-  pinLabels?: Record<
-    number | SchematicPinLabel,
-    SchematicPinLabel | SchematicPinLabel[]
-  >
-  schPinStyle?: SchematicPinStyle
-  schPinSpacing?: number | string
-  schWidth?: number | string
-  schHeight?: number | string
-  schDirection?: "left" | "right"
-  schPortArrangement?: SchematicPortArrangement
-  /**
-   * Groups of pins that are internally connected
-   * e.g., [["1","2"], ["2","3"]]
-   */
-  internallyConnectedPins?: (string | number)[][]
+export interface ConnectorProps extends ChipPropsSU {
   /**
    * Connector standard, e.g. usb_c, m2
    */

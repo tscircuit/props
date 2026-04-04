@@ -38,6 +38,7 @@ export interface CadModelBase {
   pcbRotationOffset?: number
   zOffsetFromSurface?: Distance
   showAsTranslucentModel?: boolean
+  stepUrl?: string
 }
 export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
@@ -49,6 +50,7 @@ export const cadModelBase = z.object({
   pcbRotationOffset: z.number().optional(),
   zOffsetFromSurface: distance.optional(),
   showAsTranslucentModel: z.boolean().optional(),
+  stepUrl: url.optional(),
 })
 export interface CadModelStl extends CadModelBase {
   stlUrl: string
@@ -1082,6 +1084,7 @@ export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
   manufacturerPartNumber?: string
+  standard?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   showPinAliases?: boolean
   pcbPinLabels?: Record<string, string>
@@ -1120,6 +1123,7 @@ export const pinCompatibleVariant = z.object({
 })
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
+  standard: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),
   pcbPinLabels: z.record(z.string(), z.string()).optional(),
@@ -1142,41 +1146,13 @@ export const chipProps = commonComponentProps.extend({
 ### connector
 
 ```typescript
-export interface ConnectorProps extends CommonComponentProps {
-  manufacturerPartNumber?: string
-  pinLabels?: Record<
-    number | SchematicPinLabel,
-    SchematicPinLabel | SchematicPinLabel[]
-  >
-  schPinStyle?: SchematicPinStyle
-  schPinSpacing?: number | string
-  schWidth?: number | string
-  schHeight?: number | string
-  schDirection?: "left" | "right"
-  schPortArrangement?: SchematicPortArrangement
-  internallyConnectedPins?: (string | number)[][]
+export interface ConnectorProps extends ChipPropsSU {
   standard?: "usb_c" | "m2"
 }
 /**
    * Connector standard, e.g. usb_c, m2
    */
-export const connectorProps = commonComponentProps.extend({
-  manufacturerPartNumber: z.string().optional(),
-  pinLabels: z
-    .record(
-      z.number().or(schematicPinLabel),
-      schematicPinLabel.or(z.array(schematicPinLabel)),
-    )
-    .optional(),
-  schPinStyle: schematicPinStyle.optional(),
-  schPinSpacing: distance.optional(),
-  schWidth: distance.optional(),
-  schHeight: distance.optional(),
-  schDirection: z.enum(["left", "right"]).optional(),
-  schPortArrangement: schematicPortArrangement.optional(),
-  internallyConnectedPins: z
-    .array(z.array(z.union([z.string(), z.number()])))
-    .optional(),
+export const connectorProps = chipProps.extend({
   standard: z.enum(["usb_c", "m2"]).optional(),
 })
 ```
@@ -1943,6 +1919,13 @@ export type PartsEngine = {
     sourceComponent: AnySourceComponent
     footprinterString?: string
   }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
+  fetchPartCircuitJson?: (params: {
+    supplierPartNumber?: string
+    manufacturerPartNumber?: string
+  }) =>
+    | Promise<AnyCircuitElement[] | undefined>
+    | AnyCircuitElement[]
+    | undefined
 }
 export interface PcbRouteCache {
   pcbTraces: PcbTrace[]

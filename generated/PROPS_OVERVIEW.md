@@ -584,6 +584,7 @@ export interface CopperPourProps {
   name?: string
   layer: LayerRefInput
   connectsTo: string
+  unbroken?: boolean
   padMargin?: Distance
   traceMargin?: Distance
   clearance?: Distance

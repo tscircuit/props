@@ -8,6 +8,7 @@ export interface CopperPourProps {
   name?: string
   layer: LayerRefInput
   connectsTo: string
+  unbroken?: boolean
   padMargin?: Distance
   traceMargin?: Distance
   clearance?: Distance
@@ -21,6 +22,7 @@ export const copperPourProps = z.object({
   name: z.string().optional(),
   layer: layer_ref,
   connectsTo: z.string(),
+  unbroken: z.boolean().optional(),
   padMargin: distance.optional(),
   traceMargin: distance.optional(),
   clearance: distance.optional(),

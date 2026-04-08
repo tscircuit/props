@@ -74,3 +74,15 @@ test("should parse cutoutMargin", () => {
 
   expect(parsed.cutoutMargin).toBe(2)
 })
+
+test("should parse unbroken", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    unbroken: true,
+  }
+
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.unbroken).toBe(true)
+})

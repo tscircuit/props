@@ -19,3 +19,13 @@ test("should parse NetProps with connectsTo", () => {
   expect(parsed.routingPhaseIndex).toBe(2)
   expect(parsed.highlightColor).toBe("blue")
 })
+
+test("should parse NetProps with nullable routingPhaseIndex", () => {
+  const raw: NetProps = {
+    name: "N2",
+    routingPhaseIndex: null,
+  }
+
+  const parsed = netProps.parse(raw)
+  expect(parsed.routingPhaseIndex).toBeNull()
+})

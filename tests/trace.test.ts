@@ -17,6 +17,16 @@ test("parses arbitrary schStroke and highlightColor on trace", () => {
   expect(parsed.highlightColor).toBe("#123456")
 })
 
+test("accepts nullable routingPhaseIndex on trace", () => {
+  const raw: TraceProps = {
+    from: "A",
+    to: "B",
+    routingPhaseIndex: null,
+  }
+  const parsed = traceProps.parse(raw)
+  expect(parsed.routingPhaseIndex).toBeNull()
+})
+
 test("accepts pin selector strings within pcbPath", () => {
   const raw: TraceProps = {
     from: "U1.1",

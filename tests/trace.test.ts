@@ -7,10 +7,12 @@ test("parses arbitrary schStroke and highlightColor on trace", () => {
   const raw: TraceProps = {
     from: "A",
     to: "B",
+    routingPhaseIndex: 1,
     schStroke: "green",
     highlightColor: "#123456",
   }
   const parsed = traceProps.parse(raw)
+  expect(parsed.routingPhaseIndex).toBe(1)
   expect(parsed.schStroke).toBe("green")
   expect(parsed.highlightColor).toBe("#123456")
 })

@@ -44,6 +44,7 @@ const baseTraceProps = z.object({
   pcbPathRelativeTo: z.string().optional(),
   pcbPath: pcbPath.optional(),
   pcbPaths: z.array(pcbPath).optional(),
+  routingPhaseIndex: z.number().optional(),
   pcbStraightLine: z
     .boolean()
     .optional()

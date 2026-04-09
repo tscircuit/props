@@ -965,6 +965,7 @@ export interface MountedBoardProps
 export interface NetProps {
   name: string;
   connectsTo?: string | string[];
+  routingPhaseIndex?: number | null;
   highlightColor?: string;
   isPowerNet?: boolean;
   isGroundNet?: boolean;

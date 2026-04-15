@@ -297,6 +297,7 @@ export type PartsEngine = {
   fetchPartCircuitJson?: (params: {
     supplierPartNumber?: string
     manufacturerPartNumber?: string
+    platformFetch?: typeof fetch
   }) =>
     | Promise<AnyCircuitElement[] | undefined>
     | AnyCircuitElement[]

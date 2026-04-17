@@ -547,7 +547,6 @@ export interface CommonComponentProps<PinLabel extends string = string>
   allowOffBoard?: boolean
   obstructsWithinBounds?: boolean
   showAsTranslucentModel?: boolean
-  insertionDirection?: PcbInsertionDirection
   mfn?: string
   manufacturerPartNumber?: string
 }
@@ -579,11 +578,6 @@ export interface CommonComponentProps<PinLabel extends string = string>
       .optional()
       .describe(
         "Whether to show this component's CAD model as translucent in the 3D viewer.",
-      ),
-    insertionDirection: pcbInsertionDirection
-      .optional()
-      .describe(
-        "Direction a cable or mating part is inserted into this PCB component.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
     mfn: z.string().describe("Manufacturer Part Number").optional(),
@@ -1643,15 +1637,22 @@ export interface FootprintProps {
   originalLayer?: LayerRef
   circuitJson?: any[]
   src?: FootprintProp
+  insertionDirection?: FootprintInsertionDirection
 }
 /**
-   * Can be a footprint or kicad string
+   * Direction a cable or mating part is inserted into this footprint in its
+   * unrotated orientation.
    */
 export const footprintProps = z.object({
   children: z.any().optional(),
   originalLayer: layer_ref.default("top").optional(),
   circuitJson: z.array(z.any()).optional(),
   src: footprintProp.describe("Can be a footprint or kicad string").optional(),
+  insertionDirection: footprintInsertionDirection
+    .optional()
+    .describe(
+      "Direction a cable or mating part is inserted into this footprint in its unrotated orientation.",
+    ),
 })
 ```
 

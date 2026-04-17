@@ -34,24 +34,6 @@ export type PcbPositionMode =
 /** @deprecated Use {@link PcbPositionMode} instead. */
 export type PositionMode = PcbPositionMode
 
-export type PcbInsertionDirection =
-  | "from_above"
-  | "from_left"
-  | "from_right"
-  | "from_front"
-  | "from_back"
-
-export const pcbInsertionDirection = z.enum([
-  "from_above",
-  "from_left",
-  "from_right",
-  "from_front",
-  "from_back",
-])
-expectTypesMatch<PcbInsertionDirection, z.infer<typeof pcbInsertionDirection>>(
-  true,
-)
-
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
@@ -276,10 +258,6 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * Whether to show this component's CAD model as translucent in the 3D viewer.
    */
   showAsTranslucentModel?: boolean
-  /**
-   * Direction a cable or mating part is inserted into this PCB component.
-   */
-  insertionDirection?: PcbInsertionDirection
   mfn?: string
   manufacturerPartNumber?: string
 }
@@ -314,11 +292,6 @@ export const commonComponentProps = commonLayoutProps
       .optional()
       .describe(
         "Whether to show this component's CAD model as translucent in the 3D viewer.",
-      ),
-    insertionDirection: pcbInsertionDirection
-      .optional()
-      .describe(
-        "Direction a cable or mating part is inserted into this PCB component.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
     mfn: z.string().describe("Manufacturer Part Number").optional(),

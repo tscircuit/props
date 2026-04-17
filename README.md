@@ -153,6 +153,7 @@ export interface CommonComponentProps extends CommonLayoutProps {
   children?: any;
   symbolName?: string;
   doNotPlace?: boolean;
+  insertionDirection?: PcbInsertionDirection;
 }
 ```
 

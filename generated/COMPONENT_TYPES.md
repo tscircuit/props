@@ -547,6 +547,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   allowOffBoard?: boolean
   obstructsWithinBounds?: boolean
   showAsTranslucentModel?: boolean
+  insertionDirection?: PcbInsertionDirection
   mfn?: string
   manufacturerPartNumber?: string
 }
@@ -578,6 +579,11 @@ export interface CommonComponentProps<PinLabel extends string = string>
       .optional()
       .describe(
         "Whether to show this component's CAD model as translucent in the 3D viewer.",
+      ),
+    insertionDirection: pcbInsertionDirection
+      .optional()
+      .describe(
+        "Direction a cable or mating part is inserted into this PCB component.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
     mfn: z.string().describe("Manufacturer Part Number").optional(),
@@ -3973,3 +3979,4 @@ export const voltageSourceProps = commonComponentProps.extend({
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 ```
+

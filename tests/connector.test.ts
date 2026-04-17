@@ -24,3 +24,28 @@ test("should fail for invalid connector standard", () => {
     connectorProps.parse({ name: "conn", standard: "invalid" } as any),
   ).toThrow()
 })
+
+test("should parse connector insertionDirection options", () => {
+  const insertionDirections = [
+    "from_above",
+    "from_left",
+    "from_right",
+    "from_front",
+    "from_back",
+  ] as const
+
+  for (const insertionDirection of insertionDirections) {
+    const raw: ConnectorProps = { name: "conn", insertionDirection }
+    const parsed = connectorProps.parse(raw)
+    expect(parsed.insertionDirection).toBe(insertionDirection)
+  }
+})
+
+test("should fail for invalid connector insertionDirection", () => {
+  expect(() =>
+    connectorProps.parse({
+      name: "conn",
+      insertionDirection: "from_side",
+    } as any),
+  ).toThrow()
+})

@@ -184,6 +184,7 @@ function generateInterfaceDefinitions(
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  insertionDirection?: PcbInsertionDirection
 }`,
       filePath: "lib/common/layout.ts",
     },

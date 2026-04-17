@@ -500,6 +500,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * Whether to show this component's CAD model as translucent in the 3D viewer.
    */
   showAsTranslucentModel?: boolean
+  /**
+   * Direction a cable or mating part is inserted into this PCB component.
+   */
+  insertionDirection?: PcbInsertionDirection
   mfn?: string
   manufacturerPartNumber?: string
 }

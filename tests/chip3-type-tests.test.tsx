@@ -197,3 +197,31 @@ test("[typetest] connections can reference pin numbers", () => {
   void byNumber
   void invalid
 })
+
+test("[typetest] noConnect matches chip pin labels", () => {
+  const myPinLabels = {
+    pin1: "A",
+    pin2: "B",
+  } as const
+
+  const MyChip = (props: ChipProps<typeof myPinLabels>) => <chip {...props} />
+
+  const byLabel = <MyChip name="U1" pinLabels={myPinLabels} noConnect={["A"]} />
+  const byNumber = (
+    <MyChip name="U1" pinLabels={myPinLabels} noConnect={["pin2"]} />
+  )
+  const invalid = (
+    <MyChip
+      name="U1"
+      pinLabels={myPinLabels}
+      noConnect={[
+        // @ts-expect-error
+        "INVALID_PIN",
+      ]}
+    />
+  )
+
+  void byLabel
+  void byNumber
+  void invalid
+})

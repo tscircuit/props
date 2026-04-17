@@ -1097,6 +1097,7 @@ export interface ChipPropsSU<
   noSchematicRepresentation?: boolean
   internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
+  noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
 }
 /**
@@ -1137,6 +1138,7 @@ export const chipProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   noSchematicRepresentation: z.boolean().optional(),
+  noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
 })
 ```

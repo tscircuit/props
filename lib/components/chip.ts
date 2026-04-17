@@ -60,6 +60,11 @@ export interface ChipPropsSU<
   noSchematicRepresentation?: boolean
   internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
+  /**
+   * Pins intentionally left unconnected. This is a shorthand for marking
+   * those pins as do-not-connect without repeating pinAttributes entries.
+   */
+  noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
 }
 
@@ -115,6 +120,11 @@ const connectionTarget = z
   .or(z.array(z.string()).readonly())
   .or(z.array(z.string()))
 
+const noConnectProp = z
+  .array(schematicPinLabel)
+  .readonly()
+  .or(z.array(schematicPinLabel))
+
 const connectionsProp = z
   .custom<Connections>()
   .pipe(z.record(z.string(), connectionTarget))
@@ -150,6 +160,7 @@ export const chipProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   noSchematicRepresentation: z.boolean().optional(),
+  noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
 })
 

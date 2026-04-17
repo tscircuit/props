@@ -379,6 +379,11 @@ export interface ChipPropsSU<
   noSchematicRepresentation?: boolean;
   internallyConnectedPins?: (string | number)[][];
   externallyConnectedPins?: string[][];
+  /**
+   * Pins intentionally left unconnected. This is a shorthand for marking
+   * those pins as do-not-connect without repeating pinAttributes entries.
+   */
+  noConnect?: readonly PinLabel[] | PinLabel[];
   connections?: Connections<PinLabel>;
 }
 ```

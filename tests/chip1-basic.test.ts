@@ -92,6 +92,18 @@ test("should parse chip props with mixed string and array connections", () => {
   })
 })
 
+test("should parse chip props with noConnect pins", () => {
+  const rawProps: ChipProps = {
+    name: "chip",
+    manufacturerPartNumber: "1234",
+    noConnect: ["GPIO5", "pin2"],
+  }
+
+  const parsedProps = chipProps.parse(rawProps)
+
+  expect(parsedProps.noConnect).toEqual(["GPIO5", "pin2"])
+})
+
 test("should parse chip props with connections and other properties", () => {
   const rawProps: ChipProps = {
     name: "chip",
@@ -161,6 +173,7 @@ test("should work with generic type parameter for pin labels", () => {
       pin3: "SIG1",
       pin4: "SIG2",
     },
+    noConnect: ["SIG2"],
     connections: {
       VCC: "net.VCC",
       GND: "net.GND",
@@ -176,4 +189,5 @@ test("should work with generic type parameter for pin labels", () => {
     SIG1: ".R1 > .pin1",
     SIG2: [".LED1 > .anode", ".C1 > .pin1"],
   })
+  expect(parsedProps.noConnect).toEqual(["SIG2"])
 })

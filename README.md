@@ -233,6 +233,8 @@ export interface BoardProps extends Omit<
   layers?: 1 | 2 | 4 | 6 | 8;
   borderRadius?: Distance;
   thickness?: Distance;
+  minViaDiameter?: Distance;
+  minViaHole?: Distance;
   boardAnchorPosition?: Point;
   anchorAlignment?: z.infer<typeof ninePointAnchor>;
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>;

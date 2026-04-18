@@ -42,6 +42,17 @@ test("should parse borderRadius prop", () => {
   expect(parsed.borderRadius).toBe(2)
 })
 
+test("should parse min via constraints", () => {
+  const raw: BoardProps = {
+    name: "board",
+    minViaDiameter: "0.6mm",
+    minViaHole: "0.3mm",
+  }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.minViaDiameter).toBe(0.6)
+  expect(parsed.minViaHole).toBe(0.3)
+})
+
 test("should parse boardAnchorPosition prop", () => {
   const raw: BoardProps = {
     name: "board",

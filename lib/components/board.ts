@@ -31,6 +31,8 @@ export interface BoardProps
   layers?: 1 | 2 | 4 | 6 | 8
   borderRadius?: Distance
   thickness?: Distance
+  minViaDiameter?: Distance
+  minViaHole?: Distance
   boardAnchorPosition?: Point
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
@@ -67,6 +69,8 @@ export const boardProps = subcircuitGroupProps
       .default(2),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
+    minViaDiameter: distance.optional(),
+    minViaHole: distance.optional(),
     boardAnchorPosition: point.optional(),
     anchorAlignment: ninePointAnchor.optional(),
     boardAnchorAlignment: ninePointAnchor

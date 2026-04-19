@@ -88,3 +88,17 @@ test("supports pcbStraightLine flag", () => {
 
   expect(parsed.pcbStraightLine).toBe(true)
 })
+
+test("accepts start/end aliases for trace endpoints", () => {
+  const raw: TraceProps = {
+    start: "A",
+    end: "B",
+  }
+
+  const parsed = traceProps.parse(raw)
+
+  expect(parsed).toMatchObject({
+    start: "A",
+    end: "B",
+  })
+})

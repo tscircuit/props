@@ -4,8 +4,12 @@ import { point } from "../common/point"
 
 export const portRef = z.union([
   z.string(),
-  z.custom<{ getPortSelector: () => string }>((v) =>
-    Boolean(v.getPortSelector),
+  z.custom<{ getPortSelector: () => string }>(
+    (v) =>
+      typeof v === "object" &&
+      v !== null &&
+      "getPortSelector" in v &&
+      typeof v.getPortSelector === "function",
   ),
 ])
 
@@ -63,6 +67,10 @@ export const traceProps = z.union([
   baseTraceProps.extend({
     from: portRef,
     to: portRef,
+  }),
+  baseTraceProps.extend({
+    start: portRef,
+    end: portRef,
   }),
 ])
 

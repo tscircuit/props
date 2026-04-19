@@ -12,7 +12,7 @@ import {
   type SupplierPartNumbers,
 } from "lib/common/layout"
 import type { PcbStyle } from "lib/common/pcbStyle"
-import { ninePointAnchor } from "lib/common/ninePointAnchor"
+import type { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
@@ -431,7 +431,14 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   routingDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
+
   minTraceWidth?: Distance
+  minViaToViaSpacing?: Distance
+  minTraceToPadSpacing?: Distance
+  minPadToPadSpacing?: Distance
+  minViaHoleDiameter?: Distance
+  minViaPadDiameter?: Distance
+
   nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
 
@@ -594,6 +601,11 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
+  minViaToViaSpacing: length.optional(),
+  minTraceToPadSpacing: length.optional(),
+  minPadToPadSpacing: length.optional(),
+  minViaHoleDiameter: length.optional(),
+  minViaPadDiameter: length.optional(),
   nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
   _subcircuitCachingEnabled: z.boolean().optional(),

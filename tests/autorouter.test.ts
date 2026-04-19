@@ -19,6 +19,11 @@ test("supports auto jumper preset", () => {
   expect(result).toBe("auto_jumper")
 })
 
+test("supports kicad routing tools preset", () => {
+  const result = autorouterProp.parse("kicad_routing_tools")
+  expect(result).toBe("kicad_routing_tools")
+})
+
 test("supports laser prefab preset", () => {
   const result = autorouterProp.parse("laser_prefab")
   expect(result).toBe("laser_prefab")

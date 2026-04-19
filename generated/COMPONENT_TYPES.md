@@ -3862,7 +3862,7 @@ export const traceHintProps = z.object({
 ```typescript
 export const portRef = z.union([
   z.string(),
-  z.custom<{ getPortSelector: () => string }>((v) =>
+  z.custom<{ getPortSelector: () => string }>(
 .extend({
     via: z.boolean().optional(),
     fromLayer: layer_ref.optional(),
@@ -3874,6 +3874,10 @@ baseTraceProps.extend({
 baseTraceProps.extend({
     from: portRef,
     to: portRef,
+  }),
+baseTraceProps.extend({
+    start: portRef,
+    end: portRef,
   }),
 ```
 
@@ -3975,3 +3979,4 @@ export const voltageSourceProps = commonComponentProps.extend({
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 ```
+

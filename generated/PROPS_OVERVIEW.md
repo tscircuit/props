@@ -47,6 +47,7 @@ export interface AutorouterConfig {
     | "auto_local"
     | "auto_cloud"
     | "auto_jumper"
+    | "kicad_routing_tools"
     | "tscircuit_beta"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation

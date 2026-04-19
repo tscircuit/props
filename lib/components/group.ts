@@ -330,6 +330,7 @@ export interface AutorouterConfig {
     | "auto_local"
     | "auto_cloud"
     | "auto_jumper"
+    | "kicad_routing_tools"
     | "tscircuit_beta"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
@@ -346,6 +347,7 @@ export type AutorouterPreset =
   | "auto_local"
   | "auto_cloud"
   | "auto_jumper"
+  | "kicad_routing_tools"
   | "tscircuit_beta"
   | "freerouting"
   | "laser_prefab"
@@ -386,6 +388,7 @@ export const autorouterConfig = z.object({
       "auto_local",
       "auto_cloud",
       "auto_jumper",
+      "kicad_routing_tools",
       "tscircuit_beta",
       "freerouting",
       "laser_prefab",
@@ -405,6 +408,7 @@ export const autorouterPreset = z.union([
   z.literal("auto_local"),
   z.literal("auto_cloud"),
   z.literal("auto_jumper"),
+  z.literal("kicad_routing_tools"),
   z.literal("tscircuit_beta"),
   z.literal("freerouting"),
   z.literal("laser_prefab"), // Prefabricated PCB with laser copper ablation

@@ -8,6 +8,10 @@ test("should parse footprint insertionDirection options", () => {
     "from_right",
     "from_front",
     "from_back",
+    "x+",
+    "x-",
+    "y+",
+    "y-",
   ] as const
 
   for (const insertionDirection of insertionDirections) {

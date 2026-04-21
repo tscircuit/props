@@ -9,6 +9,10 @@ export type FootprintInsertionDirection =
   | "from_right"
   | "from_front"
   | "from_back"
+  | "x+"
+  | "x-"
+  | "y+"
+  | "y-"
 
 export const footprintInsertionDirection = z.enum([
   "from_above",
@@ -16,6 +20,10 @@ export const footprintInsertionDirection = z.enum([
   "from_right",
   "from_front",
   "from_back",
+  "x+",
+  "x-",
+  "y+",
+  "y-",
 ])
 expectTypesMatch<
   FootprintInsertionDirection,

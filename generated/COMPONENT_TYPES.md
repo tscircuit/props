@@ -2010,7 +2010,14 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   routingDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
+
   minTraceWidth?: Distance
+  minViaToViaSpacing?: Distance
+  minTraceToPadSpacing?: Distance
+  minPadToPadSpacing?: Distance
+  minViaHoleDiameter?: Distance
+  minViaPadDiameter?: Distance
+
   nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
 
@@ -2151,6 +2158,11 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
+  minViaToViaSpacing: length.optional(),
+  minTraceToPadSpacing: length.optional(),
+  minPadToPadSpacing: length.optional(),
+  minViaHoleDiameter: length.optional(),
+  minViaPadDiameter: length.optional(),
   nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
   _subcircuitCachingEnabled: z.boolean().optional(),

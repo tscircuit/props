@@ -1939,7 +1939,14 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   routingDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
+
   minTraceWidth?: Distance
+  minViaToViaSpacing?: Distance
+  minTraceToPadSpacing?: Distance
+  minPadToPadSpacing?: Distance
+  minViaHoleDiameter?: Distance
+  minViaPadDiameter?: Distance
+
   nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
 

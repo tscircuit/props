@@ -672,6 +672,11 @@ export interface FootprintProps {
    * Can be a footprint or kicad string
    */
   src?: FootprintProp;
+  /**
+   * Direction a cable or mating part is inserted into this footprint in its
+   * unrotated orientation.
+   */
+  insertionDirection?: FootprintInsertionDirection;
 }
 ```
 

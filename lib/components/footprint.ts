@@ -3,6 +3,33 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { type FootprintProp, footprintProp } from "../common/footprintProp"
 
+export type FootprintInsertionDirection =
+  | "from_above"
+  | "from_left"
+  | "from_right"
+  | "from_front"
+  | "from_back"
+  | "x+"
+  | "x-"
+  | "y+"
+  | "y-"
+
+export const footprintInsertionDirection = z.enum([
+  "from_above",
+  "from_left",
+  "from_right",
+  "from_front",
+  "from_back",
+  "x+",
+  "x-",
+  "y+",
+  "y-",
+])
+expectTypesMatch<
+  FootprintInsertionDirection,
+  z.infer<typeof footprintInsertionDirection>
+>(true)
+
 export interface FootprintProps {
   children?: any
   /**
@@ -24,6 +51,11 @@ export interface FootprintProps {
    * Can be a footprint or kicad string
    */
   src?: FootprintProp
+  /**
+   * Direction a cable or mating part is inserted into this footprint in its
+   * unrotated orientation.
+   */
+  insertionDirection?: FootprintInsertionDirection
 }
 
 export const footprintProps = z.object({
@@ -31,6 +63,11 @@ export const footprintProps = z.object({
   originalLayer: layer_ref.default("top").optional(),
   circuitJson: z.array(z.any()).optional(),
   src: footprintProp.describe("Can be a footprint or kicad string").optional(),
+  insertionDirection: footprintInsertionDirection
+    .optional()
+    .describe(
+      "Direction a cable or mating part is inserted into this footprint in its unrotated orientation.",
+    ),
 })
 
 export type FootprintPropsInput = z.input<typeof footprintProps>

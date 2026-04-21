@@ -1941,9 +1941,10 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   defaultTraceWidth?: Distance
 
   minTraceWidth?: Distance
-  minViaToViaSpacing?: Distance
-  minTraceToPadSpacing?: Distance
-  minPadToPadSpacing?: Distance
+  minViaToViaClearance?: Distance
+  minTraceToPadClearance?: Distance
+  minPadToPadClearance?: Distance
+  minBoardEdgeClearance?: Distance
   minViaHoleDiameter?: Distance
   minViaPadDiameter?: Distance
 

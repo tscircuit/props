@@ -92,6 +92,7 @@ export interface PillWithRectPadPlatedHoleProps
   portHints?: PortHints
   holeOffsetX?: number | string
   holeOffsetY?: number | string
+  rectBorderRadius?: number | string
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
 }
@@ -243,6 +244,7 @@ const platedHolePropsByShape = z
       holeHeight: distance,
       rectPadWidth: distance,
       rectPadHeight: distance,
+      rectBorderRadius: distance.optional(),
       portHints: portHints.optional(),
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),

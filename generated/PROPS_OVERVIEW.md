@@ -1427,6 +1427,7 @@ export interface PillWithRectPadPlatedHoleProps
   portHints?: PortHints
   holeOffsetX?: number | string
   holeOffsetY?: number | string
+  rectBorderRadius?: number | string
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
 }
@@ -1941,9 +1942,10 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   defaultTraceWidth?: Distance
 
   minTraceWidth?: Distance
-  minViaToViaClearance?: Distance
-  minTraceToPadClearance?: Distance
-  minPadToPadClearance?: Distance
+  minViaHoleEdgeToViaHoleEdgeClearance?: Distance
+  minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
+  minTraceToPadEdgeClearance?: Distance
+  minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
   minViaHoleDiameter?: Distance
   minViaPadDiameter?: Distance

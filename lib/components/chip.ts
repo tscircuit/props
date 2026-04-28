@@ -55,6 +55,7 @@ export interface ChipPropsSU<
   pinCompatibleVariants?: PinCompatibleVariant[]
   schPinStyle?: SchematicPinStyle
   schPinSpacing?: Distance
+  schPinLength?: Distance
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
@@ -157,6 +158,7 @@ export const chipProps = commonComponentProps.extend({
   pinCompatibleVariants: z.array(pinCompatibleVariant).optional(),
   schPinStyle: schematicPinStyle.optional(),
   schPinSpacing: distance.optional(),
+  schPinLength: distance.optional(),
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   noSchematicRepresentation: z.boolean().optional(),

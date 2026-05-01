@@ -54,6 +54,7 @@ export interface ChipPropsSU<
   schPortArrangement?: SchematicPortArrangement
   pinCompatibleVariants?: PinCompatibleVariant[]
   schPinStyle?: SchematicPinStyle
+  /** @deprecated Use schPinStyle instead. */
   schPinSpacing?: Distance
   schWidth?: Distance
   schHeight?: Distance

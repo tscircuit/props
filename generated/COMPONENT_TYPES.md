@@ -2560,11 +2560,13 @@ export const panelProps = baseGroupProps
 pcbLayoutProps.omit({ pcbRotation: true }).extend({
     shape: z.literal("circle"),
     radius: distance,
+    layers: z.array(layer_ref).optional(),
   }),
 pcbLayoutProps.extend({
     shape: z.literal("rect"),
     width: distance,
     height: distance,
+    layers: z.array(layer_ref).optional(),
   }),
 ```
 

@@ -746,7 +746,6 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPinArrangement?: SchematicPinArrangement;
 
   /**
-   * @deprecated Use schPinStyle instead.
    * Spacing between pins when rendered as a schematic box
    */
   schPinSpacing?: Distance;
@@ -907,7 +906,6 @@ export interface JumperProps extends CommonComponentProps {
     SchematicPinLabel | SchematicPinLabel[]
   >;
   schPinStyle?: SchematicPinStyle;
-  /** @deprecated Use schPinStyle instead. */
   schPinSpacing?: number | string;
   schWidth?: number | string;
   schHeight?: number | string;
@@ -1287,7 +1285,6 @@ export interface PinHeaderProps extends CommonComponentProps {
   schPinStyle?: SchematicPinStyle;
 
   /**
-   * @deprecated Use schPinStyle instead.
    * Schematic pin spacing
    */
   schPinSpacing?: number | string;

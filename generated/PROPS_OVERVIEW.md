@@ -217,7 +217,7 @@ export interface BatteryProps<PinLabel extends string = string>
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string
-  material?: "fr4" | "fr1"
+  material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8
   borderRadius?: Distance
@@ -394,6 +394,7 @@ export interface ChipPropsSU<
   schPortArrangement?: SchematicPortArrangement
   pinCompatibleVariants?: PinCompatibleVariant[]
   schPinStyle?: SchematicPinStyle
+  /** @deprecated Use schPinStyle instead. */
   schPinSpacing?: Distance
   schWidth?: Distance
   schHeight?: Distance

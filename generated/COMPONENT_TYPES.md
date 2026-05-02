@@ -902,7 +902,7 @@ export const batteryProps = commonComponentProps.extend({
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string
-  material?: "fr4" | "fr1"
+  material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8
   borderRadius?: Distance
   thickness?: Distance
@@ -922,7 +922,7 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
-    material: z.enum(["fr4", "fr1"]).default("fr4"),
+    material: z.enum(["fr4", "fr1", "flex"]).default("fr4"),
     layers: z
       .union([
         z.literal(1),

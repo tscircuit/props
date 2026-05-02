@@ -36,6 +36,12 @@ test("should allow 6 and 8 layer boards", () => {
   expect(boardProps.parse(eightLayer).layers).toBe(8)
 })
 
+test("should parse flex board material", () => {
+  const raw: BoardProps = { name: "board", material: "flex" }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.material).toBe("flex")
+})
+
 test("should parse borderRadius prop", () => {
   const raw: BoardProps = { name: "board", borderRadius: 2 }
   const parsed = boardProps.parse(raw)

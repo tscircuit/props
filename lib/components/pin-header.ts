@@ -107,6 +107,7 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   /**
    * Schematic pin spacing
+   * @deprecated Use schPinStyle instead.
    */
   schPinSpacing?: number | string
 

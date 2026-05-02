@@ -192,6 +192,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 
   /**
    * Spacing between pins when rendered as a schematic box
+   * @deprecated Use schPinStyle instead.
    */
   schPinSpacing?: Distance
 

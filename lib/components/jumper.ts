@@ -28,6 +28,7 @@ export interface JumperProps extends CommonComponentProps {
     SchematicPinLabel | SchematicPinLabel[]
   >
   schPinStyle?: SchematicPinStyle
+  /** @deprecated Use schPinStyle instead. */
   schPinSpacing?: number | string
   schWidth?: number | string
   schHeight?: number | string

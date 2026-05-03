@@ -23,6 +23,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | Component                      | Props Interface                                                                            |
 | ------------------------------ | ------------------------------------------------------------------------------------------ |
 | `<analogsimulation />`         | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                         |
+| `<autoroutingphase />`         | [`AutoroutingPhaseProps`](#autoroutingphaseprops-autoroutingphase)                         |
 | `<battery />`                  | [`BatteryProps`](#batteryprops-battery)                                                    |
 | `<board />`                    | [`BoardProps`](#boardprops-board)                                                          |
 | `<breakout />`                 | [`BreakoutProps`](#breakoutprops-breakout)                                                 |
@@ -204,6 +205,17 @@ export interface AnalogSimulationProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/analogsimulation.ts)
+
+### AutoroutingPhaseProps `<autoroutingphase />`
+
+```ts
+export interface AutoroutingPhaseProps {
+  phaseIndex: number;
+  autorouter: AutorouterProp;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/autoroutingphase.ts)
 
 ### BatteryProps `<battery />`
 

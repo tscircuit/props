@@ -877,6 +877,19 @@ export const analogSimulationProps = z.object({
 })
 ```
 
+### autoroutingphase
+
+```typescript
+export interface AutoroutingPhaseProps {
+  autorouter?: AutorouterProp
+  phaseIndex?: number
+}
+export const autoroutingPhaseProps = z.object({
+  autorouter: autorouterProp.optional(),
+  phaseIndex: z.number().optional(),
+})
+```
+
 ### battery
 
 ```typescript

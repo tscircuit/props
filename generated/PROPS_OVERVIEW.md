@@ -71,6 +71,12 @@ export interface AutorouterInstance {
 }
 
 
+export interface AutoroutingPhaseProps {
+  autorouter?: AutorouterProp
+  phaseIndex?: number
+}
+
+
 export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   name?: string
   key?: any

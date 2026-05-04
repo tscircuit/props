@@ -600,6 +600,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),
   schMaxTraceDistance: distance.optional(),
+  drawSchCellBorders: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),

@@ -881,10 +881,12 @@ export const analogSimulationProps = z.object({
 
 ```typescript
 export interface AutoroutingPhaseProps {
+  key?: any
   autorouter?: AutorouterProp
   phaseIndex?: number
 }
 export const autoroutingPhaseProps = z.object({
+  key: z.any().optional(),
   autorouter: autorouterProp.optional(),
   phaseIndex: z.number().optional(),
 })

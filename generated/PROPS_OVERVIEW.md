@@ -72,6 +72,7 @@ export interface AutorouterInstance {
 
 
 export interface AutoroutingPhaseProps {
+  key?: any
   autorouter?: AutorouterProp
   phaseIndex?: number
 }

@@ -210,9 +210,6 @@ export interface AnalogSimulationProps {
 
 ```ts
 export interface AutoroutingPhaseProps {
-  name?: string;
-  key?: any;
-  children?: any;
   autorouter?: AutorouterProp;
   phaseIndex?: number;
 }

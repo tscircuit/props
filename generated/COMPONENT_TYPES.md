@@ -549,16 +549,18 @@ export interface CommonComponentProps<PinLabel extends string = string>
   showAsTranslucentModel?: boolean
   mfn?: string
   manufacturerPartNumber?: string
-  schematicSectionReferenceName?: string
+  schSectionName?: string
 }
 .extend({
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
-    schematicSectionReferenceName: z
+    schSectionName: z
       .string()
       .optional()
-      .describe("Assign membership to the referenced section."),
+      .describe(
+        'This component will be drawn as part of this section e.g. "Power"',
+      ),
     datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),
@@ -3462,11 +3464,11 @@ export interface SchematicRowProps {
 ```typescript
 export interface SchematicSectionProps {
   displayName?: string
-  referenceName: string
+  name: string
 }
 export const schematicSectionProps = z.object({
   displayName: z.string().optional(),
-  referenceName: z.string(),
+  name: z.string(),
 })
 ```
 

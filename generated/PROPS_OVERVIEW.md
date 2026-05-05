@@ -524,9 +524,9 @@ export interface CommonComponentProps<PinLabel extends string = string>
   mfn?: string
   manufacturerPartNumber?: string
   /**
-   * Assign membership to the referenced section.
+   *This component will be drawn as part of this section e.g. \"Power\
    */
-  schematicSectionReferenceName?: string
+  schSectionName?: string
 }
 
 
@@ -1894,7 +1894,7 @@ export interface SchematicRowProps {
 
 export interface SchematicSectionProps {
   displayName?: string
-  referenceName: string
+  name: string
 }
 
 

@@ -156,9 +156,9 @@ export interface CommonComponentProps extends CommonLayoutProps {
   symbolName?: string;
   doNotPlace?: boolean;
   /**
-   * Assign membership to the referenced section.
+   * This component will be drawn as part of this section e.g. "Power"
    */
-  schematicSectionReferenceName?: string;
+  schSectionName?: string;
 }
 ```
 
@@ -1565,7 +1565,7 @@ export interface SchematicRowProps {
 ```ts
 export interface SchematicSectionProps {
   displayName?: string;
-  referenceName: string;
+  name: string;
 }
 ```
 

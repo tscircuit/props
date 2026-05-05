@@ -3,12 +3,12 @@ import { expectTypesMatch } from "lib/typecheck"
 
 export interface SchematicSectionProps {
   displayName?: string
-  referenceName: string
+  name: string
 }
 
 export const schematicSectionProps = z.object({
   displayName: z.string().optional(),
-  referenceName: z.string(),
+  name: z.string(),
 })
 
 export type InferredSchematicSectionProps = z.input<

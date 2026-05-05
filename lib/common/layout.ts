@@ -261,9 +261,9 @@ export interface CommonComponentProps<PinLabel extends string = string>
   mfn?: string
   manufacturerPartNumber?: string
   /**
-   * Assign membership to the referenced section.
+   *This component will be drawn as part of this section e.g. \"Power\
    */
-  schematicSectionReferenceName?: string
+  schSectionName?: string
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -272,10 +272,12 @@ export const commonComponentProps = commonLayoutProps
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
-    schematicSectionReferenceName: z
+    schSectionName: z
       .string()
       .optional()
-      .describe("Assign membership to the referenced section."),
+      .describe(
+        'This component will be drawn as part of this section e.g. "Power"',
+      ),
     datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),

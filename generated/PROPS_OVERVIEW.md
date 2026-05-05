@@ -75,6 +75,13 @@ export interface AutoroutingPhaseProps {
   key?: any
   autorouter?: AutorouterProp
   phaseIndex?: number
+  region?: {
+    minX: number
+    maxX: number
+    minY: number
+    maxY: number
+  }
+  reroute?: boolean
 }
 
 

@@ -34,3 +34,33 @@ test("autorouting phase accepts autorouter config", () => {
     traceClearance: 0.2,
   })
 })
+
+test("autorouting phase accepts region with reroute", () => {
+  const raw: AutoroutingPhaseProps = {
+    phaseIndex: 2,
+    reroute: true,
+    region: {
+      minX: 1,
+      maxX: 10,
+      minY: 2,
+      maxY: 12,
+    },
+  }
+
+  const parsed = autoroutingPhaseProps.parse(raw)
+  expect(parsed.reroute).toBe(true)
+  expect(parsed.region).toEqual({
+    minX: 1,
+    maxX: 10,
+    minY: 2,
+    maxY: 12,
+  })
+})
+
+test("autorouting phase requires region when reroute is provided", () => {
+  expect(() =>
+    autoroutingPhaseProps.parse({
+      reroute: false,
+    }),
+  ).toThrow("region is required when reroute is provided")
+})

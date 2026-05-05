@@ -549,11 +549,18 @@ export interface CommonComponentProps<PinLabel extends string = string>
   showAsTranslucentModel?: boolean
   mfn?: string
   manufacturerPartNumber?: string
+  schSectionName?: string
 }
 .extend({
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
+    schSectionName: z
+      .string()
+      .optional()
+      .describe(
+        'This component will be drawn as part of this section e.g. "Power"',
+      ),
     datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),
@@ -892,28 +899,21 @@ export interface AutoroutingPhaseProps {
   }
   reroute?: boolean
 }
-export const autoroutingPhaseProps = z.object({
-  key: z.any().optional(),
-  autorouter: autorouterProp.optional(),
-  phaseIndex: z.number().optional(),
-  region: z
-    .object({
-      minX: z.number(),
-      maxX: z.number(),
-      minY: z.number(),
-      maxY: z.number(),
-    })
-    .optional(),
-  reroute: z.boolean().optional(),
-}).superRefine((value, ctx) => {
-  if (value.reroute !== undefined && value.region === undefined) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "region is required when reroute is provided",
-      path: ["region"],
-    })
-  }
-})
+export const autoroutingPhaseProps = z
+  .object({
+    key: z.any().optional(),
+    autorouter: autorouterProp.optional(),
+    phaseIndex: z.number().optional(),
+    region: z
+      .object({
+        minX: z.number(),
+        maxX: z.number(),
+        minY: z.number(),
+        maxY: z.number(),
+      })
+      .optional(),
+    reroute: z.boolean().optional(),
+  })
 ```
 
 ### battery
@@ -2056,6 +2056,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   minTraceToPadEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
+  minViaEdgeToPadEdgeClearance?: Distance
   minViaHoleDiameter?: Distance
   minViaPadDiameter?: Distance
 
@@ -2200,6 +2201,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
   minViaHoleEdgeToViaHoleEdgeClearance: length.optional(),
+  minViaEdgeToPadEdgeClearance: length.optional(),
   minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
   minTraceToPadEdgeClearance: length.optional(),
   minPadEdgeToPadEdgeClearance: length.optional(),
@@ -3455,6 +3457,19 @@ export interface SchematicRowProps {
   children?: any
   height?: number | string
 }
+```
+
+### schematic-section
+
+```typescript
+export interface SchematicSectionProps {
+  displayName?: string
+  name: string
+}
+export const schematicSectionProps = z.object({
+  displayName: z.string().optional(),
+  name: z.string(),
+})
 ```
 
 ### schematic-table

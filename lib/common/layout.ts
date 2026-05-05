@@ -260,6 +260,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
   showAsTranslucentModel?: boolean
   mfn?: string
   manufacturerPartNumber?: string
+  /**
+   *This component will be drawn as part of this section e.g. \"Power\
+   */
+  schSectionName?: string
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -268,6 +272,12 @@ export const commonComponentProps = commonLayoutProps
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
+    schSectionName: z
+      .string()
+      .optional()
+      .describe(
+        'This component will be drawn as part of this section e.g. "Power"',
+      ),
     datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),

@@ -523,6 +523,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
   showAsTranslucentModel?: boolean
   mfn?: string
   manufacturerPartNumber?: string
+  /**
+   *This component will be drawn as part of this section e.g. \"Power\
+   */
+  schSectionName?: string
 }
 
 
@@ -1888,6 +1892,12 @@ export interface SchematicRowProps {
 }
 
 
+export interface SchematicSectionProps {
+  displayName?: string
+  name: string
+}
+
+
 export interface SchematicTableProps {
   schX?: number | string
   schY?: number | string
@@ -1965,6 +1975,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   minTraceToPadEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
+  minViaEdgeToPadEdgeClearance?: Distance
   minViaHoleDiameter?: Distance
   minViaPadDiameter?: Distance
 

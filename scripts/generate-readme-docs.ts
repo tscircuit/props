@@ -184,6 +184,10 @@ function generateInterfaceDefinitions(
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  /**
+   * This component will be drawn as part of this section e.g. "Power"
+   */
+  schSectionName?: string
 }`,
       filePath: "lib/common/layout.ts",
     },

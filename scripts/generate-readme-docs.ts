@@ -184,6 +184,10 @@ function generateInterfaceDefinitions(
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  /**
+   * Assign membership to the referenced section.
+   */
+  schematicSectionReferenceName?: string
 }`,
       filePath: "lib/common/layout.ts",
     },

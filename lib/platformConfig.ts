@@ -16,8 +16,16 @@ export interface FootprintLibraryResult {
   cadModel?: CadModelProp
 }
 
+export interface PcbFileParserResult {
+  circuitJson: CircuitJson
+}
+
 export interface FootprintFileParserEntry {
   loadFromUrl: (url: string) => Promise<FootprintLibraryResult>
+}
+
+export interface PcbFileParserEntry {
+  loadFromUrl: (url: string) => Promise<PcbFileParserResult>
 }
 
 export type CircuitJson = any[]
@@ -98,6 +106,7 @@ export interface PlatformConfig {
           ) => Promise<FootprintLibraryResult>)
       >
   >
+  pcbFileParserMap?: Record<string, PcbFileParserEntry>
 
   footprintFileParserMap?: Record<string, FootprintFileParserEntry>
 

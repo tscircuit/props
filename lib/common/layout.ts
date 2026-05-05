@@ -260,6 +260,10 @@ export interface CommonComponentProps<PinLabel extends string = string>
   showAsTranslucentModel?: boolean
   mfn?: string
   manufacturerPartNumber?: string
+  /**
+   * Assign membership to the referenced section.
+   */
+  schematicSectionReferenceName?: string
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -268,6 +272,10 @@ export const commonComponentProps = commonLayoutProps
     key: z.any().optional(),
     name: z.string(),
     displayName: z.string().optional(),
+    schematicSectionReferenceName: z
+      .string()
+      .optional()
+      .describe("Assign membership to the referenced section."),
     datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
     kicadFootprintMetadata: kicadFootprintMetadata.optional(),

@@ -439,6 +439,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   minTraceToPadEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
+  minViaEdgeToPadEdgeClearance?: Distance
   minViaHoleDiameter?: Distance
   minViaPadDiameter?: Distance
 
@@ -605,6 +606,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   defaultTraceWidth: length.optional(),
   minTraceWidth: length.optional(),
   minViaHoleEdgeToViaHoleEdgeClearance: length.optional(),
+  minViaEdgeToPadEdgeClearance: length.optional(),
   minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
   minTraceToPadEdgeClearance: length.optional(),
   minPadEdgeToPadEdgeClearance: length.optional(),

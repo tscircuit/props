@@ -219,6 +219,7 @@ export interface AutoroutingPhaseProps {
   autorouter?: AutorouterProp;
   phaseIndex?: number;
   region?: {
+    shape?: "rect";
     minX: number;
     maxX: number;
     minY: number;

@@ -40,6 +40,7 @@ test("autorouting phase accepts region with reroute", () => {
     phaseIndex: 2,
     reroute: true,
     region: {
+      shape: "rect",
       minX: 1,
       maxX: 10,
       minY: 2,
@@ -49,6 +50,27 @@ test("autorouting phase accepts region with reroute", () => {
 
   const parsed = autoroutingPhaseProps.parse(raw)
   expect(parsed.reroute).toBe(true)
+  expect(parsed.region).toEqual({
+    shape: "rect",
+    minX: 1,
+    maxX: 10,
+    minY: 2,
+    maxY: 12,
+  })
+})
+
+test("autorouting phase accepts bounds-only reroute region", () => {
+  const raw: AutoroutingPhaseProps = {
+    reroute: true,
+    region: {
+      minX: 1,
+      maxX: 10,
+      minY: 2,
+      maxY: 12,
+    },
+  }
+
+  const parsed = autoroutingPhaseProps.parse(raw)
   expect(parsed.region).toEqual({
     minX: 1,
     maxX: 10,

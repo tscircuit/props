@@ -892,6 +892,7 @@ export interface AutoroutingPhaseProps {
   autorouter?: AutorouterProp
   phaseIndex?: number
   region?: {
+    shape?: "rect"
     minX: number
     maxX: number
     minY: number
@@ -906,6 +907,7 @@ export const autoroutingPhaseProps = z
     phaseIndex: z.number().optional(),
     region: z
       .object({
+        shape: z.literal("rect").optional(),
         minX: z.number(),
         maxX: z.number(),
         minY: z.number(),

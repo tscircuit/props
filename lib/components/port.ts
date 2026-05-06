@@ -4,7 +4,7 @@ import { kicadPinMetadata } from "lib/common/kicadPinMetadata"
 import { z } from "zod"
 
 export const portProps = commonLayoutProps.extend({
-  name: z.string(),
+  name: z.string().optional(),
   pinNumber: z.number().optional(),
   schStemLength: z.number().optional(),
   aliases: z.array(z.string()).optional(),

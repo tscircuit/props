@@ -310,6 +310,18 @@ export interface PcbRouteCache {
   cacheKey: string
 }
 
+export interface RoutingTolerances {
+  minTraceWidth?: Distance
+  minViaHoleEdgeToViaHoleEdgeClearance?: Distance
+  minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
+  minTraceToPadEdgeClearance?: Distance
+  minPadEdgeToPadEdgeClearance?: Distance
+  minBoardEdgeClearance?: Distance
+  minViaEdgeToPadEdgeClearance?: Distance
+  minViaHoleDiameter?: Distance
+  minViaPadDiameter?: Distance
+}
+
 export interface AutorouterConfig {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
@@ -362,6 +374,18 @@ export type AutorouterProp =
 const pcbAnchorAlignmentAutocomplete = z.custom<
   AutocompleteString<z.infer<typeof ninePointAnchor>>
 >((value) => typeof value === "string")
+
+export const routingTolerances = z.object({
+  minTraceWidth: length.optional(),
+  minViaHoleEdgeToViaHoleEdgeClearance: length.optional(),
+  minViaEdgeToPadEdgeClearance: length.optional(),
+  minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
+  minTraceToPadEdgeClearance: length.optional(),
+  minPadEdgeToPadEdgeClearance: length.optional(),
+  minBoardEdgeClearance: length.optional(),
+  minViaHoleDiameter: length.optional(),
+  minViaPadDiameter: length.optional(),
+})
 
 export const autorouterConfig = z.object({
   serverUrl: url.optional(),
@@ -427,21 +451,13 @@ export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
 
 export const autorouterEffortLevel = z.enum(["1x", "2x", "5x", "10x", "100x"])
 
-export interface SubcircuitGroupProps extends BaseGroupProps {
+export interface SubcircuitGroupProps
+  extends BaseGroupProps,
+    RoutingTolerances {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
-
-  minTraceWidth?: Distance
-  minViaHoleEdgeToViaHoleEdgeClearance?: Distance
-  minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
-  minTraceToPadEdgeClearance?: Distance
-  minPadEdgeToPadEdgeClearance?: Distance
-  minBoardEdgeClearance?: Distance
-  minViaEdgeToPadEdgeClearance?: Distance
-  minViaHoleDiameter?: Distance
-  minViaPadDiameter?: Distance
 
   nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
@@ -604,15 +620,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   routingDisabled: z.boolean().optional(),
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
-  minTraceWidth: length.optional(),
-  minViaHoleEdgeToViaHoleEdgeClearance: length.optional(),
-  minViaEdgeToPadEdgeClearance: length.optional(),
-  minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
-  minTraceToPadEdgeClearance: length.optional(),
-  minPadEdgeToPadEdgeClearance: length.optional(),
-  minBoardEdgeClearance: length.optional(),
-  minViaHoleDiameter: length.optional(),
-  minViaPadDiameter: length.optional(),
+  ...routingTolerances.shape,
   nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
   _subcircuitCachingEnabled: z.boolean().optional(),
@@ -648,6 +656,7 @@ type InferredSubcircuitGroupPropsWithBool = z.input<
 >
 
 expectTypesMatch<AutorouterProp, z.input<typeof autorouterProp>>(true)
+expectTypesMatch<RoutingTolerances, z.input<typeof routingTolerances>>(true)
 
 expectTypesMatch<BaseGroupProps, InferredBaseGroupProps>(true)
 expectTypesMatch<

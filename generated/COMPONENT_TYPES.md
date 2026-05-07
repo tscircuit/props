@@ -2016,6 +2016,7 @@ export interface AutorouterConfig {
     | "auto_cloud"
     | "auto_jumper"
     | "tscircuit_beta"
+    | "krt"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
@@ -2059,6 +2060,7 @@ export const autorouterConfig = z.object({
       "auto_cloud",
       "auto_jumper",
       "tscircuit_beta",
+      "krt",
       "freerouting",
       "laser_prefab",
       "auto-jumper",

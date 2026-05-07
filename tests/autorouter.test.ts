@@ -31,6 +31,11 @@ test("supports tscircuit beta preset", () => {
   expect(result).toBe("tscircuit_beta")
 })
 
+test("supports krt preset", () => {
+  const result = autorouterProp.parse("krt")
+  expect(result).toBe("krt")
+})
+
 test("still supports deprecated kebab-case presets", () => {
   const result = autorouterProp.parse("auto-cloud")
   expect(result).toBe("auto-cloud")

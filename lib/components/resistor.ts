@@ -5,6 +5,7 @@ import {
   commonComponentProps,
   lrPins,
 } from "lib/common/layout"
+import { footprintProp } from "lib/common/footprintProp"
 import {
   schematicSymbolSize,
   type SchematicSymbolSize,
@@ -56,8 +57,9 @@ const mapResistorFootprint = (
   if (!resistorImperialFootprintNames.has(footprint)) return footprint
   return `res${footprint}`
 }
-export const resistorProps = commonComponentProps
-  .extend({
+export const resistorProps: z.ZodType<ResistorProps> =
+  commonComponentProps.extend({
+    footprint: footprintProp.optional().transform(mapResistorFootprint),
     resistance,
     tolerance: z
       .union([z.string(), z.number()])
@@ -89,10 +91,6 @@ export const resistorProps = commonComponentProps
 
     connections: createConnectionsProp(resistorPinLabels).optional(),
   })
-  .transform((props) => ({
-    ...props,
-    footprint: mapResistorFootprint(props.footprint),
-  }))
 export const resistorPins = lrPins
 
 type InferredResistorProps = z.input<typeof resistorProps>

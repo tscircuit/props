@@ -51,6 +51,13 @@ type FootprintLibraryPrefix = string
 /** e.g. "kicad_mod", used to reference file extensions for loaders **/
 type FileExtension = string
 
+type FileContent = string | ArrayBufferLike
+
+type EsModuleImportResult = {
+  __esModule: true
+  default: any
+}
+
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
@@ -106,6 +113,11 @@ export interface PlatformConfig {
   >
 
   footprintFileParserMap?: Record<FileExtension, FootprintFileParserEntry>
+
+  staticFileLoaderMap?: Record<
+    FileExtension,
+    (fileContent: FileContent) => Promise<EsModuleImportResult>
+  >
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
   nodeModulesResolver?: (modulePath: string) => Promise<string | null>

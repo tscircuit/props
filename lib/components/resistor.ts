@@ -57,8 +57,8 @@ const mapResistorFootprint = (
   if (!resistorImperialFootprintNames.has(footprint)) return footprint
   return `res${footprint}`
 }
-export const resistorProps: z.ZodType<ResistorProps> = commonComponentProps
-  .extend({
+export const resistorProps: z.ZodType<ResistorProps> =
+  commonComponentProps.extend({
     footprint: footprintProp.optional().transform(mapResistorFootprint),
     resistance,
     tolerance: z

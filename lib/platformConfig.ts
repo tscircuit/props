@@ -45,6 +45,19 @@ export interface AutorouterDefinition {
   ) => AutorouterInstance | Promise<AutorouterInstance>
 }
 
+/** e.g. "kicad", this is the prefix used to reference libraries in footprinter strings e.g. kicad:Resistor_0402 **/
+type FootprintLibraryPrefix = string
+
+/** e.g. "kicad_mod", used to reference file extensions for loaders **/
+type FileExtension = string
+
+type FileContent = string | ArrayBufferLike
+
+type EsModuleImportResult = {
+  __esModule: true
+  default: any
+}
+
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
@@ -84,7 +97,7 @@ export interface PlatformConfig {
   spiceEngineMap?: Record<string, SpiceEngine>
 
   footprintLibraryMap?: Record<
-    string,
+    FootprintLibraryPrefix,
     | ((
         path: string,
         options?: { resolvedPcbStyle?: PcbStyle },
@@ -99,7 +112,12 @@ export interface PlatformConfig {
       >
   >
 
-  footprintFileParserMap?: Record<string, FootprintFileParserEntry>
+  footprintFileParserMap?: Record<FileExtension, FootprintFileParserEntry>
+
+  staticFileLoaderMap?: Record<
+    FileExtension,
+    (fileContent: FileContent) => Promise<EsModuleImportResult>
+  >
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
   nodeModulesResolver?: (modulePath: string) => Promise<string | null>

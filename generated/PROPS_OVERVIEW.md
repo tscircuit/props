@@ -26,7 +26,7 @@ export interface AnalogSimulationProps {
 }
 
 
-export interface AutorouterConfig extends RoutingTolerances {
+export interface AutorouterConfig {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
@@ -71,7 +71,7 @@ export interface AutorouterInstance {
 }
 
 
-export interface AutoroutingPhaseProps {
+export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
   autorouter?: AutorouterProp
   phaseIndex?: number

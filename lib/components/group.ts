@@ -322,7 +322,7 @@ export interface RoutingTolerances {
   minViaPadDiameter?: Distance
 }
 
-export interface AutorouterConfig extends RoutingTolerances {
+export interface AutorouterConfig {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
@@ -394,7 +394,6 @@ export const autorouterConfig = z.object({
   serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
-  ...routingTolerances.shape,
   availableJumperTypes: z.array(z.enum(["1206x4", "0603"])).optional(),
   groupMode: z
     .enum(["sequential_trace", "subcircuit", "sequential-trace"])

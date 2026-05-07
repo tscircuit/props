@@ -214,7 +214,7 @@ export interface AnalogSimulationProps {
 ### AutoroutingPhaseProps `<autoroutingphase />`
 
 ```ts
-export interface AutoroutingPhaseProps {
+export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any;
   autorouter?: AutorouterProp;
   phaseIndex?: number;

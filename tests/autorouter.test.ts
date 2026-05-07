@@ -54,23 +54,6 @@ test("supports shared routing tolerances", () => {
   expect(result.minViaPadDiameter).toBe(0.6)
 })
 
-test("supports routing tolerances inside autorouter config", () => {
-  const result = subcircuitGroupPropsWithBool.parse({
-    subcircuit: true,
-    autorouter: {
-      preset: "auto_local",
-      minTraceWidth: "0.12mm",
-      minViaPadDiameter: "0.6mm",
-    },
-  })
-
-  expect(result.autorouter).toMatchObject({
-    preset: "auto_local",
-    minTraceWidth: 0.12,
-    minViaPadDiameter: 0.6,
-  })
-})
-
 test("supports autorouter version v4", () => {
   const result = subcircuitGroupPropsWithBool.parse({
     subcircuit: true,

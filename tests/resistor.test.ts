@@ -23,7 +23,7 @@ test("should parse tolerance percentage for resistor", () => {
   expect(parsed.tolerance).toBeCloseTo(0.05)
 })
 
-test("should normalize supported resistor imperial footprints", () => {
+test("should map supported resistor imperial footprints", () => {
   const supportedFootprints = ["01005", "0402", "2512"] as const
 
   for (const footprint of supportedFootprints) {

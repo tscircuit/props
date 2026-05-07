@@ -32,6 +32,9 @@ export interface ResistorProps<PinLabel extends string = string>
   schSize?: SchematicSymbolSize
   connections?: Connections<ResistorPinLabels>
 }
+
+type ResistorFootprint = CommonComponentProps["footprint"]
+
 const resistorImperialFootprintNames = new Set([
   "01005",
   "0201",
@@ -46,7 +49,9 @@ const resistorImperialFootprintNames = new Set([
   "2512",
 ])
 
-const normalizeResistorFootprint = (footprint: unknown) => {
+const mapResistorFootprint = (
+  footprint: ResistorFootprint,
+): ResistorFootprint => {
   if (typeof footprint !== "string") return footprint
   if (!resistorImperialFootprintNames.has(footprint)) return footprint
   return `res${footprint}`
@@ -86,7 +91,7 @@ export const resistorProps = commonComponentProps
   })
   .transform((props) => ({
     ...props,
-    footprint: normalizeResistorFootprint(props.footprint),
+    footprint: mapResistorFootprint(props.footprint),
   }))
 export const resistorPins = lrPins
 

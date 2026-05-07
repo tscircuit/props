@@ -32,7 +32,25 @@ export interface ResistorProps<PinLabel extends string = string>
   schSize?: SchematicSymbolSize
   connections?: Connections<ResistorPinLabels>
 }
+const resistorImperialFootprintNames = new Set([
+  "01005",
+  "0201",
+  "0402",
+  "0504",
+  "0603",
+  "0805",
+  "1206",
+  "1210",
+  "1812",
+  "2010",
+  "2512",
+])
 
+const normalizeResistorFootprint = (footprint: unknown) => {
+  if (typeof footprint !== "string") return footprint
+  if (!resistorImperialFootprintNames.has(footprint)) return footprint
+  return `res${footprint}`
+}
 export const resistorProps = commonComponentProps.extend({
   resistance,
   tolerance: z
@@ -63,8 +81,12 @@ export const resistorProps = commonComponentProps.extend({
   schOrientation: schematicOrientation.optional(),
   schSize: schematicSymbolSize.optional(),
 
-  connections: createConnectionsProp(resistorPinLabels).optional(),
-})
+    connections: createConnectionsProp(resistorPinLabels).optional(),
+  })
+  .transform((props) => ({
+    ...props,
+    footprint: normalizeResistorFootprint(props.footprint),
+  }))
 export const resistorPins = lrPins
 
 type InferredResistorProps = z.input<typeof resistorProps>

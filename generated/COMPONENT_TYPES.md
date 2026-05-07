@@ -3214,38 +3214,38 @@ export interface ResistorProps<PinLabel extends string = string>
   schSize?: SchematicSymbolSize
   connections?: Connections<ResistorPinLabels>
 }
-export const resistorProps = commonComponentProps.extend({
-  resistance,
-  tolerance: z
-    .union([z.string(), z.number()])
-    .transform((val) => {
-      if (typeof val === "string") {
-        if (val.endsWith("%")) {
-          return parseFloat(val.slice(0, -1)) / 100
+.extend({
+    resistance,
+    tolerance: z
+      .union([z.string(), z.number()])
+      .transform((val) => {
+        if (typeof val === "string") {
+          if (val.endsWith("%")) {
+            return parseFloat(val.slice(0, -1)) / 100
+          }
+          return parseFloat(val)
         }
-        return parseFloat(val)
-      }
-      return val
-    })
-    .pipe(
-      z
-        .number()
-        .min(0, "Tolerance must be non-negative")
-        .max(1, "Tolerance cannot be greater than 100%"),
-    )
-    .optional(),
+        return val
+      })
+      .pipe(
+        z
+          .number()
+          .min(0, "Tolerance must be non-negative")
+          .max(1, "Tolerance cannot be greater than 100%"),
+      )
+      .optional(),
 
-  pullupFor: z.string().optional(),
-  pullupTo: z.string().optional(),
+    pullupFor: z.string().optional(),
+    pullupTo: z.string().optional(),
 
-  pulldownFor: z.string().optional(),
-  pulldownTo: z.string().optional(),
+    pulldownFor: z.string().optional(),
+    pulldownTo: z.string().optional(),
 
-  schOrientation: schematicOrientation.optional(),
-  schSize: schematicSymbolSize.optional(),
+    schOrientation: schematicOrientation.optional(),
+    schSize: schematicSymbolSize.optional(),
 
-  connections: createConnectionsProp(resistorPinLabels).optional(),
-})
+    connections: createConnectionsProp(resistorPinLabels).optional(),
+  })
 ```
 
 ### resonator

@@ -57,40 +57,39 @@ const mapResistorFootprint = (
   if (!resistorImperialFootprintNames.has(footprint)) return footprint
   return `res${footprint}`
 }
-export const resistorProps: z.ZodType<ResistorProps> =
-  commonComponentProps.extend({
-    footprint: footprintProp.optional().transform(mapResistorFootprint),
-    resistance,
-    tolerance: z
-      .union([z.string(), z.number()])
-      .transform((val) => {
-        if (typeof val === "string") {
-          if (val.endsWith("%")) {
-            return parseFloat(val.slice(0, -1)) / 100
-          }
-          return parseFloat(val)
+export const resistorProps = commonComponentProps.extend({
+  footprint: footprintProp.optional().transform(mapResistorFootprint),
+  resistance,
+  tolerance: z
+    .union([z.string(), z.number()])
+    .transform((val) => {
+      if (typeof val === "string") {
+        if (val.endsWith("%")) {
+          return parseFloat(val.slice(0, -1)) / 100
         }
-        return val
-      })
-      .pipe(
-        z
-          .number()
-          .min(0, "Tolerance must be non-negative")
-          .max(1, "Tolerance cannot be greater than 100%"),
-      )
-      .optional(),
+        return parseFloat(val)
+      }
+      return val
+    })
+    .pipe(
+      z
+        .number()
+        .min(0, "Tolerance must be non-negative")
+        .max(1, "Tolerance cannot be greater than 100%"),
+    )
+    .optional(),
 
-    pullupFor: z.string().optional(),
-    pullupTo: z.string().optional(),
+  pullupFor: z.string().optional(),
+  pullupTo: z.string().optional(),
 
-    pulldownFor: z.string().optional(),
-    pulldownTo: z.string().optional(),
+  pulldownFor: z.string().optional(),
+  pulldownTo: z.string().optional(),
 
-    schOrientation: schematicOrientation.optional(),
-    schSize: schematicSymbolSize.optional(),
+  schOrientation: schematicOrientation.optional(),
+  schSize: schematicSymbolSize.optional(),
 
-    connections: createConnectionsProp(resistorPinLabels).optional(),
-  })
+  connections: createConnectionsProp(resistorPinLabels).optional(),
+})
 export const resistorPins = lrPins
 
 type InferredResistorProps = z.input<typeof resistorProps>

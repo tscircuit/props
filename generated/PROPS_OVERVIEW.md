@@ -1640,7 +1640,7 @@ export interface PlatformConfig {
   spiceEngineMap?: Record<string, SpiceEngine>
 
   footprintLibraryMap?: Record<
-    string,
+    FootprintLibraryPrefix,
     | ((
         path: string,
         options?: { resolvedPcbStyle?: PcbStyle },
@@ -1655,7 +1655,12 @@ export interface PlatformConfig {
       >
   >
 
-  footprintFileParserMap?: Record<string, FootprintFileParserEntry>
+  footprintFileParserMap?: Record<FileExtension, FootprintFileParserEntry>
+
+  staticFileLoaderMap?: Record<
+    FileExtension,
+    (fileContent: FileContent) => Promise<EsModuleImportResult>
+  >
 
   resolveProjectStaticFileImportUrl?: (path: string) => Promise<string>
   nodeModulesResolver?: (modulePath: string) => Promise<string | null>

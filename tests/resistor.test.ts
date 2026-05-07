@@ -23,6 +23,16 @@ test("should parse tolerance percentage for resistor", () => {
   expect(parsed.tolerance).toBeCloseTo(0.05)
 })
 
+test("should parse resistance strings to numbers", () => {
+  const parsed = resistorProps.parse({
+    name: "R3",
+    resistance: "10k",
+  })
+
+  const parsedResistance: number = parsed.resistance
+  expect(parsedResistance).toBe(10000)
+})
+
 test("should map supported resistor imperial footprints", () => {
   const supportedFootprints = ["01005", "0402", "2512"] as const
 

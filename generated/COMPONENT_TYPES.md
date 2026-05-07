@@ -1982,7 +1982,18 @@ export interface PcbRouteCache {
   pcbTraces: PcbTrace[]
   cacheKey: string
 }
-export interface AutorouterConfig {
+export interface RoutingTolerances {
+  minTraceWidth?: Distance
+  minViaHoleEdgeToViaHoleEdgeClearance?: Distance
+  minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
+  minTraceToPadEdgeClearance?: Distance
+  minPadEdgeToPadEdgeClearance?: Distance
+  minBoardEdgeClearance?: Distance
+  minViaEdgeToPadEdgeClearance?: Distance
+  minViaHoleDiameter?: Distance
+  minViaPadDiameter?: Distance
+}
+export interface AutorouterConfig extends RoutingTolerances {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
@@ -2011,6 +2022,17 @@ export interface AutorouterConfig {
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
+export const routingTolerances = z.object({
+  minTraceWidth: length.optional(),
+  minViaHoleEdgeToViaHoleEdgeClearance: length.optional(),
+  minViaEdgeToPadEdgeClearance: length.optional(),
+  minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
+  minTraceToPadEdgeClearance: length.optional(),
+  minPadEdgeToPadEdgeClearance: length.optional(),
+  minBoardEdgeClearance: length.optional(),
+  minViaHoleDiameter: length.optional(),
+  minViaPadDiameter: length.optional(),
+})
 export const autorouterConfig = z.object({
   serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
@@ -2018,6 +2040,7 @@ export const autorouterConfig = z.object({
   serverCacheEnabled: z.boolean().optional(),
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
+  ...routingTolerances.shape,
   availableJumperTypes: z.array(z.enum(["1206x4", "0603"])).optional(),
   groupMode: z
     .enum(["sequential_trace", "subcircuit", "sequential-trace"])
@@ -2046,21 +2069,13 @@ export const autorouterConfig = z.object({
     .optional(),
   local: z.boolean().optional(),
 })
-export interface SubcircuitGroupProps extends BaseGroupProps {
+export interface SubcircuitGroupProps
+  extends BaseGroupProps,
+    RoutingTolerances {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
-
-  minTraceWidth?: Distance
-  minViaHoleEdgeToViaHoleEdgeClearance?: Distance
-  minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
-  minTraceToPadEdgeClearance?: Distance
-  minPadEdgeToPadEdgeClearance?: Distance
-  minBoardEdgeClearance?: Distance
-  minViaEdgeToPadEdgeClearance?: Distance
-  minViaHoleDiameter?: Distance
-  minViaPadDiameter?: Distance
 
   nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache
@@ -2201,15 +2216,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   routingDisabled: z.boolean().optional(),
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
-  minTraceWidth: length.optional(),
-  minViaHoleEdgeToViaHoleEdgeClearance: length.optional(),
-  minViaEdgeToPadEdgeClearance: length.optional(),
-  minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
-  minTraceToPadEdgeClearance: length.optional(),
-  minPadEdgeToPadEdgeClearance: length.optional(),
-  minBoardEdgeClearance: length.optional(),
-  minViaHoleDiameter: length.optional(),
-  minViaPadDiameter: length.optional(),
+  ...routingTolerances.shape,
   nominalTraceWidth: length.optional(),
   partsEngine: partsEngine.optional(),
   _subcircuitCachingEnabled: z.boolean().optional(),

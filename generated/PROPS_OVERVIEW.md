@@ -26,7 +26,7 @@ export interface AnalogSimulationProps {
 }
 
 
-export interface AutorouterConfig {
+export interface AutorouterConfig extends RoutingTolerances {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
@@ -1772,6 +1772,19 @@ export interface RotatedRectSmtPadProps
 }
 
 
+export interface RoutingTolerances {
+  minTraceWidth?: Distance
+  minViaHoleEdgeToViaHoleEdgeClearance?: Distance
+  minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
+  minTraceToPadEdgeClearance?: Distance
+  minPadEdgeToPadEdgeClearance?: Distance
+  minBoardEdgeClearance?: Distance
+  minViaEdgeToPadEdgeClearance?: Distance
+  minViaHoleDiameter?: Distance
+  minViaPadDiameter?: Distance
+}
+
+
 export interface SchematicArcProps {
   center: Point
   radius: Distance
@@ -1964,21 +1977,13 @@ export interface StampboardProps extends BoardProps {
 }
 
 
-export interface SubcircuitGroupProps extends BaseGroupProps {
+export interface SubcircuitGroupProps
+  extends BaseGroupProps,
+    RoutingTolerances {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
-
-  minTraceWidth?: Distance
-  minViaHoleEdgeToViaHoleEdgeClearance?: Distance
-  minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
-  minTraceToPadEdgeClearance?: Distance
-  minPadEdgeToPadEdgeClearance?: Distance
-  minBoardEdgeClearance?: Distance
-  minViaEdgeToPadEdgeClearance?: Distance
-  minViaHoleDiameter?: Distance
-  minViaPadDiameter?: Distance
 
   nominalTraceWidth?: Distance
   pcbRouteCache?: PcbRouteCache

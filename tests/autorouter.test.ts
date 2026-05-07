@@ -1,7 +1,9 @@
 import { expect, test } from "bun:test"
 import {
   autorouterProp,
+  routingTolerances,
   subcircuitGroupPropsWithBool,
+  type RoutingTolerances,
 } from "../lib/components/group"
 
 test("supports freerouting preset", () => {
@@ -32,6 +34,41 @@ test("supports tscircuit beta preset", () => {
 test("still supports deprecated kebab-case presets", () => {
   const result = autorouterProp.parse("auto-cloud")
   expect(result).toBe("auto-cloud")
+})
+
+test("supports shared routing tolerances", () => {
+  const raw: RoutingTolerances = {
+    minTraceWidth: "0.12mm",
+    minViaHoleEdgeToViaHoleEdgeClearance: "0.2mm",
+    minPlatedHoleDrillEdgeToDrillEdgeClearance: "0.25mm",
+    minTraceToPadEdgeClearance: "0.16mm",
+    minPadEdgeToPadEdgeClearance: "0.18mm",
+    minBoardEdgeClearance: "0.4mm",
+    minViaEdgeToPadEdgeClearance: "0.14mm",
+    minViaHoleDiameter: "0.3mm",
+    minViaPadDiameter: "0.6mm",
+  }
+
+  const result = routingTolerances.parse(raw)
+  expect(result.minTraceWidth).toBe(0.12)
+  expect(result.minViaPadDiameter).toBe(0.6)
+})
+
+test("supports routing tolerances inside autorouter config", () => {
+  const result = subcircuitGroupPropsWithBool.parse({
+    subcircuit: true,
+    autorouter: {
+      preset: "auto_local",
+      minTraceWidth: "0.12mm",
+      minViaPadDiameter: "0.6mm",
+    },
+  })
+
+  expect(result.autorouter).toMatchObject({
+    preset: "auto_local",
+    minTraceWidth: 0.12,
+    minViaPadDiameter: 0.6,
+  })
 })
 
 test("supports autorouter version v4", () => {

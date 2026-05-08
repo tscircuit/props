@@ -57,27 +57,40 @@ const mapResistorFootprint = (
   if (!resistorImperialFootprintNames.has(footprint)) return footprint
   return `res${footprint}`
 }
-export const resistorProps = commonComponentProps.extend({
-  footprint: footprintProp.optional().transform(mapResistorFootprint),
-  resistance,
-  tolerance: z
-    .union([z.string(), z.number()])
-    .transform((val) => {
-      if (typeof val === "string") {
-        if (val.endsWith("%")) {
-          return parseFloat(val.slice(0, -1)) / 100
-        }
-        return parseFloat(val)
+
+const resistorFootprintProp: z.ZodType<
+  ResistorFootprint,
+  z.ZodTypeDef,
+  ResistorFootprint
+> = footprintProp.optional().transform(mapResistorFootprint)
+
+const resistorToleranceProp: z.ZodType<
+  number | undefined,
+  z.ZodTypeDef,
+  number | string | undefined
+> = z
+  .union([z.string(), z.number()])
+  .transform((val) => {
+    if (typeof val === "string") {
+      if (val.endsWith("%")) {
+        return parseFloat(val.slice(0, -1)) / 100
       }
-      return val
-    })
-    .pipe(
-      z
-        .number()
-        .min(0, "Tolerance must be non-negative")
-        .max(1, "Tolerance cannot be greater than 100%"),
-    )
-    .optional(),
+      return parseFloat(val)
+    }
+    return val
+  })
+  .pipe(
+    z
+      .number()
+      .min(0, "Tolerance must be non-negative")
+      .max(1, "Tolerance cannot be greater than 100%"),
+  )
+  .optional()
+
+export const resistorProps = commonComponentProps.extend({
+  footprint: resistorFootprintProp,
+  resistance,
+  tolerance: resistorToleranceProp,
 
   pullupFor: z.string().optional(),
   pullupTo: z.string().optional(),

@@ -3215,7 +3215,7 @@ export interface ResistorProps<PinLabel extends string = string>
   connections?: Connections<ResistorPinLabels>
 }
 export const resistorProps = commonComponentProps.extend({
-  footprint: footprintProp.optional().transform(mapResistorFootprint),
+  footprint: resistorFootprintProp,
   resistance,
   tolerance: z
     .union([z.string(), z.number()])

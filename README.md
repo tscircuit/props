@@ -1843,8 +1843,9 @@ export interface TransistorProps<
 ```ts
 export interface ViaProps extends CommonLayoutProps {
   name?: string;
-  fromLayer: LayerRefInput;
-  toLayer: LayerRefInput;
+  fromLayer?: LayerRefInput;
+  toLayer?: LayerRefInput;
+  layers?: LayerRefInput[];
   holeDiameter?: number | string;
   outerDiameter?: number | string;
   connectsTo?: string | string[];

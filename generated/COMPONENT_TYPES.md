@@ -4012,8 +4012,9 @@ export const transistorPins = [
 ```typescript
 export interface ViaProps extends CommonLayoutProps {
   name?: string
-  fromLayer: LayerRefInput
-  toLayer: LayerRefInput
+  fromLayer?: LayerRefInput
+  toLayer?: LayerRefInput
+  layers?: LayerRefInput[]
   holeDiameter?: number | string
   outerDiameter?: number | string
   connectsTo?: string | string[]
@@ -4021,10 +4022,11 @@ export interface ViaProps extends CommonLayoutProps {
 }
 export const viaProps = commonLayoutProps.extend({
   name: z.string().optional(),
-  fromLayer: layer_ref,
-  toLayer: layer_ref,
+  fromLayer: layer_ref.optional(),
+  toLayer: layer_ref.optional(),
   holeDiameter: distance.optional(),
   outerDiameter: distance.optional(),
+  layers: z.array(layer_ref).optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   netIsAssignable: z.boolean().optional(),
 })

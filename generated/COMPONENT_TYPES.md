@@ -2465,6 +2465,7 @@ export interface NetProps {
   highlightColor?: string
   isPowerNet?: boolean
   isGroundNet?: boolean
+  nominalTraceWidth?: Distance
 }
 export const netProps = z.object({
   name: z.string(),
@@ -2473,6 +2474,7 @@ export const netProps = z.object({
   highlightColor: z.string().optional(),
   isPowerNet: z.boolean().optional(),
   isGroundNet: z.boolean().optional(),
+  nominalTraceWidth: distance.optional(),
 })
 ```
 

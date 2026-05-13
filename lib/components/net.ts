@@ -1,4 +1,6 @@
+import { distance } from "circuit-json"
 import { z } from "zod"
+import type { Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 
 export interface NetProps {
@@ -8,6 +10,7 @@ export interface NetProps {
   highlightColor?: string
   isPowerNet?: boolean
   isGroundNet?: boolean
+  nominalTraceWidth?: Distance
 }
 
 export const netProps = z.object({
@@ -17,6 +20,7 @@ export const netProps = z.object({
   highlightColor: z.string().optional(),
   isPowerNet: z.boolean().optional(),
   isGroundNet: z.boolean().optional(),
+  nominalTraceWidth: distance.optional(),
 })
 
 type InferredNetProps = z.input<typeof netProps>

@@ -1008,6 +1008,7 @@ export interface NetProps {
   highlightColor?: string;
   isPowerNet?: boolean;
   isGroundNet?: boolean;
+  nominalTraceWidth?: Distance;
 }
 ```
 

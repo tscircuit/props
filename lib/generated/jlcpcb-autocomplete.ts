@@ -50011,6 +50011,4 @@ export type JlcpcbKnownPartNumber =
 export type JlcpcbAutocompleteStringPath = AutocompleteString<
   | `jlcpcb:${JlcpcbKnownPartNumber}`
   | `jlcpcb:C${number}`
-  | `jlcpcb:c${number}`
-  | `jlcpcb:${number}`
 >

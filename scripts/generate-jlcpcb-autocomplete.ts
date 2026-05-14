@@ -35,7 +35,6 @@ ${knownPartNumberEntries}
 export type JlcpcbAutocompleteStringPath = AutocompleteString<
   | \`jlcpcb:\${JlcpcbKnownPartNumber}\`
   | \`jlcpcb:C\${number}\`
-  | \`jlcpcb:c\${number}\`
 >
 `
 }

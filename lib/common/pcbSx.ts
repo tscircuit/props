@@ -5,6 +5,7 @@ import { z } from "zod"
 
 export type PcbSxSelector =
   | "& footprint[src^='kicad:'] silkscreentext"
+  | "& footprint[src^='jlcpcb:'] silkscreentext"
   | "& silkscreentext"
   | "& fabricationnotetext"
 

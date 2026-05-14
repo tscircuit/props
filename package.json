@@ -16,6 +16,7 @@
     "format:check": "biome format .",
     "generate:manual-edits-docs": "tsx scripts/generate-manual-edits-docs.ts",
     "generate:component-types": "tsx scripts/generate-component-types.ts",
+    "generate:jlcpcb-autocomplete": "tsx scripts/generate-jlcpcb-autocomplete.ts",
     "generate:readme-docs": "tsx scripts/generate-readme-docs.ts"
   },
   "keywords": [],

@@ -12,12 +12,24 @@ const maxRetries = Number(process.env.JLCPCB_AUTOCOMPLETE_MAX_RETRIES ?? "5")
 type JlcsearchResponse = {
   components?: Array<{
     lcsc?: number
+    package?: string
     stock?: number
   }>
 }
 
 function formatKnownPartNumbers(knownPartNumbers: string[]) {
   return knownPartNumbers.map((partNumber) => `  | "${partNumber}"`).join("\n")
+}
+
+function isPassiveLikePackage(packageName: string | undefined) {
+  const normalizedPackageName = packageName?.trim().toUpperCase() ?? ""
+
+  return (
+    /^\d{4}(X\d+)?$/.test(normalizedPackageName) ||
+    /^CASE-[A-Z0-9-]+(\(MM\))?$/.test(normalizedPackageName) ||
+    /^SMD,D[\d.]+XL[\d.]+MM$/.test(normalizedPackageName) ||
+    /^SMD\d{4}-\d+P$/.test(normalizedPackageName)
+  )
 }
 
 function generateAutocompleteContent(knownPartNumbers: string[]) {
@@ -29,6 +41,7 @@ function generateAutocompleteContent(knownPartNumbers: string[]) {
  * Generated from the public jlcsearch in-stock API.
  * Source: ${JLCSEARCH_API}?limit=${limit}
  * Filter: stock >= ${minStock}
+ * Excludes: common passive package shapes (chip passives, arrays, can caps, tantalum cases)
  * Ordering: source order (jlcsearch sorts by stock descending)
  * Generated at: ${new Date().toISOString()}
  * Known part numbers: ${knownPartNumbers.length}
@@ -64,9 +77,11 @@ async function fetchKnownPartNumbers() {
 
       for (const component of json.components ?? []) {
         const lcsc = component.lcsc
+        const packageName = component.package
         const stock = component.stock ?? 0
 
         if (!Number.isInteger(lcsc) || stock < minStock) continue
+        if (isPassiveLikePackage(packageName)) continue
 
         const partNumber = `C${lcsc}`
         if (seenPartNumbers.has(partNumber)) continue

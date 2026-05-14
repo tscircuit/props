@@ -6,11 +6,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const JLCSEARCH_API = "https://jlcsearch.tscircuit.com/api/search"
 const limit = Number(process.env.JLCPCB_AUTOCOMPLETE_LIMIT ?? "50000")
+const minStock = Number(process.env.JLCPCB_AUTOCOMPLETE_MIN_STOCK ?? "50000")
 const maxRetries = Number(process.env.JLCPCB_AUTOCOMPLETE_MAX_RETRIES ?? "5")
 
 type JlcsearchResponse = {
   components?: Array<{
     lcsc?: number
+    stock?: number
   }>
 }
 
@@ -26,6 +28,8 @@ function generateAutocompleteContent(knownPartNumbers: string[]) {
 /**
  * Generated from the public jlcsearch in-stock API.
  * Source: ${JLCSEARCH_API}?limit=${limit}
+ * Filter: stock >= ${minStock}
+ * Ordering: source order (jlcsearch sorts by stock descending)
  * Generated at: ${new Date().toISOString()}
  * Known part numbers: ${knownPartNumbers.length}
  */
@@ -55,14 +59,21 @@ async function fetchKnownPartNumbers() {
       }
 
       const json = (await res.json()) as JlcsearchResponse
-      const knownPartNumbers = Array.from(
-        new Set(
-          (json.components ?? [])
-            .map((component) => component.lcsc)
-            .filter((lcsc): lcsc is number => Number.isInteger(lcsc))
-            .map((lcsc) => `C${lcsc}`),
-        ),
-      ).sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)))
+      const knownPartNumbers: string[] = []
+      const seenPartNumbers = new Set<string>()
+
+      for (const component of json.components ?? []) {
+        const lcsc = component.lcsc
+        const stock = component.stock ?? 0
+
+        if (!Number.isInteger(lcsc) || stock < minStock) continue
+
+        const partNumber = `C${lcsc}`
+        if (seenPartNumbers.has(partNumber)) continue
+
+        seenPartNumbers.add(partNumber)
+        knownPartNumbers.push(partNumber)
+      }
 
       return knownPartNumbers
     } catch (error) {
@@ -82,6 +93,9 @@ async function fetchKnownPartNumbers() {
 async function main() {
   if (!Number.isInteger(limit) || limit <= 0) {
     throw new Error(`Invalid JLCPCB_AUTOCOMPLETE_LIMIT: ${limit}`)
+  }
+  if (!Number.isInteger(minStock) || minStock < 0) {
+    throw new Error(`Invalid JLCPCB_AUTOCOMPLETE_MIN_STOCK: ${minStock}`)
   }
   if (!Number.isInteger(maxRetries) || maxRetries < 0) {
     throw new Error(`Invalid JLCPCB_AUTOCOMPLETE_MAX_RETRIES: ${maxRetries}`)

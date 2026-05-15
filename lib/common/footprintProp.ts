@@ -3,6 +3,7 @@ import type { ReactElement } from "react"
 import { z } from "zod"
 import { type AutocompleteString } from "./autocomplete"
 import type { KicadAutocompleteStringPath } from "../generated/kicad-autocomplete"
+import type { JlcpcbAutocompleteStringPath } from "../generated/jlcpcb-autocomplete"
 import type { FootprinterStringExample } from "../generated/footprinter-autocomplete"
 
 /**
@@ -51,6 +52,7 @@ type FootprinterStringAutocomplete = BasicFootprint | FootprinterStringExample
 export type FootprintProp =
   | AutocompleteString<FootprinterStringAutocomplete>
   | KicadAutocompleteStringPath
+  | JlcpcbAutocompleteStringPath
   | ReactElement
   | FootprintSoupElements[]
 

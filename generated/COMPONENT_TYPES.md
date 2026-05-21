@@ -898,6 +898,8 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
     minY: number
     maxY: number
   }
+  connection?: string
+  connections?: string[]
   reroute?: boolean
 }
 export const autoroutingPhaseProps = z
@@ -915,6 +917,8 @@ export const autoroutingPhaseProps = z
         maxY: z.number(),
       })
       .optional(),
+    connection: z.string().optional(),
+    connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
   })
 ```

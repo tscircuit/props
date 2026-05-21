@@ -19,6 +19,45 @@ test("autorouting phase accepts autorouter and phase index", () => {
   expect(parsed.phaseIndex).toBe(1)
 })
 
+test("autorouting phase accepts a single connection", () => {
+  const raw: AutoroutingPhaseProps = {
+    phaseIndex: 2,
+    connection: "U1.pin1",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof autoroutingPhaseProps>>()
+
+  const parsed = autoroutingPhaseProps.parse(raw)
+  expect(parsed.phaseIndex).toBe(2)
+  expect(parsed.connection).toBe("U1.pin1")
+})
+
+test("autorouting phase accepts reroute connections", () => {
+  const raw: AutoroutingPhaseProps = {
+    reroute: true,
+    connections: ["U1.pin1", "R1.pin1"],
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof autoroutingPhaseProps>>()
+
+  const parsed = autoroutingPhaseProps.parse(raw)
+  expect(parsed.reroute).toBe(true)
+  expect(parsed.connections).toEqual(["U1.pin1", "R1.pin1"])
+})
+
+test("autorouting phase accepts reroute connection", () => {
+  const raw: AutoroutingPhaseProps = {
+    reroute: true,
+    connection: "U1.pin1",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof autoroutingPhaseProps>>()
+
+  const parsed = autoroutingPhaseProps.parse(raw)
+  expect(parsed.reroute).toBe(true)
+  expect(parsed.connection).toBe("U1.pin1")
+})
+
 test("autorouting phase accepts autorouter config", () => {
   const raw: AutoroutingPhaseProps = {
     autorouter: {
@@ -103,5 +142,7 @@ test("autorouting phase requires region when reroute is provided", () => {
     autoroutingPhaseProps.parse({
       reroute: false,
     }),
-  ).toThrow("region is required when reroute is provided")
+  ).toThrow(
+    "region, connection, or connections is required when reroute is provided",
+  )
 })

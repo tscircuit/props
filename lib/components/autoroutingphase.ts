@@ -18,6 +18,8 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
     minY: number
     maxY: number
   }
+  connection?: string
+  connections?: string[]
   reroute?: boolean
 }
 
@@ -36,13 +38,21 @@ export const autoroutingPhaseProps = z
         maxY: z.number(),
       })
       .optional(),
+    connection: z.string().optional(),
+    connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
   })
   .superRefine((value, ctx) => {
-    if (value.reroute !== undefined && value.region === undefined) {
+    if (
+      value.reroute !== undefined &&
+      value.region === undefined &&
+      value.connection === undefined &&
+      value.connections === undefined
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "region is required when reroute is provided",
+        message:
+          "region, connection, or connections is required when reroute is provided",
         path: ["region"],
       })
     }

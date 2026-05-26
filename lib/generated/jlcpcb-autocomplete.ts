@@ -2488,6 +2488,5 @@ export type JlcpcbKnownPartNumber =
   | "C783588"
   | "C3265019"
 
-export type JlcpcbAutocompleteStringPath = AutocompleteString<
-  `jlcpcb:${JlcpcbKnownPartNumber}` | `jlcpcb:C${number}`
->
+export type JlcpcbAutocompleteStringPath =
+  AutocompleteString<`jlcpcb:${JlcpcbKnownPartNumber}`>

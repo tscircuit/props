@@ -49,9 +49,8 @@ function generateAutocompleteContent(knownPartNumbers: string[]) {
 export type JlcpcbKnownPartNumber =
 ${knownPartNumberEntries}
 
-export type JlcpcbAutocompleteStringPath = AutocompleteString<
-  \`jlcpcb:\${JlcpcbKnownPartNumber}\` | \`jlcpcb:C\${number}\`
->
+export type JlcpcbAutocompleteStringPath =
+  AutocompleteString<\`jlcpcb:\${JlcpcbKnownPartNumber}\`>
 `
 }
 

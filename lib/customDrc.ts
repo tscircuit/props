@@ -11,21 +11,10 @@ import { z } from "zod"
 type MaybePromise<T> = T | Promise<T>
 type CircuitJsonError = Extract<AnyCircuitElement, { error_type: string }>
 type CircuitJsonWarning = Extract<AnyCircuitElement, { warning_type: string }>
-type GeneratedDiagnosticField = "type" | `${string}_id`
 
-export type CustomDrcDiagnostic = CircuitJsonError | CircuitJsonWarning
-export type CustomDrcDiagnosticPayload<TDiagnostic> = {
-  [TKey in keyof TDiagnostic as TKey extends GeneratedDiagnosticField
-    ? never
-    : TKey]: TDiagnostic[TKey]
-}
-
-export type CustomDrcDiagnosticInput =
-  CustomDrcDiagnostic extends infer TDiagnostic
-    ? TDiagnostic extends CustomDrcDiagnostic
-      ? CustomDrcDiagnosticPayload<TDiagnostic>
-      : never
-    : never
+export type CustomDrcCheckInput =
+  | Partial<CircuitJsonError>
+  | Partial<CircuitJsonWarning>
 
 export interface SelectionResultComponent {
   getPort: (name: string) => SelectionResultPort | null
@@ -81,11 +70,7 @@ export interface CustomDrcCheckContext {
 export type CustomDrcCheckFn = (
   ctx: CustomDrcCheckContext,
 ) => MaybePromise<
-  | CustomDrcDiagnosticInput
-  | CustomDrcDiagnosticInput[]
-  | null
-  | undefined
-  | void
+  CustomDrcCheckInput | CustomDrcCheckInput[] | null | undefined | void
 >
 
 export const customDrcCheckFn = z.custom<CustomDrcCheckFn>(

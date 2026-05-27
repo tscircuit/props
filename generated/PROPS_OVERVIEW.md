@@ -648,6 +648,32 @@ export interface CurrentSourceProps<PinLabel extends string = string>
 }
 
 
+export interface CustomDrcCheckContext {
+  select: CustomDrcSelect
+  selectAll: CustomDrcSelectAll
+  isConnected: (a: CustomDrcConnectable, b: CustomDrcConnectable) => boolean
+  isPulledUp: (a: CustomDrcConnectable) => boolean
+  isPulledDown: (a: CustomDrcConnectable) => boolean
+  getResistanceBetween: (
+    a: CustomDrcConnectable,
+    b: CustomDrcConnectable,
+  ) => number | null
+}
+
+
+export interface CustomDrcSelect {
+  (selector: `net.${string}`): SelectionResultNet | null
+  (selector: `${string}.${string}`): SelectionResultPort | null
+  (selector: string): SelectionResult | null
+}
+
+
+export interface CustomDrcSelectAll {
+  (selector: `chip${string}`): SelectionResultComponent[]
+  (selector: string): SelectionResult[]
+}
+
+
 export interface DiodeProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections?: {
@@ -666,6 +692,12 @@ export interface DiodeProps<PinLabel extends string = string>
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation
+}
+
+
+export interface DrcCheckProps {
+  name?: string
+  checkFn: CustomDrcCheckFn
 }
 
 
@@ -1946,6 +1978,25 @@ export interface SchematicTextProps {
 export interface SchStyle {
   defaultPassiveSize?: "xs" | "sm" | "md" | string | number
   defaultCapacitorOrientation?: "vertical" | "none"
+}
+
+
+export interface SelectionResultComponent {
+  getPort: (name: string) => SelectionResultPort | null
+  getPorts: () => SelectionResultPort[]
+  getPcbComponent: () => PcbComponent | null
+  getSourceComponent: () => SourceComponentBase | null
+}
+
+
+export interface SelectionResultNet {
+  getSourceNet: () => SourceNet | null
+}
+
+
+export interface SelectionResultPort {
+  getPcbPort: () => PcbPort | null
+  getSourcePort: () => SourcePort | null
 }
 
 

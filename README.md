@@ -45,6 +45,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<currentsource />`            | [`CurrentSourceProps`](#currentsourceprops-currentsource)                                  |
 | `<cutout />`                   | [`RectCutoutProps`](#rectcutoutprops-cutout)                                               |
 | `<diode />`                    | [`DiodeProps`](#diodeprops-diode)                                                          |
+| `<drccheck />`                 | [`DrcCheckProps`](#drccheckprops-drccheck)                                                 |
 | `<fabricationnotedimension />` | [`FabricationNoteDimensionProps`](#fabricationnotedimensionprops-fabricationnotedimension) |
 | `<fabricationnotepath />`      | [`FabricationNotePathProps`](#fabricationnotepathprops-fabricationnotepath)                |
 | `<fabricationnoterect />`      | [`FabricationNoteRectProps`](#fabricationnoterectprops-fabricationnoterect)                |
@@ -598,6 +599,17 @@ export interface DiodeProps<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/diode.ts)
+
+### DrcCheckProps `<drccheck />`
+
+```ts
+export interface DrcCheckProps {
+  name?: string;
+  checkFn: CustomDrcCheckFn;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/drc-check.ts)
 
 ### FabricationNoteDimensionProps `<fabricationnotedimension />`
 

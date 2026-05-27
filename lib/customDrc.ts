@@ -1,5 +1,6 @@
 import type {
   AnyCircuitElement,
+  CircuitJsonError,
   PcbComponent,
   PcbPort,
   SourceComponentBase,
@@ -9,7 +10,6 @@ import type {
 import { z } from "zod"
 
 type MaybePromise<T> = T | Promise<T>
-type CircuitJsonError = Extract<AnyCircuitElement, { error_type: string }>
 type CircuitJsonWarning = Extract<AnyCircuitElement, { warning_type: string }>
 
 export type CustomDrcCheckInput =

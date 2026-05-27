@@ -1542,6 +1542,19 @@ export interface DiodeProps<PinLabel extends string = string>
 }
 ```
 
+### drc-check
+
+```typescript
+export interface DrcCheckProps {
+  name?: string
+  checkFn: CustomDrcCheckFn
+}
+export const drcCheckProps = z.object({
+  name: z.string().optional(),
+  checkFn: customDrcCheckFn,
+})
+```
+
 ### fabrication-note-dimension
 
 ```typescript

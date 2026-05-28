@@ -6,7 +6,7 @@ import { z } from "zod"
 export const copperTextProps = pcbLayoutProps.extend({
   text: z.string(),
   anchorAlignment: ninePointAnchor.default("center"),
-  font: z.enum(["tscircuit2024"]).optional(),
+  font: z.enum(["tscircuit2024", "ubuntu"]).optional(),
   fontSize: length.optional(),
   layers: z.array(layer_ref).optional(),
   knockout: z.boolean().optional(),

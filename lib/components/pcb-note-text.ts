@@ -11,7 +11,7 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
     | "top_right"
     | "bottom_left"
     | "bottom_right"
-  font?: "tscircuit2024"
+  font?: "tscircuit2024" | "ubuntu"
   fontSize?: string | number
   color?: string
 }
@@ -21,7 +21,7 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
   anchorAlignment: z
     .enum(["center", "top_left", "top_right", "bottom_left", "bottom_right"])
     .default("center"),
-  font: z.enum(["tscircuit2024"]).optional(),
+  font: z.enum(["tscircuit2024", "ubuntu"]).optional(),
   fontSize: length.optional(),
   color: z.string().optional(),
 })

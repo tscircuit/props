@@ -23,7 +23,7 @@ export interface PcbNoteDimensionProps
   to: string | Point
   text?: string
   offset?: string | number
-  font?: "tscircuit2024"
+  font?: "tscircuit2024" | "ubuntu"
   fontSize?: string | number
   color?: string
   arrowSize?: string | number
@@ -50,7 +50,7 @@ export const pcbNoteDimensionProps = pcbLayoutProps
     to: dimensionTarget,
     text: z.string().optional(),
     offset: distance.optional(),
-    font: z.enum(["tscircuit2024"]).optional(),
+    font: z.enum(["tscircuit2024", "ubuntu"]).optional(),
     fontSize: length.optional(),
     color: z.string().optional(),
     arrowSize: distance.optional(),

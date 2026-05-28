@@ -6,7 +6,7 @@ import { z } from "zod"
 export const silkscreenTextProps = pcbLayoutProps.extend({
   text: z.string(),
   anchorAlignment: ninePointAnchor.default("center"),
-  font: z.enum(["tscircuit2024"]).optional(),
+  font: z.enum(["tscircuit2024", "ubuntu"]).optional(),
   fontSize: length.optional(),
   /**
    * If true, text will knock out underlying silkscreen

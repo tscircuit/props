@@ -1145,6 +1145,7 @@ export interface ChipPropsSU<
   externallyConnectedPins?: string[][]
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
+  spiceModel?: SpicemodelElement
 }
 /**
  * Get the connection prop type for a component
@@ -1186,6 +1187,7 @@ export const chipProps = commonComponentProps.extend({
   noSchematicRepresentation: z.boolean().optional(),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
+  spiceModel: spicemodelElement.optional(),
 })
 ```
 
@@ -3810,6 +3812,19 @@ export const circleSolderPasteProps = pcbLayoutProps
     shape: z.literal("circle"),
     radius: distance,
   })
+```
+
+### spicemodel
+
+```typescript
+export interface SpicemodelProps {
+  source: string
+  pinMapping?: Record<string, string>
+}
+export const spicemodelProps = z.object({
+  source: z.string(),
+  pinMapping: z.record(z.string(), z.string()).optional(),
+})
 ```
 
 ### stampboard

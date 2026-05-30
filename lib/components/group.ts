@@ -80,7 +80,7 @@ export const layoutConfig = z.object({
     ])
     .optional(),
   packPlacementStrategy: z
-    .enum(["shortest_connection_along_outline"])
+    .enum(["shortest_connection_along_outline", "force_directed"])
     .optional(),
 
   padding: length.optional(),
@@ -132,7 +132,7 @@ export interface LayoutConfig {
     | "largest_to_smallest"
     | "first_to_last"
     | "highest_to_lowest_pin_count"
-  packPlacementStrategy?: "shortest_connection_along_outline"
+  packPlacementStrategy?: "shortest_connection_along_outline" | "force_directed"
 
   padding?: Distance
   paddingLeft?: Distance

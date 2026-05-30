@@ -2026,7 +2026,7 @@ export interface SpiceEngineSimulationResult {
 
 export interface SpicemodelProps {
   source: string
-  pinMapping?: Record<string, string>
+  spicePinMapping?: Record<string, string>
 }
 
 

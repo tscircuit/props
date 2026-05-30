@@ -24,10 +24,10 @@ declare module "react/jsx-runtime" {
   }
 }
 
-test("spicemodel props parse source and pin mapping", () => {
+test("spicemodel props parse source and spice pin mapping", () => {
   const raw: SpicemodelProps = {
     source: ".subckt LM358 OUT IN- IN+ V- V+\n.ends LM358",
-    pinMapping: {
+    spicePinMapping: {
       OUT: "OUT",
       "IN-": "IN-",
       "IN+": "IN+",

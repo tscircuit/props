@@ -3,12 +3,12 @@ import { z } from "zod"
 
 export interface SpicemodelProps {
   source: string
-  pinMapping?: Record<string, string>
+  spicePinMapping?: Record<string, string>
 }
 
 export const spicemodelProps = z.object({
   source: z.string(),
-  pinMapping: z.record(z.string(), z.string()).optional(),
+  spicePinMapping: z.record(z.string(), z.string()).optional(),
 })
 
 type InferredSpicemodelProps = z.input<typeof spicemodelProps>

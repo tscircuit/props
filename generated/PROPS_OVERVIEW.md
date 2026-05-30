@@ -426,6 +426,7 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
+  spiceModel?: SpicemodelElement
 }
 
 
@@ -2020,6 +2021,12 @@ export interface SpiceEngine {
 export interface SpiceEngineSimulationResult {
   engineVersionString?: string
   simulationResultCircuitJson: CircuitJson
+}
+
+
+export interface SpicemodelProps {
+  source: string
+  spicePinMapping?: Record<string, string>
 }
 
 

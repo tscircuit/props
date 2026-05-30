@@ -1,5 +1,6 @@
 import { distance, supplier_name } from "circuit-json"
 import type { Distance } from "lib/common/distance"
+import type { SpicemodelProps } from "lib/components/spicemodel"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -19,6 +20,7 @@ import {
 } from "lib/common/schematicPinLabel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
+import type { ReactElement } from "react"
 import { z } from "zod"
 
 export type PinLabelsProp<
@@ -35,6 +37,8 @@ export interface PinCompatibleVariant {
   manufacturerPartNumber?: string
   supplierPartNumber?: SupplierPartNumbers
 }
+
+export type SpicemodelElement = ReactElement<SpicemodelProps>
 
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
@@ -67,6 +71,7 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
+  spiceModel?: SpicemodelElement
 }
 
 export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
@@ -130,6 +135,10 @@ const connectionsProp = z
   .custom<Connections>()
   .pipe(z.record(z.string(), connectionTarget))
 
+const spicemodelElement = z.custom<SpicemodelElement>(
+  (v) => !!v && typeof v === "object" && "type" in v && "props" in v,
+)
+
 export const pinLabelsProp = z.record(
   schematicPinLabel,
   schematicPinLabel
@@ -163,6 +172,7 @@ export const chipProps = commonComponentProps.extend({
   noSchematicRepresentation: z.boolean().optional(),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
+  spiceModel: spicemodelElement.optional(),
 })
 
 /**

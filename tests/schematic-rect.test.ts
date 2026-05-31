@@ -47,3 +47,15 @@ test("schematic rect allows styling overrides", () => {
   expect(parsed.fillColor).toBe("#cccccc")
   expect(parsed.isDashed).toBe(true)
 })
+
+test("schematic rect does not expose corner radius", () => {
+  const parsed = schematicRectProps.parse({
+    schX: 0,
+    schY: 0,
+    width: 5,
+    height: 3,
+    cornerRadius: 2,
+  } as any)
+
+  expect((parsed as any).cornerRadius).toBeUndefined()
+})

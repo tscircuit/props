@@ -1565,7 +1565,6 @@ export interface SchematicRectProps {
   isFilled?: boolean;
   fillColor?: string;
   isDashed?: boolean;
-  cornerRadius?: Distance;
 }
 ```
 

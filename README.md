@@ -1584,6 +1584,7 @@ export interface SchematicRowProps {
 export interface SchematicSectionProps {
   displayName?: string;
   name: string;
+  sectionTitleFontSize?: number | string;
 }
 ```
 

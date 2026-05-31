@@ -3415,6 +3415,8 @@ export const schematicLineProps = z.object({
   strokeWidth: distance.optional(),
   color: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
+  dashLength: distance.optional(),
+  dashGap: distance.optional(),
 })
 export interface SchematicLineProps {
   x1: Distance
@@ -3424,6 +3426,8 @@ export interface SchematicLineProps {
   strokeWidth?: Distance
   color?: string
   isDashed?: boolean
+  dashLength?: Distance
+  dashGap?: Distance
 }
 ```
 
@@ -3435,6 +3439,8 @@ export const schematicPathProps = z.object({
   svgPath: z.string().optional(),
   strokeWidth: distance.optional(),
   strokeColor: z.string().optional(),
+  dashLength: distance.optional(),
+  dashGap: distance.optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.string().optional(),
 })
@@ -3443,6 +3449,8 @@ export interface SchematicPathProps {
   svgPath?: string
   strokeWidth?: Distance
   strokeColor?: string
+  dashLength?: Distance
+  dashGap?: Distance
   isFilled?: boolean
   fillColor?: string
 }

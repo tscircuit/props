@@ -1527,6 +1527,8 @@ export interface SchematicLineProps {
   strokeWidth?: Distance;
   color?: string;
   isDashed?: boolean;
+  dashLength?: Distance;
+  dashGap?: Distance;
 }
 ```
 
@@ -1540,6 +1542,8 @@ export interface SchematicPathProps {
   svgPath?: string;
   strokeWidth?: Distance;
   strokeColor?: string;
+  dashLength?: Distance;
+  dashGap?: Distance;
   isFilled?: boolean;
   fillColor?: string;
 }

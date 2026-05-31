@@ -9,6 +9,8 @@ export const schematicPathProps = z.object({
   svgPath: z.string().optional(),
   strokeWidth: distance.optional(),
   strokeColor: z.string().optional(),
+  dashLength: distance.optional(),
+  dashGap: distance.optional(),
   isFilled: z.boolean().optional().default(false),
   fillColor: z.string().optional(),
 })
@@ -18,6 +20,8 @@ export interface SchematicPathProps {
   svgPath?: string
   strokeWidth?: Distance
   strokeColor?: string
+  dashLength?: Distance
+  dashGap?: Distance
   isFilled?: boolean
   fillColor?: string
 }

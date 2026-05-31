@@ -3498,10 +3498,12 @@ export interface SchematicRowProps {
 export interface SchematicSectionProps {
   displayName?: string
   name: string
+  sectionTitleFontSize?: number | string
 }
 export const schematicSectionProps = z.object({
   displayName: z.string().optional(),
   name: z.string(),
+  sectionTitleFontSize: distance.optional(),
 })
 ```
 

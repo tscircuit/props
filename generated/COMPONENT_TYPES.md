@@ -1145,7 +1145,7 @@ export interface ChipPropsSU<
   externallyConnectedPins?: string[][]
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
-  spiceModel?: SpicemodelElement
+  spiceModel?: SpiceModelElement
 }
 /**
  * Get the connection prop type for a component
@@ -3817,7 +3817,7 @@ export const circleSolderPasteProps = pcbLayoutProps
 ### spicemodel
 
 ```typescript
-export interface SpicemodelProps {
+export interface SpiceModelProps {
   source: string
   spicePinMapping?: Record<string, string>
 }

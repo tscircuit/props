@@ -101,7 +101,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<smtpad />`                   | [`RectSmtPadProps`](#rectsmtpadprops-smtpad)                                               |
 | `<solderjumper />`             | [`SolderJumperProps`](#solderjumperprops-solderjumper)                                     |
 | `<solderpaste />`              | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste)                                |
-| `<spicemodel />`               | [`SpicemodelProps`](#spicemodelprops-spicemodel)                                           |
+| `<spicemodel />`               | [`SpiceModelProps`](#spicemodelprops-spicemodel)                                           |
 | `<stampboard />`               | [`StampboardProps`](#stampboardprops-stampboard)                                           |
 | `<subcircuit />`               | [`SubcircuitProps`](#subcircuitprops-subcircuit)                                           |
 | `<subpanel />`                 | [`SubpanelProps`](#subpanelprops-subpanel)                                                 |
@@ -416,7 +416,7 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[];
   connections?: Connections<PinLabel>;
-  spiceModel?: SpicemodelElement;
+  spiceModel?: SpiceModelElement;
 }
 ```
 
@@ -1715,10 +1715,10 @@ export interface RectSolderPasteProps extends Omit<
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/solderpaste.ts)
 
-### SpicemodelProps `<spicemodel />`
+### SpiceModelProps `<spicemodel />`
 
 ```ts
-export interface SpicemodelProps {
+export interface SpiceModelProps {
   source: string;
   spicePinMapping?: Record<string, string>;
 }

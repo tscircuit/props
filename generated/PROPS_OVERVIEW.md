@@ -426,7 +426,7 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
-  spiceModel?: SpicemodelElement
+  spiceModel?: SpiceModelElement
 }
 
 
@@ -2024,7 +2024,7 @@ export interface SpiceEngineSimulationResult {
 }
 
 
-export interface SpicemodelProps {
+export interface SpiceModelProps {
   source: string
   spicePinMapping?: Record<string, string>
 }

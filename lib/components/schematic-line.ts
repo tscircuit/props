@@ -11,6 +11,8 @@ export const schematicLineProps = z.object({
   strokeWidth: distance.optional(),
   color: z.string().optional(),
   isDashed: z.boolean().optional().default(false),
+  dashLength: distance.optional(),
+  dashGap: distance.optional(),
 })
 
 export interface SchematicLineProps {
@@ -21,6 +23,8 @@ export interface SchematicLineProps {
   strokeWidth?: Distance
   color?: string
   isDashed?: boolean
+  dashLength?: Distance
+  dashGap?: Distance
 }
 
 export type InferredSchematicLineProps = z.input<typeof schematicLineProps>

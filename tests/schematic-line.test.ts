@@ -28,9 +28,13 @@ test("schematic line accepts style overrides", () => {
     strokeWidth: "0.05in",
     color: "#123456",
     isDashed: true,
+    dashLength: "2mm",
+    dashGap: "1mm",
   })
 
   expect(parsed.strokeWidth).toBeGreaterThan(0)
   expect(parsed.color).toBe("#123456")
   expect(parsed.isDashed).toBe(true)
+  expect(parsed.dashLength).toBe(2)
+  expect(parsed.dashGap).toBe(1)
 })

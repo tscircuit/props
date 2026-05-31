@@ -1,6 +1,6 @@
 import { distance, supplier_name } from "circuit-json"
 import type { Distance } from "lib/common/distance"
-import type { SpicemodelProps } from "lib/components/spicemodel"
+import type { SpiceModelProps } from "lib/components/spicemodel"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -38,7 +38,7 @@ export interface PinCompatibleVariant {
   supplierPartNumber?: SupplierPartNumbers
 }
 
-export type SpicemodelElement = ReactElement<SpicemodelProps>
+export type SpiceModelElement = ReactElement<SpiceModelProps>
 
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
@@ -71,7 +71,7 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
-  spiceModel?: SpicemodelElement
+  spiceModel?: SpiceModelElement
 }
 
 export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
@@ -135,7 +135,7 @@ const connectionsProp = z
   .custom<Connections>()
   .pipe(z.record(z.string(), connectionTarget))
 
-const spicemodelElement = z.custom<SpicemodelElement>(
+const spicemodelElement = z.custom<SpiceModelElement>(
   (v) => !!v && typeof v === "object" && "type" in v && "props" in v,
 )
 

@@ -1,7 +1,7 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface SpicemodelProps {
+export interface SpiceModelProps {
   source: string
   spicePinMapping?: Record<string, string>
 }
@@ -11,5 +11,5 @@ export const spicemodelProps = z.object({
   spicePinMapping: z.record(z.string(), z.string()).optional(),
 })
 
-type InferredSpicemodelProps = z.input<typeof spicemodelProps>
-expectTypesMatch<SpicemodelProps, InferredSpicemodelProps>(true)
+type InferredSpiceModelProps = z.input<typeof spicemodelProps>
+expectTypesMatch<SpiceModelProps, InferredSpiceModelProps>(true)

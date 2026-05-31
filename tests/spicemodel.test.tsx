@@ -4,13 +4,13 @@ import {
   chipProps,
   type ChipProps,
   spicemodelProps,
-  type SpicemodelProps,
+  type SpiceModelProps,
 } from "lib"
 import { z } from "zod"
 
 interface TscircuitElements {
   chip: ChipProps
-  spicemodel: SpicemodelProps
+  spicemodel: SpiceModelProps
 }
 
 declare module "react" {
@@ -25,7 +25,7 @@ declare module "react/jsx-runtime" {
 }
 
 test("spicemodel props parse source and spice pin mapping", () => {
-  const raw: SpicemodelProps = {
+  const raw: SpiceModelProps = {
     source: ".subckt LM358 OUT IN- IN+ V- V+\n.ends LM358",
     spicePinMapping: {
       OUT: "OUT",

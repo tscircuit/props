@@ -11,7 +11,6 @@ export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   hasStroke?: boolean
   isStrokeDashed?: boolean
   color?: string
-  cornerRadius?: string | number
 }
 
 export const pcbNoteRectProps = pcbLayoutProps
@@ -24,7 +23,6 @@ export const pcbNoteRectProps = pcbLayoutProps
     hasStroke: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
-    cornerRadius: distance.optional(),
   })
 
 expectTypesMatch<PcbNoteRectProps, z.input<typeof pcbNoteRectProps>>(true)

@@ -1212,7 +1212,6 @@ export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   hasStroke?: boolean;
   isStrokeDashed?: boolean;
   color?: string;
-  cornerRadius?: string | number;
 }
 ```
 

@@ -3574,6 +3574,46 @@ export const silkscreenCircleProps = pcbLayoutProps
   })
 ```
 
+### silkscreen-graphic
+
+```typescript
+export interface SilkscreenGraphicProps {
+  imageUrl: string
+  width: Distance
+  height: Distance
+  layer?: VisibleLayer
+  pcbX?: string | number
+  pcbY?: string | number
+  pcbLeftEdgeX?: string | number
+  pcbRightEdgeX?: string | number
+  pcbTopEdgeY?: string | number
+  pcbBottomEdgeY?: string | number
+  pcbOffsetX?: string | number
+  pcbOffsetY?: string | number
+  pcbRotation?: string | number
+  pcbPositionAnchor?: string
+  pcbPositionMode?: "relative_to_group_anchor" | "auto" | "relative_to_board_anchor" | "relative_to_component_anchor"
+  shouldBeOnEdgeOfBoard?: boolean
+  pcbMarginTop?: string | number
+  pcbMarginRight?: string | number
+  pcbMarginBottom?: string | number
+  pcbMarginLeft?: string | number
+  pcbMarginX?: string | number
+  pcbMarginY?: string | number
+  pcbRelative?: boolean
+  relative?: boolean
+}
+/** PCB layer for the silkscreen graphic. */
+export const silkscreenGraphicProps = pcbLayoutProps
+  .omit({ layer: true, pcbStyle: true, pcbSx: true })
+  .extend({
+    imageUrl: url,
+    width: distance,
+    height: distance,
+    layer: visible_layer.optional(),
+  })
+```
+
 ### silkscreen-line
 
 ```typescript

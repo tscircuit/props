@@ -21,6 +21,15 @@ export interface PillHoleProps extends PcbLayoutProps {
   coveredWithSolderMask?: boolean
 }
 
+export interface OvalHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "oval"
+  width: Distance
+  height: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
+}
+
 export interface RectHoleProps extends PcbLayoutProps {
   name?: string
   shape: "rect"
@@ -30,7 +39,11 @@ export interface RectHoleProps extends PcbLayoutProps {
   coveredWithSolderMask?: boolean
 }
 
-export type HoleProps = CircleHoleProps | PillHoleProps | RectHoleProps
+export type HoleProps =
+  | CircleHoleProps
+  | PillHoleProps
+  | OvalHoleProps
+  | RectHoleProps
 
 const circleHoleProps = pcbLayoutProps
   .extend({
@@ -56,6 +69,15 @@ const pillHoleProps = pcbLayoutProps.extend({
   coveredWithSolderMask: z.boolean().optional(),
 })
 
+const ovalHoleProps = pcbLayoutProps.extend({
+  name: z.string().optional(),
+  shape: z.literal("oval"),
+  width: distance,
+  height: distance,
+  solderMaskMargin: distance.optional(),
+  coveredWithSolderMask: z.boolean().optional(),
+})
+
 const rectHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),
   shape: z.literal("rect"),
@@ -68,6 +90,7 @@ const rectHoleProps = pcbLayoutProps.extend({
 export const holeProps = z.union([
   circleHoleProps,
   pillHoleProps,
+  ovalHoleProps,
   rectHoleProps,
 ])
 

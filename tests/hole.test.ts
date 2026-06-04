@@ -43,6 +43,27 @@ test("pill holes require width and height", () => {
   }
 })
 
+test("oval holes require width and height", () => {
+  const raw: HoleProps = {
+    shape: "oval",
+    width: "4mm",
+    height: "1.5mm",
+    name: "slot",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof holeProps>>()
+
+  const parsed = holeProps.parse(raw)
+
+  if (parsed.shape === "oval") {
+    expect(parsed.width).toBe(4)
+    expect(parsed.height).toBe(1.5)
+    expect(parsed.name).toBe("slot")
+  } else {
+    throw new Error("Expected oval hole props")
+  }
+})
+
 test("pill holes without required dimensions throw", () => {
   const raw = {
     shape: "pill",

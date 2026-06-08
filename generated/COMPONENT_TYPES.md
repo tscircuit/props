@@ -2103,7 +2103,7 @@ export interface SubcircuitGroupProps
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
-  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "v5" | "latest"
+  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "latest"
 
   circuitJson?: any[]
 
@@ -2245,7 +2245,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: z
-    .enum(["v1", "v2", "v3", "v4", "v5", "latest"])
+    .enum(["v1", "v2", "v3", "v4", "v5", "v6", "latest"])
     .optional(),
   square: z.boolean().optional(),
   emptyArea: z.string().optional(),
@@ -2281,6 +2281,14 @@ export interface PillHoleProps extends PcbLayoutProps {
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
 }
+export interface OvalHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "oval"
+  width: Distance
+  height: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
+}
 export interface RectHoleProps extends PcbLayoutProps {
   name?: string
   shape: "rect"
@@ -2300,6 +2308,14 @@ export interface RectHoleProps extends PcbLayoutProps {
 const pillHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),
   shape: z.literal("pill"),
+  width: distance,
+  height: distance,
+  solderMaskMargin: distance.optional(),
+  coveredWithSolderMask: z.boolean().optional(),
+})
+const ovalHoleProps = pcbLayoutProps.extend({
+  name: z.string().optional(),
+  shape: z.literal("oval"),
   width: distance,
   height: distance,
   solderMaskMargin: distance.optional(),
@@ -3592,7 +3608,11 @@ export interface SilkscreenGraphicProps {
   pcbOffsetY?: string | number
   pcbRotation?: string | number
   pcbPositionAnchor?: string
-  pcbPositionMode?: "relative_to_group_anchor" | "auto" | "relative_to_board_anchor" | "relative_to_component_anchor"
+  pcbPositionMode?:
+    | "relative_to_group_anchor"
+    | "auto"
+    | "relative_to_board_anchor"
+    | "relative_to_component_anchor"
   shouldBeOnEdgeOfBoard?: boolean
   pcbMarginTop?: string | number
   pcbMarginRight?: string | number

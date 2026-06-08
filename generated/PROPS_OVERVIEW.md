@@ -1214,6 +1214,16 @@ export interface OpAmpProps<PinLabel extends string = string>
 }
 
 
+export interface OvalHoleProps extends PcbLayoutProps {
+  name?: string
+  shape: "oval"
+  width: Distance
+  height: Distance
+  solderMaskMargin?: Distance
+  coveredWithSolderMask?: boolean
+}
+
+
 export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
@@ -2027,7 +2037,11 @@ export interface SilkscreenGraphicProps {
   pcbOffsetY?: string | number
   pcbRotation?: string | number
   pcbPositionAnchor?: string
-  pcbPositionMode?: "relative_to_group_anchor" | "auto" | "relative_to_board_anchor" | "relative_to_component_anchor"
+  pcbPositionMode?:
+    | "relative_to_group_anchor"
+    | "auto"
+    | "relative_to_board_anchor"
+    | "relative_to_component_anchor"
   shouldBeOnEdgeOfBoard?: boolean
   pcbMarginTop?: string | number
   pcbMarginRight?: string | number
@@ -2096,7 +2110,7 @@ export interface SubcircuitGroupProps
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
-  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "v5" | "latest"
+  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "latest"
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit

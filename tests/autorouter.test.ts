@@ -74,3 +74,11 @@ test("supports autorouter version v5", () => {
   })
   expect(result.autorouterVersion).toBe("v5")
 })
+
+test("supports autorouter version v6", () => {
+  const result = subcircuitGroupPropsWithBool.parse({
+    subcircuit: true,
+    autorouterVersion: "v6",
+  })
+  expect(result.autorouterVersion).toBe("v6")
+})

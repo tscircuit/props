@@ -1,20 +1,10 @@
-import { type VisibleLayer, visible_layer } from "circuit-json"
+import { brep_shape, type VisibleLayer, visible_layer } from "circuit-json"
 import { type Distance, distance } from "lib/common/distance"
 import { pcbLayoutProps } from "lib/common/layout"
 import { url } from "lib/common/url"
-import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface SilkscreenGraphicProps {
-  /**
-   * URL or static-file import for the source image. tscircuit/core converts the
-   * image into the pcb_silkscreen_graphic BRep in circuit-json.
-   */
-  imageUrl: string
-  /** Width of the rendered silkscreen graphic on the PCB. */
-  width: Distance
-  /** Height of the rendered silkscreen graphic on the PCB. */
-  height: Distance
+type SilkscreenGraphicLayoutProps = {
   /** PCB layer for the silkscreen graphic. */
   layer?: VisibleLayer
   pcbX?: string | number
@@ -43,14 +33,48 @@ export interface SilkscreenGraphicProps {
   relative?: boolean
 }
 
-export const silkscreenGraphicProps = pcbLayoutProps
+type BRepShapeInput = z.input<typeof brep_shape>
+
+type SilkscreenGraphicSourceProps = SilkscreenGraphicLayoutProps & {
+  /**
+   * URL or static-file import for the source image. tscircuit/core converts the
+   * image into the pcb_silkscreen_graphic BRep in circuit-json.
+   */
+  imageUrl: string
+  /** Width of the rendered silkscreen graphic on the PCB. */
+  width: Distance
+  /** Height of the rendered silkscreen graphic on the PCB. */
+  height: Distance
+  brepShape?: never
+}
+
+type SilkscreenGraphicBrepProps = SilkscreenGraphicLayoutProps & {
+  /** Precomputed BRep shape to emit directly into pcb_silkscreen_graphic. */
+  brepShape: BRepShapeInput
+  imageUrl?: never
+  width?: never
+  height?: never
+}
+
+const silkscreenGraphicBaseProps = pcbLayoutProps
   .omit({ layer: true, pcbStyle: true, pcbSx: true })
   .extend({
-    imageUrl: url,
-    width: distance,
-    height: distance,
     layer: visible_layer.optional(),
   })
 
-type InferredSilkscreenGraphicProps = z.input<typeof silkscreenGraphicProps>
-expectTypesMatch<SilkscreenGraphicProps, InferredSilkscreenGraphicProps>(true)
+export const silkscreenGraphicProps = z.union([
+  silkscreenGraphicBaseProps.extend({
+    imageUrl: url,
+    width: distance,
+    height: distance,
+    brepShape: z.never().optional(),
+  }),
+  silkscreenGraphicBaseProps.extend({
+    brepShape: brep_shape,
+    imageUrl: z.never().optional(),
+    width: z.never().optional(),
+    height: z.never().optional(),
+  }),
+])
+
+export type SilkscreenGraphicProps = z.input<typeof silkscreenGraphicProps>

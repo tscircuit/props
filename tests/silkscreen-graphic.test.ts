@@ -41,3 +41,33 @@ test("should parse a static-file import shaped imageUrl", () => {
   expect(parsed.height).toBe(4)
   expect(parsed.layer).toBe("bottom")
 })
+
+test("should parse a precomputed brep silkscreen graphic", () => {
+  const raw: SilkscreenGraphicProps = {
+    layer: "top",
+    pcbX: 2,
+    brepShape: {
+      outer_ring: {
+        vertices: [
+          { x: 0, y: 0 },
+          { x: 4, y: 0 },
+          { x: 4, y: 3 },
+          { x: 0, y: 3 },
+        ],
+      },
+      inner_rings: [],
+    },
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<SilkscreenGraphicProps>()
+  const parsed = silkscreenGraphicProps.parse(raw)
+
+  expect(parsed.layer).toBe("top")
+  expect(parsed.pcbX).toBe(2)
+  expect(parsed.brepShape).toBeDefined()
+  if (!parsed.brepShape) {
+    throw new Error("Expected brepShape to be present")
+  }
+  expect(parsed.brepShape.outer_ring.vertices).toHaveLength(4)
+  expect("imageUrl" in parsed).toBe(false)
+})

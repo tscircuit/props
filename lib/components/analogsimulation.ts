@@ -6,21 +6,39 @@ import { z } from "zod"
 export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis"
   duration?: number | string
+  startTime?: number | string
   timePerStep?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceOptions?: SpiceOptions
 }
 
 const spiceEngine = z.custom<AutocompleteString<"spicey" | "ngspice">>(
   (value) => typeof value === "string",
 )
 
+export interface SpiceOptions {
+  method?: "trap" | "gear"
+  reltol?: number | string
+  abstol?: number | string
+  vntol?: number | string
+}
+
+const spiceOptions = z.object({
+  method: z.enum(["trap", "gear"]).optional(),
+  reltol: z.union([z.number(), z.string()]).optional(),
+  abstol: z.union([z.number(), z.string()]).optional(),
+  vntol: z.union([z.number(), z.string()]).optional(),
+})
+
 export const analogSimulationProps = z.object({
   simulationType: z
     .literal("spice_transient_analysis")
     .default("spice_transient_analysis"),
   duration: ms.optional(),
+  startTime: ms.optional(),
   timePerStep: ms.optional(),
   spiceEngine: spiceEngine.optional(),
+  spiceOptions: spiceOptions.optional(),
 })
 
 expectTypesMatch<AnalogSimulationProps, z.input<typeof analogSimulationProps>>(

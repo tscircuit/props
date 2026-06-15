@@ -18,6 +18,7 @@ test("analog simulation defaults to spice transient analysis", () => {
 test("analog simulation accepts time parameters", () => {
   const raw: AnalogSimulationProps = {
     duration: "1ms",
+    startTime: "697.58us",
     timePerStep: "1us",
   }
 
@@ -25,6 +26,7 @@ test("analog simulation accepts time parameters", () => {
 
   const parsed = analogSimulationProps.parse(raw)
   expect(parsed.duration).toBe(1)
+  expect(parsed.startTime).toBeCloseTo(0.69758)
   expect(parsed.timePerStep).toBe(0.001)
 })
 
@@ -37,4 +39,25 @@ test("analog simulation accepts spice engine selection", () => {
 
   const parsed = analogSimulationProps.parse(raw)
   expect(parsed.spiceEngine).toBe("spicey")
+})
+
+test("analog simulation accepts spice options", () => {
+  const raw: AnalogSimulationProps = {
+    spiceOptions: {
+      method: "gear",
+      reltol: 0.01,
+      abstol: "1n",
+      vntol: "1u",
+    },
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof analogSimulationProps>>()
+
+  const parsed = analogSimulationProps.parse(raw)
+  expect(parsed.spiceOptions).toEqual({
+    method: "gear",
+    reltol: 0.01,
+    abstol: "1n",
+    vntol: "1u",
+  })
 })

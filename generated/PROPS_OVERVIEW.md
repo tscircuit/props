@@ -21,8 +21,10 @@ const validatedProps = chipProps.parse(unknownProps)
 export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis"
   duration?: number | string
+  startTime?: number | string
   timePerStep?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceOptions?: SpiceOptions
 }
 
 
@@ -2083,6 +2085,14 @@ export interface SpiceModelProps {
 }
 
 
+export interface SpiceOptions {
+  method?: "trap" | "gear"
+  reltol?: number | string
+  abstol?: number | string
+  vntol?: number | string
+}
+
+
 export interface StampboardProps extends BoardProps {
   leftPinCount?: number
   rightPinCount?: number
@@ -2259,6 +2269,11 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  pulseDelay?: number | string
+  riseTime?: number | string
+  fallTime?: number | string
+  pulseWidth?: number | string
+  period?: number | string
   connections?: Connections<VoltageSourcePinLabels>
 }
 

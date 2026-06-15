@@ -118,6 +118,25 @@ test("should parse duty cycle", () => {
   ).toThrow()
 })
 
+test("should parse square wave pulse timing controls", () => {
+  const rawProps: VoltageSourceProps = {
+    name: "vs_pulse",
+    waveShape: "square",
+    voltage: "4.2V",
+    pulseDelay: "1us",
+    riseTime: "1ns",
+    fallTime: "1ns",
+    pulseWidth: "2ms",
+    period: "4ms",
+  }
+  const parsed = voltageSourceProps.parse(rawProps)
+  expect(parsed.pulseDelay).toBe(0.001)
+  expect(parsed.riseTime).toBe(0.000001)
+  expect(parsed.fallTime).toBe(0.000001)
+  expect(parsed.pulseWidth).toBe(2)
+  expect(parsed.period).toBe(4)
+})
+
 test("should parse voltage source props with single string connections", () => {
   const rawProps: VoltageSourceProps = {
     name: "vs_conn",

@@ -1,4 +1,4 @@
-import { frequency, rotation, voltage } from "circuit-json"
+import { frequency, ms, rotation, voltage } from "circuit-json"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -22,6 +22,11 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  pulseDelay?: number | string
+  riseTime?: number | string
+  fallTime?: number | string
+  pulseWidth?: number | string
+  period?: number | string
   connections?: Connections<VoltageSourcePinLabels>
 }
 
@@ -50,6 +55,11 @@ export const voltageSourceProps = commonComponentProps.extend({
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
   dutyCycle: percentage.optional(),
+  pulseDelay: ms.optional(),
+  riseTime: ms.optional(),
+  fallTime: ms.optional(),
+  pulseWidth: ms.optional(),
+  period: ms.optional(),
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 

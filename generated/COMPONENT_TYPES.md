@@ -871,16 +871,26 @@ export const url = z.preprocess((value) => {
 export interface AnalogSimulationProps {
   simulationType?: "spice_transient_analysis"
   duration?: number | string
+  startTime?: number | string
   timePerStep?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceOptions?: SpiceOptions
+}
+export interface SpiceOptions {
+  method?: "trap" | "gear"
+  reltol?: number | string
+  abstol?: number | string
+  vntol?: number | string
 }
 export const analogSimulationProps = z.object({
   simulationType: z
     .literal("spice_transient_analysis")
     .default("spice_transient_analysis"),
   duration: ms.optional(),
+  startTime: ms.optional(),
   timePerStep: ms.optional(),
   spiceEngine: spiceEngine.optional(),
+  spiceOptions: spiceOptions.optional(),
 })
 ```
 
@@ -4164,6 +4174,11 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  pulseDelay?: number | string
+  riseTime?: number | string
+  fallTime?: number | string
+  pulseWidth?: number | string
+  period?: number | string
   connections?: Connections<VoltageSourcePinLabels>
 }
 export const voltageSourceProps = commonComponentProps.extend({
@@ -4173,6 +4188,11 @@ export const voltageSourceProps = commonComponentProps.extend({
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
   dutyCycle: percentage.optional(),
+  pulseDelay: ms.optional(),
+  riseTime: ms.optional(),
+  fallTime: ms.optional(),
+  pulseWidth: ms.optional(),
+  period: ms.optional(),
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 ```

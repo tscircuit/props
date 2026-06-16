@@ -2253,11 +2253,21 @@ export interface ViaProps extends CommonLayoutProps {
 }
 
 
+export interface VoltageProbeDisplayOptions {
+  label?: string
+  center?: number
+  offsetDivs?: number
+  unitsPerDiv?: number
+  color?: string
+}
+
+
 export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   name?: string
   connectsTo: string
   referenceTo?: string
   color?: string
+  display?: VoltageProbeDisplayOptions
 }
 
 

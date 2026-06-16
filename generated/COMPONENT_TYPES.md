@@ -4152,6 +4152,14 @@ export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   connectsTo: string
   referenceTo?: string
   color?: string
+  display?: VoltageProbeDisplayOptions
+}
+export interface VoltageProbeDisplayOptions {
+  label?: string
+  center?: number
+  offsetDivs?: number
+  unitsPerDiv?: number
+  color?: string
 }
 export const voltageProbeProps = commonComponentProps
   .omit({ name: true })
@@ -4160,6 +4168,15 @@ export const voltageProbeProps = commonComponentProps
     connectsTo: z.string(),
     referenceTo: z.string().optional(),
     color: z.string().optional(),
+    display: z
+      .object({
+        label: z.string().optional(),
+        center: z.number().optional(),
+        offsetDivs: z.number().optional(),
+        unitsPerDiv: z.number().optional(),
+        color: z.string().optional(),
+      })
+      .optional(),
   })
 ```
 

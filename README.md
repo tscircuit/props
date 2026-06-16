@@ -1942,6 +1942,7 @@ export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   connectsTo: string;
   referenceTo?: string;
   color?: string;
+  display?: VoltageProbeDisplayOptions;
 }
 ```
 

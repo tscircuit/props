@@ -2258,7 +2258,6 @@ export interface VoltageProbeDisplayOptions {
   center?: number
   offsetDivs?: number
   unitsPerDiv?: number
-  color?: string
 }
 
 

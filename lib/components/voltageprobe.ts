@@ -18,7 +18,6 @@ export interface VoltageProbeDisplayOptions {
   center?: number
   offsetDivs?: number
   unitsPerDiv?: number
-  color?: string
 }
 
 export const voltageProbeProps = commonComponentProps
@@ -34,7 +33,6 @@ export const voltageProbeProps = commonComponentProps
         center: z.number().optional(),
         offsetDivs: z.number().optional(),
         unitsPerDiv: z.number().optional(),
-        color: z.string().optional(),
       })
       .optional(),
   })

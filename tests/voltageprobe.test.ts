@@ -53,7 +53,6 @@ test("should parse voltageprobe with display options", () => {
       center: 3.3,
       offsetDivs: 3,
       unitsPerDiv: 0.05,
-      color: "#315cff",
     },
   }
   const parsed = voltageProbeProps.parse(raw)
@@ -62,7 +61,6 @@ test("should parse voltageprobe with display options", () => {
     center: 3.3,
     offsetDivs: 3,
     unitsPerDiv: 0.05,
-    color: "#315cff",
   })
 })
 

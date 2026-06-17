@@ -809,7 +809,7 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
 
 export interface FiducialProps extends CommonComponentProps {
   soldermaskPullback?: Distance
-  padDiameter?: Distance
+  padDiameter: Distance
 }
 
 

@@ -1725,11 +1725,11 @@ export const fabricationNoteTextProps = pcbLayoutProps.extend({
 ```typescript
 export interface FiducialProps extends CommonComponentProps {
   soldermaskPullback?: Distance
-  padDiameter?: Distance
+  padDiameter: Distance
 }
 export const fiducialProps = commonComponentProps.extend({
   soldermaskPullback: distance.optional(),
-  padDiameter: distance.optional(),
+  padDiameter: distance,
 })
 ```
 

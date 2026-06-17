@@ -8,12 +8,12 @@ import { z } from "zod"
 
 export interface FiducialProps extends CommonComponentProps {
   soldermaskPullback?: Distance
-  padDiameter?: Distance
+  padDiameter: Distance
 }
 
 export const fiducialProps = commonComponentProps.extend({
   soldermaskPullback: distance.optional(),
-  padDiameter: distance.optional(),
+  padDiameter: distance,
 })
 
 type InferredFiducialProps = z.input<typeof fiducialProps>

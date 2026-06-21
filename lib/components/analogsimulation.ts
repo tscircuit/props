@@ -4,6 +4,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export interface AnalogSimulationProps {
+  name?: string
   simulationType?: "spice_transient_analysis"
   duration?: number | string
   startTime?: number | string
@@ -31,6 +32,7 @@ const spiceOptions = z.object({
 })
 
 export const analogSimulationProps = z.object({
+  name: z.string().optional(),
   simulationType: z
     .literal("spice_transient_analysis")
     .default("spice_transient_analysis"),

@@ -15,6 +15,17 @@ test("analog simulation defaults to spice transient analysis", () => {
   expect(parsed.simulationType).toBe("spice_transient_analysis")
 })
 
+test("analog simulation accepts name", () => {
+  const raw: AnalogSimulationProps = {
+    name: "tran1",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof analogSimulationProps>>()
+
+  const parsed = analogSimulationProps.parse(raw)
+  expect(parsed.name).toBe("tran1")
+})
+
 test("analog simulation accepts time parameters", () => {
   const raw: AnalogSimulationProps = {
     duration: "1ms",

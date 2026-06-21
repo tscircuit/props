@@ -900,6 +900,7 @@ export const ammeterProps = commonComponentProps.extend({
 
 ```typescript
 export interface AnalogSimulationProps {
+  name?: string
   simulationType?: "spice_transient_analysis"
   duration?: number | string
   startTime?: number | string
@@ -914,6 +915,7 @@ export interface SpiceOptions {
   vntol?: number | string
 }
 export const analogSimulationProps = z.object({
+  name: z.string().optional(),
   simulationType: z
     .literal("spice_transient_analysis")
     .default("spice_transient_analysis"),

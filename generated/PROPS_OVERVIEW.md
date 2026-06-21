@@ -35,6 +35,7 @@ export interface AmmeterProps<PinLabel extends string = string>
 
 
 export interface AnalogSimulationProps {
+  name?: string
   simulationType?: "spice_transient_analysis"
   duration?: number | string
   startTime?: number | string

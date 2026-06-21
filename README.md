@@ -220,6 +220,7 @@ export interface AmmeterProps<
 
 ```ts
 export interface AnalogSimulationProps {
+  name?: string;
   simulationType?: "spice_transient_analysis";
   duration?: number | string;
   startTime?: number | string;

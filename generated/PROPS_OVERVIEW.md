@@ -18,19 +18,14 @@ const validatedProps = chipProps.parse(unknownProps)
 ## Available Props
 
 ```ts
-export interface AmmeterDisplayOptions {
-  label?: string
-  center?: number
-  offsetDivs?: number
-  unitsPerDiv?: number
-}
-
-
 export interface AmmeterProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections: Connections<AmmeterPinLabels>
   color?: string
-  display?: AmmeterDisplayOptions
+  displayLabel?: string
+  displayCenter?: number
+  displayOffsetDivs?: number
+  displayUnitsPerDiv?: number
 }
 
 
@@ -2270,20 +2265,15 @@ export interface ViaProps extends CommonLayoutProps {
 }
 
 
-export interface VoltageProbeDisplayOptions {
-  label?: string
-  center?: number
-  offsetDivs?: number
-  unitsPerDiv?: number
-}
-
-
 export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   name?: string
   connectsTo: string
   referenceTo?: string
   color?: string
-  display?: VoltageProbeDisplayOptions
+  displayLabel?: string
+  displayCenter?: number
+  displayOffsetDivs?: number
+  displayUnitsPerDiv?: number
 }
 
 

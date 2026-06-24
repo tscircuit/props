@@ -35,7 +35,7 @@ test("should parse ammeter with pin1 and pin2 connections", () => {
   })
 })
 
-test("should parse ammeter with color and display options", () => {
+test("should parse ammeter with color and display props", () => {
   const raw: AmmeterProps = {
     name: "A3",
     color: "green",
@@ -43,22 +43,18 @@ test("should parse ammeter with color and display options", () => {
       pos: "net.IN",
       neg: "net.OUT",
     },
-    display: {
-      label: "I_LOAD",
-      center: 0,
-      offsetDivs: 2,
-      unitsPerDiv: 0.01,
-    },
+    displayLabel: "I_LOAD",
+    displayCenter: 0,
+    displayOffsetDivs: 2,
+    displayUnitsPerDiv: 0.01,
   }
 
   const parsed = ammeterProps.parse(raw)
   expect(parsed.color).toBe("green")
-  expect(parsed.display).toEqual({
-    label: "I_LOAD",
-    center: 0,
-    offsetDivs: 2,
-    unitsPerDiv: 0.01,
-  })
+  expect(parsed.displayLabel).toBe("I_LOAD")
+  expect(parsed.displayCenter).toBe(0)
+  expect(parsed.displayOffsetDivs).toBe(2)
+  expect(parsed.displayUnitsPerDiv).toBe(0.01)
 })
 
 test("should reject missing ammeter connections", () => {

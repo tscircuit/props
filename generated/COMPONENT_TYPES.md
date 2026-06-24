@@ -868,31 +868,25 @@ export const url = z.preprocess((value) => {
 ### ammeter
 
 ```typescript
-export interface AmmeterDisplayOptions {
-  label?: string
-  center?: number
-  offsetDivs?: number
-  unitsPerDiv?: number
-}
 export interface AmmeterProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections: Connections<AmmeterPinLabels>
   color?: string
-  display?: AmmeterDisplayOptions
+  displayLabel?: string
+  displayCenter?: number
+  displayOffsetDivs?: number
+  displayUnitsPerDiv?: number
 }
-export const ammeterDisplayOptions = z.object({
-  label: z.string().optional(),
-  center: z.number().optional(),
-  offsetDivs: z.number().optional(),
-  unitsPerDiv: z.number().optional(),
-})
 export const ammeterProps = commonComponentProps.extend({
   connections: createConnectionsProp(ammeterPinLabels).refine(
     hasAmmeterConnectionPair,
     "Ammeter connections must include either pos/neg or pin1/pin2",
   ),
   color: z.string().optional(),
-  display: ammeterDisplayOptions.optional(),
+  displayLabel: z.string().optional(),
+  displayCenter: z.number().optional(),
+  displayOffsetDivs: z.number().optional(),
+  displayUnitsPerDiv: z.number().optional(),
 })
 ```
 
@@ -1436,17 +1430,15 @@ export const courtyardPillProps = pcbLayoutProps
 ### courtyard-rect
 
 ```typescript
-export const courtyardRectProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    width: distance,
-    height: distance,
-    strokeWidth: distance.optional(),
-    isFilled: z.boolean().optional(),
-    hasStroke: z.boolean().optional(),
-    isStrokeDashed: z.boolean().optional(),
-    color: z.string().optional(),
-  })
+export const courtyardRectProps = pcbLayoutProps.extend({
+  width: distance,
+  height: distance,
+  strokeWidth: distance.optional(),
+  isFilled: z.boolean().optional(),
+  hasStroke: z.boolean().optional(),
+  isStrokeDashed: z.boolean().optional(),
+  color: z.string().optional(),
+})
 ```
 
 ### crystal
@@ -4185,13 +4177,10 @@ export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   connectsTo: string
   referenceTo?: string
   color?: string
-  display?: VoltageProbeDisplayOptions
-}
-export interface VoltageProbeDisplayOptions {
-  label?: string
-  center?: number
-  offsetDivs?: number
-  unitsPerDiv?: number
+  displayLabel?: string
+  displayCenter?: number
+  displayOffsetDivs?: number
+  displayUnitsPerDiv?: number
 }
 export const voltageProbeProps = commonComponentProps
   .omit({ name: true })
@@ -4200,14 +4189,10 @@ export const voltageProbeProps = commonComponentProps
     connectsTo: z.string(),
     referenceTo: z.string().optional(),
     color: z.string().optional(),
-    display: z
-      .object({
-        label: z.string().optional(),
-        center: z.number().optional(),
-        offsetDivs: z.number().optional(),
-        unitsPerDiv: z.number().optional(),
-      })
-      .optional(),
+    displayLabel: z.string().optional(),
+    displayCenter: z.number().optional(),
+    displayOffsetDivs: z.number().optional(),
+    displayUnitsPerDiv: z.number().optional(),
   })
 ```
 

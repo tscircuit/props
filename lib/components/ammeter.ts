@@ -10,18 +10,14 @@ import { z } from "zod"
 export const ammeterPinLabels = ["pin1", "pin2", "pos", "neg"] as const
 export type AmmeterPinLabels = (typeof ammeterPinLabels)[number]
 
-export interface AmmeterDisplayOptions {
-  label?: string
-  center?: number
-  offsetDivs?: number
-  unitsPerDiv?: number
-}
-
 export interface AmmeterProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections: Connections<AmmeterPinLabels>
   color?: string
-  display?: AmmeterDisplayOptions
+  displayLabel?: string
+  displayCenter?: number
+  displayOffsetDivs?: number
+  displayUnitsPerDiv?: number
 }
 
 const hasAmmeterConnectionPair = (
@@ -33,20 +29,16 @@ const hasAmmeterConnectionPair = (
   )
 }
 
-export const ammeterDisplayOptions = z.object({
-  label: z.string().optional(),
-  center: z.number().optional(),
-  offsetDivs: z.number().optional(),
-  unitsPerDiv: z.number().optional(),
-})
-
 export const ammeterProps = commonComponentProps.extend({
   connections: createConnectionsProp(ammeterPinLabels).refine(
     hasAmmeterConnectionPair,
     "Ammeter connections must include either pos/neg or pin1/pin2",
   ),
   color: z.string().optional(),
-  display: ammeterDisplayOptions.optional(),
+  displayLabel: z.string().optional(),
+  displayCenter: z.number().optional(),
+  displayOffsetDivs: z.number().optional(),
+  displayUnitsPerDiv: z.number().optional(),
 })
 
 export const ammeterPins = ammeterPinLabels

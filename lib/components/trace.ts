@@ -41,6 +41,8 @@ const pcbPath = z.array(z.union([pcbPathPoint, z.string()]))
 
 const baseTraceProps = z.object({
   key: z.string().optional(),
+  name: z.string().optional(),
+  displayName: z.string().optional(),
   thickness: distance.optional(),
   width: distance.optional().describe("Alias for trace thickness"),
   schematicRouteHints: z.array(point).optional(),

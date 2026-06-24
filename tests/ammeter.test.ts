@@ -43,18 +43,18 @@ test("should parse ammeter with color and display props", () => {
       pos: "net.IN",
       neg: "net.OUT",
     },
-    displayLabel: "I_LOAD",
-    displayCenter: 0,
-    displayOffsetDivs: 2,
-    displayUnitsPerDiv: 0.01,
+    graphDisplayName: "I_LOAD",
+    graphCenter: 0,
+    graphOffsetDivs: 2,
+    graphUnitsPerDiv: 0.01,
   }
 
   const parsed = ammeterProps.parse(raw)
   expect(parsed.color).toBe("green")
-  expect(parsed.displayLabel).toBe("I_LOAD")
-  expect(parsed.displayCenter).toBe(0)
-  expect(parsed.displayOffsetDivs).toBe(2)
-  expect(parsed.displayUnitsPerDiv).toBe(0.01)
+  expect(parsed.graphDisplayName).toBe("I_LOAD")
+  expect(parsed.graphCenter).toBe(0)
+  expect(parsed.graphOffsetDivs).toBe(2)
+  expect(parsed.graphUnitsPerDiv).toBe(0.01)
 })
 
 test("should reject missing ammeter connections", () => {

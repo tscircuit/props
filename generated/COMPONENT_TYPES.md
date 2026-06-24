@@ -872,10 +872,10 @@ export interface AmmeterProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections: Connections<AmmeterPinLabels>
   color?: string
-  displayLabel?: string
-  displayCenter?: number
-  displayOffsetDivs?: number
-  displayUnitsPerDiv?: number
+  graphDisplayName?: string
+  graphCenter?: number
+  graphOffsetDivs?: number
+  graphUnitsPerDiv?: number
 }
 export const ammeterProps = commonComponentProps.extend({
   connections: createConnectionsProp(ammeterPinLabels).refine(
@@ -883,10 +883,10 @@ export const ammeterProps = commonComponentProps.extend({
     "Ammeter connections must include either pos/neg or pin1/pin2",
   ),
   color: z.string().optional(),
-  displayLabel: z.string().optional(),
-  displayCenter: z.number().optional(),
-  displayOffsetDivs: z.number().optional(),
-  displayUnitsPerDiv: z.number().optional(),
+  graphDisplayName: z.string().optional(),
+  graphCenter: z.number().optional(),
+  graphOffsetDivs: z.number().optional(),
+  graphUnitsPerDiv: z.number().optional(),
 })
 ```
 
@@ -4177,10 +4177,10 @@ export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   connectsTo: string
   referenceTo?: string
   color?: string
-  displayLabel?: string
-  displayCenter?: number
-  displayOffsetDivs?: number
-  displayUnitsPerDiv?: number
+  graphDisplayName?: string
+  graphCenter?: number
+  graphOffsetDivs?: number
+  graphUnitsPerDiv?: number
 }
 export const voltageProbeProps = commonComponentProps
   .omit({ name: true })
@@ -4189,10 +4189,10 @@ export const voltageProbeProps = commonComponentProps
     connectsTo: z.string(),
     referenceTo: z.string().optional(),
     color: z.string().optional(),
-    displayLabel: z.string().optional(),
-    displayCenter: z.number().optional(),
-    displayOffsetDivs: z.number().optional(),
-    displayUnitsPerDiv: z.number().optional(),
+    graphDisplayName: z.string().optional(),
+    graphCenter: z.number().optional(),
+    graphOffsetDivs: z.number().optional(),
+    graphUnitsPerDiv: z.number().optional(),
   })
 ```
 

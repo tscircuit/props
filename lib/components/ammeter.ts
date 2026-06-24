@@ -14,10 +14,10 @@ export interface AmmeterProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections: Connections<AmmeterPinLabels>
   color?: string
-  displayLabel?: string
-  displayCenter?: number
-  displayOffsetDivs?: number
-  displayUnitsPerDiv?: number
+  graphDisplayName?: string
+  graphCenter?: number
+  graphOffsetDivs?: number
+  graphUnitsPerDiv?: number
 }
 
 const hasAmmeterConnectionPair = (
@@ -35,10 +35,10 @@ export const ammeterProps = commonComponentProps.extend({
     "Ammeter connections must include either pos/neg or pin1/pin2",
   ),
   color: z.string().optional(),
-  displayLabel: z.string().optional(),
-  displayCenter: z.number().optional(),
-  displayOffsetDivs: z.number().optional(),
-  displayUnitsPerDiv: z.number().optional(),
+  graphDisplayName: z.string().optional(),
+  graphCenter: z.number().optional(),
+  graphOffsetDivs: z.number().optional(),
+  graphUnitsPerDiv: z.number().optional(),
 })
 
 export const ammeterPins = ammeterPinLabels

@@ -13,3 +13,31 @@ This repository contains the generated props documentation and supporting script
 - After running the scripts, confirm that `git status` reports a clean working tree (or that you have staged all generated changes) before committing.
 
 Following these steps helps prevent CI failures and ensures generated content stays in sync with the source definitions.
+
+## Props API rules
+
+Design props for TSX authors, not renderers. Prefer user intent over implementation detail.
+
+Use the narrowest valid scope: component-specific first, shared/common only when the meaning is identical across many components.
+
+Namespace ambiguous domains: `pcb*`, `sch*`, `cad*`, `sim*`, `bom*`, `supplier*`, `manufacturer*`.
+
+Use common identity conventions: `name` is stable circuit identity; `displayName` is the human-facing alternate. Do not introduce generic `label`/`displayLabel` for this role.
+
+Preserve naming patterns: `FooProps`, `fooProps`, `fooPinLabels`, `FooPinLabels`, `fooPins`, `connections`, `pinLabels`, `pcbPinLabels`, `schOrientation`, `pcbOrientation`, `pcbRotation`, `schStyle`, `pcbStyle`.
+
+Prefer canonical props. Add aliases only for common domain vocabulary, normalize them to the canonical representation, and error on conflicting aliases.
+
+Use `number | string` plus unit-aware parsing for physical/electrical/time values. Raw numbers must have obvious units.
+
+Use enums for three or more modes. Booleans should read as clear yes/no decisions.
+
+Defaults must be safe, boring, and unsurprising. Do not silently choose important electrical/design values.
+
+Electrical connectivity should usually be `connections` keyed by known pin labels. Higher-level props like `pullupTo` are acceptable when they express intent.
+
+Keep advanced escape hatches isolated and explicitly typed.
+
+Document non-obvious props at declaration. Deprecations must name the replacement and remain parseable.
+
+Every prop change must define accepted inputs, canonical parsed output, defaults, conflicts, aliases, and migration behavior.

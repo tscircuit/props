@@ -543,9 +543,13 @@ export interface CommonComponentProps<PinLabel extends string = string>
   mfn?: string
   manufacturerPartNumber?: string
   /**
-   *This component will be drawn as part of this section e.g. \"Power\
+   * This component will be drawn as part of this section e.g. "Power"
    */
   schSectionName?: string
+  /**
+   * This component will be drawn as part of this sheet e.g. "Main"
+   */
+  schSheetName?: string
 }
 
 
@@ -1979,6 +1983,13 @@ export interface SchematicSectionProps {
   displayName?: string
   name: string
   sectionTitleFontSize?: number | string
+}
+
+
+export interface SchematicSheetProps {
+  name: string
+  displayName: string
+  children?: any
 }
 
 

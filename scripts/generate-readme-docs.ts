@@ -188,6 +188,10 @@ function generateInterfaceDefinitions(
    * This component will be drawn as part of this section e.g. "Power"
    */
   schSectionName?: string
+  /**
+   * This component will be drawn as part of this sheet e.g. "Main"
+   */
+  schSheetName?: string
 }`,
       filePath: "lib/common/layout.ts",
     },

@@ -550,6 +550,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   mfn?: string
   manufacturerPartNumber?: string
   schSectionName?: string
+  schSheetName?: string
 }
 .extend({
     key: z.any().optional(),
@@ -560,6 +561,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
       .optional()
       .describe(
         'This component will be drawn as part of this section e.g. "Power"',
+      ),
+    schSheetName: z
+      .string()
+      .optional()
+      .describe(
+        'This component will be drawn as part of this sheet e.g. "Main"',
       ),
     datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),
@@ -3561,6 +3568,21 @@ export const schematicSectionProps = z.object({
   displayName: z.string().optional(),
   name: z.string(),
   sectionTitleFontSize: distance.optional(),
+})
+```
+
+### schematic-sheet
+
+```typescript
+export interface SchematicSheetProps {
+  name: string
+  displayName: string
+  children?: any
+}
+export const schematicSheetProps = z.object({
+  name: z.string(),
+  displayName: z.string(),
+  children: z.any().optional(),
 })
 ```
 

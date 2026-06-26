@@ -92,6 +92,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<schematicrect />`            | [`SchematicRectProps`](#schematicrectprops-schematicrect)                                  |
 | `<schematicrow />`             | [`SchematicRowProps`](#schematicrowprops-schematicrow)                                     |
 | `<schematicsection />`         | [`SchematicSectionProps`](#schematicsectionprops-schematicsection)                         |
+| `<schematicsheet />`           | [`SchematicSheetProps`](#schematicsheetprops-schematicsheet)                               |
 | `<schematictable />`           | [`SchematicTableProps`](#schematictableprops-schematictable)                               |
 | `<schematictext />`            | [`SchematicTextProps`](#schematictextprops-schematictext)                                  |
 | `<silkscreencircle />`         | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                         |
@@ -163,6 +164,10 @@ export interface CommonComponentProps extends CommonLayoutProps {
    * This component will be drawn as part of this section e.g. "Power"
    */
   schSectionName?: string;
+  /**
+   * This component will be drawn as part of this sheet e.g. "Main"
+   */
+  schSheetName?: string;
 }
 ```
 
@@ -1614,6 +1619,18 @@ export interface SchematicSectionProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-section.ts)
+
+### SchematicSheetProps `<schematicsheet />`
+
+```ts
+export interface SchematicSheetProps {
+  name: string;
+  displayName: string;
+  children?: any;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-sheet.ts)
 
 ### SchematicTableProps `<schematictable />`
 

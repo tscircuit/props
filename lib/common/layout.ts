@@ -261,9 +261,13 @@ export interface CommonComponentProps<PinLabel extends string = string>
   mfn?: string
   manufacturerPartNumber?: string
   /**
-   *This component will be drawn as part of this section e.g. \"Power\
+   * This component will be drawn as part of this section e.g. "Power"
    */
   schSectionName?: string
+  /**
+   * This component will be drawn as part of this sheet e.g. "Main"
+   */
+  schSheetName?: string
 }
 
 export const commonComponentProps = commonLayoutProps
@@ -277,6 +281,12 @@ export const commonComponentProps = commonLayoutProps
       .optional()
       .describe(
         'This component will be drawn as part of this section e.g. "Power"',
+      ),
+    schSheetName: z
+      .string()
+      .optional()
+      .describe(
+        'This component will be drawn as part of this sheet e.g. "Main"',
       ),
     datasheetUrl: url.optional(),
     cadModel: cadModelProp.optional(),

@@ -2151,6 +2151,8 @@ export interface SubcircuitGroupProps
 
   exposedNets?: string[]
 
+  exposeNets?: boolean
+
   schAutoLayoutEnabled?: boolean
 
   schTraceAutoLabelEnabled?: boolean
@@ -2301,6 +2303,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   outlineOffsetY: distance.optional(),
   circuitJson: z.array(z.any()).optional(),
   exposedNets: z.array(z.string()).optional(),
+  exposeNets: z.boolean().optional(),
 })
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({
   subcircuit: z.literal(true),

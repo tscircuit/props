@@ -481,6 +481,11 @@ export interface SubcircuitGroupProps
   exposedNets?: string[]
 
   /**
+   * If true, all nets defined within this subcircuit are exposed to parent circuits
+   */
+  exposeNets?: boolean
+
+  /**
    * If true, we'll automatically layout the schematic for this group. Must be
    * a subcircuit (currently). This is eventually going to be replaced with more
    * sophisticated layout options/modes and will be enabled by default.
@@ -649,6 +654,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   outlineOffsetY: distance.optional(),
   circuitJson: z.array(z.any()).optional(),
   exposedNets: z.array(z.string()).optional(),
+  exposeNets: z.boolean().optional(),
 })
 
 export const subcircuitGroupPropsWithBool = subcircuitGroupProps.extend({

@@ -2156,6 +2156,11 @@ export interface SubcircuitGroupProps
   exposedNets?: string[]
 
   /**
+   * If true, all nets defined within this subcircuit are exposed to parent circuits
+   */
+  exposeNets?: boolean
+
+  /**
    * If true, we'll automatically layout the schematic for this group. Must be
    * a subcircuit (currently). This is eventually going to be replaced with more
    * sophisticated layout options/modes and will be enabled by default.

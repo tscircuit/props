@@ -186,6 +186,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
 
   autorouter?: AutorouterProp;
   exposedNets?: string[];
+  exposeNets?: boolean;
 
   /**
    * If true, we'll automatically layout the schematic for this group. Must be

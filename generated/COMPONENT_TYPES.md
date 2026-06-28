@@ -3591,11 +3591,13 @@ export const schematicSectionProps = z.object({
 export interface SchematicSheetProps {
   name: string
   displayName: string
+  sheetIndex?: number
   children?: any
 }
 export const schematicSheetProps = z.object({
   name: z.string(),
   displayName: z.string(),
+  sheetIndex: z.number().optional(),
   children: z.any().optional(),
 })
 ```

@@ -9,6 +9,7 @@ test("should parse schematic sheet with name, displayName, and children", () => 
   const raw: SchematicSheetProps = {
     name: "main",
     displayName: "Main Sheet",
+    sheetIndex: 0,
     children: [{ type: "resistor", props: { name: "R1" } }],
   }
 
@@ -16,6 +17,7 @@ test("should parse schematic sheet with name, displayName, and children", () => 
   const parsed = schematicSheetProps.parse(raw)
   expect(parsed.name).toBe("main")
   expect(parsed.displayName).toBe("Main Sheet")
+  expect(parsed.sheetIndex).toBe(0)
   expect(parsed.children).toEqual([{ type: "resistor", props: { name: "R1" } }])
 })
 

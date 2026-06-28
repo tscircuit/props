@@ -1633,6 +1633,7 @@ export interface SchematicSectionProps {
 export interface SchematicSheetProps {
   name: string;
   displayName: string;
+  sheetIndex?: number;
   children?: any;
 }
 ```

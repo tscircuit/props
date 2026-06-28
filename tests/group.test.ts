@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test"
 import {
   baseGroupProps,
+  groupProps,
   subcircuitGroupProps,
   type BaseGroupProps,
   type SubcircuitGroupProps,
@@ -102,6 +103,31 @@ test("should parse schTitle", () => {
 
   const parsed = baseGroupProps.parse(raw)
   expect(parsed.schTitle).toBe("My Group")
+})
+
+test("should parse schSheetName on groups and subcircuits", () => {
+  const groupRaw: BaseGroupProps = {
+    name: "g",
+    schSheetName: "Power",
+  }
+
+  const parsedGroup = baseGroupProps.parse(groupRaw)
+  expect(parsedGroup.schSheetName).toBe("Power")
+
+  const subcircuitRaw: SubcircuitGroupProps = {
+    name: "sub",
+    schSheetName: "Power",
+  }
+
+  const parsedSubcircuit = subcircuitGroupProps.parse(subcircuitRaw)
+  expect(parsedSubcircuit.schSheetName).toBe("Power")
+
+  const parsedSubcircuitGroup = groupProps.parse({
+    name: "sub",
+    subcircuit: true,
+    schSheetName: "Power",
+  })
+  expect(parsedSubcircuitGroup.schSheetName).toBe("Power")
 })
 
 test("should parse relative flags", () => {

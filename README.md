@@ -802,6 +802,11 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schTitle?: string;
 
   /**
+   * This group will be drawn as part of this sheet e.g. "Main"
+   */
+  schSheetName?: string;
+
+  /**
    * If true, render this group as a single schematic box
    */
   showAsSchematicBox?: boolean;

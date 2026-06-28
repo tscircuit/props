@@ -176,6 +176,11 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schTitle?: string
 
   /**
+   * This group will be drawn as part of this sheet e.g. "Main"
+   */
+  schSheetName?: string
+
+  /**
    * If true, render this group as a single schematic box
    */
   showAsSchematicBox?: boolean
@@ -535,6 +540,10 @@ export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),
   children: z.any().optional(),
   schTitle: z.string().optional(),
+  schSheetName: z
+    .string()
+    .optional()
+    .describe('This group will be drawn as part of this sheet e.g. "Main"'),
   key: z.any().optional(),
   showAsSchematicBox: z.boolean().optional(),
   connections: z.record(z.string(), connectionTarget.optional()).optional(),

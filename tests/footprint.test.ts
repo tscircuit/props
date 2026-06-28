@@ -1,6 +1,12 @@
 import { expect, test } from "bun:test"
 import { footprintProps, type FootprintProps } from "lib/components/footprint"
 
+test("should parse footprint name", () => {
+  const raw: FootprintProps = { name: "U1_FOOTPRINT" }
+  const parsed = footprintProps.parse(raw)
+  expect(parsed.name).toBe("U1_FOOTPRINT")
+})
+
 test("should parse footprint insertionDirection options", () => {
   const insertionDirections = [
     "from_above",

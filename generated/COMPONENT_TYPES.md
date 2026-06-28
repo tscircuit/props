@@ -1739,6 +1739,7 @@ export const fiducialProps = commonComponentProps.extend({
 ```typescript
 export interface FootprintProps {
   children?: any
+  name?: string
   originalLayer?: LayerRef
   circuitJson?: any[]
   src?: FootprintProp
@@ -1750,6 +1751,7 @@ export interface FootprintProps {
    */
 export const footprintProps = z.object({
   children: z.any().optional(),
+  name: z.string().optional(),
   originalLayer: layer_ref.default("top").optional(),
   circuitJson: z.array(z.any()).optional(),
   src: footprintProp.describe("Can be a footprint or kicad string").optional(),

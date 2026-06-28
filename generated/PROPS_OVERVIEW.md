@@ -832,6 +832,7 @@ export interface FootprintLibraryResult {
 
 export interface FootprintProps {
   children?: any
+  name?: string
   /**
    * The layer that the footprint is designed for. If you set this to "top"
    * then it means the children were intended to represent the top layer. If

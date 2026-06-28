@@ -24,6 +24,7 @@ expectTypesMatch<
 
 export interface FootprintProps {
   children?: any
+  name?: string
   /**
    * The layer that the footprint is designed for. If you set this to "top"
    * then it means the children were intended to represent the top layer. If
@@ -52,6 +53,7 @@ export interface FootprintProps {
 
 export const footprintProps = z.object({
   children: z.any().optional(),
+  name: z.string().optional(),
   originalLayer: layer_ref.default("top").optional(),
   circuitJson: z.array(z.any()).optional(),
   src: footprintProp.describe("Can be a footprint or kicad string").optional(),

@@ -16,6 +16,14 @@ test("supports snake_case presets", () => {
   expect(result).toBe("auto_cloud")
 })
 
+test("supports default preset", () => {
+  const result = autorouterProp.parse("default")
+  expect(result).toBe("default")
+
+  const configResult = autorouterProp.parse({ preset: "default" })
+  expect(configResult).toMatchObject({ preset: "default" })
+})
+
 test("supports auto jumper preset", () => {
   const result = autorouterProp.parse("auto_jumper")
   expect(result).toBe("auto_jumper")

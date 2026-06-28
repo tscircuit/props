@@ -57,6 +57,7 @@ export interface AutorouterConfig {
   preset?:
     | "sequential_trace"
     | "subcircuit"
+    | "default"
     | "auto"
     | "auto_local"
     | "auto_cloud"

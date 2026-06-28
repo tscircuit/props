@@ -339,6 +339,7 @@ export interface AutorouterConfig {
   preset?:
     | "sequential_trace"
     | "subcircuit"
+    | "default"
     | "auto"
     | "auto_local"
     | "auto_cloud"
@@ -356,6 +357,7 @@ export interface AutorouterConfig {
 export type AutorouterPreset =
   | "sequential_trace"
   | "subcircuit"
+  | "default"
   | "auto"
   | "auto_local"
   | "auto_cloud"
@@ -409,6 +411,7 @@ export const autorouterConfig = z.object({
     .enum([
       "sequential_trace",
       "subcircuit",
+      "default",
       "auto",
       "auto_local",
       "auto_cloud",
@@ -429,6 +432,7 @@ export const autorouterConfig = z.object({
 export const autorouterPreset = z.union([
   z.literal("sequential_trace"),
   z.literal("subcircuit"),
+  z.literal("default"),
   z.literal("auto"),
   z.literal("auto_local"),
   z.literal("auto_cloud"),

@@ -34,7 +34,7 @@ export interface AnalogSimulationProps {
   timePerStep?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
-  multipleGraphYAxes?: boolean
+  graphIndependentAxes?: boolean
 }
 
 

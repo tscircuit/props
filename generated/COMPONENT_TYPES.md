@@ -902,7 +902,7 @@ export interface AnalogSimulationProps {
   timePerStep?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
-  multipleGraphYAxes?: boolean
+  graphIndependentAxes?: boolean
 }
 export interface SpiceOptions {
   method?: "trap" | "gear"
@@ -920,7 +920,7 @@ export const analogSimulationProps = z.object({
   timePerStep: ms.optional(),
   spiceEngine: spiceEngine.optional(),
   spiceOptions: spiceOptions.optional(),
-  multipleGraphYAxes: z.boolean().optional(),
+  graphIndependentAxes: z.boolean().optional(),
 })
 ```
 

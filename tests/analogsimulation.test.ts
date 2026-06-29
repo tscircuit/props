@@ -72,3 +72,14 @@ test("analog simulation accepts spice options", () => {
     vntol: "1u",
   })
 })
+
+test("analog simulation accepts multiple graph y axes", () => {
+  const raw: AnalogSimulationProps = {
+    multipleGraphYAxes: true,
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof analogSimulationProps>>()
+
+  const parsed = analogSimulationProps.parse(raw)
+  expect(parsed.multipleGraphYAxes).toBe(true)
+})

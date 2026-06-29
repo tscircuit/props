@@ -23,9 +23,6 @@ export interface AmmeterProps<PinLabel extends string = string>
   connections: Connections<AmmeterPinLabels>
   color?: string
   graphDisplayName?: string
-  graphCenter?: number
-  graphOffsetDivs?: number
-  graphUnitsPerDiv?: number
 }
 
 
@@ -37,6 +34,7 @@ export interface AnalogSimulationProps {
   timePerStep?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
+  multipleGraphYAxes?: boolean
 }
 
 
@@ -2300,9 +2298,6 @@ export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   referenceTo?: string
   color?: string
   graphDisplayName?: string
-  graphCenter?: number
-  graphOffsetDivs?: number
-  graphUnitsPerDiv?: number
 }
 
 

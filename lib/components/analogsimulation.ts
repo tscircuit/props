@@ -11,6 +11,7 @@ export interface AnalogSimulationProps {
   timePerStep?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
+  multipleGraphYAxes?: boolean
 }
 
 const spiceEngine = z.custom<AutocompleteString<"spicey" | "ngspice">>(
@@ -41,6 +42,7 @@ export const analogSimulationProps = z.object({
   timePerStep: ms.optional(),
   spiceEngine: spiceEngine.optional(),
   spiceOptions: spiceOptions.optional(),
+  multipleGraphYAxes: z.boolean().optional(),
 })
 
 expectTypesMatch<AnalogSimulationProps, z.input<typeof analogSimulationProps>>(

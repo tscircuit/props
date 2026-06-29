@@ -43,21 +43,20 @@ test("should parse voltageprobe with referenceTo", () => {
   expect(parsed.referenceTo).toBe(".R1 > .p2")
 })
 
-test("should parse voltageprobe with display props", () => {
+test("should parse voltageprobe with name, reference, color, and graph display name", () => {
   const raw: VoltageProbeProps = {
     connectsTo: ".DUT .U1 .VOUT",
     referenceTo: "net.GND",
     name: "VOUT_PROBE",
-    graphDisplayName: "VO",
-    graphCenter: 3.3,
-    graphOffsetDivs: 3,
-    graphUnitsPerDiv: 0.05,
+    color: "blue",
+    graphDisplayName: "VOUT",
   }
   const parsed = voltageProbeProps.parse(raw)
-  expect(parsed.graphDisplayName).toBe("VO")
-  expect(parsed.graphCenter).toBe(3.3)
-  expect(parsed.graphOffsetDivs).toBe(3)
-  expect(parsed.graphUnitsPerDiv).toBe(0.05)
+  expect(parsed.name).toBe("VOUT_PROBE")
+  expect(parsed.connectsTo).toBe(".DUT .U1 .VOUT")
+  expect(parsed.referenceTo).toBe("net.GND")
+  expect(parsed.color).toBe("blue")
+  expect(parsed.graphDisplayName).toBe("VOUT")
 })
 
 test("should not parse voltageprobe with array connectsTo", () => {

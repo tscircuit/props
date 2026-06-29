@@ -880,9 +880,6 @@ export interface AmmeterProps<PinLabel extends string = string>
   connections: Connections<AmmeterPinLabels>
   color?: string
   graphDisplayName?: string
-  graphCenter?: number
-  graphOffsetDivs?: number
-  graphUnitsPerDiv?: number
 }
 export const ammeterProps = commonComponentProps.extend({
   connections: createConnectionsProp(ammeterPinLabels).refine(
@@ -891,9 +888,6 @@ export const ammeterProps = commonComponentProps.extend({
   ),
   color: z.string().optional(),
   graphDisplayName: z.string().optional(),
-  graphCenter: z.number().optional(),
-  graphOffsetDivs: z.number().optional(),
-  graphUnitsPerDiv: z.number().optional(),
 })
 ```
 
@@ -908,6 +902,7 @@ export interface AnalogSimulationProps {
   timePerStep?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
+  multipleGraphYAxes?: boolean
 }
 export interface SpiceOptions {
   method?: "trap" | "gear"
@@ -925,6 +920,7 @@ export const analogSimulationProps = z.object({
   timePerStep: ms.optional(),
   spiceEngine: spiceEngine.optional(),
   spiceOptions: spiceOptions.optional(),
+  multipleGraphYAxes: z.boolean().optional(),
 })
 ```
 
@@ -4218,9 +4214,6 @@ export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
   referenceTo?: string
   color?: string
   graphDisplayName?: string
-  graphCenter?: number
-  graphOffsetDivs?: number
-  graphUnitsPerDiv?: number
 }
 export const voltageProbeProps = commonComponentProps
   .omit({ name: true })
@@ -4230,9 +4223,6 @@ export const voltageProbeProps = commonComponentProps
     referenceTo: z.string().optional(),
     color: z.string().optional(),
     graphDisplayName: z.string().optional(),
-    graphCenter: z.number().optional(),
-    graphOffsetDivs: z.number().optional(),
-    graphUnitsPerDiv: z.number().optional(),
   })
 ```
 

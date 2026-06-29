@@ -15,9 +15,6 @@ export interface AmmeterProps<PinLabel extends string = string>
   connections: Connections<AmmeterPinLabels>
   color?: string
   graphDisplayName?: string
-  graphCenter?: number
-  graphOffsetDivs?: number
-  graphUnitsPerDiv?: number
 }
 
 const hasAmmeterConnectionPair = (
@@ -36,9 +33,6 @@ export const ammeterProps = commonComponentProps.extend({
   ),
   color: z.string().optional(),
   graphDisplayName: z.string().optional(),
-  graphCenter: z.number().optional(),
-  graphOffsetDivs: z.number().optional(),
-  graphUnitsPerDiv: z.number().optional(),
 })
 
 export const ammeterPins = ammeterPinLabels

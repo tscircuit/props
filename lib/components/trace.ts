@@ -55,6 +55,12 @@ const baseTraceProps = z.object({
     .boolean()
     .optional()
     .describe("Draw a straight pcb trace between the connected points"),
+  pcbComb: z
+    .enum(["columnToColumn", "rowToColumn", "columnToRow", "rowToRow"])
+    .optional()
+    .describe(
+      "Draw a fixed straight → 45° → straight comb trace between the connected pads; the value is <sourceLine>To<targetLine> (a COLUMN of pads escapes perpendicular in x, a ROW in y)",
+    ),
   schDisplayLabel: z.string().optional(),
   schStroke: z.string().optional(),
   highlightColor: z.string().optional(),

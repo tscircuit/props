@@ -611,6 +611,7 @@ export interface RectCutoutProps extends Omit<
 export interface DiodeProps<
   PinLabel extends string = string,
 > extends CommonComponentProps<PinLabel> {
+  pinLabels?: DiodePinLabelsProp<PinLabel>;
   connections?: {
     anode?: string | string[] | readonly string[];
     cathode?: string | string[] | readonly string[];

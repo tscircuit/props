@@ -9,6 +9,13 @@ import {
   schematicOrientation,
   type SchematicOrientation,
 } from "lib/common/schematicOrientation"
+import { schematicPinLabel } from "lib/common/schematicPinLabel"
+
+export const diodePins = lrPolarPins
+export type DiodePinLabels = (typeof diodePins)[number]
+export type DiodePinLabelsProp<PinLabel extends string = string> = Partial<
+  Record<DiodePinLabels, PinLabel | PinLabel[] | readonly PinLabel[]>
+>
 
 const diodeConnectionKeys = z.enum([
   "anode",
@@ -25,6 +32,13 @@ const connectionTarget = z
   .or(z.array(z.string()))
 
 const connectionsProp = z.record(diodeConnectionKeys, connectionTarget)
+
+const diodePinLabelsProp = z.record(
+  z.enum(diodePins),
+  schematicPinLabel
+    .or(z.array(schematicPinLabel).readonly())
+    .or(z.array(schematicPinLabel)),
+)
 
 const diodeVariant = z.enum([
   "standard",
@@ -46,6 +60,7 @@ export const diodeProps = commonComponentProps
     photo: z.boolean().optional(),
     tvs: z.boolean().optional(),
     schOrientation: schematicOrientation.optional(),
+    pinLabels: diodePinLabelsProp.optional(),
   })
   .superRefine((data, ctx) => {
     // Check if multiple boolean flags are set directly
@@ -112,11 +127,9 @@ export const diodeProps = commonComponentProps
     return result
   })
 
-export const diodePins = lrPolarPins
-export type DiodePinLabels = (typeof diodePins)[number]
-
 export interface DiodeProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
+  pinLabels?: DiodePinLabelsProp<PinLabel>
   connections?: {
     anode?: string | string[] | readonly string[]
     cathode?: string | string[] | readonly string[]

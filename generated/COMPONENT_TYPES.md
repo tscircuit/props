@@ -1566,9 +1566,11 @@ export const polygonCutoutProps = pcbLayoutProps
     photo: z.boolean().optional(),
     tvs: z.boolean().optional(),
     schOrientation: schematicOrientation.optional(),
+    pinLabels: diodePinLabelsProp.optional(),
   })
 export interface DiodeProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
+  pinLabels?: DiodePinLabelsProp<PinLabel>
   connections?: {
     anode?: string | string[] | readonly string[]
     cathode?: string | string[] | readonly string[]

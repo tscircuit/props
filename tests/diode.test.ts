@@ -112,6 +112,49 @@ test("should allow optional connections", () => {
   expect(parsedProps.connections).toBeUndefined()
 })
 
+test("should parse diode pinLabels", () => {
+  const rawProps: DiodeProps<"A" | "K"> = {
+    name: "diode",
+    pinLabels: {
+      anode: "A",
+      cathode: "K",
+      pin1: "A",
+      pin2: "K",
+    },
+  }
+
+  const parsedProps = diodeProps.parse(rawProps)
+
+  expect(parsedProps.pinLabels).toEqual({
+    anode: "A",
+    cathode: "K",
+    pin1: "A",
+    pin2: "K",
+  })
+})
+
+test("should reject diode pinLabels with invalid pin keys", () => {
+  expect(() => {
+    diodeProps.parse({
+      name: "diode",
+      pinLabels: {
+        gate: "G",
+      },
+    })
+  }).toThrow(z.ZodError)
+})
+
+test("should reject diode pinLabels with invalid schematic labels", () => {
+  expect(() => {
+    diodeProps.parse({
+      name: "diode",
+      pinLabels: {
+        anode: "A-B",
+      },
+    })
+  }).toThrow(z.ZodError)
+})
+
 // New tests for diode variants
 
 test("should default to standard variant when no variant is specified", () => {

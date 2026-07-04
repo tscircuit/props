@@ -1848,6 +1848,7 @@ export type SubcircuitProps = SubcircuitGroupProps;
 ```ts
 export interface SwitchProps extends CommonComponentProps {
   type?: "spst" | "spdt" | "dpst" | "dpdt";
+  pinLabels?: PinLabelsProp<SchematicPinLabel>;
   isNormallyClosed?: boolean;
   spdt?: boolean;
   spst?: boolean;

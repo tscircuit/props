@@ -8,7 +8,6 @@ expectTypesMatch<
   | string
   | React.ReactElement
   | AnyCircuitElement[]
-  | readonly AnyCircuitElement[]
 >(true)
 
 test("dummy", () => {

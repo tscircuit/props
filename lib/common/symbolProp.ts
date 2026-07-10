@@ -6,6 +6,5 @@ export type SymbolProp =
   | string
   | ReactElement
   | AnyCircuitElement[]
-  | readonly AnyCircuitElement[]
 
 export const symbolProp = z.custom<SymbolProp>((v) => true)

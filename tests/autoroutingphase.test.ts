@@ -1,10 +1,21 @@
 import { expect, test } from "bun:test"
 import { expectTypeOf } from "expect-type"
-import { z } from "zod"
 import {
-  autoroutingPhaseProps,
   type AutoroutingPhaseProps,
+  autoroutingPhaseProps,
 } from "lib/components/autoroutingphase"
+import type { z } from "zod"
+
+test("autorouting phase accepts a name", () => {
+  const raw: AutoroutingPhaseProps = {
+    name: "route-power",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof autoroutingPhaseProps>>()
+
+  const parsed = autoroutingPhaseProps.parse(raw)
+  expect(parsed.name).toBe("route-power")
+})
 
 test("autorouting phase accepts autorouter and phase index", () => {
   const raw: AutoroutingPhaseProps = {

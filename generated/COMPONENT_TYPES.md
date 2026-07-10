@@ -935,6 +935,7 @@ export const analogSimulationProps = z.object({
 ```typescript
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
+  name?: string
   autorouter?: AutorouterProp
   phaseIndex?: number
   region?: {
@@ -951,6 +952,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
 export const autoroutingPhaseProps = z
   .object({
     key: z.any().optional(),
+    name: z.string().optional(),
     autorouter: autorouterProp.optional(),
     phaseIndex: z.number().optional(),
     ...routingTolerances.shape,
@@ -4008,6 +4010,7 @@ export const stampboardProps = boardProps.extend({
 ```typescript
 export interface SwitchProps extends CommonComponentProps {
   type?: "spst" | "spdt" | "dpst" | "dpdt"
+  pinLabels?: PinLabelsProp<SchematicPinLabel>
   isNormallyClosed?: boolean
   spdt?: boolean
   spst?: boolean
@@ -4027,6 +4030,7 @@ export interface SwitchProps extends CommonComponentProps {
     spdt: z.boolean().optional(),
     dpst: z.boolean().optional(),
     dpdt: z.boolean().optional(),
+    pinLabels: pinLabelsProp.optional(),
     simSwitchFrequency: frequency.optional(),
     simCloseAt: ms.optional(),
     simOpenAt: ms.optional(),

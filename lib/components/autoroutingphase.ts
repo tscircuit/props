@@ -1,14 +1,15 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import {
-  autorouterProp,
-  routingTolerances,
   type AutorouterProp,
   type RoutingTolerances,
+  autorouterProp,
+  routingTolerances,
 } from "./group"
 
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
+  name?: string
   autorouter?: AutorouterProp
   phaseIndex?: number
   region?: {
@@ -26,6 +27,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
 export const autoroutingPhaseProps = z
   .object({
     key: z.any().optional(),
+    name: z.string().optional(),
     autorouter: autorouterProp.optional(),
     phaseIndex: z.number().optional(),
     ...routingTolerances.shape,

@@ -248,6 +248,7 @@ export interface AnalogSimulationProps {
 ```ts
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any;
+  name?: string;
   autorouter?: AutorouterProp;
   phaseIndex?: number;
   region?: {

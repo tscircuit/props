@@ -90,6 +90,7 @@ export interface AutorouterInstance {
 
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
+  name?: string
   autorouter?: AutorouterProp
   phaseIndex?: number
   region?: {
@@ -2215,6 +2216,7 @@ export interface SupplierProps {
 
 export interface SwitchProps extends CommonComponentProps {
   type?: "spst" | "spdt" | "dpst" | "dpdt"
+  pinLabels?: PinLabelsProp<SchematicPinLabel>
   isNormallyClosed?: boolean
   spdt?: boolean
   spst?: boolean

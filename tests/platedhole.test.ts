@@ -135,6 +135,20 @@ test("should infer circle shape when plated hole diameter props are provided", (
   }
 })
 
+test("should treat diameter as an alias for outerDiameter", () => {
+  const parsed = platedHoleProps.parse({
+    holeDiameter: "1mm",
+    diameter: "2mm",
+  })
+
+  expect(parsed.shape).toBe("circle")
+  if (parsed.shape === "circle") {
+    expect(parsed.holeDiameter).toBe(1)
+    expect(parsed.outerDiameter).toBe(2)
+    expect("diameter" in parsed).toBe(false)
+  }
+})
+
 test("should default to pinheader circle plated hole when shape is omitted", () => {
   const parsed = platedHoleProps.parse({})
 

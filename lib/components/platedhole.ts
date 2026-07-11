@@ -130,6 +130,13 @@ const inferPlatedHoleShapeAndDefaults = (rawProps: unknown): unknown => {
 
   const props = { ...(rawProps as Record<string, unknown>) }
 
+  // Treat `diameter` as an alias for `outerDiameter` so a circle platedhole
+  // resolves cleanly, mirroring how <hole> accepts `diameter`.
+  if (props.diameter !== undefined && props.outerDiameter === undefined) {
+    props.outerDiameter = props.diameter
+  }
+  delete props.diameter
+
   if (props.shape !== undefined) return props
 
   if (props.padOutline !== undefined) {

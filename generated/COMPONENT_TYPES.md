@@ -1459,15 +1459,18 @@ export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
+  maxTraceLength?: number | string
   manufacturerPartNumber?: string
   mpn?: string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
   connections?: Connections<CrystalPinLabels>
 }
+/** Maximum allowed PCB trace length between the crystal and its connected component */
 export const crystalProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
+  maxTraceLength: distance.optional(),
   manufacturerPartNumber: z.string().optional(),
   mpn: z.string().optional(),
   pinVariant: z.enum(["two_pin", "four_pin"]).optional(),

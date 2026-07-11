@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
-import { crystalProps, type CrystalProps } from "../lib/components/crystal"
-import type { z } from "zod"
 import { expectTypeOf } from "expect-type"
+import type { z } from "zod"
+import { type CrystalProps, crystalProps } from "../lib/components/crystal"
 
 test("should parse crystal props with 2pin variant", () => {
   const rawProps: CrystalProps = {
@@ -28,6 +28,19 @@ test("should parse manufacturerPartNumber and mpn", () => {
 
   expect(parsedProps.manufacturerPartNumber).toBe("1234")
   expect(parsedProps.mpn).toBe("5678")
+})
+
+test("should parse maxTraceLength", () => {
+  const rawProps: CrystalProps = {
+    name: "crystal",
+    frequency: "16MHz",
+    loadCapacitance: "20pF",
+    maxTraceLength: "10mm",
+  }
+
+  const parsedProps = crystalProps.parse(rawProps)
+
+  expect(parsedProps.maxTraceLength).toBe(10)
 })
 
 test("should parse crystal props with 4pin variant", () => {

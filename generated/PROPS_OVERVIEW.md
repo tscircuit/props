@@ -655,6 +655,8 @@ export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
+  /** Maximum allowed PCB trace length between the crystal and its connected component */
+  maxTraceLength?: number | string
   manufacturerPartNumber?: string
   mpn?: string
   pinVariant?: PinVariant

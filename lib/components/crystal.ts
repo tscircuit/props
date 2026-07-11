@@ -1,16 +1,16 @@
-import { frequency, capacitance } from "circuit-json"
+import { capacitance, distance, frequency } from "circuit-json"
+import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
   lrPins,
 } from "lib/common/layout"
-import type { Connections } from "lib/utility-types/connections-and-selectors"
-import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
-  schematicOrientation,
   type SchematicOrientation,
+  schematicOrientation,
 } from "lib/common/schematicOrientation"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { z } from "zod"
 
 export type PinVariant = "two_pin" | "four_pin"
@@ -22,6 +22,8 @@ export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
   loadCapacitance: number | string
+  /** Maximum allowed PCB trace length between the crystal and its connected component */
+  maxTraceLength?: number | string
   manufacturerPartNumber?: string
   mpn?: string
   pinVariant?: PinVariant
@@ -32,6 +34,7 @@ export interface CrystalProps<PinLabel extends string = string>
 export const crystalProps = commonComponentProps.extend({
   frequency: frequency,
   loadCapacitance: capacitance,
+  maxTraceLength: distance.optional(),
   manufacturerPartNumber: z.string().optional(),
   mpn: z.string().optional(),
   pinVariant: z.enum(["two_pin", "four_pin"]).optional(),

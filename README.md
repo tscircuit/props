@@ -1031,6 +1031,7 @@ export interface MosfetProps<
 > extends CommonComponentProps<PinLabel> {
   channelType: "n" | "p";
   mosfetMode: "enhancement" | "depletion";
+  connections?: Connections<MosfetPinLabels>;
 }
 ```
 

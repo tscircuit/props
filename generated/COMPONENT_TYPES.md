@@ -2511,15 +2511,6 @@ export const ledProps = commonComponentProps.extend({
 ### mosfet
 
 ```typescript
-export interface MosfetProps<PinLabel extends string = string>
-  extends CommonComponentProps<PinLabel> {
-  channelType: "n" | "p"
-  mosfetMode: "enhancement" | "depletion"
-}
-export const mosfetProps = commonComponentProps.extend({
-  channelType: z.enum(["n", "p"]),
-  mosfetMode: z.enum(["enhancement", "depletion"]),
-})
 export const mosfetPins = [
   "pin1",
   "drain",
@@ -2528,6 +2519,17 @@ export const mosfetPins = [
   "pin3",
   "gate",
 ] as const
+export interface MosfetProps<PinLabel extends string = string>
+  extends CommonComponentProps<PinLabel> {
+  channelType: "n" | "p"
+  mosfetMode: "enhancement" | "depletion"
+  connections?: Connections<MosfetPinLabels>
+}
+export const mosfetProps = commonComponentProps.extend({
+  channelType: z.enum(["n", "p"]),
+  mosfetMode: z.enum(["enhancement", "depletion"]),
+  connections: createConnectionsProp(mosfetPins).optional(),
+})
 ```
 
 ### mountedboard

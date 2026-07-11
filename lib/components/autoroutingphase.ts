@@ -45,6 +45,17 @@ export const autoroutingPhaseProps = z
     reroute: z.boolean().optional(),
   })
   .superRefine((value, ctx) => {
+    const isSimplifyAutorouter =
+      value.autorouter === "simplify" ||
+      (typeof value.autorouter === "object" &&
+        value.autorouter?.preset === "simplify")
+
+    if (isSimplifyAutorouter && value.reroute !== true) {
+      console.warn(
+        'The "simplify" autorouter preset should only be used with reroute=true',
+      )
+    }
+
     if (
       value.reroute !== undefined &&
       value.region === undefined &&

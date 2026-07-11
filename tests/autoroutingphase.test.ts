@@ -1,10 +1,14 @@
-import { expect, test } from "bun:test"
+import { afterEach, expect, mock, spyOn, test } from "bun:test"
 import { expectTypeOf } from "expect-type"
 import {
   type AutoroutingPhaseProps,
   autoroutingPhaseProps,
 } from "lib/components/autoroutingphase"
 import type { z } from "zod"
+
+afterEach(() => {
+  mock.restore()
+})
 
 test("autorouting phase accepts a name", () => {
   const raw: AutoroutingPhaseProps = {
@@ -83,6 +87,30 @@ test("autorouting phase accepts autorouter config", () => {
     preset: "auto_local",
     traceClearance: 0.2,
   })
+})
+
+test("autorouting phase warns when simplify is used without reroute", () => {
+  const warn = spyOn(console, "warn").mockImplementation(() => {})
+
+  autoroutingPhaseProps.parse({ autorouter: "simplify" })
+  autoroutingPhaseProps.parse({ autorouter: { preset: "simplify" } })
+
+  expect(warn).toHaveBeenCalledTimes(2)
+  expect(warn).toHaveBeenCalledWith(
+    'The "simplify" autorouter preset should only be used with reroute=true',
+  )
+})
+
+test("autorouting phase does not warn when simplify reroutes", () => {
+  const warn = spyOn(console, "warn").mockImplementation(() => {})
+
+  autoroutingPhaseProps.parse({
+    autorouter: "simplify",
+    reroute: true,
+    connection: "U1.pin1",
+  })
+
+  expect(warn).not.toHaveBeenCalled()
 })
 
 test("autorouting phase accepts routing tolerances", () => {

@@ -43,6 +43,7 @@ export interface AnalogSimulationProps {
 
 export interface AutorouterConfig {
   serverUrl?: string
+  cacheServerUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
   serverCacheEnabled?: boolean
@@ -1691,8 +1692,6 @@ export interface PlatformConfig {
   registryApiUrl?: string
 
   cloudAutorouterUrl?: string
-
-  remoteAutoroutingCacheUrl?: string
 
   projectName?: string
   projectBaseUrl?: string

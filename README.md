@@ -2041,8 +2041,6 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string;
 
-  remoteAutoroutingCacheUrl?: string;
-
   projectName?: string;
   projectBaseUrl?: string;
   version?: string;

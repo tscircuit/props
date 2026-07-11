@@ -72,8 +72,6 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string
 
-  remoteAutoroutingCacheUrl?: string
-
   projectName?: string
   projectBaseUrl?: string
   version?: string
@@ -206,7 +204,6 @@ export const platformConfig = z.object({
   autorouterMap: z.record(z.string(), autorouterDefinition).optional(),
   registryApiUrl: url.optional(),
   cloudAutorouterUrl: url.optional(),
-  remoteAutoroutingCacheUrl: url.optional(),
   projectName: z.string().optional(),
   projectBaseUrl: url.optional(),
   version: z.string().optional(),

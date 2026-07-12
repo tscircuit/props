@@ -24,13 +24,15 @@ test("supports default preset", () => {
   expect(configResult).toMatchObject({ preset: "default" })
 })
 
-test("supports a cache server URL", () => {
+test("supports cache server settings", () => {
   const result = autorouterProp.parse({
     cacheServerUrl: "https://cache.example.com/autorouting",
+    shouldUploadToCache: true,
   })
 
   expect(result).toMatchObject({
     cacheServerUrl: "https://cache.example.com/autorouting",
+    shouldUploadToCache: true,
   })
 })
 

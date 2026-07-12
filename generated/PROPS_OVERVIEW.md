@@ -44,6 +44,7 @@ export interface AnalogSimulationProps {
 export interface AutorouterConfig {
   serverUrl?: string
   cacheServerUrl?: string
+  shouldUploadToCache?: boolean
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
   serverCacheEnabled?: boolean

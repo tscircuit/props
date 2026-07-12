@@ -2070,8 +2070,6 @@ export interface RoutingTolerances {
 }
 export interface AutorouterConfig {
   serverUrl?: string
-  cacheServerUrl?: string
-  shouldUploadToCache?: boolean
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
   serverCacheEnabled?: boolean
@@ -2114,8 +2112,6 @@ export const routingTolerances = z.object({
 })
 export const autorouterConfig = z.object({
   serverUrl: url.optional(),
-  cacheServerUrl: url.optional(),
-  shouldUploadToCache: z.boolean().optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
   serverCacheEnabled: z.boolean().optional(),

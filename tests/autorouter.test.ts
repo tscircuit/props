@@ -24,18 +24,6 @@ test("supports default preset", () => {
   expect(configResult).toMatchObject({ preset: "default" })
 })
 
-test("supports cache server settings", () => {
-  const result = autorouterProp.parse({
-    cacheServerUrl: "https://cache.example.com/autorouting",
-    shouldUploadToCache: true,
-  })
-
-  expect(result).toMatchObject({
-    cacheServerUrl: "https://cache.example.com/autorouting",
-    shouldUploadToCache: true,
-  })
-})
-
 test("supports auto jumper preset", () => {
   const result = autorouterProp.parse("auto_jumper")
   expect(result).toBe("auto_jumper")

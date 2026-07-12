@@ -2526,11 +2526,18 @@ export interface MosfetProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   channelType: "n" | "p"
   mosfetMode: "enhancement" | "depletion"
+  symbolDrainSide?: "left" | "right" | "top" | "bottom"
+  symbolSourceSide?: "left" | "right" | "top" | "bottom"
+  symbolGateSide?: "left" | "right" | "top" | "bottom"
   connections?: Connections<MosfetPinLabels>
 }
+/** The side of the schematic symbol where the gate port is placed. */
 export const mosfetProps = commonComponentProps.extend({
   channelType: z.enum(["n", "p"]),
   mosfetMode: z.enum(["enhancement", "depletion"]),
+  symbolDrainSide: z.enum(["left", "right", "top", "bottom"]).optional(),
+  symbolSourceSide: z.enum(["left", "right", "top", "bottom"]).optional(),
+  symbolGateSide: z.enum(["left", "right", "top", "bottom"]).optional(),
   connections: createConnectionsProp(mosfetPins).optional(),
 })
 ```

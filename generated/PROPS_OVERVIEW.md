@@ -1190,6 +1190,12 @@ export interface MosfetProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   channelType: "n" | "p"
   mosfetMode: "enhancement" | "depletion"
+  /** The side of the schematic symbol where the drain port is placed. */
+  symbolDrainSide?: "left" | "right" | "top" | "bottom"
+  /** The side of the schematic symbol where the source port is placed. */
+  symbolSourceSide?: "left" | "right" | "top" | "bottom"
+  /** The side of the schematic symbol where the gate port is placed. */
+  symbolGateSide?: "left" | "right" | "top" | "bottom"
   connections?: Connections<MosfetPinLabels>
 }
 

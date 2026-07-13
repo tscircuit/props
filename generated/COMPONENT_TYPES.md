@@ -2648,15 +2648,16 @@ export interface NetLabelProps {
   schRotation?: number | string
   anchorSide?: "left" | "top" | "right" | "bottom"
 }
-export const netLabelProps = z.object({
-  net: z.string().optional(),
-  connection: z.string().optional(),
-  connectsTo: z.string().or(z.array(z.string())).optional(),
-  schX: distance.optional(),
-  schY: distance.optional(),
-  schRotation: rotation.optional(),
-  anchorSide: z.enum(["left", "top", "right", "bottom"]).optional(),
-})
+export const netLabelProps = z
+  .object({
+    net: z.string().optional(),
+    connection: z.string().optional(),
+    connectsTo: z.string().or(z.array(z.string())).optional(),
+    schX: distance.optional(),
+    schY: distance.optional(),
+    schRotation: rotation.optional(),
+    anchorSide: z.enum(["left", "top", "right", "bottom"]).optional(),
+  })
 ```
 
 ### opamp

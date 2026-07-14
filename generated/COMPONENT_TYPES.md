@@ -902,10 +902,11 @@ export const ammeterProps = commonComponentProps.extend({
 ```typescript
 export interface AnalogSimulationProps {
   name?: string
-  simulationType?: "spice_transient_analysis"
+  simulationType?: "spice_dc_operating_point" | "spice_transient_analysis"
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
+  timeout?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
@@ -919,11 +920,12 @@ export interface SpiceOptions {
 export const analogSimulationProps = z.object({
   name: z.string().optional(),
   simulationType: z
-    .literal("spice_transient_analysis")
+    .enum(["spice_dc_operating_point", "spice_transient_analysis"])
     .default("spice_transient_analysis"),
   duration: ms.optional(),
   startTime: ms.optional(),
   timePerStep: ms.optional(),
+  timeout: ms.optional(),
   spiceEngine: spiceEngine.optional(),
   spiceOptions: spiceOptions.optional(),
   graphIndependentAxes: z.boolean().optional(),
@@ -1193,6 +1195,7 @@ export interface ChipPropsSU<
   externallyConnectedPins?: string[][]
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
+  simulationBoundary?: boolean
   spiceModel?: SpiceModelElement
 }
 /**
@@ -1235,6 +1238,7 @@ export const chipProps = commonComponentProps.extend({
   noSchematicRepresentation: z.boolean().optional(),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
+  simulationBoundary: z.boolean().default(false),
   spiceModel: spicemodelElement.optional(),
 })
 ```

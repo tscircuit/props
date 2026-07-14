@@ -51,6 +51,16 @@ test("chip spiceModel accepts a spicemodel element", () => {
   expect(chipProps.parse(raw).spiceModel).toBe(raw.spiceModel)
 })
 
+test("chip accepts an explicit analog simulation boundary", () => {
+  const raw: ChipProps = {
+    name: "U1",
+    simulationBoundary: true,
+  }
+
+  expect(chipProps.parse(raw).simulationBoundary).toBe(true)
+  expect(chipProps.parse({ name: "U2" }).simulationBoundary).toBe(false)
+})
+
 test("chip spiceModel rejects plain model objects", () => {
   expect(() => {
     chipProps.parse({

@@ -71,6 +71,12 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
+  /**
+   * Treat this chip as the intentional boundary of an analog simulation.
+   * Defaults to false, allowing an accidentally missing SPICE model to be
+   * reported instead of silently omitting the chip.
+   */
+  simulationBoundary?: boolean
   spiceModel?: SpiceModelElement
 }
 
@@ -172,6 +178,7 @@ export const chipProps = commonComponentProps.extend({
   noSchematicRepresentation: z.boolean().optional(),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
+  simulationBoundary: z.boolean().default(false),
   spiceModel: spicemodelElement.optional(),
 })
 

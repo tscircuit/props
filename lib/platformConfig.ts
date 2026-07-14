@@ -27,8 +27,15 @@ export interface SpiceEngineSimulationResult {
   simulationResultCircuitJson: CircuitJson
 }
 
+export interface SpiceEngineSimulationOptions {
+  timeoutMs?: number
+}
+
 export interface SpiceEngine {
-  simulate: (spiceString: string) => Promise<SpiceEngineSimulationResult>
+  simulate: (
+    spiceString: string,
+    options?: SpiceEngineSimulationOptions,
+  ) => Promise<SpiceEngineSimulationResult>
 }
 
 export type SimpleRouteJson = any

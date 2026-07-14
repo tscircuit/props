@@ -31,10 +31,11 @@ export interface AmmeterProps<PinLabel extends string = string>
 
 export interface AnalogSimulationProps {
   name?: string
-  simulationType?: "spice_transient_analysis"
+  simulationType?: "spice_dc_operating_point" | "spice_transient_analysis"
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
+  timeout?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
@@ -448,6 +449,12 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
+  /**
+   * Treat this chip as the intentional boundary of an analog simulation.
+   * Defaults to false, allowing an accidentally missing SPICE model to be
+   * reported instead of silently omitting the chip.
+   */
+  simulationBoundary?: boolean
   spiceModel?: SpiceModelElement
 }
 
@@ -2123,7 +2130,15 @@ export interface SolderJumperProps extends JumperProps {
 
 
 export interface SpiceEngine {
-  simulate: (spiceString: string) => Promise<SpiceEngineSimulationResult>
+  simulate: (
+    spiceString: string,
+    options?: SpiceEngineSimulationOptions,
+  ) => Promise<SpiceEngineSimulationResult>
+}
+
+
+export interface SpiceEngineSimulationOptions {
+  timeoutMs?: number
 }
 
 

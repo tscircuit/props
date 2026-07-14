@@ -5,10 +5,11 @@ import { z } from "zod"
 
 export interface AnalogSimulationProps {
   name?: string
-  simulationType?: "spice_transient_analysis"
+  simulationType?: "spice_dc_operating_point" | "spice_transient_analysis"
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
+  timeout?: number | string
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
@@ -35,11 +36,12 @@ const spiceOptions = z.object({
 export const analogSimulationProps = z.object({
   name: z.string().optional(),
   simulationType: z
-    .literal("spice_transient_analysis")
+    .enum(["spice_dc_operating_point", "spice_transient_analysis"])
     .default("spice_transient_analysis"),
   duration: ms.optional(),
   startTime: ms.optional(),
   timePerStep: ms.optional(),
+  timeout: ms.optional(),
   spiceEngine: spiceEngine.optional(),
   spiceOptions: spiceOptions.optional(),
   graphIndependentAxes: z.boolean().optional(),

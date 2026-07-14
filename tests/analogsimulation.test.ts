@@ -41,6 +41,20 @@ test("analog simulation accepts time parameters", () => {
   expect(parsed.timePerStep).toBe(0.001)
 })
 
+test("analog simulation accepts DC operating-point analysis and timeout", () => {
+  const raw: AnalogSimulationProps = {
+    name: "bias",
+    simulationType: "spice_dc_operating_point",
+    timeout: "2s",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof analogSimulationProps>>()
+
+  const parsed = analogSimulationProps.parse(raw)
+  expect(parsed.simulationType).toBe("spice_dc_operating_point")
+  expect(parsed.timeout).toBe(2000)
+})
+
 test("analog simulation accepts spice engine selection", () => {
   const raw: AnalogSimulationProps = {
     spiceEngine: "spicey",

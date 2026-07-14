@@ -1,5 +1,6 @@
 import { expect, test } from "bun:test"
 import {
+  cutoutApertureShapes,
   cutoutApertureProps,
   type CutoutApertureProps,
 } from "lib/components/cutout-aperture"
@@ -27,28 +28,25 @@ test("cutout aperture props normalize dimensions to millimeters", () => {
   expect(parsed.width).toBeCloseTo(3.6576)
 })
 
-test("cutout aperture props support circular and D-shaped profiles", () => {
+test("cutout aperture props expose the supported shape spec", () => {
+  expect(cutoutApertureShapes).toEqual(["rect", "rounded_rect", "circle"])
+
+  expect(cutoutApertureProps.parse({ shape: "rect" })).toEqual({
+    shape: "rect",
+  })
+
   expect(
     cutoutApertureProps.parse({
       shape: "circle",
       diameter: "6.5mm",
     }),
   ).toEqual({ shape: "circle", diameter: 6.5 })
-
-  expect(
-    cutoutApertureProps.parse({
-      shape: "d_shape",
-      diameter: "9mm",
-      flatOffset: "1mm",
-    }),
-  ).toEqual({
-    shape: "d_shape",
-    diameter: 9,
-    flatOffset: 1,
-  })
 })
 
-test("cutout aperture props reject unknown shapes", () => {
+test("cutout aperture props reject D-shaped and unknown shapes", () => {
+  expect(() =>
+    cutoutApertureProps.parse({ shape: "d_shape", diameter: "9mm" }),
+  ).toThrow()
   expect(() =>
     cutoutApertureProps.parse({ shape: "oval", width: "4mm" }),
   ).toThrow()

@@ -1,12 +1,12 @@
 import { distance, type Distance } from "lib/common/distance"
+import { commonShapeProps } from "lib/common/commonShape"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export const cutoutApertureShapes = [
-  "rect",
+  commonShapeProps.enum.rect,
   "rounded_rect",
-  "circle",
-  "d_shape",
+  commonShapeProps.enum.circle,
 ] as const
 
 export type CutoutApertureShape = (typeof cutoutApertureShapes)[number]
@@ -24,12 +24,10 @@ export interface CutoutApertureProps {
   width?: Distance
   /** Nominal height for rectangular and rounded-rectangular openings. */
   height?: Distance
-  /** Nominal diameter for circular and D-shaped openings. */
+  /** Nominal diameter for circular openings. */
   diameter?: Distance
   /** Corner radius for a rounded-rectangular opening. */
   cornerRadius?: Distance
-  /** Distance from the aperture center to a D-shaped opening's flat edge. */
-  flatOffset?: Distance
   /** Height of the opening's center above the top surface of the PCB. */
   zCenterAboveBoard?: Distance
   /** Additional clearance around the nominal opening. */
@@ -42,7 +40,6 @@ export const cutoutApertureProps = z.object({
   height: distance.optional(),
   diameter: distance.optional(),
   cornerRadius: distance.optional(),
-  flatOffset: distance.optional(),
   zCenterAboveBoard: distance.optional(),
   margin: distance.optional(),
 })

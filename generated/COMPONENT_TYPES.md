@@ -1515,10 +1515,9 @@ export const currentSourceProps = commonComponentProps.extend({
 
 ```typescript
 export const cutoutApertureShapes = [
-  "rect",
+  commonShapeProps.enum.rect,
   "rounded_rect",
-  "circle",
-  "d_shape",
+  commonShapeProps.enum.circle,
 ] as const
 /**
  * Describes the nominal enclosure opening required by a component.
@@ -1532,7 +1531,6 @@ export interface CutoutApertureProps {
   height?: Distance
   diameter?: Distance
   cornerRadius?: Distance
-  flatOffset?: Distance
   zCenterAboveBoard?: Distance
   margin?: Distance
 }
@@ -1543,7 +1541,6 @@ export const cutoutApertureProps = z.object({
   height: distance.optional(),
   diameter: distance.optional(),
   cornerRadius: distance.optional(),
-  flatOffset: distance.optional(),
   zCenterAboveBoard: distance.optional(),
   margin: distance.optional(),
 })

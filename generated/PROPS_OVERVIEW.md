@@ -710,12 +710,10 @@ export interface CutoutApertureProps {
   width?: Distance
   /** Nominal height for rectangular and rounded-rectangular openings. */
   height?: Distance
-  /** Nominal diameter for circular and D-shaped openings. */
+  /** Nominal diameter for circular openings. */
   diameter?: Distance
   /** Corner radius for a rounded-rectangular opening. */
   cornerRadius?: Distance
-  /** Distance from the aperture center to a D-shaped opening's flat edge. */
-  flatOffset?: Distance
   /** Height of the opening's center above the top surface of the PCB. */
   zCenterAboveBoard?: Distance
   /** Additional clearance around the nominal opening. */

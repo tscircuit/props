@@ -82,3 +82,26 @@ test("should parse crystal props with connections", () => {
     right: "net.CLK_OUT",
   })
 })
+
+test("should parse four-pin crystal props with numbered connections", () => {
+  const rawProps: CrystalProps = {
+    name: "crystal",
+    frequency: "16MHz",
+    loadCapacitance: "20pF",
+    pinVariant: "four_pin",
+    connections: {
+      pin1: "U1.XIN",
+      pin2: "net.GND",
+      pin3: "U1.XOUT",
+      pin4: "net.GND",
+    },
+  }
+
+  const parsedProps = crystalProps.parse(rawProps)
+  expect(parsedProps.connections).toEqual({
+    pin1: "U1.XIN",
+    pin2: "net.GND",
+    pin3: "U1.XOUT",
+    pin4: "net.GND",
+  })
+})

@@ -3,7 +3,6 @@ import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
-  lrPins,
 } from "lib/common/layout"
 import {
   type SchematicOrientation,
@@ -15,7 +14,14 @@ import { z } from "zod"
 
 export type PinVariant = "two_pin" | "four_pin"
 
-export const crystalPins = lrPins
+export const crystalPins = [
+  "pin1",
+  "left",
+  "pin2",
+  "right",
+  "pin3",
+  "pin4",
+] as const
 export type CrystalPinLabels = (typeof crystalPins)[number]
 
 export interface CrystalProps<PinLabel extends string = string>

@@ -1455,6 +1455,14 @@ export const courtyardRectProps = pcbLayoutProps.extend({
 ### crystal
 
 ```typescript
+export const crystalPins = [
+  "pin1",
+  "left",
+  "pin2",
+  "right",
+  "pin3",
+  "pin4",
+] as const
 export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string

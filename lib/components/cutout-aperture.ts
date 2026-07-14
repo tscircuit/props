@@ -21,30 +21,30 @@ export interface CutoutApertureProps {
   /** Opening geometry used by the enclosure generator. */
   shape: CutoutApertureShape
   /** Nominal width for rectangular and rounded-rectangular openings. */
-  widthMm?: Distance
+  width?: Distance
   /** Nominal height for rectangular and rounded-rectangular openings. */
-  heightMm?: Distance
+  height?: Distance
   /** Nominal diameter for circular and D-shaped openings. */
-  diameterMm?: Distance
+  diameter?: Distance
   /** Corner radius for a rounded-rectangular opening. */
-  cornerRadiusMm?: Distance
+  cornerRadius?: Distance
   /** Distance from the aperture center to a D-shaped opening's flat edge. */
-  flatOffsetMm?: Distance
+  flatOffset?: Distance
   /** Height of the opening's center above the top surface of the PCB. */
-  zCenterAboveBoardMm?: Distance
+  zCenterAboveBoard?: Distance
   /** Additional clearance around the nominal opening. */
-  marginMm?: Distance
+  margin?: Distance
 }
 
 export const cutoutApertureProps = z.object({
   shape: z.enum(cutoutApertureShapes),
-  widthMm: distance.optional(),
-  heightMm: distance.optional(),
-  diameterMm: distance.optional(),
-  cornerRadiusMm: distance.optional(),
-  flatOffsetMm: distance.optional(),
-  zCenterAboveBoardMm: distance.optional(),
-  marginMm: distance.optional(),
+  width: distance.optional(),
+  height: distance.optional(),
+  diameter: distance.optional(),
+  cornerRadius: distance.optional(),
+  flatOffset: distance.optional(),
+  zCenterAboveBoard: distance.optional(),
+  margin: distance.optional(),
 })
 
 type InferredCutoutApertureProps = z.input<typeof cutoutApertureProps>

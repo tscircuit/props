@@ -1528,24 +1528,24 @@ export const cutoutApertureShapes = [
  */
 export interface CutoutApertureProps {
   shape: CutoutApertureShape
-  widthMm?: Distance
-  heightMm?: Distance
-  diameterMm?: Distance
-  cornerRadiusMm?: Distance
-  flatOffsetMm?: Distance
-  zCenterAboveBoardMm?: Distance
-  marginMm?: Distance
+  width?: Distance
+  height?: Distance
+  diameter?: Distance
+  cornerRadius?: Distance
+  flatOffset?: Distance
+  zCenterAboveBoard?: Distance
+  margin?: Distance
 }
 /** Additional clearance around the nominal opening. */
 export const cutoutApertureProps = z.object({
   shape: z.enum(cutoutApertureShapes),
-  widthMm: distance.optional(),
-  heightMm: distance.optional(),
-  diameterMm: distance.optional(),
-  cornerRadiusMm: distance.optional(),
-  flatOffsetMm: distance.optional(),
-  zCenterAboveBoardMm: distance.optional(),
-  marginMm: distance.optional(),
+  width: distance.optional(),
+  height: distance.optional(),
+  diameter: distance.optional(),
+  cornerRadius: distance.optional(),
+  flatOffset: distance.optional(),
+  zCenterAboveBoard: distance.optional(),
+  margin: distance.optional(),
 })
 ```
 

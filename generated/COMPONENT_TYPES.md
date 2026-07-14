@@ -104,6 +104,14 @@ export const cadModelProp = z.union([
   }),
 ```
 
+### commonShape
+
+```typescript
+export interface CommonShapeProps {
+  shape: "pill" | "rect" | "circle"
+}
+```
+
 ### connectionsProp
 
 ```typescript
@@ -1514,11 +1522,6 @@ export const currentSourceProps = commonComponentProps.extend({
 ### cutout-aperture
 
 ```typescript
-export const cutoutApertureShapes = [
-  commonShapeProps.enum.rect,
-  "rounded_rect",
-  commonShapeProps.enum.circle,
-] as const
 /**
  * Describes the nominal enclosure opening required by a component.
  *
@@ -1536,7 +1539,11 @@ export interface CutoutApertureProps {
 }
 /** Additional clearance around the nominal opening. */
 export const cutoutApertureProps = z.object({
-  shape: z.enum(cutoutApertureShapes),
+  shape: z.union([
+    rectShapeProps.shape.shape,
+    z.literal("rounded_rect"),
+    circleShapeProps.shape.shape,
+  ]),
   width: distance.optional(),
   height: distance.optional(),
   diameter: distance.optional(),

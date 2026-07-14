@@ -1,13 +1,9 @@
 import { distance, type Distance } from "lib/common/distance"
-import { commonShapeProps } from "lib/common/commonShape"
+import { circleShapeProps, rectShapeProps } from "lib/common/commonShape"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export const cutoutApertureShapes = [
-  commonShapeProps.enum.rect,
-  "rounded_rect",
-  commonShapeProps.enum.circle,
-] as const
+export const cutoutApertureShapes = ["rect", "rounded_rect", "circle"] as const
 
 export type CutoutApertureShape = (typeof cutoutApertureShapes)[number]
 
@@ -35,7 +31,11 @@ export interface CutoutApertureProps {
 }
 
 export const cutoutApertureProps = z.object({
-  shape: z.enum(cutoutApertureShapes),
+  shape: z.union([
+    rectShapeProps.shape.shape,
+    z.literal("rounded_rect"),
+    circleShapeProps.shape.shape,
+  ]),
   width: distance.optional(),
   height: distance.optional(),
   diameter: distance.optional(),

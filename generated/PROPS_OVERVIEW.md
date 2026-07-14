@@ -621,6 +621,11 @@ export interface CommonLayoutProps {
 }
 
 
+export interface CommonShapeProps {
+  shape: "pill" | "rect" | "circle"
+}
+
+
 export interface ConnectorProps extends ChipPropsSU {
   /**
    * Connector standard, e.g. usb_c, m2

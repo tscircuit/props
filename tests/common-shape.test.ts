@@ -2,13 +2,11 @@ import { expect, test } from "bun:test"
 import { commonShapeProps } from "lib/common/commonShape"
 
 test("common shape props contain the initial common shapes", () => {
-  expect(commonShapeProps.options).toEqual(["pill", "rect", "circle"])
-
-  for (const shape of commonShapeProps.options) {
-    expect(commonShapeProps.parse(shape)).toBe(shape)
+  for (const shape of ["pill", "rect", "circle"] as const) {
+    expect(commonShapeProps.parse({ shape })).toEqual({ shape })
   }
 })
 
 test("common shape props reject component-specific shapes", () => {
-  expect(() => commonShapeProps.parse("rounded_rect")).toThrow()
+  expect(() => commonShapeProps.parse({ shape: "rounded_rect" })).toThrow()
 })

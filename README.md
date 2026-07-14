@@ -45,6 +45,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<crystal />`                  | [`CrystalProps`](#crystalprops-crystal)                                                    |
 | `<currentsource />`            | [`CurrentSourceProps`](#currentsourceprops-currentsource)                                  |
 | `<cutout />`                   | [`RectCutoutProps`](#rectcutoutprops-cutout)                                               |
+| `<cutoutaperture />`           | [`CutoutApertureProps`](#cutoutapertureprops-cutoutaperture)                               |
 | `<differentialpair />`         | [`DifferentialPairProps`](#differentialpairprops-differentialpair)                         |
 | `<diode />`                    | [`DiodeProps`](#diodeprops-diode)                                                          |
 | `<drccheck />`                 | [`DrcCheckProps`](#drccheckprops-drccheck)                                                 |
@@ -608,6 +609,31 @@ export interface RectCutoutProps extends Omit<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/cutout.ts)
+
+### CutoutApertureProps `<cutoutaperture />`
+
+```ts
+export interface CutoutApertureProps {
+  /** Opening geometry used by the enclosure generator. */
+  shape: CutoutApertureShape;
+  /** Nominal width for rectangular and rounded-rectangular openings. */
+  widthMm?: Distance;
+  /** Nominal height for rectangular and rounded-rectangular openings. */
+  heightMm?: Distance;
+  /** Nominal diameter for circular and D-shaped openings. */
+  diameterMm?: Distance;
+  /** Corner radius for a rounded-rectangular opening. */
+  cornerRadiusMm?: Distance;
+  /** Distance from the aperture center to a D-shaped opening's flat edge. */
+  flatOffsetMm?: Distance;
+  /** Height of the opening's center above the top surface of the PCB. */
+  zCenterAboveBoardMm?: Distance;
+  /** Additional clearance around the nominal opening. */
+  marginMm?: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/cutout-aperture.ts)
 
 ### DifferentialPairProps `<differentialpair />`
 

@@ -1511,6 +1511,44 @@ export const currentSourceProps = commonComponentProps.extend({
 })
 ```
 
+### cutout-aperture
+
+```typescript
+export const cutoutApertureShapes = [
+  "rect",
+  "rounded_rect",
+  "circle",
+  "d_shape",
+] as const
+/**
+ * Describes the nominal enclosure opening required by a component.
+ *
+ * All dimensions are optional because an enclosure generator may infer omitted
+ * dimensions from the component's body. Numeric values are interpreted as mm.
+ */
+export interface CutoutApertureProps {
+  shape: CutoutApertureShape
+  widthMm?: Distance
+  heightMm?: Distance
+  diameterMm?: Distance
+  cornerRadiusMm?: Distance
+  flatOffsetMm?: Distance
+  zCenterAboveBoardMm?: Distance
+  marginMm?: Distance
+}
+/** Additional clearance around the nominal opening. */
+export const cutoutApertureProps = z.object({
+  shape: z.enum(cutoutApertureShapes),
+  widthMm: distance.optional(),
+  heightMm: distance.optional(),
+  diameterMm: distance.optional(),
+  cornerRadiusMm: distance.optional(),
+  flatOffsetMm: distance.optional(),
+  zCenterAboveBoardMm: distance.optional(),
+  marginMm: distance.optional(),
+})
+```
+
 ### cutout
 
 ```typescript

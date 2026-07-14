@@ -703,6 +703,26 @@ export interface CustomDrcSelectAll {
 }
 
 
+export interface CutoutApertureProps {
+  /** Opening geometry used by the enclosure generator. */
+  shape: CutoutApertureShape
+  /** Nominal width for rectangular and rounded-rectangular openings. */
+  widthMm?: Distance
+  /** Nominal height for rectangular and rounded-rectangular openings. */
+  heightMm?: Distance
+  /** Nominal diameter for circular and D-shaped openings. */
+  diameterMm?: Distance
+  /** Corner radius for a rounded-rectangular opening. */
+  cornerRadiusMm?: Distance
+  /** Distance from the aperture center to a D-shaped opening's flat edge. */
+  flatOffsetMm?: Distance
+  /** Height of the opening's center above the top surface of the PCB. */
+  zCenterAboveBoardMm?: Distance
+  /** Additional clearance around the nominal opening. */
+  marginMm?: Distance
+}
+
+
 export interface DifferentialPairProps {
   name?: string
   /** Name of the trace or pin carrying the positive signal. */

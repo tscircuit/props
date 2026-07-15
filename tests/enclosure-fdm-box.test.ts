@@ -27,6 +27,17 @@ test("exposes the box schema through the enclosure namespace", () => {
   expect(enclosureProps.fdm.Box).toBe(enclosureFdmBoxProps)
 })
 
+test("allows dimensions to be inferred from boardRef", () => {
+  expect(
+    enclosureFdmBoxProps.parse({
+      boardRef: ".main-board",
+    }),
+  ).toEqual({
+    boardRef: ".main-board",
+    wallThickness: 2,
+  })
+})
+
 test("requires a non-empty boardRef", () => {
   expect(() =>
     enclosureFdmBoxProps.parse({

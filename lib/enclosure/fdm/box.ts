@@ -5,17 +5,17 @@ import { z } from "zod"
 export interface EnclosureFdmBoxProps {
   /** The name or selector of the board enclosed by this box. */
   boardRef: string
-  width: Distance
-  height: Distance
-  depth: Distance
+  width?: Distance
+  height?: Distance
+  depth?: Distance
   wallThickness?: Distance
 }
 
 export const enclosureFdmBoxProps = z.object({
   boardRef: z.string().min(1),
-  width: distance,
-  height: distance,
-  depth: distance,
+  width: distance.optional(),
+  height: distance.optional(),
+  depth: distance.optional(),
   wallThickness: distance.default("2mm"),
 })
 

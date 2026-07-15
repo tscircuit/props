@@ -24,8 +24,6 @@ export interface CutoutApertureProps {
   diameter?: Distance
   /** Corner radius for a rounded-rectangular opening. */
   cornerRadius?: Distance
-  /** Height of the opening's center above the top surface of the PCB. */
-  zCenterAboveBoard?: Distance
   /** Additional clearance around the nominal opening. */
   margin?: Distance
 }
@@ -40,7 +38,6 @@ export const cutoutApertureProps = z.object({
   height: distance.optional(),
   diameter: distance.optional(),
   cornerRadius: distance.optional(),
-  zCenterAboveBoard: distance.optional(),
   margin: distance.optional(),
 })
 

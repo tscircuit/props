@@ -624,8 +624,6 @@ export interface CutoutApertureProps {
   diameter?: Distance;
   /** Corner radius for a rounded-rectangular opening. */
   cornerRadius?: Distance;
-  /** Height of the opening's center above the top surface of the PCB. */
-  zCenterAboveBoard?: Distance;
   /** Additional clearance around the nominal opening. */
   margin?: Distance;
 }

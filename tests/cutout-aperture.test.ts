@@ -11,7 +11,6 @@ test("cutout aperture props normalize dimensions to millimeters", () => {
     width: "0.144in",
     height: "8.34mm",
     cornerRadius: "1.83mm",
-    zCenterAboveBoard: 6.75,
     margin: "0.2mm",
   }
 
@@ -22,7 +21,6 @@ test("cutout aperture props normalize dimensions to millimeters", () => {
     width: expect.any(Number),
     height: 8.34,
     cornerRadius: 1.83,
-    zCenterAboveBoard: 6.75,
     margin: 0.2,
   })
   expect(parsed.width).toBeCloseTo(3.6576)

@@ -1534,7 +1534,6 @@ export interface CutoutApertureProps {
   height?: Distance
   diameter?: Distance
   cornerRadius?: Distance
-  zCenterAboveBoard?: Distance
   margin?: Distance
 }
 /** Additional clearance around the nominal opening. */
@@ -1548,7 +1547,6 @@ export const cutoutApertureProps = z.object({
   height: distance.optional(),
   diameter: distance.optional(),
   cornerRadius: distance.optional(),
-  zCenterAboveBoard: distance.optional(),
   margin: distance.optional(),
 })
 ```

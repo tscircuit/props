@@ -1,50 +1,54 @@
+import {
+  circleShapeProps,
+  type CircleShapeProps,
+  type CommonShapeProps,
+  pillShapeProps,
+  type PillShapeProps,
+  rectShapeProps,
+  type RectShapeProps,
+} from "lib/common/commonShape"
 import { distance, type Distance } from "lib/common/distance"
-import { circleShapeProps, rectShapeProps } from "lib/common/commonShape"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export const enclosureCutoutApertureShapes = [
-  "rect",
-  "rounded_rect",
-  "circle",
-] as const
+export const enclosureCutoutApertureShapes = ["pill", "rect", "circle"] as const
 
-export type EnclosureCutoutApertureShape =
-  (typeof enclosureCutoutApertureShapes)[number]
+export type EnclosureCutoutApertureShape = CommonShapeProps["shape"]
 
 /**
  * Describes the nominal enclosure opening required by a component.
  *
- * All dimensions are optional because an enclosure generator may infer omitted
- * dimensions from the component's body. Numeric values are interpreted as mm.
+ * Numeric values are interpreted as mm.
  */
-export interface EnclosureCutoutApertureProps {
-  /** Opening geometry used by the enclosure generator. */
-  shape: EnclosureCutoutApertureShape
-  /** Nominal width for rectangular and rounded-rectangular openings. */
-  width?: Distance
-  /** Nominal height for rectangular and rounded-rectangular openings. */
-  height?: Distance
-  /** Nominal diameter for circular openings. */
-  diameter?: Distance
-  /** Corner radius for a rounded-rectangular opening. */
-  cornerRadius?: Distance
+export interface PillEnclosureCutoutApertureProps extends PillShapeProps {
   /** Additional clearance around the nominal opening. */
   margin?: Distance
 }
 
-export const enclosureCutoutApertureProps = z.object({
-  shape: z.union([
-    rectShapeProps.shape.shape,
-    z.literal("rounded_rect"),
-    circleShapeProps.shape.shape,
-  ]),
-  width: distance.optional(),
-  height: distance.optional(),
-  diameter: distance.optional(),
-  cornerRadius: distance.optional(),
+export interface RectEnclosureCutoutApertureProps extends RectShapeProps {
+  /** Additional clearance around the nominal opening. */
+  margin?: Distance
+}
+
+export interface CircleEnclosureCutoutApertureProps extends CircleShapeProps {
+  /** Additional clearance around the nominal opening. */
+  margin?: Distance
+}
+
+export type EnclosureCutoutApertureProps =
+  | PillEnclosureCutoutApertureProps
+  | RectEnclosureCutoutApertureProps
+  | CircleEnclosureCutoutApertureProps
+
+const apertureOnlyProps = {
   margin: distance.optional(),
-})
+}
+
+export const enclosureCutoutApertureProps = z.discriminatedUnion("shape", [
+  pillShapeProps.extend(apertureOnlyProps),
+  rectShapeProps.extend(apertureOnlyProps),
+  circleShapeProps.extend(apertureOnlyProps),
+])
 
 type InferredEnclosureCutoutApertureProps = z.input<
   typeof enclosureCutoutApertureProps

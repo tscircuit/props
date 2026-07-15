@@ -1,8 +1,45 @@
+import { distance, type Distance } from "lib/common/distance"
+import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export const pillShapeProps = z.object({ shape: z.literal("pill") })
-export const rectShapeProps = z.object({ shape: z.literal("rect") })
-export const circleShapeProps = z.object({ shape: z.literal("circle") })
+export interface PillShapeProps {
+  shape: "pill"
+  width: Distance
+  height: Distance
+}
+
+export interface RectShapeProps {
+  shape: "rect"
+  width: Distance
+  height: Distance
+}
+
+export interface CircleShapeProps {
+  shape: "circle"
+  radius: Distance
+}
+
+export type CommonShapeProps =
+  | PillShapeProps
+  | RectShapeProps
+  | CircleShapeProps
+
+export const pillShapeProps = z.object({
+  shape: z.literal("pill"),
+  width: distance,
+  height: distance,
+})
+
+export const rectShapeProps = z.object({
+  shape: z.literal("rect"),
+  width: distance,
+  height: distance,
+})
+
+export const circleShapeProps = z.object({
+  shape: z.literal("circle"),
+  radius: distance,
+})
 
 export const commonShapeProps = z.discriminatedUnion("shape", [
   pillShapeProps,
@@ -10,6 +47,4 @@ export const commonShapeProps = z.discriminatedUnion("shape", [
   circleShapeProps,
 ])
 
-export interface CommonShapeProps {
-  shape: "pill" | "rect" | "circle"
-}
+expectTypesMatch<CommonShapeProps, z.input<typeof commonShapeProps>>(true)

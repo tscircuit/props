@@ -708,22 +708,6 @@ export interface CustomDrcSelectAll {
 }
 
 
-export interface CutoutApertureProps {
-  /** Opening geometry used by the enclosure generator. */
-  shape: CutoutApertureShape
-  /** Nominal width for rectangular and rounded-rectangular openings. */
-  width?: Distance
-  /** Nominal height for rectangular and rounded-rectangular openings. */
-  height?: Distance
-  /** Nominal diameter for circular openings. */
-  diameter?: Distance
-  /** Corner radius for a rounded-rectangular opening. */
-  cornerRadius?: Distance
-  /** Additional clearance around the nominal opening. */
-  margin?: Distance
-}
-
-
 export interface DifferentialPairProps {
   name?: string
   /** Name of the trace or pin carrying the positive signal. */
@@ -805,6 +789,32 @@ export interface EditTraceHintEvent extends BaseManualEditEvent {
   pcb_port_id: string
   pcb_trace_hint_id?: string
   route: Array<{ x: number; y: number; via?: boolean }>
+}
+
+
+export interface EnclosureCutoutApertureProps {
+  /** Opening geometry used by the enclosure generator. */
+  shape: EnclosureCutoutApertureShape
+  /** Nominal width for rectangular and rounded-rectangular openings. */
+  width?: Distance
+  /** Nominal height for rectangular and rounded-rectangular openings. */
+  height?: Distance
+  /** Nominal diameter for circular openings. */
+  diameter?: Distance
+  /** Corner radius for a rounded-rectangular opening. */
+  cornerRadius?: Distance
+  /** Additional clearance around the nominal opening. */
+  margin?: Distance
+}
+
+
+export interface EnclosureFdmBoxProps {
+  /** The name or selector of the board enclosed by this box. */
+  boardRef: string
+  width?: Distance
+  height?: Distance
+  depth?: Distance
+  wallThickness?: Distance
 }
 
 

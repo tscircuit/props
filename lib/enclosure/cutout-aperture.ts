@@ -3,9 +3,14 @@ import { circleShapeProps, rectShapeProps } from "lib/common/commonShape"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export const cutoutApertureShapes = ["rect", "rounded_rect", "circle"] as const
+export const enclosureCutoutApertureShapes = [
+  "rect",
+  "rounded_rect",
+  "circle",
+] as const
 
-export type CutoutApertureShape = (typeof cutoutApertureShapes)[number]
+export type EnclosureCutoutApertureShape =
+  (typeof enclosureCutoutApertureShapes)[number]
 
 /**
  * Describes the nominal enclosure opening required by a component.
@@ -13,9 +18,9 @@ export type CutoutApertureShape = (typeof cutoutApertureShapes)[number]
  * All dimensions are optional because an enclosure generator may infer omitted
  * dimensions from the component's body. Numeric values are interpreted as mm.
  */
-export interface CutoutApertureProps {
+export interface EnclosureCutoutApertureProps {
   /** Opening geometry used by the enclosure generator. */
-  shape: CutoutApertureShape
+  shape: EnclosureCutoutApertureShape
   /** Nominal width for rectangular and rounded-rectangular openings. */
   width?: Distance
   /** Nominal height for rectangular and rounded-rectangular openings. */
@@ -28,7 +33,7 @@ export interface CutoutApertureProps {
   margin?: Distance
 }
 
-export const cutoutApertureProps = z.object({
+export const enclosureCutoutApertureProps = z.object({
   shape: z.union([
     rectShapeProps.shape.shape,
     z.literal("rounded_rect"),
@@ -41,7 +46,14 @@ export const cutoutApertureProps = z.object({
   margin: distance.optional(),
 })
 
-type InferredCutoutApertureProps = z.input<typeof cutoutApertureProps>
-export type ParsedCutoutApertureProps = z.output<typeof cutoutApertureProps>
+type InferredEnclosureCutoutApertureProps = z.input<
+  typeof enclosureCutoutApertureProps
+>
+export type ParsedEnclosureCutoutApertureProps = z.output<
+  typeof enclosureCutoutApertureProps
+>
 
-expectTypesMatch<CutoutApertureProps, InferredCutoutApertureProps>(true)
+expectTypesMatch<
+  EnclosureCutoutApertureProps,
+  InferredEnclosureCutoutApertureProps
+>(true)

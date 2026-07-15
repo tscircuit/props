@@ -45,7 +45,6 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<crystal />`                  | [`CrystalProps`](#crystalprops-crystal)                                                    |
 | `<currentsource />`            | [`CurrentSourceProps`](#currentsourceprops-currentsource)                                  |
 | `<cutout />`                   | [`RectCutoutProps`](#rectcutoutprops-cutout)                                               |
-| `<cutoutaperture />`           | [`CutoutApertureProps`](#cutoutapertureprops-cutoutaperture)                               |
 | `<differentialpair />`         | [`DifferentialPairProps`](#differentialpairprops-differentialpair)                         |
 | `<diode />`                    | [`DiodeProps`](#diodeprops-diode)                                                          |
 | `<drccheck />`                 | [`DrcCheckProps`](#drccheckprops-drccheck)                                                 |
@@ -609,27 +608,6 @@ export interface RectCutoutProps extends Omit<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/cutout.ts)
-
-### CutoutApertureProps `<cutoutaperture />`
-
-```ts
-export interface CutoutApertureProps {
-  /** Opening geometry used by the enclosure generator. */
-  shape: CutoutApertureShape;
-  /** Nominal width for rectangular and rounded-rectangular openings. */
-  width?: Distance;
-  /** Nominal height for rectangular and rounded-rectangular openings. */
-  height?: Distance;
-  /** Nominal diameter for circular openings. */
-  diameter?: Distance;
-  /** Corner radius for a rounded-rectangular opening. */
-  cornerRadius?: Distance;
-  /** Additional clearance around the nominal opening. */
-  margin?: Distance;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/cutout-aperture.ts)
 
 ### DifferentialPairProps `<differentialpair />`
 

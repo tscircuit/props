@@ -5,7 +5,7 @@ import {
   enclosureProps,
 } from "lib/enclosure"
 
-test("parses enclosure.fdm.Box props with a boardRef", () => {
+test("parses enclosure.fdm.box props with a boardRef", () => {
   const input: EnclosureFdmBoxPropsInput = {
     boardRef: ".main-board",
     width: "45mm",
@@ -24,7 +24,7 @@ test("parses enclosure.fdm.Box props with a boardRef", () => {
 })
 
 test("exposes the box schema through the enclosure namespace", () => {
-  expect(enclosureProps.fdm.Box).toBe(enclosureFdmBoxProps)
+  expect(enclosureProps.fdm.box).toBe(enclosureFdmBoxProps)
 })
 
 test("allows dimensions to be inferred from boardRef", () => {

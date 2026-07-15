@@ -28,19 +28,19 @@ test("enclosure cutout aperture props normalize dimensions to millimeters", () =
 })
 
 test("exposes cutout aperture props through the enclosure namespace", () => {
-  expect(enclosureProps.CutoutAperture).toBe(enclosureCutoutApertureProps)
+  expect(enclosureProps.cutoutaperture).toBe(enclosureCutoutApertureProps)
   expect(enclosureCutoutApertureShapes).toEqual([
     "rect",
     "rounded_rect",
     "circle",
   ])
 
-  expect(enclosureProps.CutoutAperture.parse({ shape: "rect" })).toEqual({
+  expect(enclosureProps.cutoutaperture.parse({ shape: "rect" })).toEqual({
     shape: "rect",
   })
 
   expect(
-    enclosureProps.CutoutAperture.parse({
+    enclosureProps.cutoutaperture.parse({
       shape: "circle",
       diameter: "6.5mm",
     }),

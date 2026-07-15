@@ -5,8 +5,8 @@ export * from "./cutout-aperture"
 export * from "./fdm"
 
 export const enclosureProps = {
-  CutoutAperture: enclosureCutoutApertureProps,
+  cutoutaperture: enclosureCutoutApertureProps,
   fdm: {
-    Box: enclosureFdmBoxProps,
+    box: enclosureFdmBoxProps,
   },
 } as const

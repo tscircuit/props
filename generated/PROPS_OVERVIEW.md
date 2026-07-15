@@ -536,6 +536,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
   key?: any
   name: string
+  /** Unit identifier when this component is a direct child of a shell. */
+  unitId?: string
+  /** Maps this unit's logical terminal names to physical shell pin identifiers. */
+  pinMapping?: Record<string, string>
+  /** Overrides the unit's rendered reference designator. */
+  refdesOverride?: string
   displayName?: string
   datasheetUrl?: string
   pinAttributes?: Record<PinLabel, PinAttributeMap>
@@ -2116,6 +2122,15 @@ export interface SelectionResultNet {
 export interface SelectionResultPort {
   getPcbPort: () => PcbPort | null
   getSourcePort: () => SourcePort | null
+}
+
+
+export interface ShellProps {
+  name: string
+  mpn?: string
+  manufacturer?: string
+  pinCount?: number
+  children?: any
 }
 
 

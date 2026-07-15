@@ -234,6 +234,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
   key?: any
   name: string
+  /** Unit identifier when this component is a direct child of a shell. */
+  unitId?: string
+  /** Maps this unit's logical terminal names to physical shell pin identifiers. */
+  pinMapping?: Record<string, string>
+  /** Overrides the unit's rendered reference designator. */
+  refdesOverride?: string
   displayName?: string
   datasheetUrl?: string
   pinAttributes?: Record<PinLabel, PinAttributeMap>
@@ -275,6 +281,9 @@ export const commonComponentProps = commonLayoutProps
   .extend({
     key: z.any().optional(),
     name: z.string(),
+    unitId: z.string().min(1).optional(),
+    pinMapping: z.record(z.string(), z.string().min(1)).optional(),
+    refdesOverride: z.string().min(1).optional(),
     displayName: z.string().optional(),
     schSectionName: z
       .string()

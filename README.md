@@ -96,6 +96,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<schematicsheet />`           | [`SchematicSheetProps`](#schematicsheetprops-schematicsheet)                               |
 | `<schematictable />`           | [`SchematicTableProps`](#schematictableprops-schematictable)                               |
 | `<schematictext />`            | [`SchematicTextProps`](#schematictextprops-schematictext)                                  |
+| `<shell />`                    | [`ShellProps`](#shellprops-shell)                                                          |
 | `<silkscreencircle />`         | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                         |
 | `<silkscreengraphic />`        | [`SilkscreenGraphicProps`](#silkscreengraphicprops-silkscreengraphic)                      |
 | `<silkscreenline />`           | [`SilkscreenLineProps`](#silkscreenlineprops-silkscreenline)                               |
@@ -718,11 +719,7 @@ export type FabricationNoteRectProps = z.input<typeof fabricationNoteRectProps>;
 export interface FabricationNoteTextProps extends PcbLayoutProps {
   text: string;
   anchorAlignment?:
-    | "center"
-    | "top_left"
-    | "top_right"
-    | "bottom_left"
-    | "bottom_right";
+    "center" | "top_left" | "top_right" | "bottom_left" | "bottom_right";
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
@@ -1288,11 +1285,7 @@ export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 export interface PcbNoteTextProps extends PcbLayoutProps {
   text: string;
   anchorAlignment?:
-    | "center"
-    | "top_left"
-    | "top_right"
-    | "bottom_left"
-    | "bottom_right";
+    "center" | "top_left" | "top_right" | "bottom_left" | "bottom_right";
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
@@ -1701,6 +1694,20 @@ export interface SchematicTextProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)
+
+### ShellProps `<shell />`
+
+```ts
+export interface ShellProps {
+  name: string;
+  mpn?: string;
+  manufacturer?: string;
+  pinCount?: number;
+  children?: any;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/shell.ts)
 
 ### SilkscreenCircleProps `<silkscreencircle />`
 
@@ -2126,7 +2133,6 @@ export interface PlatformConfig {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/platformConfig.ts)
-
 <!-- PLATFORM_CONFIG_END -->
 
 <!-- PROJECT_CONFIG_START -->
@@ -2150,5 +2156,4 @@ export interface ProjectConfig extends Pick<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/projectConfig.ts)
-
 <!-- PROJECT_CONFIG_END -->

@@ -567,6 +567,9 @@ export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
   key?: any
   name: string
+  unitId?: string
+  pinMapping?: Record<string, string>
+  refdesOverride?: string
   displayName?: string
   datasheetUrl?: string
   pinAttributes?: Record<PinLabel, PinAttributeMap>
@@ -588,6 +591,9 @@ export interface CommonComponentProps<PinLabel extends string = string>
 .extend({
     key: z.any().optional(),
     name: z.string(),
+    unitId: z.string().min(1).optional(),
+    pinMapping: z.record(z.string(), z.string().min(1)).optional(),
+    refdesOverride: z.string().min(1).optional(),
     displayName: z.string().optional(),
     schSectionName: z
       .string()
@@ -3731,6 +3737,27 @@ export interface SchematicTextProps {
   color?: string
   schRotation?: number | string
 }
+```
+
+### shell
+
+```typescript
+/** Props for a logical multi-unit physical package shell. */
+export interface ShellProps {
+  name: string
+  mpn?: string
+  manufacturer?: string
+  pinCount?: number
+  children?: any
+}
+/** Runtime parser for {@link ShellProps}. */
+export const shellProps = z.object({
+  name: z.string().min(1),
+  mpn: z.string().optional(),
+  manufacturer: z.string().optional(),
+  pinCount: z.number().int().positive().optional(),
+  children: z.any().optional(),
+})
 ```
 
 ### silkscreen-circle

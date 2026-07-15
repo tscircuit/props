@@ -1030,7 +1030,7 @@ export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string
   material?: "fr4" | "fr1" | "flex"
-  layers?: 1 | 2 | 4 | 6 | 8
+  layers?: 1 | 2 | 4 | 6 | 8 | 10
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -1057,6 +1057,7 @@ export const boardProps = subcircuitGroupProps
         z.literal(4),
         z.literal(6),
         z.literal(8),
+        z.literal(10),
       ])
       .default(2),
     borderRadius: distance.optional(),

@@ -28,12 +28,14 @@ test("should allow single-layer boards", () => {
   expect(parsed.layers).toBe(1)
 })
 
-test("should allow 6 and 8 layer boards", () => {
+test("should allow 6, 8, and 10 layer boards", () => {
   const sixLayer: BoardProps = { name: "board", layers: 6 }
   const eightLayer: BoardProps = { name: "board", layers: 8 }
+  const tenLayer: BoardProps = { name: "board", layers: 10 }
 
   expect(boardProps.parse(sixLayer).layers).toBe(6)
   expect(boardProps.parse(eightLayer).layers).toBe(8)
+  expect(boardProps.parse(tenLayer).layers).toBe(10)
 })
 
 test("should parse flex board material", () => {

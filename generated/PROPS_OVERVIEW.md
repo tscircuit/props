@@ -787,6 +787,16 @@ export interface EditTraceHintEvent extends BaseManualEditEvent {
 }
 
 
+export interface EnclosureFdmBoxProps {
+  /** The name or selector of the board enclosed by this box. */
+  boardRef: string
+  width: Distance
+  height: Distance
+  depth: Distance
+  wallThickness?: Distance
+}
+
+
 export interface FabricationNoteDimensionProps
   extends Omit<
     PcbLayoutProps,

@@ -1,4 +1,5 @@
 export * from "./common/direction"
+export * from "./enclosure"
 export * from "./common/portHints"
 export * from "./common/layout"
 export * from "./common/pinAttributeMap"

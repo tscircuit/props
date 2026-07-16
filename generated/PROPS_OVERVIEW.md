@@ -450,8 +450,8 @@ export interface ChipPropsSU<
   connections?: Connections<PinLabel>
   spiceModel?: SpiceModelElement
   /**
-   * Functional components contained inside this physical chip package, used
-   * to describe its internal schematic and simulation behavior.
+   * Functional components contained inside this physical chip package,
+   * wrapped in an `<internalcircuit />` element.
    */
   internalCircuit?: InternalCircuitElement
 }
@@ -967,6 +967,11 @@ export interface InterconnectProps extends CommonComponentProps {
    * e.g., [["1","2"], ["2","3"]]
    */
   internallyConnectedPins?: (string | number)[][]
+}
+
+
+export interface InternalCircuitProps {
+  children?: ReactNode
 }
 
 

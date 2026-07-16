@@ -1,9 +1,16 @@
 import { expect, test } from "bun:test"
-import { chipProps, type ChipProps, type MosfetProps } from "lib"
+import {
+  chipProps,
+  type ChipProps,
+  internalCircuitProps,
+  type InternalCircuitProps,
+  type MosfetProps,
+} from "lib"
 import { z } from "zod"
 
 interface TscircuitElements {
   chip: ChipProps
+  internalcircuit: InternalCircuitProps
   mosfet: MosfetProps
 }
 
@@ -18,9 +25,9 @@ declare module "react/jsx-runtime" {
   }
 }
 
-test("chip internalCircuit accepts a fragment of functional components", () => {
+test("chip internalCircuit accepts an internalcircuit element", () => {
   const internalCircuit = (
-    <>
+    <internalcircuit>
       <mosfet
         name="A"
         channelType="n"
@@ -41,7 +48,7 @@ test("chip internalCircuit accepts a fragment of functional components", () => {
           drain: "pin.D2",
         }}
       />
-    </>
+    </internalcircuit>
   )
   const raw: ChipProps = {
     name: "Q1",
@@ -49,6 +56,22 @@ test("chip internalCircuit accepts a fragment of functional components", () => {
   }
 
   expect(chipProps.parse(raw).internalCircuit).toBe(internalCircuit)
+  expect(internalCircuitProps.parse(internalCircuit.props)).toEqual(
+    internalCircuit.props,
+  )
+})
+
+test("chip internalCircuit rejects a fragment without the wrapper", () => {
+  expect(() =>
+    chipProps.parse({
+      name: "Q1",
+      internalCircuit: (
+        <>
+          <mosfet name="A" channelType="n" mosfetMode="enhancement" />
+        </>
+      ),
+    }),
+  ).toThrow(z.ZodError)
 })
 
 test("chip internalCircuit rejects objects that are not React elements", () => {

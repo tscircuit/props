@@ -2512,6 +2512,21 @@ export const interconnectProps = commonComponentProps.extend({
 })
 ```
 
+### internal-circuit
+
+```typescript
+/**
+ * Props for a semantic container that groups the functional components inside
+ * a physical chip package.
+ */
+export interface InternalCircuitProps {
+  children?: ReactNode
+}
+export const internalCircuitProps = z.object({
+  children: z.custom<ReactNode>().optional(),
+})
+```
+
 ### jumper
 
 ```typescript

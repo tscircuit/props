@@ -59,6 +59,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<hole />`                     | [`CircleHoleProps`](#circleholeprops-hole)                                                 |
 | `<inductor />`                 | [`InductorProps`](#inductorprops-inductor)                                                 |
 | `<interconnect />`             | [`InterconnectProps`](#interconnectprops-interconnect)                                     |
+| `<internalcircuit />`          | [`InternalCircuitProps`](#internalcircuitprops-internalcircuit)                            |
 | `<jumper />`                   | [`JumperProps`](#jumperprops-jumper)                                                       |
 | `<led />`                      | [`LedProps`](#ledprops-led)                                                                |
 | `<mosfet />`                   | [`MosfetProps`](#mosfetprops-mosfet)                                                       |
@@ -450,8 +451,8 @@ export interface ChipPropsSU<
   connections?: Connections<PinLabel>;
   spiceModel?: SpiceModelElement;
   /**
-   * Functional components contained inside this physical chip package, used
-   * to describe its internal schematic and simulation behavior.
+   * Functional components contained inside this physical chip package,
+   * wrapped in an `<internalcircuit />` element.
    */
   internalCircuit?: InternalCircuitElement;
 }
@@ -1000,6 +1001,16 @@ export interface InterconnectProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/interconnect.ts)
+
+### InternalCircuitProps `<internalcircuit />`
+
+```ts
+export interface InternalCircuitProps {
+  children?: ReactNode;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/internal-circuit.ts)
 
 ### JumperProps `<jumper />`
 

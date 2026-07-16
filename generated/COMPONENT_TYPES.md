@@ -1227,6 +1227,7 @@ export interface ChipPropsSU<
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
   spiceModel?: SpiceModelElement
+  internalCircuit?: InternalCircuitElement
 }
 /**
  * Get the connection prop type for a component
@@ -1269,6 +1270,7 @@ export const chipProps = commonComponentProps.extend({
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
   spiceModel: spicemodelElement.optional(),
+  internalCircuit: internalCircuitElement.optional(),
 })
 ```
 

@@ -20,7 +20,7 @@ import {
 } from "lib/common/schematicPinLabel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
-import type { ReactElement } from "react"
+import { isValidElement, type ReactElement } from "react"
 import { z } from "zod"
 
 export type PinLabelsProp<
@@ -39,6 +39,7 @@ export interface PinCompatibleVariant {
 }
 
 export type SpiceModelElement = ReactElement<SpiceModelProps>
+export type InternalCircuitElement = ReactElement
 
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
@@ -72,6 +73,11 @@ export interface ChipPropsSU<
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
   spiceModel?: SpiceModelElement
+  /**
+   * Functional components contained inside this physical chip package, used
+   * to describe its internal schematic and simulation behavior.
+   */
+  internalCircuit?: InternalCircuitElement
 }
 
 export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
@@ -139,6 +145,8 @@ const spicemodelElement = z.custom<SpiceModelElement>(
   (v) => !!v && typeof v === "object" && "type" in v && "props" in v,
 )
 
+const internalCircuitElement = z.custom<InternalCircuitElement>(isValidElement)
+
 export const pinLabelsProp = z.record(
   schematicPinLabel,
   schematicPinLabel
@@ -173,6 +181,7 @@ export const chipProps = commonComponentProps.extend({
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
   spiceModel: spicemodelElement.optional(),
+  internalCircuit: internalCircuitElement.optional(),
 })
 
 /**

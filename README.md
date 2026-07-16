@@ -449,6 +449,11 @@ export interface ChipPropsSU<
   noConnect?: readonly PinLabel[] | PinLabel[];
   connections?: Connections<PinLabel>;
   spiceModel?: SpiceModelElement;
+  /**
+   * Functional components contained inside this physical chip package, used
+   * to describe its internal schematic and simulation behavior.
+   */
+  internalCircuit?: InternalCircuitElement;
 }
 ```
 

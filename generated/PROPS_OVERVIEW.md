@@ -2094,6 +2094,19 @@ export interface SchematicTextProps {
 }
 
 
+export interface SchematicUnitProps {
+  /** Unit suffix displayed with the parent component reference, such as "A". */
+  unit: string
+  /** Name of the schematic symbol used to render this unit. */
+  symbolName: string
+  /** Maps symbol port names to pin names on the parent component. */
+  pinMapping: Record<string, string>
+  schX?: string | number
+  schY?: string | number
+  schRotation?: string | number
+}
+
+
 export interface SchStyle {
   defaultPassiveSize?: "xs" | "sm" | "md" | string | number
   defaultCapacitorOrientation?: "vertical" | "none"

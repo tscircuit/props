@@ -96,6 +96,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<schematicsheet />`           | [`SchematicSheetProps`](#schematicsheetprops-schematicsheet)                               |
 | `<schematictable />`           | [`SchematicTableProps`](#schematictableprops-schematictable)                               |
 | `<schematictext />`            | [`SchematicTextProps`](#schematictextprops-schematictext)                                  |
+| `<schematicunit />`            | [`SchematicUnitProps`](#schematicunitprops-schematicunit)                                  |
 | `<silkscreencircle />`         | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                         |
 | `<silkscreengraphic />`        | [`SilkscreenGraphicProps`](#silkscreengraphicprops-silkscreengraphic)                      |
 | `<silkscreenline />`           | [`SilkscreenLineProps`](#silkscreenlineprops-silkscreenline)                               |
@@ -1701,6 +1702,24 @@ export interface SchematicTextProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)
+
+### SchematicUnitProps `<schematicunit />`
+
+```ts
+export interface SchematicUnitProps {
+  /** Unit suffix displayed with the parent component reference, such as "A". */
+  unit: string;
+  /** Name of the schematic symbol used to render this unit. */
+  symbolName: string;
+  /** Maps symbol port names to pin names on the parent component. */
+  pinMapping: Record<string, string>;
+  schX?: string | number;
+  schY?: string | number;
+  schRotation?: string | number;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-unit.ts)
 
 ### SilkscreenCircleProps `<silkscreencircle />`
 

@@ -3733,6 +3733,36 @@ export interface SchematicTextProps {
 }
 ```
 
+### schematic-unit
+
+```typescript
+/**
+ * Props for an independently placeable schematic representation of one part
+ * of a parent physical component.
+ */
+export interface SchematicUnitProps {
+  unit: string
+  symbolName: string
+  pinMapping: Record<string, string>
+  schX?: string | number
+  schY?: string | number
+  schRotation?: string | number
+}
+/** Maps symbol port names to pin names on the parent component. */
+export const schematicUnitProps = z.object({
+  unit: z.string().min(1),
+  symbolName: z.string().min(1),
+  pinMapping: z
+    .record(z.string().min(1), z.string().min(1))
+    .refine((mapping) => Object.keys(mapping).length > 0, {
+      message: "pinMapping must contain at least one symbol port mapping",
+    }),
+  schX: distance.optional(),
+  schY: distance.optional(),
+  schRotation: rotation.optional(),
+})
+```
+
 ### silkscreen-circle
 
 ```typescript

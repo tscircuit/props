@@ -41,6 +41,12 @@ export interface AnalogSimulationProps {
 }
 
 
+export interface AssemblyDeviceProps {
+  /** Product-level assembly identity. */
+  name?: string
+}
+
+
 export interface AutorouterConfig {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"

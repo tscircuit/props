@@ -1,5 +1,6 @@
 export * from "./common/direction"
 export * from "./common/commonShape"
+export * from "./assembly"
 export * from "./enclosure"
 export * from "./common/portHints"
 export * from "./common/layout"

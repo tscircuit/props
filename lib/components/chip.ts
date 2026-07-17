@@ -68,6 +68,7 @@ export interface ChipPropsSU<
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
+  schShowInternalCircuit?: boolean
   internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
   /**

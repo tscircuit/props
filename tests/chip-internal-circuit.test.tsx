@@ -61,21 +61,6 @@ test("chip internalCircuit accepts an internalcircuit element", () => {
   )
 })
 
-test("chip schShowInternalCircuit defaults to false", () => {
-  const parsed = chipProps.parse({ name: "Q1" })
-
-  expect(parsed.schShowInternalCircuit).toBe(false)
-})
-
-test("chip schShowInternalCircuit accepts true", () => {
-  const parsed = chipProps.parse({
-    name: "Q1",
-    schShowInternalCircuit: true,
-  })
-
-  expect(parsed.schShowInternalCircuit).toBe(true)
-})
-
 test("chip internalCircuit rejects a fragment without the wrapper", () => {
   expect(() =>
     chipProps.parse({

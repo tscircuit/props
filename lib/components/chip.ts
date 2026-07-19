@@ -68,6 +68,11 @@ export interface ChipPropsSU<
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
+  /**
+   * Whether to show the components from `internalCircuit` in the schematic.
+   * When false, the chip's schematic box is shown instead.
+   * @default false
+   */
   schShowInternalCircuit?: boolean
   internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
@@ -185,6 +190,7 @@ export const chipProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   noSchematicRepresentation: z.boolean().optional(),
+  schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
   spiceModel: spicemodelElement.optional(),

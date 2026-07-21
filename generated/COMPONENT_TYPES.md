@@ -1007,19 +1007,20 @@ export const autoroutingPhaseProps = z
 ### battery
 
 ```typescript
-/** @deprecated use battery_capacity from circuit-json when circuit-json is updated */
 export interface BatteryProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   capacity?: number | string
   voltage?: number | string
   standard?: "AA" | "AAA" | "9V" | "CR2032" | "18650" | "C"
   schOrientation?: SchematicOrientation
+  connections?: Connections<BatteryPinLabels>
 }
 export const batteryProps = commonComponentProps.extend({
   capacity: capacity.optional(),
   voltage: voltage.optional(),
   standard: z.enum(["AA", "AAA", "9V", "CR2032", "18650", "C"]).optional(),
   schOrientation: schematicOrientation.optional(),
+  connections: createConnectionsProp(batteryPins).optional(),
 })
 ```
 
@@ -1223,6 +1224,7 @@ export interface ChipPropsSU<
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
+  schShowInternalCircuit?: boolean
   internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
   noConnect?: readonly PinLabel[] | PinLabel[]
@@ -1268,6 +1270,7 @@ export const chipProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   noSchematicRepresentation: z.boolean().optional(),
+  schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
   spiceModel: spicemodelElement.optional(),
@@ -3490,6 +3493,11 @@ export interface SchematicArcProps {
 ```typescript
 export const schematicBoxProps = z
   .object({
+    name: z.string().optional(),
+    chipRef: z.string().optional(),
+    pinLabels: pinLabelsProp.optional(),
+    schPinArrangement: schematicPinArrangement.optional(),
+
     schX: distance.optional(),
     schY: distance.optional(),
     width: distance.optional(),
@@ -3510,6 +3518,10 @@ export const schematicBoxProps = z
     strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
   })
 export interface SchematicBoxProps {
+  name?: string
+  chipRef?: string
+  pinLabels?: PinLabelsProp
+  schPinArrangement?: SchematicPinArrangement
   schX?: Distance
   schY?: Distance
   width?: Distance

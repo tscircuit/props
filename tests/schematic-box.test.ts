@@ -20,6 +20,39 @@ test("should parse schematic box with schX and schY", () => {
   expect(parsed.height).toBe(30)
 })
 
+test("should parse schematic box chip reference props", () => {
+  const raw: SchematicBoxProps = {
+    name: "U1A",
+    chipRef: "U1",
+    width: 2.245,
+    height: 1,
+    pinLabels: {
+      pin1: "VCC",
+      pin2: "GND",
+    },
+    schPinArrangement: {
+      leftSide: ["pin1", "pin2"],
+      rightSide: [],
+    },
+  }
+
+  const parsed = schematicBoxProps.parse(raw)
+
+  expect(parsed.name).toBe("U1A")
+  expect(parsed.chipRef).toBe("U1")
+  expect(parsed.pinLabels).toEqual({ pin1: "VCC", pin2: "GND" })
+  expect(parsed.schPinArrangement).toEqual({
+    leftSide: {
+      pins: ["pin1", "pin2"],
+      direction: "top-to-bottom",
+    },
+    rightSide: {
+      pins: [],
+      direction: "top-to-bottom",
+    },
+  })
+})
+
 test("should parse schematic box with only overlay", () => {
   const raw: SchematicBoxProps = {
     overlay: ["custom"],

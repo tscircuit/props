@@ -278,6 +278,7 @@ export interface BatteryProps<
   voltage?: number | string;
   standard?: "AA" | "AAA" | "9V" | "CR2032" | "18650" | "C";
   schOrientation?: SchematicOrientation;
+  connections?: Connections<BatteryPinLabels>;
 }
 ```
 
@@ -441,6 +442,12 @@ export interface ChipPropsSU<
   schWidth?: Distance;
   schHeight?: Distance;
   noSchematicRepresentation?: boolean;
+  /**
+   * Whether to show the components from `internalCircuit` in the schematic.
+   * When false, the chip's schematic box is shown instead.
+   * @default false
+   */
+  schShowInternalCircuit?: boolean;
   internallyConnectedPins?: (string | number)[][];
   externallyConnectedPins?: string[][];
   /**
@@ -1534,6 +1541,10 @@ export interface SchematicArcProps {
 
 ```ts
 export interface SchematicBoxProps {
+  name?: string;
+  chipRef?: string;
+  pinLabels?: PinLabelsProp;
+  schPinArrangement?: SchematicPinArrangement;
   schX?: Distance;
   schY?: Distance;
   width?: Distance;

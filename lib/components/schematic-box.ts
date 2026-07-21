@@ -1,11 +1,21 @@
 import { distance } from "circuit-json"
-import { z } from "zod"
 import { ninePointAnchor } from "lib/common/ninePointAnchor"
+import {
+  type SchematicPinArrangement,
+  schematicPinArrangement,
+} from "lib/common/schematicPinDefinitions"
+import { type PinLabelsProp, pinLabelsProp } from "lib/components/chip"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Distance } from "lib/common/distance"
+import { z } from "zod"
 
 export const schematicBoxProps = z
   .object({
+    name: z.string().optional(),
+    chipRef: z.string().optional(),
+    pinLabels: pinLabelsProp.optional(),
+    schPinArrangement: schematicPinArrangement.optional(),
+
     schX: distance.optional(),
     schY: distance.optional(),
     width: distance.optional(),
@@ -49,6 +59,10 @@ export const schematicBoxProps = z
   )
 
 export interface SchematicBoxProps {
+  name?: string
+  chipRef?: string
+  pinLabels?: PinLabelsProp
+  schPinArrangement?: SchematicPinArrangement
   schX?: Distance
   schY?: Distance
   width?: Distance

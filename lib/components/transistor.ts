@@ -33,11 +33,11 @@ export const transistorProps = commonComponentProps.extend({
 
 export const transistorPins = [
   "pin1",
-  "emitter",
-  "pin2",
   "collector",
-  "pin3",
+  "pin2",
   "base",
+  "pin3",
+  "emitter",
 ] as const
 export type TransistorPinLabels = (typeof transistorPins)[number]
 

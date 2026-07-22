@@ -26,6 +26,20 @@ test("projectConfig only includes project-specific fields", () => {
     includeBoardFiles: ["boards/main.circuit.tsx"],
     snapshotsDir: "custom/snapshots",
     defaultSpiceEngine: "spicey",
+    pcbDisabled: true,
+    schematicDisabled: true,
+  })
+})
+
+test("projectConfig includes disabled rendering flags when provided", () => {
+  const config = projectConfig.parse({
+    pcbDisabled: true,
+    schematicDisabled: false,
+  })
+
+  expect(config).toEqual({
+    pcbDisabled: true,
+    schematicDisabled: false,
   })
 })
 

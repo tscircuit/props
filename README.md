@@ -2164,6 +2164,8 @@ export interface ProjectConfig extends Pick<
   | "includeBoardFiles"
   | "snapshotsDir"
   | "defaultSpiceEngine"
+  | "pcbDisabled"
+  | "schematicDisabled"
 > {}
 ```
 

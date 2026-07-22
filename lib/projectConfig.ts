@@ -13,6 +13,8 @@ export interface ProjectConfig
     | "includeBoardFiles"
     | "snapshotsDir"
     | "defaultSpiceEngine"
+    | "pcbDisabled"
+    | "schematicDisabled"
   > {}
 
 const platformConfigObject = platformConfig as z.ZodObject<any>
@@ -26,6 +28,8 @@ export const projectConfig = platformConfigObject.pick({
   includeBoardFiles: true,
   snapshotsDir: true,
   defaultSpiceEngine: true,
+  pcbDisabled: true,
+  schematicDisabled: true,
 }) as z.ZodType<ProjectConfig>
 
 expectTypesMatch<ProjectConfig, z.infer<typeof projectConfig>>(true)

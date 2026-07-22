@@ -1547,6 +1547,7 @@ export interface SchematicBoxProps {
   schPinArrangement?: SchematicPinArrangement;
   schX?: Distance;
   schY?: Distance;
+  schSheetName?: string;
   width?: Distance;
   height?: Distance;
   overlay?: string[];

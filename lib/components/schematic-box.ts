@@ -18,6 +18,7 @@ export const schematicBoxProps = z
 
     schX: distance.optional(),
     schY: distance.optional(),
+    schSheetName: z.string().optional(),
     width: distance.optional(),
     height: distance.optional(),
     overlay: z.array(z.string()).optional(),
@@ -65,6 +66,7 @@ export interface SchematicBoxProps {
   schPinArrangement?: SchematicPinArrangement
   schX?: Distance
   schY?: Distance
+  schSheetName?: string
   width?: Distance
   height?: Distance
   overlay?: string[]

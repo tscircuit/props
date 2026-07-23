@@ -95,6 +95,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<schematicrow />`             | [`SchematicRowProps`](#schematicrowprops-schematicrow)                                     |
 | `<schematicsection />`         | [`SchematicSectionProps`](#schematicsectionprops-schematicsection)                         |
 | `<schematicsheet />`           | [`SchematicSheetProps`](#schematicsheetprops-schematicsheet)                               |
+| `<schematicsymbol />`          | [`SchematicSymbolProps`](#schematicsymbolprops-schematicsymbol)                            |
 | `<schematictable />`           | [`SchematicTableProps`](#schematictableprops-schematictable)                               |
 | `<schematictext />`            | [`SchematicTextProps`](#schematictextprops-schematictext)                                  |
 | `<silkscreencircle />`         | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                         |
@@ -1690,6 +1691,21 @@ export interface SchematicSheetProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-sheet.ts)
+
+### SchematicSymbolProps `<schematicsymbol />`
+
+```ts
+export interface SchematicSymbolProps extends CommonComponentProps {
+  /** Selector for the physical component represented by this symbol. */
+  chipRef?: string;
+  /** Name of the symbol from the schematic-symbol library. */
+  symbolName: string;
+  /** Maps symbol port labels to physical component port selectors. */
+  connections: Connections;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-symbol.ts)
 
 ### SchematicTableProps `<schematictable />`
 

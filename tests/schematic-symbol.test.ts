@@ -4,7 +4,6 @@ import { schematicSymbolProps } from "lib/components/schematic-symbol"
 test("schematic symbol parses a physical component projection", () => {
   const parsed = schematicSymbolProps.parse({
     name: "A",
-    displayName: "Q1A",
     chipRef: ".Q1",
     symbolName: "n_channel_e_mosfet_transistor",
     connections: {
@@ -21,7 +20,6 @@ test("schematic symbol parses a physical component projection", () => {
 
   expect(parsed).toEqual({
     name: "A",
-    displayName: "Q1A",
     chipRef: ".Q1",
     symbolName: "n_channel_e_mosfet_transistor",
     connections: {
@@ -37,10 +35,9 @@ test("schematic symbol parses a physical component projection", () => {
   })
 })
 
-test("schematic symbol accepts standard component props and optional chipRef", () => {
+test("schematic symbol allows an optional chipRef", () => {
   const parsed = schematicSymbolProps.parse({
     name: "B",
-    displayName: "Q1B",
     symbolName: "n_channel_e_mosfet_transistor",
     connections: {
       gate: ".Q1 > .G2",
@@ -49,7 +46,6 @@ test("schematic symbol accepts standard component props and optional chipRef", (
     },
   })
 
-  expect(parsed.displayName).toBe("Q1B")
   expect(parsed.chipRef).toBeUndefined()
 })
 

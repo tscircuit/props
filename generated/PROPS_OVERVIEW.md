@@ -2101,13 +2101,20 @@ export interface SchematicSheetProps {
 }
 
 
-export interface SchematicSymbolProps extends CommonComponentProps {
+export interface SchematicSymbolProps {
+  /** Stable name for this representation, such as `A` or `B`. */
+  name: string
   /** Selector for the physical component represented by this symbol. */
   chipRef?: string
   /** Name of the symbol from the schematic-symbol library. */
   symbolName: string
   /** Maps symbol port labels to physical component port selectors. */
   connections: Connections
+  schX?: Distance
+  schY?: Distance
+  schRotation?: number | string
+  schSectionName?: string
+  schSheetName?: string
 }
 
 

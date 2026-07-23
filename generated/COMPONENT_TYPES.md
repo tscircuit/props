@@ -3692,11 +3692,13 @@ export interface SchematicSectionProps {
   displayName?: string
   name: string
   sectionTitleFontSize?: number | string
+  children?: any
 }
 export const schematicSectionProps = z.object({
   displayName: z.string().optional(),
   name: z.string(),
   sectionTitleFontSize: distance.optional(),
+  children: z.any().optional(),
 })
 ```
 

@@ -1672,6 +1672,7 @@ export interface SchematicSectionProps {
   displayName?: string;
   name: string;
   sectionTitleFontSize?: number | string;
+  children?: any;
 }
 ```
 

@@ -2104,6 +2104,8 @@ export interface SchematicSheetProps {
 export interface SchematicSymbolProps {
   /** Stable name for this representation, such as `A` or `B`. */
   name: string
+  /** Optional human-facing name shown in the schematic. */
+  displayName?: string
   /** Selector for the physical component represented by this symbol. */
   chipRef?: string
   /** Name of the symbol from the schematic-symbol library. */

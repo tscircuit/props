@@ -3733,6 +3733,7 @@ export const schematicSheetProps = z.object({
  */
 export interface SchematicSymbolProps {
   name: string
+  displayName?: string
   chipRef?: string
   symbolName: string
   connections: Connections
@@ -3745,6 +3746,7 @@ export interface SchematicSymbolProps {
 /** Maps symbol port labels to physical component port selectors. */
 export const schematicSymbolProps = z.object({
   name: z.string().min(1),
+  displayName: z.string().optional(),
   chipRef: z.string().min(1).optional(),
   symbolName: z.string().min(1),
   connections: schematicSymbolConnections,

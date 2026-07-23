@@ -3500,6 +3500,7 @@ export const schematicBoxProps = z
 
     schX: distance.optional(),
     schY: distance.optional(),
+    schSectionName: z.string().optional(),
     schSheetName: z.string().optional(),
     width: distance.optional(),
     height: distance.optional(),
@@ -3525,6 +3526,7 @@ export interface SchematicBoxProps {
   schPinArrangement?: SchematicPinArrangement
   schX?: Distance
   schY?: Distance
+  schSectionName?: string
   schSheetName?: string
   width?: Distance
   height?: Distance

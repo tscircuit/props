@@ -2111,7 +2111,7 @@ export interface SchematicSymbolProps {
   /** Name of the symbol from the schematic-symbol library. */
   symbolName: string
   /** Maps symbol port labels to physical component port selectors. */
-  connections: Connections
+  connections?: Connections
   schX?: Distance
   schY?: Distance
   schRotation?: number | string

@@ -24,7 +24,7 @@ export interface SchematicSymbolProps {
   /** Name of the symbol from the schematic-symbol library. */
   symbolName: string
   /** Maps symbol port labels to physical component port selectors. */
-  connections: Connections
+  connections?: Connections
   schX?: Distance
   schY?: Distance
   schRotation?: number | string
@@ -44,7 +44,7 @@ export const schematicSymbolProps = z.object({
   displayName: z.string().optional(),
   chipRef: z.string().min(1).optional(),
   symbolName: z.string().min(1),
-  connections: schematicSymbolConnections,
+  connections: schematicSymbolConnections.optional(),
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),

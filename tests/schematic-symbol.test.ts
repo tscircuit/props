@@ -37,21 +37,17 @@ test("schematic symbol parses a physical component projection", () => {
   })
 })
 
-test("schematic symbol allows an optional chipRef", () => {
+test("schematic symbol allows optional chipRef and connections", () => {
   const parsed = schematicSymbolProps.parse({
     name: "B",
     symbolName: "n_channel_e_mosfet_transistor",
-    connections: {
-      gate: ".Q1 > .G2",
-      source: ".Q1 > .S2",
-      drain: ".Q1 > .D2",
-    },
   })
 
   expect(parsed.chipRef).toBeUndefined()
+  expect(parsed.connections).toBeUndefined()
 })
 
-test("schematic symbol requires at least one connection", () => {
+test("schematic symbol rejects an empty connections map", () => {
   expect(
     schematicSymbolProps.safeParse({
       name: "A",

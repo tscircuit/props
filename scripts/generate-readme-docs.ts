@@ -5,6 +5,22 @@ import { execSync } from "node:child_process"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+const namespacedAnalogComponentNames = new Set([
+  "analogacsweepsimulation",
+  "analogdcoperatingpointsimulation",
+  "analogdcsweepsimulation",
+  "analogsweepparameter",
+  "analogtransientsimulation",
+])
+
+function getComponentTagName(componentName: string): string {
+  const lowercaseComponentName = componentName.toLowerCase()
+  if (!namespacedAnalogComponentNames.has(lowercaseComponentName)) {
+    return lowercaseComponentName
+  }
+  return lowercaseComponentName.replace("analog", "analog.")
+}
+
 // Read all TypeScript files in the lib/components directory
 function getComponentFiles(dir: string): string[] {
   const files: string[] = []
@@ -125,9 +141,10 @@ function generateComponentsTable(
   }[],
 ): string {
   const rows = components.map((comp) => {
+    const componentTagName = getComponentTagName(comp.name)
     // Link to the section in the document instead of GitHub
     const sectionLink = `#${comp.props.toLowerCase()}-${comp.name.toLowerCase()}`
-    return `| \`<${comp.name.toLowerCase()} />\` | [\`${comp.props}\`](${sectionLink}) |`
+    return `| \`<${componentTagName} />\` | [\`${comp.props}\`](${sectionLink}) |`
   })
 
   return `
@@ -241,7 +258,7 @@ function generateInterfaceDefinitions(
     const githubPath = `https://github.com/tscircuit/props/blob/main/${comp.filePath}`
     const componentHeader =
       comp.name !== "Common" && comp.name !== "Group"
-        ? ` \`<${comp.name.toLowerCase()} />\``
+        ? ` \`<${getComponentTagName(comp.name)} />\``
         : ""
 
     return `

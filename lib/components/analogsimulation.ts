@@ -1,6 +1,7 @@
 import { ms } from "circuit-json"
 import type { AutocompleteString } from "lib/common/autocomplete"
 import { expectTypesMatch } from "lib/typecheck"
+import type { ReactNode } from "react"
 import { z } from "zod"
 
 export interface AnalogSimulationProps {
@@ -31,6 +32,27 @@ const spiceOptions = z.object({
   abstol: z.union([z.number(), z.string()]).optional(),
   vntol: z.union([z.number(), z.string()]).optional(),
 })
+
+export interface AnalogAnalysisSimulationBaseProps {
+  /** Stable identity for the simulation experiment. */
+  name?: string
+  /** SPICE implementation used to run this analysis. */
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  /** Numerical solver settings forwarded to the selected SPICE engine. */
+  spiceOptions?: SpiceOptions
+  /** Render each probe with an independent vertical graph scale. */
+  graphIndependentAxes?: boolean
+  /** Optional nested sweep parameter for repeated analysis runs. */
+  children?: ReactNode
+}
+
+export const analogAnalysisSimulationBaseProps = {
+  name: z.string().optional(),
+  spiceEngine: spiceEngine.optional(),
+  spiceOptions: spiceOptions.optional(),
+  graphIndependentAxes: z.boolean().optional(),
+  children: z.custom<ReactNode>().optional(),
+}
 
 export const analogSimulationProps = z.object({
   name: z.string().optional(),

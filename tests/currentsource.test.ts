@@ -95,6 +95,17 @@ test("should parse AC source with DC offset", () => {
   expect(parsed.peakToPeakCurrent).toBe(5)
 })
 
+test("should parse small-signal AC source props", () => {
+  const rawProps: CurrentSourceProps = {
+    name: "is_ac",
+    acMagnitude: "2A",
+    acPhase: "90deg",
+  }
+  const parsed = currentSourceProps.parse(rawProps)
+  expect(parsed.acMagnitude).toBe(2)
+  expect(parsed.acPhase).toBe(90)
+})
+
 test("should parse duty cycle", () => {
   const rawProps: CurrentSourceProps = {
     name: "is_duty",

@@ -29,6 +29,80 @@ export interface AmmeterProps<PinLabel extends string = string>
 }
 
 
+export interface AnalogAcSweepSimulationProps
+  extends AnalogAnalysisSimulationBaseProps {
+  /** Frequency spacing used by the AC analysis. */
+  sweepType: "linear" | "decade" | "octave"
+  /** First positive frequency. Raw numbers are hertz. */
+  startFrequency: number | string
+  /** Last frequency, which must be greater than startFrequency. Raw numbers are hertz. */
+  stopFrequency: number | string
+  /** Samples per decade or octave; required for non-linear sweeps. */
+  samplesPerInterval?: number
+  /** Total samples; required for linear sweeps. */
+  sampleCount?: number
+}
+
+
+export interface AnalogAnalysisSimulationBaseProps {
+  /** Stable identity for the simulation experiment. */
+  name?: string
+  /** SPICE implementation used to run this analysis. */
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  /** Numerical solver settings forwarded to the selected SPICE engine. */
+  spiceOptions?: SpiceOptions
+  /** Render each probe with an independent vertical graph scale. */
+  graphIndependentAxes?: boolean
+  /** Optional nested sweep parameter for repeated analysis runs. */
+  children?: ReactNode
+}
+
+
+export interface AnalogCapacitanceSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "capacitance"
+  /** Selector for the capacitor whose simulation-only capacitance is swept. */
+  capacitorRef: string
+}
+
+
+export interface AnalogCurrentSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "current"
+  /** Selector for the current source whose simulation-only current is swept. */
+  currentSourceRef: string
+}
+
+
+export interface AnalogDcSweepSimulationProps
+  extends AnalogAnalysisSimulationBaseProps {
+  /** Selector for the independent voltage or current source being swept. */
+  sweepSource: string
+  /** First source level. Raw numbers use volts or amperes according to the source. */
+  sweepStart: number | string
+  /** Last source level. Raw numbers use volts or amperes according to the source. */
+  sweepStop: number | string
+  /** Nonzero increment directed from sweepStart toward sweepStop. */
+  sweepStep: number | string
+}
+
+
+export interface AnalogInductanceSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "inductance"
+  /** Selector for the inductor whose simulation-only inductance is swept. */
+  inductorRef: string
+}
+
+
+export interface AnalogResistanceSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "resistance"
+  /** Selector for the resistor whose simulation-only resistance is swept. */
+  resistorRef: string
+}
+
+
 export interface AnalogSimulationProps {
   name?: string
   simulationType?: "spice_transient_analysis"
@@ -38,6 +112,25 @@ export interface AnalogSimulationProps {
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
+}
+
+
+export interface AnalogTransientSimulationProps
+  extends AnalogAnalysisSimulationBaseProps {
+  /** Simulation duration. Raw numbers are milliseconds. Defaults to 10ms. */
+  duration?: number | string
+  /** Time at which recording starts. Raw numbers are milliseconds. Defaults to 0ms. */
+  startTime?: number | string
+  /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
+  timePerStep?: number | string
+}
+
+
+export interface AnalogVoltageSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "voltage"
+  /** Net whose simulation-only voltage is swept. */
+  net: string
 }
 
 
@@ -703,6 +796,10 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  /** Small-signal AC magnitude. Raw numbers are amperes. */
+  acMagnitude?: number | string
+  /** Small-signal AC phase. Raw numbers are degrees. */
+  acPhase?: number | string
   connections?: Connections<CurrentSourcePinLabels>
 }
 
@@ -2439,6 +2536,10 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   fallTime?: number | string
   pulseWidth?: number | string
   period?: number | string
+  /** Small-signal AC magnitude. Raw numbers are volts. */
+  acMagnitude?: number | string
+  /** Small-signal AC phase. Raw numbers are degrees. */
+  acPhase?: number | string
   connections?: Connections<VoltageSourcePinLabels>
 }
 

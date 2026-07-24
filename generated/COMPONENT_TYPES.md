@@ -930,6 +930,67 @@ export const ammeterProps = commonComponentProps.extend({
 })
 ```
 
+### analogacsweepsimulation
+
+```typescript
+export interface AnalogAcSweepSimulationProps
+  extends AnalogAnalysisSimulationBaseProps {
+  sweepType: "linear" | "decade" | "octave"
+  startFrequency: number | string
+  stopFrequency: number | string
+  samplesPerInterval?: number
+  sampleCount?: number
+}
+/** Total samples; required for linear sweeps. */
+export const analogAcSweepSimulationProps = z
+  .object({
+    ...analogAnalysisSimulationBaseProps,
+    sweepType: z.enum(["linear", "decade", "octave"]),
+    startFrequency: frequency.refine(
+      (startFrequencyHz) => startFrequencyHz > 0,
+      "startFrequency must be positive",
+    ),
+    stopFrequency: frequency.refine(
+      (stopFrequencyHz) => stopFrequencyHz > 0,
+      "stopFrequency must be positive",
+    ),
+    samplesPerInterval: z.number().int().positive().optional(),
+    sampleCount: z.number().int().positive().optional(),
+  })
+```
+
+### analogdcoperatingpointsimulation
+
+```typescript
+export const analogDcOperatingPointSimulationProps = z.object({
+  ...analogAnalysisSimulationBaseProps,
+})
+```
+
+### analogdcsweepsimulation
+
+```typescript
+export interface AnalogDcSweepSimulationProps
+  extends AnalogAnalysisSimulationBaseProps {
+  sweepSource: string
+  sweepStart: number | string
+  sweepStop: number | string
+  sweepStep: number | string
+}
+/** Nonzero increment directed from sweepStart toward sweepStop. */
+export const analogDcSweepSimulationProps = z
+  .object({
+    ...analogAnalysisSimulationBaseProps,
+    sweepSource: z.string().min(1),
+    sweepStart: dcSweepQuantity,
+    sweepStop: dcSweepQuantity,
+    sweepStep: dcSweepQuantity.refine(
+      (sweepStep) => sweepStep !== 0,
+      "sweepStep must be nonzero",
+    ),
+  })
+```
+
 ### analogsimulation
 
 ```typescript
@@ -949,6 +1010,21 @@ export interface SpiceOptions {
   abstol?: number | string
   vntol?: number | string
 }
+export interface AnalogAnalysisSimulationBaseProps {
+  name?: string
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceOptions?: SpiceOptions
+  graphIndependentAxes?: boolean
+  children?: ReactNode
+}
+/** Optional nested sweep parameter for repeated analysis runs. */
+export const analogAnalysisSimulationBaseProps = {
+  name: z.string().optional(),
+  spiceEngine: spiceEngine.optional(),
+  spiceOptions: spiceOptions.optional(),
+  graphIndependentAxes: z.boolean().optional(),
+  children: z.custom<ReactNode>().optional(),
+}
 export const analogSimulationProps = z.object({
   name: z.string().optional(),
   simulationType: z
@@ -961,6 +1037,91 @@ export const analogSimulationProps = z.object({
   spiceOptions: spiceOptions.optional(),
   graphIndependentAxes: z.boolean().optional(),
 })
+```
+
+### analogsweepparameter
+
+```typescript
+/** Nonzero parameter increment directed from start toward stop. */
+export interface AnalogResistanceSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "resistance"
+  resistorRef: string
+}
+/** Selector for the resistor whose simulation-only resistance is swept. */
+export interface AnalogCapacitanceSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "capacitance"
+  capacitorRef: string
+}
+/** Selector for the capacitor whose simulation-only capacitance is swept. */
+export interface AnalogInductanceSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "inductance"
+  inductorRef: string
+}
+/** Selector for the inductor whose simulation-only inductance is swept. */
+export interface AnalogVoltageSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "voltage"
+  net: string
+}
+/** Net whose simulation-only voltage is swept. */
+export interface AnalogCurrentSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "current"
+  currentSourceRef: string
+}
+/** Selector for the current source whose simulation-only current is swept. */
+export const analogResistanceSweepParameterProps = z
+  .object({
+    ...createAnalogSweepCoordinateProps(resistanceSweepQuantity),
+    parameterType: z.literal("resistance"),
+    resistorRef: z.string().min(1),
+  })
+export const analogCapacitanceSweepParameterProps = z
+  .object({
+    ...createAnalogSweepCoordinateProps(capacitanceSweepQuantity),
+    parameterType: z.literal("capacitance"),
+    capacitorRef: z.string().min(1),
+  })
+export const analogInductanceSweepParameterProps = z
+  .object({
+    ...createAnalogSweepCoordinateProps(inductanceSweepQuantity),
+    parameterType: z.literal("inductance"),
+    inductorRef: z.string().min(1),
+  })
+export const analogVoltageSweepParameterProps = z
+  .object({
+    ...createAnalogSweepCoordinateProps(voltageSweepQuantity),
+    parameterType: z.literal("voltage"),
+    net: z.string().min(1),
+  })
+export const analogCurrentSweepParameterProps = z
+  .object({
+    ...createAnalogSweepCoordinateProps(currentSweepQuantity),
+    parameterType: z.literal("current"),
+    currentSourceRef: z.string().min(1),
+  })
+```
+
+### analogtransientsimulation
+
+```typescript
+export interface AnalogTransientSimulationProps
+  extends AnalogAnalysisSimulationBaseProps {
+  duration?: number | string
+  startTime?: number | string
+  timePerStep?: number | string
+}
+/** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
+export const analogTransientSimulationProps = z
+  .object({
+    ...analogAnalysisSimulationBaseProps,
+    duration: positiveMilliseconds.default("10ms"),
+    startTime: ms.default("0ms"),
+    timePerStep: positiveMilliseconds.default("0.01ms"),
+  })
 ```
 
 ### autoroutingphase
@@ -1537,8 +1698,11 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  acMagnitude?: number | string
+  acPhase?: number | string
   connections?: Connections<CurrentSourcePinLabels>
 }
+/** Small-signal AC phase. Raw numbers are degrees. */
 export const currentSourceProps = commonComponentProps.extend({
   current: current.optional(),
   frequency: frequency.optional(),
@@ -1546,6 +1710,8 @@ export const currentSourceProps = commonComponentProps.extend({
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
   dutyCycle: percentage.optional(),
+  acMagnitude: current.optional(),
+  acPhase: rotation.optional(),
   connections: createConnectionsProp(currentSourcePinLabels).optional(),
 })
 ```
@@ -4408,8 +4574,11 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   fallTime?: number | string
   pulseWidth?: number | string
   period?: number | string
+  acMagnitude?: number | string
+  acPhase?: number | string
   connections?: Connections<VoltageSourcePinLabels>
 }
+/** Small-signal AC phase. Raw numbers are degrees. */
 export const voltageSourceProps = commonComponentProps.extend({
   voltage: voltage.optional(),
   frequency: frequency.optional(),
@@ -4422,6 +4591,8 @@ export const voltageSourceProps = commonComponentProps.extend({
   fallTime: ms.optional(),
   pulseWidth: ms.optional(),
   period: ms.optional(),
+  acMagnitude: voltage.optional(),
+  acPhase: rotation.optional(),
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 ```

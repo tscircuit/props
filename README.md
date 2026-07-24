@@ -9,7 +9,7 @@ This repo is the source-of-truth for defining the React props, API changes begin
 the user (unlike [circuit-json](https://github.com/tscircuit/circuit-json) which focuses on ergonomics for a renderer)
 
 > **Zod v4 migration:** This package now requires `zod@^4` and
-> `circuit-json@^0.0.454` as peer dependencies. Schemas composed with these
+> `circuit-json@^0.0.455` as peer dependencies. Schemas composed with these
 > props must use the same Zod major; consumers that inspect raw Zod errors
 > should update to the v4 error APIs.
 

@@ -58,7 +58,12 @@ const mapResistorFootprint = (
   return `res${footprint}`
 }
 
-const resistorFootprintProp: z.ZodType<ResistorFootprint> = footprintProp
+type ResistorFootprintPropSchema = z.ZodPipe<
+  z.ZodOptional<typeof footprintProp>,
+  z.ZodTransform<ResistorFootprint, ResistorFootprint>
+>
+
+const resistorFootprintProp: ResistorFootprintPropSchema = footprintProp
   .optional()
   .transform(mapResistorFootprint)
 

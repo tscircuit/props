@@ -24,9 +24,9 @@ const positiveMilliseconds = ms.refine(
 export const analogTransientSimulationProps = z
   .object({
     ...analogAnalysisSimulationBaseProps,
-    duration: positiveMilliseconds.default("10ms"),
-    startTime: ms.default("0ms"),
-    timePerStep: positiveMilliseconds.default("0.01ms"),
+    duration: positiveMilliseconds.prefault("10ms"),
+    startTime: ms.prefault("0ms"),
+    timePerStep: positiveMilliseconds.prefault("0.01ms"),
   })
   .superRefine((simulation, context) => {
     if (

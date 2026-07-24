@@ -22,6 +22,7 @@ export type SchematicPinStyle = Record<
 >
 
 export const schematicPinStyle = z.record(
+  z.string(),
   z.object({
     marginLeft: distance.optional(),
     marginRight: distance.optional(),

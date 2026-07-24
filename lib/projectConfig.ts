@@ -30,6 +30,6 @@ export const projectConfig = platformConfigObject.pick({
   defaultSpiceEngine: true,
   pcbDisabled: true,
   schematicDisabled: true,
-}) as z.ZodType<ProjectConfig>
+}) as z.ZodType<ProjectConfig, ProjectConfig>
 
 expectTypesMatch<ProjectConfig, z.infer<typeof projectConfig>>(true)

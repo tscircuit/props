@@ -32,8 +32,8 @@ export interface FootprintProps {
    * components will be mirrored.
    *
    * Generally, you shouldn't set this except where it can help prevent
-   * confusion because you have a complex multi-layer footprint. Default is
-   * "top" and this is most intuitive.
+   * confusion because you have a complex multi-layer footprint. When omitted,
+   * the footprint leaves its original layer unspecified.
    */
   originalLayer?: LayerRef
   /**
@@ -54,7 +54,7 @@ export interface FootprintProps {
 export const footprintProps = z.object({
   children: z.any().optional(),
   name: z.string().optional(),
-  originalLayer: layer_ref.default("top").optional(),
+  originalLayer: layer_ref.optional(),
   circuitJson: z.array(z.any()).optional(),
   src: footprintProp.describe("Can be a footprint or kicad string").optional(),
   insertionDirection: footprintInsertionDirection

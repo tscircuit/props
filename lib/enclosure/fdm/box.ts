@@ -16,7 +16,7 @@ export const enclosureFdmBoxProps = z.object({
   width: distance.optional(),
   height: distance.optional(),
   depth: distance.optional(),
-  wallThickness: distance.default("2mm"),
+  wallThickness: distance.prefault("2mm"),
 })
 
 export type EnclosureFdmBoxPropsInput = z.input<typeof enclosureFdmBoxProps>

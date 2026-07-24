@@ -225,7 +225,9 @@ export interface SupplierProps {
   supplierPartNumbers?: SupplierPartNumbers
 }
 export const supplierProps = z.object({
-  supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
+  supplierPartNumbers: z
+    .partialRecord(supplier_name, z.array(z.string()))
+    .optional(),
 })
 
 expectTypesMatch<SupplierProps, z.input<typeof supplierProps>>(true)

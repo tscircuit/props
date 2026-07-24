@@ -110,7 +110,7 @@ export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
 }
 export const cadModelJscad = cadModelBase.extend({
-  jscad: z.record(z.any()),
+  jscad: z.record(z.string(), z.any()),
 })
 
 export type CadModelProp =

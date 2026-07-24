@@ -31,9 +31,9 @@ const connectionTarget = z
   .or(z.array(z.string()).readonly())
   .or(z.array(z.string()))
 
-const connectionsProp = z.record(diodeConnectionKeys, connectionTarget)
+const connectionsProp = z.partialRecord(diodeConnectionKeys, connectionTarget)
 
-const diodePinLabelsProp = z.record(
+const diodePinLabelsProp = z.partialRecord(
   z.enum(diodePins),
   schematicPinLabel
     .or(z.array(schematicPinLabel).readonly())
@@ -79,7 +79,7 @@ export const diodeProps = commonComponentProps
         message: "Exactly one diode variant must be enabled",
         path: [],
       })
-      return z.INVALID
+      return
     }
   })
   .transform((data) => {

@@ -94,7 +94,7 @@ export interface CadModelJscad extends CadModelBase {
   jscad: Record<string, any>
 }
 export const cadModelJscad = cadModelBase.extend({
-  jscad: z.record(z.any()),
+  jscad: z.record(z.string(), z.any()),
 })
 export const cadModelProp = z.union([
   z.null(),
@@ -143,7 +143,7 @@ export const circleShapeProps = z.object({
 export const createConnectionsProp = <T extends readonly [string, ...string[]]>(
   labels: T,
 ) => {
-  return z.record(z.enum(labels), connectionTarget)
+  return z.partialRecord(z.enum(labels), connectionTarget)
 }
 ```
 
@@ -561,7 +561,9 @@ export interface SupplierProps {
   supplierPartNumbers?: SupplierPartNumbers
 }
 export const supplierProps = z.object({
-  supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
+  supplierPartNumbers: z
+    .partialRecord(supplier_name, z.array(z.string()))
+    .optional(),
 })
 export interface CommonComponentProps<PinLabel extends string = string>
   extends CommonLayoutProps {
@@ -878,6 +880,7 @@ export type SchematicPinStyle = Record<
   }
 /** @deprecated use marginBottom */
 export const schematicPinStyle = z.record(
+  z.string(),
   z.object({
     marginLeft: distance.optional(),
     marginRight: distance.optional(),
@@ -900,7 +903,7 @@ export const url = z.preprocess((value) => {
   }
 
   return value
-}, z.string()) as z.ZodType<string, z.ZodTypeDef, string>
+}, z.string()) as unknown as z.ZodType<string, string>
 ```
 
 ## Available Component Types
@@ -1118,9 +1121,9 @@ export interface AnalogTransientSimulationProps
 export const analogTransientSimulationProps = z
   .object({
     ...analogAnalysisSimulationBaseProps,
-    duration: positiveMilliseconds.default("10ms"),
-    startTime: ms.default("0ms"),
-    timePerStep: positiveMilliseconds.default("0.01ms"),
+    duration: positiveMilliseconds.prefault("10ms"),
+    startTime: ms.prefault("0ms"),
+    timePerStep: positiveMilliseconds.prefault("0.01ms"),
   })
 ```
 
@@ -1290,11 +1293,11 @@ export interface CadAssemblyProps {
    * components will be mirrored.
    *
    * Generally, you shouldn't set this except where it can help prevent
-   * confusion because you have a complex multi-layer assembly. Default is
-   * "top" and this is most intuitive.
+   * confusion because you have a complex multi-layer assembly. When omitted,
+   * the assembly leaves its original layer unspecified.
    */
 export const cadassemblyProps = z.object({
-  originalLayer: layer_ref.default("top").optional(),
+  originalLayer: layer_ref.optional(),
   children: z.any().optional(),
 })
 ```
@@ -1412,7 +1415,9 @@ export type ChipConnections<T extends (props: ChipProps<any>) => any> = {
 }
 export const pinCompatibleVariant = z.object({
   manufacturerPartNumber: z.string().optional(),
-  supplierPartNumber: z.record(supplier_name, z.array(z.string())).optional(),
+  supplierPartNumber: z
+    .partialRecord(supplier_name, z.array(z.string()))
+    .optional(),
 })
 export const chipProps = commonComponentProps.extend({
   manufacturerPartNumber: z.string().optional(),
@@ -1996,7 +2001,7 @@ export interface FootprintProps {
 export const footprintProps = z.object({
   children: z.any().optional(),
   name: z.string().optional(),
-  originalLayer: layer_ref.default("top").optional(),
+  originalLayer: layer_ref.optional(),
   circuitJson: z.array(z.any()).optional(),
   src: footprintProp.describe("Can be a footprint or kicad string").optional(),
   insertionDirection: footprintInsertionDirection
@@ -4076,7 +4081,7 @@ export const silkscreenPathProps = pcbLayoutProps
 export const silkscreenRectProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
-    filled: z.boolean().default(true).optional(),
+    filled: z.boolean().optional(),
     stroke: z.enum(["dashed", "solid", "none"]).optional(),
     strokeWidth: distance.optional(),
     width: distance,
@@ -4370,13 +4375,11 @@ export interface SymbolProps {
    * The facing direction that the symbol is designed for. If you set this to "right",
    * then it means the children were intended to represent the symbol facing right.
    * Generally, you shouldn't set this except where it can help prevent confusion
-   * because you have a complex symbol. Default is "right" and this is most intuitive.
+   * because you have a complex symbol. When omitted, the symbol leaves its
+   * original facing direction unspecified.
    */
 export const symbolProps = z.object({
-  originalFacingDirection: z
-    .enum(["up", "down", "left", "right"])
-    .default("right")
-    .optional(),
+  originalFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   width: distance.optional(),
   height: distance.optional(),
   name: z.string().optional(),

@@ -453,14 +453,12 @@ export const autorouterPreset = z.union([
 ])
 
 const autorouterString = z.string() as z.ZodType<
+  AutocompleteString<AutorouterPreset>,
   AutocompleteString<AutorouterPreset>
 >
 
-export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
-  autorouterConfig,
-  autorouterPreset,
-  autorouterString,
-])
+export const autorouterProp: z.ZodType<AutorouterProp, AutorouterProp> =
+  z.union([autorouterConfig, autorouterPreset, autorouterString])
 
 export const autorouterEffortLevel = z.enum(["1x", "2x", "5x", "10x", "100x"])
 
@@ -637,7 +635,9 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 
-export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
+export const partsEngine = z.custom<PartsEngine>(
+  (value) => typeof value === "object" && value !== null && "findPart" in value,
+)
 
 export const subcircuitGroupProps = baseGroupProps.extend({
   manualEdits: manual_edits_file.optional(),

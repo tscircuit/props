@@ -29,9 +29,9 @@ export const pcbSxValue = z.object({
   visibility: z.enum(["hidden", "visible", "inherit"]).optional(),
 })
 
-export const pcbSx = z.record(
-  z.string(),
-  pcbSxValue,
-) as unknown as z.ZodType<PcbSx>
+export const pcbSx = z.record(z.string(), pcbSxValue) as unknown as z.ZodType<
+  PcbSx,
+  PcbSx
+>
 
 expectTypesMatch<PcbSx, z.input<typeof pcbSx>>(true)

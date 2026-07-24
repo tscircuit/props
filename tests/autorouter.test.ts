@@ -5,6 +5,7 @@ import {
   subcircuitGroupPropsWithBool,
   type RoutingTolerances,
 } from "../lib/components/group"
+import { platformConfig } from "../lib/platformConfig"
 
 test("supports freerouting preset", () => {
   const result = autorouterProp.parse("freerouting")
@@ -89,4 +90,26 @@ test("supports autorouter version v6", () => {
     autorouterVersion: "v6",
   })
   expect(result.autorouterVersion).toBe("v6")
+})
+
+test("validates async platform autorouter factories", async () => {
+  const config = platformConfig.parse({
+    autorouterMap: {
+      local: {
+        createAutorouter: async () => ({
+          run: async () => undefined,
+          getOutputSimpleRouteJson: async () => ({ routes: [] }),
+        }),
+      },
+    },
+  })
+  const createAutorouter = config.autorouterMap?.local?.createAutorouter
+
+  if (!createAutorouter) {
+    throw new Error("expected local autorouter factory")
+  }
+
+  const autorouter = await createAutorouter({})
+  await autorouter.run()
+  expect(await autorouter.getOutputSimpleRouteJson()).toEqual({ routes: [] })
 })

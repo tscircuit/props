@@ -167,12 +167,10 @@ const inferPlatedHoleShapeAndDefaults = (rawProps: unknown): unknown => {
   return props
 }
 
-const distanceHiddenUndefined = z
-  .custom<z.input<typeof distance>>()
-  .transform((a) => {
-    if (a === undefined) return undefined
-    return distance.parse(a)
-  })
+const distanceHiddenUndefined = distance.optional() as unknown as z.ZodType<
+  Distance,
+  z.input<typeof distance>
+>
 
 const platedHolePropsByShape = z
   .discriminatedUnion("shape", [

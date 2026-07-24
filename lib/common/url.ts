@@ -6,4 +6,4 @@ export const url = z.preprocess((value) => {
   }
 
   return value
-}, z.string()) as z.ZodType<string, z.ZodTypeDef, string>
+}, z.string()) as unknown as z.ZodType<string, string>

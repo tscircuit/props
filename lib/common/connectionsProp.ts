@@ -8,5 +8,5 @@ export const connectionTarget = z
 export const createConnectionsProp = <T extends readonly [string, ...string[]]>(
   labels: T,
 ) => {
-  return z.record(z.enum(labels), connectionTarget)
+  return z.partialRecord(z.enum(labels), connectionTarget)
 }

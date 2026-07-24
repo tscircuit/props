@@ -170,7 +170,9 @@ expectTypesMatch<PinLabelsProp, z.input<typeof pinLabelsProp>>(true)
 
 export const pinCompatibleVariant = z.object({
   manufacturerPartNumber: z.string().optional(),
-  supplierPartNumber: z.record(supplier_name, z.array(z.string())).optional(),
+  supplierPartNumber: z
+    .partialRecord(supplier_name, z.array(z.string()))
+    .optional(),
 })
 
 export const chipProps = commonComponentProps.extend({

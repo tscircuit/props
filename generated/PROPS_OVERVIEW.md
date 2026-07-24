@@ -416,8 +416,8 @@ export interface CadAssemblyProps {
    * components will be mirrored.
    *
    * Generally, you shouldn't set this except where it can help prevent
-   * confusion because you have a complex multi-layer assembly. Default is
-   * "top" and this is most intuitive.
+   * confusion because you have a complex multi-layer assembly. When omitted,
+   * the assembly leaves its original layer unspecified.
    */
   originalLayer?: LayerRef
 
@@ -993,8 +993,8 @@ export interface FootprintProps {
    * components will be mirrored.
    *
    * Generally, you shouldn't set this except where it can help prevent
-   * confusion because you have a complex multi-layer footprint. Default is
-   * "top" and this is most intuitive.
+   * confusion because you have a complex multi-layer footprint. When omitted,
+   * the footprint leaves its original layer unspecified.
    */
   originalLayer?: LayerRef
   /**
@@ -2449,7 +2449,8 @@ export interface SymbolProps {
    * The facing direction that the symbol is designed for. If you set this to "right",
    * then it means the children were intended to represent the symbol facing right.
    * Generally, you shouldn't set this except where it can help prevent confusion
-   * because you have a complex symbol. Default is "right" and this is most intuitive.
+   * because you have a complex symbol. When omitted, the symbol leaves its
+   * original facing direction unspecified.
    */
   originalFacingDirection?: "up" | "down" | "left" | "right"
   width?: string | number

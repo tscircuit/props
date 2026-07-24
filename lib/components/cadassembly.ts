@@ -10,8 +10,8 @@ export interface CadAssemblyProps {
    * components will be mirrored.
    *
    * Generally, you shouldn't set this except where it can help prevent
-   * confusion because you have a complex multi-layer assembly. Default is
-   * "top" and this is most intuitive.
+   * confusion because you have a complex multi-layer assembly. When omitted,
+   * the assembly leaves its original layer unspecified.
    */
   originalLayer?: LayerRef
 
@@ -19,7 +19,7 @@ export interface CadAssemblyProps {
 }
 
 export const cadassemblyProps = z.object({
-  originalLayer: layer_ref.default("top").optional(),
+  originalLayer: layer_ref.optional(),
   children: z.any().optional(),
 })
 

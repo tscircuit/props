@@ -63,7 +63,7 @@ const voltageSweepQuantity = voltage.pipe(z.number())
 const currentSweepQuantity = current.pipe(z.number())
 
 const createAnalogSweepCoordinateProps = (
-  sweepQuantity: z.ZodType<number, z.ZodTypeDef, number | string>,
+  sweepQuantity: z.ZodType<number, number | string>,
 ) => ({
   name: z.string().optional(),
   values: z.array(sweepQuantity).min(1).optional(),

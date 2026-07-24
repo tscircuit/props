@@ -129,29 +129,78 @@ const footprintLibraryResult = z.object({
   footprintCircuitJson: z.array(z.any()),
   cadModel: cadModelProp.optional(),
 })
-const pathToCircuitJsonFn = z
-  .function()
-  .args(z.string())
-  .returns(z.promise(footprintLibraryResult))
-  .or(
-    z
-      .function()
-      .args(
-        z.string(),
-        z.object({ resolvedPcbStyle: pcbStyle.optional() }).optional(),
-      )
-      .returns(z.promise(footprintLibraryResult)),
-  )
-  .describe("A function that takes a path and returns Circuit JSON")
+
+// Zod 4's z.function is a factory rather than a schema:
+// https://zod.dev/v4/changelog#zfunction
+const createValidatedAsyncFunctionSchema = <
+  T extends (...args: any[]) => Promise<unknown>,
+>(
+  argsSchema: z.ZodTuple,
+  outputSchema: z.ZodType,
+) =>
+  z
+    .custom<T>((value): value is T => typeof value === "function")
+    .transform((fn) => {
+      const validatedFunction = async (...args: unknown[]) => {
+        const parsedArgs = argsSchema.parse(args)
+        const result = await (fn as (...args: unknown[]) => unknown)(
+          ...parsedArgs,
+        )
+
+        return outputSchema.parse(result)
+      }
+
+      return validatedFunction as T
+    })
+
+const createValidatedFunctionSchema = <T extends (...args: any[]) => unknown>(
+  argsSchema: z.ZodTuple,
+  outputSchema: z.ZodType,
+) =>
+  z
+    .custom<T>((value): value is T => typeof value === "function")
+    .transform((fn) => {
+      const validatedFunction = (...args: unknown[]) => {
+        const parsedArgs = argsSchema.parse(args)
+        const result = (fn as (...args: unknown[]) => unknown)(...parsedArgs)
+
+        if (
+          result !== null &&
+          typeof result === "object" &&
+          "then" in result &&
+          typeof result.then === "function"
+        ) {
+          return Promise.resolve(result).then((value) =>
+            outputSchema.parse(value),
+          )
+        }
+
+        return outputSchema.parse(result)
+      }
+
+      return validatedFunction as T
+    })
+
+type PathToCircuitJsonFn = (
+  path: string,
+  options?: { resolvedPcbStyle?: PcbStyle },
+) => Promise<FootprintLibraryResult>
+
+const pathToCircuitJsonFn =
+  createValidatedAsyncFunctionSchema<PathToCircuitJsonFn>(
+    z.tuple([
+      z.string(),
+      z.object({ resolvedPcbStyle: pcbStyle.optional() }).optional(),
+    ]),
+    footprintLibraryResult,
+  ).describe("A function that takes a path and returns Circuit JSON")
 
 const footprintFileParserEntry = z.object({
-  loadFromUrl: z
-    .function()
-    .args(z.string())
-    .returns(z.promise(footprintLibraryResult))
-    .describe(
-      "A function that takes a footprint file URL and returns Circuit JSON",
-    ),
+  loadFromUrl: createValidatedAsyncFunctionSchema<
+    FootprintFileParserEntry["loadFromUrl"]
+  >(z.tuple([z.string()]), footprintLibraryResult).describe(
+    "A function that takes a footprint file URL and returns Circuit JSON",
+  ),
 })
 
 const spiceEngineSimulationResult = z.object({
@@ -160,13 +209,12 @@ const spiceEngineSimulationResult = z.object({
 })
 
 const spiceEngineZod = z.object({
-  simulate: z
-    .function()
-    .args(z.string())
-    .returns(z.promise(spiceEngineSimulationResult))
-    .describe(
-      "A function that takes a SPICE string and returns a simulation result",
-    ),
+  simulate: createValidatedAsyncFunctionSchema<SpiceEngine["simulate"]>(
+    z.tuple([z.string()]),
+    spiceEngineSimulationResult,
+  ).describe(
+    "A function that takes a SPICE string and returns a simulation result",
+  ),
 })
 
 const defaultSpiceEngine = z.custom<AutocompleteString<"spicey" | "ngspice">>(
@@ -174,24 +222,21 @@ const defaultSpiceEngine = z.custom<AutocompleteString<"spicey" | "ngspice">>(
 )
 
 const autorouterInstance = z.object({
-  run: z
-    .function()
-    .args()
-    .returns(z.promise(z.unknown()))
-    .describe("Run the autorouter"),
-  getOutputSimpleRouteJson: z
-    .function()
-    .args()
-    .returns(z.promise(z.any()))
-    .describe("Get the resulting SimpleRouteJson"),
+  run: createValidatedAsyncFunctionSchema<AutorouterInstance["run"]>(
+    z.tuple([]),
+    z.unknown(),
+  ).describe("Run the autorouter"),
+  getOutputSimpleRouteJson: createValidatedAsyncFunctionSchema<
+    AutorouterInstance["getOutputSimpleRouteJson"]
+  >(z.tuple([]), z.unknown()).describe("Get the resulting SimpleRouteJson"),
 })
 
 const autorouterDefinition = z.object({
-  createAutorouter: z
-    .function()
-    .args(z.any(), z.any().optional())
-    .returns(z.union([autorouterInstance, z.promise(autorouterInstance)]))
-    .describe("Create an autorouter instance"),
+  createAutorouter: createValidatedFunctionSchema<
+    AutorouterDefinition["createAutorouter"]
+  >(z.tuple([z.any(), z.any().optional()]), autorouterInstance).describe(
+    "Create an autorouter instance",
+  ),
 })
 
 const platformFetch = z
@@ -249,15 +294,14 @@ export const platformConfig = z.object({
   footprintFileParserMap: z
     .record(z.string(), footprintFileParserEntry)
     .optional(),
-  resolveProjectStaticFileImportUrl: z
-    .function()
-    .args(z.string())
-    .returns(z.promise(z.string()))
+  resolveProjectStaticFileImportUrl: createValidatedAsyncFunctionSchema<
+    NonNullable<PlatformConfig["resolveProjectStaticFileImportUrl"]>
+  >(z.tuple([z.string()]), z.string())
     .describe(
       "A function that returns a string URL for static files for the project",
     )
     .optional(),
   platformFetch: platformFetch.optional(),
-}) as z.ZodType<PlatformConfig>
+}) as z.ZodType<PlatformConfig, PlatformConfig>
 
 expectTypesMatch<PlatformConfig, z.infer<typeof platformConfig>>(true)

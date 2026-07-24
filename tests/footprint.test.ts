@@ -7,6 +7,10 @@ test("should parse footprint name", () => {
   expect(parsed.name).toBe("U1_FOOTPRINT")
 })
 
+test("leaves originalLayer undefined when omitted", () => {
+  expect(footprintProps.parse({}).originalLayer).toBeUndefined()
+})
+
 test("should parse footprint insertionDirection options", () => {
   const insertionDirections = [
     "from_above",

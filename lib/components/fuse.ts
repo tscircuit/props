@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -8,6 +9,7 @@ import {
   type SchematicOrientation,
 } from "lib/common/schematicOrientation"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
+import { expectTypesMatch } from "lib/typecheck"
 
 /**
  * Pin labels for fuse component
@@ -38,7 +40,7 @@ export interface FuseProps<PinLabel extends string = string>
   /**
    * Connections to other components
    */
-  connections?: Connections<PinLabel>
+  connections?: Connections<FusePinLabels>
 }
 
 /**
@@ -49,16 +51,9 @@ export const fuseProps = commonComponentProps.extend({
   voltageRating: z.union([z.number(), z.string()]).optional(),
   schShowRatings: z.boolean().optional(),
   schOrientation: schematicOrientation.optional(),
-  connections: z
-    .record(
-      z.string(),
-      z.union([
-        z.string(),
-        z.array(z.string()).readonly(),
-        z.array(z.string()),
-      ]),
-    )
-    .optional(),
+  connections: createConnectionsProp(fusePinLabels).optional(),
 })
 
 export type InferredFuseProps = z.input<typeof fuseProps>
+
+expectTypesMatch<FuseProps, InferredFuseProps>(true)

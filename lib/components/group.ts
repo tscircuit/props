@@ -352,6 +352,7 @@ export interface AutorouterConfig {
     | "tscircuit_beta"
     | "krt"
     | "freerouting"
+    | "topola"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
@@ -370,6 +371,7 @@ export type AutorouterPreset =
   | "tscircuit_beta"
   | "krt"
   | "freerouting"
+  | "topola"
   | "laser_prefab"
   | "auto-jumper"
   | "sequential-trace"
@@ -424,6 +426,7 @@ export const autorouterConfig = z.object({
       "tscircuit_beta",
       "krt",
       "freerouting",
+      "topola",
       "laser_prefab",
       "auto-jumper",
       "sequential-trace",
@@ -445,6 +448,7 @@ export const autorouterPreset = z.union([
   z.literal("tscircuit_beta"),
   z.literal("krt"),
   z.literal("freerouting"),
+  z.literal("topola"),
   z.literal("laser_prefab"), // Prefabricated PCB with laser copper ablation
   z.literal("auto-jumper"),
   z.literal("sequential-trace"),

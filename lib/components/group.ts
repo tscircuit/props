@@ -335,10 +335,6 @@ export interface AutorouterConfig {
   cache?: PcbRouteCache
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
-  /**
-   * Allows the autorouter to place vias inside connected pads.
-   * Omitted or false keeps via-in-pad routing disabled.
-   */
   allowViaInPad?: boolean
   groupMode?:
     | "sequential_trace"

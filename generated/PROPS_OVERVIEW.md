@@ -408,6 +408,13 @@ export interface BreakoutProps
 }
 
 
+export interface BusProps {
+  name?: string
+  /** Trace names or port selectors for the connections in the bus. */
+  connections: string[]
+}
+
+
 export interface CadAssemblyProps {
   /**
    * The layer that the CAD assembly is designed for. If you set this to "top"

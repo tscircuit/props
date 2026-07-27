@@ -342,12 +342,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string;
   connections?: string[];
   reroute?: boolean;
-  /** Selector for the component whose pads should be escaped in this phase. */
-  fanoutComponent?: string;
-  /** Direction in which complete buses should leave the selected component. */
-  fanoutDirection?: FanoutDirection;
-  /** Boundary edge or corner toward which buses should leave the component. */
-  fanoutPreferredExit?: FanoutPreferredExit;
+  /**
+   * Fanout direction for each named bus in this phase. `center` leaves the
+   * direction unconstrained.
+   */
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>;
 }
 ```
 

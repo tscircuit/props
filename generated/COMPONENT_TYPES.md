@@ -1127,6 +1127,11 @@ export const analogTransientSimulationProps = z
 ### autoroutingphase
 
 ```typescript
+export type BusFanoutDirection =
+  | NinePointAnchor
+  | {
+      direction: NinePointAnchor
+    }
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
   name?: string
@@ -1142,11 +1147,12 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
-  fanoutComponent?: string
-  fanoutDirection?: FanoutDirection
-  fanoutPreferredExit?: FanoutPreferredExit
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
 }
-/** Boundary edge or corner toward which buses should leave the component. */
+/**
+   * Fanout direction for each named bus in this phase. `center` leaves the
+   * direction unconstrained.
+   */
 export const autoroutingPhaseProps = z
   .object({
     key: z.any().optional(),
@@ -1166,20 +1172,7 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
-    fanoutComponent: z.string().optional(),
-    fanoutDirection: z.enum(["left", "right", "up", "down"]).optional(),
-    fanoutPreferredExit: z
-      .enum([
-        "left",
-        "right",
-        "top",
-        "bottom",
-        "top_left",
-        "top_right",
-        "bottom_left",
-        "bottom_right",
-      ])
-      .optional(),
+    busFanoutDirections: z.record(busFanoutDirection).optional(),
   })
 ```
 

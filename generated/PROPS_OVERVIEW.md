@@ -204,6 +204,12 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
+  /** Selector for the component whose pads should be escaped in this phase. */
+  fanoutComponent?: string
+  /** Direction in which complete buses should leave the selected component. */
+  fanoutDirection?: FanoutDirection
+  /** Boundary edge or corner toward which buses should leave the component. */
+  fanoutPreferredExit?: FanoutPreferredExit
 }
 
 
@@ -414,10 +420,6 @@ export interface BusProps {
   name?: string
   /** Trace names or port selectors for the connections in the bus. */
   connections: string[]
-  /** Direction in which this complete bus should leave its source footprint. */
-  pcbFanoutDirection?: BusPcbFanoutDirection
-  /** Board edge or corner toward which this complete bus should fan out. */
-  pcbFanoutPreferredExit?: BusPcbFanoutPreferredExit
 }
 
 

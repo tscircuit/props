@@ -1142,7 +1142,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
+  fanoutComponent?: string
+  fanoutDirection?: FanoutDirection
+  fanoutPreferredExit?: FanoutPreferredExit
 }
+/** Boundary edge or corner toward which buses should leave the component. */
 export const autoroutingPhaseProps = z
   .object({
     key: z.any().optional(),
@@ -1162,6 +1166,20 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
+    fanoutComponent: z.string().optional(),
+    fanoutDirection: z.enum(["left", "right", "up", "down"]).optional(),
+    fanoutPreferredExit: z
+      .enum([
+        "left",
+        "right",
+        "top",
+        "bottom",
+        "top_left",
+        "top_right",
+        "bottom_left",
+        "bottom_right",
+      ])
+      .optional(),
   })
 ```
 
@@ -1285,26 +1303,11 @@ export const breakoutPointProps = pcbLayoutProps
 export interface BusProps {
   name?: string
   connections: string[]
-  pcbFanoutDirection?: BusPcbFanoutDirection
-  pcbFanoutPreferredExit?: BusPcbFanoutPreferredExit
 }
-/** Board edge or corner toward which this complete bus should fan out. */
+/** Trace names or port selectors for the connections in the bus. */
 export const busProps = z.object({
   name: z.string().optional(),
   connections: z.array(z.string()).min(2),
-  pcbFanoutDirection: z.enum(["left", "right", "up", "down"]).optional(),
-  pcbFanoutPreferredExit: z
-    .enum([
-      "left",
-      "right",
-      "top",
-      "bottom",
-      "top_left",
-      "top_right",
-      "bottom_left",
-      "bottom_right",
-    ])
-    .optional(),
 })
 ```
 

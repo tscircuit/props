@@ -7,6 +7,18 @@ import {
   routingTolerances,
 } from "./group"
 
+export type FanoutDirection = "left" | "right" | "up" | "down"
+
+export type FanoutPreferredExit =
+  | "left"
+  | "right"
+  | "top"
+  | "bottom"
+  | "top_left"
+  | "top_right"
+  | "bottom_left"
+  | "bottom_right"
+
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
   name?: string
@@ -22,6 +34,12 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
+  /** Selector for the component whose pads should be escaped in this phase. */
+  fanoutComponent?: string
+  /** Direction in which complete buses should leave the selected component. */
+  fanoutDirection?: FanoutDirection
+  /** Boundary edge or corner toward which buses should leave the component. */
+  fanoutPreferredExit?: FanoutPreferredExit
 }
 
 export const autoroutingPhaseProps = z
@@ -43,6 +61,20 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
+    fanoutComponent: z.string().optional(),
+    fanoutDirection: z.enum(["left", "right", "up", "down"]).optional(),
+    fanoutPreferredExit: z
+      .enum([
+        "left",
+        "right",
+        "top",
+        "bottom",
+        "top_left",
+        "top_right",
+        "bottom_left",
+        "bottom_right",
+      ])
+      .optional(),
   })
   .superRefine((value, ctx) => {
     if (
@@ -56,6 +88,18 @@ export const autoroutingPhaseProps = z
         message:
           "region, connection, or connections is required when reroute is provided",
         path: ["region"],
+      })
+    }
+    if (
+      value.fanoutComponent === undefined &&
+      (value.fanoutDirection !== undefined ||
+        value.fanoutPreferredExit !== undefined)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "fanoutComponent is required when fanoutDirection or fanoutPreferredExit is provided",
+        path: ["fanoutComponent"],
       })
     }
   })

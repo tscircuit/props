@@ -30,6 +30,26 @@ test("autorouting phase accepts autorouter and phase index", () => {
   expect(parsed.phaseIndex).toBe(1)
 })
 
+test("autorouting phase accepts component-scoped fanout controls", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutComponent: ".U1",
+    fanoutDirection: "right",
+    fanoutPreferredExit: "top_right",
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
+})
+
+test("autorouting phase requires a component for directed fanout", () => {
+  expect(
+    autoroutingPhaseProps.safeParse({
+      autorouter: "fanout",
+      fanoutDirection: "right",
+    }).success,
+  ).toBe(false)
+})
+
 test("autorouting phase accepts a single connection", () => {
   const raw: AutoroutingPhaseProps = {
     phaseIndex: 2,

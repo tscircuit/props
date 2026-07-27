@@ -44,6 +44,16 @@ test("supports krt preset", () => {
   expect(result).toBe("krt")
 })
 
+test("supports fanout presets", () => {
+  expect(autorouterProp.parse("single_layer_fanout")).toBe(
+    "single_layer_fanout",
+  )
+  expect(autorouterProp.parse("fanout")).toBe("fanout")
+  expect(autorouterProp.parse({ preset: "fanout" })).toMatchObject({
+    preset: "fanout",
+  })
+})
+
 test("still supports deprecated kebab-case presets", () => {
   const result = autorouterProp.parse("auto-cloud")
   expect(result).toBe("auto-cloud")

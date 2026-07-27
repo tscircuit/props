@@ -1285,11 +1285,26 @@ export const breakoutPointProps = pcbLayoutProps
 export interface BusProps {
   name?: string
   connections: string[]
+  pcbFanoutDirection?: BusPcbFanoutDirection
+  pcbFanoutPreferredExit?: BusPcbFanoutPreferredExit
 }
-/** Trace names or port selectors for the connections in the bus. */
+/** Board edge or corner toward which this complete bus should fan out. */
 export const busProps = z.object({
   name: z.string().optional(),
   connections: z.array(z.string()).min(2),
+  pcbFanoutDirection: z.enum(["left", "right", "up", "down"]).optional(),
+  pcbFanoutPreferredExit: z
+    .enum([
+      "left",
+      "right",
+      "top",
+      "bottom",
+      "top_left",
+      "top_right",
+      "bottom_left",
+      "bottom_right",
+    ])
+    .optional(),
 })
 ```
 
@@ -2347,6 +2362,8 @@ export interface AutorouterConfig {
     | "krt"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
+    | "single_layer_fanout"
+    | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -2392,6 +2409,8 @@ export const autorouterConfig = z.object({
       "krt",
       "freerouting",
       "laser_prefab",
+      "single_layer_fanout",
+      "fanout",
       "auto-jumper",
       "sequential-trace",
       "auto-local",

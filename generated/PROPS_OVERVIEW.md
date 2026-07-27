@@ -166,6 +166,8 @@ export interface AutorouterConfig {
     | "krt"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
+    | "single_layer_fanout"
+    | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -412,6 +414,10 @@ export interface BusProps {
   name?: string
   /** Trace names or port selectors for the connections in the bus. */
   connections: string[]
+  /** Direction in which this complete bus should leave its source footprint. */
+  pcbFanoutDirection?: BusPcbFanoutDirection
+  /** Board edge or corner toward which this complete bus should fan out. */
+  pcbFanoutPreferredExit?: BusPcbFanoutPreferredExit
 }
 
 

@@ -1,8 +1,10 @@
 import { expect, test } from "bun:test"
 import {
+  autorouterConfig,
   autorouterProp,
   routingTolerances,
   subcircuitGroupPropsWithBool,
+  type AutorouterConfig,
   type RoutingTolerances,
 } from "../lib/components/group"
 
@@ -27,6 +29,15 @@ test("supports default preset", () => {
 test("supports auto jumper preset", () => {
   const result = autorouterProp.parse("auto_jumper")
   expect(result).toBe("auto_jumper")
+})
+
+test("supports opting in to via-in-pad routing", () => {
+  const enabled: AutorouterConfig = { allowViaInPad: true }
+  const disabled: AutorouterConfig = { allowViaInPad: false }
+
+  expect(autorouterConfig.parse(enabled).allowViaInPad).toBe(true)
+  expect(autorouterConfig.parse(disabled).allowViaInPad).toBe(false)
+  expect(autorouterConfig.parse({}).allowViaInPad).toBeUndefined()
 })
 
 test("supports laser prefab preset", () => {

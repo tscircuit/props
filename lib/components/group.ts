@@ -335,6 +335,11 @@ export interface AutorouterConfig {
   cache?: PcbRouteCache
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
+  /**
+   * Allows the autorouter to place vias inside connected pads.
+   * Omitted or false keeps via-in-pad routing disabled.
+   */
+  allowViaInPad?: boolean
   groupMode?:
     | "sequential_trace"
     | "subcircuit"
@@ -404,6 +409,12 @@ export const autorouterConfig = z.object({
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
   availableJumperTypes: z.array(z.enum(["1206x4", "0603"])).optional(),
+  allowViaInPad: z
+    .boolean()
+    .optional()
+    .describe(
+      "Allows the autorouter to place vias inside connected pads. Omitted or false keeps via-in-pad routing disabled.",
+    ),
   groupMode: z
     .enum(["sequential_trace", "subcircuit", "sequential-trace"])
     .optional(),

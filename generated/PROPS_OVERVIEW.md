@@ -166,6 +166,8 @@ export interface AutorouterConfig {
     | "krt"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
+    | "single_layer_fanout"
+    | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -202,6 +204,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
+  /**
+   * Fanout direction for each named bus in this phase. `center` leaves the
+   * direction unconstrained.
+   */
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
 }
 
 

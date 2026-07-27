@@ -30,6 +30,18 @@ test("autorouting phase accepts autorouter and phase index", () => {
   expect(parsed.phaseIndex).toBe(1)
 })
 
+test("autorouting phase accepts per-bus fanout directions", () => {
+  const raw = {
+    autorouter: "fanout",
+    busFanoutDirections: {
+      DATA: "top_right",
+      CONTROL: { direction: "center_left" },
+    },
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
+})
+
 test("autorouting phase accepts a single connection", () => {
   const raw: AutoroutingPhaseProps = {
     phaseIndex: 2,

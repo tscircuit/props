@@ -353,6 +353,8 @@ export interface AutorouterConfig {
     | "krt"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
+    | "single_layer_fanout"
+    | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -371,6 +373,8 @@ export type AutorouterPreset =
   | "krt"
   | "freerouting"
   | "laser_prefab"
+  | "single_layer_fanout"
+  | "fanout"
   | "auto-jumper"
   | "sequential-trace"
   | "auto-local"
@@ -425,6 +429,8 @@ export const autorouterConfig = z.object({
       "krt",
       "freerouting",
       "laser_prefab",
+      "single_layer_fanout",
+      "fanout",
       "auto-jumper",
       "sequential-trace",
       "auto-local",
@@ -446,6 +452,8 @@ export const autorouterPreset = z.union([
   z.literal("krt"),
   z.literal("freerouting"),
   z.literal("laser_prefab"), // Prefabricated PCB with laser copper ablation
+  z.literal("single_layer_fanout"),
+  z.literal("fanout"),
   z.literal("auto-jumper"),
   z.literal("sequential-trace"),
   z.literal("auto-local"),

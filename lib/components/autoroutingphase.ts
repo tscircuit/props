@@ -1,11 +1,22 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import {
+  type NinePointAnchor,
+  ninePointAnchor,
+} from "../common/ninePointAnchor"
+import type { BusName } from "./bus"
+import {
   type AutorouterProp,
   type RoutingTolerances,
   autorouterProp,
   routingTolerances,
 } from "./group"
+
+export type BusFanoutDirection =
+  | NinePointAnchor
+  | {
+      direction: NinePointAnchor
+    }
 
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
@@ -22,7 +33,17 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
+  /**
+   * Fanout direction for each named bus in this phase. `center` leaves the
+   * direction unconstrained.
+   */
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
 }
+
+const busFanoutDirection = z.union([
+  ninePointAnchor,
+  z.object({ direction: ninePointAnchor }),
+])
 
 export const autoroutingPhaseProps = z
   .object({
@@ -43,6 +64,7 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
+    busFanoutDirections: z.record(busFanoutDirection).optional(),
   })
   .superRefine((value, ctx) => {
     if (

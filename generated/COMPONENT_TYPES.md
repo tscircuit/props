@@ -1127,6 +1127,11 @@ export const analogTransientSimulationProps = z
 ### autoroutingphase
 
 ```typescript
+export type BusFanoutDirection =
+  | NinePointAnchor
+  | {
+      direction: NinePointAnchor
+    }
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
   name?: string
@@ -1142,7 +1147,12 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
 }
+/**
+   * Fanout direction for each named bus in this phase. `center` leaves the
+   * direction unconstrained.
+   */
 export const autoroutingPhaseProps = z
   .object({
     key: z.any().optional(),
@@ -1162,6 +1172,7 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
+    busFanoutDirections: z.record(busFanoutDirection).optional(),
   })
 ```
 
@@ -2347,6 +2358,8 @@ export interface AutorouterConfig {
     | "krt"
     | "freerouting"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
+    | "single_layer_fanout"
+    | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -2392,6 +2405,8 @@ export const autorouterConfig = z.object({
       "krt",
       "freerouting",
       "laser_prefab",
+      "single_layer_fanout",
+      "fanout",
       "auto-jumper",
       "sequential-trace",
       "auto-local",

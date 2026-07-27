@@ -11,3 +11,5 @@ export const ninePointAnchor = z.enum([
   "bottom_center",
   "bottom_right",
 ])
+
+export type NinePointAnchor = z.infer<typeof ninePointAnchor>

@@ -342,6 +342,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string;
   connections?: string[];
   reroute?: boolean;
+  /**
+   * Fanout direction for each named bus in this phase. `center` leaves the
+   * direction unconstrained.
+   */
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>;
 }
 ```
 

@@ -1275,6 +1275,24 @@ export const breakoutPointProps = pcbLayoutProps
   })
 ```
 
+### bus
+
+```typescript
+/**
+ * Declares a group of connections that an autorouter should keep together.
+ * Each connection may be a trace name or a port selector.
+ */
+export interface BusProps {
+  name?: string
+  connections: string[]
+}
+/** Trace names or port selectors for the connections in the bus. */
+export const busProps = z.object({
+  name: z.string().optional(),
+  connections: z.array(z.string()).min(2),
+})
+```
+
 ### cadassembly
 
 ```typescript

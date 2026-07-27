@@ -34,6 +34,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<board />`                             | [`BoardProps`](#boardprops-board)                                                                                  |
 | `<breakout />`                          | [`BreakoutProps`](#breakoutprops-breakout)                                                                         |
 | `<breakoutpoint />`                     | [`BreakoutPointProps`](#breakoutpointprops-breakoutpoint)                                                          |
+| `<bus />`                               | [`BusProps`](#busprops-bus)                                                                                        |
 | `<cadassembly />`                       | [`CadAssemblyProps`](#cadassemblyprops-cadassembly)                                                                |
 | `<cadmodel />`                          | [`CadModelProps`](#cadmodelprops-cadmodel)                                                                         |
 | `<capacitor />`                         | [`CapacitorProps`](#capacitorprops-capacitor)                                                                      |
@@ -428,6 +429,18 @@ export interface BreakoutPointProps extends Omit<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/breakoutpoint.ts)
+
+### BusProps `<bus />`
+
+```ts
+export interface BusProps {
+  name?: string;
+  /** Trace names or port selectors for the connections in the bus. */
+  connections: string[];
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/bus.ts)
 
 ### CadAssemblyProps `<cadassembly />`
 

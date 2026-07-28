@@ -412,6 +412,11 @@ export interface BreakoutProps extends Omit<
   SubcircuitGroupProps,
   "subcircuit"
 > {
+  /**
+   * Autorouter used to escape the components inside the breakout boundary.
+   * Defaults to the multilayer fanout autorouter.
+   */
+  autorouter?: AutorouterProp;
   padding?: Distance;
   paddingLeft?: Distance;
   paddingRight?: Distance;

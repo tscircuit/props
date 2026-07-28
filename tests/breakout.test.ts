@@ -17,6 +17,13 @@ test("should parse breakout props with padding", () => {
   expect(parsed.paddingLeft).toBe(2)
 })
 
+test("breakout and fanout elements default to the fanout autorouter", () => {
+  expect(breakoutProps.parse({}).autorouter).toBe("fanout")
+  expect(
+    breakoutProps.parse({ autorouter: "single_layer_fanout" }).autorouter,
+  ).toBe("single_layer_fanout")
+})
+
 test("should parse breakout point props", () => {
   const raw: BreakoutPointProps = {
     pcbX: 5,

@@ -1257,13 +1257,19 @@ export const boardProps = subcircuitGroupProps
 ```typescript
 export interface BreakoutProps
   extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  autorouter?: AutorouterProp
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
 }
+/**
+   * Autorouter used to escape the components inside the breakout boundary.
+   * Defaults to the multilayer fanout autorouter.
+   */
 export const breakoutProps = subcircuitGroupProps.extend({
+  autorouter: autorouterProp.default("fanout"),
   padding: distance.optional(),
   paddingLeft: distance.optional(),
   paddingRight: distance.optional(),

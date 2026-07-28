@@ -113,10 +113,18 @@ export const cadModelJscad = cadModelBase.extend({
   jscad: z.record(z.any()),
 })
 
+/**
+ * A Footprinter string used to procedurally generate the component's CAD model,
+ * independently of the component's PCB footprint.
+ *
+ * @example "soic8"
+ */
+export type CadModelFootprinterString = string
+
 export type CadModelProp =
   | null
-  | string
   | ReactElement
+  | CadModelFootprinterString
   | CadModelStl
   | CadModelObj
   | CadModelGltf
@@ -127,7 +135,7 @@ export type CadModelProp =
 
 export const cadModelProp = z.union([
   z.null(),
-  url,
+  z.string().min(1),
   z.custom<ReactElement>((v) => {
     return v && typeof v === "object" && "type" in v && "props" in v
   }),

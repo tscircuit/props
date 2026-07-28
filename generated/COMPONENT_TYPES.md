@@ -98,7 +98,7 @@ export const cadModelJscad = cadModelBase.extend({
 })
 export const cadModelProp = z.union([
   z.null(),
-  url,
+  z.string().min(1),
   z.custom<ReactElement>((v) => {
     return v && typeof v === "object" && "type" in v && "props" in v
   }),

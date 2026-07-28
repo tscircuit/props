@@ -2,14 +2,14 @@ import { expect, test } from "bun:test"
 import { cadModelProp } from "../lib/common/cadModel"
 import { chipProps } from "../lib/components/chip"
 
-test("cadModel accepts the footprinter_string procedural model", () => {
-  expect(cadModelProp.parse("footprinter_string")).toBe("footprinter_string")
+test("cadModel accepts a Footprinter string as the procedural model", () => {
+  expect(cadModelProp.parse("soic8")).toBe("soic8")
+  expect(() => cadModelProp.parse("")).toThrow()
 
   const parsedChip = chipProps.parse({
     name: "U1",
-    footprint: "soic8",
-    cadModel: "footprinter_string",
+    cadModel: "soic8",
   })
 
-  expect(parsedChip.cadModel).toBe("footprinter_string")
+  expect(parsedChip.cadModel).toBe("soic8")
 })

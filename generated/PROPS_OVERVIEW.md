@@ -148,6 +148,7 @@ export interface AutorouterConfig {
   cache?: PcbRouteCache
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
+  allowViaInPad?: boolean
   groupMode?:
     | "sequential_trace"
     | "subcircuit"

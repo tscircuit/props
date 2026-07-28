@@ -98,6 +98,7 @@ export const cadModelJscad = cadModelBase.extend({
 })
 export const cadModelProp = z.union([
   z.null(),
+  z.literal("footprinter_string"),
   url,
   z.custom<ReactElement>((v) => {
     return v && typeof v === "object" && "type" in v && "props" in v

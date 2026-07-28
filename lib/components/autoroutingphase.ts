@@ -1,6 +1,10 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import {
+  type FanoutBoundaryPadding,
+  fanoutBoundaryPadding,
+} from "../common/fanoutBoundaryPadding"
+import {
   type NinePointAnchor,
   ninePointAnchor,
 } from "../common/ninePointAnchor"
@@ -38,6 +42,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
    * direction unconstrained.
    */
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 
 const busFanoutDirection = z.union([
@@ -65,6 +74,7 @@ export const autoroutingPhaseProps = z
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
     busFanoutDirections: z.record(busFanoutDirection).optional(),
+    fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
   })
   .superRefine((value, ctx) => {
     if (

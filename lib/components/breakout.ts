@@ -1,5 +1,8 @@
-import { distance } from "circuit-json"
-import type { Distance } from "lib/common/distance"
+import { distance, type Distance } from "lib/common/distance"
+import {
+  type FanoutBoundaryPadding,
+  fanoutBoundaryPadding,
+} from "lib/common/fanoutBoundaryPadding"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import {
@@ -21,6 +24,12 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate. This is independent of the
+   * breakout group's layout padding.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 
 export const breakoutProps = subcircuitGroupProps.extend({
@@ -30,6 +39,7 @@ export const breakoutProps = subcircuitGroupProps.extend({
   paddingRight: distance.optional(),
   paddingTop: distance.optional(),
   paddingBottom: distance.optional(),
+  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
 })
 
 type InferredBreakoutProps = z.input<typeof breakoutProps>

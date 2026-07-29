@@ -98,7 +98,7 @@ export const cadModelJscad = cadModelBase.extend({
 })
 export const cadModelProp = z.union([
   z.null(),
-  url,
+  z.string().min(1),
   z.custom<ReactElement>((v) => {
     return v && typeof v === "object" && "type" in v && "props" in v
   }),
@@ -1312,13 +1312,19 @@ export const boardProps = subcircuitGroupProps
 ```typescript
 export interface BreakoutProps
   extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  autorouter?: AutorouterProp
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
 }
+/**
+   * Autorouter used to escape the components inside the breakout boundary.
+   * Defaults to the multilayer fanout autorouter.
+   */
 export const breakoutProps = subcircuitGroupProps.extend({
+  autorouter: autorouterProp.default("fanout"),
   padding: distance.optional(),
   paddingLeft: distance.optional(),
   paddingRight: distance.optional(),
@@ -2402,6 +2408,7 @@ export interface AutorouterConfig {
   cache?: PcbRouteCache
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
+  allowViaInPad?: boolean
   groupMode?:
     | "sequential_trace"
     | "subcircuit"
@@ -2446,6 +2453,12 @@ export const autorouterConfig = z.object({
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
   availableJumperTypes: z.array(z.enum(["1206x4", "0603"])).optional(),
+  allowViaInPad: z
+    .boolean()
+    .optional()
+    .describe(
+      "Allows the autorouter to place vias inside connected pads. Omitted or false keeps via-in-pad routing disabled.",
+    ),
   groupMode: z
     .enum(["sequential_trace", "subcircuit", "sequential-trace"])
     .optional(),

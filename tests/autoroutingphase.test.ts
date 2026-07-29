@@ -42,6 +42,34 @@ test("autorouting phase accepts per-bus fanout directions", () => {
   expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
 })
 
+test("autorouting phase accepts scalar fanout boundary padding", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutBoundaryPadding: "0.6mm",
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw).fanoutBoundaryPadding).toBe(0.6)
+})
+
+test("autorouting phase accepts directional fanout boundary padding", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutBoundaryPadding: {
+      top: "0.4mm",
+      right: 0.8,
+      bottom: "1.2mm",
+      left: 0.5,
+    },
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw).fanoutBoundaryPadding).toEqual({
+    top: 0.4,
+    right: 0.8,
+    bottom: 1.2,
+    left: 0.5,
+  })
+})
+
 test("autorouting phase accepts a single connection", () => {
   const raw: AutoroutingPhaseProps = {
     phaseIndex: 2,

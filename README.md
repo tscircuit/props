@@ -374,6 +374,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
    * direction unconstrained.
    */
   busFanoutDirections?: Record<BusName, BusFanoutDirection>;
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding;
 }
 ```
 
@@ -439,11 +444,22 @@ export interface BreakoutProps extends Omit<
   SubcircuitGroupProps,
   "subcircuit"
 > {
+  /**
+   * Autorouter used to escape the components inside the breakout boundary.
+   * Defaults to the multilayer fanout autorouter.
+   */
+  autorouter?: AutorouterProp;
   padding?: Distance;
   paddingLeft?: Distance;
   paddingRight?: Distance;
   paddingTop?: Distance;
   paddingBottom?: Distance;
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate. This is independent of the
+   * breakout group's layout padding.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding;
 }
 ```
 

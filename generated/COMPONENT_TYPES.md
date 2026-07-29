@@ -891,6 +891,25 @@ export const schematicPinStyle = z.record(
   }),
 ```
 
+### simulation-waveform
+
+```typescript
+export const validateStrictlyIncreasingWaveformTimes = (
+  points: ReadonlyArray<Record<"time", number>>,
+  context: z.RefinementCtx,
+) => {
+  for (let index = 1; index < points.length; index++) {
+    if (points[index]!.time <= points[index - 1]!.time) {
+      context.addIssue({
+        code: "custom",
+        path: [index, "time"],
+        message: "Waveform times must be strictly increasing",
+      })
+    }
+  }
+}
+```
+
 ### url
 
 ```typescript
@@ -991,6 +1010,33 @@ export const analogDcSweepSimulationProps = z
   })
 ```
 
+### analogmeasurement
+
+```typescript
+export interface TransientMeasurementSeries {
+  timestampsMs: readonly number[]
+  values: readonly number[]
+}
+export interface AnalogTransientMeasurementContext {
+  getVoltage: (selector: string) => TransientMeasurementSeries
+  getCurrent: (selector: string) => TransientMeasurementSeries
+}
+export interface AnalogMeasurementProps {
+  name: string
+  unit: string
+  measureFn: (context: AnalogTransientMeasurementContext) => number
+}
+/** Computes one scalar for each transient simulation run. */
+export const analogMeasurementProps = z
+  .object({
+    name: z.string().min(1),
+    unit: z.string().min(1),
+    measureFn: z.custom<AnalogMeasurementProps["measureFn"]>(
+      (value) => typeof value === "function",
+    ),
+  })
+```
+
 ### analogsimulation
 
 ```typescript
@@ -1017,7 +1063,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   graphIndependentAxes?: boolean
   children?: ReactNode
 }
-/** Optional nested sweep parameter for repeated analysis runs. */
+/** Optional nested sweep parameters and transient measurements. */
 export const analogAnalysisSimulationBaseProps = {
   name: z.string().optional(),
   spiceEngine: spiceEngine.optional(),
@@ -1042,7 +1088,16 @@ export const analogSimulationProps = z.object({
 ### analogsweepparameter
 
 ```typescript
-/** Nonzero parameter increment directed from start toward stop. */
+export interface AnalogSweepCoordinatesProps {
+  name?: string
+  values?: Array<number | string>
+  start?: number | string
+  stop?: number | string
+  step?: number | string
+  displayValues?: number[]
+  displayUnit?: string
+}
+/** Unit for displayValues. Required when displayValues is provided. */
 export interface AnalogResistanceSweepParameterProps
   extends AnalogSweepCoordinatesProps {
   parameterType: "resistance"
@@ -1719,6 +1774,11 @@ export const crystalProps = commonComponentProps.extend({
 ### currentsource
 
 ```typescript
+export interface CurrentWaveformPoint {
+  time: number | string
+  current: number | string
+}
+/** Source current at this point. Raw numbers are amperes. */
 export interface CurrentSourceProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   current?: number | string
@@ -1729,9 +1789,10 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   dutyCycle?: number | string
   acMagnitude?: number | string
   acPhase?: number | string
+  currentWaveform?: CurrentWaveformPoint[]
   connections?: Connections<CurrentSourcePinLabels>
 }
-/** Small-signal AC phase. Raw numbers are degrees. */
+/** Piecewise-linear transient source waveform. Cannot be combined with waveShape. */
 export const currentSourceProps = commonComponentProps.extend({
   current: current.optional(),
   frequency: frequency.optional(),
@@ -1741,6 +1802,7 @@ export const currentSourceProps = commonComponentProps.extend({
   dutyCycle: percentage.optional(),
   acMagnitude: current.optional(),
   acPhase: rotation.optional(),
+  currentWaveform: currentWaveform.optional(),
   connections: createConnectionsProp(currentSourcePinLabels).optional(),
 })
 ```
@@ -4594,6 +4656,11 @@ export const voltageProbeProps = commonComponentProps
 ### voltagesource
 
 ```typescript
+export interface VoltageWaveformPoint {
+  time: number | string
+  voltage: number | string
+}
+/** Source voltage at this point. Raw numbers are volts. */
 export interface VoltageSourceProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   voltage?: number | string
@@ -4609,9 +4676,10 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   period?: number | string
   acMagnitude?: number | string
   acPhase?: number | string
+  voltageWaveform?: VoltageWaveformPoint[]
   connections?: Connections<VoltageSourcePinLabels>
 }
-/** Small-signal AC phase. Raw numbers are degrees. */
+/** Piecewise-linear transient source waveform. Cannot be combined with waveShape. */
 export const voltageSourceProps = commonComponentProps.extend({
   voltage: voltage.optional(),
   frequency: frequency.optional(),
@@ -4626,6 +4694,7 @@ export const voltageSourceProps = commonComponentProps.extend({
   period: ms.optional(),
   acMagnitude: voltage.optional(),
   acPhase: rotation.optional(),
+  voltageWaveform: voltageWaveform.optional(),
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 ```

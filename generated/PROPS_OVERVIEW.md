@@ -53,7 +53,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   spiceOptions?: SpiceOptions
   /** Render each probe with an independent vertical graph scale. */
   graphIndependentAxes?: boolean
-  /** Optional nested sweep parameter for repeated analysis runs. */
+  /** Optional nested sweep parameters and transient measurements. */
   children?: ReactNode
 }
 
@@ -95,6 +95,16 @@ export interface AnalogInductanceSweepParameterProps
 }
 
 
+export interface AnalogMeasurementProps {
+  /** Stable name written to the simulation measurement result. */
+  name: string
+  /** Unit of the scalar returned by measureFn. */
+  unit: string
+  /** Computes one scalar for each transient simulation run. */
+  measureFn: (context: AnalogTransientMeasurementContext) => number
+}
+
+
 export interface AnalogResistanceSweepParameterProps
   extends AnalogSweepCoordinatesProps {
   parameterType: "resistance"
@@ -112,6 +122,30 @@ export interface AnalogSimulationProps {
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
+}
+
+
+export interface AnalogSweepCoordinatesProps {
+  /** Stable identity for this sweep parameter. */
+  name?: string
+  /** Explicit parameter coordinates. Cannot be combined with start/stop/step. */
+  values?: Array<number | string>
+  /** First generated parameter coordinate. Requires stop and step. */
+  start?: number | string
+  /** Last generated parameter coordinate. Requires start and step. */
+  stop?: number | string
+  /** Nonzero parameter increment directed from start toward stop. */
+  step?: number | string
+  /** Optional graph coordinates corresponding one-to-one with the physical sweep values. */
+  displayValues?: number[]
+  /** Unit for displayValues. Required when displayValues is provided. */
+  displayUnit?: string
+}
+
+
+export interface AnalogTransientMeasurementContext {
+  getVoltage: (selector: string) => TransientMeasurementSeries
+  getCurrent: (selector: string) => TransientMeasurementSeries
 }
 
 
@@ -814,7 +848,17 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string
+  /** Piecewise-linear transient source waveform. Cannot be combined with waveShape. */
+  currentWaveform?: CurrentWaveformPoint[]
   connections?: Connections<CurrentSourcePinLabels>
+}
+
+
+export interface CurrentWaveformPoint {
+  /** Time from the start of the transient simulation. Raw numbers are milliseconds. */
+  time: number | string
+  /** Source current at this point. Raw numbers are amperes. */
+  current: number | string
 }
 
 
@@ -2506,6 +2550,12 @@ export interface ToolingrailProps {
 }
 
 
+export interface TransientMeasurementSeries {
+  timestampsMs: readonly number[]
+  values: readonly number[]
+}
+
+
 export interface TransistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
@@ -2554,7 +2604,17 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string
+  /** Piecewise-linear transient source waveform. Cannot be combined with waveShape. */
+  voltageWaveform?: VoltageWaveformPoint[]
   connections?: Connections<VoltageSourcePinLabels>
+}
+
+
+export interface VoltageWaveformPoint {
+  /** Time from the start of the transient simulation. Raw numbers are milliseconds. */
+  time: number | string
+  /** Source voltage at this point. Raw numbers are volts. */
+  voltage: number | string
 }
 
 ```

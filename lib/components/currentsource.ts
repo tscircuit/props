@@ -1,4 +1,4 @@
-import { frequency, rotation, current } from "circuit-json"
+import { current, frequency, ms, rotation } from "circuit-json"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -9,9 +9,17 @@ import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { type WaveShape } from "./voltagesource"
+import { validateStrictlyIncreasingWaveformTimes } from "../common/simulation-waveform"
 
 export const currentSourcePinLabels = ["pin1", "pin2", "pos", "neg"] as const
 export type CurrentSourcePinLabels = (typeof currentSourcePinLabels)[number]
+
+export interface CurrentWaveformPoint {
+  /** Time from the start of the transient simulation. Raw numbers are milliseconds. */
+  time: number | string
+  /** Source current at this point. Raw numbers are amperes. */
+  current: number | string
+}
 
 export interface CurrentSourceProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
@@ -25,6 +33,8 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string
+  /** Piecewise-linear transient source waveform. Cannot be combined with waveShape. */
+  currentWaveform?: CurrentWaveformPoint[]
   connections?: Connections<CurrentSourcePinLabels>
 }
 
@@ -46,6 +56,18 @@ const percentage = z
       .max(1, "Duty cycle cannot be greater than 100%"),
   )
 
+const currentWaveform = z
+  .array(
+    z
+      .object({
+        time: ms.pipe(z.number().nonnegative()),
+        current,
+      })
+      .strict(),
+  )
+  .min(1)
+  .superRefine(validateStrictlyIncreasingWaveformTimes)
+
 export const currentSourceProps = commonComponentProps.extend({
   current: current.optional(),
   frequency: frequency.optional(),
@@ -55,6 +77,7 @@ export const currentSourceProps = commonComponentProps.extend({
   dutyCycle: percentage.optional(),
   acMagnitude: current.optional(),
   acPhase: rotation.optional(),
+  currentWaveform: currentWaveform.optional(),
   connections: createConnectionsProp(currentSourcePinLabels).optional(),
 })
 

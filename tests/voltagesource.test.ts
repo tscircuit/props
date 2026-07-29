@@ -196,3 +196,20 @@ test("should allow optional connections", () => {
   const parsed = voltageSourceProps.parse(rawProps)
   expect(parsed.connections).toBeUndefined()
 })
+
+test("should parse a piecewise-linear voltage waveform", () => {
+  const parsed = voltageSourceProps.parse({
+    name: "VIN",
+    voltageWaveform: [
+      { time: "0ms", voltage: "2.2V" },
+      { time: "1ms", voltage: "2.2V" },
+      { time: "1.001ms", voltage: "4.2V" },
+    ],
+  })
+
+  expect(parsed.voltageWaveform).toEqual([
+    { time: 0, voltage: 2.2 },
+    { time: 1, voltage: 2.2 },
+    { time: 1.001, voltage: 4.2 },
+  ])
+})

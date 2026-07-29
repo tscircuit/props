@@ -177,3 +177,32 @@ test("should allow optional connections", () => {
   const parsed = currentSourceProps.parse(rawProps)
   expect(parsed.connections).toBeUndefined()
 })
+
+test("should parse a piecewise-linear current waveform", () => {
+  const parsed = currentSourceProps.parse({
+    name: "ILOAD",
+    currentWaveform: [
+      { time: "0ms", current: "100mA" },
+      { time: "1ms", current: "100mA" },
+      { time: "1.001ms", current: "1A" },
+    ],
+  })
+
+  expect(parsed.currentWaveform).toEqual([
+    { time: 0, current: 0.1 },
+    { time: 1, current: 0.1 },
+    { time: 1.001, current: 1 },
+  ])
+})
+
+test("should reject non-increasing current waveform times", () => {
+  expect(() =>
+    currentSourceProps.parse({
+      name: "ILOAD",
+      currentWaveform: [
+        { time: "1ms", current: "100mA" },
+        { time: "1ms", current: "1A" },
+      ],
+    }),
+  ).toThrow("Waveform times must be strictly increasing")
+})

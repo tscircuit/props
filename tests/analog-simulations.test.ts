@@ -2,6 +2,7 @@ import { expect, test } from "bun:test"
 import { analogAcSweepSimulationProps } from "lib/components/analogacsweepsimulation"
 import { analogDcOperatingPointSimulationProps } from "lib/components/analogdcoperatingpointsimulation"
 import { analogDcSweepSimulationProps } from "lib/components/analogdcsweepsimulation"
+import { analogMeasurementProps } from "lib/components/analogmeasurement"
 import { analogSweepParameterProps } from "lib/components/analogsweepparameter"
 import { analogTransientSimulationProps } from "lib/components/analogtransientsimulation"
 
@@ -141,4 +142,39 @@ test("analog parameter sweep accepts values or a complete range", () => {
       step: "1mA",
     }),
   ).toThrow("Provide either values or start/stop/step")
+})
+
+test("analog measurement preserves the measurement function", () => {
+  const measureFn = () => 3.3
+  const parsed = analogMeasurementProps.parse({
+    name: "settled-output",
+    unit: "V",
+    measureFn,
+  })
+
+  expect(parsed.measureFn).toBe(measureFn)
+})
+
+test("analog parameter sweep accepts aligned display coordinates", () => {
+  const parsed = analogSweepParameterProps.parse({
+    parameterType: "resistance",
+    resistorRef: ".R_FB_TOP",
+    values: ["236.6kΩ", "511kΩ", "855.4kΩ"],
+    displayValues: [1.8, 3.3, 5.2],
+    displayUnit: "V",
+  })
+
+  expect(parsed.displayValues).toEqual([1.8, 3.3, 5.2])
+})
+
+test("analog parameter sweep rejects misaligned display coordinates", () => {
+  expect(() =>
+    analogSweepParameterProps.parse({
+      parameterType: "resistance",
+      resistorRef: ".R_FB_TOP",
+      values: ["236.6kΩ", "511kΩ"],
+      displayValues: [1.8],
+      displayUnit: "V",
+    }),
+  ).toThrow("displayValues and values must have the same length")
 })

@@ -8,11 +8,19 @@ import { createConnectionsProp } from "lib/common/connectionsProp"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import { validateStrictlyIncreasingWaveformTimes } from "../common/simulation-waveform"
 
 export type WaveShape = "sinewave" | "square" | "triangle" | "sawtooth"
 
 export const voltageSourcePinLabels = ["pin1", "pin2", "pos", "neg"] as const
 export type VoltageSourcePinLabels = (typeof voltageSourcePinLabels)[number]
+
+export interface VoltageWaveformPoint {
+  /** Time from the start of the transient simulation. Raw numbers are milliseconds. */
+  time: number | string
+  /** Source voltage at this point. Raw numbers are volts. */
+  voltage: number | string
+}
 
 export interface VoltageSourceProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
@@ -31,6 +39,8 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string
+  /** Piecewise-linear transient source waveform. Cannot be combined with waveShape. */
+  voltageWaveform?: VoltageWaveformPoint[]
   connections?: Connections<VoltageSourcePinLabels>
 }
 
@@ -52,6 +62,18 @@ const percentage = z
       .max(1, "Duty cycle cannot be greater than 100%"),
   )
 
+const voltageWaveform = z
+  .array(
+    z
+      .object({
+        time: ms.pipe(z.number().nonnegative()),
+        voltage,
+      })
+      .strict(),
+  )
+  .min(1)
+  .superRefine(validateStrictlyIncreasingWaveformTimes)
+
 export const voltageSourceProps = commonComponentProps.extend({
   voltage: voltage.optional(),
   frequency: frequency.optional(),
@@ -66,6 +88,7 @@ export const voltageSourceProps = commonComponentProps.extend({
   period: ms.optional(),
   acMagnitude: voltage.optional(),
   acPhase: rotation.optional(),
+  voltageWaveform: voltageWaveform.optional(),
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 

@@ -42,7 +42,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   spiceOptions?: SpiceOptions
   /** Render each probe with an independent vertical graph scale. */
   graphIndependentAxes?: boolean
-  /** Optional nested sweep parameter for repeated analysis runs. */
+  /** Optional nested sweep parameters and transient measurements. */
   children?: ReactNode
 }
 

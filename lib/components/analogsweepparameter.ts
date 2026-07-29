@@ -8,7 +8,7 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-interface AnalogSweepCoordinatesProps {
+export interface AnalogSweepCoordinatesProps {
   /** Stable identity for this sweep parameter. */
   name?: string
   /** Explicit parameter coordinates. Cannot be combined with start/stop/step. */
@@ -19,6 +19,10 @@ interface AnalogSweepCoordinatesProps {
   stop?: number | string
   /** Nonzero parameter increment directed from start toward stop. */
   step?: number | string
+  /** Optional graph coordinates corresponding one-to-one with the physical sweep values. */
+  displayValues?: number[]
+  /** Unit for displayValues. Required when displayValues is provided. */
+  displayUnit?: string
 }
 
 export interface AnalogResistanceSweepParameterProps
@@ -70,6 +74,8 @@ const createAnalogSweepCoordinateProps = (
   start: sweepQuantity.optional(),
   stop: sweepQuantity.optional(),
   step: sweepQuantity.optional(),
+  displayValues: z.array(z.number().finite()).min(1).optional(),
+  displayUnit: z.string().min(1).optional(),
 })
 
 export const analogResistanceSweepParameterProps = z
@@ -117,6 +123,8 @@ interface ParsedAnalogSweepCoordinates {
   start?: number
   stop?: number
   step?: number
+  displayValues?: number[]
+  displayUnit?: string
 }
 
 const validateAnalogSweepCoordinates = (
@@ -137,6 +145,26 @@ const validateAnalogSweepCoordinates = (
       message: "Provide either values or start/stop/step",
     })
     return
+  }
+
+  const hasDisplayValues = sweepCoordinates.displayValues !== undefined
+  const hasDisplayUnit = sweepCoordinates.displayUnit !== undefined
+  if (hasDisplayValues !== hasDisplayUnit) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "displayValues and displayUnit must be provided together",
+    })
+  }
+  if (
+    sweepCoordinates.values &&
+    sweepCoordinates.displayValues &&
+    sweepCoordinates.values.length !== sweepCoordinates.displayValues.length
+  ) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["displayValues"],
+      message: "displayValues and values must have the same length",
+    })
   }
 
   if (rangeCoordinateCount !== 0 && rangeCoordinateCount !== 3) {

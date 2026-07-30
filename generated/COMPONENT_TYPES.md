@@ -1178,10 +1178,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   reroute?: boolean
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
   fanoutBoundaryPadding?: FanoutBoundaryPadding
+  fanoutRoutingLayers?: LayerRefInput[]
 }
 /**
-   * Padding between the union of the fanout source pads and the shared
-   * boundary where fanout traces terminate.
+   * Copper layers available to boundary-terminated fanout buses. Plane
+   * terminations still use the layer declared on their bus.
    */
 export const autoroutingPhaseProps = z
   .object({
@@ -1204,6 +1205,7 @@ export const autoroutingPhaseProps = z
     reroute: z.boolean().optional(),
     busFanoutDirections: z.record(busFanoutDirection).optional(),
     fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
+    fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
   })
 ```
 

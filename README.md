@@ -352,6 +352,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
    * boundary where fanout traces terminate.
    */
   fanoutBoundaryPadding?: FanoutBoundaryPadding;
+  /**
+   * Copper layers available to boundary-terminated fanout buses. Plane
+   * terminations still use the layer declared on their bus.
+   */
+  fanoutRoutingLayers?: LayerRefInput[];
 }
 ```
 

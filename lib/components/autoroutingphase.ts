@@ -1,5 +1,6 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import { layer_ref, type LayerRefInput } from "circuit-json"
 import {
   type FanoutBoundaryPadding,
   fanoutBoundaryPadding,
@@ -47,6 +48,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
    * boundary where fanout traces terminate.
    */
   fanoutBoundaryPadding?: FanoutBoundaryPadding
+  /**
+   * Copper layers available to boundary-terminated fanout buses. Plane
+   * terminations still use the layer declared on their bus.
+   */
+  fanoutRoutingLayers?: LayerRefInput[]
 }
 
 const busFanoutDirection = z.union([
@@ -75,6 +81,7 @@ export const autoroutingPhaseProps = z
     reroute: z.boolean().optional(),
     busFanoutDirections: z.record(busFanoutDirection).optional(),
     fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
+    fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
   })
   .superRefine((value, ctx) => {
     if (

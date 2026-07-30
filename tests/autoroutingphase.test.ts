@@ -42,6 +42,15 @@ test("autorouting phase accepts per-bus fanout directions", () => {
   expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
 })
 
+test("autorouting phase accepts fanout routing layers", () => {
+  const parsed = autoroutingPhaseProps.parse({
+    autorouter: "fanout",
+    fanoutRoutingLayers: ["top", { name: "inner3" }, "bottom"],
+  })
+
+  expect(parsed.fanoutRoutingLayers).toEqual(["top", "inner3", "bottom"])
+})
+
 test("autorouting phase accepts scalar fanout boundary padding", () => {
   const raw = {
     autorouter: "fanout",

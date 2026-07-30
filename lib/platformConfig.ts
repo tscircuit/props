@@ -28,6 +28,11 @@ export interface SpiceEngineSimulationResult {
 }
 
 export interface SpiceEngine {
+  /**
+   * Maximum number of independent simulations this engine can safely execute
+   * at once. Engines are treated as serial when this is omitted.
+   */
+  maxConcurrentSimulations?: number
   simulate: (spiceString: string) => Promise<SpiceEngineSimulationResult>
 }
 

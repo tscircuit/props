@@ -95,6 +95,13 @@ export interface AnalogInductanceSweepParameterProps
 }
 
 
+export interface AnalogMeasurementProps {
+  name: string
+  unit: string
+  measureFn: (context: AnalogTransientMeasurementContext) => number
+}
+
+
 export interface AnalogResistanceSweepParameterProps
   extends AnalogSweepCoordinatesProps {
   parameterType: "resistance"
@@ -112,6 +119,12 @@ export interface AnalogSimulationProps {
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
+}
+
+
+export interface AnalogTransientMeasurementContext {
+  getVoltage: (selector: string) => TransientMeasurementSeries
+  getCurrent: (selector: string) => TransientMeasurementSeries
 }
 
 
@@ -210,6 +223,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
    * direction unconstrained.
    */
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 
 
@@ -408,11 +426,22 @@ export interface BreakoutPointProps
 
 export interface BreakoutProps
   extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  /**
+   * Autorouter used to escape the components inside the breakout boundary.
+   * Defaults to the multilayer fanout autorouter.
+   */
+  autorouter?: AutorouterProp
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate. This is independent of the
+   * breakout group's layout padding.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 
 
@@ -815,6 +844,11 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string
+  /** Piecewise-linear transient source points. Raw times are milliseconds. */
+  currentWaveform?: Array<{
+    time: number | string
+    current: number | string
+  }>
   connections?: Connections<CurrentSourcePinLabels>
 }
 
@@ -875,6 +909,14 @@ export interface DiodeProps<PinLabel extends string = string>
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation
+}
+
+
+export interface DirectionalFanoutBoundaryPadding {
+  top?: Distance
+  right?: Distance
+  bottom?: Distance
+  left?: Distance
 }
 
 
@@ -2507,6 +2549,12 @@ export interface ToolingrailProps {
 }
 
 
+export interface TransientMeasurementSeries {
+  timestampsMs: readonly number[]
+  values: readonly number[]
+}
+
+
 export interface TransistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
@@ -2555,6 +2603,11 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string
+  /** Piecewise-linear transient source points. Raw times are milliseconds. */
+  voltageWaveform?: Array<{
+    time: number | string
+    voltage: number | string
+  }>
   connections?: Connections<VoltageSourcePinLabels>
 }
 

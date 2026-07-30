@@ -31,6 +31,11 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string
+  /** Piecewise-linear transient source points. Raw times are milliseconds. */
+  voltageWaveform?: Array<{
+    time: number | string
+    voltage: number | string
+  }>
   connections?: Connections<VoltageSourcePinLabels>
 }
 
@@ -52,22 +57,64 @@ const percentage = z
       .max(1, "Duty cycle cannot be greater than 100%"),
   )
 
-export const voltageSourceProps = commonComponentProps.extend({
-  voltage: voltage.optional(),
-  frequency: frequency.optional(),
-  peakToPeakVoltage: voltage.optional(),
-  waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
-  phase: rotation.optional(),
-  dutyCycle: percentage.optional(),
-  pulseDelay: ms.optional(),
-  riseTime: ms.optional(),
-  fallTime: ms.optional(),
-  pulseWidth: ms.optional(),
-  period: ms.optional(),
-  acMagnitude: voltage.optional(),
-  acPhase: rotation.optional(),
-  connections: createConnectionsProp(voltageSourcePinLabels).optional(),
-})
+export const voltageSourceProps = commonComponentProps
+  .extend({
+    voltage: voltage.optional(),
+    frequency: frequency.optional(),
+    peakToPeakVoltage: voltage.optional(),
+    waveShape: z
+      .enum(["sinewave", "square", "triangle", "sawtooth"])
+      .optional(),
+    phase: rotation.optional(),
+    dutyCycle: percentage.optional(),
+    pulseDelay: ms.optional(),
+    riseTime: ms.optional(),
+    fallTime: ms.optional(),
+    pulseWidth: ms.optional(),
+    period: ms.optional(),
+    acMagnitude: voltage.optional(),
+    acPhase: rotation.optional(),
+    voltageWaveform: z
+      .array(
+        z
+          .object({
+            time: ms.refine((timeMs) => timeMs >= 0, {
+              message: "Waveform times must be nonnegative",
+            }),
+            voltage,
+          })
+          .strict(),
+      )
+      .min(1)
+      .optional(),
+    connections: createConnectionsProp(voltageSourcePinLabels).optional(),
+  })
+  .superRefine((source, context) => {
+    if (source.voltageWaveform && source.waveShape) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["voltageWaveform"],
+        message: "voltageWaveform cannot be combined with waveShape",
+      })
+    }
+    for (
+      let index = 1;
+      index < (source.voltageWaveform?.length ?? 0);
+      index++
+    ) {
+      if (
+        source.voltageWaveform![index]!.time <=
+        source.voltageWaveform![index - 1]!.time
+      ) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["voltageWaveform", index, "time"],
+          message: "Waveform times must be strictly increasing",
+        })
+        break
+      }
+    }
+  })
 
 export const voltageSourcePins = lrPolarPins
 

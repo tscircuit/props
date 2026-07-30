@@ -178,6 +178,44 @@ test("should parse voltage source props with array connections", () => {
   })
 })
 
+test("should parse a piecewise-linear voltage waveform", () => {
+  const parsed = voltageSourceProps.parse({
+    name: "VIN",
+    voltage: "2.2V",
+    voltageWaveform: [
+      { time: "0ms", voltage: "2.2V" },
+      { time: "1ms", voltage: "2.2V" },
+      { time: "1.001ms", voltage: "4.2V" },
+    ],
+  })
+
+  expect(parsed.voltageWaveform).toEqual([
+    { time: 0, voltage: 2.2 },
+    { time: 1, voltage: 2.2 },
+    { time: 1.001, voltage: 4.2 },
+  ])
+})
+
+test("should reject non-increasing or periodic voltage waveforms", () => {
+  expect(() =>
+    voltageSourceProps.parse({
+      name: "VIN",
+      voltageWaveform: [
+        { time: "1ms", voltage: "2.2V" },
+        { time: "1ms", voltage: "4.2V" },
+      ],
+    }),
+  ).toThrow("strictly increasing")
+
+  expect(() =>
+    voltageSourceProps.parse({
+      name: "VIN",
+      waveShape: "square",
+      voltageWaveform: [{ time: "0ms", voltage: "2.2V" }],
+    }),
+  ).toThrow("cannot be combined")
+})
+
 test("should reject connections with invalid keys", () => {
   expect(() => {
     voltageSourceProps.parse({

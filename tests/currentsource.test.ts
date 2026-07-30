@@ -159,6 +159,44 @@ test("should parse current source props with array connections", () => {
   })
 })
 
+test("should parse a piecewise-linear current waveform", () => {
+  const parsed = currentSourceProps.parse({
+    name: "ILOAD",
+    current: "100mA",
+    currentWaveform: [
+      { time: "0ms", current: "100mA" },
+      { time: "1ms", current: "100mA" },
+      { time: "1.001ms", current: "1A" },
+    ],
+  })
+
+  expect(parsed.currentWaveform).toEqual([
+    { time: 0, current: 0.1 },
+    { time: 1, current: 0.1 },
+    { time: 1.001, current: 1 },
+  ])
+})
+
+test("should reject non-increasing or periodic current waveforms", () => {
+  expect(() =>
+    currentSourceProps.parse({
+      name: "ILOAD",
+      currentWaveform: [
+        { time: "1ms", current: "100mA" },
+        { time: "1ms", current: "1A" },
+      ],
+    }),
+  ).toThrow("strictly increasing")
+
+  expect(() =>
+    currentSourceProps.parse({
+      name: "ILOAD",
+      waveShape: "square",
+      currentWaveform: [{ time: "0ms", current: "100mA" }],
+    }),
+  ).toThrow("cannot be combined")
+})
+
 test("should reject connections with invalid keys", () => {
   expect(() => {
     currentSourceProps.parse({

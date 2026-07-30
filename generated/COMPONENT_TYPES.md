@@ -155,6 +155,35 @@ export const pcbCoordinate = calcString.or(baseDistance)
 export { length }
 ```
 
+### fanoutBoundaryPadding
+
+```typescript
+export interface DirectionalFanoutBoundaryPadding {
+  top?: Distance
+  right?: Distance
+  bottom?: Distance
+  left?: Distance
+}
+/**
+ * Padding between the union of the fanout source pads and the shared boundary
+ * where fanout traces terminate. Omitted directional values are treated as
+ * zero.
+ */
+export type FanoutBoundaryPadding = Distance | DirectionalFanoutBoundaryPadding
+
+const nonnegativeDistance = distance.refine((value) => value >= 0, {
+  message: "Fanout boundary padding cannot be negative",
+})
+export const fanoutBoundaryPadding = z.union([
+  nonnegativeDistance,
+  z.object({
+    top: nonnegativeDistance.optional(),
+    right: nonnegativeDistance.optional(),
+    bottom: nonnegativeDistance.optional(),
+    left: nonnegativeDistance.optional(),
+  }),
+```
+
 ### footprintProp
 
 ```typescript
@@ -991,6 +1020,31 @@ export const analogDcSweepSimulationProps = z
   })
 ```
 
+### analogmeasurement
+
+```typescript
+export interface TransientMeasurementSeries {
+  timestampsMs: readonly number[]
+  values: readonly number[]
+}
+export interface AnalogTransientMeasurementContext {
+  getVoltage: (selector: string) => TransientMeasurementSeries
+  getCurrent: (selector: string) => TransientMeasurementSeries
+}
+export interface AnalogMeasurementProps {
+  name: string
+  unit: string
+  measureFn: (context: AnalogTransientMeasurementContext) => number
+}
+export const analogMeasurementProps = z.object({
+  name: z.string().min(1),
+  unit: z.string().min(1),
+  measureFn: z.custom<AnalogMeasurementProps["measureFn"]>(
+    (measureFn) => typeof measureFn === "function",
+  ),
+})
+```
+
 ### analogsimulation
 
 ```typescript
@@ -1148,10 +1202,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connections?: string[]
   reroute?: boolean
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 /**
-   * Fanout direction for each named bus in this phase. `center` leaves the
-   * direction unconstrained.
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate.
    */
 export const autoroutingPhaseProps = z
   .object({
@@ -1173,6 +1228,7 @@ export const autoroutingPhaseProps = z
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
     busFanoutDirections: z.record(busFanoutDirection).optional(),
+    fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
   })
 ```
 
@@ -1263,10 +1319,12 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 /**
-   * Autorouter used to escape the components inside the breakout boundary.
-   * Defaults to the multilayer fanout autorouter.
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate. This is independent of the
+   * breakout group's layout padding.
    */
 export const breakoutProps = subcircuitGroupProps.extend({
   autorouter: autorouterProp.default("fanout"),
@@ -1275,6 +1333,7 @@ export const breakoutProps = subcircuitGroupProps.extend({
   paddingRight: distance.optional(),
   paddingTop: distance.optional(),
   paddingBottom: distance.optional(),
+  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
 })
 ```
 
@@ -1735,20 +1794,36 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   dutyCycle?: number | string
   acMagnitude?: number | string
   acPhase?: number | string
+  currentWaveform?: Array<{
+    time: number | string
+    current: number | string
+  }>
   connections?: Connections<CurrentSourcePinLabels>
 }
-/** Small-signal AC phase. Raw numbers are degrees. */
-export const currentSourceProps = commonComponentProps.extend({
-  current: current.optional(),
-  frequency: frequency.optional(),
-  peakToPeakCurrent: current.optional(),
-  waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
-  phase: rotation.optional(),
-  dutyCycle: percentage.optional(),
-  acMagnitude: current.optional(),
-  acPhase: rotation.optional(),
-  connections: createConnectionsProp(currentSourcePinLabels).optional(),
-})
+.extend({
+    current: current.optional(),
+    frequency: frequency.optional(),
+    peakToPeakCurrent: current.optional(),
+    waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
+    phase: rotation.optional(),
+    dutyCycle: percentage.optional(),
+    acMagnitude: current.optional(),
+    acPhase: rotation.optional(),
+    currentWaveform: z
+      .array(
+        z
+          .object({
+            time: ms.refine((timeMs) => timeMs >= 0, {
+              message: "Waveform times must be nonnegative",
+            }),
+            current,
+          })
+          .strict(),
+      )
+      .min(1)
+      .optional(),
+    connections: createConnectionsProp(currentSourcePinLabels).optional(),
+  })
 ```
 
 ### cutout
@@ -4622,24 +4697,40 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   period?: number | string
   acMagnitude?: number | string
   acPhase?: number | string
+  voltageWaveform?: Array<{
+    time: number | string
+    voltage: number | string
+  }>
   connections?: Connections<VoltageSourcePinLabels>
 }
-/** Small-signal AC phase. Raw numbers are degrees. */
-export const voltageSourceProps = commonComponentProps.extend({
-  voltage: voltage.optional(),
-  frequency: frequency.optional(),
-  peakToPeakVoltage: voltage.optional(),
-  waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
-  phase: rotation.optional(),
-  dutyCycle: percentage.optional(),
-  pulseDelay: ms.optional(),
-  riseTime: ms.optional(),
-  fallTime: ms.optional(),
-  pulseWidth: ms.optional(),
-  period: ms.optional(),
-  acMagnitude: voltage.optional(),
-  acPhase: rotation.optional(),
-  connections: createConnectionsProp(voltageSourcePinLabels).optional(),
-})
+.extend({
+    voltage: voltage.optional(),
+    frequency: frequency.optional(),
+    peakToPeakVoltage: voltage.optional(),
+    waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
+    phase: rotation.optional(),
+    dutyCycle: percentage.optional(),
+    pulseDelay: ms.optional(),
+    riseTime: ms.optional(),
+    fallTime: ms.optional(),
+    pulseWidth: ms.optional(),
+    period: ms.optional(),
+    acMagnitude: voltage.optional(),
+    acPhase: rotation.optional(),
+    voltageWaveform: z
+      .array(
+        z
+          .object({
+            time: ms.refine((timeMs) => timeMs >= 0, {
+              message: "Waveform times must be nonnegative",
+            }),
+            voltage,
+          })
+          .strict(),
+      )
+      .min(1)
+      .optional(),
+    connections: createConnectionsProp(voltageSourcePinLabels).optional(),
+  })
 ```
 

@@ -1,4 +1,4 @@
-import { frequency, rotation, current } from "circuit-json"
+import { current, frequency, ms, rotation } from "circuit-json"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -25,6 +25,11 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string
+  /** Piecewise-linear transient source points. Raw times are milliseconds. */
+  currentWaveform?: Array<{
+    time: number | string
+    current: number | string
+  }>
   connections?: Connections<CurrentSourcePinLabels>
 }
 
@@ -46,17 +51,59 @@ const percentage = z
       .max(1, "Duty cycle cannot be greater than 100%"),
   )
 
-export const currentSourceProps = commonComponentProps.extend({
-  current: current.optional(),
-  frequency: frequency.optional(),
-  peakToPeakCurrent: current.optional(),
-  waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
-  phase: rotation.optional(),
-  dutyCycle: percentage.optional(),
-  acMagnitude: current.optional(),
-  acPhase: rotation.optional(),
-  connections: createConnectionsProp(currentSourcePinLabels).optional(),
-})
+export const currentSourceProps = commonComponentProps
+  .extend({
+    current: current.optional(),
+    frequency: frequency.optional(),
+    peakToPeakCurrent: current.optional(),
+    waveShape: z
+      .enum(["sinewave", "square", "triangle", "sawtooth"])
+      .optional(),
+    phase: rotation.optional(),
+    dutyCycle: percentage.optional(),
+    acMagnitude: current.optional(),
+    acPhase: rotation.optional(),
+    currentWaveform: z
+      .array(
+        z
+          .object({
+            time: ms.refine((timeMs) => timeMs >= 0, {
+              message: "Waveform times must be nonnegative",
+            }),
+            current,
+          })
+          .strict(),
+      )
+      .min(1)
+      .optional(),
+    connections: createConnectionsProp(currentSourcePinLabels).optional(),
+  })
+  .superRefine((source, context) => {
+    if (source.currentWaveform && source.waveShape) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["currentWaveform"],
+        message: "currentWaveform cannot be combined with waveShape",
+      })
+    }
+    for (
+      let index = 1;
+      index < (source.currentWaveform?.length ?? 0);
+      index++
+    ) {
+      if (
+        source.currentWaveform![index]!.time <=
+        source.currentWaveform![index - 1]!.time
+      ) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["currentWaveform", index, "time"],
+          message: "Waveform times must be strictly increasing",
+        })
+        break
+      }
+    }
+  })
 
 export const currentSourcePins = lrPolarPins
 

@@ -26,6 +26,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<analog.acsweepsimulation />`          | [`AnalogAcSweepSimulationProps`](#analogacsweepsimulationprops-analogacsweepsimulation)                            |
 | `<analog.dcoperatingpointsimulation />` | [`AnalogDcOperatingPointSimulationProps`](#analogdcoperatingpointsimulationprops-analogdcoperatingpointsimulation) |
 | `<analog.dcsweepsimulation />`          | [`AnalogDcSweepSimulationProps`](#analogdcsweepsimulationprops-analogdcsweepsimulation)                            |
+| `<analogmeasurement />`                 | [`AnalogMeasurementProps`](#analogmeasurementprops-analogmeasurement)                                              |
 | `<analogsimulation />`                  | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                                                 |
 | `<analog.sweepparameter />`             | [`AnalogResistanceSweepParameterProps`](#analogresistancesweepparameterprops-analogsweepparameter)                 |
 | `<analog.transientsimulation />`        | [`AnalogTransientSimulationProps`](#analogtransientsimulationprops-analogtransientsimulation)                      |
@@ -279,6 +280,18 @@ export interface AnalogDcSweepSimulationProps extends AnalogAnalysisSimulationBa
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/analogdcsweepsimulation.ts)
+
+### AnalogMeasurementProps `<analogmeasurement />`
+
+```ts
+export interface AnalogMeasurementProps {
+  name: string;
+  unit: string;
+  measureFn: (context: AnalogTransientMeasurementContext) => number;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogmeasurement.ts)
 
 ### AnalogSimulationProps `<analogsimulation />`
 
@@ -716,6 +729,11 @@ export interface CurrentSourceProps<
   acMagnitude?: number | string;
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string;
+  /** Piecewise-linear transient source points. Raw times are milliseconds. */
+  currentWaveform?: Array<{
+    time: number | string;
+    current: number | string;
+  }>;
   connections?: Connections<CurrentSourcePinLabels>;
 }
 ```
@@ -2208,6 +2226,11 @@ export interface VoltageSourceProps<
   acMagnitude?: number | string;
   /** Small-signal AC phase. Raw numbers are degrees. */
   acPhase?: number | string;
+  /** Piecewise-linear transient source points. Raw times are milliseconds. */
+  voltageWaveform?: Array<{
+    time: number | string;
+    voltage: number | string;
+  }>;
   connections?: Connections<VoltageSourcePinLabels>;
 }
 ```

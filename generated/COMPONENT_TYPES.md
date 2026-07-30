@@ -155,6 +155,35 @@ export const pcbCoordinate = calcString.or(baseDistance)
 export { length }
 ```
 
+### fanoutBoundaryPadding
+
+```typescript
+export interface DirectionalFanoutBoundaryPadding {
+  top?: Distance
+  right?: Distance
+  bottom?: Distance
+  left?: Distance
+}
+/**
+ * Padding between the union of the fanout source pads and the shared boundary
+ * where fanout traces terminate. Omitted directional values are treated as
+ * zero.
+ */
+export type FanoutBoundaryPadding = Distance | DirectionalFanoutBoundaryPadding
+
+const nonnegativeDistance = distance.refine((value) => value >= 0, {
+  message: "Fanout boundary padding cannot be negative",
+})
+export const fanoutBoundaryPadding = z.union([
+  nonnegativeDistance,
+  z.object({
+    top: nonnegativeDistance.optional(),
+    right: nonnegativeDistance.optional(),
+    bottom: nonnegativeDistance.optional(),
+    left: nonnegativeDistance.optional(),
+  }),
+```
+
 ### footprintProp
 
 ```typescript
@@ -1148,10 +1177,16 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connections?: string[]
   reroute?: boolean
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
+  fanoutRoutingLayers?: LayerRefInput[]
+  fanoutPourNetMap?: FanoutPourNetMap
 }
 /**
-   * Fanout direction for each named bus in this phase. `center` leaves the
-   * direction unconstrained.
+   * Maps copper layers to the net or nets poured on them. During fanout,
+   * source-only traces on those nets drop to the mapped layer instead of
+   * routing to the breakout boundary.
+   *
+   * This is inferred from `<copperpour>` components when omitted.
    */
 export const autoroutingPhaseProps = z
   .object({
@@ -1173,6 +1208,11 @@ export const autoroutingPhaseProps = z
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
     busFanoutDirections: z.record(busFanoutDirection).optional(),
+    fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
+    fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
+    fanoutPourNetMap: z
+      .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+      .optional(),
   })
 ```
 
@@ -1263,10 +1303,12 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 /**
-   * Autorouter used to escape the components inside the breakout boundary.
-   * Defaults to the multilayer fanout autorouter.
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate. This is independent of the
+   * breakout group's layout padding.
    */
 export const breakoutProps = subcircuitGroupProps.extend({
   autorouter: autorouterProp.default("fanout"),
@@ -1275,6 +1317,7 @@ export const breakoutProps = subcircuitGroupProps.extend({
   paddingRight: distance.optional(),
   paddingTop: distance.optional(),
   paddingBottom: distance.optional(),
+  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
 })
 ```
 

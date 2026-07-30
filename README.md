@@ -352,6 +352,20 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
    * boundary where fanout traces terminate.
    */
   fanoutBoundaryPadding?: FanoutBoundaryPadding;
+  /**
+   * Copper layers available to boundary-terminated fanout buses. Source-only
+   * traces whose nets are mapped by `fanoutPourNetMap` terminate on their
+   * mapped plane layer.
+   */
+  fanoutRoutingLayers?: LayerRefInput[];
+  /**
+   * Maps copper layers to the net or nets poured on them. During fanout,
+   * source-only traces on those nets drop to the mapped layer instead of
+   * routing to the breakout boundary.
+   *
+   * This is inferred from `<copperpour>` components when omitted.
+   */
+  fanoutPourNetMap?: FanoutPourNetMap;
 }
 ```
 

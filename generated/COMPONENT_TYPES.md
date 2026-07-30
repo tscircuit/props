@@ -1179,10 +1179,14 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
   fanoutBoundaryPadding?: FanoutBoundaryPadding
   fanoutRoutingLayers?: LayerRefInput[]
+  fanoutPourNetMap?: FanoutPourNetMap
 }
 /**
-   * Copper layers available to boundary-terminated fanout buses. Plane
-   * terminations still use the layer declared on their bus.
+   * Maps copper layers to the net or nets poured on them. During fanout,
+   * source-only traces on those nets drop to the mapped layer instead of
+   * routing to the breakout boundary.
+   *
+   * This is inferred from `<copperpour>` components when omitted.
    */
 export const autoroutingPhaseProps = z
   .object({
@@ -1206,6 +1210,9 @@ export const autoroutingPhaseProps = z
     busFanoutDirections: z.record(busFanoutDirection).optional(),
     fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
     fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
+    fanoutPourNetMap: z
+      .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+      .optional(),
   })
 ```
 
@@ -1331,10 +1338,6 @@ export const breakoutPointProps = pcbLayoutProps
 ### bus
 
 ```typescript
-export type BusFanoutTermination =
-  | {
-      type: "boundary"
-    }
 /**
  * Declares a group of connections that an autorouter should keep together.
  * Each connection may be a trace name or a port selector.
@@ -1342,20 +1345,12 @@ export type BusFanoutTermination =
 export interface BusProps {
   name?: string
   connections: string[]
-  fanoutTermination?: BusFanoutTermination
 }
-/**
-   * How this bus should terminate during fanout.
-   *
-   * Plane termination escapes each source pad to a local via on the selected
-   * layer instead of routing the bus to the breakout boundary.
-   */
-export const busProps = z
-  .object({
-    name: z.string().optional(),
-    connections: z.array(z.string()).min(1),
-    fanoutTermination: busFanoutTermination.optional(),
-  })
+/** Trace names or port selectors for the connections in the bus. */
+export const busProps = z.object({
+  name: z.string().optional(),
+  connections: z.array(z.string()).min(2),
+})
 ```
 
 ### cadassembly

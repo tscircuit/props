@@ -1,6 +1,6 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import { layer_ref, type LayerRefInput } from "circuit-json"
+import { layer_ref, type LayerRef, type LayerRefInput } from "circuit-json"
 import {
   type FanoutBoundaryPadding,
   fanoutBoundaryPadding,
@@ -22,6 +22,10 @@ export type BusFanoutDirection =
   | {
       direction: NinePointAnchor
     }
+
+export type FanoutPourNetMap = Partial<
+  Record<Extract<LayerRef, string>, string | string[]>
+>
 
 export interface AutoroutingPhaseProps extends RoutingTolerances {
   key?: any
@@ -49,10 +53,19 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
    */
   fanoutBoundaryPadding?: FanoutBoundaryPadding
   /**
-   * Copper layers available to boundary-terminated fanout buses. Plane
-   * terminations still use the layer declared on their bus.
+   * Copper layers available to boundary-terminated fanout buses. Source-only
+   * traces whose nets are mapped by `fanoutPourNetMap` terminate on their
+   * mapped plane layer.
    */
   fanoutRoutingLayers?: LayerRefInput[]
+  /**
+   * Maps copper layers to the net or nets poured on them. During fanout,
+   * source-only traces on those nets drop to the mapped layer instead of
+   * routing to the breakout boundary.
+   *
+   * This is inferred from `<copperpour>` components when omitted.
+   */
+  fanoutPourNetMap?: FanoutPourNetMap
 }
 
 const busFanoutDirection = z.union([
@@ -82,6 +95,9 @@ export const autoroutingPhaseProps = z
     busFanoutDirections: z.record(busFanoutDirection).optional(),
     fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
     fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
+    fanoutPourNetMap: z
+      .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+      .optional(),
   })
   .superRefine((value, ctx) => {
     if (

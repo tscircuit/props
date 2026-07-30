@@ -210,6 +210,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
    * direction unconstrained.
    */
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 
 
@@ -408,11 +413,22 @@ export interface BreakoutPointProps
 
 export interface BreakoutProps
   extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  /**
+   * Autorouter used to escape the components inside the breakout boundary.
+   * Defaults to the multilayer fanout autorouter.
+   */
+  autorouter?: AutorouterProp
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate. This is independent of the
+   * breakout group's layout padding.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 
 
@@ -420,6 +436,13 @@ export interface BusProps {
   name?: string
   /** Trace names or port selectors for the connections in the bus. */
   connections: string[]
+  /**
+   * How this bus should terminate during fanout.
+   *
+   * Plane termination escapes each source pad to a local via on the selected
+   * layer instead of routing the bus to the breakout boundary.
+   */
+  fanoutTermination?: BusFanoutTermination
 }
 
 
@@ -875,6 +898,14 @@ export interface DiodeProps<PinLabel extends string = string>
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation
+}
+
+
+export interface DirectionalFanoutBoundaryPadding {
+  top?: Distance
+  right?: Distance
+  bottom?: Distance
+  left?: Distance
 }
 
 

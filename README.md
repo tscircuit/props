@@ -458,6 +458,13 @@ export interface BusProps {
   name?: string;
   /** Trace names or port selectors for the connections in the bus. */
   connections: string[];
+  /**
+   * How this bus should terminate during fanout.
+   *
+   * Plane termination escapes each source pad to a local via on the selected
+   * layer instead of routing the bus to the breakout boundary.
+   */
+  fanoutTermination?: BusFanoutTermination;
 }
 ```
 

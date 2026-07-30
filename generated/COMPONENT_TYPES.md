@@ -155,6 +155,35 @@ export const pcbCoordinate = calcString.or(baseDistance)
 export { length }
 ```
 
+### fanoutBoundaryPadding
+
+```typescript
+export interface DirectionalFanoutBoundaryPadding {
+  top?: Distance
+  right?: Distance
+  bottom?: Distance
+  left?: Distance
+}
+/**
+ * Padding between the union of the fanout source pads and the shared boundary
+ * where fanout traces terminate. Omitted directional values are treated as
+ * zero.
+ */
+export type FanoutBoundaryPadding = Distance | DirectionalFanoutBoundaryPadding
+
+const nonnegativeDistance = distance.refine((value) => value >= 0, {
+  message: "Fanout boundary padding cannot be negative",
+})
+export const fanoutBoundaryPadding = z.union([
+  nonnegativeDistance,
+  z.object({
+    top: nonnegativeDistance.optional(),
+    right: nonnegativeDistance.optional(),
+    bottom: nonnegativeDistance.optional(),
+    left: nonnegativeDistance.optional(),
+  }),
+```
+
 ### footprintProp
 
 ```typescript
@@ -1148,10 +1177,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connections?: string[]
   reroute?: boolean
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 /**
-   * Fanout direction for each named bus in this phase. `center` leaves the
-   * direction unconstrained.
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate.
    */
 export const autoroutingPhaseProps = z
   .object({
@@ -1173,6 +1203,7 @@ export const autoroutingPhaseProps = z
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
     busFanoutDirections: z.record(busFanoutDirection).optional(),
+    fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
   })
 ```
 
@@ -1263,10 +1294,12 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 /**
-   * Autorouter used to escape the components inside the breakout boundary.
-   * Defaults to the multilayer fanout autorouter.
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate. This is independent of the
+   * breakout group's layout padding.
    */
 export const breakoutProps = subcircuitGroupProps.extend({
   autorouter: autorouterProp.default("fanout"),
@@ -1275,6 +1308,7 @@ export const breakoutProps = subcircuitGroupProps.extend({
   paddingRight: distance.optional(),
   paddingTop: distance.optional(),
   paddingBottom: distance.optional(),
+  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
 })
 ```
 
@@ -1295,6 +1329,10 @@ export const breakoutPointProps = pcbLayoutProps
 ### bus
 
 ```typescript
+export type BusFanoutTermination =
+  | {
+      type: "boundary"
+    }
 /**
  * Declares a group of connections that an autorouter should keep together.
  * Each connection may be a trace name or a port selector.
@@ -1302,12 +1340,20 @@ export const breakoutPointProps = pcbLayoutProps
 export interface BusProps {
   name?: string
   connections: string[]
+  fanoutTermination?: BusFanoutTermination
 }
-/** Trace names or port selectors for the connections in the bus. */
-export const busProps = z.object({
-  name: z.string().optional(),
-  connections: z.array(z.string()).min(2),
-})
+/**
+   * How this bus should terminate during fanout.
+   *
+   * Plane termination escapes each source pad to a local via on the selected
+   * layer instead of routing the bus to the breakout boundary.
+   */
+export const busProps = z
+  .object({
+    name: z.string().optional(),
+    connections: z.array(z.string()).min(1),
+    fanoutTermination: busFanoutTermination.optional(),
+  })
 ```
 
 ### cadassembly

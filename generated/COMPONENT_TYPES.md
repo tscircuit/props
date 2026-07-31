@@ -184,6 +184,43 @@ export const fanoutBoundaryPadding = z.union([
   }),
 ```
 
+### fanoutProps
+
+```typescript
+export type BusFanoutDirection =
+  | NinePointAnchor
+  | {
+      direction: NinePointAnchor
+    }
+/**
+ * Routing controls shared by fanout autorouting phases and breakout groups.
+ */
+export interface FanoutProps {
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
+  fanoutRoutingLayers?: LayerRefInput[]
+  fanoutPourNetMap?: FanoutPourNetMap
+}
+/**
+   * Maps copper layers to the net or nets poured on them. During fanout,
+   * source-only traces on those nets drop to the mapped layer instead of
+   * routing to the breakout boundary.
+   *
+   * This is inferred from `<copperpour>` components when omitted.
+   */
+export const busFanoutDirection = z.union([
+  ninePointAnchor,
+  z.object({ direction: ninePointAnchor }),
+export const fanoutProps = z.object({
+  busFanoutDirections: z.record(busFanoutDirection).optional(),
+  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
+  fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
+  fanoutPourNetMap: z
+    .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+    .optional(),
+})
+```
+
 ### footprintProp
 
 ```typescript
@@ -1156,12 +1193,11 @@ export const analogTransientSimulationProps = z
 ### autoroutingphase
 
 ```typescript
-export type BusFanoutDirection =
-  | NinePointAnchor
-  | {
-      direction: NinePointAnchor
-    }
-export interface AutoroutingPhaseProps extends RoutingTolerances {
+export type {
+  BusFanoutDirection,
+  FanoutPourNetMap,
+} from "../common/fanoutProps"
+export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
@@ -1176,18 +1212,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
-  busFanoutDirections?: Record<BusName, BusFanoutDirection>
-  fanoutBoundaryPadding?: FanoutBoundaryPadding
-  fanoutRoutingLayers?: LayerRefInput[]
-  fanoutPourNetMap?: FanoutPourNetMap
 }
-/**
-   * Maps copper layers to the net or nets poured on them. During fanout,
-   * source-only traces on those nets drop to the mapped layer instead of
-   * routing to the breakout boundary.
-   *
-   * This is inferred from `<copperpour>` components when omitted.
-   */
 export const autoroutingPhaseProps = z
   .object({
     key: z.any().optional(),
@@ -1207,12 +1232,7 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
-    busFanoutDirections: z.record(busFanoutDirection).optional(),
-    fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
-    fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
-    fanoutPourNetMap: z
-      .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
-      .optional(),
+    ...fanoutProps.shape,
   })
 ```
 
@@ -1296,19 +1316,18 @@ export const boardProps = subcircuitGroupProps
 
 ```typescript
 export interface BreakoutProps
-  extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  extends Omit<SubcircuitGroupProps, "subcircuit">,
+    FanoutProps {
   autorouter?: AutorouterProp
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
-  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 /**
-   * Padding between the union of the fanout source pads and the shared
-   * boundary where fanout traces terminate. This is independent of the
-   * breakout group's layout padding.
+   * Autorouter used to escape the components inside the breakout boundary.
+   * Defaults to the multilayer fanout autorouter.
    */
 export const breakoutProps = subcircuitGroupProps.extend({
   autorouter: autorouterProp.default("fanout"),
@@ -1317,7 +1336,7 @@ export const breakoutProps = subcircuitGroupProps.extend({
   paddingRight: distance.optional(),
   paddingTop: distance.optional(),
   paddingBottom: distance.optional(),
-  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
+  ...fanoutProps.shape,
 })
 ```
 
@@ -4209,6 +4228,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  solderPasteMargin?: Distance
 }
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -4225,6 +4245,7 @@ export interface RotatedRectSmtPadProps
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  solderPasteMargin?: Distance
 }
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -4233,6 +4254,7 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
 }
 export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -4243,6 +4265,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
 }
 export interface PolygonSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -4252,6 +4275,7 @@ export interface PolygonSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
 }
 export const rectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -4269,6 +4293,7 @@ export const rectSmtPadProps = pcbLayoutProps
     solderMaskMarginRight: distance.optional(),
     solderMaskMarginTop: distance.optional(),
     solderMaskMarginBottom: distance.optional(),
+    solderPasteMargin: distance.optional(),
   })
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -4286,6 +4311,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     solderMaskMarginRight: distance.optional(),
     solderMaskMarginTop: distance.optional(),
     solderMaskMarginBottom: distance.optional(),
+    solderPasteMargin: distance.optional(),
   })
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -4296,6 +4322,7 @@ export const circleSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderPasteMargin: distance.optional(),
   })
 export const pillSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -4308,6 +4335,7 @@ export const pillSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderPasteMargin: distance.optional(),
   })
 export const polygonSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -4318,6 +4346,7 @@ export const polygonSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    solderPasteMargin: distance.optional(),
   })
 ```
 
@@ -4587,11 +4616,11 @@ export const transistorProps = commonComponentProps.extend({
 })
 export const transistorPins = [
   "pin1",
-  "emitter",
-  "pin2",
   "collector",
-  "pin3",
+  "pin2",
   "base",
+  "pin3",
+  "emitter",
 ] as const
 ```
 

@@ -190,7 +190,7 @@ export interface AutorouterInstance {
 }
 
 
-export interface AutoroutingPhaseProps extends RoutingTolerances {
+export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
@@ -205,30 +205,6 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
-  /**
-   * Fanout direction for each named bus in this phase. `center` leaves the
-   * direction unconstrained.
-   */
-  busFanoutDirections?: Record<BusName, BusFanoutDirection>
-  /**
-   * Padding between the union of the fanout source pads and the shared
-   * boundary where fanout traces terminate.
-   */
-  fanoutBoundaryPadding?: FanoutBoundaryPadding
-  /**
-   * Copper layers available to boundary-terminated fanout buses. Source-only
-   * traces whose nets are mapped by `fanoutPourNetMap` terminate on their
-   * mapped plane layer.
-   */
-  fanoutRoutingLayers?: LayerRefInput[]
-  /**
-   * Maps copper layers to the net or nets poured on them. During fanout,
-   * source-only traces on those nets drop to the mapped layer instead of
-   * routing to the breakout boundary.
-   *
-   * This is inferred from `<copperpour>` components when omitted.
-   */
-  fanoutPourNetMap?: FanoutPourNetMap
 }
 
 
@@ -426,7 +402,8 @@ export interface BreakoutPointProps
 
 
 export interface BreakoutProps
-  extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  extends Omit<SubcircuitGroupProps, "subcircuit">,
+    FanoutProps {
   /**
    * Autorouter used to escape the components inside the breakout boundary.
    * Defaults to the multilayer fanout autorouter.
@@ -437,12 +414,6 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
-  /**
-   * Padding between the union of the fanout source pads and the shared
-   * boundary where fanout traces terminate. This is independent of the
-   * breakout group's layout padding.
-   */
-  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 
 
@@ -659,6 +630,7 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
 }
 
 
@@ -1016,6 +988,34 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
+}
+
+
+export interface FanoutProps {
+  /**
+   * Fanout direction for each named bus. `center` leaves the direction
+   * unconstrained.
+   */
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  /**
+   * Padding between the union of the fanout source pads and the shared
+   * boundary where fanout traces terminate.
+   */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
+  /**
+   * Copper layers available to boundary-terminated fanout buses. Source-only
+   * traces whose nets are mapped by `fanoutPourNetMap` terminate on their
+   * mapped plane layer.
+   */
+  fanoutRoutingLayers?: LayerRefInput[]
+  /**
+   * Maps copper layers to the net or nets poured on them. During fanout,
+   * source-only traces on those nets drop to the mapped layer instead of
+   * routing to the breakout boundary.
+   *
+   * This is inferred from `<copperpour>` components when omitted.
+   */
+  fanoutPourNetMap?: FanoutPourNetMap
 }
 
 
@@ -1735,6 +1735,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
 }
 
 
@@ -1986,6 +1987,7 @@ export interface PolygonSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
 }
 
 
@@ -2043,6 +2045,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  solderPasteMargin?: Distance
 }
 
 
@@ -2090,6 +2093,7 @@ export interface RotatedRectSmtPadProps
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  solderPasteMargin?: Distance
 }
 
 

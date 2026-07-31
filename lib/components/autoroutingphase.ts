@@ -1,15 +1,6 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import { layer_ref, type LayerRef, type LayerRefInput } from "circuit-json"
-import {
-  type FanoutBoundaryPadding,
-  fanoutBoundaryPadding,
-} from "../common/fanoutBoundaryPadding"
-import {
-  type NinePointAnchor,
-  ninePointAnchor,
-} from "../common/ninePointAnchor"
-import type { BusName } from "./bus"
+import { type FanoutProps, fanoutProps } from "../common/fanoutProps"
 import {
   type AutorouterProp,
   type RoutingTolerances,
@@ -17,17 +8,12 @@ import {
   routingTolerances,
 } from "./group"
 
-export type BusFanoutDirection =
-  | NinePointAnchor
-  | {
-      direction: NinePointAnchor
-    }
+export type {
+  BusFanoutDirection,
+  FanoutPourNetMap,
+} from "../common/fanoutProps"
 
-export type FanoutPourNetMap = Partial<
-  Record<Extract<LayerRef, string>, string | string[]>
->
-
-export interface AutoroutingPhaseProps extends RoutingTolerances {
+export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
@@ -42,36 +28,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string
   connections?: string[]
   reroute?: boolean
-  /**
-   * Fanout direction for each named bus in this phase. `center` leaves the
-   * direction unconstrained.
-   */
-  busFanoutDirections?: Record<BusName, BusFanoutDirection>
-  /**
-   * Padding between the union of the fanout source pads and the shared
-   * boundary where fanout traces terminate.
-   */
-  fanoutBoundaryPadding?: FanoutBoundaryPadding
-  /**
-   * Copper layers available to boundary-terminated fanout buses. Source-only
-   * traces whose nets are mapped by `fanoutPourNetMap` terminate on their
-   * mapped plane layer.
-   */
-  fanoutRoutingLayers?: LayerRefInput[]
-  /**
-   * Maps copper layers to the net or nets poured on them. During fanout,
-   * source-only traces on those nets drop to the mapped layer instead of
-   * routing to the breakout boundary.
-   *
-   * This is inferred from `<copperpour>` components when omitted.
-   */
-  fanoutPourNetMap?: FanoutPourNetMap
 }
-
-const busFanoutDirection = z.union([
-  ninePointAnchor,
-  z.object({ direction: ninePointAnchor }),
-])
 
 export const autoroutingPhaseProps = z
   .object({
@@ -92,12 +49,7 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
-    busFanoutDirections: z.record(busFanoutDirection).optional(),
-    fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
-    fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
-    fanoutPourNetMap: z
-      .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
-      .optional(),
+    ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
     if (

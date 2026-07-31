@@ -69,3 +69,55 @@ test("should parse RectSmtPadProps with individual solder mask margins", () => {
     throw new Error("Expected RectSmtPadProps")
   }
 })
+
+test("should parse solder paste margin on every smtpad shape", () => {
+  const rect = smtPadProps.parse({
+    shape: "rect",
+    width: "1mm",
+    height: "2mm",
+    solderPasteMargin: "-0.05mm",
+  })
+  if (rect.shape !== "rect") throw new Error("Expected rect")
+  expect(rect.solderPasteMargin).toBe(-0.05)
+
+  const circle = smtPadProps.parse({
+    shape: "circle",
+    radius: "0.5mm",
+    solderPasteMargin: "0.1mm",
+  })
+  if (circle.shape !== "circle") throw new Error("Expected circle")
+  expect(circle.solderPasteMargin).toBe(0.1)
+
+  const rotatedRect = smtPadProps.parse({
+    shape: "rotated_rect",
+    width: 1,
+    height: 1,
+    ccwRotation: 45,
+    solderPasteMargin: "0.05mm",
+  })
+  if (rotatedRect.shape !== "rotated_rect")
+    throw new Error("Expected rotated_rect")
+  expect(rotatedRect.solderPasteMargin).toBe(0.05)
+
+  const pill = smtPadProps.parse({
+    shape: "pill",
+    width: 2,
+    height: 1,
+    radius: 0.5,
+    solderPasteMargin: -0.1,
+  })
+  if (pill.shape !== "pill") throw new Error("Expected pill")
+  expect(pill.solderPasteMargin).toBe(-0.1)
+
+  const polygon = smtPadProps.parse({
+    shape: "polygon",
+    points: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+    ],
+    solderPasteMargin: 0,
+  })
+  if (polygon.shape !== "polygon") throw new Error("Expected polygon")
+  expect(polygon.solderPasteMargin).toBe(0)
+})

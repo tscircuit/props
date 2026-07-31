@@ -54,6 +54,36 @@ test("breakout rejects negative fanout boundary padding", () => {
   ).toThrow("Fanout boundary padding cannot be negative")
 })
 
+test("breakout accepts fanout bus directions and routing layers", () => {
+  const raw = {
+    busFanoutDirections: {
+      DATA: "center_right",
+      ADDRESS: { direction: "center_left" },
+    },
+    fanoutRoutingLayers: ["top", { name: "inner3" }, "bottom"],
+  } satisfies BreakoutProps
+
+  expect(breakoutProps.parse(raw)).toEqual({
+    autorouter: "fanout",
+    busFanoutDirections: raw.busFanoutDirections,
+    fanoutRoutingLayers: ["top", "inner3", "bottom"],
+  })
+})
+
+test("breakout accepts a fanout pour net map", () => {
+  const raw = {
+    fanoutPourNetMap: {
+      inner1: "GND",
+      inner2: ["VCC_CORE", "VCC_IO"],
+    },
+  } satisfies BreakoutProps
+
+  expect(breakoutProps.parse(raw)).toEqual({
+    autorouter: "fanout",
+    fanoutPourNetMap: raw.fanoutPourNetMap,
+  })
+})
+
 test("should parse breakout point props", () => {
   const raw: BreakoutPointProps = {
     pcbX: 5,

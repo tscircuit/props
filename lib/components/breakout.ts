@@ -1,8 +1,5 @@
 import { distance, type Distance } from "lib/common/distance"
-import {
-  type FanoutBoundaryPadding,
-  fanoutBoundaryPadding,
-} from "lib/common/fanoutBoundaryPadding"
+import { type FanoutProps, fanoutProps } from "lib/common/fanoutProps"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import {
@@ -13,7 +10,8 @@ import {
 } from "./group"
 
 export interface BreakoutProps
-  extends Omit<SubcircuitGroupProps, "subcircuit"> {
+  extends Omit<SubcircuitGroupProps, "subcircuit">,
+    FanoutProps {
   /**
    * Autorouter used to escape the components inside the breakout boundary.
    * Defaults to the multilayer fanout autorouter.
@@ -24,12 +22,6 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
-  /**
-   * Padding between the union of the fanout source pads and the shared
-   * boundary where fanout traces terminate. This is independent of the
-   * breakout group's layout padding.
-   */
-  fanoutBoundaryPadding?: FanoutBoundaryPadding
 }
 
 export const breakoutProps = subcircuitGroupProps.extend({
@@ -39,7 +31,7 @@ export const breakoutProps = subcircuitGroupProps.extend({
   paddingRight: distance.optional(),
   paddingTop: distance.optional(),
   paddingBottom: distance.optional(),
-  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
+  ...fanoutProps.shape,
 })
 
 type InferredBreakoutProps = z.input<typeof breakoutProps>

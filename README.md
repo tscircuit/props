@@ -354,7 +354,7 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
 ### AutoroutingPhaseProps `<autoroutingphase />`
 
 ```ts
-export interface AutoroutingPhaseProps extends RoutingTolerances {
+export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any;
   name?: string;
   autorouter?: AutorouterProp;
@@ -369,16 +369,6 @@ export interface AutoroutingPhaseProps extends RoutingTolerances {
   connection?: string;
   connections?: string[];
   reroute?: boolean;
-  /**
-   * Fanout direction for each named bus in this phase. `center` leaves the
-   * direction unconstrained.
-   */
-  busFanoutDirections?: Record<BusName, BusFanoutDirection>;
-  /**
-   * Padding between the union of the fanout source pads and the shared
-   * boundary where fanout traces terminate.
-   */
-  fanoutBoundaryPadding?: FanoutBoundaryPadding;
 }
 ```
 
@@ -440,10 +430,8 @@ export interface BoardProps extends Omit<
 ### BreakoutProps `<breakout />`
 
 ```ts
-export interface BreakoutProps extends Omit<
-  SubcircuitGroupProps,
-  "subcircuit"
-> {
+export interface BreakoutProps
+  extends Omit<SubcircuitGroupProps, "subcircuit">, FanoutProps {
   /**
    * Autorouter used to escape the components inside the breakout boundary.
    * Defaults to the multilayer fanout autorouter.
@@ -454,12 +442,6 @@ export interface BreakoutProps extends Omit<
   paddingRight?: Distance;
   paddingTop?: Distance;
   paddingBottom?: Distance;
-  /**
-   * Padding between the union of the fanout source pads and the shared
-   * boundary where fanout traces terminate. This is independent of the
-   * breakout group's layout padding.
-   */
-  fanoutBoundaryPadding?: FanoutBoundaryPadding;
 }
 ```
 
@@ -1993,6 +1975,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderMaskMarginRight?: Distance;
   solderMaskMarginTop?: Distance;
   solderMaskMarginBottom?: Distance;
+  solderPasteMargin?: Distance;
 }
 ```
 

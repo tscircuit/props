@@ -11,11 +11,14 @@ export interface BusProps {
   name?: string
   /** Trace names or port selectors for the connections in the bus. */
   connections: string[]
+  /** Autorouting phase in which this bus constraint should be applied. */
+  routingPhaseIndex?: number | null
 }
 
 export const busProps = z.object({
   name: z.string().optional(),
   connections: z.array(z.string()).min(2),
+  routingPhaseIndex: z.number().nullable().optional(),
 })
 
 type InferredBusProps = z.input<typeof busProps>

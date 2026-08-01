@@ -1364,11 +1364,13 @@ export const breakoutPointProps = pcbLayoutProps
 export interface BusProps {
   name?: string
   connections: string[]
+  routingPhaseIndex?: number | null
 }
-/** Trace names or port selectors for the connections in the bus. */
+/** If set, every trace in this bus is assigned to this autorouting phase. */
 export const busProps = z.object({
   name: z.string().optional(),
   connections: z.array(z.string()).min(2),
+  routingPhaseIndex: z.number().nullable().optional(),
 })
 ```
 
@@ -3084,12 +3086,24 @@ pcbLayoutProps.omit({ pcbRotation: true }).extend({
     shape: z.literal("circle"),
     radius: distance,
     layers: z.array(layer_ref).optional(),
+    excludeRefs: z
+      .array(z.string())
+      .optional()
+      .describe(
+        'Component selectors excluded from the keepout, such as ".ANT1"',
+      ),
   }),
 pcbLayoutProps.extend({
     shape: z.literal("rect"),
     width: distance,
     height: distance,
     layers: z.array(layer_ref).optional(),
+    excludeRefs: z
+      .array(z.string())
+      .optional()
+      .describe(
+        'Component selectors excluded from the keepout, such as ".ANT1"',
+      ),
   }),
 ```
 

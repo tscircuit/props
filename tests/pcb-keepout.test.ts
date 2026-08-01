@@ -30,3 +30,20 @@ test("should parse keepout layers prop", () => {
   expect(parsed.shape).toBe("circle")
   expect(parsed.layers).toEqual(["top", "bottom"])
 })
+
+test("should parse keepout excludeRefs selectors", () => {
+  const rectProps: PcbKeepoutProps = {
+    shape: "rect",
+    width: "5mm",
+    height: "2mm",
+    excludeRefs: [".ANT1", ".C1"],
+  }
+  const circleProps: PcbKeepoutProps = {
+    shape: "circle",
+    radius: "1mm",
+    excludeRefs: [".ANT1"],
+  }
+
+  expect(pcbKeepoutProps.parse(rectProps).excludeRefs).toEqual([".ANT1", ".C1"])
+  expect(pcbKeepoutProps.parse(circleProps).excludeRefs).toEqual([".ANT1"])
+})

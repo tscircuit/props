@@ -440,6 +440,8 @@ export interface BusProps {
   name?: string;
   /** Trace names or port selectors for the connections in the bus. */
   connections: string[];
+  /** If set, every trace in this bus is assigned to this autorouting phase. */
+  routingPhaseIndex?: number | null;
 }
 ```
 

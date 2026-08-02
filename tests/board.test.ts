@@ -111,3 +111,18 @@ test("should parse schematicDisabled prop", () => {
   const parsed = boardProps.parse(raw)
   expect(parsed.schematicDisabled).toBe(true)
 })
+
+test("should parse isViaInPadAllowed prop", () => {
+  const enabled: BoardProps = {
+    name: "board",
+    isViaInPadAllowed: true,
+  }
+  const disabled: BoardProps = {
+    name: "board",
+    isViaInPadAllowed: false,
+  }
+
+  expect(boardProps.parse(enabled).isViaInPadAllowed).toBe(true)
+  expect(boardProps.parse(disabled).isViaInPadAllowed).toBe(false)
+  expect(boardProps.parse({ name: "board" }).isViaInPadAllowed).toBeUndefined()
+})

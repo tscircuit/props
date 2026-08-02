@@ -48,6 +48,8 @@ export interface BoardProps
   bottomSilkscreenColor?: BoardColor
   /** Whether the board should be assembled on both sides */
   doubleSidedAssembly?: boolean
+  /** Whether vias may be placed inside PCB pads */
+  isViaInPadAllowed?: boolean
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
 }
@@ -81,6 +83,12 @@ export const boardProps = subcircuitGroupProps
     topSilkscreenColor: boardColor.optional(),
     bottomSilkscreenColor: boardColor.optional(),
     doubleSidedAssembly: z.boolean().optional().default(false),
+    isViaInPadAllowed: z
+      .boolean()
+      .optional()
+      .describe(
+        "Allows intentional via-in-pad designs to pass DRC. Omitted or false keeps via-in-pad disallowed.",
+      ),
     schematicDisabled: z.boolean().optional(),
   })
 

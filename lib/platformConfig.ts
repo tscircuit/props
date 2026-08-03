@@ -85,7 +85,7 @@ export interface PlatformConfig {
    * Analyze rendered and supplier footprints so manufacturing exporters can
    * align their semantic pin 1 orientations.
    */
-  usePartOrientationAnalysis?: boolean
+  enablePartOrientationAnalysis?: boolean
 
   registryApiUrl?: string
 
@@ -254,7 +254,7 @@ export const platformConfig = z.object({
   defaultSpiceEngine: defaultSpiceEngine.optional(),
   unitPreference: z.enum(["mm", "in", "mil"]).optional(),
   localCacheEngine: localCacheEngine.optional(),
-  usePartOrientationAnalysis: z.boolean().optional(),
+  enablePartOrientationAnalysis: z.boolean().optional(),
   pcbDisabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),

@@ -1949,7 +1949,7 @@ export interface PlatformConfig {
    * Analyze rendered and supplier footprints so manufacturing exporters can
    * align their semantic pin 1 orientations.
    */
-  usePartOrientationAnalysis?: boolean
+  enablePartOrientationAnalysis?: boolean
 
   registryApiUrl?: string
 

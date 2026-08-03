@@ -1372,12 +1372,20 @@ export interface BusProps {
   name?: string
   connections: string[]
   routingPhaseIndex?: number | null
+  maxLengthSkew?: number | string
+  targetImpedance?: number | string
+  pcbTraceWidth?: number | string
+  pcbAllowedLayers?: LayerRefInput[]
 }
-/** If set, every trace in this bus is assigned to this autorouting phase. */
+/** PCB layers on which the bus may be routed. */
 export const busProps = z.object({
   name: z.string().optional(),
   connections: z.array(z.string()).min(2),
   routingPhaseIndex: z.number().nullable().optional(),
+  maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
+  targetImpedance: resistance.pipe(z.number().positive().finite()).optional(),
+  pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
+  pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
 })
 ```
 
@@ -1888,14 +1896,22 @@ export interface DifferentialPairProps {
   name?: string
   positiveConnection: string
   negativeConnection: string
-  maxLengthSkew?: number
+  maxLengthSkew?: number | string
+  targetDifferentialImpedance?: number | string
+  pcbTraceGap?: number | string
+  maxUncoupledLength?: number | string
 }
-/** Maximum permitted routed-length skew in millimeters. */
+/** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
 export const differentialPairProps = z.object({
   name: z.string().optional(),
   positiveConnection: z.string(),
   negativeConnection: z.string(),
-  maxLengthSkew: z.number().min(0).finite().optional(),
+  maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
+  targetDifferentialImpedance: resistance
+    .pipe(z.number().positive().finite())
+    .optional(),
+  pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
+  maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
 })
 ```
 

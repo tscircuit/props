@@ -425,6 +425,14 @@ export interface BusProps {
   connections: string[]
   /** If set, every trace in this bus is assigned to this autorouting phase. */
   routingPhaseIndex?: number | null
+  /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
+  maxLengthSkew?: number | string
+  /** Intended single-ended characteristic impedance. Raw numbers are ohms. */
+  targetImpedance?: number | string
+  /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
+  pcbTraceWidth?: number | string
+  /** PCB layers on which the bus may be routed. */
+  pcbAllowedLayers?: LayerRefInput[]
 }
 
 
@@ -857,8 +865,14 @@ export interface DifferentialPairProps {
   positiveConnection: string
   /** Name of the trace or pin carrying the negative signal. */
   negativeConnection: string
-  /** Maximum permitted routed-length skew in millimeters. */
-  maxLengthSkew?: number
+  /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
+  maxLengthSkew?: number | string
+  /** Intended differential characteristic impedance. Raw numbers are ohms. */
+  targetDifferentialImpedance?: number | string
+  /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
+  pcbTraceGap?: number | string
+  /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
+  maxUncoupledLength?: number | string
 }
 
 

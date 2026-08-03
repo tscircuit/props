@@ -66,6 +66,20 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderPasteMargin?: Distance
 }
 
+export interface RotatedPillSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
+  shape: "rotated_pill"
+  width: Distance
+  height: Distance
+  radius: Distance
+  ccwRotation: number
+  portHints?: PortHints
+  coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
+}
+
 export interface PolygonSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -82,6 +96,7 @@ export type SmtPadProps =
   | CircleSmtPadProps
   | RotatedRectSmtPadProps
   | PillSmtPadProps
+  | RotatedPillSmtPadProps
   | PolygonSmtPadProps
 
 // ----------------------------------------------------------------------------
@@ -160,6 +175,23 @@ export const pillSmtPadProps = pcbLayoutProps
 type InferredPillSmtPadProps = z.input<typeof pillSmtPadProps>
 expectTypesMatch<InferredPillSmtPadProps, PillSmtPadProps>(true)
 
+export const rotatedPillSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    name: z.string().optional(),
+    shape: z.literal("rotated_pill"),
+    width: distance,
+    height: distance,
+    radius: distance,
+    ccwRotation: z.number(),
+    portHints: portHints.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
+    solderPasteMargin: distance.optional(),
+  })
+type InferredRotatedPillSmtPadProps = z.input<typeof rotatedPillSmtPadProps>
+expectTypesMatch<InferredRotatedPillSmtPadProps, RotatedPillSmtPadProps>(true)
+
 export const polygonSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
@@ -179,6 +211,7 @@ export const smtPadProps = z.discriminatedUnion("shape", [
   rectSmtPadProps,
   rotatedRectSmtPadProps,
   pillSmtPadProps,
+  rotatedPillSmtPadProps,
   polygonSmtPadProps,
 ])
 

@@ -2102,6 +2102,21 @@ export interface ResonatorProps extends CommonComponentProps {
 }
 
 
+export interface RotatedPillSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
+  shape: "rotated_pill"
+  width: Distance
+  height: Distance
+  radius: Distance
+  ccwRotation: number
+  portHints?: PortHints
+  coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
+}
+
+
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string

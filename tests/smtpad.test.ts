@@ -2,7 +2,9 @@ import { expect, test } from "bun:test"
 import {
   smtPadProps,
   polygonSmtPadProps,
+  rotatedPillSmtPadProps,
   type PolygonSmtPadProps,
+  type RotatedPillSmtPadProps,
   type SmtPadProps,
 } from "lib/components/smtpad"
 import { expectTypeOf } from "expect-type"
@@ -46,6 +48,41 @@ test("type inference for SmtPadProps", () => {
     points: [{ x: 0, y: 0 }],
   }
   expectTypeOf(polygon).toMatchTypeOf<PolygonSmtPadProps>()
+})
+
+test("should parse RotatedPillSmtPadProps", () => {
+  const rawProps: RotatedPillSmtPadProps = {
+    name: "pad1",
+    shape: "rotated_pill",
+    width: "2mm",
+    height: "1mm",
+    radius: "0.5mm",
+    ccwRotation: 90,
+    pcbX: "1mm",
+    pcbY: 2,
+    portHints: ["1"],
+  }
+
+  expectTypeOf(rawProps).toMatchTypeOf<z.input<typeof rotatedPillSmtPadProps>>()
+
+  const parsed = rotatedPillSmtPadProps.parse(rawProps)
+  expect(parsed).toMatchObject({
+    name: "pad1",
+    shape: "rotated_pill",
+    width: 2,
+    height: 1,
+    radius: 0.5,
+    ccwRotation: 90,
+    pcbX: 1,
+    pcbY: 2,
+    portHints: ["1"],
+  })
+
+  const parsedUnion = smtPadProps.parse(rawProps)
+  if (parsedUnion.shape !== "rotated_pill") {
+    throw new Error("Expected RotatedPillSmtPadProps")
+  }
+  expect(parsedUnion.ccwRotation).toBe(90)
 })
 
 test("should parse RectSmtPadProps with individual solder mask margins", () => {
@@ -108,6 +145,19 @@ test("should parse solder paste margin on every smtpad shape", () => {
   })
   if (pill.shape !== "pill") throw new Error("Expected pill")
   expect(pill.solderPasteMargin).toBe(-0.1)
+
+  const rotatedPill = smtPadProps.parse({
+    shape: "rotated_pill",
+    width: 2,
+    height: 1,
+    radius: 0.5,
+    ccwRotation: 90,
+    solderPasteMargin: -0.1,
+  })
+  if (rotatedPill.shape !== "rotated_pill") {
+    throw new Error("Expected rotated_pill")
+  }
+  expect(rotatedPill.solderPasteMargin).toBe(-0.1)
 
   const polygon = smtPadProps.parse({
     shape: "polygon",

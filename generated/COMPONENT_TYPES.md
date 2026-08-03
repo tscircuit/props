@@ -4302,6 +4302,19 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderMaskMargin?: Distance
   solderPasteMargin?: Distance
 }
+export interface RotatedPillSmtPadProps
+  extends Omit<PcbLayoutProps, "pcbRotation"> {
+  name?: string
+  shape: "rotated_pill"
+  width: Distance
+  height: Distance
+  radius: Distance
+  ccwRotation: number
+  portHints?: PortHints
+  coveredWithSolderMask?: boolean
+  solderMaskMargin?: Distance
+  solderPasteMargin?: Distance
+}
 export interface PolygonSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -4367,6 +4380,20 @@ export const pillSmtPadProps = pcbLayoutProps
     width: distance,
     height: distance,
     radius: distance,
+    portHints: portHints.optional(),
+    coveredWithSolderMask: z.boolean().optional(),
+    solderMaskMargin: distance.optional(),
+    solderPasteMargin: distance.optional(),
+  })
+export const rotatedPillSmtPadProps = pcbLayoutProps
+  .omit({ pcbRotation: true })
+  .extend({
+    name: z.string().optional(),
+    shape: z.literal("rotated_pill"),
+    width: distance,
+    height: distance,
+    radius: distance,
+    ccwRotation: z.number(),
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),

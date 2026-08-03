@@ -65,6 +65,13 @@ export interface PlatformConfig {
 
   autorouterMap?: Record<string, AutorouterDefinition>
 
+  /**
+   * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
+   * Defaults to false because these presets are otherwise disabled.
+   * Platforms should only enable this temporarily while migrating projects.
+   */
+  allowLegacyAutorouters?: boolean
+
   // TODO this follows a subset of the localStorage interface
   localCacheEngine?: any
 
@@ -202,6 +209,7 @@ export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
   autorouter: autorouterProp.optional(),
   autorouterMap: z.record(z.string(), autorouterDefinition).optional(),
+  allowLegacyAutorouters: z.boolean().optional(),
   registryApiUrl: url.optional(),
   cloudAutorouterUrl: url.optional(),
   projectName: z.string().optional(),

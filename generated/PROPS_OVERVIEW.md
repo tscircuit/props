@@ -1928,6 +1928,13 @@ export interface PlatformConfig {
 
   autorouterMap?: Record<string, AutorouterDefinition>
 
+  /**
+   * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
+   * Defaults to false because these presets are otherwise disabled.
+   * Platforms should only enable this temporarily while migrating projects.
+   */
+  allowLegacyAutorouters?: boolean
+
   // TODO this follows a subset of the localStorage interface
   localCacheEngine?: any
 

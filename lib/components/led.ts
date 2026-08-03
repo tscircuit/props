@@ -2,6 +2,7 @@ import { commonComponentProps, lrPolarPins } from "lib/common/layout"
 import { schematicOrientation } from "lib/common/schematicOrientation"
 import { z } from "zod"
 import { createConnectionsProp } from "lib/common/connectionsProp"
+import { diodePinLabelsProp } from "lib/components/diode"
 
 export type LedPinLabels = (typeof lrPolarPins)[number]
 
@@ -10,6 +11,7 @@ export const ledProps = commonComponentProps.extend({
   wavelength: z.string().optional(),
   schDisplayValue: z.string().optional(),
   schOrientation: schematicOrientation.optional(),
+  pinLabels: diodePinLabelsProp.optional(),
   connections: createConnectionsProp(lrPolarPins).optional(),
   laser: z.boolean().optional(),
 })

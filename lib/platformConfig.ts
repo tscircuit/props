@@ -45,6 +45,12 @@ export interface AutorouterDefinition {
   ) => AutorouterInstance | Promise<AutorouterInstance>
 }
 
+export interface LocalCacheEngine {
+  getItem(key: string): string | Promise<string | null> | null
+  setItem(key: string, value: string): void | Promise<void>
+  removeItem?(key: string): void | Promise<void>
+}
+
 /** e.g. "kicad", this is the prefix used to reference libraries in footprinter strings e.g. kicad:Resistor_0402 **/
 type FootprintLibraryPrefix = string
 
@@ -72,8 +78,14 @@ export interface PlatformConfig {
    */
   allowLegacyAutorouters?: boolean
 
-  // TODO this follows a subset of the localStorage interface
-  localCacheEngine?: any
+  /** A localStorage-compatible cache used by render phases and engines. */
+  localCacheEngine?: LocalCacheEngine
+
+  /**
+   * Analyze rendered and supplier footprints so manufacturing exporters can
+   * align their semantic pin 1 orientations.
+   */
+  enablePartOrientationAnalysis?: boolean
 
   registryApiUrl?: string
 
@@ -205,6 +217,16 @@ const platformFetch = z
   .custom<typeof fetch>((value) => typeof value === "function")
   .describe("A fetch-like function to use for platform requests")
 
+const localCacheEngine = z.custom<LocalCacheEngine>(
+  (value) =>
+    typeof value === "object" &&
+    value !== null &&
+    "getItem" in value &&
+    typeof value.getItem === "function" &&
+    "setItem" in value &&
+    typeof value.setItem === "function",
+)
+
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
   autorouter: autorouterProp.optional(),
@@ -231,7 +253,8 @@ export const platformConfig = z.object({
     .optional(),
   defaultSpiceEngine: defaultSpiceEngine.optional(),
   unitPreference: z.enum(["mm", "in", "mil"]).optional(),
-  localCacheEngine: z.any().optional(),
+  localCacheEngine: localCacheEngine.optional(),
+  enablePartOrientationAnalysis: z.boolean().optional(),
   pcbDisabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),

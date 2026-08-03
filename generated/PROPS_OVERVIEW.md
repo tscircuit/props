@@ -1382,6 +1382,13 @@ export interface LayoutConfig {
 }
 
 
+export interface LocalCacheEngine {
+  getItem(key: string): string | Promise<string | null> | null
+  setItem(key: string, value: string): void | Promise<void>
+  removeItem?(key: string): void | Promise<void>
+}
+
+
 export interface ManualEditsFile {
   pcb_placements?: ManualPcbPlacement[]
   manual_trace_hints?: ManualTraceHint[]
@@ -1935,8 +1942,14 @@ export interface PlatformConfig {
    */
   allowLegacyAutorouters?: boolean
 
-  // TODO this follows a subset of the localStorage interface
-  localCacheEngine?: any
+  /** A localStorage-compatible cache used by render phases and engines. */
+  localCacheEngine?: LocalCacheEngine
+
+  /**
+   * Analyze rendered and supplier footprints so manufacturing exporters can
+   * align their semantic pin 1 orientations.
+   */
+  usePartOrientationAnalysis?: boolean
 
   registryApiUrl?: string
 

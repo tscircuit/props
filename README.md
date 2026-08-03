@@ -2237,8 +2237,14 @@ export interface PlatformConfig {
    */
   allowLegacyAutorouters?: boolean;
 
-  // TODO this follows a subset of the localStorage interface
-  localCacheEngine?: any;
+  /** A localStorage-compatible cache used by render phases and engines. */
+  localCacheEngine?: LocalCacheEngine;
+
+  /**
+   * Analyze rendered and supplier footprints so manufacturing exporters can
+   * align their semantic pin 1 orientations.
+   */
+  usePartOrientationAnalysis?: boolean;
 
   registryApiUrl?: string;
 

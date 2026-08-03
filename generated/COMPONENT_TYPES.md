@@ -2096,8 +2096,21 @@ export interface FootprintProps {
   insertionDirection?: FootprintInsertionDirection
 }
 /**
-   * Direction a cable or mating part is inserted into this footprint in its
-   * unrotated orientation.
+   * Direction a cable or mating part is attached from, in the footprint's own
+   * frame -- the same frame its pads are drawn in. Directions are named for the
+   * footprint as drawn in the 2D PCB view: `from_top` is +Y, `from_bottom` -Y,
+   * `from_left` -X, `from_right` +X, `from_above` +Z and `from_below` -Z.
+   * Cartesian spellings such as `from_y_pos` are also accepted.
+   *
+   * This names a side, not a motion. A receptacle on the +Y edge is `from_top`
+   * because that is the side the plug comes from, even though the plug itself
+   * moves in -Y as it seats.
+   *
+   * This is a property of the part, so it is authored without regard to where
+   * the part is placed. Rotating or flipping the component rotates this with it,
+   * and `pcb_component.insertion_direction` reports the result in board
+   * coordinates. The two frames coincide for an unrotated top-layer part, which
+   * makes the distinction easy to miss.
    */
 export const footprintProps = z.object({
   children: z.any().optional(),
@@ -2108,7 +2121,7 @@ export const footprintProps = z.object({
   insertionDirection: footprintInsertionDirection
     .optional()
     .describe(
-      "Direction a cable or mating part is inserted into this footprint in its unrotated orientation.",
+      "Direction a cable or mating part is attached from, named for the side of the footprint it approaches from, in its unrotated orientation.",
     ),
 })
 ```
@@ -2873,6 +2886,7 @@ export const ledProps = commonComponentProps.extend({
   wavelength: z.string().optional(),
   schDisplayValue: z.string().optional(),
   schOrientation: schematicOrientation.optional(),
+  pinLabels: diodePinLabelsProp.optional(),
   connections: createConnectionsProp(lrPolarPins).optional(),
   laser: z.boolean().optional(),
 })

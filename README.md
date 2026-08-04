@@ -941,7 +941,7 @@ export interface FuseProps<
   /**
    * Connections to other components
    */
-  connections?: Connections<PinLabel>;
+  connections?: Connections<FusePinLabels>;
 }
 ```
 

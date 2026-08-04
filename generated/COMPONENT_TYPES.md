@@ -2155,7 +2155,7 @@ export interface FuseProps<PinLabel extends string = string>
 
   schOrientation?: SchematicOrientation
 
-  connections?: Connections<PinLabel>
+  connections?: Connections<FusePinLabels>
 }
 /**
  * Schema for validating fuse props
@@ -2165,16 +2165,7 @@ export const fuseProps = commonComponentProps.extend({
   voltageRating: z.union([z.number(), z.string()]).optional(),
   schShowRatings: z.boolean().optional(),
   schOrientation: schematicOrientation.optional(),
-  connections: z
-    .record(
-      z.string(),
-      z.union([
-        z.string(),
-        z.array(z.string()).readonly(),
-        z.array(z.string()),
-      ]),
-    )
-    .optional(),
+  connections: createConnectionsProp(fusePinLabels).optional(),
 })
 ```
 

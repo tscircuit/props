@@ -59,6 +59,12 @@ const baseTraceProps = z.object({
   schStroke: z.string().optional(),
   highlightColor: z.string().optional(),
   maxLength: distance.optional(),
+  maxViaCount: z
+    .number()
+    .int()
+    .nonnegative()
+    .optional()
+    .describe("Maximum number of vias allowed in the PCB trace route"),
   connectsTo: z.string().or(z.array(z.string())).optional(),
 })
 

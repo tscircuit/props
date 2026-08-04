@@ -88,6 +88,37 @@ test("should parse pinLabels as record", () => {
   expect(parsed.pinLabels).toEqual({ 1: "A", 2: "B" })
 })
 
+test("should reject a fractional pinCount", () => {
+  const parsed = pinHeaderProps.safeParse({ name: "header", pinCount: 2.5 })
+
+  expect(parsed.success).toBe(false)
+})
+
+test("should reject a zero or negative pinCount", () => {
+  expect(
+    pinHeaderProps.safeParse({ name: "header", pinCount: 0 }).success,
+  ).toBe(false)
+  expect(
+    pinHeaderProps.safeParse({ name: "header", pinCount: -4 }).success,
+  ).toBe(false)
+})
+
+test("should reject a non-finite pinCount", () => {
+  expect(
+    pinHeaderProps.safeParse({
+      name: "header",
+      pinCount: Number.POSITIVE_INFINITY,
+    }).success,
+  ).toBe(false)
+})
+
+test("should parse whole pinCount values unchanged", () => {
+  for (const pinCount of [1, 2, 8, 40]) {
+    const parsed = pinHeaderProps.parse({ name: "header", pinCount })
+    expect(parsed.pinCount).toBe(pinCount)
+  }
+})
+
 test("should snapshot schematic props for pin header", () => {
   const rawProps: PinHeaderProps = {
     name: "header",

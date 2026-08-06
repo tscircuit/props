@@ -91,7 +91,7 @@ export interface PlatformConfig {
    * Maximum time, in milliseconds, that an individual PCB pack solver may run.
    * The timeout is checked between solver steps.
    */
-  packSolverTimeoutMs?: number
+  pcbPackSolverTimeoutMs?: number
 
   registryApiUrl?: string
 
@@ -261,7 +261,7 @@ export const platformConfig = z.object({
   unitPreference: z.enum(["mm", "in", "mil"]).optional(),
   localCacheEngine: localCacheEngine.optional(),
   enablePartOrientationAnalysis: z.boolean().optional(),
-  packSolverTimeoutMs: z.number().finite().positive().optional(),
+  pcbPackSolverTimeoutMs: z.number().finite().positive().optional(),
   pcbDisabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),

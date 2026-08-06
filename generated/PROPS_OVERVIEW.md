@@ -1969,7 +1969,7 @@ export interface PlatformConfig {
    * Maximum time, in milliseconds, that an individual PCB pack solver may run.
    * The timeout is checked between solver steps.
    */
-  packSolverTimeoutMs?: number
+  pcbPackSolverTimeoutMs?: number
 
   registryApiUrl?: string
 

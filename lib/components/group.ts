@@ -484,6 +484,12 @@ export interface SubcircuitGroupProps
     RoutingTolerances {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
+  /**
+   * Skip the PCB placement design rule checks for this subcircuit. Placement
+   * errors otherwise cause autorouting to be skipped entirely, so this is the
+   * escape hatch for a placement the checks flag but you intend to keep.
+   */
+  placementDrcChecksDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
 
@@ -668,6 +674,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   schTraceAutoLabelEnabled: z.boolean().optional(),
   schMaxTraceDistance: distance.optional(),
   routingDisabled: z.boolean().optional(),
+  placementDrcChecksDisabled: z.boolean().optional(),
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   ...routingTolerances.shape,

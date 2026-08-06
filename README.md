@@ -2260,6 +2260,12 @@ export interface PlatformConfig {
    */
   enablePartOrientationAnalysis?: boolean;
 
+  /**
+   * Maximum time, in milliseconds, that an individual PCB pack solver may run.
+   * The timeout is checked between solver steps.
+   */
+  packSolverTimeoutMs?: number;
+
   registryApiUrl?: string;
 
   cloudAutorouterUrl?: string;

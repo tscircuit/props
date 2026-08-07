@@ -1456,11 +1456,12 @@ export interface CapacitorProps<PinLabel extends string = string>
   decouplingTo?: string
   bypassFor?: string
   bypassTo?: string
-  maxDecouplingTraceLength?: number
+  maxDecouplingTraceLength?: number | string
   schOrientation?: SchematicOrientation
   schSize?: SchematicSymbolSize
   connections?: Connections<CapacitorPinLabels>
 }
+/** Maximum allowed PCB trace length between this capacitor and the component it decouples */
 export const capacitorProps = commonComponentProps.extend({
   capacitance,
   maxVoltageRating: voltage.optional(),
@@ -1470,7 +1471,7 @@ export const capacitorProps = commonComponentProps.extend({
   decouplingTo: z.string().optional(),
   bypassFor: z.string().optional(),
   bypassTo: z.string().optional(),
-  maxDecouplingTraceLength: z.number().optional(),
+  maxDecouplingTraceLength: distance.optional(),
   schOrientation: schematicOrientation.optional(),
   schSize: schematicSymbolSize.optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),
@@ -2533,6 +2534,7 @@ export interface SubcircuitGroupProps
     RoutingTolerances {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
+  placementDrcChecksDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
 
@@ -2689,6 +2691,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   schTraceAutoLabelEnabled: z.boolean().optional(),
   schMaxTraceDistance: distance.optional(),
   routingDisabled: z.boolean().optional(),
+  placementDrcChecksDisabled: z.boolean().optional(),
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   ...routingTolerances.shape,

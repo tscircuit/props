@@ -1965,6 +1965,12 @@ export interface PlatformConfig {
    */
   enablePartOrientationAnalysis?: boolean
 
+  /**
+   * Maximum time, in milliseconds, that an individual PCB pack solver may run.
+   * The timeout is checked between solver steps.
+   */
+  pcbPackSolverTimeoutMs?: number
+
   registryApiUrl?: string
 
   cloudAutorouterUrl?: string
@@ -2490,7 +2496,15 @@ export interface SubcircuitGroupProps
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
-  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "latest"
+  autorouterVersion?:
+    | "v1"
+    | "v2"
+    | "v3"
+    | "v4"
+    | "v5"
+    | "v6"
+    | "beta_pipeline9"
+    | "latest"
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit

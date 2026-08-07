@@ -126,3 +126,12 @@ test("should parse isViaInPadAllowed prop", () => {
   expect(boardProps.parse(disabled).isViaInPadAllowed).toBe(false)
   expect(boardProps.parse({ name: "board" }).isViaInPadAllowed).toBeUndefined()
 })
+
+// core reads this through getInheritedProperty("placementDrcChecksDisabled"),
+// so it has to survive the zod parse to reach the autorouting gate
+
+test("should parse placementDrcChecksDisabled prop", () => {
+  const raw: BoardProps = { name: "board", placementDrcChecksDisabled: true }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.placementDrcChecksDisabled).toBe(true)
+})

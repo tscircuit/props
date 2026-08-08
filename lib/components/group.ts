@@ -479,6 +479,39 @@ export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
 
 export const autorouterEffortLevel = z.enum(["1x", "2x", "5x", "10x", "100x"])
 
+export type AutorouterVersion =
+  | "beta_pipeline1"
+  | "beta_pipeline3"
+  | "beta_pipeline4"
+  | "beta_pipeline5"
+  | "beta_pipeline7"
+  | "beta_pipeline9"
+  | "latest"
+
+const knownAutorouterVersion = z.enum([
+  "beta_pipeline1",
+  "beta_pipeline3",
+  "beta_pipeline4",
+  "beta_pipeline5",
+  "beta_pipeline7",
+  "beta_pipeline9",
+  "latest",
+])
+
+const autorouterVersion = z
+  .custom<AutocompleteString<AutorouterVersion>>(
+    (value) => typeof value === "string",
+  )
+  .transform((value): AutorouterVersion => {
+    const parsedAutorouterVersion = knownAutorouterVersion.safeParse(value)
+    if (parsedAutorouterVersion.success) return parsedAutorouterVersion.data
+
+    console.warn(
+      `Unknown autorouterVersion "${value}", falling back to "latest".`,
+    )
+    return "latest"
+  })
+
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
@@ -498,15 +531,19 @@ export interface SubcircuitGroupProps
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
+  /**
+   * Selects the local autorouting pipeline. Unknown string values emit a
+   * warning and fall back to `latest`.
+   */
   autorouterVersion?:
-    | "v1"
-    | "v2"
-    | "v3"
-    | "v4"
-    | "v5"
-    | "v6"
+    | "beta_pipeline1"
+    | "beta_pipeline3"
+    | "beta_pipeline4"
+    | "beta_pipeline5"
+    | "beta_pipeline7"
     | "beta_pipeline9"
     | "latest"
+    | (string & {})
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit
@@ -684,9 +721,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
-  autorouterVersion: z
-    .enum(["v1", "v2", "v3", "v4", "v5", "v6", "beta_pipeline9", "latest"])
-    .optional(),
+  autorouterVersion: autorouterVersion.optional(),
   square: z.boolean().optional(),
   emptyArea: z.string().optional(),
   filledArea: z.string().optional(),

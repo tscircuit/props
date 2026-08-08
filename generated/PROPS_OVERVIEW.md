@@ -2503,6 +2503,10 @@ export interface SubcircuitGroupProps
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
+  /**
+   * Selects the local autorouting pipeline. Unknown string values emit a
+   * warning and fall back to `latest`.
+   */
   autorouterVersion?:
     | "beta_pipeline1"
     | "beta_pipeline3"
@@ -2511,6 +2515,7 @@ export interface SubcircuitGroupProps
     | "beta_pipeline7"
     | "beta_pipeline9"
     | "latest"
+    | (string & {})
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit

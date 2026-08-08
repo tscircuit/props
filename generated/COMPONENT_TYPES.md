@@ -2529,6 +2529,38 @@ export const autorouterConfig = z.object({
     .optional(),
   local: z.boolean().optional(),
 })
+export type AutorouterVersion =
+  | "beta_pipeline1"
+  | "beta_pipeline3"
+  | "beta_pipeline4"
+  | "beta_pipeline5"
+  | "beta_pipeline7"
+  | "beta_pipeline9"
+  | "latest"
+
+const knownAutorouterVersion = z.enum([
+  "beta_pipeline1",
+  "beta_pipeline3",
+  "beta_pipeline4",
+  "beta_pipeline5",
+  "beta_pipeline7",
+  "beta_pipeline9",
+  "latest",
+])
+
+const autorouterVersion = z
+  .custom<AutocompleteString<AutorouterVersion>>(
+    (value) => typeof value === "string",
+  )
+  .transform((value): AutorouterVersion => {
+    const parsedAutorouterVersion = knownAutorouterVersion.safeParse(value)
+    if (parsedAutorouterVersion.success) return parsedAutorouterVersion.data
+
+    console.warn(
+      `Unknown autorouterVersion "${value}", falling back to "latest".`,
+    )
+    return "latest"
+  })
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
@@ -2551,6 +2583,7 @@ export interface SubcircuitGroupProps
     | "beta_pipeline7"
     | "beta_pipeline9"
     | "latest"
+    | (string & {})
 
   circuitJson?: any[]
 
@@ -2700,17 +2733,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
-  autorouterVersion: z
-    .enum([
-      "beta_pipeline1",
-      "beta_pipeline3",
-      "beta_pipeline4",
-      "beta_pipeline5",
-      "beta_pipeline7",
-      "beta_pipeline9",
-      "latest",
-    ])
-    .optional(),
+  autorouterVersion: autorouterVersion.optional(),
   square: z.boolean().optional(),
   emptyArea: z.string().optional(),
   filledArea: z.string().optional(),

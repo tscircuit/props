@@ -1,4 +1,4 @@
-import { expect, test } from "bun:test"
+import { expect, spyOn, test } from "bun:test"
 import {
   autorouterConfig,
   autorouterProp,
@@ -108,12 +108,21 @@ test("supports pipeline-based autorouter versions", () => {
   }
 })
 
-test("rejects v-prefixed autorouter versions", () => {
-  for (const autorouterVersion of ["v1", "v2", "v3", "v4", "v5", "v6"]) {
-    const result = subcircuitGroupPropsWithBool.safeParse({
-      subcircuit: true,
-      autorouterVersion,
-    })
-    expect(result.success).toBe(false)
+test("warns and falls back to latest for unknown autorouter versions", () => {
+  const consoleWarn = spyOn(console, "warn").mockImplementation(() => {})
+
+  try {
+    for (const autorouterVersion of ["v1", "v6", "beta_pipeline999"]) {
+      const result = subcircuitGroupPropsWithBool.parse({
+        subcircuit: true,
+        autorouterVersion,
+      })
+      expect(result.autorouterVersion).toBe("latest")
+      expect(consoleWarn).toHaveBeenCalledWith(
+        `Unknown autorouterVersion "${autorouterVersion}", falling back to "latest".`,
+      )
+    }
+  } finally {
+    consoleWarn.mockRestore()
   }
 })

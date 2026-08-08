@@ -2255,6 +2255,9 @@ export interface PlatformConfig {
   /** A localStorage-compatible cache used by render phases and engines. */
   localCacheEngine?: LocalCacheEngine;
 
+  /** A solver cache forwarded unchanged to local autorouters. */
+  cacheProvider?: CacheProvider;
+
   /**
    * Analyze rendered and supplier footprints so manufacturing exporters can
    * align their semantic pin 1 orientations.

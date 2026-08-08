@@ -51,6 +51,21 @@ export interface LocalCacheEngine {
   removeItem?(key: string): void | Promise<void>
 }
 
+/** A solver cache supplied by the host platform and shared across renders. */
+export interface CacheProvider {
+  isSyncCache: boolean
+  cacheHits: number
+  cacheMisses: number
+  cacheHitsByPrefix: Record<string, number>
+  cacheMissesByPrefix: Record<string, number>
+  getCachedSolutionSync(cacheKey: string): unknown
+  getCachedSolution(cacheKey: string): Promise<unknown>
+  setCachedSolutionSync(cacheKey: string, cachedSolution: unknown): void
+  setCachedSolution(cacheKey: string, cachedSolution: unknown): Promise<void>
+  getAllCacheKeys(): string[]
+  clearCache(): void
+}
+
 /** e.g. "kicad", this is the prefix used to reference libraries in footprinter strings e.g. kicad:Resistor_0402 **/
 type FootprintLibraryPrefix = string
 
@@ -80,6 +95,9 @@ export interface PlatformConfig {
 
   /** A localStorage-compatible cache used by render phases and engines. */
   localCacheEngine?: LocalCacheEngine
+
+  /** A solver cache forwarded unchanged to local autorouters. */
+  cacheProvider?: CacheProvider
 
   /**
    * Analyze rendered and supplier footprints so manufacturing exporters can
@@ -233,6 +251,34 @@ const localCacheEngine = z.custom<LocalCacheEngine>(
     typeof value.setItem === "function",
 )
 
+const cacheProvider = z.custom<CacheProvider>(
+  (value) =>
+    typeof value === "object" &&
+    value !== null &&
+    "isSyncCache" in value &&
+    typeof value.isSyncCache === "boolean" &&
+    "cacheHits" in value &&
+    typeof value.cacheHits === "number" &&
+    "cacheMisses" in value &&
+    typeof value.cacheMisses === "number" &&
+    "cacheHitsByPrefix" in value &&
+    typeof value.cacheHitsByPrefix === "object" &&
+    "cacheMissesByPrefix" in value &&
+    typeof value.cacheMissesByPrefix === "object" &&
+    "getCachedSolutionSync" in value &&
+    typeof value.getCachedSolutionSync === "function" &&
+    "getCachedSolution" in value &&
+    typeof value.getCachedSolution === "function" &&
+    "setCachedSolutionSync" in value &&
+    typeof value.setCachedSolutionSync === "function" &&
+    "setCachedSolution" in value &&
+    typeof value.setCachedSolution === "function" &&
+    "getAllCacheKeys" in value &&
+    typeof value.getAllCacheKeys === "function" &&
+    "clearCache" in value &&
+    typeof value.clearCache === "function",
+)
+
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
   autorouter: autorouterProp.optional(),
@@ -260,6 +306,7 @@ export const platformConfig = z.object({
   defaultSpiceEngine: defaultSpiceEngine.optional(),
   unitPreference: z.enum(["mm", "in", "mil"]).optional(),
   localCacheEngine: localCacheEngine.optional(),
+  cacheProvider: cacheProvider.optional(),
   enablePartOrientationAnalysis: z.boolean().optional(),
   pcbPackSolverTimeoutMs: z.number().finite().positive().optional(),
   pcbDisabled: z.boolean().optional(),

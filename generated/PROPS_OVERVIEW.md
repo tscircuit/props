@@ -436,6 +436,21 @@ export interface BusProps {
 }
 
 
+export interface CacheProvider {
+  isSyncCache: boolean
+  cacheHits: number
+  cacheMisses: number
+  cacheHitsByPrefix: Record<string, number>
+  cacheMissesByPrefix: Record<string, number>
+  getCachedSolutionSync(cacheKey: string): unknown
+  getCachedSolution(cacheKey: string): Promise<unknown>
+  setCachedSolutionSync(cacheKey: string, cachedSolution: unknown): void
+  setCachedSolution(cacheKey: string, cachedSolution: unknown): Promise<void>
+  getAllCacheKeys(): string[]
+  clearCache(): void
+}
+
+
 export interface CadAssemblyProps {
   /**
    * The layer that the CAD assembly is designed for. If you set this to "top"
@@ -1959,6 +1974,9 @@ export interface PlatformConfig {
 
   /** A localStorage-compatible cache used by render phases and engines. */
   localCacheEngine?: LocalCacheEngine
+
+  /** A solver cache forwarded unchanged to local autorouters. */
+  cacheProvider?: CacheProvider
 
   /**
    * Analyze rendered and supplier footprints so manufacturing exporters can

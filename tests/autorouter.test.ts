@@ -88,34 +88,32 @@ test("supports shared routing tolerances", () => {
   expect(result.minViaPadDiameter).toBe(0.6)
 })
 
-test("supports autorouter version v4", () => {
-  const result = subcircuitGroupPropsWithBool.parse({
-    subcircuit: true,
-    autorouterVersion: "v4",
-  })
-  expect(result.autorouterVersion).toBe("v4")
+test("supports pipeline-based autorouter versions", () => {
+  const autorouterVersions = [
+    "beta_pipeline1",
+    "beta_pipeline3",
+    "beta_pipeline4",
+    "beta_pipeline5",
+    "beta_pipeline7",
+    "beta_pipeline9",
+    "latest",
+  ] as const
+
+  for (const autorouterVersion of autorouterVersions) {
+    const result = subcircuitGroupPropsWithBool.parse({
+      subcircuit: true,
+      autorouterVersion,
+    })
+    expect(result.autorouterVersion).toBe(autorouterVersion)
+  }
 })
 
-test("supports autorouter version v5", () => {
-  const result = subcircuitGroupPropsWithBool.parse({
-    subcircuit: true,
-    autorouterVersion: "v5",
-  })
-  expect(result.autorouterVersion).toBe("v5")
-})
-
-test("supports autorouter version v6", () => {
-  const result = subcircuitGroupPropsWithBool.parse({
-    subcircuit: true,
-    autorouterVersion: "v6",
-  })
-  expect(result.autorouterVersion).toBe("v6")
-})
-
-test("supports autorouter version beta_pipeline9", () => {
-  const result = subcircuitGroupPropsWithBool.parse({
-    subcircuit: true,
-    autorouterVersion: "beta_pipeline9",
-  })
-  expect(result.autorouterVersion).toBe("beta_pipeline9")
+test("rejects v-prefixed autorouter versions", () => {
+  for (const autorouterVersion of ["v1", "v2", "v3", "v4", "v5", "v6"]) {
+    const result = subcircuitGroupPropsWithBool.safeParse({
+      subcircuit: true,
+      autorouterVersion,
+    })
+    expect(result.success).toBe(false)
+  }
 })

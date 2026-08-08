@@ -499,12 +499,11 @@ export interface SubcircuitGroupProps
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
   autorouterVersion?:
-    | "v1"
-    | "v2"
-    | "v3"
-    | "v4"
-    | "v5"
-    | "v6"
+    | "beta_pipeline1"
+    | "beta_pipeline3"
+    | "beta_pipeline4"
+    | "beta_pipeline5"
+    | "beta_pipeline7"
     | "beta_pipeline9"
     | "latest"
 
@@ -685,7 +684,15 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: z
-    .enum(["v1", "v2", "v3", "v4", "v5", "v6", "beta_pipeline9", "latest"])
+    .enum([
+      "beta_pipeline1",
+      "beta_pipeline3",
+      "beta_pipeline4",
+      "beta_pipeline5",
+      "beta_pipeline7",
+      "beta_pipeline9",
+      "latest",
+    ])
     .optional(),
   square: z.boolean().optional(),
   emptyArea: z.string().optional(),

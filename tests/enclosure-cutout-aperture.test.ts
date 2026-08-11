@@ -12,6 +12,7 @@ test("enclosure cutout aperture props normalize dimensions to millimeters", () =
     width: "0.144in",
     height: "8.34mm",
     margin: "0.2mm",
+    heightDimensionOffset: "6.5mm",
   }
 
   const parsed = enclosureCutoutApertureProps.parse(raw)
@@ -21,6 +22,7 @@ test("enclosure cutout aperture props normalize dimensions to millimeters", () =
     width: expect.any(Number),
     height: 8.34,
     margin: 0.2,
+    heightDimensionOffset: 6.5,
   })
   if (parsed.shape === "pill") {
     expect(parsed.width).toBeCloseTo(3.6576)

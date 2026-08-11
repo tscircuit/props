@@ -32,6 +32,10 @@ export interface CadModelBase {
     y: number | string
     z: number | string
   }
+  modelBounds?: {
+    min: { x: number | string; y: number | string; z: number | string }
+    max: { x: number | string; y: number | string; z: number | string }
+  }
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
   modelBoardNormalDirection?: CadModelAxisDirection
@@ -40,10 +44,28 @@ export interface CadModelBase {
   showAsTranslucentModel?: boolean
   stepUrl?: string
 }
+/**
+   * Axis-aligned extent of the model measured in its own coordinate frame, the
+   * same frame as `modelOriginPosition`.
+   *
+   * `size` gives the extent but not where the box sits relative to the model
+   * origin, and the box is generally not centered on it, so `size` alone cannot
+   * say how much of the part is above the board. Since `modelOriginPosition` is
+   * the point placed on the board surface, these bounds supply the missing
+   * term. `modelBoardNormalDirection` names the axis (default `z+`): for a
+   * positive normal the outward reach is `max[axis] - origin[axis]`, and for a
+   * negative one it is `origin[axis] - min[axis]`.
+   *
+   * These are the model's own bounds, before `modelUnitToMmScale` or any
+   * object-fit scaling is applied.
+   *
+   * Whatever generates a part file already measures this to produce `size`.
+   */
 export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
   positionOffset: point3.optional(),
   modelOriginPosition: point3.optional(),
+  modelBounds: z.object({ min: point3, max: point3 }).optional(),
   size: point3.optional(),
   modelUnitToMmScale: distance.optional(),
   modelBoardNormalDirection: cadModelAxisDirection.optional(),
@@ -2111,23 +2133,26 @@ export interface FootprintProps {
   circuitJson?: any[]
   src?: FootprintProp
   insertionDirection?: FootprintInsertionDirection
+  cutoutApertureDirection?: FootprintInsertionDirection
 }
 /**
-   * Direction a cable or mating part is attached from, in the footprint's own
-   * frame -- the same frame its pads are drawn in. Directions are named for the
-   * footprint as drawn in the 2D PCB view: `from_top` is +Y, `from_bottom` -Y,
-   * `from_left` -X, `from_right` +X, `from_above` +Z and `from_below` -Z.
-   * Cartesian spellings such as `from_y_pos` are also accepted.
+   * Direction the part's enclosure opening faces, named the same way as
+   * `insertionDirection` and in the same unrotated part frame.
    *
-   * This names a side, not a motion. A receptacle on the +Y edge is `from_top`
-   * because that is the side the plug comes from, even though the plug itself
-   * moves in -Y as it seats.
+   * These are two different physical facts and a part may need both. A
+   * side-actuated switch is *installed* from above and *actuated* from the side:
+   * its aperture must pierce a side wall, while nothing is ever inserted into
+   * it. Reusing `insertionDirection` for that would either put the opening on
+   * the wrong face or overload a field documented as "the side exposing the
+   * receptacle where the cable is attached".
    *
-   * This is a property of the part, so it is authored without regard to where
-   * the part is placed. Rotating or flipping the component rotates this with it,
-   * and `pcb_component.insertion_direction` reports the result in board
-   * coordinates. The two frames coincide for an unrotated top-layer part, which
-   * makes the distinction easy to miss.
+   * Like `insertionDirection`, this is a property of the part, authored without
+   * regard to placement: rotating or flipping the component rotates it too, and
+   * `pcb_component.cutout_aperture_direction` reports the result in board
+   * coordinates.
+   *
+   * When absent, the aperture falls back to `insertionDirection`, which is
+   * correct for every connector -- a cable enters through the opening it needs.
    */
 export const footprintProps = z.object({
   children: z.any().optional(),
@@ -2139,6 +2164,11 @@ export const footprintProps = z.object({
     .optional()
     .describe(
       "Direction a cable or mating part is attached from, named for the side of the footprint it approaches from, in its unrotated orientation.",
+    ),
+  cutoutApertureDirection: footprintInsertionDirection
+    .optional()
+    .describe(
+      "Direction the part's enclosure opening faces, in its unrotated orientation. Distinct from insertionDirection: a side-actuated switch is installed from above and actuated from the side. Falls back to insertionDirection when absent.",
     ),
 })
 ```

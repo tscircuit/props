@@ -38,6 +38,27 @@ export interface CadModelBase {
     y: number | string
     z: number | string
   }
+  /**
+   * Axis-aligned extent of the model measured in its own coordinate frame, the
+   * same frame as `modelOriginPosition`.
+   *
+   * `size` gives the extent but not where the box sits relative to the model
+   * origin, and the box is generally not centered on it, so `size` alone cannot
+   * say how much of the part is above the board. Since `modelOriginPosition` is
+   * the point placed on the board surface, these bounds supply the missing
+   * term. `modelBoardNormalDirection` names the axis (default `z+`): for a
+   * positive normal the outward reach is `max[axis] - origin[axis]`, and for a
+   * negative one it is `origin[axis] - min[axis]`.
+   *
+   * These are the model's own bounds, before `modelUnitToMmScale` or any
+   * object-fit scaling is applied.
+   *
+   * Whatever generates a part file already measures this to produce `size`.
+   */
+  modelBounds?: {
+    min: { x: number | string; y: number | string; z: number | string }
+    max: { x: number | string; y: number | string; z: number | string }
+  }
   size?: { x: number | string; y: number | string; z: number | string }
   modelUnitToMmScale?: Distance
   modelBoardNormalDirection?: CadModelAxisDirection
@@ -51,6 +72,7 @@ export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
   positionOffset: point3.optional(),
   modelOriginPosition: point3.optional(),
+  modelBounds: z.object({ min: point3, max: point3 }).optional(),
   size: point3.optional(),
   modelUnitToMmScale: distance.optional(),
   modelBoardNormalDirection: cadModelAxisDirection.optional(),

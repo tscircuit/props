@@ -41,6 +41,8 @@ export interface EnclosureFdmBoxProps {
   lidLipDepth?: Distance
   /** Disable placement of apertures explicitly declared by enclosed components. */
   disableCutouts?: boolean
+  /** Show edges hidden behind the enclosure surface in compatible 3D viewers. */
+  showHiddenEdges?: boolean
 }
 
 export const enclosureFdmBoxProps = z.object({
@@ -57,6 +59,7 @@ export const enclosureFdmBoxProps = z.object({
   topHeadroom: distance.optional(),
   lidLipDepth: distance.optional(),
   disableCutouts: z.boolean().optional(),
+  showHiddenEdges: z.boolean().optional(),
 })
 
 export type EnclosureFdmBoxPropsInput = z.input<typeof enclosureFdmBoxProps>

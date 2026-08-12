@@ -1060,6 +1060,8 @@ export interface EnclosureFdmBoxProps {
   lidLipDepth?: Distance
   /** Disable placement of apertures explicitly declared by enclosed components. */
   disableCutouts?: boolean
+  /** Show edges hidden behind the enclosure surface in compatible 3D viewers. */
+  showHiddenEdges?: boolean
 }
 
 

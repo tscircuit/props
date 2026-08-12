@@ -20,6 +20,7 @@ test("parses enclosure.fdm.box props with a boardRef", () => {
     topHeadroom: "6mm",
     lidLipDepth: "3mm",
     disableCutouts: true,
+    showHiddenEdges: true,
   }
 
   expect(enclosureFdmBoxProps.parse(input)).toEqual({
@@ -36,6 +37,7 @@ test("parses enclosure.fdm.box props with a boardRef", () => {
     topHeadroom: 6,
     lidLipDepth: 3,
     disableCutouts: true,
+    showHiddenEdges: true,
   })
 })
 

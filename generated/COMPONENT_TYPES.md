@@ -1581,12 +1581,15 @@ export const chipProps = commonComponentProps.extend({
 ```typescript
 export interface ConnectorProps extends ChipPropsSU {
   standard?: ConnectorStandard
+
+  pinCount?: number
 }
 /**
-   * Connector interface or product family, e.g. usb_c, m2, jst_ph
+   * Number of electrical circuits in the connector
    */
 export const connectorProps = chipProps.extend({
   standard: connectorStandard.optional(),
+  pinCount: z.number().int().positive().optional(),
 })
 ```
 

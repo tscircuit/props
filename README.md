@@ -582,6 +582,11 @@ export interface ConnectorProps extends ChipPropsSU {
    * Connector interface or product family, e.g. usb_c, m2, jst_ph
    */
   standard?: ConnectorStandard;
+
+  /**
+   * Number of electrical circuits in the connector
+   */
+  pinCount?: number;
 }
 ```
 

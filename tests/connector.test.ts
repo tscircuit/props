@@ -30,3 +30,19 @@ test("should reject a contradictory JST family and pitch", () => {
     connectorProps.parse({ name: "conn", standard: "jst_sh_2mm" } as any),
   ).toThrow()
 })
+
+test("should parse an optional connector pin count", () => {
+  const raw: ConnectorProps = {
+    name: "conn",
+    standard: "jst_ph",
+    pinCount: 2,
+  }
+  const parsed = connectorProps.parse(raw)
+  expect(parsed.pinCount).toBe(2)
+})
+
+for (const pinCount of [0, -1, 2.5, Number.POSITIVE_INFINITY]) {
+  test(`should reject invalid connector pin count ${pinCount}`, () => {
+    expect(() => connectorProps.parse({ name: "conn", pinCount })).toThrow()
+  })
+}

@@ -791,9 +791,14 @@ export interface CommonLayoutProps {
 
 export interface ConnectorProps extends ChipPropsSU {
   /**
-   * Connector standard, e.g. usb_c, m2
+   * Connector interface or product family, e.g. usb_c, m2, jst_ph
    */
-  standard?: "usb_c" | "m2"
+  standard?: ConnectorStandard
+
+  /**
+   * Number of electrical circuits in the connector
+   */
+  pinCount?: number
 }
 
 

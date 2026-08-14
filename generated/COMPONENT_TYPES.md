@@ -1580,13 +1580,16 @@ export const chipProps = commonComponentProps.extend({
 
 ```typescript
 export interface ConnectorProps extends ChipPropsSU {
-  standard?: "usb_c" | "m2"
+  standard?: ConnectorStandard
+
+  pinCount?: number
 }
 /**
-   * Connector standard, e.g. usb_c, m2
+   * Number of electrical circuits in the connector
    */
 export const connectorProps = chipProps.extend({
-  standard: z.enum(["usb_c", "m2"]).optional(),
+  standard: connectorStandard.optional(),
+  pinCount: z.number().int().positive().optional(),
 })
 ```
 

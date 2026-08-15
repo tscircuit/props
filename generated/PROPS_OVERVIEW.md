@@ -819,10 +819,7 @@ export interface CopperPourProps {
   clearance?: Distance
   boardEdgeMargin?: Distance
   cutoutMargin?: Distance
-  thermalRelief?: {
-    spokeWidth: Distance
-    spokeCount?: number
-  }
+  useThermalReliefs?: boolean
   outline?: Point[]
   coveredWithSolderMask?: boolean
 }

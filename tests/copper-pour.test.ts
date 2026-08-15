@@ -1,9 +1,9 @@
 import { expect, test } from "bun:test"
-import { expectTypeOf } from "expect-type"
 import {
-  type CopperPourProps,
   copperPourProps,
+  type CopperPourProps,
 } from "lib/components/copper-pour"
+import { expectTypeOf } from "expect-type"
 
 test("should parse a valid copper pour", () => {
   const rawProps: CopperPourProps = {
@@ -75,48 +75,16 @@ test("should parse cutoutMargin", () => {
   expect(parsed.cutoutMargin).toBe(2)
 })
 
-test("should parse thermalRelief", () => {
+test("should parse useThermalReliefs", () => {
   const rawProps: CopperPourProps = {
     connectsTo: "gnd",
     layer: "top",
-    thermalRelief: {
-      spokeWidth: "0.3mm",
-      spokeCount: 4,
-    },
+    useThermalReliefs: true,
   }
 
   const parsed = copperPourProps.parse(rawProps)
 
-  expect(parsed.thermalRelief).toEqual({
-    spokeWidth: 0.3,
-    spokeCount: 4,
-  })
-})
-
-test("should reject invalid thermalRelief spoke counts", () => {
-  expect(() =>
-    copperPourProps.parse({
-      connectsTo: "gnd",
-      layer: "top",
-      thermalRelief: {
-        spokeWidth: "0.3mm",
-        spokeCount: 3.5,
-      },
-    }),
-  ).toThrow()
-})
-
-test("should reject invalid thermalRelief spoke widths", () => {
-  expect(() =>
-    copperPourProps.parse({
-      connectsTo: "gnd",
-      layer: "top",
-      thermalRelief: {
-        spokeWidth: "0mm",
-        spokeCount: 4,
-      },
-    }),
-  ).toThrow()
+  expect(parsed.useThermalReliefs).toBe(true)
 })
 
 test("should parse unbroken", () => {

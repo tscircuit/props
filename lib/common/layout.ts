@@ -6,6 +6,7 @@ import {
   supplier_name,
 } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Key } from "react"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
 import { pcbCoordinate } from "./distance"
@@ -35,6 +36,8 @@ export type PcbPositionMode =
 export type PositionMode = PcbPositionMode
 
 export interface PcbLayoutProps {
+  /** React reconciliation key for primitives created in arrays. */
+  key?: Key
   pcbX?: string | number
   pcbY?: string | number
   /**
@@ -130,6 +133,7 @@ export interface CommonLayoutProps {
 }
 
 export const pcbLayoutProps = z.object({
+  key: z.union([z.string(), z.number(), z.bigint()]).optional(),
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
   pcbLeftEdgeX: pcbCoordinate.optional(),

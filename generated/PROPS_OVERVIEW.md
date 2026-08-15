@@ -1679,6 +1679,8 @@ export interface PanelProps
 
 
 export interface PcbLayoutProps {
+  /** React reconciliation key for primitives created in arrays. */
+  key?: Key
   pcbX?: string | number
   pcbY?: string | number
   /**
@@ -2505,6 +2507,8 @@ export interface SelectionResultPort {
 
 
 export interface SilkscreenGraphicProps {
+  /** React reconciliation key for primitives created in arrays. */
+  key?: Key
   /**
    * URL or static-file import for the source image. tscircuit/core converts the
    * image into the pcb_silkscreen_graphic BRep in circuit-json.

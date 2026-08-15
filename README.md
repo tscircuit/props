@@ -1914,6 +1914,8 @@ export type SilkscreenCircleProps = z.input<typeof silkscreenCircleProps>;
 
 ```ts
 export interface SilkscreenGraphicProps {
+  /** React reconciliation key for primitives created in arrays. */
+  key?: Key;
   /**
    * URL or static-file import for the source image. tscircuit/core converts the
    * image into the pcb_silkscreen_graphic BRep in circuit-json.

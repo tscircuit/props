@@ -19,31 +19,24 @@ declare module "react/jsx-runtime" {
   }
 }
 
-test("repro: mapped footprint primitives need an awkward key workaround", () => {
+test("mapped footprint primitives accept React keys directly", () => {
   const portHints = ["pin1", "pin2"] as const
 
-  const rejectedSmtPadProps: SmtPadProps = {
-    // @ts-expect-error SmtPadProps currently rejects React's reserved key
+  const keyedSmtPadProps: SmtPadProps = {
     key: "pin1",
     shape: "rect",
     width: "1mm",
     height: "2mm",
   }
-  const rejectedPlatedHoleProps: PlatedHoleProps = {
-    // @ts-expect-error PlatedHoleProps currently rejects React's reserved key
+  const keyedPlatedHoleProps: PlatedHoleProps = {
     key: "pin1",
     shape: "circle",
     holeDiameter: "0.8mm",
     outerDiameter: "1.6mm",
   }
 
-  const SmtPadWithKeyWorkaround = (props: SmtPadProps) => <smtpad {...props} />
-  const PlatedHoleWithKeyWorkaround = (props: PlatedHoleProps) => (
-    <platedhole {...props} />
-  )
-
   const smtPads = portHints.map((portHint, index) => (
-    <SmtPadWithKeyWorkaround
+    <smtpad
       key={portHint}
       shape="rect"
       width="1mm"
@@ -53,7 +46,7 @@ test("repro: mapped footprint primitives need an awkward key workaround", () => 
     />
   ))
   const platedHoles = portHints.map((portHint, index) => (
-    <PlatedHoleWithKeyWorkaround
+    <platedhole
       key={portHint}
       shape="circle"
       holeDiameter="0.8mm"
@@ -63,8 +56,8 @@ test("repro: mapped footprint primitives need an awkward key workaround", () => 
     />
   ))
 
-  expect(rejectedSmtPadProps).toHaveProperty("key", "pin1")
-  expect(rejectedPlatedHoleProps).toHaveProperty("key", "pin1")
+  expect(keyedSmtPadProps).toHaveProperty("key", "pin1")
+  expect(keyedPlatedHoleProps).toHaveProperty("key", "pin1")
   expect(smtPads.map((pad) => pad.key)).toEqual([...portHints])
   expect(platedHoles.map((hole) => hole.key)).toEqual([...portHints])
 
@@ -74,5 +67,21 @@ test("repro: mapped footprint primitives need an awkward key workaround", () => 
     width: "1mm",
     height: "2mm",
   })
-  expect("key" in parsedPad).toBe(false)
+  expect(parsedPad.key).toBe("pin1")
+  expect(
+    smtPadProps.parse({
+      key: 2,
+      shape: "rect",
+      width: "1mm",
+      height: "2mm",
+    }).key,
+  ).toBe(2)
+  expect(
+    smtPadProps.parse({
+      key: 3n,
+      shape: "rect",
+      width: "1mm",
+      height: "2mm",
+    }).key,
+  ).toBe(3n)
 })

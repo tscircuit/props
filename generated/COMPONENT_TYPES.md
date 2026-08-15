@@ -493,6 +493,7 @@ export const kicadSymbolMetadata = z.object({
 
 ```typescript
 export interface PcbLayoutProps {
+  key?: Key
   pcbX?: string | number
   pcbY?: string | number
   pcbLeftEdgeX?: string | number
@@ -569,6 +570,7 @@ export interface CommonLayoutProps {
    * If true, pcbX/pcbY will be interpreted relative to the parent group
    */
 export const pcbLayoutProps = z.object({
+  key: z.union([z.string(), z.number(), z.bigint()]).optional(),
   pcbX: pcbCoordinate.optional(),
   pcbY: pcbCoordinate.optional(),
   pcbLeftEdgeX: pcbCoordinate.optional(),
@@ -4237,6 +4239,7 @@ export const silkscreenCircleProps = pcbLayoutProps
 
 ```typescript
 export interface SilkscreenGraphicProps {
+  key?: Key
   imageUrl: string
   width: Distance
   height: Distance

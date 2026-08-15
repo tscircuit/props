@@ -3,9 +3,12 @@ import { type Distance, distance } from "lib/common/distance"
 import { pcbLayoutProps } from "lib/common/layout"
 import { url } from "lib/common/url"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Key } from "react"
 import { z } from "zod"
 
 export interface SilkscreenGraphicProps {
+  /** React reconciliation key for primitives created in arrays. */
+  key?: Key
   /**
    * URL or static-file import for the source image. tscircuit/core converts the
    * image into the pcb_silkscreen_graphic BRep in circuit-json.

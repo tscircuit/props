@@ -26,7 +26,7 @@ const boardColor = z.custom<BoardColor>((value) => typeof value === "string")
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
   title?: string
-  material?: "fr4" | "fr1" | "flex"
+  material?: "fr4" | "fr1"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   borderRadius?: Distance
@@ -57,7 +57,7 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
-    material: z.enum(["fr4", "fr1", "flex"]).default("fr4"),
+    material: z.enum(["fr4", "fr1"]).default("fr4"),
     layers: z
       .union([
         z.literal(1),

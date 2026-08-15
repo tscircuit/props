@@ -1,8 +1,8 @@
-import { z } from "zod"
-import { distance, type Distance } from "lib/common/distance"
+import { type LayerRefInput, layer_ref } from "circuit-json"
+import { type Distance, distance } from "lib/common/distance"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
-import { layer_ref, type LayerRefInput } from "circuit-json"
+import { z } from "zod"
 
 export interface CopperPourProps {
   name?: string
@@ -14,6 +14,10 @@ export interface CopperPourProps {
   clearance?: Distance
   boardEdgeMargin?: Distance
   cutoutMargin?: Distance
+  thermalRelief?: {
+    spokeWidth: Distance
+    spokeCount?: number
+  }
   outline?: Point[]
   coveredWithSolderMask?: boolean
 }
@@ -28,6 +32,14 @@ export const copperPourProps = z.object({
   clearance: distance.optional(),
   boardEdgeMargin: distance.optional(),
   cutoutMargin: distance.optional(),
+  thermalRelief: z
+    .object({
+      spokeWidth: distance.refine((spokeWidth) => spokeWidth > 0, {
+        message: "Thermal relief spoke width must be greater than 0",
+      }),
+      spokeCount: z.number().int().positive().optional(),
+    })
+    .optional(),
   outline: z.array(point).optional(),
   coveredWithSolderMask: z.boolean().optional().default(true),
 })

@@ -633,6 +633,10 @@ export interface CopperPourProps {
   clearance?: Distance;
   boardEdgeMargin?: Distance;
   cutoutMargin?: Distance;
+  thermalRelief?: {
+    spokeWidth: Distance;
+    spokeCount?: number;
+  };
   outline?: Point[];
   coveredWithSolderMask?: boolean;
 }

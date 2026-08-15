@@ -1700,6 +1700,10 @@ export interface CopperPourProps {
   clearance?: Distance
   boardEdgeMargin?: Distance
   cutoutMargin?: Distance
+  thermalRelief?: {
+    spokeWidth: Distance
+    spokeCount?: number
+  }
   outline?: Point[]
   coveredWithSolderMask?: boolean
 }
@@ -1713,6 +1717,14 @@ export const copperPourProps = z.object({
   clearance: distance.optional(),
   boardEdgeMargin: distance.optional(),
   cutoutMargin: distance.optional(),
+  thermalRelief: z
+    .object({
+      spokeWidth: distance.refine((spokeWidth) => spokeWidth > 0, {
+        message: "Thermal relief spoke width must be greater than 0",
+      }),
+      spokeCount: z.number().int().positive().optional(),
+    })
+    .optional(),
   outline: z.array(point).optional(),
   coveredWithSolderMask: z.boolean().optional().default(true),
 })

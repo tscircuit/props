@@ -123,7 +123,7 @@ export interface PinHeaderProps extends CommonComponentProps {
 }
 
 export const pinHeaderProps = commonComponentProps.extend({
-  pinCount: z.number(),
+  pinCount: z.number().int().positive(),
   pitch: distance.optional(),
   schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
   gender: z.enum(["male", "female", "unpopulated"]).optional().default("male"),

@@ -65,4 +65,3 @@ export const differentialPairProps = z.object({
 
 type InferredDifferentialPairProps = z.input<typeof differentialPairProps>
 expectTypesMatch<DifferentialPairProps, InferredDifferentialPairProps>(true)
-

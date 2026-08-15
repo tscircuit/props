@@ -122,10 +122,20 @@ test("should snapshot schematic props for pin header", () => {
 })
 
 test("should reject fractional, zero, negative and infinite pinCount (#756)", () => {
-  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: 2.5 }).success).toBe(false)
-  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: 0 }).success).toBe(false)
-  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: -4 }).success).toBe(false)
-  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: Number.POSITIVE_INFINITY }).success).toBe(false)
-  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: 5 }).success).toBe(true)
+  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: 2.5 }).success).toBe(
+    false,
+  )
+  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: 0 }).success).toBe(
+    false,
+  )
+  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: -4 }).success).toBe(
+    false,
+  )
+  expect(
+    pinHeaderProps.safeParse({ name: "H1", pinCount: Number.POSITIVE_INFINITY })
+      .success,
+  ).toBe(false)
+  expect(pinHeaderProps.safeParse({ name: "H1", pinCount: 5 }).success).toBe(
+    true,
+  )
 })
-

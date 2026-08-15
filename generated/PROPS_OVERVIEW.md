@@ -1658,8 +1658,13 @@ export interface PanelProps
    * If true, prevent a solder mask from being applied to this panel.
    */
   noSolderMask?: boolean
-  /** Method for panelization */
-  panelizationMethod?: "tab-routing" | "none"
+  /**
+   * Method used to separate boards in the panel.
+   *
+   * `outline_routing` creates continuous routed cutouts around each board
+   * outline without tabs.
+   */
+  panelizationMethod?: "tab-routing" | "outline_routing" | "none"
   /** Gap between boards in a panel */
   boardGap?: Distance
   layoutMode?: "grid" | "pack" | "none"

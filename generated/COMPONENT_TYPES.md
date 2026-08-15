@@ -3157,7 +3157,7 @@ export interface PanelProps
   children?: BaseGroupProps["children"]
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   noSolderMask?: boolean
-  panelizationMethod?: "tab-routing" | "none"
+  panelizationMethod?: "tab-routing" | "outline_routing" | "none"
   boardGap?: Distance
   layoutMode?: "grid" | "pack" | "none"
   row?: number
@@ -3188,7 +3188,9 @@ export const panelProps = baseGroupProps
     children: z.any().optional(),
     anchorAlignment: ninePointAnchor.optional(),
     noSolderMask: z.boolean().optional(),
-    panelizationMethod: z.enum(["tab-routing", "none"]).optional(),
+    panelizationMethod: z
+      .enum(["tab-routing", "outline_routing", "none"])
+      .optional(),
     boardGap: distance.optional(),
     layoutMode: z.enum(["grid", "pack", "none"]).optional(),
     row: z.number().optional(),

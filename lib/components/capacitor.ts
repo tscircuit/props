@@ -1,4 +1,4 @@
-import { capacitance, distance, voltage } from "circuit-json"
+import { capacitance, distance, resistance, voltage } from "circuit-json"
 import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
@@ -31,6 +31,10 @@ export interface CapacitorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   capacitance: number | string
   maxVoltageRating?: number | string
+  tolerance?: number | string
+  temperatureCoefficient?: string
+  equivalentSeriesResistance?: number | string
+  esr?: number | string
   schShowRatings?: boolean
   polarized?: boolean
   decouplingFor?: string
@@ -47,6 +51,27 @@ export interface CapacitorProps<PinLabel extends string = string>
 export const capacitorProps = commonComponentProps.extend({
   capacitance,
   maxVoltageRating: voltage.optional(),
+  tolerance: z
+    .union([z.string(), z.number()])
+    .transform((val) => {
+      if (typeof val === "string") {
+        if (val.endsWith("%")) {
+          return parseFloat(val.slice(0, -1)) / 100
+        }
+        return parseFloat(val)
+      }
+      return val
+    })
+    .pipe(
+      z
+        .number()
+        .min(0, "Tolerance must be non-negative")
+        .max(1, "Tolerance cannot be greater than 100%"),
+    )
+    .optional(),
+  temperatureCoefficient: z.string().optional(),
+  equivalentSeriesResistance: resistance.optional(),
+  esr: resistance.optional(),
   schShowRatings: z.boolean().optional().default(false),
   polarized: z.boolean().optional().default(false),
   decouplingFor: z.string().optional(),

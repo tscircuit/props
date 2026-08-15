@@ -75,6 +75,18 @@ test("should parse cutoutMargin", () => {
   expect(parsed.cutoutMargin).toBe(2)
 })
 
+test("should parse useThermalReliefs", () => {
+  const rawProps: CopperPourProps = {
+    connectsTo: "gnd",
+    layer: "top",
+    useThermalReliefs: true,
+  }
+
+  const parsed = copperPourProps.parse(rawProps)
+
+  expect(parsed.useThermalReliefs).toBe(true)
+})
+
 test("should parse unbroken", () => {
   const rawProps: CopperPourProps = {
     connectsTo: "gnd",

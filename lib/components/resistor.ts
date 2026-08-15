@@ -25,6 +25,11 @@ export interface ResistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   resistance: number | string
   tolerance?: number | string
+  powerRating?: number | string
+  maxPowerRating?: number | string
+  maxVoltageRating?: number | string
+  temperatureOperatingRange?: [number, number] | string
+  schShowRatings?: boolean
   pullupFor?: string
   pullupTo?: string
   pulldownFor?: string
@@ -83,6 +88,14 @@ export const resistorProps = commonComponentProps.extend({
         .max(1, "Tolerance cannot be greater than 100%"),
     )
     .optional(),
+
+  powerRating: z.union([z.number(), z.string()]).optional(),
+  maxPowerRating: z.union([z.number(), z.string()]).optional(),
+  maxVoltageRating: z.union([z.number(), z.string()]).optional(),
+  temperatureOperatingRange: z
+    .union([z.tuple([z.number(), z.number()]), z.string()])
+    .optional(),
+  schShowRatings: z.boolean().optional(),
 
   pullupFor: z.string().optional(),
   pullupTo: z.string().optional(),

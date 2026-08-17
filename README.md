@@ -452,6 +452,10 @@ export interface BusProps {
   pcbTraceWidth?: number | string;
   /** PCB layers on which the bus may be routed. */
   pcbAllowedLayers?: LayerRefInput[];
+  /** Preferred PCB layer for routing the bus. */
+  preferredLayer?: LayerRefInput;
+  /** Preferred PCB layers for routing the bus, in priority order. */
+  preferredLayers?: LayerRefInput[];
 }
 ```
 

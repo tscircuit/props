@@ -27,6 +27,10 @@ export interface BusProps {
   pcbTraceWidth?: number | string
   /** PCB layers on which the bus may be routed. */
   pcbAllowedLayers?: LayerRefInput[]
+  /** Preferred PCB layer for routing the bus. */
+  preferredLayer?: LayerRefInput
+  /** Preferred PCB layers for routing the bus, in priority order. */
+  preferredLayers?: LayerRefInput[]
 }
 
 export const busProps = z.object({
@@ -37,6 +41,8 @@ export const busProps = z.object({
   targetImpedance: resistance.pipe(z.number().positive().finite()).optional(),
   pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
   pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
+  preferredLayer: layer_ref.optional(),
+  preferredLayers: z.array(layer_ref).min(1).optional(),
 })
 
 type InferredBusProps = z.input<typeof busProps>

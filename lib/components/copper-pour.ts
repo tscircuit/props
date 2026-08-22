@@ -8,6 +8,10 @@ export interface CopperPourProps {
   name?: string
   layer: LayerRefInput
   connectsTo: string
+  /**
+   * Reserves the pour region during autorouting so unrelated traces do not
+   * split it. Vias may still cross the region using antipads.
+   */
   unbroken?: boolean
   padMargin?: Distance
   traceMargin?: Distance
@@ -23,7 +27,12 @@ export const copperPourProps = z.object({
   name: z.string().optional(),
   layer: layer_ref,
   connectsTo: z.string(),
-  unbroken: z.boolean().optional(),
+  unbroken: z
+    .boolean()
+    .optional()
+    .describe(
+      "Reserves the pour region during autorouting so unrelated traces do not split it. Vias may still cross the region using antipads.",
+    ),
   padMargin: distance.optional(),
   traceMargin: distance.optional(),
   clearance: distance.optional(),

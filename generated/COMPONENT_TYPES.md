@@ -1335,6 +1335,7 @@ export interface BoardProps
   title?: string
   material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
+  allowBlindAndBuriedVias?: boolean
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -1365,6 +1366,12 @@ export const boardProps = subcircuitGroupProps
         z.literal(10),
       ])
       .default(2),
+    allowBlindAndBuriedVias: z
+      .boolean()
+      .default(false)
+      .describe(
+        "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack.",
+      ),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),
@@ -1757,11 +1764,20 @@ export interface CopperPourProps {
   outline?: Point[]
   coveredWithSolderMask?: boolean
 }
+/**
+   * Reserves the pour region during autorouting so unrelated traces do not
+   * split it. Vias may still cross the region using antipads.
+   */
 export const copperPourProps = z.object({
   name: z.string().optional(),
   layer: layer_ref,
   connectsTo: z.string(),
-  unbroken: z.boolean().optional(),
+  unbroken: z
+    .boolean()
+    .optional()
+    .describe(
+      "Reserves the pour region during autorouting so unrelated traces do not split it. Vias may still cross the region using antipads.",
+    ),
   padMargin: distance.optional(),
   traceMargin: distance.optional(),
   clearance: distance.optional(),

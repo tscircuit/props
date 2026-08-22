@@ -29,6 +29,11 @@ export interface BoardProps
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
+  /**
+   * Whether the autorouter may generate blind and buried vias. Defaults to
+   * false, which restricts newly generated vias to the full board stack.
+   */
+  allowBlindAndBuriedVias?: boolean
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -68,6 +73,12 @@ export const boardProps = subcircuitGroupProps
         z.literal(10),
       ])
       .default(2),
+    allowBlindAndBuriedVias: z
+      .boolean()
+      .default(false)
+      .describe(
+        "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack.",
+      ),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),

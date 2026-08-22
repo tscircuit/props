@@ -264,6 +264,55 @@ export type FootprintSoupElements = {
 }
 ```
 
+### implicitBreakoutPointSolver
+
+```typescript
+export interface ImplicitBreakoutPoint {
+  readonly x: number
+  readonly y: number
+}
+export interface ImplicitBreakoutBounds {
+  readonly minX: number
+  readonly maxX: number
+  readonly minY: number
+  readonly maxY: number
+}
+export interface ImplicitBreakoutRegion {
+  readonly regionId: string
+  readonly bounds: ImplicitBreakoutBounds
+  readonly edge: ImplicitBreakoutEdge
+}
+export interface ImplicitBreakoutConnectionEndpoint {
+  readonly regionId: string
+  readonly position: ImplicitBreakoutPoint
+}
+export interface ImplicitBreakoutConnection {
+  readonly connectionId: string
+  readonly endpoints: readonly ImplicitBreakoutConnectionEndpoint[]
+}
+export interface ImplicitBreakoutDifferentialPair {
+  readonly type: "differential"
+  readonly connections: readonly [
+    ImplicitBreakoutConnection,
+    ImplicitBreakoutConnection,
+  ]
+}
+export interface ImplicitBreakoutBus {
+  readonly busId: string
+  readonly connectionIds: readonly string[]
+  readonly targetLayers?: readonly string[]
+}
+/** Ordered candidate layers that the solver may distribute this bus over. */
+export interface ImplicitBreakoutSolverPoint extends ImplicitBreakoutPoint {
+  readonly regionId: string
+  readonly connectionId: string
+  readonly layer: string
+}
+export interface ImplicitBreakoutPointSolverOutput {
+  readonly breakoutPoints: readonly ImplicitBreakoutSolverPoint[]
+}
+```
+
 ### kicadFootprintMetadata
 
 ```typescript
@@ -2493,6 +2542,7 @@ export interface AutorouterConfig {
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
+  implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
     | "sequential_trace"
     | "subcircuit"
@@ -2543,6 +2593,11 @@ export const autorouterConfig = z.object({
   algorithmFn: z
     .custom<(simpleRouteJson: any) => Promise<any>>(
       (v) => typeof v === "function" || v === undefined,
+    )
+    .optional(),
+  implicitBreakoutPointSolverFn: z
+    .custom<ImplicitBreakoutPointSolverFn>(
+      (value) => typeof value === "function" || value === undefined,
     )
     .optional(),
   preset: z
@@ -3459,6 +3514,10 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   gender?: "male" | "female" | "unpopulated"
 
+  connectsFromAbove?: boolean
+
+  connectsFromBelow?: boolean
+
   showSilkscreenPinLabels?: boolean
 
   pcbPinLabels?: Record<string, string>
@@ -3489,36 +3548,38 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   schHeight?: number | string
 }
-/**
-   * Schematic height
-   */
-export const pinHeaderProps = commonComponentProps.extend({
-  pinCount: z.number(),
-  pitch: distance.optional(),
-  schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
-  gender: z.enum(["male", "female", "unpopulated"]).optional().default("male"),
-  showSilkscreenPinLabels: z.boolean().optional(),
-  pcbPinLabels: z.record(z.string(), z.string()).optional(),
-  doubleRow: z.boolean().optional(),
-  rightAngle: z.boolean().optional(),
-  pcbOrientation: pcbOrientationProp.optional(),
-  holeDiameter: distance.optional(),
-  platedDiameter: distance.optional(),
-  pinLabels: z
-    .record(z.string(), schematicPinLabel)
-    .or(z.array(schematicPinLabel))
-    .optional(),
-  connections: z
-    .custom<Connections>()
-    .pipe(z.record(z.string(), connectionTarget))
-    .optional(),
-  facingDirection: z.enum(["left", "right"]).optional(),
-  schPinArrangement: schematicPinArrangement.optional(),
-  schPinStyle: schematicPinStyle.optional(),
-  schPinSpacing: distance.optional(),
-  schWidth: distance.optional(),
-  schHeight: distance.optional(),
-})
+.extend({
+    pinCount: z.number(),
+    pitch: distance.optional(),
+    schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
+    gender: z
+      .enum(["male", "female", "unpopulated"])
+      .optional()
+      .default("male"),
+    showSilkscreenPinLabels: z.boolean().optional(),
+    pcbPinLabels: z.record(z.string(), z.string()).optional(),
+    doubleRow: z.boolean().optional(),
+    rightAngle: z.boolean().optional(),
+    pcbOrientation: pcbOrientationProp.optional(),
+    holeDiameter: distance.optional(),
+    platedDiameter: distance.optional(),
+    pinLabels: z
+      .record(z.string(), schematicPinLabel)
+      .or(z.array(schematicPinLabel))
+      .optional(),
+    connections: z
+      .custom<Connections>()
+      .pipe(z.record(z.string(), connectionTarget))
+      .optional(),
+    facingDirection: z.enum(["left", "right"]).optional(),
+    schPinArrangement: schematicPinArrangement.optional(),
+    schPinStyle: schematicPinStyle.optional(),
+    schPinSpacing: distance.optional(),
+    schWidth: distance.optional(),
+    schHeight: distance.optional(),
+    connectsFromAbove: z.boolean().optional(),
+    connectsFromBelow: z.boolean().optional(),
+  })
 ```
 
 ### pinout

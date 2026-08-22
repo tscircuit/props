@@ -41,7 +41,7 @@ test("supports opting in to via-in-pad routing", () => {
   expect(autorouterConfig.parse({}).allowViaInPad).toBeUndefined()
 })
 
-test("supports an implicit breakout point solver override", async () => {
+test("supports an implicit breakout point solver override", () => {
   const implicitBreakoutPointSolverFn: ImplicitBreakoutPointSolverFn = (
     input,
   ) => ({
@@ -63,7 +63,7 @@ test("supports an implicit breakout point solver override", async () => {
     implicitBreakoutPointSolverFn,
   )
   expect(
-    await result.implicitBreakoutPointSolverFn?.({
+    result.implicitBreakoutPointSolverFn?.({
       regions: [
         {
           regionId: "region-1",

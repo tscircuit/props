@@ -66,6 +66,4 @@ export interface ImplicitBreakoutPointSolverOutput {
 
 export type ImplicitBreakoutPointSolverFn = (
   input: ImplicitBreakoutPointSolverInput,
-) =>
-  | ImplicitBreakoutPointSolverOutput
-  | Promise<ImplicitBreakoutPointSolverOutput>
+) => ImplicitBreakoutPointSolverOutput

@@ -33,6 +33,7 @@ import {
 } from "lib/common/schematicPinStyle"
 import { url } from "lib/common/url"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
+import type { ImplicitBreakoutPointSolverFn } from "lib/common/implicitBreakoutPointSolver"
 
 export const layoutConfig = z.object({
   layoutMode: z
@@ -342,6 +343,8 @@ export interface AutorouterConfig {
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
+  /** Override the solver used to place implicit breakout points. */
+  implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
     | "sequential_trace"
     | "subcircuit"
@@ -421,6 +424,11 @@ export const autorouterConfig = z.object({
   algorithmFn: z
     .custom<(simpleRouteJson: any) => Promise<any>>(
       (v) => typeof v === "function" || v === undefined,
+    )
+    .optional(),
+  implicitBreakoutPointSolverFn: z
+    .custom<ImplicitBreakoutPointSolverFn>(
+      (value) => typeof value === "function" || value === undefined,
     )
     .optional(),
   preset: z

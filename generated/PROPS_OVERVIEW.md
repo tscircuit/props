@@ -155,6 +155,8 @@ export interface AutorouterConfig {
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
+  /** Override the solver used to place implicit breakout points. */
+  implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
     | "sequential_trace"
     | "subcircuit"
@@ -1269,6 +1271,76 @@ export interface HoleWithPolygonPadPlatedHoleProps
 }
 
 
+export interface ImplicitBreakoutBounds {
+  readonly minX: number
+  readonly maxX: number
+  readonly minY: number
+  readonly maxY: number
+}
+
+
+export interface ImplicitBreakoutBus {
+  readonly busId: string
+  readonly connectionIds: readonly string[]
+  /** Ordered candidate layers that the solver may distribute this bus over. */
+  readonly targetLayers?: readonly string[]
+}
+
+
+export interface ImplicitBreakoutConnection {
+  readonly connectionId: string
+  readonly endpoints: readonly ImplicitBreakoutConnectionEndpoint[]
+}
+
+
+export interface ImplicitBreakoutConnectionEndpoint {
+  readonly regionId: string
+  readonly position: ImplicitBreakoutPoint
+}
+
+
+export interface ImplicitBreakoutDifferentialPair {
+  readonly type: "differential"
+  readonly connections: readonly [
+    ImplicitBreakoutConnection,
+    ImplicitBreakoutConnection,
+  ]
+}
+
+
+export interface ImplicitBreakoutPoint {
+  readonly x: number
+  readonly y: number
+}
+
+
+export interface ImplicitBreakoutPointSolverInput {
+  readonly regions: readonly ImplicitBreakoutRegion[]
+  readonly connections: readonly ImplicitBreakoutConnectionOrDifferentialPair[]
+  readonly buses: readonly ImplicitBreakoutBus[]
+  readonly boundaryPointSpacing: number
+}
+
+
+export interface ImplicitBreakoutPointSolverOutput {
+  readonly breakoutPoints: readonly ImplicitBreakoutSolverPoint[]
+}
+
+
+export interface ImplicitBreakoutRegion {
+  readonly regionId: string
+  readonly bounds: ImplicitBreakoutBounds
+  readonly edge: ImplicitBreakoutEdge
+}
+
+
+export interface ImplicitBreakoutSolverPoint extends ImplicitBreakoutPoint {
+  readonly regionId: string
+  readonly connectionId: string
+  readonly layer: string
+}
+
+
 export interface InductorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   inductance: number | string
@@ -1980,6 +2052,27 @@ export interface PinHeaderProps extends CommonComponentProps {
    * Whether the header is male, female, or unpopulated
    */
   gender?: "male" | "female" | "unpopulated"
+
+  /**
+   * Mount the header on the top of the board, so it is connected to from
+   * above. An alias for `layer: "top"`, which is the default.
+   *
+   * Which side of the board a part sits on is `layer`, and only `layer`: the
+   * 3D model is always drawn top-side and consumers flip it for a bottom-layer
+   * component. Prefer these names on a connector, where "which side does the
+   * mating connector come from" is the question actually being asked.
+   */
+  connectsFromAbove?: boolean
+
+  /**
+   * Mount the header on the underside of the board, so it is connected to from
+   * below. An alias for `layer: "bottom"`.
+   *
+   * Not to be confused with `invert` on a footprint string, which installs a
+   * header BACKWARDS on whichever side it is on — long pins through the board
+   * rather than short ones.
+   */
+  connectsFromBelow?: boolean
 
   /**
    * Whether to show pin labels in silkscreen

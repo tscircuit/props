@@ -5,8 +5,9 @@ import {
   routingTolerances,
   subcircuitGroupPropsWithBool,
   type AutorouterConfig,
+  type ImplicitBreakoutPointSolverFn,
   type RoutingTolerances,
-} from "../lib/components/group"
+} from "../lib"
 
 test("supports freerouting preset", () => {
   const result = autorouterProp.parse("freerouting")
@@ -38,6 +39,64 @@ test("supports opting in to via-in-pad routing", () => {
   expect(autorouterConfig.parse(enabled).allowViaInPad).toBe(true)
   expect(autorouterConfig.parse(disabled).allowViaInPad).toBe(false)
   expect(autorouterConfig.parse({}).allowViaInPad).toBeUndefined()
+})
+
+test("supports an implicit breakout point solver override", async () => {
+  const implicitBreakoutPointSolverFn: ImplicitBreakoutPointSolverFn = (
+    input,
+  ) => ({
+    breakoutPoints: input.connections.flatMap((connection) =>
+      "connectionId" in connection
+        ? connection.endpoints.map((endpoint) => ({
+            ...endpoint.position,
+            regionId: endpoint.regionId,
+            connectionId: connection.connectionId,
+            layer: "top",
+          }))
+        : [],
+    ),
+  })
+
+  const result = autorouterConfig.parse({ implicitBreakoutPointSolverFn })
+
+  expect(result.implicitBreakoutPointSolverFn).toBe(
+    implicitBreakoutPointSolverFn,
+  )
+  expect(
+    await result.implicitBreakoutPointSolverFn?.({
+      regions: [
+        {
+          regionId: "region-1",
+          bounds: { minX: 0, maxX: 10, minY: 0, maxY: 10 },
+          edge: "right",
+        },
+      ],
+      connections: [
+        {
+          connectionId: "connection-1",
+          endpoints: [{ regionId: "region-1", position: { x: 5, y: 5 } }],
+        },
+      ],
+      buses: [
+        {
+          busId: "bus-1",
+          connectionIds: ["connection-1"],
+          targetLayers: ["top", "bottom"],
+        },
+      ],
+      boundaryPointSpacing: 0.5,
+    }),
+  ).toEqual({
+    breakoutPoints: [
+      {
+        x: 5,
+        y: 5,
+        regionId: "region-1",
+        connectionId: "connection-1",
+        layer: "top",
+      },
+    ],
+  })
 })
 
 test("supports laser prefab preset", () => {

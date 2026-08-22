@@ -366,6 +366,11 @@ export interface BoardProps
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
+  /**
+   * Whether the autorouter may generate blind and buried vias. Defaults to
+   * false, which restricts newly generated vias to the full board stack.
+   */
+  allowBlindAndBuriedVias?: boolean
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -819,6 +824,10 @@ export interface CopperPourProps {
   name?: string
   layer: LayerRefInput
   connectsTo: string
+  /**
+   * Reserves the pour region during autorouting so unrelated traces do not
+   * split it. Vias may still cross the region using antipads.
+   */
   unbroken?: boolean
   padMargin?: Distance
   traceMargin?: Distance

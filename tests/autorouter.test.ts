@@ -1,12 +1,12 @@
 import { expect, spyOn, test } from "bun:test"
 import {
+  type AutorouterConfig,
+  type ImplicitBreakoutPointSolverFn,
+  type RoutingTolerances,
   autorouterConfig,
   autorouterProp,
   routingTolerances,
   subcircuitGroupPropsWithBool,
-  type AutorouterConfig,
-  type ImplicitBreakoutPointSolverFn,
-  type RoutingTolerances,
 } from "../lib"
 
 test("supports freerouting preset", () => {
@@ -74,7 +74,13 @@ test("supports an implicit breakout point solver override", async () => {
       connections: [
         {
           connectionId: "connection-1",
-          endpoints: [{ regionId: "region-1", position: { x: 5, y: 5 } }],
+          endpoints: [
+            {
+              regionId: "region-1",
+              position: { x: 5, y: 5 },
+              externalDestination: { x: 15, y: 5 },
+            },
+          ],
         },
       ],
       buses: [

@@ -1305,6 +1305,11 @@ export interface ImplicitBreakoutConnection {
 export interface ImplicitBreakoutConnectionEndpoint {
   readonly regionId: string
   readonly position: ImplicitBreakoutPoint
+  /**
+   * Optional PCB world-space routing destination, in millimeters, beyond this
+   * breakout region. A solver may use it to select and align a nearer edge.
+   */
+  readonly externalDestination?: ImplicitBreakoutPoint
 }
 
 

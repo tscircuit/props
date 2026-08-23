@@ -7,6 +7,11 @@ export const portProps = commonLayoutProps.extend({
   name: z.string().optional(),
   pinNumber: z.number().optional(),
   schStemLength: z.number().optional(),
+  /**
+   * Overrides the schematic pin-label font size for this port, in schematic
+   * millimeters. When omitted, the renderer uses its default pin-label size.
+   */
+  schPinLabelFontSize: z.number().positive().finite().optional(),
   aliases: z.array(z.string()).optional(),
   layer: z.string().optional(),
   layers: z.array(z.string()).optional(),

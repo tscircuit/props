@@ -3864,6 +3864,7 @@ export const portProps = commonLayoutProps.extend({
   name: z.string().optional(),
   pinNumber: z.number().optional(),
   schStemLength: z.number().optional(),
+  schPinLabelFontSize: z.number().positive().finite().optional(),
   aliases: z.array(z.string()).optional(),
   layer: z.string().optional(),
   layers: z.array(z.string()).optional(),

@@ -1414,10 +1414,11 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  fanoutMargin?: Distance
 }
 /**
-   * Autorouter used to escape the components inside the breakout boundary.
-   * Defaults to the multilayer fanout autorouter.
+   * Minimum clearance between this fanout boundary and another fanout
+   * boundary. Fanout boundaries may never overlap, even when this is omitted.
    */
 export const breakoutProps = subcircuitGroupProps.extend({
   autorouter: autorouterProp.default("fanout"),
@@ -1426,6 +1427,7 @@ export const breakoutProps = subcircuitGroupProps.extend({
   paddingRight: distance.optional(),
   paddingTop: distance.optional(),
   paddingBottom: distance.optional(),
+  fanoutMargin: nonnegativeFanoutMargin.optional(),
   ...fanoutProps.shape,
 })
 ```

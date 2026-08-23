@@ -423,6 +423,11 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  /**
+   * Minimum clearance between this fanout boundary and another fanout
+   * boundary. Fanout boundaries may never overlap, even when this is omitted.
+   */
+  fanoutMargin?: Distance
 }
 
 

@@ -22,7 +22,16 @@ export interface BreakoutProps
   paddingRight?: Distance
   paddingTop?: Distance
   paddingBottom?: Distance
+  /**
+   * Minimum clearance between this fanout boundary and another fanout
+   * boundary. Fanout boundaries may never overlap, even when this is omitted.
+   */
+  fanoutMargin?: Distance
 }
+
+const nonnegativeFanoutMargin = distance.refine((value) => value >= 0, {
+  message: "Fanout margin cannot be negative",
+})
 
 export const breakoutProps = subcircuitGroupProps.extend({
   autorouter: autorouterProp.default("fanout"),
@@ -31,6 +40,7 @@ export const breakoutProps = subcircuitGroupProps.extend({
   paddingRight: distance.optional(),
   paddingTop: distance.optional(),
   paddingBottom: distance.optional(),
+  fanoutMargin: nonnegativeFanoutMargin.optional(),
   ...fanoutProps.shape,
 })
 

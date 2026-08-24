@@ -4011,6 +4011,7 @@ export const schematicBoxProps = z
     chipRef: z.string().optional(),
     pinLabels: pinLabelsProp.optional(),
     schPinArrangement: schematicPinArrangement.optional(),
+    schPinStyle: schematicPinStyle.optional(),
 
     schX: distance.optional(),
     schY: distance.optional(),
@@ -4038,6 +4039,7 @@ export interface SchematicBoxProps {
   chipRef?: string
   pinLabels?: PinLabelsProp
   schPinArrangement?: SchematicPinArrangement
+  schPinStyle?: SchematicPinStyle
   schX?: Distance
   schY?: Distance
   schSectionName?: string

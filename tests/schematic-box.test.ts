@@ -36,6 +36,10 @@ test("should parse schematic box chip reference props", () => {
       leftSide: ["pin1", "pin2"],
       rightSide: [],
     },
+    schPinStyle: {
+      pin1: { marginBottom: "0.5mm" },
+      GND: { marginTop: 0.25 },
+    },
   }
 
   const parsed = schematicBoxProps.parse(raw)
@@ -54,6 +58,10 @@ test("should parse schematic box chip reference props", () => {
       pins: [],
       direction: "top-to-bottom",
     },
+  })
+  expect(parsed.schPinStyle).toEqual({
+    pin1: { marginBottom: 0.5 },
+    GND: { marginTop: 0.25 },
   })
 })
 

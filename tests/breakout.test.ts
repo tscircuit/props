@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test"
-import { breakoutProps, type BreakoutProps } from "../lib/components/breakout"
+import { type BreakoutProps, breakoutProps } from "../lib/components/breakout"
 import {
-  breakoutPointProps,
   type BreakoutPointProps,
+  breakoutPointProps,
 } from "../lib/components/breakoutpoint"
 
 test("should parse breakout props with padding", () => {

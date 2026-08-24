@@ -10,7 +10,10 @@ import {
 
 export type {
   BusFanoutDirection,
+  BusFanoutDirectionLiteral,
+  CanonicalBusFanoutDirection,
   FanoutPourNetMap,
+  LegacyBusFanoutDirection,
 } from "../common/fanoutProps"
 
 export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {

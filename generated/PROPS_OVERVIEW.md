@@ -2432,6 +2432,8 @@ export interface SchematicBoxProps {
   chipRef?: string
   pinLabels?: PinLabelsProp
   schPinArrangement?: SchematicPinArrangement
+  /** Per-pin schematic margin overrides keyed by pin number or label. */
+  schPinStyle?: SchematicPinStyle
   schX?: Distance
   schY?: Distance
   schSectionName?: string

@@ -4,6 +4,10 @@ import {
   type SchematicPinArrangement,
   schematicPinArrangement,
 } from "lib/common/schematicPinDefinitions"
+import {
+  type SchematicPinStyle,
+  schematicPinStyle,
+} from "lib/common/schematicPinStyle"
 import { type PinLabelsProp, pinLabelsProp } from "lib/components/chip"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Distance } from "lib/common/distance"
@@ -15,6 +19,7 @@ export const schematicBoxProps = z
     chipRef: z.string().optional(),
     pinLabels: pinLabelsProp.optional(),
     schPinArrangement: schematicPinArrangement.optional(),
+    schPinStyle: schematicPinStyle.optional(),
 
     schX: distance.optional(),
     schY: distance.optional(),
@@ -65,6 +70,8 @@ export interface SchematicBoxProps {
   chipRef?: string
   pinLabels?: PinLabelsProp
   schPinArrangement?: SchematicPinArrangement
+  /** Per-pin schematic margin overrides keyed by pin number or label. */
+  schPinStyle?: SchematicPinStyle
   schX?: Distance
   schY?: Distance
   schSectionName?: string

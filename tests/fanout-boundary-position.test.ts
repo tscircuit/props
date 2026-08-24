@@ -3,6 +3,7 @@ import {
   type CanonicalBusFanoutDirection,
   busFanoutDirection,
 } from "lib/common/fanoutProps"
+import type { NinePointAnchor } from "lib/common/ninePointAnchor"
 
 const canonicalDirections: CanonicalBusFanoutDirection[] = [
   "topside_left",
@@ -20,8 +21,25 @@ const canonicalDirections: CanonicalBusFanoutDirection[] = [
   "center",
 ]
 
-test("all edge-first fanout directions parse in scalar and object form", () => {
+const legacyNinePointDirections: NinePointAnchor[] = [
+  "top_left",
+  "top_center",
+  "top_right",
+  "center_left",
+  "center",
+  "center_right",
+  "bottom_left",
+  "bottom_center",
+  "bottom_right",
+]
+
+test("canonical and legacy fanout directions parse in both forms", () => {
   for (const direction of canonicalDirections) {
+    expect(busFanoutDirection.parse(direction)).toBe(direction)
+    expect(busFanoutDirection.parse({ direction })).toEqual({ direction })
+  }
+
+  for (const direction of legacyNinePointDirections) {
     expect(busFanoutDirection.parse(direction)).toBe(direction)
     expect(busFanoutDirection.parse({ direction })).toEqual({ direction })
   }

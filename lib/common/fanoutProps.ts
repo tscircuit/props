@@ -45,8 +45,11 @@ export type CanonicalBusFanoutDirection =
   (typeof canonicalBusFanoutDirectionValues)[number]
 
 /**
- * Legacy nine-point fanout names. They remain accepted for compatibility;
- * prefer `CanonicalBusFanoutDirection` when the physical exit edge matters.
+ * Legacy NinePointAnchor fanout names. `top_left`, `top_center`, `top_right`,
+ * `center_left`, `center`, `center_right`, `bottom_left`, `bottom_center`, and
+ * `bottom_right` remain accepted unchanged and retain their destination-guided
+ * behavior. Prefer `CanonicalBusFanoutDirection` when the physical exit edge
+ * matters.
  */
 export type LegacyBusFanoutDirection = NinePointAnchor
 
@@ -71,11 +74,12 @@ export interface FanoutProps {
   /**
    * Fanout direction and boundary position for each named bus. Prefer the
    * edge-first names such as `rightside_top` and `topside_right` when selecting
-   * a corner region; their physical exit edges are unambiguous. Legacy
-   * nine-point names remain accepted. `center` leaves the direction
-   * unconstrained. Directions use board/circuit world coordinates. For a bus
-   * that terminates on a copper plane, the physical-edge prefix is ignored and
-   * only the position's local escape direction is used.
+   * a corner region; their physical exit edges are unambiguous. All legacy
+   * NinePointAnchor names remain accepted unchanged and retain their
+   * destination-guided behavior. `center` leaves the direction unconstrained.
+   * Directions use board/circuit world coordinates. For a bus that terminates
+   * on a copper plane, the physical-edge prefix is ignored and only the
+   * position's local escape direction is used.
    */
   busFanoutDirections?: Record<BusName, BusFanoutDirection>
   /**

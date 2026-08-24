@@ -67,8 +67,8 @@ test("breakout rejects negative fanout boundary padding", () => {
 test("breakout accepts fanout bus directions and routing layers", () => {
   const raw = {
     busFanoutDirections: {
-      DATA: "rightside_center",
-      ADDRESS: { direction: "leftside_center" },
+      DATA: "center_right",
+      ADDRESS: { direction: "center_left" },
     },
     fanoutRoutingLayers: ["top", { name: "inner3" }, "bottom"],
   } satisfies BreakoutProps

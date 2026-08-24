@@ -34,9 +34,10 @@ test("autorouting phase accepts per-bus fanout directions", () => {
   const raw = {
     autorouter: "fanout",
     busFanoutDirections: {
-      UPPER_DATA: "rightside_top",
-      TOP_CONTROL: { direction: "topside_right" },
-      LEGACY_DATA: "top_right",
+      DATA: "top_right",
+      CONTROL: { direction: "center_left" },
+      CANONICAL_UPPER_DATA: "rightside_top",
+      CANONICAL_TOP_CONTROL: { direction: "topside_right" },
       UNCONSTRAINED: "center",
     },
   } satisfies AutoroutingPhaseProps

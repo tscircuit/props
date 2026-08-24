@@ -34,12 +34,23 @@ test("autorouting phase accepts per-bus fanout directions", () => {
   const raw = {
     autorouter: "fanout",
     busFanoutDirections: {
-      DATA: "top_right",
-      CONTROL: { direction: "center_left" },
+      UPPER_DATA: "rightside_top",
+      TOP_CONTROL: { direction: "topside_right" },
+      LEGACY_DATA: "top_right",
+      UNCONSTRAINED: "center",
     },
   } satisfies AutoroutingPhaseProps
 
   expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
+})
+
+test("autorouting phase rejects low-level solver boundary-region names", () => {
+  expect(() =>
+    autoroutingPhaseProps.parse({
+      autorouter: "fanout",
+      busFanoutDirections: { DATA: "right_top" },
+    }),
+  ).toThrow()
 })
 
 test("autorouting phase accepts fanout routing layers", () => {

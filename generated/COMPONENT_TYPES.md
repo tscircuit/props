@@ -209,10 +209,38 @@ export const fanoutBoundaryPadding = z.union([
 ### fanoutProps
 
 ```typescript
+/**
+ * An unambiguous fanout direction and boundary position.
+ *
+ * The prefix before `side` names the physical boundary edge. The suffix names
+ * the region along that edge; for corner regions it also names the local
+ * direction used to escape the source pads. For example, `rightside_top`
+ * terminates on the right edge in its upper region after escaping the source
+ * pads toward the top, while `topside_right` terminates on the top edge in its
+ * right region after escaping toward the right. Center regions escape toward
+ * their named edge. Directions are in board/circuit world coordinates, where
+ * right is +X and top is +Y; they do not rotate with the source component.
+ * `center` leaves the fanout direction unconstrained.
+ */
+export const canonicalBusFanoutDirectionValues = [
+  "topside_left",
+  "topside_center",
+  "topside_right",
+  "rightside_top",
+  "rightside_center",
+  "rightside_bottom",
+  "bottomside_right",
+  "bottomside_center",
+  "bottomside_left",
+  "leftside_bottom",
+  "leftside_center",
+  "leftside_top",
+  "center",
+] as const
 export type BusFanoutDirection =
-  | NinePointAnchor
+  | BusFanoutDirectionLiteral
   | {
-      direction: NinePointAnchor
+      direction: BusFanoutDirectionLiteral
     }
 /**
  * Routing controls shared by fanout autorouting phases and breakout groups.
@@ -232,7 +260,10 @@ export interface FanoutProps {
    */
 export const busFanoutDirection = z.union([
   ninePointAnchor,
-  z.object({ direction: ninePointAnchor }),
+  canonicalBusFanoutDirection,
+  z.object({
+    direction: z.union([ninePointAnchor, canonicalBusFanoutDirection]),
+  }),
 export const fanoutProps = z.object({
   busFanoutDirections: z.record(busFanoutDirection).optional(),
   fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
@@ -1271,7 +1302,10 @@ export const analogTransientSimulationProps = z
 ```typescript
 export type {
   BusFanoutDirection,
+  BusFanoutDirectionLiteral,
+  CanonicalBusFanoutDirection,
   FanoutPourNetMap,
+  LegacyBusFanoutDirection,
 } from "../common/fanoutProps"
 export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any

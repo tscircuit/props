@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test"
-import { breakoutProps, type BreakoutProps } from "../lib/components/breakout"
+import { type BreakoutProps, breakoutProps } from "../lib/components/breakout"
 import {
-  breakoutPointProps,
   type BreakoutPointProps,
+  breakoutPointProps,
 } from "../lib/components/breakoutpoint"
 
 test("should parse breakout props with padding", () => {
@@ -67,8 +67,8 @@ test("breakout rejects negative fanout boundary padding", () => {
 test("breakout accepts fanout bus directions and routing layers", () => {
   const raw = {
     busFanoutDirections: {
-      DATA: "center_right",
-      ADDRESS: { direction: "center_left" },
+      DATA: "rightside_center",
+      ADDRESS: { direction: "leftside_center" },
     },
     fanoutRoutingLayers: ["top", { name: "inner3" }, "bottom"],
   } satisfies BreakoutProps

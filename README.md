@@ -1309,6 +1309,12 @@ export interface NetLabelProps {
   net?: string;
   connection?: string;
   connectsTo?: string | string[];
+  /**
+   * Render the net name along its schematic trace instead of as an anchored
+   * label. Inline placement is automatic, so schematic anchor positioning
+   * props are ignored.
+   */
+  inline?: boolean;
   schX?: number | string;
   schY?: number | string;
   schRotation?: number | string;

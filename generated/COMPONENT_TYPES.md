@@ -3225,15 +3225,22 @@ export interface NetLabelProps {
   net?: string
   connection?: string
   connectsTo?: string | string[]
+  inline?: boolean
   schX?: number | string
   schY?: number | string
   schRotation?: number | string
   anchorSide?: "left" | "top" | "right" | "bottom"
 }
+/**
+   * Render the net name along its schematic trace instead of as an anchored
+   * label. Inline placement is automatic, so schematic anchor positioning
+   * props are ignored.
+   */
 export const netLabelProps = z.object({
   net: z.string().optional(),
   connection: z.string().optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
+  inline: z.boolean().optional(),
   schX: distance.optional(),
   schY: distance.optional(),
   schRotation: rotation.optional(),

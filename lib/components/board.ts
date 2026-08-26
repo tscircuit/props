@@ -119,6 +119,11 @@ export interface BoardProps
   doubleSidedAssembly?: boolean
   /** Whether vias may be placed inside PCB pads */
   isViaInPadAllowed?: boolean
+  /**
+   * Whether implicit copper pours should be generated automatically. Defaults
+   * to false.
+   */
+  automaticPoursEnabled?: boolean
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
 }
@@ -164,6 +169,12 @@ export const boardProps = subcircuitGroupProps
       .optional()
       .describe(
         "Allows intentional via-in-pad designs to pass DRC. Omitted or false keeps via-in-pad disallowed.",
+      ),
+    automaticPoursEnabled: z
+      .boolean()
+      .default(false)
+      .describe(
+        "Whether implicit copper pours should be generated automatically. Defaults to false.",
       ),
     schematicDisabled: z.boolean().optional(),
   })

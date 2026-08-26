@@ -2599,6 +2599,8 @@ export interface SchematicSheetProps {
   name: string
   displayName: string
   sheetIndex?: number
+  /** Paper size used to render the schematic sheet. Defaults to A4. */
+  paperSize?: SchematicSheetPaperSize
   children?: any
 }
 

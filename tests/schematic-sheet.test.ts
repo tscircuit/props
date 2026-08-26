@@ -18,7 +18,18 @@ test("should parse schematic sheet with name, displayName, and children", () => 
   expect(parsed.name).toBe("main")
   expect(parsed.displayName).toBe("Main Sheet")
   expect(parsed.sheetIndex).toBe(0)
+  expect(parsed.sheetSize).toBe("A4")
   expect(parsed.children).toEqual([{ type: "resistor", props: { name: "R1" } }])
+})
+
+test("should parse ANSI B schematic sheet size", () => {
+  const parsed = schematicSheetProps.parse({
+    name: "power",
+    displayName: "Power Sheet",
+    sheetSize: "ANSI_B",
+  })
+
+  expect(parsed.sheetSize).toBe("ANSI_B")
 })
 
 test("should parse schematic sheet without children", () => {
@@ -33,4 +44,14 @@ test("should parse schematic sheet without children", () => {
 
 test("should fail without displayName", () => {
   expect(() => schematicSheetProps.parse({ name: "main" })).toThrow()
+})
+
+test("should fail with an unsupported sheet size", () => {
+  expect(() =>
+    schematicSheetProps.parse({
+      name: "main",
+      displayName: "Main Sheet",
+      sheetSize: "A3",
+    }),
+  ).toThrow()
 })

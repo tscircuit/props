@@ -4290,12 +4290,15 @@ export interface SchematicSheetProps {
   name: string
   displayName: string
   sheetIndex?: number
+  sheetSize?: SchematicSheetSize
   children?: any
 }
+/** Sheet size used to render the schematic. Defaults to A4. */
 export const schematicSheetProps = z.object({
   name: z.string(),
   displayName: z.string(),
   sheetIndex: z.number().optional(),
+  sheetSize: z.enum(["A4", "ANSI_B"]).default("A4"),
   children: z.any().optional(),
 })
 ```

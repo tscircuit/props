@@ -2519,6 +2519,21 @@ export interface SchematicCircleProps {
 }
 
 
+export interface SchematicGraphicProps {
+  /** URL or static-file import for the canonical source SVG asset. */
+  imageUrl?: string
+  /**
+   * Complete SVG markup, including its dimensions or viewBox. Used as the
+   * source when imageUrl is omitted, or as fallback content when both exist.
+   */
+  svgContent?: string
+  /** Optional rendered width of the graphic. */
+  width?: Distance
+  /** Optional rendered height of the graphic. */
+  height?: Distance
+}
+
+
 export interface SchematicLineProps {
   x1: Distance
   y1: Distance
@@ -2596,8 +2611,8 @@ export interface SchematicSectionProps {
 
 
 export interface SchematicSheetProps {
-  name: string
-  displayName: string
+  name?: string
+  displayName?: string
   sheetIndex?: number
   /** Sheet size used to render the schematic. Defaults to A4. */
   sheetSize?: SchematicSheetSize

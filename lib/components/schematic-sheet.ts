@@ -6,8 +6,8 @@ import { expectTypesMatch } from "lib/typecheck"
 export type SchematicSheetSize = "A4" | "ANSI_B"
 
 export interface SchematicSheetProps {
-  name: string
-  displayName: string
+  name?: string
+  displayName?: string
   sheetIndex?: number
   /** Sheet size used to render the schematic. Defaults to A4. */
   sheetSize?: SchematicSheetSize
@@ -19,8 +19,8 @@ export interface SchematicSheetProps {
 }
 
 export const schematicSheetProps = z.object({
-  name: z.string(),
-  displayName: z.string(),
+  name: z.string().optional(),
+  displayName: z.string().optional(),
   sheetIndex: z.number().optional(),
   sheetSize: z.enum(["A4", "ANSI_B"]).default("A4"),
   sheetWidth: distance.pipe(z.number().positive()).optional(),

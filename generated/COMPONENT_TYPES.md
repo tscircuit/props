@@ -4174,6 +4174,36 @@ export interface SchematicCircleProps {
 }
 ```
 
+### schematic-graphic
+
+```typescript
+/**
+ * Props for embedding an image or raw SVG graphic in a schematic sheet.
+ * At least one source is required; both sources may be provided.
+ * When both are provided, imageUrl is the canonical asset source and
+ * svgContent is optional materialized fallback content.
+ */
+export interface SchematicGraphicProps {
+  imageUrl?: string
+  svgContent?: string
+  width?: Distance
+  height?: Distance
+}
+/** Optional rendered height of the graphic. */
+export const schematicGraphicProps = z
+  .object({
+    imageUrl: nonemptyUrl.optional(),
+    svgContent: z
+      .string()
+      .refine((value) => value.trim().length > 0, {
+        message: "svgContent cannot be empty",
+      })
+      .optional(),
+    width: positiveDistance("width").optional(),
+    height: positiveDistance("height").optional(),
+  })
+```
+
 ### schematic-line
 
 ```typescript
@@ -4287,8 +4317,8 @@ export const schematicSectionProps = z.object({
 
 ```typescript
 export interface SchematicSheetProps {
-  name: string
-  displayName: string
+  name?: string
+  displayName?: string
   sheetIndex?: number
   sheetSize?: SchematicSheetSize
   sheetWidth?: Distance
@@ -4297,8 +4327,8 @@ export interface SchematicSheetProps {
 }
 /** Explicit schematic sheet height. Overrides the height from sheetSize. */
 export const schematicSheetProps = z.object({
-  name: z.string(),
-  displayName: z.string(),
+  name: z.string().optional(),
+  displayName: z.string().optional(),
   sheetIndex: z.number().optional(),
   sheetSize: z.enum(["A4", "ANSI_B"]).default("A4"),
   sheetWidth: distance.pipe(z.number().positive()).optional(),

@@ -95,6 +95,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<schematicbox />`                      | [`SchematicBoxProps`](#schematicboxprops-schematicbox)                                                             |
 | `<schematiccell />`                     | [`SchematicCellProps`](#schematiccellprops-schematiccell)                                                          |
 | `<schematiccircle />`                   | [`SchematicCircleProps`](#schematiccircleprops-schematiccircle)                                                    |
+| `<schematicgraphic />`                  | [`SchematicGraphicProps`](#schematicgraphicprops-schematicgraphic)                                                 |
 | `<schematicline />`                     | [`SchematicLineProps`](#schematiclineprops-schematicline)                                                          |
 | `<schematicpath />`                     | [`SchematicPathProps`](#schematicpathprops-schematicpath)                                                          |
 | `<schematicrect />`                     | [`SchematicRectProps`](#schematicrectprops-schematicrect)                                                          |
@@ -1826,6 +1827,26 @@ export interface SchematicCircleProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-circle.ts)
 
+### SchematicGraphicProps `<schematicgraphic />`
+
+```ts
+export interface SchematicGraphicProps {
+  /** URL or static-file import for the canonical source SVG asset. */
+  imageUrl?: string;
+  /**
+   * Complete SVG markup, including its dimensions or viewBox. Used as the
+   * source when imageUrl is omitted, or as fallback content when both exist.
+   */
+  svgContent?: string;
+  /** Optional rendered width of the graphic. */
+  width?: Distance;
+  /** Optional rendered height of the graphic. */
+  height?: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-graphic.ts)
+
 ### SchematicLineProps `<schematicline />`
 
 ```ts
@@ -1907,8 +1928,8 @@ export interface SchematicSectionProps {
 
 ```ts
 export interface SchematicSheetProps {
-  name: string;
-  displayName: string;
+  name?: string;
+  displayName?: string;
   sheetIndex?: number;
   /** Sheet size used to render the schematic. Defaults to A4. */
   sheetSize?: SchematicSheetSize;

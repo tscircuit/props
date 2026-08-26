@@ -54,8 +54,12 @@ test("should parse schematic sheet without children", () => {
   expect(parsed.children).toBeUndefined()
 })
 
-test("should fail without displayName", () => {
-  expect(() => schematicSheetProps.parse({ name: "main" })).toThrow()
+test("should parse an unnamed schematic sheet", () => {
+  const parsed = schematicSheetProps.parse({})
+
+  expect(parsed.name).toBeUndefined()
+  expect(parsed.displayName).toBeUndefined()
+  expect(parsed.sheetIndex).toBeUndefined()
 })
 
 test("should fail with an unsupported sheet size", () => {

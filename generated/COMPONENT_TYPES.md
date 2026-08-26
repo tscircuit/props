@@ -4291,14 +4291,18 @@ export interface SchematicSheetProps {
   displayName: string
   sheetIndex?: number
   sheetSize?: SchematicSheetSize
+  sheetWidth?: Distance
+  sheetHeight?: Distance
   children?: any
 }
-/** Sheet size used to render the schematic. Defaults to A4. */
+/** Explicit schematic sheet height. Overrides the height from sheetSize. */
 export const schematicSheetProps = z.object({
   name: z.string(),
   displayName: z.string(),
   sheetIndex: z.number().optional(),
   sheetSize: z.enum(["A4", "ANSI_B"]).default("A4"),
+  sheetWidth: distance.pipe(z.number().positive()).optional(),
+  sheetHeight: distance.pipe(z.number().positive()).optional(),
   children: z.any().optional(),
 })
 ```

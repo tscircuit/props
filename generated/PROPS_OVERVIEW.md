@@ -2601,6 +2601,10 @@ export interface SchematicSheetProps {
   sheetIndex?: number
   /** Sheet size used to render the schematic. Defaults to A4. */
   sheetSize?: SchematicSheetSize
+  /** Explicit schematic sheet width. Overrides the width from sheetSize. */
+  sheetWidth?: Distance
+  /** Explicit schematic sheet height. Overrides the height from sheetSize. */
+  sheetHeight?: Distance
   children?: any
 }
 

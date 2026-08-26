@@ -1,14 +1,14 @@
 import { z } from "zod"
 import { expectTypesMatch } from "lib/typecheck"
 
-export type SchematicSheetPaperSize = "A4" | "ANSI_B"
+export type SchematicSheetSize = "A4" | "ANSI_B"
 
 export interface SchematicSheetProps {
   name: string
   displayName: string
   sheetIndex?: number
-  /** Paper size used to render the schematic sheet. Defaults to A4. */
-  paperSize?: SchematicSheetPaperSize
+  /** Sheet size used to render the schematic. Defaults to A4. */
+  sheetSize?: SchematicSheetSize
   children?: any
 }
 
@@ -16,7 +16,7 @@ export const schematicSheetProps = z.object({
   name: z.string(),
   displayName: z.string(),
   sheetIndex: z.number().optional(),
-  paperSize: z.enum(["A4", "ANSI_B"]).default("A4"),
+  sheetSize: z.enum(["A4", "ANSI_B"]).default("A4"),
   children: z.any().optional(),
 })
 

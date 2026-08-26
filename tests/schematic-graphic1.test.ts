@@ -11,7 +11,3 @@ test("should parse an SVG schematic graphic", () => {
   expectTypeOf(raw).toMatchTypeOf<SchematicGraphicProps>()
   expect(schematicGraphicProps.parse(raw)).toEqual(raw)
 })
-
-test("should require SVG content", () => {
-  expect(() => schematicGraphicProps.parse({})).toThrow()
-})

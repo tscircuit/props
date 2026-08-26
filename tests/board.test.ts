@@ -50,6 +50,55 @@ test("should parse borderRadius prop", () => {
   expect(parsed.borderRadius).toBe(2)
 })
 
+test("should parse castellated holes on board outline points", () => {
+  const raw: BoardProps = {
+    name: "board",
+    outline: [
+      { x: "-5mm", y: "-5mm" },
+      {
+        x: "-5mm",
+        y: 0,
+        castellatedHole: {
+          holeDiameter: "0.8mm",
+          outerDiameter: "1.2mm",
+          connectsTo: ["net.GND", "source_port_1"],
+        },
+      },
+      { x: "-5mm", y: "5mm" },
+      { x: "5mm", y: "5mm" },
+      { x: "5mm", y: "-5mm" },
+    ],
+  }
+
+  const parsed = boardProps.parse(raw)
+
+  expect(parsed.outline?.[0]).toEqual({ x: -5, y: -5 })
+  expect(parsed.outline?.[1]).toEqual({
+    x: -5,
+    y: 0,
+    castellatedHole: {
+      holeDiameter: 0.8,
+      outerDiameter: 1.2,
+      connectsTo: ["net.GND", "source_port_1"],
+    },
+  })
+})
+
+test("should require both diameters for a castellated outline hole", () => {
+  const result = boardProps.safeParse({
+    name: "board",
+    outline: [
+      {
+        x: 0,
+        y: 0,
+        castellatedHole: { holeDiameter: "0.8mm" },
+      },
+    ],
+  })
+
+  expect(result.success).toBe(false)
+})
+
 test("should parse boardAnchorPosition prop", () => {
   const raw: BoardProps = {
     name: "board",

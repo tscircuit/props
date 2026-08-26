@@ -368,7 +368,7 @@ export interface BatteryProps<
 ```ts
 export interface BoardProps extends Omit<
   SubcircuitGroupProps,
-  "subcircuit" | "connections"
+  "subcircuit" | "connections" | "outline"
 > {
   title?: string;
   material?: "fr4" | "fr1" | "flex";
@@ -384,6 +384,11 @@ export interface BoardProps extends Omit<
   boardAnchorPosition?: Point;
   anchorAlignment?: z.infer<typeof ninePointAnchor>;
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>;
+  /**
+   * Points defining the board edge. A point may include a castellated hole
+   * centered on that location.
+   */
+  outline?: BoardOutlinePoint[];
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor;
   /** Color of the top solder mask */

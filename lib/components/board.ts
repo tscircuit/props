@@ -23,8 +23,44 @@ export type BoardColor = AutocompleteString<BoardColorPreset>
 
 const boardColor = z.custom<BoardColor>((value) => typeof value === "string")
 
+export interface BoardCastellatedHole {
+  /** Diameter of the drilled hole */
+  holeDiameter: Distance
+  /** Diameter of the plated copper surrounding the hole */
+  outerDiameter: Distance
+  /** Connection target or targets for the castellated hole */
+  connectsTo?: string | string[]
+}
+
+export const boardCastellatedHole = z.object({
+  holeDiameter: distance,
+  outerDiameter: distance,
+  connectsTo: z.string().or(z.array(z.string())).optional(),
+})
+
+export interface BoardOutlinePoint extends Point {
+  /**
+   * Marks this outline point as the center of a castellated plated hole.
+   * The point should lie on the board edge.
+   *
+   * @example
+   * ```tsx
+   * { x: "-5mm", y: 0, castellatedHole: {
+   *   holeDiameter: "0.8mm",
+   *   outerDiameter: "1.2mm",
+   *   connectsTo: "net.GND",
+   * } }
+   * ```
+   */
+  castellatedHole?: BoardCastellatedHole
+}
+
+export const boardOutlinePoint = point.extend({
+  castellatedHole: boardCastellatedHole.optional(),
+})
+
 export interface BoardProps
-  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
@@ -39,6 +75,11 @@ export interface BoardProps
   boardAnchorPosition?: Point
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  /**
+   * Points defining the board edge. A point may include a castellated hole
+   * centered on that location.
+   */
+  outline?: BoardOutlinePoint[]
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor
   /** Color of the top solder mask */
@@ -86,6 +127,7 @@ export const boardProps = subcircuitGroupProps
     boardAnchorAlignment: ninePointAnchor
       .optional()
       .describe("Prefer using anchorAlignment when possible"),
+    outline: z.array(boardOutlinePoint).optional(),
     title: z.string().optional(),
     solderMaskColor: boardColor.optional(),
     topSolderMaskColor: boardColor.optional(),
@@ -104,4 +146,8 @@ export const boardProps = subcircuitGroupProps
   })
 
 type InferredBoardProps = z.input<typeof boardProps>
+expectTypesMatch<BoardCastellatedHole, z.input<typeof boardCastellatedHole>>(
+  true,
+)
+expectTypesMatch<BoardOutlinePoint, z.input<typeof boardOutlinePoint>>(true)
 expectTypesMatch<BoardProps, InferredBoardProps>(true)

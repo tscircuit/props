@@ -1369,8 +1369,38 @@ export const batteryProps = commonComponentProps.extend({
 ### board
 
 ```typescript
+export interface BoardCastellatedHole {
+  holeDiameter: Distance
+  outerDiameter: Distance
+  connectsTo?: string | string[]
+}
+/** Connection target or targets for the castellated hole */
+export const boardCastellatedHole = z.object({
+  holeDiameter: distance,
+  outerDiameter: distance,
+  connectsTo: z.string().or(z.array(z.string())).optional(),
+})
+export interface BoardOutlinePoint extends Point {
+  castellatedHole?: BoardCastellatedHole
+}
+/**
+   * Marks this outline point as the center of a castellated plated hole.
+   * The point should lie on the board edge.
+   *
+   * @example
+   * ```tsx
+   * { x: "-5mm", y: 0, castellatedHole: {
+   *   holeDiameter: "0.8mm",
+   *   outerDiameter: "1.2mm",
+   *   connectsTo: "net.GND",
+   * } }
+   * ```
+   */
+export const boardOutlinePoint = point.extend({
+  castellatedHole: boardCastellatedHole.optional(),
+})
 export interface BoardProps
-  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
   material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
@@ -1380,6 +1410,7 @@ export interface BoardProps
   boardAnchorPosition?: Point
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  outline?: BoardOutlinePoint[]
   solderMaskColor?: BoardColor
   topSolderMaskColor?: BoardColor
   bottomSolderMaskColor?: BoardColor
@@ -1418,6 +1449,7 @@ export const boardProps = subcircuitGroupProps
     boardAnchorAlignment: ninePointAnchor
       .optional()
       .describe("Prefer using anchorAlignment when possible"),
+    outline: z.array(boardOutlinePoint).optional(),
     title: z.string().optional(),
     solderMaskColor: boardColor.optional(),
     topSolderMaskColor: boardColor.optional(),

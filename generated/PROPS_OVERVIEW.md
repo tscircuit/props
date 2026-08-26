@@ -360,8 +360,36 @@ export interface BatteryProps<PinLabel extends string = string>
 }
 
 
+export interface BoardCastellatedHole {
+  /** Diameter of the drilled hole */
+  holeDiameter: Distance
+  /** Diameter of the plated copper surrounding the hole */
+  outerDiameter: Distance
+  /** Connection target or targets for the castellated hole */
+  connectsTo?: string | string[]
+}
+
+
+export interface BoardOutlinePoint extends Point {
+  /**
+   * Marks this outline point as the center of a castellated plated hole.
+   * The point should lie on the board edge.
+   *
+   * @example
+   * ```tsx
+   * { x: "-5mm", y: 0, castellatedHole: {
+   *   holeDiameter: "0.8mm",
+   *   outerDiameter: "1.2mm",
+   *   connectsTo: "net.GND",
+   * } }
+   * ```
+   */
+  castellatedHole?: BoardCastellatedHole
+}
+
+
 export interface BoardProps
-  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
@@ -376,6 +404,11 @@ export interface BoardProps
   boardAnchorPosition?: Point
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  /**
+   * Points defining the board edge. A point may include a castellated hole
+   * centered on that location.
+   */
+  outline?: BoardOutlinePoint[]
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor
   /** Color of the top solder mask */

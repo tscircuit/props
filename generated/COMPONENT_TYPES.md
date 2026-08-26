@@ -4177,14 +4177,26 @@ export interface SchematicCircleProps {
 ### schematic-graphic
 
 ```typescript
-/** Props for embedding a raw SVG graphic in a schematic sheet. */
+/** Props for embedding an image or raw SVG graphic in a schematic sheet. */
 export interface SchematicGraphicProps {
-  svgContent: string
+  imageUrl?: string
+  svgContent?: string
+  width?: Distance
+  height?: Distance
 }
-/** Complete SVG markup, including its dimensions or viewBox. */
-export const schematicGraphicProps = z.object({
-  svgContent: z.string(),
-})
+/** Optional rendered height of the graphic. */
+export const schematicGraphicProps = z
+  .object({
+    imageUrl: nonemptyUrl.optional(),
+    svgContent: z
+      .string()
+      .refine((value) => value.trim().length > 0, {
+        message: "svgContent cannot be empty",
+      })
+      .optional(),
+    width: positiveDistance("width").optional(),
+    height: positiveDistance("height").optional(),
+  })
 ```
 
 ### schematic-line

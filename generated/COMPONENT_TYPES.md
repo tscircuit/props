@@ -4180,6 +4180,8 @@ export interface SchematicCircleProps {
 /**
  * Props for embedding an image or raw SVG graphic in a schematic sheet.
  * At least one source is required; both sources may be provided.
+ * When both are provided, imageUrl is the canonical asset source and
+ * svgContent is optional materialized fallback content.
  */
 export interface SchematicGraphicProps {
   imageUrl?: string

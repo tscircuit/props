@@ -1831,9 +1831,12 @@ export interface SchematicCircleProps {
 
 ```ts
 export interface SchematicGraphicProps {
-  /** URL or static-file import for the source SVG image. */
+  /** URL or static-file import for the canonical source SVG asset. */
   imageUrl?: string;
-  /** Complete SVG markup, including its dimensions or viewBox. */
+  /**
+   * Complete SVG markup, including its dimensions or viewBox. Used as the
+   * source when imageUrl is omitted, or as fallback content when both exist.
+   */
   svgContent?: string;
   /** Optional rendered width of the graphic. */
   width?: Distance;

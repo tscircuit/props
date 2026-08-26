@@ -32,6 +32,18 @@ test("should parse ANSI B schematic sheet size", () => {
   expect(parsed.sheetSize).toBe("ANSI_B")
 })
 
+test("should parse explicit schematic sheet dimensions", () => {
+  const parsed = schematicSheetProps.parse({
+    name: "custom",
+    displayName: "Custom Sheet",
+    sheetWidth: "17in",
+    sheetHeight: "11in",
+  })
+
+  expect(parsed.sheetWidth).toBeCloseTo(431.8)
+  expect(parsed.sheetHeight).toBeCloseTo(279.4)
+})
+
 test("should parse schematic sheet without children", () => {
   const raw: SchematicSheetProps = {
     name: "power",
@@ -52,6 +64,17 @@ test("should fail with an unsupported sheet size", () => {
       name: "main",
       displayName: "Main Sheet",
       sheetSize: "A3",
+    }),
+  ).toThrow()
+})
+
+test("should fail with non-positive explicit sheet dimensions", () => {
+  expect(() =>
+    schematicSheetProps.parse({
+      name: "main",
+      displayName: "Main Sheet",
+      sheetWidth: 0,
+      sheetHeight: -1,
     }),
   ).toThrow()
 })

@@ -95,6 +95,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<schematicbox />`                      | [`SchematicBoxProps`](#schematicboxprops-schematicbox)                                                             |
 | `<schematiccell />`                     | [`SchematicCellProps`](#schematiccellprops-schematiccell)                                                          |
 | `<schematiccircle />`                   | [`SchematicCircleProps`](#schematiccircleprops-schematiccircle)                                                    |
+| `<schematicgraphic />`                  | [`SchematicGraphicProps`](#schematicgraphicprops-schematicgraphic)                                                 |
 | `<schematicline />`                     | [`SchematicLineProps`](#schematiclineprops-schematicline)                                                          |
 | `<schematicpath />`                     | [`SchematicPathProps`](#schematicpathprops-schematicpath)                                                          |
 | `<schematicrect />`                     | [`SchematicRectProps`](#schematicrectprops-schematicrect)                                                          |
@@ -1825,6 +1826,17 @@ export interface SchematicCircleProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-circle.ts)
+
+### SchematicGraphicProps `<schematicgraphic />`
+
+```ts
+export interface SchematicGraphicProps {
+  /** Complete SVG markup, including its dimensions or viewBox. */
+  svgContent: string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-graphic.ts)
 
 ### SchematicLineProps `<schematicline />`
 

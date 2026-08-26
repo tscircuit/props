@@ -4174,6 +4174,19 @@ export interface SchematicCircleProps {
 }
 ```
 
+### schematic-graphic
+
+```typescript
+/** Props for embedding a raw SVG graphic in a schematic sheet. */
+export interface SchematicGraphicProps {
+  svgContent: string
+}
+/** Complete SVG markup, including its dimensions or viewBox. */
+export const schematicGraphicProps = z.object({
+  svgContent: z.string(),
+})
+```
+
 ### schematic-line
 
 ```typescript

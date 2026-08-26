@@ -2519,6 +2519,12 @@ export interface SchematicCircleProps {
 }
 
 
+export interface SchematicGraphicProps {
+  /** Complete SVG markup, including its dimensions or viewBox. */
+  svgContent: string
+}
+
+
 export interface SchematicLineProps {
   x1: Distance
   y1: Distance

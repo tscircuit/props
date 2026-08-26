@@ -58,11 +58,10 @@ test("should parse castellated holes on board outline points", () => {
       {
         x: "-5mm",
         y: 0,
-        castellatedHole: {
-          holeDiameter: "0.8mm",
-          outerDiameter: "1.2mm",
-          connectsTo: ["net.GND", "source_port_1"],
-        },
+        isCastellatedHole: true,
+        holeDiameter: "0.8mm",
+        outerDiameter: "1.2mm",
+        connectsTo: ["net.GND", "source_port_1"],
       },
       { x: "-5mm", y: "5mm" },
       { x: "5mm", y: "5mm" },
@@ -76,11 +75,10 @@ test("should parse castellated holes on board outline points", () => {
   expect(parsed.outline?.[1]).toEqual({
     x: -5,
     y: 0,
-    castellatedHole: {
-      holeDiameter: 0.8,
-      outerDiameter: 1.2,
-      connectsTo: ["net.GND", "source_port_1"],
-    },
+    isCastellatedHole: true,
+    holeDiameter: 0.8,
+    outerDiameter: 1.2,
+    connectsTo: ["net.GND", "source_port_1"],
   })
 })
 
@@ -91,7 +89,24 @@ test("should require both diameters for a castellated outline hole", () => {
       {
         x: 0,
         y: 0,
-        castellatedHole: { holeDiameter: "0.8mm" },
+        isCastellatedHole: true,
+        holeDiameter: "0.8mm",
+      },
+    ],
+  })
+
+  expect(result.success).toBe(false)
+})
+
+test("should require isCastellatedHole for flattened hole props", () => {
+  const result = boardProps.safeParse({
+    name: "board",
+    outline: [
+      {
+        x: 0,
+        y: 0,
+        holeDiameter: "0.8mm",
+        outerDiameter: "1.2mm",
       },
     ],
   })

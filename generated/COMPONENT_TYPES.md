@@ -1369,36 +1369,21 @@ export const batteryProps = commonComponentProps.extend({
 ### board
 
 ```typescript
-export interface BoardCastellatedHole {
-  holeDiameter: Distance
-  outerDiameter: Distance
+export interface BoardOutlinePoint extends Point {
+  isCastellatedHole?: boolean
+  holeDiameter?: Distance
+  outerDiameter?: Distance
   connectsTo?: string | string[]
 }
 /** Connection target or targets for the castellated hole */
-export const boardCastellatedHole = z.object({
-  holeDiameter: distance,
-  outerDiameter: distance,
-  connectsTo: z.string().or(z.array(z.string())).optional(),
-})
-export interface BoardOutlinePoint extends Point {
-  castellatedHole?: BoardCastellatedHole
-}
-/**
-   * Marks this outline point as the center of a castellated plated hole.
-   * The point should lie on the board edge.
-   *
-   * @example
-   * ```tsx
-   * { x: "-5mm", y: 0, castellatedHole: {
-   *   holeDiameter: "0.8mm",
-   *   outerDiameter: "1.2mm",
-   *   connectsTo: "net.GND",
-   * } }
-   * ```
-   */
-export const boardOutlinePoint = point.extend({
-  castellatedHole: boardCastellatedHole.optional(),
-})
+export const boardOutlinePoint = z
+  .object({
+    ...point.shape,
+    isCastellatedHole: z.boolean().optional(),
+    holeDiameter: distance.optional(),
+    outerDiameter: distance.optional(),
+    connectsTo: z.string().or(z.array(z.string())).optional(),
+  })
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string

@@ -23,41 +23,60 @@ export type BoardColor = AutocompleteString<BoardColorPreset>
 
 const boardColor = z.custom<BoardColor>((value) => typeof value === "string")
 
-export interface BoardCastellatedHole {
-  /** Diameter of the drilled hole */
-  holeDiameter: Distance
-  /** Diameter of the plated copper surrounding the hole */
-  outerDiameter: Distance
+export interface BoardOutlinePoint extends Point {
+  /** Marks this outline point as the center of a castellated plated hole */
+  isCastellatedHole?: boolean
+  /** Diameter of the drilled hole. Required when `isCastellatedHole` is true. */
+  holeDiameter?: Distance
+  /**
+   * Diameter of the plated copper surrounding the hole. Required when
+   * `isCastellatedHole` is true.
+   */
+  outerDiameter?: Distance
   /** Connection target or targets for the castellated hole */
   connectsTo?: string | string[]
 }
 
-export const boardCastellatedHole = z.object({
-  holeDiameter: distance,
-  outerDiameter: distance,
-  connectsTo: z.string().or(z.array(z.string())).optional(),
-})
+export const boardOutlinePoint = z
+  .object({
+    ...point.shape,
+    isCastellatedHole: z.boolean().optional(),
+    holeDiameter: distance.optional(),
+    outerDiameter: distance.optional(),
+    connectsTo: z.string().or(z.array(z.string())).optional(),
+  })
+  .superRefine((outlinePoint, ctx) => {
+    if (outlinePoint.isCastellatedHole) {
+      if (outlinePoint.holeDiameter === undefined) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["holeDiameter"],
+          message: "holeDiameter is required for a castellated hole",
+        })
+      }
+      if (outlinePoint.outerDiameter === undefined) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["outerDiameter"],
+          message: "outerDiameter is required for a castellated hole",
+        })
+      }
+      return
+    }
 
-export interface BoardOutlinePoint extends Point {
-  /**
-   * Marks this outline point as the center of a castellated plated hole.
-   * The point should lie on the board edge.
-   *
-   * @example
-   * ```tsx
-   * { x: "-5mm", y: 0, castellatedHole: {
-   *   holeDiameter: "0.8mm",
-   *   outerDiameter: "1.2mm",
-   *   connectsTo: "net.GND",
-   * } }
-   * ```
-   */
-  castellatedHole?: BoardCastellatedHole
-}
-
-export const boardOutlinePoint = point.extend({
-  castellatedHole: boardCastellatedHole.optional(),
-})
+    if (
+      outlinePoint.holeDiameter !== undefined ||
+      outlinePoint.outerDiameter !== undefined ||
+      outlinePoint.connectsTo !== undefined
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["isCastellatedHole"],
+        message:
+          "isCastellatedHole must be true when castellated hole props are provided",
+      })
+    }
+  })
 
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
@@ -76,8 +95,15 @@ export interface BoardProps
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
   /**
-   * Points defining the board edge. A point may include a castellated hole
-   * centered on that location.
+   * Points defining the board edge. Set `isCastellatedHole` on a point to
+   * place a castellated plated hole centered on that location.
+   *
+   * @example
+   * ```tsx
+   * { x: "-5mm", y: 0, isCastellatedHole: true,
+   *   holeDiameter: "0.8mm", outerDiameter: "1.2mm",
+   *   connectsTo: "net.GND" }
+   * ```
    */
   outline?: BoardOutlinePoint[]
   /** Color applied to both top and bottom solder masks */
@@ -146,8 +172,5 @@ export const boardProps = subcircuitGroupProps
   })
 
 type InferredBoardProps = z.input<typeof boardProps>
-expectTypesMatch<BoardCastellatedHole, z.input<typeof boardCastellatedHole>>(
-  true,
-)
 expectTypesMatch<BoardOutlinePoint, z.input<typeof boardOutlinePoint>>(true)
 expectTypesMatch<BoardProps, InferredBoardProps>(true)

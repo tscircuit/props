@@ -365,10 +365,10 @@ export interface BatteryProps<
 
 ### BoardProps `<board />`
 
-```ts
+````ts
 export interface BoardProps extends Omit<
   SubcircuitGroupProps,
-  "subcircuit" | "connections"
+  "subcircuit" | "connections" | "outline"
 > {
   title?: string;
   material?: "fr4" | "fr1" | "flex";
@@ -384,6 +384,18 @@ export interface BoardProps extends Omit<
   boardAnchorPosition?: Point;
   anchorAlignment?: z.infer<typeof ninePointAnchor>;
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>;
+  /**
+   * Points defining the board edge. Set `isCastellatedHole` on a point to
+   * place a castellated plated hole centered on that location.
+   *
+   * @example
+   * ```tsx
+   * { x: "-5mm", y: 0, isCastellatedHole: true,
+   *   holeDiameter: "0.8mm", padDiameter: "1.2mm",
+   *   connectsTo: "net.GND" }
+   * ```
+   */
+  outline?: BoardOutlinePoint[];
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor;
   /** Color of the top solder mask */
@@ -403,7 +415,7 @@ export interface BoardProps extends Omit<
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean;
 }
-```
+````
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/board.ts)
 

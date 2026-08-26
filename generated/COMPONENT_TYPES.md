@@ -1369,8 +1369,23 @@ export const batteryProps = commonComponentProps.extend({
 ### board
 
 ```typescript
+export interface BoardOutlinePoint extends Point {
+  isCastellatedHole?: boolean
+  holeDiameter?: Distance
+  padDiameter?: Distance
+  connectsTo?: string | string[]
+}
+/** Connection target or targets for the castellated hole */
+export const boardOutlinePoint = z
+  .object({
+    ...point.shape,
+    isCastellatedHole: z.boolean().optional(),
+    holeDiameter: distance.optional(),
+    padDiameter: distance.optional(),
+    connectsTo: z.string().or(z.array(z.string())).optional(),
+  })
 export interface BoardProps
-  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
   material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
@@ -1380,6 +1395,7 @@ export interface BoardProps
   boardAnchorPosition?: Point
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  outline?: BoardOutlinePoint[]
   solderMaskColor?: BoardColor
   topSolderMaskColor?: BoardColor
   bottomSolderMaskColor?: BoardColor
@@ -1418,6 +1434,7 @@ export const boardProps = subcircuitGroupProps
     boardAnchorAlignment: ninePointAnchor
       .optional()
       .describe("Prefer using anchorAlignment when possible"),
+    outline: z.array(boardOutlinePoint).optional(),
     title: z.string().optional(),
     solderMaskColor: boardColor.optional(),
     topSolderMaskColor: boardColor.optional(),

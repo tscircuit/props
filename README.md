@@ -391,7 +391,7 @@ export interface BoardProps extends Omit<
    * @example
    * ```tsx
    * { x: "-5mm", y: 0, isCastellatedHole: true,
-   *   holeDiameter: "0.8mm", outerDiameter: "1.2mm",
+   *   holeDiameter: "0.8mm", padDiameter: "1.2mm",
    *   connectsTo: "net.GND" }
    * ```
    */

@@ -28,11 +28,8 @@ export interface BoardOutlinePoint extends Point {
   isCastellatedHole?: boolean
   /** Diameter of the drilled hole. Required when `isCastellatedHole` is true. */
   holeDiameter?: Distance
-  /**
-   * Diameter of the plated copper surrounding the hole. Required when
-   * `isCastellatedHole` is true.
-   */
-  outerDiameter?: Distance
+  /** Diameter of the copper pad. Required when `isCastellatedHole` is true. */
+  padDiameter?: Distance
   /** Connection target or targets for the castellated hole */
   connectsTo?: string | string[]
 }
@@ -42,7 +39,7 @@ export const boardOutlinePoint = z
     ...point.shape,
     isCastellatedHole: z.boolean().optional(),
     holeDiameter: distance.optional(),
-    outerDiameter: distance.optional(),
+    padDiameter: distance.optional(),
     connectsTo: z.string().or(z.array(z.string())).optional(),
   })
   .superRefine((outlinePoint, ctx) => {
@@ -54,11 +51,11 @@ export const boardOutlinePoint = z
           message: "holeDiameter is required for a castellated hole",
         })
       }
-      if (outlinePoint.outerDiameter === undefined) {
+      if (outlinePoint.padDiameter === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ["outerDiameter"],
-          message: "outerDiameter is required for a castellated hole",
+          path: ["padDiameter"],
+          message: "padDiameter is required for a castellated hole",
         })
       }
       return
@@ -66,7 +63,7 @@ export const boardOutlinePoint = z
 
     if (
       outlinePoint.holeDiameter !== undefined ||
-      outlinePoint.outerDiameter !== undefined ||
+      outlinePoint.padDiameter !== undefined ||
       outlinePoint.connectsTo !== undefined
     ) {
       ctx.addIssue({
@@ -101,7 +98,7 @@ export interface BoardProps
    * @example
    * ```tsx
    * { x: "-5mm", y: 0, isCastellatedHole: true,
-   *   holeDiameter: "0.8mm", outerDiameter: "1.2mm",
+   *   holeDiameter: "0.8mm", padDiameter: "1.2mm",
    *   connectsTo: "net.GND" }
    * ```
    */

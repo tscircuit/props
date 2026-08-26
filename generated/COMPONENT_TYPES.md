@@ -1372,7 +1372,7 @@ export const batteryProps = commonComponentProps.extend({
 export interface BoardOutlinePoint extends Point {
   isCastellatedHole?: boolean
   holeDiameter?: Distance
-  outerDiameter?: Distance
+  padDiameter?: Distance
   connectsTo?: string | string[]
 }
 /** Connection target or targets for the castellated hole */
@@ -1381,7 +1381,7 @@ export const boardOutlinePoint = z
     ...point.shape,
     isCastellatedHole: z.boolean().optional(),
     holeDiameter: distance.optional(),
-    outerDiameter: distance.optional(),
+    padDiameter: distance.optional(),
     connectsTo: z.string().or(z.array(z.string())).optional(),
   })
 export interface BoardProps

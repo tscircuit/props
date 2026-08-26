@@ -365,11 +365,8 @@ export interface BoardOutlinePoint extends Point {
   isCastellatedHole?: boolean
   /** Diameter of the drilled hole. Required when `isCastellatedHole` is true. */
   holeDiameter?: Distance
-  /**
-   * Diameter of the plated copper surrounding the hole. Required when
-   * `isCastellatedHole` is true.
-   */
-  outerDiameter?: Distance
+  /** Diameter of the copper pad. Required when `isCastellatedHole` is true. */
+  padDiameter?: Distance
   /** Connection target or targets for the castellated hole */
   connectsTo?: string | string[]
 }
@@ -398,7 +395,7 @@ export interface BoardProps
    * @example
    * ```tsx
    * { x: "-5mm", y: 0, isCastellatedHole: true,
-   *   holeDiameter: "0.8mm", outerDiameter: "1.2mm",
+   *   holeDiameter: "0.8mm", padDiameter: "1.2mm",
    *   connectsTo: "net.GND" }
    * ```
    */

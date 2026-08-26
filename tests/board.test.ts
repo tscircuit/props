@@ -60,7 +60,7 @@ test("should parse castellated holes on board outline points", () => {
         y: 0,
         isCastellatedHole: true,
         holeDiameter: "0.8mm",
-        outerDiameter: "1.2mm",
+        padDiameter: "1.2mm",
         connectsTo: ["net.GND", "source_port_1"],
       },
       { x: "-5mm", y: "5mm" },
@@ -77,7 +77,7 @@ test("should parse castellated holes on board outline points", () => {
     y: 0,
     isCastellatedHole: true,
     holeDiameter: 0.8,
-    outerDiameter: 1.2,
+    padDiameter: 1.2,
     connectsTo: ["net.GND", "source_port_1"],
   })
 })
@@ -106,7 +106,7 @@ test("should require isCastellatedHole for flattened hole props", () => {
         x: 0,
         y: 0,
         holeDiameter: "0.8mm",
-        outerDiameter: "1.2mm",
+        padDiameter: "1.2mm",
       },
     ],
   })

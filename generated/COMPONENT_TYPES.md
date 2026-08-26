@@ -1404,6 +1404,7 @@ export interface BoardProps
   bottomSilkscreenColor?: BoardColor
   doubleSidedAssembly?: boolean
   isViaInPadAllowed?: boolean
+  automaticPoursEnabled?: boolean
   schematicDisabled?: boolean
 }
 /** Whether this board should be omitted from the schematic view */
@@ -1448,6 +1449,12 @@ export const boardProps = subcircuitGroupProps
       .optional()
       .describe(
         "Allows intentional via-in-pad designs to pass DRC. Omitted or false keeps via-in-pad disallowed.",
+      ),
+    automaticPoursEnabled: z
+      .boolean()
+      .default(false)
+      .describe(
+        "Whether implicit copper pours should be generated automatically. Defaults to false.",
       ),
     schematicDisabled: z.boolean().optional(),
   })

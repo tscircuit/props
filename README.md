@@ -412,6 +412,11 @@ export interface BoardProps extends Omit<
   doubleSidedAssembly?: boolean;
   /** Whether vias may be placed inside PCB pads */
   isViaInPadAllowed?: boolean;
+  /**
+   * Whether implicit copper pours should be generated automatically. Defaults
+   * to false.
+   */
+  automaticPoursEnabled?: boolean;
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean;
 }

@@ -4177,7 +4177,10 @@ export interface SchematicCircleProps {
 ### schematic-graphic
 
 ```typescript
-/** Props for embedding an image or raw SVG graphic in a schematic sheet. */
+/**
+ * Props for embedding an image or raw SVG graphic in a schematic sheet.
+ * At least one source is required; both sources may be provided.
+ */
 export interface SchematicGraphicProps {
   imageUrl?: string
   svgContent?: string

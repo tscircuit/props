@@ -3,7 +3,10 @@ import { type Distance, distance } from "lib/common/distance"
 import { url } from "lib/common/url"
 import { expectTypesMatch } from "lib/typecheck"
 
-/** Props for embedding an image or raw SVG graphic in a schematic sheet. */
+/**
+ * Props for embedding an image or raw SVG graphic in a schematic sheet.
+ * At least one source is required; both sources may be provided.
+ */
 export interface SchematicGraphicProps {
   /** URL or static-file import for the source SVG image. */
   imageUrl?: string
@@ -40,14 +43,7 @@ export const schematicGraphicProps = z
     if (imageUrl === undefined && svgContent === undefined) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Exactly one of imageUrl or svgContent is required",
-      })
-    }
-
-    if (imageUrl !== undefined && svgContent !== undefined) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "imageUrl and svgContent cannot both be provided",
+        message: "At least one of imageUrl or svgContent is required",
       })
     }
   })

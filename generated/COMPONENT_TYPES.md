@@ -4300,14 +4300,14 @@ export const schematicSectionProps = z.object({
 
 ```typescript
 export interface SchematicSheetProps {
-  name: string
-  displayName: string
+  name?: string
+  displayName?: string
   sheetIndex?: number
   children?: any
 }
 export const schematicSheetProps = z.object({
-  name: z.string(),
-  displayName: z.string(),
+  name: z.string().optional(),
+  displayName: z.string().optional(),
   sheetIndex: z.number().optional(),
   children: z.any().optional(),
 })

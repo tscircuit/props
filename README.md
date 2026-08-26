@@ -1919,8 +1919,8 @@ export interface SchematicSectionProps {
 
 ```ts
 export interface SchematicSheetProps {
-  name: string;
-  displayName: string;
+  name?: string;
+  displayName?: string;
   sheetIndex?: number;
   children?: any;
 }

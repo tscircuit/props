@@ -15,6 +15,7 @@ export interface ProjectConfig
     | "defaultSpiceEngine"
     | "pcbDisabled"
     | "schematicDisabled"
+    | "analogSimulationDisabled"
   > {}
 
 const platformConfigObject = platformConfig as z.ZodObject<any>
@@ -30,6 +31,7 @@ export const projectConfig = platformConfigObject.pick({
   defaultSpiceEngine: true,
   pcbDisabled: true,
   schematicDisabled: true,
+  analogSimulationDisabled: true,
 }) as z.ZodType<ProjectConfig>
 
 expectTypesMatch<ProjectConfig, z.infer<typeof projectConfig>>(true)

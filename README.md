@@ -29,6 +29,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<analogsimulation />`                  | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                                                 |
 | `<analog.sweepparameter />`             | [`AnalogResistanceSweepParameterProps`](#analogresistancesweepparameterprops-analogsweepparameter)                 |
 | `<analog.transientsimulation />`        | [`AnalogTransientSimulationProps`](#analogtransientsimulationprops-analogtransientsimulation)                      |
+| `<antenna />`                           | [`AntennaProps`](#antennaprops-antenna)                                                                            |
 | `<autoroutingphase />`                  | [`AutoroutingPhaseProps`](#autoroutingphaseprops-autoroutingphase)                                                 |
 | `<battery />`                           | [`BatteryProps`](#batteryprops-battery)                                                                            |
 | `<board />`                             | [`BoardProps`](#boardprops-board)                                                                                  |
@@ -324,6 +325,27 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/analogtransientsimulation.ts)
+
+### AntennaProps `<antenna />`
+
+```ts
+export interface AntennaProps {
+  key?: string;
+  name?: string;
+  displayName?: string;
+  thickness?: Distance;
+  /** Alias for antenna trace thickness. */
+  width?: Distance;
+  pcbPathRelativeTo?: string;
+  /**
+   * Explicit antenna path. Entries use the same selector, point, and via
+   * syntax as trace pcbPath entries.
+   */
+  pcbPath?: PcbPath;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/antenna.ts)
 
 ### AutoroutingPhaseProps `<autoroutingphase />`
 

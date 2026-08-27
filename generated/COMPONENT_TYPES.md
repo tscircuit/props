@@ -1332,27 +1332,15 @@ export const analogTransientSimulationProps = z
 ### antenna
 
 ```typescript
-/** Props for a PCB antenna defined by an explicit copper path. */
-export interface AntennaProps {
-  key?: string
-  name?: string
-  displayName?: string
-  thickness?: Distance
-  width?: Distance
-  pcbPathRelativeTo?: string
+/** Props for an antenna component with an optional explicit PCB path. */
+export interface AntennaProps extends CommonComponentProps {
   pcbPath?: PcbPath
 }
 /**
    * Explicit antenna path. Entries use the same selector, point, and via
    * syntax as trace pcbPath entries.
    */
-export const antennaProps = z.object({
-  key: z.string().optional(),
-  name: z.string().optional(),
-  displayName: z.string().optional(),
-  thickness: distance.optional(),
-  width: distance.optional().describe("Alias for antenna trace thickness"),
-  pcbPathRelativeTo: z.string().optional(),
+export const antennaProps = commonComponentProps.extend({
   pcbPath: pcbPath.optional(),
 })
 ```

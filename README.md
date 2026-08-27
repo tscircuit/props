@@ -329,14 +329,7 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
 ### AntennaProps `<antenna />`
 
 ```ts
-export interface AntennaProps {
-  key?: string;
-  name?: string;
-  displayName?: string;
-  thickness?: Distance;
-  /** Alias for antenna trace thickness. */
-  width?: Distance;
-  pcbPathRelativeTo?: string;
+export interface AntennaProps extends CommonComponentProps {
   /**
    * Explicit antenna path. Entries use the same selector, point, and via
    * syntax as trace pcbPath entries.

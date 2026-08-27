@@ -4,7 +4,9 @@ import { antennaProps, type AntennaProps } from "lib"
 test("accepts a pcbPath using trace path syntax", () => {
   const raw: AntennaProps = {
     name: "ANT1",
-    width: "0.3mm",
+    footprint: "0402",
+    pcbX: "5mm",
+    pcbY: -2,
     pcbPath: [
       "U1.1",
       { x: 0, y: 0 },
@@ -15,7 +17,9 @@ test("accepts a pcbPath using trace path syntax", () => {
 
   expect(antennaProps.parse(raw)).toEqual({
     name: "ANT1",
-    width: 0.3,
+    footprint: "0402",
+    pcbX: 5,
+    pcbY: -2,
     pcbPath: [
       "U1.1",
       { x: 0, y: 0 },
@@ -28,7 +32,12 @@ test("accepts a pcbPath using trace path syntax", () => {
 test("applies trace pcbPath via validation", () => {
   expect(() =>
     antennaProps.parse({
+      name: "ANT1",
       pcbPath: [{ x: 0, y: 0, via: true }],
     }),
   ).toThrow("toLayer is required when via is true")
+})
+
+test("requires a component name", () => {
+  expect(() => antennaProps.parse({ footprint: "0402" })).toThrow()
 })

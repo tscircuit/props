@@ -1,0 +1,22 @@
+name: Publish PR package preview
+
+on:
+  push:
+    branches:
+      - feat/antenna-props
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun install
+      - run: bun run build
+      - run: bunx pkg-pr-new publish --compact --comment=off --bun

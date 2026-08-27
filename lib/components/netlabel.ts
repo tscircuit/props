@@ -5,6 +5,8 @@ import { rotation } from "circuit-json"
 
 export interface NetLabelProps {
   net?: string
+  /** Human-facing text rendered for the label; electrical identity remains `net`. */
+  displayName?: string
   connection?: string
   connectsTo?: string | string[]
   /**
@@ -21,6 +23,7 @@ export interface NetLabelProps {
 
 export const netLabelProps = z.object({
   net: z.string().optional(),
+  displayName: z.string().optional(),
   connection: z.string().optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   inline: z.boolean().optional(),

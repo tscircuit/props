@@ -1718,6 +1718,8 @@ export interface NetAliasProps {
 
 export interface NetLabelProps {
   net?: string
+  /** Human-facing text rendered for the label; electrical identity remains `net`. */
+  displayName?: string
   connection?: string
   connectsTo?: string | string[]
   /**

@@ -815,6 +815,38 @@ export const lrPolarPins = [
 ] as const
 ```
 
+### pcbPath
+
+```typescript
+export interface PcbPathPoint extends Point {
+  via?: boolean
+  fromLayer?: LayerRefInput
+  toLayer?: LayerRefInput
+}
+const basePcbPathPoint = point.extend({
+  via: z.boolean().optional(),
+  fromLayer: layer_ref.optional(),
+  toLayer: layer_ref.optional(),
+})
+export const pcbPathPoint = basePcbPathPoint.superRefine((value, ctx) => {
+  if (value.via) {
+    if (!value.toLayer) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "toLayer is required when via is true",
+        path: ["toLayer"],
+      })
+    }
+  } else if (value.fromLayer || value.toLayer) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "fromLayer/toLayer are only allowed when via is true",
+      path: ["via"],
+    })
+  }
+})
+```
+
 ### pcbStyle
 
 ```typescript
@@ -1295,6 +1327,22 @@ export const analogTransientSimulationProps = z
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
   })
+```
+
+### antenna
+
+```typescript
+/** Props for an antenna component with an optional explicit PCB path. */
+export interface AntennaProps extends CommonComponentProps {
+  pcbPath?: PcbPath
+}
+/**
+   * Explicit antenna path. Entries use the same selector, point, and via
+   * syntax as trace pcbPath entries.
+   */
+export const antennaProps = commonComponentProps.extend({
+  pcbPath: pcbPath.optional(),
+})
 ```
 
 ### autoroutingphase
@@ -4944,11 +4992,6 @@ export const traceHintProps = z.object({
 export const portRef = z.union([
   z.string(),
   z.custom<{ getPortSelector: () => string }>(
-.extend({
-    via: z.boolean().optional(),
-    fromLayer: layer_ref.optional(),
-    toLayer: layer_ref.optional(),
-  })
 baseTraceProps.extend({
     path: z.array(portRef),
   }),

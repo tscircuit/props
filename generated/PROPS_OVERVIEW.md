@@ -134,6 +134,15 @@ export interface AnalogVoltageSweepParameterProps
 }
 
 
+export interface AntennaProps extends CommonComponentProps {
+  /**
+   * Explicit antenna path. Entries use the same selector, point, and via
+   * syntax as trace pcbPath entries.
+   */
+  pcbPath?: PcbPath
+}
+
+
 export interface AssemblyDeviceProps {
   /** Product-level assembly identity. */
   name?: string
@@ -1950,6 +1959,13 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
+}
+
+
+export interface PcbPathPoint extends Point {
+  via?: boolean
+  fromLayer?: LayerRefInput
+  toLayer?: LayerRefInput
 }
 
 

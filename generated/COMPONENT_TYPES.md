@@ -1556,7 +1556,7 @@ export const breakoutPointProps = pcbLayoutProps
 
 ```typescript
 /**
- * Declares a group of connections that an autorouter should keep together.
+ * Declares one or more connections that an autorouter should route as a group.
  * Each connection may be a trace name or a port selector.
  */
 export interface BusProps {
@@ -1573,7 +1573,7 @@ export interface BusProps {
 /** Preferred PCB layers for routing the bus, in priority order. */
 export const busProps = z.object({
   name: z.string().optional(),
-  connections: z.array(z.string()).min(2),
+  connections: z.array(z.string()).min(1),
   routingPhaseIndex: z.number().nullable().optional(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
   targetImpedance: resistance.pipe(z.number().positive().finite()).optional(),

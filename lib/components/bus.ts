@@ -10,12 +10,12 @@ import { z } from "zod"
 export type BusName = string
 
 /**
- * Declares a group of connections that an autorouter should keep together.
+ * Declares one or more connections that an autorouter should route as a group.
  * Each connection may be a trace name or a port selector.
  */
 export interface BusProps {
   name?: string
-  /** Trace names or port selectors for the connections in the bus. */
+  /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[]
   /** If set, every trace in this bus is assigned to this autorouting phase. */
   routingPhaseIndex?: number | null
@@ -35,7 +35,7 @@ export interface BusProps {
 
 export const busProps = z.object({
   name: z.string().optional(),
-  connections: z.array(z.string()).min(2),
+  connections: z.array(z.string()).min(1),
   routingPhaseIndex: z.number().nullable().optional(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
   targetImpedance: resistance.pipe(z.number().positive().finite()).optional(),

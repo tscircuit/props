@@ -113,6 +113,11 @@ export interface PlatformConfig {
   routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
+  /**
+   * Disables analog simulation model processing and simulator execution.
+   * Defaults to false.
+   */
+  analogSimulationDisabled?: boolean
   drcChecksDisabled?: boolean
   netlistDrcChecksDisabled?: boolean
   routingDrcChecksDisabled?: boolean
@@ -266,6 +271,7 @@ export const platformConfig = z.object({
   routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),
   partsEngineDisabled: z.boolean().optional(),
+  analogSimulationDisabled: z.boolean().optional(),
   drcChecksDisabled: z.boolean().optional(),
   netlistDrcChecksDisabled: z.boolean().optional(),
   routingDrcChecksDisabled: z.boolean().optional(),

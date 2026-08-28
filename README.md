@@ -2424,6 +2424,11 @@ export interface PlatformConfig {
   routingDisabled?: boolean;
   schematicDisabled?: boolean;
   partsEngineDisabled?: boolean;
+  /**
+   * Disables analog simulation model processing and simulator execution.
+   * Defaults to false.
+   */
+  analogSimulationDisabled?: boolean;
   drcChecksDisabled?: boolean;
   netlistDrcChecksDisabled?: boolean;
   routingDrcChecksDisabled?: boolean;
@@ -2483,6 +2488,7 @@ export interface ProjectConfig extends Pick<
   | "defaultSpiceEngine"
   | "pcbDisabled"
   | "schematicDisabled"
+  | "analogSimulationDisabled"
 > {}
 ```
 

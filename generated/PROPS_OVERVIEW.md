@@ -2130,23 +2130,14 @@ export interface PinHeaderProps extends CommonComponentProps {
   gender?: "male" | "female" | "unpopulated"
 
   /**
-   * Mount the header on the top of the board, so it is connected to from
-   * above. An alias for `layer: "top"`, which is the default.
-   *
-   * Which side of the board a part sits on is `layer`, and only `layer`: the
-   * 3D model is always drawn top-side and consumers flip it for a bottom-layer
-   * component. Prefer these names on a connector, where "which side does the
-   * mating connector come from" is the question actually being asked.
+   * Mount the header on top of the board so its mating connector approaches
+   * from above. An alias for `layer: "top"`, which is the default.
    */
   connectsFromAbove?: boolean
 
   /**
-   * Mount the header on the underside of the board, so it is connected to from
-   * below. An alias for `layer: "bottom"`.
-   *
-   * Not to be confused with `invert` on a footprint string, which installs a
-   * header BACKWARDS on whichever side it is on — long pins through the board
-   * rather than short ones.
+   * Mount the header on the underside of the board so its mating connector
+   * approaches from below. An alias for `layer: "bottom"`.
    */
   connectsFromBelow?: boolean
 

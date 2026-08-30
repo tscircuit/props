@@ -7,11 +7,20 @@ export interface AssemblyScreenProps {
   name: string
   /** Selector for the connector that the screen attaches to. */
   connectsTo: string
-  /** Outer width of the screen body, including its bezel but excluding the flex cable. */
-  width: Distance
-  /** Outer height of the screen body, including its bezel but excluding the flex cable. */
-  height: Distance
-  /** Advanced modelprinter string used to render the screen assembly. */
+  /**
+   * Outer width of the screen body, including its bezel but excluding the flex
+   * cable. When supplied, it must be provided together with `height`.
+   */
+  width?: Distance
+  /**
+   * Outer height of the screen body, including its bezel but excluding the flex
+   * cable. When supplied, it must be provided together with `width`.
+   */
+  height?: Distance
+  /**
+   * Advanced modelprinter string used to render the screen assembly. Required
+   * when `width` and `height` are omitted.
+   */
   cadModel?: string
 }
 
@@ -25,13 +34,35 @@ const positiveDistance = (fieldName: "width" | "height") =>
     message: `${fieldName} must be a positive finite distance`,
   })
 
-export const assemblyScreenProps = z.object({
-  name: nonemptyString("name"),
-  connectsTo: nonemptyString("connectsTo"),
-  width: positiveDistance("width"),
-  height: positiveDistance("height"),
-  cadModel: nonemptyString("cadModel").optional(),
-})
+export const assemblyScreenProps = z
+  .object({
+    name: nonemptyString("name"),
+    connectsTo: nonemptyString("connectsTo"),
+    width: positiveDistance("width").optional(),
+    height: positiveDistance("height").optional(),
+    cadModel: nonemptyString("cadModel").optional(),
+  })
+  .superRefine((screen, context) => {
+    const hasWidth = screen.width !== undefined
+    const hasHeight = screen.height !== undefined
+
+    if (hasWidth !== hasHeight) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "width and height must be provided together",
+        path: hasWidth ? ["height"] : ["width"],
+      })
+      return
+    }
+
+    if (!hasWidth && screen.cadModel === undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "provide either width and height or cadModel",
+        path: [],
+      })
+    }
+  })
 
 export type AssemblyScreenPropsInput = z.input<typeof assemblyScreenProps>
 

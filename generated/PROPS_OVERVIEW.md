@@ -166,11 +166,20 @@ export interface AssemblyScreenProps {
   name: string
   /** Selector for the connector that the screen attaches to. */
   connectsTo: string
-  /** Outer width of the screen body, including its bezel but excluding the flex cable. */
-  width: Distance
-  /** Outer height of the screen body, including its bezel but excluding the flex cable. */
-  height: Distance
-  /** Advanced modelprinter string used to render the screen assembly. */
+  /**
+   * Outer width of the screen body, including its bezel but excluding the flex
+   * cable. When supplied, it must be provided together with `height`.
+   */
+  width?: Distance
+  /**
+   * Outer height of the screen body, including its bezel but excluding the flex
+   * cable. When supplied, it must be provided together with `width`.
+   */
+  height?: Distance
+  /**
+   * Advanced modelprinter string used to render the screen assembly. Required
+   * when `width` and `height` are omitted.
+   */
   cadModel?: string
 }
 

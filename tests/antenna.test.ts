@@ -3,7 +3,6 @@ import {
   antennaFrequencyBands,
   antennaProps,
   antennaShapes,
-  antennaWirelessStandards,
   type AntennaProps,
 } from "lib"
 
@@ -12,12 +11,6 @@ test("accepts supported antenna design intent", () => {
     expect(
       antennaProps.parse({ name: "ANT1", antennaShape }).antennaShape,
     ).toBe(antennaShape)
-  }
-
-  for (const wirelessStandard of antennaWirelessStandards) {
-    expect(
-      antennaProps.parse({ name: "ANT1", wirelessStandard }).wirelessStandard,
-    ).toBe(wirelessStandard)
   }
 
   for (const frequencyBand of antennaFrequencyBands) {
@@ -32,18 +25,24 @@ test("rejects unknown antenna design intent", () => {
     antennaProps.parse({ name: "ANT1", antennaShape: "chip" }),
   ).toThrow()
   expect(() =>
-    antennaProps.parse({ name: "ANT1", wirelessStandard: "zigbee" }),
-  ).toThrow()
-  expect(() =>
     antennaProps.parse({ name: "ANT1", frequencyBand: "900mhz" }),
   ).toThrow()
+})
+
+test("antennaShape encodes its frequency band", () => {
+  const parsed = antennaProps.parse({
+    name: "ANT1",
+    antennaShape: "2.4ghz_meandered_inverted_f",
+  })
+
+  expect(parsed.antennaShape).toBe("2.4ghz_meandered_inverted_f")
+  expect(parsed.frequencyBand).toBeUndefined()
 })
 
 test("does not assume antenna design intent", () => {
   const parsed = antennaProps.parse({ name: "ANT1" })
 
   expect(parsed.antennaShape).toBeUndefined()
-  expect(parsed.wirelessStandard).toBeUndefined()
   expect(parsed.frequencyBand).toBeUndefined()
 })
 

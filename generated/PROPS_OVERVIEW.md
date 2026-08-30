@@ -136,13 +136,16 @@ export interface AnalogVoltageSweepParameterProps
 
 export interface AntennaProps extends CommonComponentProps {
   /**
-   * PCB-trace topology to generate. No shape is assumed when omitted. An
-   * explicit pcbPath takes precedence when both are provided.
+   * Band-qualified PCB-trace topology to generate. The encoded band is enough
+   * to select the geometry without frequencyBand. No shape is assumed when
+   * omitted. An explicit pcbPath takes precedence when both are provided.
    */
   antennaShape?: AntennaShape
-  /** Wi-Fi or Bluetooth radio standard. No standard is assumed when omitted. */
-  wirelessStandard?: AntennaWirelessStandard
-  /** Nominal operating band or multiband configuration. */
+  /**
+   * Nominal operating band or multiband configuration. This is redundant when
+   * antennaShape is present; the band encoded in antennaShape controls generated
+   * geometry.
+   */
   frequencyBand?: AntennaFrequencyBand
   /**
    * Explicit antenna path. Entries use the same selector, point, and via

@@ -1332,25 +1332,13 @@ export const analogTransientSimulationProps = z
 ### antenna
 
 ```typescript
-/** PCB-trace antenna topologies that can be generated from design intent. */
+/** Band-qualified PCB-trace antenna topologies. */
 export const antennaShapes = [
-  "quarter_wave_monopole",
-  "meandered_monopole",
-  "inverted_f",
-  "meandered_inverted_f",
-  "folded_dipole",
-] as const
-/** Wi-Fi and Bluetooth radio standards commonly used with PCB antennas. */
-export const antennaWirelessStandards = [
-  "wifi_802_11a",
-  "wifi_802_11b",
-  "wifi_802_11g",
-  "wifi_802_11n",
-  "wifi_802_11ac",
-  "wifi_802_11ax",
-  "wifi_802_11be",
-  "bluetooth_classic",
-  "bluetooth_le",
+  "2.4ghz_quarter_wave_monopole",
+  "2.4ghz_meandered_monopole",
+  "2.4ghz_inverted_f",
+  "2.4ghz_meandered_inverted_f",
+  "2.4ghz_folded_dipole",
 ] as const
 /** Nominal Wi-Fi and Bluetooth operating-band configurations. */
 export const antennaFrequencyBands = [
@@ -1363,7 +1351,6 @@ export const antennaFrequencyBands = [
 /** Props for an antenna component with optional generated or explicit geometry. */
 export interface AntennaProps extends CommonComponentProps {
   antennaShape?: AntennaShape
-  wirelessStandard?: AntennaWirelessStandard
   frequencyBand?: AntennaFrequencyBand
   pcbPath?: PcbPath
 }
@@ -1373,7 +1360,6 @@ export interface AntennaProps extends CommonComponentProps {
    */
 export const antennaProps = commonComponentProps.extend({
   antennaShape: antennaShape.optional(),
-  wirelessStandard: antennaWirelessStandard.optional(),
   frequencyBand: antennaFrequencyBand.optional(),
   pcbPath: pcbPath.optional(),
 })

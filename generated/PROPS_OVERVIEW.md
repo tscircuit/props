@@ -161,6 +161,20 @@ export interface AssemblyDeviceProps {
 }
 
 
+export interface AssemblyScreenProps {
+  /** Stable product-level identity for the screen assembly. */
+  name: string
+  /** Selector for the connector that the screen attaches to. */
+  connectsTo: string
+  /** Physical width of the complete screen assembly. */
+  width: Distance
+  /** Physical height of the complete screen assembly. */
+  height: Distance
+  /** Advanced modelprinter string used to render the screen assembly. */
+  cadModel?: string
+}
+
+
 export interface AutorouterConfig {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"

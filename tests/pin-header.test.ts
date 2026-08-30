@@ -48,6 +48,28 @@ test("should allow optional connections", () => {
   expect(parsed.connections).toBeUndefined()
 })
 
+test("should reject fractional, zero, negative, and infinite pinCount values", () => {
+  for (const pinCount of [2.5, 3.7, 0, -4, Infinity]) {
+    const result = pinHeaderProps.safeParse({ name: "header", pinCount })
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(
+        result.error.issues.some((issue) =>
+          issue.path.includes("pinCount"),
+        ),
+      ).toBe(true)
+    }
+  }
+})
+
+test("should accept positive integer pinCount values", () => {
+  for (const pinCount of [1, 2, 8, 40]) {
+    const result = pinHeaderProps.safeParse({ name: "header", pinCount })
+    expect(result.success).toBe(true)
+    if (result.success) expect(result.data.pinCount).toBe(pinCount)
+  }
+})
+
 test("should parse rightAngle property", () => {
   const rawProps: PinHeaderProps = {
     name: "header",

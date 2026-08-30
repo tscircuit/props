@@ -331,6 +331,18 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
 ```ts
 export interface AntennaProps extends CommonComponentProps {
   /**
+   * Band-qualified PCB-trace topology to generate. The encoded band is enough
+   * to select the geometry without frequencyBand. No shape is assumed when
+   * omitted. An explicit pcbPath takes precedence when both are provided.
+   */
+  antennaShape?: AntennaShape;
+  /**
+   * Nominal operating band or multiband configuration. This is redundant when
+   * antennaShape is present; the band encoded in antennaShape controls generated
+   * geometry.
+   */
+  frequencyBand?: AntennaFrequencyBand;
+  /**
    * Explicit antenna path. Entries use the same selector, point, and via
    * syntax as trace pcbPath entries.
    */

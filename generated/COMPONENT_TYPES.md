@@ -1332,8 +1332,26 @@ export const analogTransientSimulationProps = z
 ### antenna
 
 ```typescript
-/** Props for an antenna component with an optional explicit PCB path. */
+/** Band-qualified PCB-trace antenna topologies. */
+export const antennaShapes = [
+  "2.4ghz_quarter_wave_monopole",
+  "2.4ghz_meandered_monopole",
+  "2.4ghz_inverted_f",
+  "2.4ghz_meandered_inverted_f",
+  "2.4ghz_folded_dipole",
+] as const
+/** Nominal Wi-Fi and Bluetooth operating-band configurations. */
+export const antennaFrequencyBands = [
+  "2.4ghz",
+  "5ghz",
+  "6ghz",
+  "dual_band_2.4ghz_5ghz",
+  "tri_band_2.4ghz_5ghz_6ghz",
+] as const
+/** Props for an antenna component with optional generated or explicit geometry. */
 export interface AntennaProps extends CommonComponentProps {
+  antennaShape?: AntennaShape
+  frequencyBand?: AntennaFrequencyBand
   pcbPath?: PcbPath
 }
 /**
@@ -1341,6 +1359,8 @@ export interface AntennaProps extends CommonComponentProps {
    * syntax as trace pcbPath entries.
    */
 export const antennaProps = commonComponentProps.extend({
+  antennaShape: antennaShape.optional(),
+  frequencyBand: antennaFrequencyBand.optional(),
   pcbPath: pcbPath.optional(),
 })
 ```

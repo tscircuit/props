@@ -1,5 +1,51 @@
 import { expect, test } from "bun:test"
-import { antennaProps, type AntennaProps } from "lib"
+import {
+  antennaFrequencyBands,
+  antennaProps,
+  antennaShapes,
+  antennaWirelessStandards,
+  type AntennaProps,
+} from "lib"
+
+test("accepts supported antenna design intent", () => {
+  for (const antennaShape of antennaShapes) {
+    expect(
+      antennaProps.parse({ name: "ANT1", antennaShape }).antennaShape,
+    ).toBe(antennaShape)
+  }
+
+  for (const wirelessStandard of antennaWirelessStandards) {
+    expect(
+      antennaProps.parse({ name: "ANT1", wirelessStandard }).wirelessStandard,
+    ).toBe(wirelessStandard)
+  }
+
+  for (const frequencyBand of antennaFrequencyBands) {
+    expect(
+      antennaProps.parse({ name: "ANT1", frequencyBand }).frequencyBand,
+    ).toBe(frequencyBand)
+  }
+})
+
+test("rejects unknown antenna design intent", () => {
+  expect(() =>
+    antennaProps.parse({ name: "ANT1", antennaShape: "chip" }),
+  ).toThrow()
+  expect(() =>
+    antennaProps.parse({ name: "ANT1", wirelessStandard: "zigbee" }),
+  ).toThrow()
+  expect(() =>
+    antennaProps.parse({ name: "ANT1", frequencyBand: "900mhz" }),
+  ).toThrow()
+})
+
+test("does not assume antenna design intent", () => {
+  const parsed = antennaProps.parse({ name: "ANT1" })
+
+  expect(parsed.antennaShape).toBeUndefined()
+  expect(parsed.wirelessStandard).toBeUndefined()
+  expect(parsed.frequencyBand).toBeUndefined()
+})
 
 test("accepts a pcbPath using trace path syntax", () => {
   const raw: AntennaProps = {

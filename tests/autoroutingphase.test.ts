@@ -34,6 +34,79 @@ test("autorouting phase accepts autorouter and phase index", () => {
   expect(parsed.phaseIndex).toBe(1)
 })
 
+test("autorouting phase accepts per-bus fanout directions", () => {
+  const raw = {
+    autorouter: "fanout",
+    busFanoutDirections: {
+      DATA: "top_right",
+      CONTROL: { direction: "center_left" },
+      CANONICAL_UPPER_DATA: "rightside_top",
+      CANONICAL_TOP_CONTROL: { direction: "topside_right" },
+      UNCONSTRAINED: "center",
+    },
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
+})
+
+test("autorouting phase rejects low-level solver boundary-region names", () => {
+  expect(() =>
+    autoroutingPhaseProps.parse({
+      autorouter: "fanout",
+      busFanoutDirections: { DATA: "right_top" },
+    }),
+  ).toThrow()
+})
+
+test("autorouting phase accepts fanout routing layers", () => {
+  const parsed = autoroutingPhaseProps.parse({
+    autorouter: "fanout",
+    fanoutRoutingLayers: ["top", { name: "inner3" }, "bottom"],
+  })
+
+  expect(parsed.fanoutRoutingLayers).toEqual(["top", "inner3", "bottom"])
+})
+
+test("autorouting phase accepts a fanout pour net map", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutPourNetMap: {
+      inner1: "GND",
+      inner2: ["VCC_CORE", "VCC_IO"],
+    },
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
+})
+
+test("autorouting phase accepts scalar fanout boundary padding", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutBoundaryPadding: "0.6mm",
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw).fanoutBoundaryPadding).toBe(0.6)
+})
+
+test("autorouting phase accepts directional fanout boundary padding", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutBoundaryPadding: {
+      top: "0.4mm",
+      right: 0.8,
+      bottom: "1.2mm",
+      left: 0.5,
+    },
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw).fanoutBoundaryPadding).toEqual({
+    top: 0.4,
+    right: 0.8,
+    bottom: 1.2,
+    left: 0.5,
+  })
+})
+
 test("autorouting phase accepts a single connection", () => {
   const raw: AutoroutingPhaseProps = {
     phaseIndex: 2,

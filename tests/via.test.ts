@@ -24,7 +24,9 @@ test("should parse ViaProps with name and connectsTo", () => {
 test("should parse ViaProps with layers and net assignability flag", () => {
   const raw: ViaProps = {
     name: "v2",
-    layers: ["top", "bottom"],
+    fromLayer: "inner7",
+    toLayer: "inner8",
+    layers: ["inner7", "inner8"],
     holeDiameter: "0.25mm",
     outerDiameter: "0.6mm",
     netIsAssignable: true,
@@ -33,7 +35,9 @@ test("should parse ViaProps with layers and net assignability flag", () => {
   expectTypeOf(raw).toMatchTypeOf<z.input<typeof viaProps>>()
 
   const parsed = viaProps.parse(raw)
-  expect(parsed.layers).toEqual(["top", "bottom"])
+  expect(parsed.fromLayer).toBe("inner7")
+  expect(parsed.toLayer).toBe("inner8")
+  expect(parsed.layers).toEqual(["inner7", "inner8"])
   expect(parsed.holeDiameter).toBe(0.25)
   expect(parsed.outerDiameter).toBe(0.6)
   expect(parsed.netIsAssignable).toBe(true)

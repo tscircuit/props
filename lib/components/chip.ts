@@ -1,5 +1,6 @@
 import { distance, supplier_name } from "circuit-json"
 import type { Distance } from "lib/common/distance"
+import type { InternalCircuitProps } from "lib/components/internal-circuit"
 import type { SpiceModelProps } from "lib/components/spicemodel"
 import {
   type CommonComponentProps,
@@ -20,7 +21,7 @@ import {
 } from "lib/common/schematicPinLabel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
-import type { ReactElement } from "react"
+import { isValidElement, type ReactElement } from "react"
 import { z } from "zod"
 
 export type PinLabelsProp<
@@ -39,6 +40,10 @@ export interface PinCompatibleVariant {
 }
 
 export type SpiceModelElement = ReactElement<SpiceModelProps>
+export type InternalCircuitElement = ReactElement<
+  InternalCircuitProps,
+  "internalcircuit"
+>
 
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
@@ -63,6 +68,12 @@ export interface ChipPropsSU<
   schWidth?: Distance
   schHeight?: Distance
   noSchematicRepresentation?: boolean
+  /**
+   * Whether to show the components from `internalCircuit` in the schematic.
+   * When false, the chip's schematic box is shown instead.
+   * @default false
+   */
+  schShowInternalCircuit?: boolean
   internallyConnectedPins?: (string | number)[][]
   externallyConnectedPins?: string[][]
   /**
@@ -72,6 +83,11 @@ export interface ChipPropsSU<
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
   spiceModel?: SpiceModelElement
+  /**
+   * Functional components contained inside this physical chip package,
+   * wrapped in an `<internalcircuit />` element.
+   */
+  internalCircuit?: InternalCircuitElement
 }
 
 export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
@@ -139,6 +155,10 @@ const spicemodelElement = z.custom<SpiceModelElement>(
   (v) => !!v && typeof v === "object" && "type" in v && "props" in v,
 )
 
+const internalCircuitElement = z.custom<InternalCircuitElement>(
+  (value) => isValidElement(value) && value.type === "internalcircuit",
+)
+
 export const pinLabelsProp = z.record(
   schematicPinLabel,
   schematicPinLabel
@@ -170,9 +190,11 @@ export const chipProps = commonComponentProps.extend({
   schWidth: distance.optional(),
   schHeight: distance.optional(),
   noSchematicRepresentation: z.boolean().optional(),
+  schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
   spiceModel: spicemodelElement.optional(),
+  internalCircuit: internalCircuitElement.optional(),
 })
 
 /**

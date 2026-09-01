@@ -1,13 +1,30 @@
 import { distance } from "circuit-json"
-import { z } from "zod"
 import { ninePointAnchor } from "lib/common/ninePointAnchor"
+import {
+  type SchematicPinArrangement,
+  schematicPinArrangement,
+} from "lib/common/schematicPinDefinitions"
+import {
+  type SchematicPinStyle,
+  schematicPinStyle,
+} from "lib/common/schematicPinStyle"
+import { type PinLabelsProp, pinLabelsProp } from "lib/components/chip"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Distance } from "lib/common/distance"
+import { z } from "zod"
 
 export const schematicBoxProps = z
   .object({
+    name: z.string().optional(),
+    chipRef: z.string().optional(),
+    pinLabels: pinLabelsProp.optional(),
+    schPinArrangement: schematicPinArrangement.optional(),
+    schPinStyle: schematicPinStyle.optional(),
+
     schX: distance.optional(),
     schY: distance.optional(),
+    schSectionName: z.string().optional(),
+    schSheetName: z.string().optional(),
     width: distance.optional(),
     height: distance.optional(),
     overlay: z.array(z.string()).optional(),
@@ -49,8 +66,16 @@ export const schematicBoxProps = z
   )
 
 export interface SchematicBoxProps {
+  name?: string
+  chipRef?: string
+  pinLabels?: PinLabelsProp
+  schPinArrangement?: SchematicPinArrangement
+  /** Per-pin schematic margin overrides keyed by pin number or label. */
+  schPinStyle?: SchematicPinStyle
   schX?: Distance
   schY?: Distance
+  schSectionName?: string
+  schSheetName?: string
   width?: Distance
   height?: Distance
   overlay?: string[]

@@ -33,6 +33,7 @@ import {
 } from "lib/common/schematicPinStyle"
 import { url } from "lib/common/url"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
+import type { ImplicitBreakoutPointSolverFn } from "lib/common/implicitBreakoutPointSolver"
 
 export const layoutConfig = z.object({
   layoutMode: z
@@ -335,12 +336,15 @@ export interface AutorouterConfig {
   cache?: PcbRouteCache
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
+  allowViaInPad?: boolean
   groupMode?:
     | "sequential_trace"
     | "subcircuit"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
+  /** Override the solver used to place implicit breakout points. */
+  implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
     | "sequential_trace"
     | "subcircuit"
@@ -354,6 +358,8 @@ export interface AutorouterConfig {
     | "freerouting"
     | "simplify"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
+    | "single_layer_fanout"
+    | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -373,6 +379,8 @@ export type AutorouterPreset =
   | "freerouting"
   | "simplify"
   | "laser_prefab"
+  | "single_layer_fanout"
+  | "fanout"
   | "auto-jumper"
   | "sequential-trace"
   | "auto-local"
@@ -406,12 +414,23 @@ export const autorouterConfig = z.object({
   cache: z.custom<PcbRouteCache>((v) => true).optional(),
   traceClearance: length.optional(),
   availableJumperTypes: z.array(z.enum(["1206x4", "0603"])).optional(),
+  allowViaInPad: z
+    .boolean()
+    .optional()
+    .describe(
+      "Allows the autorouter to place vias inside connected pads. Omitted or false keeps via-in-pad routing disabled.",
+    ),
   groupMode: z
     .enum(["sequential_trace", "subcircuit", "sequential-trace"])
     .optional(),
   algorithmFn: z
     .custom<(simpleRouteJson: any) => Promise<any>>(
       (v) => typeof v === "function" || v === undefined,
+    )
+    .optional(),
+  implicitBreakoutPointSolverFn: z
+    .custom<ImplicitBreakoutPointSolverFn>(
+      (value) => typeof value === "function" || value === undefined,
     )
     .optional(),
   preset: z
@@ -428,6 +447,8 @@ export const autorouterConfig = z.object({
       "freerouting",
       "simplify",
       "laser_prefab",
+      "single_layer_fanout",
+      "fanout",
       "auto-jumper",
       "sequential-trace",
       "auto-local",
@@ -450,6 +471,8 @@ export const autorouterPreset = z.union([
   z.literal("freerouting"),
   z.literal("simplify"),
   z.literal("laser_prefab"), // Prefabricated PCB with laser copper ablation
+  z.literal("single_layer_fanout"),
+  z.literal("fanout"),
   z.literal("auto-jumper"),
   z.literal("sequential-trace"),
   z.literal("auto-local"),
@@ -468,11 +491,50 @@ export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
 
 export const autorouterEffortLevel = z.enum(["1x", "2x", "5x", "10x", "100x"])
 
+export type AutorouterVersion =
+  | "beta_pipeline1"
+  | "beta_pipeline3"
+  | "beta_pipeline4"
+  | "beta_pipeline5"
+  | "beta_pipeline7"
+  | "beta_pipeline9"
+  | "latest"
+
+const knownAutorouterVersion = z.enum([
+  "beta_pipeline1",
+  "beta_pipeline3",
+  "beta_pipeline4",
+  "beta_pipeline5",
+  "beta_pipeline7",
+  "beta_pipeline9",
+  "latest",
+])
+
+const autorouterVersion = z
+  .custom<AutocompleteString<AutorouterVersion>>(
+    (value) => typeof value === "string",
+  )
+  .transform((value): AutorouterVersion => {
+    const parsedAutorouterVersion = knownAutorouterVersion.safeParse(value)
+    if (parsedAutorouterVersion.success) return parsedAutorouterVersion.data
+
+    console.warn(
+      `Unknown autorouterVersion "${value}", falling back to "latest".`,
+    )
+    return "latest"
+  })
+
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
+  /**
+   * Skip the PCB placement design rule checks for this subcircuit. Placement
+   * errors otherwise cause autorouting to be skipped entirely, so this is the
+   * escape hatch for a placement the checks flag but you intend to keep.
+   */
+  placementDrcChecksDisabled?: boolean
   bomDisabled?: boolean
   defaultTraceWidth?: Distance
 
@@ -481,7 +543,19 @@ export interface SubcircuitGroupProps
 
   autorouter?: AutorouterProp
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
-  autorouterVersion?: "v1" | "v2" | "v3" | "v4" | "v5" | "v6" | "latest"
+  /**
+   * Selects the local autorouting pipeline. Unknown string values emit a
+   * warning and fall back to `latest`.
+   */
+  autorouterVersion?:
+    | "beta_pipeline1"
+    | "beta_pipeline3"
+    | "beta_pipeline4"
+    | "beta_pipeline5"
+    | "beta_pipeline7"
+    | "beta_pipeline9"
+    | "latest"
+    | (string & {})
 
   /**
    * Serialized circuit JSON describing a precompiled subcircuit
@@ -649,6 +723,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   schTraceAutoLabelEnabled: z.boolean().optional(),
   schMaxTraceDistance: distance.optional(),
   routingDisabled: z.boolean().optional(),
+  placementDrcChecksDisabled: z.boolean().optional(),
   bomDisabled: z.boolean().optional(),
   defaultTraceWidth: length.optional(),
   ...routingTolerances.shape,
@@ -658,9 +733,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
-  autorouterVersion: z
-    .enum(["v1", "v2", "v3", "v4", "v5", "v6", "latest"])
-    .optional(),
+  autorouterVersion: autorouterVersion.optional(),
   square: z.boolean().optional(),
   emptyArea: z.string().optional(),
   filledArea: z.string().optional(),

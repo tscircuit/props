@@ -95,3 +95,31 @@ test("should allow optional mosfet connections", () => {
 
   expect(parsedProps.connections).toBeUndefined()
 })
+
+test("should parse mosfet schematic symbol port sides", () => {
+  const rawProps: MosfetProps = {
+    name: "M1",
+    channelType: "n",
+    mosfetMode: "enhancement",
+    symbolDrainSide: "bottom",
+    symbolSourceSide: "top",
+    symbolGateSide: "right",
+  }
+
+  const parsedProps = mosfetProps.parse(rawProps)
+
+  expect(parsedProps.symbolDrainSide).toBe("bottom")
+  expect(parsedProps.symbolSourceSide).toBe("top")
+  expect(parsedProps.symbolGateSide).toBe("right")
+})
+
+test("should reject invalid mosfet schematic symbol port sides", () => {
+  expect(() =>
+    mosfetProps.parse({
+      name: "M1",
+      channelType: "n",
+      mosfetMode: "enhancement",
+      symbolGateSide: "center",
+    }),
+  ).toThrow(z.ZodError)
+})

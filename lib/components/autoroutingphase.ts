@@ -1,5 +1,6 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import { type FanoutProps, fanoutProps } from "../common/fanoutProps"
 import {
   type AutorouterProp,
   type RoutingTolerances,
@@ -7,7 +8,15 @@ import {
   routingTolerances,
 } from "./group"
 
-export interface AutoroutingPhaseProps extends RoutingTolerances {
+export type {
+  BusFanoutDirection,
+  BusFanoutDirectionLiteral,
+  CanonicalBusFanoutDirection,
+  FanoutPourNetMap,
+  LegacyBusFanoutDirection,
+} from "../common/fanoutProps"
+
+export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
@@ -43,6 +52,7 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
+    ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
     const isSimplifyAutorouter =

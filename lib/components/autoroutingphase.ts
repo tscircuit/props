@@ -30,6 +30,8 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   }
   connection?: string
   connections?: string[]
+  // Reroutes traces selected by region or connection. The simplify autorouter
+  // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
 }
 
@@ -55,8 +57,20 @@ export const autoroutingPhaseProps = z
     ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
+    const isSimplifyAutorouter =
+      value.autorouter === "simplify" ||
+      (typeof value.autorouter === "object" &&
+        value.autorouter?.preset === "simplify")
+
+    if (isSimplifyAutorouter && value.reroute !== true) {
+      console.warn(
+        'The "simplify" autorouter preset should only be used with reroute=true',
+      )
+    }
+
     if (
       value.reroute !== undefined &&
+      !(isSimplifyAutorouter && value.reroute === true) &&
       value.region === undefined &&
       value.connection === undefined &&
       value.connections === undefined

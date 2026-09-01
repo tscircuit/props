@@ -212,6 +212,7 @@ export interface AutorouterConfig {
     | "tscircuit_beta"
     | "krt"
     | "freerouting"
+    | "simplify"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
@@ -250,6 +251,8 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   }
   connection?: string
   connections?: string[]
+  // Reroutes traces selected by region or connection. The simplify autorouter
+  // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
 }
 

@@ -356,6 +356,7 @@ export interface AutorouterConfig {
     | "tscircuit_beta"
     | "krt"
     | "freerouting"
+    | "simplify"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
@@ -376,6 +377,7 @@ export type AutorouterPreset =
   | "tscircuit_beta"
   | "krt"
   | "freerouting"
+  | "simplify"
   | "laser_prefab"
   | "single_layer_fanout"
   | "fanout"
@@ -443,6 +445,7 @@ export const autorouterConfig = z.object({
       "tscircuit_beta",
       "krt",
       "freerouting",
+      "simplify",
       "laser_prefab",
       "single_layer_fanout",
       "fanout",
@@ -466,6 +469,7 @@ export const autorouterPreset = z.union([
   z.literal("tscircuit_beta"),
   z.literal("krt"),
   z.literal("freerouting"),
+  z.literal("simplify"),
   z.literal("laser_prefab"), // Prefabricated PCB with laser copper ablation
   z.literal("single_layer_fanout"),
   z.literal("fanout"),

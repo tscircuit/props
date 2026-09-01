@@ -177,12 +177,12 @@ test("autorouting phase warns when simplify is used without reroute", () => {
 test("autorouting phase does not warn when simplify reroutes", () => {
   const warn = spyOn(console, "warn").mockImplementation(() => {})
 
-  autoroutingPhaseProps.parse({
+  const parsed = autoroutingPhaseProps.parse({
     autorouter: "simplify",
     reroute: true,
-    connection: "U1.pin1",
   })
 
+  expect(parsed).toEqual({ autorouter: "simplify", reroute: true })
   expect(warn).not.toHaveBeenCalled()
 })
 

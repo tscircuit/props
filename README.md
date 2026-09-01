@@ -2434,6 +2434,12 @@ export interface PlatformConfig {
 
   pcbDisabled?: boolean;
   routingDisabled?: boolean;
+  /**
+   * Runs the PCB routing phase in planning-only mode: routing algorithms are
+   * skipped, but routing-planning debug objects are still emitted.
+   * Defaults to false.
+   */
+  showRoutingPlan?: boolean;
   schematicDisabled?: boolean;
   partsEngineDisabled?: boolean;
   /**

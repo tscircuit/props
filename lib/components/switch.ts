@@ -5,7 +5,11 @@ import {
 } from "lib/common/layout"
 import { connectionTarget } from "lib/common/connectionsProp"
 import type { SchematicPinLabel } from "lib/common/schematicPinLabel"
-import { type PinLabelsProp, pinLabelsProp } from "lib/components/chip"
+import {
+  noConnectProp,
+  type PinLabelsProp,
+  pinLabelsProp,
+} from "lib/components/chip"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 
@@ -14,6 +18,12 @@ import { z } from "zod"
 export interface SwitchProps extends CommonComponentProps {
   type?: "spst" | "spdt" | "dpst" | "dpdt"
   pinLabels?: PinLabelsProp<SchematicPinLabel>
+  /**
+   * Pin names that should not be connected to anything. Marks the
+   * corresponding source ports with do_not_connect so downstream DRC checks
+   * skip them (see tscircuit/tscircuit#4443).
+   */
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[]
   isNormallyClosed?: boolean
   spdt?: boolean
   spst?: boolean
@@ -36,6 +46,7 @@ export const switchProps = commonComponentProps
     dpst: z.boolean().optional(),
     dpdt: z.boolean().optional(),
     pinLabels: pinLabelsProp.optional(),
+    noConnect: noConnectProp.optional(),
     simSwitchFrequency: frequency.optional(),
     simCloseAt: ms.optional(),
     simOpenAt: ms.optional(),

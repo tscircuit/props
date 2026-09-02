@@ -42,3 +42,14 @@ test("should parse switch props with connections", () => {
   const parsedProps = switchProps.parse(rawProps)
   expect(parsedProps.connections?.pin1).toBe(".U1 > .pin1")
 })
+
+test("should parse switch props with noConnect pins", () => {
+  const rawProps: SwitchProps = {
+    name: "switch",
+    type: "spdt",
+    noConnect: ["pin3"],
+  }
+
+  const parsedProps = switchProps.parse(rawProps)
+  expect(parsedProps.noConnect).toEqual(["pin3"])
+})

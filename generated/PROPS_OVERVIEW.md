@@ -1039,6 +1039,18 @@ export interface DifferentialPairProps {
   pcbTraceGap?: number | string
   /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
   maxUncoupledLength?: number | string
+  /** Explicit PCB trace width for each member of the differential pair. Raw numbers are millimeters. */
+  pcbTraceWidth?: number | string
+  /** Alias for pcbTraceWidth. Raw numbers are millimeters. */
+  traceWidth?: number | string
+  /** Target or preferred PCB layer on which the differential pair should be routed. */
+  layer?: LayerRefInput
+  /** Allowed PCB layers on which the differential pair may be routed. */
+  pcbAllowedLayers?: LayerRefInput[]
+  /** Whether both traces of the differential pair must be routed on the same layer. */
+  sameLayer?: boolean
+  /** Whether via transitions between layers must be matched between pair members. */
+  matchViaTransitions?: boolean
 }
 
 

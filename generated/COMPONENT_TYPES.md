@@ -2132,8 +2132,14 @@ export interface DifferentialPairProps {
   targetDifferentialImpedance?: number | string
   pcbTraceGap?: number | string
   maxUncoupledLength?: number | string
+  pcbTraceWidth?: number | string
+  traceWidth?: number | string
+  layer?: LayerRefInput
+  pcbAllowedLayers?: LayerRefInput[]
+  sameLayer?: boolean
+  matchViaTransitions?: boolean
 }
-/** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
+/** Whether via transitions between layers must be matched between pair members. */
 export const differentialPairProps = z.object({
   name: z.string().optional(),
   positiveConnection: z.string(),
@@ -2144,6 +2150,12 @@ export const differentialPairProps = z.object({
     .optional(),
   pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
   maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
+  pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
+  traceWidth: distance.pipe(z.number().positive().finite()).optional(),
+  layer: layer_ref.optional(),
+  pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
+  sameLayer: z.boolean().optional(),
+  matchViaTransitions: z.boolean().optional(),
 })
 ```
 
@@ -3709,7 +3721,7 @@ export interface PinHeaderProps extends CommonComponentProps {
   schHeight?: number | string
 }
 .extend({
-    pinCount: z.number(),
+    pinCount: z.number().int().positive(),
     pitch: distance.optional(),
     schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
     gender: z

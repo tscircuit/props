@@ -5,7 +5,11 @@ import {
 } from "lib/common/layout"
 import { connectionTarget } from "lib/common/connectionsProp"
 import type { SchematicPinLabel } from "lib/common/schematicPinLabel"
-import { type PinLabelsProp, pinLabelsProp } from "lib/components/chip"
+import {
+  noConnectProp,
+  type PinLabelsProp,
+  pinLabelsProp,
+} from "lib/components/chip"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 
@@ -24,12 +28,17 @@ export interface SwitchProps extends CommonComponentProps {
   simOpenAt?: number | string
   simStartClosed?: boolean
   simStartOpen?: boolean
+  /**
+   * Pins intentionally left unconnected.
+   */
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[]
   connections?: Connections<string>
 }
 
 export const switchProps = commonComponentProps
   .extend({
     type: z.enum(["spst", "spdt", "dpst", "dpdt"]).optional(),
+    noConnect: noConnectProp.optional(),
     isNormallyClosed: z.boolean().optional().default(false),
     spst: z.boolean().optional(),
     spdt: z.boolean().optional(),

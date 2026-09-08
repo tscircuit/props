@@ -570,6 +570,9 @@ export interface CapacitorProps<
   maxVoltageRating?: number | string;
   schShowRatings?: boolean;
   polarized?: boolean;
+  tolerance?: number | string;
+  temperatureCoefficient?: number | string;
+  equivalentSeriesResistance?: number | string;
   decouplingFor?: string;
   decouplingTo?: string;
   bypassFor?: string;

@@ -1749,6 +1749,8 @@ export interface ResistorProps<
 > extends CommonComponentProps<PinLabel> {
   resistance: number | string;
   tolerance?: number | string;
+  powerRating?: number | string;
+  temperatureOperatingRange?: [number, number] | string;
   pullupFor?: string;
   pullupTo?: string;
   pulldownFor?: string;

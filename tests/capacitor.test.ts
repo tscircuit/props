@@ -27,3 +27,19 @@ test("parses numeric maxDecouplingTraceLength as millimeters", () => {
 
   expect(parsedProps.maxDecouplingTraceLength).toBe(3)
 })
+
+test("accepts documented specification props", () => {
+  const rawProps: CapacitorProps = {
+    name: "C2",
+    capacitance: "100nF",
+    tolerance: "10%",
+    temperatureCoefficient: "X7R",
+    equivalentSeriesResistance: "0.02",
+  }
+
+  const parsedProps = capacitorProps.parse(rawProps)
+
+  expect(parsedProps.tolerance).toBeCloseTo(0.1)
+  expect(parsedProps.temperatureCoefficient).toBe("X7R")
+  expect(parsedProps.equivalentSeriesResistance).toBeCloseTo(0.02)
+})

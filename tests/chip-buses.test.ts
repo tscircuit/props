@@ -7,7 +7,7 @@ test("chip bus declarations use standalone bus parsing", () => {
     buses: [
       {
         name: "DATA",
-        connections: [".U1 > .D0", ".U1 > .D1"],
+        pinNames: ["D0", "D1"],
         maxLengthSkew: "500um",
         targetImpedance: "50ohm",
         pcbTraceWidth: "0.2mm",
@@ -16,11 +16,19 @@ test("chip bus declarations use standalone bus parsing", () => {
         preferredLayers: ["top", "bottom"],
         routingPhaseIndex: 1,
       },
-      { connections: ["RESET"], routingPhaseIndex: null },
+      { pinNames: ["RESET"], routingPhaseIndex: null },
     ],
   }
   const parsed = chipProps.parse(props)
-  expect(parsed.buses).toEqual(props.buses!.map((bus) => busProps.parse(bus)))
+  expect(parsed.buses).toEqual(
+    props.buses!.map(({ pinNames, ...options }) => {
+      const { connections, ...parsedOptions } = busProps.parse({
+        ...options,
+        connections: pinNames,
+      })
+      return { ...parsedOptions, pinNames: connections }
+    }),
+  )
   expect(parsed.buses?.[0]?.maxLengthSkew).toBe(0.5)
   expect(parsed.buses?.[0]?.targetImpedance).toBe(50)
   expect(parsed.buses?.[0]?.pcbTraceWidth).toBe(0.2)
@@ -34,13 +42,15 @@ test("chip buses are optional and may be empty", () => {
 test("chip rejects invalid nested bus declarations", () => {
   for (const bus of [
     {},
-    { connections: [] },
-    { connections: [1] },
-    { connections: ["DATA"], maxLengthSkew: "-1mm" },
-    { connections: ["DATA"], targetImpedance: 0 },
-    { connections: ["DATA"], pcbTraceWidth: 0 },
-    { connections: ["DATA"], pcbAllowedLayers: [] },
-    { connections: ["DATA"], preferredLayers: [] },
+    { connections: ["DATA"] },
+    { pinNames: [] },
+    { pinNames: [".U1 > .D0"] },
+    { pinNames: [1] },
+    { pinNames: ["DATA"], maxLengthSkew: "-1mm" },
+    { pinNames: ["DATA"], targetImpedance: 0 },
+    { pinNames: ["DATA"], pcbTraceWidth: 0 },
+    { pinNames: ["DATA"], pcbAllowedLayers: [] },
+    { pinNames: ["DATA"], preferredLayers: [] },
   ]) {
     const result = chipProps.safeParse({ name: "U1", buses: [bus] })
     expect(result.success).toBe(false)
@@ -50,11 +60,26 @@ test("chip rejects invalid nested bus declarations", () => {
   }
 })
 
-test("chip buses require connections at compile time", () => {
+test("chip buses require pinNames at compile time", () => {
   const props: ChipProps = {
     name: "U1",
-    // @ts-expect-error Each bus requires connections.
+    // @ts-expect-error Each bus requires pinNames.
     buses: [{ name: "DATA" }],
   }
   void props
+})
+
+test("chip bus pinNames follow the chip pin label type", () => {
+  const pinLabels = { pin1: "D0", pin2: "D1" } as const
+  const props: ChipProps<typeof pinLabels> = {
+    name: "U1",
+    pinLabels,
+    buses: [{ pinNames: ["D0", "pin2"] }],
+  }
+  expect(chipProps.parse(props).buses?.[0]?.pinNames).toEqual(["D0", "pin2"])
+  const invalid: ChipProps<typeof pinLabels> = {
+    // @ts-expect-error Bus members must be known chip pin names.
+    buses: [{ pinNames: ["UNKNOWN"] }],
+  }
+  void invalid
 })

@@ -672,6 +672,13 @@ export interface CapacitorProps<PinLabel extends string = string>
 }
 
 
+export interface ChipBusProps<PinLabel extends string = string>
+  extends Omit<BusProps, "connections"> {
+  /** Local pin names or numbers on this chip. Core resolves these to bus connections. */
+  pinNames: PinLabel[]
+}
+
+
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
@@ -710,13 +717,13 @@ export interface ChipPropsSU<
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
   /**
-   * Bus declarations for core to create alongside this chip. Each entry uses
-   * the same trace names or port selectors and routing options as <bus />.
+   * Bus declarations for core to create alongside this chip. Each entry names
+   * local chip pins with pinNames and uses the routing options from <bus />.
    * Values use busProps parsing, including canonical millimeter/ohm units.
    * Omission or an empty array declares no buses. No aliases or merging with
    * standalone buses are applied; existing chip props are unchanged.
    */
-  buses?: BusProps[]
+  buses?: ChipBusProps<PinLabel>[]
   spiceModel?: SpiceModelElement
   /**
    * Functional components contained inside this physical chip package,

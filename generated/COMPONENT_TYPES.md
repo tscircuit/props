@@ -1758,6 +1758,14 @@ export const capacitorProps = commonComponentProps.extend({
 ### chip
 
 ```typescript
+export interface ChipBusProps<PinLabel extends string = string>
+  extends Omit<BusProps, "connections"> {
+  pinNames: PinLabel[]
+}
+/** Local pin names or numbers on this chip. Core resolves these to bus connections. */
+export const chipBusProps = busProps.omit({ connections: true }).extend({
+  pinNames: z.array(schematicPinLabel).min(1),
+})
 export interface PinCompatibleVariant {
   manufacturerPartNumber?: string
   supplierPartNumber?: SupplierPartNumbers
@@ -1782,7 +1790,7 @@ export interface ChipPropsSU<
   externallyConnectedPins?: string[][]
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
-  buses?: BusProps[]
+  buses?: ChipBusProps<PinLabel>[]
   spiceModel?: SpiceModelElement
   internalCircuit?: InternalCircuitElement
 }
@@ -1827,7 +1835,7 @@ export const chipProps = commonComponentProps.extend({
   schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
-  buses: z.array(busProps).optional(),
+  buses: z.array(chipBusProps).optional(),
   spiceModel: spicemodelElement.optional(),
   internalCircuit: internalCircuitElement.optional(),
 })

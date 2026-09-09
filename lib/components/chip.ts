@@ -35,6 +35,18 @@ export type PinLabelFromPinLabelMap<PinLabelMap extends PinLabelsProp> =
     ? PinLabel
     : never
 
+export interface ChipBusProps<PinLabel extends string = string>
+  extends Omit<BusProps, "connections"> {
+  /** Local pin names or numbers on this chip. Core resolves these to bus connections. */
+  pinNames: PinLabel[]
+}
+
+export const chipBusProps = busProps.omit({ connections: true }).extend({
+  pinNames: z.array(schematicPinLabel).min(1),
+})
+
+expectTypesMatch<ChipBusProps, z.input<typeof chipBusProps>>(true)
+
 export interface PinCompatibleVariant {
   manufacturerPartNumber?: string
   supplierPartNumber?: SupplierPartNumbers
@@ -84,13 +96,13 @@ export interface ChipPropsSU<
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
   /**
-   * Bus declarations for core to create alongside this chip. Each entry uses
-   * the same trace names or port selectors and routing options as <bus />.
+   * Bus declarations for core to create alongside this chip. Each entry names
+   * local chip pins with pinNames and uses the routing options from <bus />.
    * Values use busProps parsing, including canonical millimeter/ohm units.
    * Omission or an empty array declares no buses. No aliases or merging with
    * standalone buses are applied; existing chip props are unchanged.
    */
-  buses?: BusProps[]
+  buses?: ChipBusProps<PinLabel>[]
   spiceModel?: SpiceModelElement
   /**
    * Functional components contained inside this physical chip package,
@@ -202,7 +214,7 @@ export const chipProps = commonComponentProps.extend({
   schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
-  buses: z.array(busProps).optional(),
+  buses: z.array(chipBusProps).optional(),
   spiceModel: spicemodelElement.optional(),
   internalCircuit: internalCircuitElement.optional(),
 })

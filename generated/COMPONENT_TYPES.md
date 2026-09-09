@@ -942,7 +942,17 @@ export const pcbSxValue = z.object({
 
 ```typescript
 export interface PinAttributeMap {
-  electricalType?: PinElectricalType
+  isInput?: boolean
+  isOutput?: boolean
+  isPassive?: boolean
+  isFree?: boolean
+  isUnspecified?: boolean
+  canUseTriState?: boolean
+  isUsingTriState?: boolean
+  canUseOpenCollector?: boolean
+  isUsingOpenCollector?: boolean
+  canUseOpenEmitter?: boolean
+  isUsingOpenEmitter?: boolean
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability
@@ -970,17 +980,19 @@ export interface PinAttributeMap {
   recommendedDecouplingCapacitorCapacitance?: string | number
   isGpio?: boolean
 }
-/**
-   * Electrical classification, preserved as the supplied enum value with no
-   * default or aliases. Omission leaves the classification unset; "unspecified"
-   * explicitly declares an unknown type. "free" is a connectable pin with no
-   * electrical function, while "passive" is a passive component terminal.
-   * This metadata does not infer, override, or validate conflicts with existing
-   * power, drive-mode, or connection attributes. Existing props need no migration;
-   * keep using requiresPower/providesPower and doNotConnect where applicable.
-   */
+/** Whether the pin is configured as an open-emitter output. */
 export const pinAttributeMap = z.object({
-  electricalType: pinElectricalType.optional(),
+  isInput: z.boolean().optional(),
+  isOutput: z.boolean().optional(),
+  isPassive: z.boolean().optional(),
+  isFree: z.boolean().optional(),
+  isUnspecified: z.boolean().optional(),
+  canUseTriState: z.boolean().optional(),
+  isUsingTriState: z.boolean().optional(),
+  canUseOpenCollector: z.boolean().optional(),
+  isUsingOpenCollector: z.boolean().optional(),
+  canUseOpenEmitter: z.boolean().optional(),
+  isUsingOpenEmitter: z.boolean().optional(),
   capabilities: z.array(pinCapability).optional(),
   activeCapabilities: z.array(pinCapability).optional(),
   activeCapability: pinCapability.optional(),

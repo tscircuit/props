@@ -1,48 +1,51 @@
-# Pin electrical types
+# Pin electrical attributes
 
-Use `pinAttributes[pin].electricalType` to describe a pin's electrical role:
+Use optional boolean attributes to describe each pin's electrical role:
 
 ```tsx
 <chip
   name="U1"
   pinAttributes={{
-    pin1: { electricalType: "input" },
-    pin2: { electricalType: "tri_state" },
-    pin3: { electricalType: "open_collector" },
-    pin4: { electricalType: "power_input", requiresPower: true },
+    pin1: { isInput: true },
+    pin2: { isInput: true, isOutput: true },
+    pin3: { isOutput: true, canUseTriState: true, isUsingTriState: true },
+    pin4: { requiresPower: true },
   }}
 />
 ```
 
-The optional `PinElectricalType` enum represents every classification in the
-[KiCad pin conflicts map](https://docs.kicad.org/master/en/eeschema/eeschema.html#erc_configuration):
+The classifications in the KiCad pin conflicts map can be represented as follows:
 
-| Pin type | `electricalType` |
+| Pin type | Attributes |
 | --- | --- |
-| Input | `"input"` |
-| Output | `"output"` |
-| Bidirectional | `"bidirectional"` |
-| Tri-state | `"tri_state"` |
-| Passive | `"passive"` |
-| Free | `"free"` |
-| Unspecified | `"unspecified"` |
-| Power input | `"power_input"` |
-| Power output | `"power_output"` |
-| Open collector | `"open_collector"` |
-| Open emitter | `"open_emitter"` |
+| Input | `isInput: true` |
+| Output | `isOutput: true` |
+| Bidirectional | `isInput: true, isOutput: true` |
+| Tri-state | `isOutput: true, isUsingTriState: true` |
+| Passive | `isPassive: true` |
+| Free | `isFree: true` |
+| Unspecified | `isUnspecified: true` |
+| Power input | `requiresPower: true` (existing) |
+| Power output | `providesPower: true` (existing) |
+| Open collector | `isOutput: true, isUsingOpenCollector: true` |
+| Open emitter | `isOutput: true, isUsingOpenEmitter: true` |
 
-Values parse unchanged. There are no aliases or defaults: an omitted field stays
-unset, whereas `"unspecified"` explicitly records an unknown electrical type.
-`"free"` describes a connectable pin with no electrical function; it is distinct
-from a passive terminal and from `doNotConnect: true`.
+`canUseTriState`, `canUseOpenCollector`, and `canUseOpenEmitter` describe supported
+modes; the corresponding `isUsing…` flags describe configuration, following the
+existing open-drain and push-pull pattern. `isUsingTriState` does not describe
+whether the pin is currently in its high-impedance state. Add `isInput: true` when
+a tri-state pin also accepts signals.
 
-Existing attributes remain valid and independent. Continue supplying
-`requiresPower`, `providesPower`, drive-mode flags, and connection requirements
-for consumers that use them. The enum neither populates nor overrides those
-fields, and parsing does not validate contradictions between them. Open-collector
-and open-emitter classifications are not aliases for the existing open-drain
-configuration flags. No migration is required.
+All new fields accept only booleans and preserve both `true` and `false`. Omitted
+fields stay unset; there are no defaults, aliases, inferred attributes, or
+cross-field conflict validation. `isUnspecified: true` explicitly records an
+unknown role. `isFree: true` describes a connectable pin with no electrical
+function, distinct from a passive terminal or `doNotConnect: true`.
+
+Existing attributes remain valid and no migration is required. Power types reuse
+`requiresPower` and `providesPower`. Open-collector and open-emitter flags remain
+distinct from the existing open-drain flags.
 
 This package validates and types the metadata only. Propagation into Circuit JSON
 and electrical rules checking, including pairwise conflict severities, require
-downstream support; declaring a type does not enable those checks by itself.
+downstream support; declaring these attributes does not enable those checks.

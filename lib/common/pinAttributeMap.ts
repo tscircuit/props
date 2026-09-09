@@ -14,34 +14,29 @@ export const pinCapability = z.enum([
 
 export type PinCapability = z.input<typeof pinCapability>
 
-/** Electrical pin classifications for electrical rules checking. */
-export const pinElectricalType = z.enum([
-  "input",
-  "output",
-  "bidirectional",
-  "tri_state",
-  "passive",
-  "free",
-  "unspecified",
-  "power_input",
-  "power_output",
-  "open_collector",
-  "open_emitter",
-])
-
-export type PinElectricalType = z.input<typeof pinElectricalType>
-
 export interface PinAttributeMap {
-  /**
-   * Electrical classification, preserved as the supplied enum value with no
-   * default or aliases. Omission leaves the classification unset; "unspecified"
-   * explicitly declares an unknown type. "free" is a connectable pin with no
-   * electrical function, while "passive" is a passive component terminal.
-   * This metadata does not infer, override, or validate conflicts with existing
-   * power, drive-mode, or connection attributes. Existing props need no migration;
-   * keep using requiresPower/providesPower and doNotConnect where applicable.
-   */
-  electricalType?: PinElectricalType
+  /** Whether the pin accepts a signal. Combine with isOutput for bidirectional pins. */
+  isInput?: boolean
+  /** Whether the pin drives a signal. Combine with isInput for bidirectional pins. */
+  isOutput?: boolean
+  /** Whether the pin is a passive component terminal. */
+  isPassive?: boolean
+  /** Whether the pin has no electrical function but may be connected; distinct from doNotConnect. */
+  isFree?: boolean
+  /** Whether the electrical role is explicitly unknown; omission makes no declaration. */
+  isUnspecified?: boolean
+  /** Whether the pin supports a high-impedance output state. */
+  canUseTriState?: boolean
+  /** Whether the pin is configured for tri-state operation, not its instantaneous impedance. */
+  isUsingTriState?: boolean
+  /** Whether the pin supports an open-collector output. */
+  canUseOpenCollector?: boolean
+  /** Whether the pin is configured as an open-collector output. */
+  isUsingOpenCollector?: boolean
+  /** Whether the pin supports an open-emitter output. */
+  canUseOpenEmitter?: boolean
+  /** Whether the pin is configured as an open-emitter output. */
+  isUsingOpenEmitter?: boolean
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability
@@ -71,7 +66,17 @@ export interface PinAttributeMap {
 }
 
 export const pinAttributeMap = z.object({
-  electricalType: pinElectricalType.optional(),
+  isInput: z.boolean().optional(),
+  isOutput: z.boolean().optional(),
+  isPassive: z.boolean().optional(),
+  isFree: z.boolean().optional(),
+  isUnspecified: z.boolean().optional(),
+  canUseTriState: z.boolean().optional(),
+  isUsingTriState: z.boolean().optional(),
+  canUseOpenCollector: z.boolean().optional(),
+  isUsingOpenCollector: z.boolean().optional(),
+  canUseOpenEmitter: z.boolean().optional(),
+  isUsingOpenEmitter: z.boolean().optional(),
   capabilities: z.array(pinCapability).optional(),
   activeCapabilities: z.array(pinCapability).optional(),
   activeCapability: pinCapability.optional(),

@@ -15,16 +15,14 @@ export const pinCapability = z.enum([
 export type PinCapability = z.input<typeof pinCapability>
 
 export interface PinAttributeMap {
-  /** Whether the pin accepts a signal. Combine with isOutput for bidirectional pins. */
+  /** Whether the pin accepts a signal. */
   isInput?: boolean
-  /** Whether the pin drives a signal. Combine with isInput for bidirectional pins. */
+  /** Whether the pin drives a signal. */
   isOutput?: boolean
+  /** Whether the pin can both accept and drive signals. */
+  isBidirectional?: boolean
   /** Whether the pin is a passive component terminal. */
   isPassive?: boolean
-  /** Whether the pin has no electrical function but may be connected; distinct from doNotConnect. */
-  isFree?: boolean
-  /** Whether the electrical role is explicitly unknown; omission makes no declaration. */
-  isUnspecified?: boolean
   /** Whether the pin supports a high-impedance output state. */
   canUseTriState?: boolean
   /** Whether the pin is configured for tri-state operation, not its instantaneous impedance. */
@@ -68,9 +66,8 @@ export interface PinAttributeMap {
 export const pinAttributeMap = z.object({
   isInput: z.boolean().optional(),
   isOutput: z.boolean().optional(),
+  isBidirectional: z.boolean().optional(),
   isPassive: z.boolean().optional(),
-  isFree: z.boolean().optional(),
-  isUnspecified: z.boolean().optional(),
   canUseTriState: z.boolean().optional(),
   isUsingTriState: z.boolean().optional(),
   canUseOpenCollector: z.boolean().optional(),

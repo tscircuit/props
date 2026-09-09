@@ -944,9 +944,8 @@ export const pcbSxValue = z.object({
 export interface PinAttributeMap {
   isInput?: boolean
   isOutput?: boolean
+  isBidirectional?: boolean
   isPassive?: boolean
-  isFree?: boolean
-  isUnspecified?: boolean
   canUseTriState?: boolean
   isUsingTriState?: boolean
   canUseOpenCollector?: boolean
@@ -984,9 +983,8 @@ export interface PinAttributeMap {
 export const pinAttributeMap = z.object({
   isInput: z.boolean().optional(),
   isOutput: z.boolean().optional(),
+  isBidirectional: z.boolean().optional(),
   isPassive: z.boolean().optional(),
-  isFree: z.boolean().optional(),
-  isUnspecified: z.boolean().optional(),
   canUseTriState: z.boolean().optional(),
   isUsingTriState: z.boolean().optional(),
   canUseOpenCollector: z.boolean().optional(),

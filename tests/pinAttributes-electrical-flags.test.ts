@@ -5,8 +5,7 @@ const electricalFlags = [
   "isInput",
   "isOutput",
   "isPassive",
-  "isFree",
-  "isUnspecified",
+  "isBidirectional",
   "canUseTriState",
   "isUsingTriState",
   "canUseOpenCollector",
@@ -48,12 +47,10 @@ test.each([...electricalFlags])("rejects non-boolean values for %s", (flag) => {
 test("electrical flags compose with existing attributes without inferred defaults", () => {
   const pinAttributes: Record<string, PinAttributeMap> = {
     pin1: {},
-    pin2: { isInput: true, isOutput: true, isGpio: true },
+    pin2: { isBidirectional: true, isGpio: true },
     pin3: { requiresPower: true, requiresVoltage: "3.3V" },
     pin4: { providesPower: true },
     pin5: { isOutput: true, canUseTriState: true, isUsingTriState: false },
-    pin6: { isFree: true, doNotConnect: false },
-    pin7: { isUnspecified: true },
     pin8: { isPassive: true },
     pin9: {
       isOutput: true,

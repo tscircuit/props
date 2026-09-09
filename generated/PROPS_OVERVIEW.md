@@ -498,7 +498,9 @@ export interface BreakoutProps
    * Saved port-to-exit wire/via routes in the fanout's local PCB frame.
    * Numeric distances are mm; unit strings are normalized to mm. Each route
    * must start at its selected port and end at its fanout exit. Layers name
-   * physical board layers. Core creates the exits and preserves saved copper.
+   * physical board layers. Either endpoint may be a via when permitted by
+   * the circuit's routing rules (e.g. allowViaInPad for a via at a pad).
+   * Core creates the exits and preserves saved copper.
    * When supplied, replaces automatic routing (including `autorouter`) for
    * this fanout and must cover all its routing connections. Do not also add
    * a breakoutpoint/fanoutpoint for the same port. Omitted by default; existing

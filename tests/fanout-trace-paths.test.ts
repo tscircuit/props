@@ -67,7 +67,7 @@ test("saved fanout paths reject invalid geometry and layer transitions", () => {
           route_type: "via",
           x: 1,
           y: 1,
-          from_layer: "top",
+          from_layer: "inner1",
           to_layer: "bottom",
         },
       ],
@@ -91,4 +91,60 @@ test("saved fanout paths reject invalid geometry and layer transitions", () => {
     },
   ])
     expect(fanoutTracePath.safeParse(invalid).success).toBe(false)
+})
+
+const topToBottomVia = {
+  route_type: "via" as const,
+  x: 0,
+  y: 0,
+  from_layer: "top" as const,
+  to_layer: "bottom" as const,
+}
+const topWire = {
+  route_type: "wire" as const,
+  x: 1,
+  y: 1,
+  width: 0.2,
+  layer: "top" as const,
+}
+
+test.each([
+  ["start", [topToBottomVia, { ...topWire, layer: "bottom" }]],
+  ["end", [topWire, topToBottomVia]],
+  [
+    "both",
+    [
+      topToBottomVia,
+      { ...topWire, layer: "bottom" },
+      { ...topToBottomVia, x: 2, from_layer: "bottom", to_layer: "top" },
+    ],
+  ],
+  [
+    "consecutive vias",
+    [
+      topToBottomVia,
+      { ...topToBottomVia, x: 2, from_layer: "bottom", to_layer: "top" },
+    ],
+  ],
+] satisfies [string, FanoutTracePath["route"]][])(
+  "saved fanout paths accept vias at %s with continuous layers",
+  (_name, route) => {
+    const savedPath = { connection: "U1.1", route } satisfies FanoutTracePath
+    const original = JSON.stringify(savedPath)
+    const parsed = breakoutProps.parse({
+      autorouter: { allowViaInPad: true },
+      pcbTracePaths: [savedPath],
+    })
+    expect(parsed.pcbTracePaths).toEqual([savedPath])
+    expect(JSON.stringify(savedPath)).toBe(original)
+  },
+)
+
+test("consecutive endpoint vias must have continuous layers", () => {
+  expect(
+    fanoutTracePath.safeParse({
+      connection: "U1.1",
+      route: [topToBottomVia, { ...topToBottomVia, x: 2 }],
+    }).success,
+  ).toBe(false)
 })

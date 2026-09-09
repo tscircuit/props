@@ -31,7 +31,10 @@ const routePoint = z.discriminatedUnion("route_type", [
  * fanout's local PCB frame, in mm: +X right, +Y up, right-handed with +Z
  * above the board. They are points (placement adds translation), not
  * directions. Numeric distances are mm; unit strings are parsed to mm.
- * Layers are physical board layers, independent of placement.
+ * Layers are physical board layers, independent of placement. Either endpoint
+ * may be a via: the initial layer is its from_layer and the final layer is its
+ * to_layer. Placement legality (including allowViaInPad) is checked by core,
+ * since this schema has no pad geometry or inherited routing configuration.
  */
 export const fanoutTracePath = z.object({
   connection: z.string().min(1),
@@ -39,16 +42,8 @@ export const fanoutTracePath = z.object({
     .array(routePoint)
     .min(2)
     .superRefine((route, ctx) => {
-      if (
-        route[0]?.route_type !== "wire" ||
-        route.at(-1)?.route_type !== "wire"
-      ) {
-        ctx.addIssue({
-          code: "custom",
-          message: "A fanout trace path must start and end with wire points",
-        })
-      }
-      let layer = route[0]?.route_type === "wire" ? route[0].layer : undefined
+      const first = route[0]
+      let layer = first?.route_type === "via" ? first.from_layer : first?.layer
       for (const point of route) {
         if (
           (point.route_type === "wire" ? point.layer : point.from_layer) !==

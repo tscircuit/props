@@ -71,6 +71,11 @@ export interface PlatformConfig {
 
   autorouterMap?: Record<string, AutorouterDefinition>
 
+  /** Use networked Pipeline9 node solving at effort 1. Omitted or false keeps local routing.
+   * Explicit alternative pipelines and effort levels retain their local solver.
+   */
+  useCloudAutorouter?: boolean
+
   /**
    * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
    * Defaults to false because these presets are otherwise disabled.
@@ -265,6 +270,7 @@ export const platformConfig = z.object({
   defaultSpiceEngine: defaultSpiceEngine.optional(),
   unitPreference: z.enum(["mm", "in", "mil"]).optional(),
   localCacheEngine: localCacheEngine.optional(),
+  useCloudAutorouter: z.boolean().optional(),
   enablePartOrientationAnalysis: z.boolean().optional(),
   pcbPackSolverTimeoutMs: z.number().finite().positive().optional(),
   pcbDisabled: z.boolean().optional(),

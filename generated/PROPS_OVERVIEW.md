@@ -2124,6 +2124,26 @@ export interface PillWithRectPadPlatedHoleProps
 
 
 export interface PinAttributeMap {
+  /** Whether the pin accepts a signal. */
+  isInput?: boolean
+  /** Whether the pin drives a signal. */
+  isOutput?: boolean
+  /** Whether the pin can both accept and drive signals. */
+  isBidirectional?: boolean
+  /** Whether the pin is a passive component terminal. */
+  isPassive?: boolean
+  /** Whether the pin supports a high-impedance output state. */
+  canUseTriState?: boolean
+  /** Whether the pin is configured for tri-state operation, not its instantaneous impedance. */
+  isUsingTriState?: boolean
+  /** Whether the pin supports an open-collector output. */
+  canUseOpenCollector?: boolean
+  /** Whether the pin is configured as an open-collector output. */
+  isUsingOpenCollector?: boolean
+  /** Whether the pin supports an open-emitter output. */
+  canUseOpenEmitter?: boolean
+  /** Whether the pin is configured as an open-emitter output. */
+  isUsingOpenEmitter?: boolean
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability

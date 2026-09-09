@@ -942,6 +942,16 @@ export const pcbSxValue = z.object({
 
 ```typescript
 export interface PinAttributeMap {
+  isInput?: boolean
+  isOutput?: boolean
+  isBidirectional?: boolean
+  isPassive?: boolean
+  canUseTriState?: boolean
+  isUsingTriState?: boolean
+  canUseOpenCollector?: boolean
+  isUsingOpenCollector?: boolean
+  canUseOpenEmitter?: boolean
+  isUsingOpenEmitter?: boolean
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability
@@ -969,7 +979,18 @@ export interface PinAttributeMap {
   recommendedDecouplingCapacitorCapacitance?: string | number
   isGpio?: boolean
 }
+/** Whether the pin is configured as an open-emitter output. */
 export const pinAttributeMap = z.object({
+  isInput: z.boolean().optional(),
+  isOutput: z.boolean().optional(),
+  isBidirectional: z.boolean().optional(),
+  isPassive: z.boolean().optional(),
+  canUseTriState: z.boolean().optional(),
+  isUsingTriState: z.boolean().optional(),
+  canUseOpenCollector: z.boolean().optional(),
+  isUsingOpenCollector: z.boolean().optional(),
+  canUseOpenEmitter: z.boolean().optional(),
+  isUsingOpenEmitter: z.boolean().optional(),
   capabilities: z.array(pinCapability).optional(),
   activeCapabilities: z.array(pinCapability).optional(),
   activeCapability: pinCapability.optional(),

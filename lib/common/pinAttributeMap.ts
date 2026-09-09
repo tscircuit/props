@@ -14,7 +14,34 @@ export const pinCapability = z.enum([
 
 export type PinCapability = z.input<typeof pinCapability>
 
+/** Electrical pin classifications for electrical rules checking. */
+export const pinElectricalType = z.enum([
+  "input",
+  "output",
+  "bidirectional",
+  "tri_state",
+  "passive",
+  "free",
+  "unspecified",
+  "power_input",
+  "power_output",
+  "open_collector",
+  "open_emitter",
+])
+
+export type PinElectricalType = z.input<typeof pinElectricalType>
+
 export interface PinAttributeMap {
+  /**
+   * Electrical classification, preserved as the supplied enum value with no
+   * default or aliases. Omission leaves the classification unset; "unspecified"
+   * explicitly declares an unknown type. "free" is a connectable pin with no
+   * electrical function, while "passive" is a passive component terminal.
+   * This metadata does not infer, override, or validate conflicts with existing
+   * power, drive-mode, or connection attributes. Existing props need no migration;
+   * keep using requiresPower/providesPower and doNotConnect where applicable.
+   */
+  electricalType?: PinElectricalType
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability
@@ -44,6 +71,7 @@ export interface PinAttributeMap {
 }
 
 export const pinAttributeMap = z.object({
+  electricalType: pinElectricalType.optional(),
   capabilities: z.array(pinCapability).optional(),
   activeCapabilities: z.array(pinCapability).optional(),
   activeCapability: pinCapability.optional(),

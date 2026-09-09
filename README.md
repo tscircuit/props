@@ -637,6 +637,14 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[];
   connections?: Connections<PinLabel>;
+  /**
+   * Bus declarations for core to create alongside this chip. Each entry uses
+   * the same trace names or port selectors and routing options as <bus />.
+   * Values use busProps parsing, including canonical millimeter/ohm units.
+   * Omission or an empty array declares no buses. No aliases or merging with
+   * standalone buses are applied; existing chip props are unchanged.
+   */
+  buses?: BusProps[];
   spiceModel?: SpiceModelElement;
   /**
    * Functional components contained inside this physical chip package,

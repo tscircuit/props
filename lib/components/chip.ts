@@ -2,6 +2,7 @@ import { distance, supplier_name } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import type { InternalCircuitProps } from "lib/components/internal-circuit"
 import type { SpiceModelProps } from "lib/components/spicemodel"
+import { busProps, type BusProps } from "lib/components/bus"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -82,6 +83,14 @@ export interface ChipPropsSU<
    */
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
+  /**
+   * Bus declarations for core to create alongside this chip. Each entry uses
+   * the same trace names or port selectors and routing options as <bus />.
+   * Values use busProps parsing, including canonical millimeter/ohm units.
+   * Omission or an empty array declares no buses. No aliases or merging with
+   * standalone buses are applied; existing chip props are unchanged.
+   */
+  buses?: BusProps[]
   spiceModel?: SpiceModelElement
   /**
    * Functional components contained inside this physical chip package,
@@ -193,6 +202,7 @@ export const chipProps = commonComponentProps.extend({
   schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
+  buses: z.array(busProps).optional(),
   spiceModel: spicemodelElement.optional(),
   internalCircuit: internalCircuitElement.optional(),
 })

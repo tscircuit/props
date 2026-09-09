@@ -1782,6 +1782,7 @@ export interface ChipPropsSU<
   externallyConnectedPins?: string[][]
   noConnect?: readonly PinLabel[] | PinLabel[]
   connections?: Connections<PinLabel>
+  buses?: BusProps[]
   spiceModel?: SpiceModelElement
   internalCircuit?: InternalCircuitElement
 }
@@ -1826,6 +1827,7 @@ export const chipProps = commonComponentProps.extend({
   schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),
   connections: connectionsProp.optional(),
+  buses: z.array(busProps).optional(),
   spiceModel: spicemodelElement.optional(),
   internalCircuit: internalCircuitElement.optional(),
 })

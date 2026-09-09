@@ -7,5 +7,7 @@ test("platform cloud autorouting is an optional boolean preserved by parsing", (
     expect(platformConfig.parse(config).useCloudAutorouter).toBe(value)
   }
   expect(platformConfig.parse({})).not.toHaveProperty("useCloudAutorouter")
-  expect(platformConfig.safeParse({ useCloudAutorouter: "true" }).success).toBe(false)
+  expect(platformConfig.safeParse({ useCloudAutorouter: "true" }).success).toBe(
+    false,
+  )
 })

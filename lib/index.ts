@@ -145,3 +145,5 @@ export * from "./common/ninePointAnchor"
 export * from "./common/fanoutBoundaryPadding"
 export * from "./common/fanoutProps"
 export * from "./common/implicitBreakoutPointSolver"
+
+export * from "./common/fanoutTracePath"

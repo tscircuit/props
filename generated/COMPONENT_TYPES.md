@@ -274,6 +274,48 @@ export const fanoutProps = z.object({
 })
 ```
 
+### fanoutTracePath
+
+```typescript
+/**
+ * A saved route from a selected port to a fanout exit. Points are in the
+ * fanout's local PCB frame, in mm: +X right, +Y up, right-handed with +Z
+ * above the board. They are points (placement adds translation), not
+ * directions. Numeric distances are mm; unit strings are parsed to mm.
+ * Layers are physical board layers, independent of placement.
+ */
+export const fanoutTracePath = z.object({
+  connection: z.string().min(1),
+  route: z
+    .array(routePoint)
+    .min(2)
+    .superRefine((route, ctx) => {
+      if (
+        route[0]?.route_type !== "wire" ||
+        route.at(-1)?.route_type !== "wire"
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          message: "A fanout trace path must start and end with wire points",
+        })
+      }
+      let layer = route[0]?.route_type === "wire" ? route[0].layer : undefined
+      for (const point of route) {
+        if (
+          (point.route_type === "wire" ? point.layer : point.from_layer) !==
+          layer
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message: "A fanout trace path must use vias for layer changes",
+          })
+        }
+        if (point.route_type === "via") layer = point.to_layer
+      }
+    }),
+})
+```
+
 ### footprintProp
 
 ```typescript
@@ -1537,6 +1579,7 @@ export interface BreakoutProps
   extends Omit<SubcircuitGroupProps, "subcircuit">,
     FanoutProps {
   autorouter?: AutorouterProp
+  pcbTracePaths?: FanoutTracePath[]
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance
@@ -1550,6 +1593,7 @@ export interface BreakoutProps
    */
 export const breakoutProps = subcircuitGroupProps.extend({
   autorouter: autorouterProp.default("fanout"),
+  pcbTracePaths: z.array(fanoutTracePath).optional(),
   padding: distance.optional(),
   paddingLeft: distance.optional(),
   paddingRight: distance.optional(),

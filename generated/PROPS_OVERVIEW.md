@@ -2283,6 +2283,11 @@ export interface PlatformConfig {
 
   autorouterMap?: Record<string, AutorouterDefinition>
 
+  /** Use networked Pipeline9 node solving at effort 1. Omitted or false keeps local routing.
+   * Explicit alternative pipelines and effort levels retain their local solver.
+   */
+  useCloudAutorouter?: boolean
+
   /**
    * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
    * Defaults to false because these presets are otherwise disabled.

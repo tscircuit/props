@@ -790,6 +790,7 @@ export interface CurrentSourceProps<
   peakToPeakCurrent?: number | string;
   waveShape?: WaveShape;
   phase?: number | string;
+  /** Fraction from 0 to 1 or a percentage string, e.g. "50%". Whitespace is trimmed. */
   dutyCycle?: number | string;
   /** Small-signal AC magnitude. Raw numbers are amperes. */
   acMagnitude?: number | string;
@@ -2377,6 +2378,7 @@ export interface VoltageSourceProps<
   peakToPeakVoltage?: number | string;
   waveShape?: WaveShape;
   phase?: number | string;
+  /** Fraction from 0 to 1 or a percentage string, e.g. "50%". Whitespace is trimmed. */
   dutyCycle?: number | string;
   pulseDelay?: number | string;
   riseTime?: number | string;

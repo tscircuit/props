@@ -2421,7 +2421,10 @@ export interface PlatformConfig {
   /**
    * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
    * Defaults to false because these presets are otherwise disabled.
+   * This also applies to the sequential-trace and auto-cloud aliases.
    * Platforms should only enable this temporarily while migrating projects.
+   * For sequential_trace / sequential-trace, use the default autorouter with
+   * <autoroutingphase /> or <fanout /> elements as needed instead.
    */
   allowLegacyAutorouters?: boolean;
 

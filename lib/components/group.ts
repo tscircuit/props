@@ -338,15 +338,15 @@ export interface AutorouterConfig {
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean
   groupMode?:
-    | "sequential_trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
-    | "sequential_trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
     | "default"
     | "auto"
@@ -361,13 +361,13 @@ export interface AutorouterConfig {
     | "single_layer_fanout"
     | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 
 export type AutorouterPreset =
-  | "sequential_trace"
+  | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
   | "subcircuit"
   | "default"
   | "auto"
@@ -382,7 +382,7 @@ export type AutorouterPreset =
   | "single_layer_fanout"
   | "fanout"
   | "auto-jumper"
-  | "sequential-trace"
+  | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   | "auto-local"
   | "auto-cloud"
 

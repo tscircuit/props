@@ -124,6 +124,10 @@ export interface BoardProps
    * to false.
    */
   automaticPoursEnabled?: boolean
+  /** Whether to stitch copper pours on the same net across layers with vias. Defaults to false. */
+  enableViaStitching?: boolean
+  /** Positive center-to-center stitching via spacing in millimeters or a unit string. Omitted uses the solver default. Does not enable stitching by itself. */
+  viaStitchPitch?: Distance
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
 }
@@ -175,6 +179,18 @@ export const boardProps = subcircuitGroupProps
       .default(false)
       .describe(
         "Whether implicit copper pours should be generated automatically. Defaults to false.",
+      ),
+    enableViaStitching: z
+      .boolean()
+      .default(false)
+      .describe(
+        "Whether to stitch copper pours on the same net across layers with vias. Defaults to false.",
+      ),
+    viaStitchPitch: distance
+      .pipe(z.number().positive().finite())
+      .optional()
+      .describe(
+        "Positive center-to-center stitching via spacing in millimeters or a unit string, parsed to millimeters. Omitted uses the solver default. Does not enable stitching by itself.",
       ),
     schematicDisabled: z.boolean().optional(),
   })

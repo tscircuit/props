@@ -360,6 +360,13 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   name?: string;
   autorouter?: AutorouterProp;
   phaseIndex?: number;
+  /**
+   * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.
+   * Numeric distances are mm; unit strings are normalized to mm. Omitted by
+   * default; an empty array is accepted. No aliases or prop conflicts are
+   * introduced, and existing phases require no migration.
+   */
+  pcbTracePaths?: FanoutTracePath[];
   region?: {
     shape?: "rect";
     minX: number;

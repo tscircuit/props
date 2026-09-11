@@ -2,6 +2,10 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { type FanoutProps, fanoutProps } from "../common/fanoutProps"
 import {
+  type FanoutTracePath,
+  fanoutTracePath,
+} from "../common/fanoutTracePath"
+import {
   type AutorouterProp,
   type RoutingTolerances,
   autorouterProp,
@@ -21,6 +25,13 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   name?: string
   autorouter?: AutorouterProp
   phaseIndex?: number
+  /**
+   * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.
+   * Numeric distances are mm; unit strings are normalized to mm. Omitted by
+   * default; an empty array is accepted. No aliases or prop conflicts are
+   * introduced, and existing phases require no migration.
+   */
+  pcbTracePaths?: FanoutTracePath[]
   region?: {
     shape?: "rect"
     minX: number
@@ -41,6 +52,7 @@ export const autoroutingPhaseProps = z
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
     phaseIndex: z.number().optional(),
+    pcbTracePaths: z.array(fanoutTracePath).optional(),
     ...routingTolerances.shape,
     region: z
       .object({

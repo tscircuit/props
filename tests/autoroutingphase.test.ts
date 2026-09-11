@@ -23,14 +23,14 @@ test("autorouting phase accepts a name", () => {
 
 test("autorouting phase accepts autorouter and phase index", () => {
   const raw: AutoroutingPhaseProps = {
-    autorouter: "sequential_trace",
+    autorouter: "auto",
     phaseIndex: 1,
   }
 
   expectTypeOf(raw).toMatchTypeOf<z.input<typeof autoroutingPhaseProps>>()
 
   const parsed = autoroutingPhaseProps.parse(raw)
-  expect(parsed.autorouter).toBe("sequential_trace")
+  expect(parsed.autorouter).toBe("auto")
   expect(parsed.phaseIndex).toBe(1)
 })
 

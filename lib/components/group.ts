@@ -337,16 +337,12 @@ export interface AutorouterConfig {
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean
-  groupMode?:
-    | "sequential_trace"
-    | "subcircuit"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+  groupMode?: "subcircuit"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
-    | "sequential_trace"
     | "subcircuit"
     | "default"
     | "auto"
@@ -361,13 +357,11 @@ export interface AutorouterConfig {
     | "single_layer_fanout"
     | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 
 export type AutorouterPreset =
-  | "sequential_trace"
   | "subcircuit"
   | "default"
   | "auto"
@@ -382,7 +376,6 @@ export type AutorouterPreset =
   | "single_layer_fanout"
   | "fanout"
   | "auto-jumper"
-  | "sequential-trace"
   | "auto-local"
   | "auto-cloud"
 
@@ -420,9 +413,7 @@ export const autorouterConfig = z.object({
     .describe(
       "Allows the autorouter to place vias inside connected pads. Omitted or false keeps via-in-pad routing disabled.",
     ),
-  groupMode: z
-    .enum(["sequential_trace", "subcircuit", "sequential-trace"])
-    .optional(),
+  groupMode: z.enum(["subcircuit"]).optional(),
   algorithmFn: z
     .custom<(simpleRouteJson: any) => Promise<any>>(
       (v) => typeof v === "function" || v === undefined,
@@ -435,7 +426,6 @@ export const autorouterConfig = z.object({
     .optional(),
   preset: z
     .enum([
-      "sequential_trace",
       "subcircuit",
       "default",
       "auto",
@@ -450,7 +440,6 @@ export const autorouterConfig = z.object({
       "single_layer_fanout",
       "fanout",
       "auto-jumper",
-      "sequential-trace",
       "auto-local",
       "auto-cloud",
     ])
@@ -459,7 +448,6 @@ export const autorouterConfig = z.object({
 })
 
 export const autorouterPreset = z.union([
-  z.literal("sequential_trace"),
   z.literal("subcircuit"),
   z.literal("default"),
   z.literal("auto"),
@@ -474,7 +462,6 @@ export const autorouterPreset = z.union([
   z.literal("single_layer_fanout"),
   z.literal("fanout"),
   z.literal("auto-jumper"),
-  z.literal("sequential-trace"),
   z.literal("auto-local"),
   z.literal("auto-cloud"),
 ])

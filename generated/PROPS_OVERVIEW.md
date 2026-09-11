@@ -193,16 +193,12 @@ export interface AutorouterConfig {
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean
-  groupMode?:
-    | "sequential_trace"
-    | "subcircuit"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+  groupMode?: "subcircuit"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
-    | "sequential_trace"
     | "subcircuit"
     | "default"
     | "auto"
@@ -217,7 +213,6 @@ export interface AutorouterConfig {
     | "single_layer_fanout"
     | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
@@ -2326,8 +2321,8 @@ export interface PlatformConfig {
   useCloudAutorouter?: boolean
 
   /**
-   * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
-   * Defaults to false because these presets are otherwise disabled.
+   * Allows the deprecated auto_cloud autorouter preset.
+   * Defaults to false because this preset is otherwise disabled.
    * Platforms should only enable this temporarily while migrating projects.
    */
   allowLegacyAutorouters?: boolean

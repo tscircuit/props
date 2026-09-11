@@ -2761,11 +2761,15 @@ export interface AutorouterConfig {
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean
-  groupMode?: "subcircuit"
+  groupMode?:
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
+    | "subcircuit"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
     | "default"
     | "auto"
@@ -2780,6 +2784,7 @@ export interface AutorouterConfig {
     | "single_layer_fanout"
     | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
@@ -2808,7 +2813,9 @@ export const autorouterConfig = z.object({
     .describe(
       "Allows the autorouter to place vias inside connected pads. Omitted or false keeps via-in-pad routing disabled.",
     ),
-  groupMode: z.enum(["subcircuit"]).optional(),
+  groupMode: z
+    .enum(["sequential_trace", "subcircuit", "sequential-trace"])
+    .optional(),
   algorithmFn: z
     .custom<(simpleRouteJson: any) => Promise<any>>(
       (v) => typeof v === "function" || v === undefined,
@@ -2821,6 +2828,7 @@ export const autorouterConfig = z.object({
     .optional(),
   preset: z
     .enum([
+      "sequential_trace",
       "subcircuit",
       "default",
       "auto",
@@ -2835,6 +2843,7 @@ export const autorouterConfig = z.object({
       "single_layer_fanout",
       "fanout",
       "auto-jumper",
+      "sequential-trace",
       "auto-local",
       "auto-cloud",
     ])

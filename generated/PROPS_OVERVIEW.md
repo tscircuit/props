@@ -193,12 +193,16 @@ export interface AutorouterConfig {
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean
-  groupMode?: "subcircuit"
+  groupMode?:
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
+    | "subcircuit"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
     | "default"
     | "auto"
@@ -213,6 +217,7 @@ export interface AutorouterConfig {
     | "single_layer_fanout"
     | "fanout"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
@@ -2321,9 +2326,12 @@ export interface PlatformConfig {
   useCloudAutorouter?: boolean
 
   /**
-   * Allows the deprecated auto_cloud autorouter preset.
-   * Defaults to false because this preset is otherwise disabled.
+   * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
+   * Defaults to false because these presets are otherwise disabled.
+   * This also applies to the sequential-trace and auto-cloud aliases.
    * Platforms should only enable this temporarily while migrating projects.
+   * For sequential_trace / sequential-trace, use the default autorouter with
+   * <autoroutingphase /> or <fanout /> elements as needed instead.
    */
   allowLegacyAutorouters?: boolean
 

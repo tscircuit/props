@@ -1,5 +1,7 @@
 import { expect, test } from "bun:test"
 import {
+  autoroutingPhaseProps,
+  type AutoroutingPhaseProps,
   breakoutProps,
   fanoutTracePath,
   type BreakoutProps,
@@ -23,32 +25,40 @@ const path: FanoutTracePath = {
   ],
 }
 
-test("breakout retains JSON-serializable saved routes and normalizes distances", () => {
-  const props: BreakoutProps = { pcbTracePaths: [path] }
-  const original = JSON.stringify(props)
-  const parsed = breakoutProps.parse(JSON.parse(original))
-  expect(parsed.pcbTracePaths).toEqual([
-    {
-      connection: "U1.1",
-      route: [
-        { route_type: "wire", x: 0, y: 0, width: 0.2, layer: "top" },
-        {
-          route_type: "via",
-          x: 1,
-          y: 1,
-          from_layer: "top",
-          to_layer: "bottom",
-          via_diameter: 0.6,
-          via_hole_diameter: 0.3,
-        },
-        { route_type: "wire", x: 3, y: 1, width: 0.2, layer: "bottom" },
-      ],
-    },
-  ])
-  expect(JSON.stringify(props)).toBe(original)
-  expect(breakoutProps.parse({}).pcbTracePaths).toBeUndefined()
-  expect(breakoutProps.parse({ pcbTracePaths: [] }).pcbTracePaths).toEqual([])
-})
+test.each([
+  ["breakout", breakoutProps],
+  ["autorouting phase", autoroutingPhaseProps],
+] as const)(
+  "%s retains JSON-serializable saved routes and normalizes distances",
+  (_name, schema) => {
+    const props: BreakoutProps & AutoroutingPhaseProps = {
+      pcbTracePaths: [path],
+    }
+    const original = JSON.stringify(props)
+    const parsed = schema.parse(JSON.parse(original))
+    expect(parsed.pcbTracePaths).toEqual([
+      {
+        connection: "U1.1",
+        route: [
+          { route_type: "wire", x: 0, y: 0, width: 0.2, layer: "top" },
+          {
+            route_type: "via",
+            x: 1,
+            y: 1,
+            from_layer: "top",
+            to_layer: "bottom",
+            via_diameter: 0.6,
+            via_hole_diameter: 0.3,
+          },
+          { route_type: "wire", x: 3, y: 1, width: 0.2, layer: "bottom" },
+        ],
+      },
+    ])
+    expect(JSON.stringify(props)).toBe(original)
+    expect(schema.parse({}).pcbTracePaths).toBeUndefined()
+    expect(schema.parse({ pcbTracePaths: [] }).pcbTracePaths).toEqual([])
+  },
+)
 
 test("saved fanout paths reject invalid geometry and layer transitions", () => {
   const wire = { route_type: "wire", x: 0, y: 0, width: 0.2, layer: "top" }
@@ -89,8 +99,12 @@ test("saved fanout paths reject invalid geometry and layer transitions", () => {
       connection: "U1.1",
       route: [wire, { ...path.route[1], from_layer: "inner1" }, path.route[2]],
     },
-  ])
+  ]) {
     expect(fanoutTracePath.safeParse(invalid).success).toBe(false)
+    expect(
+      autoroutingPhaseProps.safeParse({ pcbTracePaths: [invalid] }).success,
+    ).toBe(false)
+  }
 })
 
 const topToBottomVia = {

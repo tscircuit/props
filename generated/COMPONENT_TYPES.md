@@ -1438,6 +1438,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   name?: string
   autorouter?: AutorouterProp
   phaseIndex?: number
+  pcbTracePaths?: FanoutTracePath[]
   region?: {
     shape?: "rect"
     minX: number
@@ -1451,12 +1452,19 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
 }
+/**
+   * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.
+   * Numeric distances are mm; unit strings are normalized to mm. Omitted by
+   * default; an empty array is accepted. No aliases or prop conflicts are
+   * introduced, and existing phases require no migration.
+   */
 export const autoroutingPhaseProps = z
   .object({
     key: z.any().optional(),
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
     phaseIndex: z.number().optional(),
+    pcbTracePaths: z.array(fanoutTracePath).optional(),
     ...routingTolerances.shape,
     region: z
       .object({

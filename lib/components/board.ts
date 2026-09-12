@@ -86,6 +86,14 @@ export interface BoardProps
    * false, which restricts newly generated vias to the full board stack.
    */
   allowBlindAndBuriedVias?: boolean
+  /**
+   * Default solder mask coverage for manual and generated vias on this PCB.
+   * `true` (including `<board viaTenting>`) parses to "both"; `false` to "none".
+   * String modes are preserved. Omitted stays undefined, preserving existing behavior.
+   * Explicit via `tented` props override this default. Applies through nested
+   * components/subcircuits on this PCB, but not to a separate child PCB.
+   */
+  viaTenting?: boolean | "both" | "top" | "bottom" | "none"
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -151,6 +159,15 @@ export const boardProps = subcircuitGroupProps
       .default(false)
       .describe(
         "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack.",
+      ),
+    viaTenting: z
+      .union([z.boolean(), z.enum(["both", "top", "bottom", "none"])])
+      .transform((value) =>
+        typeof value === "boolean" ? (value ? "both" : "none") : value,
+      )
+      .optional()
+      .describe(
+        'Default via solder mask coverage on this PCB: "both", "top", "bottom", or "none". True parses to "both", false to "none", and omitted stays undefined. Explicit via tented props override it; a separate child PCB has its own policy.',
       ),
     borderRadius: distance.optional(),
     thickness: distance.optional(),

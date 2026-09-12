@@ -437,6 +437,14 @@ export interface BoardProps
    * false, which restricts newly generated vias to the full board stack.
    */
   allowBlindAndBuriedVias?: boolean
+  /**
+   * Default solder mask coverage for manual and generated vias on this PCB.
+   * `true` (including `<board viaTenting>`) parses to "both"; `false` to "none".
+   * String modes are preserved. Omitted stays undefined, preserving existing behavior.
+   * Explicit via `tented` props override this default. Applies through nested
+   * components/subcircuits on this PCB, but not to a separate child PCB.
+   */
+  viaTenting?: boolean | "both" | "top" | "bottom" | "none"
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -3063,6 +3071,13 @@ export interface ViaProps extends CommonLayoutProps {
   outerDiameter?: number | string
   connectsTo?: string | string[]
   netIsAssignable?: boolean
+  /**
+   * Overrides the owning board's viaTenting default. True tents both faces;
+   * false exposes both. An object must specify both top and bottom booleans.
+   * Parsed values are preserved; omitted stays undefined for board inheritance.
+   * Tenting covers the via with solder mask without filling or plugging it.
+   */
+  tented?: boolean | { top: boolean; bottom: boolean }
 }
 
 

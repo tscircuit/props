@@ -1523,6 +1523,11 @@ export const boardOutlinePoint = z
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
+  fabricatorPreset?:
+    | "jlcpcb_economy"
+    | "jlcpcb_standard"
+    | "jlcpcb_economy_20260912"
+    | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   allowBlindAndBuriedVias?: boolean
@@ -1549,6 +1554,17 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
+    fabricatorPreset: z
+      .enum([
+        "jlcpcb_economy",
+        "jlcpcb_standard",
+        "jlcpcb_economy_20260912",
+        "jlcpcb_standard_20260912",
+      ])
+      .optional()
+      .describe(
+        "Fabricator preset, preserved as supplied. Omitted leaves the preset unset.",
+      ),
     material: z.enum(["fr4", "fr1", "flex"]).default("fr4"),
     layers: z
       .union([

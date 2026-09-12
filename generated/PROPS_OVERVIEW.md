@@ -429,6 +429,12 @@ export interface BoardOutlinePoint extends Point {
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
+  /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
+  fabricatorPreset?:
+    | "jlcpcb_economy"
+    | "jlcpcb_standard"
+    | "jlcpcb_economy_20260912"
+    | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10

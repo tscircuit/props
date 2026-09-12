@@ -1,6 +1,34 @@
 import { expect, test } from "bun:test"
 import { boardProps, type BoardProps } from "lib/components/board"
 
+test("fabricatorPreset accepts the supported presets unchanged", () => {
+  for (const fabricatorPreset of [
+    "jlcpcb_economy",
+    "jlcpcb_standard",
+    "jlcpcb_economy_20260912",
+    "jlcpcb_standard_20260912",
+  ] as const) {
+    const raw: BoardProps = { fabricatorPreset }
+    expect(boardProps.parse(raw).fabricatorPreset).toBe(fabricatorPreset)
+  }
+})
+
+test("fabricatorPreset is optional without a default", () => {
+  expect(boardProps.parse({}).fabricatorPreset).toBeUndefined()
+})
+
+test("fabricatorPreset rejects unsupported values", () => {
+  for (const fabricatorPreset of [
+    "jlcpcb",
+    "jlcpcb_economy_20260913",
+    "",
+    null,
+    123,
+  ]) {
+    expect(boardProps.safeParse({ fabricatorPreset }).success).toBe(false)
+  }
+})
+
 test("via stitching is opt-in and pitch does not enable it", () => {
   const defaults = boardProps.parse({})
   expect(defaults.enableViaStitching).toBe(false)

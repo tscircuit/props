@@ -16,8 +16,8 @@ for (const [name, schema] of [
   ["board", boardProps],
   ["subcircuit", subcircuitProps],
 ] as const) {
-  test(`${name} preserves both preflight routing check policies`, () => {
-    for (const policy of ["none", "conservative"] as const) {
+  test(`${name} preserves all three preflight routing check policies`, () => {
+    for (const policy of ["none", "basic", "conservative"] as const) {
       expect(
         schema.parse({ preflightRoutingCheckPolicy: policy })
           .preflightRoutingCheckPolicy,
@@ -55,9 +55,9 @@ for (const [name, schema] of [
 }
 
 test("preflight routing check policy types are optional and narrow", () => {
-  type Policy = "none" | "conservative" | undefined
+  type Policy = "none" | "basic" | "conservative" | undefined
   expectTypeOf<PreflightRoutingCheckPolicy>().toEqualTypeOf<
-    "none" | "conservative"
+    "none" | "basic" | "conservative"
   >()
   expectTypeOf<
     AutoroutingPhaseProps["preflightRoutingCheckPolicy"]

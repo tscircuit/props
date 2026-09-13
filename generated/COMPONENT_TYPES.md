@@ -5010,6 +5010,7 @@ export const stampboardProps = boardProps.extend({
 export interface SwitchProps extends CommonComponentProps {
   type?: "spst" | "spdt" | "dpst" | "dpdt"
   pinLabels?: PinLabelsProp<SchematicPinLabel>
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[]
   isNormallyClosed?: boolean
   spdt?: boolean
   spst?: boolean
@@ -5030,6 +5031,7 @@ export interface SwitchProps extends CommonComponentProps {
     dpst: z.boolean().optional(),
     dpdt: z.boolean().optional(),
     pinLabels: pinLabelsProp.optional(),
+    noConnect: noConnectProp.optional(),
     simSwitchFrequency: frequency.optional(),
     simCloseAt: ms.optional(),
     simOpenAt: ms.optional(),

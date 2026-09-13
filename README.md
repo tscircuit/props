@@ -2248,6 +2248,13 @@ export type SubcircuitProps = SubcircuitGroupProps;
 export interface SwitchProps extends CommonComponentProps {
   type?: "spst" | "spdt" | "dpst" | "dpdt";
   pinLabels?: PinLabelsProp<SchematicPinLabel>;
+  /**
+   * Pin names or aliases intentionally left unconnected. Accepts mutable or
+   * readonly arrays, using the same label validation as chip noConnect.
+   * Omitted or empty arrays mark no pins. Parsed labels are preserved and
+   * matching source ports get do_not_connect; explicit connections are not removed.
+   */
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[];
   isNormallyClosed?: boolean;
   spdt?: boolean;
   spst?: boolean;

@@ -256,7 +256,6 @@ export interface FabricatorDrcCheckParams {
   circuitJson: AnyCircuitElement[]
   fabricatorPreset: NonNullable<BoardProps["fabricatorPreset"]>
   pcbBoardId: PcbBoard["pcb_board_id"]
-  subcircuitId: PcbBoard["subcircuit_id"]
 }
 
 export interface FabricatorEngine {

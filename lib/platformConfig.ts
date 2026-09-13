@@ -1,4 +1,6 @@
 import { z } from "zod"
+import type { AnyCircuitElement, PcbBoard } from "circuit-json"
+import type { BoardProps } from "./components/board"
 import type { AutocompleteString } from "./common/autocomplete"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
 import { type PcbStyle, pcbStyle } from "./common/pcbStyle"
@@ -66,6 +68,9 @@ type EsModuleImportResult = {
 
 export interface PlatformConfig {
   partsEngine?: PartsEngine
+
+  /** Optional fabricator-specific DRC provider. No checks run when omitted. */
+  fabricatorEngine?: FabricatorEngine
 
   autorouter?: AutorouterProp
 
@@ -246,8 +251,32 @@ const localCacheEngine = z.custom<LocalCacheEngine>(
     typeof value.setItem === "function",
 )
 
+export interface FabricatorDrcCheckParams {
+  /** Board subtree in Circuit JSON world coordinates: +X right, +Y up, +Z above; positions and distances in mm. */
+  circuitJson: AnyCircuitElement[]
+  fabricatorPreset: NonNullable<BoardProps["fabricatorPreset"]>
+  pcbBoardId: PcbBoard["pcb_board_id"]
+  subcircuitId: PcbBoard["subcircuit_id"]
+}
+
+export interface FabricatorEngine {
+  /** Return diagnostic records for the selected preset without modifying the input. */
+  runDrcChecks: (
+    params: FabricatorDrcCheckParams,
+  ) => AnyCircuitElement[] | Promise<AnyCircuitElement[]>
+}
+
+export const fabricatorEngine = z.custom<FabricatorEngine>(
+  (value) =>
+    typeof value === "object" &&
+    value !== null &&
+    "runDrcChecks" in value &&
+    typeof value.runDrcChecks === "function",
+)
+
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
+  fabricatorEngine: fabricatorEngine.optional(),
   autorouter: autorouterProp.optional(),
   autorouterMap: z.record(z.string(), autorouterDefinition).optional(),
   allowLegacyAutorouters: z.boolean().optional(),

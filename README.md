@@ -2436,6 +2436,9 @@ export interface VoltageSourceProps<
 export interface PlatformConfig {
   partsEngine?: PartsEngine;
 
+  /** Optional fabricator-specific DRC provider. No checks run when omitted. */
+  fabricatorEngine?: FabricatorEngine;
+
   autorouter?: AutorouterProp;
 
   autorouterMap?: Record<string, AutorouterDefinition>;

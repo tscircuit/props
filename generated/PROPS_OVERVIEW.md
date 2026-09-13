@@ -1246,6 +1246,23 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
 }
 
 
+export interface FabricatorDrcCheckParams {
+  /** Board subtree in Circuit JSON world coordinates: +X right, +Y up, +Z above; positions and distances in mm. */
+  circuitJson: AnyCircuitElement[]
+  fabricatorPreset: NonNullable<BoardProps["fabricatorPreset"]>
+  pcbBoardId: PcbBoard["pcb_board_id"]
+  subcircuitId: PcbBoard["subcircuit_id"]
+}
+
+
+export interface FabricatorEngine {
+  /** Return diagnostic records for the selected preset without modifying the input. */
+  runDrcChecks: (
+    params: FabricatorDrcCheckParams,
+  ) => AnyCircuitElement[] | Promise<AnyCircuitElement[]>
+}
+
+
 export interface FanoutProps {
   /**
    * Fanout direction and boundary position for each named bus. Prefer the
@@ -2335,6 +2352,9 @@ export interface PinSideDefinition {
 
 export interface PlatformConfig {
   partsEngine?: PartsEngine
+
+  /** Optional fabricator-specific DRC provider. No checks run when omitted. */
+  fabricatorEngine?: FabricatorEngine
 
   autorouter?: AutorouterProp
 

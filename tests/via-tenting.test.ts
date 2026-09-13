@@ -1,54 +1,73 @@
 import { expect, test } from "bun:test"
 import { expectTypeOf } from "expect-type"
-import { boardProps, type BoardProps } from "lib/components/board"
-import { stampboardProps } from "lib/components/stampboard"
-import { viaProps, type ViaProps } from "lib/components/via"
+import {
+  boardProps,
+  stampboardProps,
+  viaProps,
+  type BoardProps,
+  type ViaProps,
+  type ViaTenting,
+} from "lib"
 import type { z } from "zod"
 
-test("board via tenting preserves modes and normalizes boolean shorthand", () => {
-  for (const viaTenting of ["both", "top", "bottom", "none"] as const) {
-    const raw: BoardProps = { viaTenting }
-    expect(boardProps.parse(raw).viaTenting).toBe(viaTenting)
+const tentingCases = [
+  [true, "top_and_bottom_tented"],
+  [false, "exposed"],
+  ["both_sides", "top_and_bottom_tented"],
+  ["top_and_bottom_tented", "top_and_bottom_tented"],
+  ["top_tented", "top_tented"],
+  ["bottom_tented", "bottom_tented"],
+  ["exposed", "exposed"],
+] as const
+
+test("board and via tenting accept the same modes and normalize aliases", () => {
+  for (const [input, expected] of tentingCases) {
+    const board: BoardProps = { defaultViaTenting: input }
+    const via: ViaProps = { tented: input }
+    expect(boardProps.parse(board).defaultViaTenting).toBe(expected)
+    expect(viaProps.parse(via).tented).toBe(expected)
   }
 
-  for (const [viaTenting, expected] of [
-    [true, "both"],
-    [false, "none"],
-  ] as const) {
-    const raw: BoardProps = { viaTenting }
-    expect(boardProps.parse(raw).viaTenting).toBe(expected)
-  }
-
-  expectTypeOf<z.output<typeof boardProps>>().toMatchTypeOf<{
-    viaTenting?: "both" | "top" | "bottom" | "none"
-  }>()
+  expectTypeOf<BoardProps["defaultViaTenting"]>().toEqualTypeOf<
+    ViaTenting | undefined
+  >()
+  expectTypeOf<ViaProps["tented"]>().toEqualTypeOf<ViaTenting | undefined>()
+  expectTypeOf<
+    z.output<typeof boardProps>["defaultViaTenting"]
+  >().toEqualTypeOf<
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed"
+    | undefined
+  >()
+  expectTypeOf<z.output<typeof viaProps>["tented"]>().toEqualTypeOf<
+    z.output<typeof boardProps>["defaultViaTenting"]
+  >()
 })
 
-test("omitted tenting stays unspecified for legacy behavior and inheritance", () => {
-  expect(boardProps.parse({}).viaTenting).toBeUndefined()
-  expect(boardProps.parse({ viaTenting: undefined }).viaTenting).toBeUndefined()
+test("omitted tenting stays unspecified for board inheritance", () => {
+  expect(boardProps.parse({}).defaultViaTenting).toBeUndefined()
+  expect(
+    boardProps.parse({ defaultViaTenting: undefined }).defaultViaTenting,
+  ).toBeUndefined()
   expect(viaProps.parse({}).tented).toBeUndefined()
   expect(viaProps.parse({ tented: undefined }).tented).toBeUndefined()
 })
 
-test("via tenting preserves explicit booleans including false overrides", () => {
-  for (const tented of [true, false]) {
-    const raw: ViaProps = { name: "V1", tented }
-    expect(viaProps.parse(raw).tented).toBe(tented)
-  }
+test("explicit false remains an exposed override instead of unspecified", () => {
+  expect(boardProps.parse({ defaultViaTenting: false }).defaultViaTenting).toBe(
+    "exposed",
+  )
+  expect(viaProps.parse({ tented: false }).tented).toBe("exposed")
 })
 
-test("via tenting preserves independent top and bottom coverage", () => {
-  for (const top of [true, false]) {
-    for (const bottom of [true, false]) {
-      const raw: ViaProps = { tented: { top, bottom } }
-      expect(viaProps.parse(raw).tented).toEqual({ top, bottom })
-    }
-  }
-})
-
-test("board via tenting rejects invalid modes and nonboolean shorthand", () => {
-  for (const viaTenting of [
+test("board and via tenting reject unsupported modes and object inputs", () => {
+  for (const input of [
+    "both",
+    "top",
+    "bottom",
+    "none",
     "all",
     "true",
     "false",
@@ -56,35 +75,24 @@ test("board via tenting rejects invalid modes and nonboolean shorthand", () => {
     0,
     1,
     null,
-    { top: true, bottom: false },
-    [],
-  ]) {
-    expect(boardProps.safeParse({ viaTenting }).success).toBe(false)
-  }
-})
-
-test("via tenting rejects incomplete sides and nonboolean coverage", () => {
-  for (const tented of [
-    "both",
-    "true",
-    0,
-    1,
-    null,
     [],
     {},
+    { top: true, bottom: false },
     { top: true },
     { bottom: false },
-    { top: undefined, bottom: false },
-    { top: true, bottom: "false" },
-    { top: 1, bottom: false },
   ]) {
-    expect(viaProps.safeParse({ tented }).success).toBe(false)
+    expect(boardProps.safeParse({ defaultViaTenting: input }).success).toBe(
+      false,
+    )
+    expect(viaProps.safeParse({ tented: input }).success).toBe(false)
   }
 })
 
-test("stampboards retain board via tenting normalization", () => {
-  expect(stampboardProps.parse({ viaTenting: true }).viaTenting).toBe("both")
-  expect(stampboardProps.parse({ viaTenting: false }).viaTenting).toBe("none")
-  expect(stampboardProps.parse({ viaTenting: "top" }).viaTenting).toBe("top")
-  expect(stampboardProps.parse({}).viaTenting).toBeUndefined()
+test("stampboards inherit the same default via tenting schema", () => {
+  for (const [input, expected] of tentingCases) {
+    expect(
+      stampboardProps.parse({ defaultViaTenting: input }).defaultViaTenting,
+    ).toBe(expected)
+  }
+  expect(stampboardProps.parse({}).defaultViaTenting).toBeUndefined()
 })

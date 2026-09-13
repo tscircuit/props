@@ -1166,6 +1166,29 @@ export const url = z.preprocess((value) => {
 }, z.string()) as z.ZodType<string, z.ZodTypeDef, string>
 ```
 
+### via-tenting
+
+```typescript
+export const viaTenting = z
+  .union([
+    z.boolean(),
+    z.enum([
+      "both_sides",
+      "top_and_bottom_tented",
+      "top_tented",
+      "bottom_tented",
+      "exposed",
+    ]),
+  ])
+  .transform((value) => {
+    if (value === true || value === "both_sides") {
+      return "top_and_bottom_tented" as const
+    }
+    if (value === false) return "exposed" as const
+    return value
+  })
+```
+
 ## Available Component Types
 
 ### ammeter
@@ -1526,7 +1549,7 @@ export interface BoardProps
   material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   allowBlindAndBuriedVias?: boolean
-  viaTenting?: boolean | "both" | "top" | "bottom" | "none"
+  defaultViaTenting?: ViaTenting
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -1567,15 +1590,7 @@ export const boardProps = subcircuitGroupProps
       .describe(
         "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack.",
       ),
-    viaTenting: z
-      .union([z.boolean(), z.enum(["both", "top", "bottom", "none"])])
-      .transform((value) =>
-        typeof value === "boolean" ? (value ? "both" : "none") : value,
-      )
-      .optional()
-      .describe(
-        'Default via solder mask coverage on this PCB: "both", "top", "bottom", or "none". True parses to "both", false to "none", and omitted stays undefined. Explicit via tented props override it; a separate child PCB has its own policy.',
-      ),
+    defaultViaTenting: viaTenting.optional(),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),
@@ -5166,14 +5181,8 @@ export interface ViaProps extends CommonLayoutProps {
   outerDiameter?: number | string
   connectsTo?: string | string[]
   netIsAssignable?: boolean
-  tented?: boolean | { top: boolean; bottom: boolean }
+  tented?: ViaTenting
 }
-/**
-   * Overrides the owning board's viaTenting default. True tents both faces;
-   * false exposes both. An object must specify both top and bottom booleans.
-   * Parsed values are preserved; omitted stays undefined for board inheritance.
-   * Tenting covers the via with solder mask without filling or plugging it.
-   */
 export const viaProps = commonLayoutProps.extend({
   name: z.string().optional(),
   fromLayer: layer_ref.optional(),
@@ -5183,12 +5192,7 @@ export const viaProps = commonLayoutProps.extend({
   layers: z.array(layer_ref).optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   netIsAssignable: z.boolean().optional(),
-  tented: z
-    .union([z.boolean(), z.object({ top: z.boolean(), bottom: z.boolean() })])
-    .optional()
-    .describe(
-      "Per-via solder mask coverage overriding the owning board's viaTenting default. True tents both faces, false exposes both, or specify both top and bottom booleans. Values are preserved; omitted stays undefined for inheritance. Does not fill or plug the via.",
-    ),
+  tented: viaTenting.optional(),
 })
 ```
 

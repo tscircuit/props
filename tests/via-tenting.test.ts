@@ -6,6 +6,7 @@ import {
   viaProps,
   type BoardProps,
   type ViaProps,
+  type ViaTenting,
 } from "lib"
 import type { z } from "zod"
 
@@ -28,8 +29,9 @@ test("board and via tenting accept the same modes and normalize aliases", () => 
   }
 
   expectTypeOf<BoardProps["defaultViaTenting"]>().toEqualTypeOf<
-    ViaProps["tented"]
+    ViaTenting | undefined
   >()
+  expectTypeOf<ViaProps["tented"]>().toEqualTypeOf<ViaTenting | undefined>()
   expectTypeOf<
     z.output<typeof boardProps>["defaultViaTenting"]
   >().toEqualTypeOf<

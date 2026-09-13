@@ -1166,6 +1166,29 @@ export const url = z.preprocess((value) => {
 }, z.string()) as z.ZodType<string, z.ZodTypeDef, string>
 ```
 
+### via-tenting
+
+```typescript
+export const viaTenting = z
+  .union([
+    z.boolean(),
+    z.enum([
+      "both_sides",
+      "top_and_bottom_tented",
+      "top_tented",
+      "bottom_tented",
+      "exposed",
+    ]),
+  ])
+  .transform((value) => {
+    if (value === true || value === "both_sides") {
+      return "top_and_bottom_tented" as const
+    }
+    if (value === false) return "exposed" as const
+    return value
+  })
+```
+
 ## Available Component Types
 
 ### ammeter
@@ -1526,13 +1549,7 @@ export interface BoardProps
   material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   allowBlindAndBuriedVias?: boolean
-  defaultViaTenting?:
-    | boolean
-    | "both_sides"
-    | "top_and_bottom_tented"
-    | "top_tented"
-    | "bottom_tented"
-    | "exposed"
+  defaultViaTenting?: ViaTenting
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -1573,25 +1590,7 @@ export const boardProps = subcircuitGroupProps
       .describe(
         "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack.",
       ),
-    defaultViaTenting: z
-      .union([
-        z.boolean(),
-        z.enum([
-          "both_sides",
-          "top_and_bottom_tented",
-          "top_tented",
-          "bottom_tented",
-          "exposed",
-        ]),
-      ])
-      .transform((value) => {
-        if (value === true || value === "both_sides") {
-          return "top_and_bottom_tented" as const
-        }
-        if (value === false) return "exposed" as const
-        return value
-      })
-      .optional(),
+    defaultViaTenting: viaTenting.optional(),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),
@@ -5182,13 +5181,7 @@ export interface ViaProps extends CommonLayoutProps {
   outerDiameter?: number | string
   connectsTo?: string | string[]
   netIsAssignable?: boolean
-  tented?:
-    | boolean
-    | "both_sides"
-    | "top_and_bottom_tented"
-    | "top_tented"
-    | "bottom_tented"
-    | "exposed"
+  tented?: ViaTenting
 }
 export const viaProps = commonLayoutProps.extend({
   name: z.string().optional(),
@@ -5199,25 +5192,7 @@ export const viaProps = commonLayoutProps.extend({
   layers: z.array(layer_ref).optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   netIsAssignable: z.boolean().optional(),
-  tented: z
-    .union([
-      z.boolean(),
-      z.enum([
-        "both_sides",
-        "top_and_bottom_tented",
-        "top_tented",
-        "bottom_tented",
-        "exposed",
-      ]),
-    ])
-    .transform((value) => {
-      if (value === true || value === "both_sides") {
-        return "top_and_bottom_tented" as const
-      }
-      if (value === false) return "exposed" as const
-      return value
-    })
-    .optional(),
+  tented: viaTenting.optional(),
 })
 ```
 

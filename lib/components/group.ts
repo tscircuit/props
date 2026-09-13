@@ -491,6 +491,12 @@ export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
 
 export const autorouterEffortLevel = z.enum(["1x", "2x", "5x", "10x", "100x"])
 
+export const preflightRoutingCheckPolicy = z.enum(["none", "conservative"])
+
+export type PreflightRoutingCheckPolicy = z.infer<
+  typeof preflightRoutingCheckPolicy
+>
+
 export type AutorouterVersion =
   | "beta_pipeline1"
   | "beta_pipeline3"
@@ -542,6 +548,13 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  /**
+   * Policy for checks before autorouting: "none" disables checks and
+   * "conservative" requests conservative checks. Values are preserved as
+   * supplied; omission leaves the policy unset. No default, aliases, prop
+   * conflicts, or migration requirements are introduced.
+   */
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
   /**
    * Selects the local autorouting pipeline. Unknown string values emit a
@@ -732,6 +745,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: autorouterVersion.optional(),
   square: z.boolean().optional(),

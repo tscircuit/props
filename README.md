@@ -196,6 +196,13 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   pcbRouteCache?: PcbRouteCache;
 
   autorouter?: AutorouterProp;
+  /**
+   * Policy for checks before autorouting: "none" disables checks and
+   * "conservative" requests conservative checks. Values are preserved as
+   * supplied; omission leaves the policy unset. No default, aliases, prop
+   * conflicts, or migration requirements are introduced.
+   */
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy;
   exposedNets?: string[];
   exposeNets?: boolean;
 
@@ -359,6 +366,13 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any;
   name?: string;
   autorouter?: AutorouterProp;
+  /**
+   * Policy for checks before autorouting: "none" disables checks and
+   * "conservative" requests conservative checks. Values are preserved as
+   * supplied; omission leaves the policy unset. No default, aliases, prop
+   * conflicts, or migration requirements are introduced.
+   */
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy;
   phaseIndex?: number;
   /**
    * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.

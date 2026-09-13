@@ -241,6 +241,13 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
+  /**
+   * Policy for checks before autorouting: "none" disables checks and
+   * "conservative" requests conservative checks. Values are preserved as
+   * supplied; omission leaves the policy unset. No default, aliases, prop
+   * conflicts, or migration requirements are introduced.
+   */
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
   /**
    * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.
@@ -2941,6 +2948,13 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  /**
+   * Policy for checks before autorouting: "none" disables checks and
+   * "conservative" requests conservative checks. Values are preserved as
+   * supplied; omission leaves the policy unset. No default, aliases, prop
+   * conflicts, or migration requirements are introduced.
+   */
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
   /**
    * Selects the local autorouting pipeline. Unknown string values emit a

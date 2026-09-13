@@ -443,6 +443,13 @@ export interface BoardProps
    * false, which restricts newly generated vias to the full board stack.
    */
   allowBlindAndBuriedVias?: boolean
+  defaultViaTenting?:
+    | boolean
+    | "both_sides"
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed"
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -3069,6 +3076,13 @@ export interface ViaProps extends CommonLayoutProps {
   outerDiameter?: number | string
   connectsTo?: string | string[]
   netIsAssignable?: boolean
+  tented?:
+    | boolean
+    | "both_sides"
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed"
 }
 
 

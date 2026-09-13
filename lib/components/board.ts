@@ -92,6 +92,13 @@ export interface BoardProps
    * false, which restricts newly generated vias to the full board stack.
    */
   allowBlindAndBuriedVias?: boolean
+  defaultViaTenting?:
+    | boolean
+    | "both_sides"
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed"
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -169,6 +176,25 @@ export const boardProps = subcircuitGroupProps
       .describe(
         "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack.",
       ),
+    defaultViaTenting: z
+      .union([
+        z.boolean(),
+        z.enum([
+          "both_sides",
+          "top_and_bottom_tented",
+          "top_tented",
+          "bottom_tented",
+          "exposed",
+        ]),
+      ])
+      .transform((value) => {
+        if (value === true || value === "both_sides") {
+          return "top_and_bottom_tented" as const
+        }
+        if (value === false) return "exposed" as const
+        return value
+      })
+      .optional(),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),

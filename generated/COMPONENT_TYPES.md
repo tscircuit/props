@@ -1713,6 +1713,10 @@ export interface BusProps {
   routingPhaseIndex?: number | null
   maxLengthSkew?: number | string
   targetImpedance?: number | string
+  pcbImpedanceProfile?: {
+    layer: LayerRefInput
+    points: Array<{ traceWidth: number | string; impedance: number | string }>
+  }
   pcbTraceWidth?: number | string
   pcbAllowedLayers?: LayerRefInput[]
   preferredLayer?: LayerRefInput
@@ -1725,6 +1729,19 @@ export const busProps = z.object({
   routingPhaseIndex: z.number().nullable().optional(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
   targetImpedance: resistance.pipe(z.number().positive().finite()).optional(),
+  pcbImpedanceProfile: z
+    .object({
+      layer: layer_ref,
+      points: z
+        .array(
+          z.object({
+            traceWidth: distance.pipe(z.number().positive().finite()),
+            impedance: resistance.pipe(z.number().positive().finite()),
+          }),
+        )
+        .min(2),
+    })
+    .optional(),
   pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
   pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
   preferredLayer: layer_ref.optional(),
@@ -2835,6 +2852,7 @@ export interface AutorouterConfig {
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
+    | "bus_lanes"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -2894,6 +2912,7 @@ export const autorouterConfig = z.object({
       "laser_prefab",
       "single_layer_fanout",
       "fanout",
+      "bus_lanes",
       "auto-jumper",
       "sequential-trace",
       "auto-local",

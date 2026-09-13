@@ -544,6 +544,13 @@ export interface BusProps {
   maxLengthSkew?: number | string;
   /** Intended single-ended characteristic impedance. Raw numbers are ohms. */
   targetImpedance?: number | string;
+  /** Stackup-specific width/impedance samples for the selected routing layer.
+   * Required by bus_lanes when targetImpedance is set. No default or extrapolation.
+   * Widths must increase and impedances decrease. */
+  pcbImpedanceProfile?: {
+    layer: LayerRefInput;
+    points: Array<{ traceWidth: number | string; impedance: number | string }>;
+  };
   /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
   pcbTraceWidth?: number | string;
   /** PCB layers on which the bus may be routed. */

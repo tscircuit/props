@@ -216,6 +216,7 @@ export interface AutorouterConfig {
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
+    | "bus_lanes"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -555,6 +556,13 @@ export interface BusProps {
   maxLengthSkew?: number | string
   /** Intended single-ended characteristic impedance. Raw numbers are ohms. */
   targetImpedance?: number | string
+  /** Stackup-specific width/impedance samples for the selected routing layer.
+   * Required by bus_lanes when targetImpedance is set. No default or extrapolation.
+   * Widths must increase and impedances decrease. */
+  pcbImpedanceProfile?: {
+    layer: LayerRefInput
+    points: Array<{ traceWidth: number | string; impedance: number | string }>
+  }
   /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
   pcbTraceWidth?: number | string
   /** PCB layers on which the bus may be routed. */

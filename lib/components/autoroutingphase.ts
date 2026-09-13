@@ -7,8 +7,10 @@ import {
 } from "../common/fanoutTracePath"
 import {
   type AutorouterProp,
+  type PreflightRoutingCheckPolicy,
   type RoutingTolerances,
   autorouterProp,
+  preflightRoutingCheckPolicy,
   routingTolerances,
 } from "./group"
 
@@ -24,6 +26,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
   /**
    * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.
@@ -51,6 +54,7 @@ export const autoroutingPhaseProps = z
     key: z.any().optional(),
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
+    preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
     phaseIndex: z.number().optional(),
     pcbTracePaths: z.array(fanoutTracePath).optional(),
     ...routingTolerances.shape,

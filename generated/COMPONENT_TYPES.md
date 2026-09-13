@@ -1437,6 +1437,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
   pcbTracePaths?: FanoutTracePath[]
   region?: {
@@ -1463,6 +1464,7 @@ export const autoroutingPhaseProps = z
     key: z.any().optional(),
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
+    preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
     phaseIndex: z.number().optional(),
     pcbTracePaths: z.array(fanoutTracePath).optional(),
     ...routingTolerances.shape,
@@ -2945,6 +2947,7 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
   autorouterVersion?:
     | "beta_pipeline1"
@@ -3103,6 +3106,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: autorouterVersion.optional(),
   square: z.boolean().optional(),

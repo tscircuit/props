@@ -2835,6 +2835,7 @@ export interface AutorouterConfig {
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
+    | "bus_lanes"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -2894,6 +2895,7 @@ export const autorouterConfig = z.object({
       "laser_prefab",
       "single_layer_fanout",
       "fanout",
+      "bus_lanes",
       "auto-jumper",
       "sequential-trace",
       "auto-local",

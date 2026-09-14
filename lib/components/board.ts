@@ -92,6 +92,11 @@ export interface BoardProps
    * false, which restricts newly generated vias to the full board stack.
    */
   allowBlindAndBuriedVias?: boolean
+  /**
+   * Whether to route remaining unrouted connections after explicit routing phases.
+   * Omitted leaves the setting unset, preserving the consumer's default behavior.
+   */
+  routeRemaining?: boolean
   defaultViaTenting?:
     | boolean
     | "both_sides"
@@ -175,6 +180,12 @@ export const boardProps = subcircuitGroupProps
       .default(false)
       .describe(
         "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack.",
+      ),
+    routeRemaining: z
+      .boolean()
+      .optional()
+      .describe(
+        "Whether to route remaining unrouted connections after explicit routing phases. Boolean values are preserved; omitted leaves the setting unset. No aliases or prop conflicts are introduced, and existing boards require no migration.",
       ),
     defaultViaTenting: z
       .union([

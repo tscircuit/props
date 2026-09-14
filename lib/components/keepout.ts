@@ -2,7 +2,7 @@ import { distance, layer_ref } from "circuit-json"
 import { pcbLayoutProps } from "lib/common/layout"
 import { z } from "zod"
 
-export const pcbKeepoutProps = z.union([
+export const keepoutProps = z.union([
   pcbLayoutProps.omit({ pcbRotation: true }).extend({
     shape: z.literal("circle"),
     radius: distance,
@@ -27,4 +27,4 @@ export const pcbKeepoutProps = z.union([
       ),
   }),
 ])
-export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>
+export type KeepoutProps = z.input<typeof keepoutProps>

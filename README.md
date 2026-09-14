@@ -68,6 +68,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<interconnect />`                      | [`InterconnectProps`](#interconnectprops-interconnect)                                                             |
 | `<internalcircuit />`                   | [`InternalCircuitProps`](#internalcircuitprops-internalcircuit)                                                    |
 | `<jumper />`                            | [`JumperProps`](#jumperprops-jumper)                                                                               |
+| `<keepout />`                           | [`KeepoutProps`](#keepoutprops-keepout)                                                                            |
 | `<led />`                               | [`LedProps`](#ledprops-led)                                                                                        |
 | `<mosfet />`                            | [`MosfetProps`](#mosfetprops-mosfet)                                                                               |
 | `<mountedboard />`                      | [`MountedBoardProps`](#mountedboardprops-mountedboard)                                                             |
@@ -76,7 +77,6 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<netlabel />`                          | [`NetLabelProps`](#netlabelprops-netlabel)                                                                         |
 | `<opamp />`                             | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                             | [`PanelProps`](#panelprops-panel)                                                                                  |
-| `<keepout />`                           | [`PcbKeepoutProps`](#pcbkeepoutprops-keepout)                                                                      |
 | `<pcbnotedimension />`                  | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
 | `<pcbnoteline />`                       | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
 | `<pcbnotepath />`                       | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
@@ -1317,6 +1317,14 @@ export interface JumperProps extends CommonComponentProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts)
 
+### KeepoutProps `<keepout />`
+
+```ts
+export type KeepoutProps = z.input<typeof keepoutProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/keepout.ts)
+
 ### LedProps `<led />`
 
 ```ts
@@ -1464,14 +1472,6 @@ export interface PanelProps extends Omit<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/panel.ts)
-
-### PcbKeepoutProps `<keepout />`
-
-```ts
-export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-keepout.ts)
 
 ### PcbNoteDimensionProps `<pcbnotedimension />`
 

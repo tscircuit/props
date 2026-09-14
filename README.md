@@ -76,7 +76,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<netlabel />`                          | [`NetLabelProps`](#netlabelprops-netlabel)                                                                         |
 | `<opamp />`                             | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                             | [`PanelProps`](#panelprops-panel)                                                                                  |
-| `<pcbkeepout />`                        | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
+| `<keepout />`                           | [`PcbKeepoutProps`](#pcbkeepoutprops-keepout)                                                                      |
 | `<pcbnotedimension />`                  | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
 | `<pcbnoteline />`                       | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
 | `<pcbnotepath />`                       | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
@@ -1465,7 +1465,7 @@ export interface PanelProps extends Omit<
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/panel.ts)
 
-### PcbKeepoutProps `<pcbkeepout />`
+### PcbKeepoutProps `<keepout />`
 
 ```ts
 export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;

@@ -15,6 +15,9 @@ const namespacedAnalogComponentNames = new Set([
 
 function getComponentTagName(componentName: string): string {
   const lowercaseComponentName = componentName.toLowerCase()
+  if (lowercaseComponentName === "pcbkeepout") {
+    return "keepout"
+  }
   if (!namespacedAnalogComponentNames.has(lowercaseComponentName)) {
     return lowercaseComponentName
   }
@@ -143,7 +146,7 @@ function generateComponentsTable(
   const rows = components.map((comp) => {
     const componentTagName = getComponentTagName(comp.name)
     // Link to the section in the document instead of GitHub
-    const sectionLink = `#${comp.props.toLowerCase()}-${comp.name.toLowerCase()}`
+    const sectionLink = `#${comp.props.toLowerCase()}-${componentTagName.replaceAll(".", "")}`
     return `| \`<${componentTagName} />\` | [\`${comp.props}\`](${sectionLink}) |`
   })
 

@@ -23,13 +23,6 @@ export interface BusProps {
   maxLengthSkew?: number | string
   /** Intended single-ended characteristic impedance. Raw numbers are ohms. */
   targetImpedance?: number | string
-  /** Stackup-specific width/impedance samples for the selected routing layer.
-   * Required by bus_lanes when targetImpedance is set. No default or extrapolation.
-   * Widths must increase and impedances decrease. */
-  pcbImpedanceProfile?: {
-    layer: LayerRefInput
-    points: Array<{ traceWidth: number | string; impedance: number | string }>
-  }
   /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
   pcbTraceWidth?: number | string
   /** PCB layers on which the bus may be routed. */
@@ -46,19 +39,6 @@ export const busProps = z.object({
   routingPhaseIndex: z.number().nullable().optional(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
   targetImpedance: resistance.pipe(z.number().positive().finite()).optional(),
-  pcbImpedanceProfile: z
-    .object({
-      layer: layer_ref,
-      points: z
-        .array(
-          z.object({
-            traceWidth: distance.pipe(z.number().positive().finite()),
-            impedance: resistance.pipe(z.number().positive().finite()),
-          }),
-        )
-        .min(2),
-    })
-    .optional(),
   pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
   pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
   preferredLayer: layer_ref.optional(),

@@ -3319,6 +3319,34 @@ export const jumperProps = commonComponentProps.extend({
 })
 ```
 
+### keepout
+
+```typescript
+pcbLayoutProps.omit({ pcbRotation: true }).extend({
+    shape: z.literal("circle"),
+    radius: distance,
+    layers: z.array(layer_ref).optional(),
+    excludeRefs: z
+      .array(z.string())
+      .optional()
+      .describe(
+        'Component selectors excluded from the keepout, such as ".ANT1"',
+      ),
+  }),
+pcbLayoutProps.extend({
+    shape: z.literal("rect"),
+    width: distance,
+    height: distance,
+    layers: z.array(layer_ref).optional(),
+    excludeRefs: z
+      .array(z.string())
+      .optional()
+      .describe(
+        'Component selectors excluded from the keepout, such as ".ANT1"',
+      ),
+  }),
+```
+
 ### led
 
 ```typescript
@@ -3563,34 +3591,6 @@ export const panelProps = baseGroupProps
     edgePaddingBottom: distance.optional(),
     _subcircuitCachingEnabled: z.boolean().optional(),
   })
-```
-
-### pcb-keepout
-
-```typescript
-pcbLayoutProps.omit({ pcbRotation: true }).extend({
-    shape: z.literal("circle"),
-    radius: distance,
-    layers: z.array(layer_ref).optional(),
-    excludeRefs: z
-      .array(z.string())
-      .optional()
-      .describe(
-        'Component selectors excluded from the keepout, such as ".ANT1"',
-      ),
-  }),
-pcbLayoutProps.extend({
-    shape: z.literal("rect"),
-    width: distance,
-    height: distance,
-    layers: z.array(layer_ref).optional(),
-    excludeRefs: z
-      .array(z.string())
-      .optional()
-      .describe(
-        'Component selectors excluded from the keepout, such as ".ANT1"',
-      ),
-  }),
 ```
 
 ### pcb-note-dimension

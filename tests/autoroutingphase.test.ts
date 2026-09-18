@@ -1,10 +1,14 @@
-import { expect, test } from "bun:test"
+import { afterEach, expect, mock, spyOn, test } from "bun:test"
 import { expectTypeOf } from "expect-type"
 import {
   type AutoroutingPhaseProps,
   autoroutingPhaseProps,
 } from "lib/components/autoroutingphase"
 import type { z } from "zod"
+
+afterEach(() => {
+  mock.restore()
+})
 
 test("autorouting phase accepts a name", () => {
   const raw: AutoroutingPhaseProps = {
@@ -28,6 +32,79 @@ test("autorouting phase accepts autorouter and phase index", () => {
   const parsed = autoroutingPhaseProps.parse(raw)
   expect(parsed.autorouter).toBe("sequential_trace")
   expect(parsed.phaseIndex).toBe(1)
+})
+
+test("autorouting phase accepts per-bus fanout directions", () => {
+  const raw = {
+    autorouter: "fanout",
+    busFanoutDirections: {
+      DATA: "top_right",
+      CONTROL: { direction: "center_left" },
+      CANONICAL_UPPER_DATA: "rightside_top",
+      CANONICAL_TOP_CONTROL: { direction: "topside_right" },
+      UNCONSTRAINED: "center",
+    },
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
+})
+
+test("autorouting phase rejects low-level solver boundary-region names", () => {
+  expect(() =>
+    autoroutingPhaseProps.parse({
+      autorouter: "fanout",
+      busFanoutDirections: { DATA: "right_top" },
+    }),
+  ).toThrow()
+})
+
+test("autorouting phase accepts fanout routing layers", () => {
+  const parsed = autoroutingPhaseProps.parse({
+    autorouter: "fanout",
+    fanoutRoutingLayers: ["top", { name: "inner3" }, "bottom"],
+  })
+
+  expect(parsed.fanoutRoutingLayers).toEqual(["top", "inner3", "bottom"])
+})
+
+test("autorouting phase accepts a fanout pour net map", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutPourNetMap: {
+      inner1: "GND",
+      inner2: ["VCC_CORE", "VCC_IO"],
+    },
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw)).toEqual(raw)
+})
+
+test("autorouting phase accepts scalar fanout boundary padding", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutBoundaryPadding: "0.6mm",
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw).fanoutBoundaryPadding).toBe(0.6)
+})
+
+test("autorouting phase accepts directional fanout boundary padding", () => {
+  const raw = {
+    autorouter: "fanout",
+    fanoutBoundaryPadding: {
+      top: "0.4mm",
+      right: 0.8,
+      bottom: "1.2mm",
+      left: 0.5,
+    },
+  } satisfies AutoroutingPhaseProps
+
+  expect(autoroutingPhaseProps.parse(raw).fanoutBoundaryPadding).toEqual({
+    top: 0.4,
+    right: 0.8,
+    bottom: 1.2,
+    left: 0.5,
+  })
 })
 
 test("autorouting phase accepts a single connection", () => {
@@ -83,6 +160,30 @@ test("autorouting phase accepts autorouter config", () => {
     preset: "auto_local",
     traceClearance: 0.2,
   })
+})
+
+test("autorouting phase warns when simplify is used without reroute", () => {
+  const warn = spyOn(console, "warn").mockImplementation(() => {})
+
+  autoroutingPhaseProps.parse({ autorouter: "simplify" })
+  autoroutingPhaseProps.parse({ autorouter: { preset: "simplify" } })
+
+  expect(warn).toHaveBeenCalledTimes(2)
+  expect(warn).toHaveBeenCalledWith(
+    'The "simplify" autorouter preset should only be used with reroute=true',
+  )
+})
+
+test("autorouting phase does not warn when simplify reroutes", () => {
+  const warn = spyOn(console, "warn").mockImplementation(() => {})
+
+  const parsed = autoroutingPhaseProps.parse({
+    autorouter: "simplify",
+    reroute: true,
+  })
+
+  expect(parsed).toEqual({ autorouter: "simplify", reroute: true })
+  expect(warn).not.toHaveBeenCalled()
 })
 
 test("autorouting phase accepts routing tolerances", () => {

@@ -9,9 +9,18 @@ test("should parse footprint name", () => {
 
 test("should parse footprint insertionDirection options", () => {
   const insertionDirections = [
-    "from_above",
     "from_left",
     "from_right",
+    "from_top",
+    "from_bottom",
+    "from_above",
+    "from_below",
+    "from_x_neg",
+    "from_x_pos",
+    "from_y_pos",
+    "from_y_neg",
+    "from_z_pos",
+    "from_z_neg",
     "from_front",
     "from_back",
   ] as const
@@ -24,9 +33,7 @@ test("should parse footprint insertionDirection options", () => {
 })
 
 test("should fail for invalid footprint insertionDirection", () => {
-  expect(() =>
-    footprintProps.parse({
-      insertionDirection: "from_side",
-    } as any),
-  ).toThrow()
+  for (const insertionDirection of ["from_side", "from_y+", "from_beneath"]) {
+    expect(() => footprintProps.parse({ insertionDirection } as any)).toThrow()
+  }
 })

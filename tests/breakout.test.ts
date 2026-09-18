@@ -1,8 +1,8 @@
 import { expect, test } from "bun:test"
-import { breakoutProps, type BreakoutProps } from "../lib/components/breakout"
+import { type BreakoutProps, breakoutProps } from "../lib/components/breakout"
 import {
-  breakoutPointProps,
   type BreakoutPointProps,
+  breakoutPointProps,
 } from "../lib/components/breakoutpoint"
 
 test("should parse breakout props with padding", () => {
@@ -15,6 +15,83 @@ test("should parse breakout props with padding", () => {
   const parsed = breakoutProps.parse(raw)
   expect(parsed.padding).toBe(1)
   expect(parsed.paddingLeft).toBe(2)
+})
+
+test("breakout accepts a fanout margin", () => {
+  expect(breakoutProps.parse({ fanoutMargin: "0.6mm" }).fanoutMargin).toBe(0.6)
+})
+
+test("breakout rejects a negative fanout margin", () => {
+  expect(() => breakoutProps.parse({ fanoutMargin: "-0.1mm" })).toThrow(
+    "Fanout margin cannot be negative",
+  )
+})
+
+test("breakout and fanout elements default to the fanout autorouter", () => {
+  expect(breakoutProps.parse({}).autorouter).toBe("fanout")
+  expect(
+    breakoutProps.parse({ autorouter: "single_layer_fanout" }).autorouter,
+  ).toBe("single_layer_fanout")
+})
+
+test("breakout accepts scalar fanout boundary padding", () => {
+  const raw = {
+    fanoutBoundaryPadding: "0.6mm",
+  } satisfies BreakoutProps
+
+  expect(breakoutProps.parse(raw).fanoutBoundaryPadding).toBe(0.6)
+})
+
+test("breakout accepts directional fanout boundary padding", () => {
+  const raw = {
+    fanoutBoundaryPadding: {
+      top: "0.4mm",
+      right: 0.8,
+      bottom: "1.2mm",
+    },
+  } satisfies BreakoutProps
+
+  expect(breakoutProps.parse(raw).fanoutBoundaryPadding).toEqual({
+    top: 0.4,
+    right: 0.8,
+    bottom: 1.2,
+  })
+})
+
+test("breakout rejects negative fanout boundary padding", () => {
+  expect(() =>
+    breakoutProps.parse({ fanoutBoundaryPadding: "-0.1mm" }),
+  ).toThrow("Fanout boundary padding cannot be negative")
+})
+
+test("breakout accepts fanout bus directions and routing layers", () => {
+  const raw = {
+    busFanoutDirections: {
+      DATA: "center_right",
+      ADDRESS: { direction: "center_left" },
+    },
+    fanoutRoutingLayers: ["top", { name: "inner3" }, "bottom"],
+  } satisfies BreakoutProps
+
+  expect(breakoutProps.parse(raw)).toEqual({
+    autorouter: "fanout",
+    busFanoutDirections: raw.busFanoutDirections,
+    fanoutRoutingLayers: ["top", "inner3", "bottom"],
+  })
+})
+
+test("breakout accepts a fanout pour net map", () => {
+  const raw = {
+    fanoutPourNetMap: {
+      inner1: "GND",
+      inner2: ["VCC_CORE", "VCC_IO"],
+    },
+  } satisfies BreakoutProps
+
+  expect(breakoutProps.parse(raw)).toEqual({
+    autorouter: "fanout",
+    fanoutPourNetMap: raw.fanoutPourNetMap,
+  })
 })
 
 test("should parse breakout point props", () => {

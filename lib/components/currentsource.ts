@@ -21,6 +21,10 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  /** Small-signal AC magnitude. Raw numbers are amperes. */
+  acMagnitude?: number | string
+  /** Small-signal AC phase. Raw numbers are degrees. */
+  acPhase?: number | string
   connections?: Connections<CurrentSourcePinLabels>
 }
 
@@ -49,6 +53,8 @@ export const currentSourceProps = commonComponentProps.extend({
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
   dutyCycle: percentage.optional(),
+  acMagnitude: current.optional(),
+  acPhase: rotation.optional(),
   connections: createConnectionsProp(currentSourcePinLabels).optional(),
 })
 

@@ -1,6 +1,64 @@
 import { expect, test } from "bun:test"
 import { boardProps, type BoardProps } from "lib/components/board"
 
+test("fabricatorPreset accepts the supported presets unchanged", () => {
+  for (const fabricatorPreset of [
+    "jlcpcb_economy",
+    "jlcpcb_standard",
+    "jlcpcb_economy_20260912",
+    "jlcpcb_standard_20260912",
+  ] as const) {
+    const raw: BoardProps = { fabricatorPreset }
+    expect(boardProps.parse(raw).fabricatorPreset).toBe(fabricatorPreset)
+  }
+})
+
+test("fabricatorPreset is optional without a default", () => {
+  expect(boardProps.parse({}).fabricatorPreset).toBeUndefined()
+})
+
+test("fabricatorPreset rejects unsupported values", () => {
+  for (const fabricatorPreset of [
+    "jlcpcb",
+    "jlcpcb_economy_20260913",
+    "",
+    null,
+    123,
+  ]) {
+    expect(boardProps.safeParse({ fabricatorPreset }).success).toBe(false)
+  }
+})
+
+test("via stitching is opt-in and pitch does not enable it", () => {
+  const defaults = boardProps.parse({})
+  expect(defaults.enableViaStitching).toBe(false)
+  expect(defaults.viaStitchPitch).toBeUndefined()
+  expect(boardProps.parse({ viaStitchPitch: "1mm" }).enableViaStitching).toBe(
+    false,
+  )
+  expect(
+    boardProps.parse({ enableViaStitching: false }).enableViaStitching,
+  ).toBe(false)
+  expect(boardProps.safeParse({ enableViaStitching: "true" }).success).toBe(
+    false,
+  )
+})
+
+test("via stitch pitch accepts distances and normalizes to millimeters", () => {
+  for (const pitch of [2.54, "2.54mm", "0.1in"]) {
+    const raw: BoardProps = { enableViaStitching: true, viaStitchPitch: pitch }
+    const parsed = boardProps.parse(raw)
+    expect(parsed.enableViaStitching).toBe(true)
+    expect(parsed.viaStitchPitch).toBeCloseTo(2.54)
+  }
+})
+
+test("via stitch pitch rejects nonpositive and nonfinite distances", () => {
+  for (const pitch of [0, -1, "0mm", "-1mm", Infinity, NaN, "invalid"]) {
+    expect(boardProps.safeParse({ viaStitchPitch: pitch }).success).toBe(false)
+  }
+})
+
 // ensure square and area props parse correctly
 
 test("should parse square and area props", () => {
@@ -28,12 +86,14 @@ test("should allow single-layer boards", () => {
   expect(parsed.layers).toBe(1)
 })
 
-test("should allow 6 and 8 layer boards", () => {
+test("should allow 6, 8, and 10 layer boards", () => {
   const sixLayer: BoardProps = { name: "board", layers: 6 }
   const eightLayer: BoardProps = { name: "board", layers: 8 }
+  const tenLayer: BoardProps = { name: "board", layers: 10 }
 
   expect(boardProps.parse(sixLayer).layers).toBe(6)
   expect(boardProps.parse(eightLayer).layers).toBe(8)
+  expect(boardProps.parse(tenLayer).layers).toBe(10)
 })
 
 test("should parse flex board material", () => {
@@ -46,6 +106,70 @@ test("should parse borderRadius prop", () => {
   const raw: BoardProps = { name: "board", borderRadius: 2 }
   const parsed = boardProps.parse(raw)
   expect(parsed.borderRadius).toBe(2)
+})
+
+test("should parse castellated holes on board outline points", () => {
+  const raw: BoardProps = {
+    name: "board",
+    outline: [
+      { x: "-5mm", y: "-5mm" },
+      {
+        x: "-5mm",
+        y: 0,
+        isCastellatedHole: true,
+        holeDiameter: "0.8mm",
+        padDiameter: "1.2mm",
+        connectsTo: ["net.GND", "source_port_1"],
+      },
+      { x: "-5mm", y: "5mm" },
+      { x: "5mm", y: "5mm" },
+      { x: "5mm", y: "-5mm" },
+    ],
+  }
+
+  const parsed = boardProps.parse(raw)
+
+  expect(parsed.outline?.[0]).toEqual({ x: -5, y: -5 })
+  expect(parsed.outline?.[1]).toEqual({
+    x: -5,
+    y: 0,
+    isCastellatedHole: true,
+    holeDiameter: 0.8,
+    padDiameter: 1.2,
+    connectsTo: ["net.GND", "source_port_1"],
+  })
+})
+
+test("should require both diameters for a castellated outline hole", () => {
+  const result = boardProps.safeParse({
+    name: "board",
+    outline: [
+      {
+        x: 0,
+        y: 0,
+        isCastellatedHole: true,
+        holeDiameter: "0.8mm",
+      },
+    ],
+  })
+
+  expect(result.success).toBe(false)
+})
+
+test("should require isCastellatedHole for flattened hole props", () => {
+  const result = boardProps.safeParse({
+    name: "board",
+    outline: [
+      {
+        x: 0,
+        y: 0,
+        holeDiameter: "0.8mm",
+        padDiameter: "1.2mm",
+      },
+    ],
+  })
+
+  expect(result.success).toBe(false)
 })
 
 test("should parse boardAnchorPosition prop", () => {
@@ -108,4 +232,43 @@ test("should parse schematicDisabled prop", () => {
   }
   const parsed = boardProps.parse(raw)
   expect(parsed.schematicDisabled).toBe(true)
+})
+
+test("should parse isViaInPadAllowed prop", () => {
+  const enabled: BoardProps = {
+    name: "board",
+    isViaInPadAllowed: true,
+  }
+  const disabled: BoardProps = {
+    name: "board",
+    isViaInPadAllowed: false,
+  }
+
+  expect(boardProps.parse(enabled).isViaInPadAllowed).toBe(true)
+  expect(boardProps.parse(disabled).isViaInPadAllowed).toBe(false)
+  expect(boardProps.parse({ name: "board" }).isViaInPadAllowed).toBeUndefined()
+})
+
+test("should parse automaticPoursEnabled prop", () => {
+  const enabled: BoardProps = {
+    name: "board",
+    automaticPoursEnabled: true,
+  }
+  const disabled: BoardProps = {
+    name: "board",
+    automaticPoursEnabled: false,
+  }
+
+  expect(boardProps.parse(enabled).automaticPoursEnabled).toBe(true)
+  expect(boardProps.parse(disabled).automaticPoursEnabled).toBe(false)
+  expect(boardProps.parse({ name: "board" }).automaticPoursEnabled).toBe(false)
+})
+
+// core reads this through getInheritedProperty("placementDrcChecksDisabled"),
+// so it has to survive the zod parse to reach the autorouting gate
+
+test("should parse placementDrcChecksDisabled prop", () => {
+  const raw: BoardProps = { name: "board", placementDrcChecksDisabled: true }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.placementDrcChecksDisabled).toBe(true)
 })

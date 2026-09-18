@@ -93,3 +93,20 @@ test("should allow optional connections", () => {
   const parsedProps = ledProps.parse(rawProps)
   expect(parsedProps.connections).toBeUndefined()
 })
+
+test("should parse supplier-specific LED pin labels", () => {
+  const rawProps: LedProps = {
+    name: "led",
+    pinLabels: {
+      pin1: ["cathode", "neg"],
+      pin2: ["anode", "pos"],
+    },
+  }
+
+  const parsedProps = ledProps.parse(rawProps)
+
+  expect(parsedProps.pinLabels).toEqual({
+    pin1: ["cathode", "neg"],
+    pin2: ["anode", "pos"],
+  })
+})

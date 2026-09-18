@@ -89,6 +89,20 @@ test("supports pcbStraightLine flag", () => {
   expect(parsed.pcbStraightLine).toBe(true)
 })
 
+test("supports limiting the maximum number of PCB vias", () => {
+  const raw: TraceProps = {
+    from: "A",
+    to: "B",
+    maxViaCount: 0,
+  }
+
+  const parsed = traceProps.parse(raw)
+
+  expect(parsed.maxViaCount).toBe(0)
+  expect(() => traceProps.parse({ ...raw, maxViaCount: -1 })).toThrow()
+  expect(() => traceProps.parse({ ...raw, maxViaCount: 1.5 })).toThrow()
+})
+
 test("accepts start/end aliases for trace endpoints", () => {
   const raw: TraceProps = {
     start: "A",

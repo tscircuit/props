@@ -14,8 +14,13 @@ export interface PanelProps
    * If true, prevent a solder mask from being applied to this panel.
    */
   noSolderMask?: boolean
-  /** Method for panelization */
-  panelizationMethod?: "tab-routing" | "none"
+  /**
+   * Method used to separate boards in the panel.
+   *
+   * `outline_routing` creates continuous routed cutouts around each board
+   * outline without tabs.
+   */
+  panelizationMethod?: "tab-routing" | "outline_routing" | "none"
   /** Gap between boards in a panel */
   boardGap?: Distance
   layoutMode?: "grid" | "pack" | "none"
@@ -47,7 +52,9 @@ export const panelProps = baseGroupProps
     children: z.any().optional(),
     anchorAlignment: ninePointAnchor.optional(),
     noSolderMask: z.boolean().optional(),
-    panelizationMethod: z.enum(["tab-routing", "none"]).optional(),
+    panelizationMethod: z
+      .enum(["tab-routing", "outline_routing", "none"])
+      .optional(),
     boardGap: distance.optional(),
     layoutMode: z.enum(["grid", "pack", "none"]).optional(),
     row: z.number().optional(),

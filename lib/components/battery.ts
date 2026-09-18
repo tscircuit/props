@@ -2,7 +2,6 @@ import { voltage } from "circuit-json"
 import { z } from "zod"
 import {
   commonComponentProps,
-  lrPins,
   lrPolarPins,
   type CommonComponentProps,
 } from "lib/common/layout"
@@ -10,6 +9,8 @@ import {
   schematicOrientation,
   type SchematicOrientation,
 } from "lib/common/schematicOrientation"
+import { createConnectionsProp } from "lib/common/connectionsProp"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 
 /** @deprecated use battery_capacity from circuit-json when circuit-json is updated */
@@ -29,12 +30,16 @@ const capacity = z
   })
   .describe("Battery capacity in mAh")
 
+export const batteryPins = lrPolarPins
+export type BatteryPinLabels = (typeof batteryPins)[number]
+
 export interface BatteryProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   capacity?: number | string
   voltage?: number | string
   standard?: "AA" | "AAA" | "9V" | "CR2032" | "18650" | "C"
   schOrientation?: SchematicOrientation
+  connections?: Connections<BatteryPinLabels>
 }
 
 export const batteryProps = commonComponentProps.extend({
@@ -42,8 +47,7 @@ export const batteryProps = commonComponentProps.extend({
   voltage: voltage.optional(),
   standard: z.enum(["AA", "AAA", "9V", "CR2032", "18650", "C"]).optional(),
   schOrientation: schematicOrientation.optional(),
+  connections: createConnectionsProp(batteryPins).optional(),
 })
-export const batteryPins = lrPolarPins
-export type BatteryPinLabels = (typeof batteryPins)[number]
 
 expectTypesMatch<BatteryProps, z.input<typeof batteryProps>>(true)

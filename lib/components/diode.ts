@@ -33,7 +33,7 @@ const connectionTarget = z
 
 const connectionsProp = z.record(diodeConnectionKeys, connectionTarget)
 
-const diodePinLabelsProp = z.record(
+export const diodePinLabelsProp = z.record(
   z.enum(diodePins),
   schematicPinLabel
     .or(z.array(schematicPinLabel).readonly())

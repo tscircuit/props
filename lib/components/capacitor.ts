@@ -1,4 +1,4 @@
-import { capacitance, voltage } from "circuit-json"
+import { capacitance, distance, voltage } from "circuit-json"
 import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
@@ -37,7 +37,8 @@ export interface CapacitorProps<PinLabel extends string = string>
   decouplingTo?: string
   bypassFor?: string
   bypassTo?: string
-  maxDecouplingTraceLength?: number
+  /** Maximum allowed PCB trace length between this capacitor and the component it decouples */
+  maxDecouplingTraceLength?: number | string
   schOrientation?: SchematicOrientation
   schSize?: SchematicSymbolSize
   connections?: Connections<CapacitorPinLabels>
@@ -52,7 +53,7 @@ export const capacitorProps = commonComponentProps.extend({
   decouplingTo: z.string().optional(),
   bypassFor: z.string().optional(),
   bypassTo: z.string().optional(),
-  maxDecouplingTraceLength: z.number().optional(),
+  maxDecouplingTraceLength: distance.optional(),
   schOrientation: schematicOrientation.optional(),
   schSize: schematicSymbolSize.optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),

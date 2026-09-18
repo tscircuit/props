@@ -27,6 +27,10 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   fallTime?: number | string
   pulseWidth?: number | string
   period?: number | string
+  /** Small-signal AC magnitude. Raw numbers are volts. */
+  acMagnitude?: number | string
+  /** Small-signal AC phase. Raw numbers are degrees. */
+  acPhase?: number | string
   connections?: Connections<VoltageSourcePinLabels>
 }
 
@@ -60,6 +64,8 @@ export const voltageSourceProps = commonComponentProps.extend({
   fallTime: ms.optional(),
   pulseWidth: ms.optional(),
   period: ms.optional(),
+  acMagnitude: voltage.optional(),
+  acPhase: rotation.optional(),
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
 

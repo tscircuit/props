@@ -7,12 +7,16 @@ export const pcbKeepoutProps = z.union([
     shape: z.literal("circle"),
     radius: distance,
     layers: z.array(layer_ref).optional(),
+    /** Report keepout violations as warnings when true. Omit for normal enforcement. */
+    warningOnly: z.boolean().optional(),
   }),
   pcbLayoutProps.extend({
     shape: z.literal("rect"),
     width: distance,
     height: distance,
     layers: z.array(layer_ref).optional(),
+    /** Report keepout violations as warnings when true. Omit for normal enforcement. */
+    warningOnly: z.boolean().optional(),
   }),
 ])
 export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>

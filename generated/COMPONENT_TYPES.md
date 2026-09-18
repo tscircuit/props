@@ -2714,12 +2714,15 @@ pcbLayoutProps.omit({ pcbRotation: true }).extend({
     shape: z.literal("circle"),
     radius: distance,
     layers: z.array(layer_ref).optional(),
+    warningOnly: z.boolean().optional(),
   }),
-pcbLayoutProps.extend({
+/** Report keepout violations as warnings when true. Omit for normal enforcement. */
+  pcbLayoutProps.extend({
     shape: z.literal("rect"),
     width: distance,
     height: distance,
     layers: z.array(layer_ref).optional(),
+    warningOnly: z.boolean().optional(),
   }),
 ```
 

@@ -623,6 +623,9 @@ export interface CapacitorProps<
   schOrientation?: SchematicOrientation;
   schSize?: SchematicSymbolSize;
   connections?: Connections<CapacitorPinLabels>;
+  tolerance?: number | string;
+  temperatureCoefficient?: string;
+  equivalentSeriesResistance?: number | string;
 }
 ```
 

@@ -1,4 +1,4 @@
-import { capacitance, distance, voltage } from "circuit-json"
+import { capacitance, distance, resistance, voltage } from "circuit-json"
 import { createConnectionsProp } from "lib/common/connectionsProp"
 import {
   type CommonComponentProps,
@@ -42,6 +42,9 @@ export interface CapacitorProps<PinLabel extends string = string>
   schOrientation?: SchematicOrientation
   schSize?: SchematicSymbolSize
   connections?: Connections<CapacitorPinLabels>
+  tolerance?: number | string
+  temperatureCoefficient?: string
+  equivalentSeriesResistance?: number | string
 }
 
 export const capacitorProps = commonComponentProps.extend({
@@ -57,6 +60,27 @@ export const capacitorProps = commonComponentProps.extend({
   schOrientation: schematicOrientation.optional(),
   schSize: schematicSymbolSize.optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),
+  tolerance: z
+    .union([z.string(), z.number()])
+    .transform((val) => {
+      if (typeof val === "string") {
+        const cleaned = val.replace(/^[±\+\/-]+/, "").trim()
+        if (cleaned.endsWith("%")) {
+          return parseFloat(cleaned.slice(0, -1)) / 100
+        }
+        return parseFloat(cleaned)
+      }
+      return val
+    })
+    .pipe(
+      z
+        .number()
+        .min(0, "Tolerance must be non-negative")
+        .max(1, "Tolerance cannot be greater than 100%"),
+    )
+    .optional(),
+  temperatureCoefficient: z.string().optional(),
+  equivalentSeriesResistance: resistance.optional(),
 })
 export const capacitorPins = lrPolarPins
 

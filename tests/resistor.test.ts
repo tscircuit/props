@@ -58,3 +58,19 @@ test("should preserve non-generic resistor footprints", () => {
   const parsed = resistorProps.parse(raw)
   expect(parsed.footprint).toBe("kicad:R_0402_1005Metric")
 })
+
+test("should parse documented rating props powerRating and temperatureOperatingRange", () => {
+  const raw: ResistorProps = {
+    name: "R1",
+    resistance: "1k",
+    powerRating: "5W",
+    temperatureOperatingRange: "-15F-150F",
+    footprint: "0402",
+    tolerance: "±5%",
+  }
+
+  const parsed = resistorProps.parse(raw)
+  expect(parsed.powerRating).toBe("5W")
+  expect(parsed.temperatureOperatingRange).toBe("-15F-150F")
+  expect(parsed.tolerance).toBeCloseTo(0.05)
+})

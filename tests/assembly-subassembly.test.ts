@@ -15,7 +15,6 @@ test("assembly.cadassembly is the same schema as assembly.subassembly", () => {
   const input: AssemblyCadAssemblyPropsInput = {
     name: "display-module",
     displayName: "Display module",
-    connectsTo: ".housing",
     cadModel: { glbUrl: "https://example.com/display.glb" },
   }
   const canonical: AssemblySubassemblyPropsInput = input
@@ -24,15 +23,11 @@ test("assembly.cadassembly is the same schema as assembly.subassembly", () => {
   )
 })
 
-test("keeps selector references and children for core to resolve", () => {
+test("preserves nested children", () => {
   const children = createElement("assembly.cadassembly", { name: "bracket" })
-  const input = { name: "display", connectsTo: ".bracket", children }
+  const input = { name: "display", children }
   expect(assemblySubassemblyProps.parse(input)).toEqual(input)
   expect(assemblySubassemblyProps.parse(input).children).toBe(children)
-  // A forward reference must not require the target to exist during parsing.
-  expect(
-    assemblyCadAssemblyProps.parse({ name: "bracket", connectsTo: ".housing" }),
-  ).toEqual({ name: "bracket", connectsTo: ".housing" })
 })
 
 test("permits empty containers and existing CAD model forms without defaults", () => {
@@ -50,14 +45,23 @@ test("permits empty containers and existing CAD model forms without defaults", (
   }
 })
 
-test("rejects missing identities and empty identity or attachment selectors", () => {
-  for (const input of [
-    {},
-    { name: "" },
-    { name: "  " },
-    { name: "module", connectsTo: " " },
-  ]) {
+test("rejects missing and empty identities", () => {
+  for (const input of [{}, { name: "" }, { name: "  " }]) {
     expect(assemblySubassemblyProps.safeParse(input).success).toBe(false)
     expect(assemblyCadAssemblyProps.safeParse(input).success).toBe(false)
   }
+})
+
+test("connectsTo is not a subassembly prop on either alias", () => {
+  for (const schema of [assemblySubassemblyProps, assemblyCadAssemblyProps]) {
+    expect(schema.parse({ name: "module", connectsTo: ".other" })).toEqual({
+      name: "module",
+    })
+  }
+  const input: AssemblySubassemblyPropsInput = {
+    name: "module",
+    // @ts-expect-error Subassemblies group geometry; they do not attach to targets.
+    connectsTo: ".other",
+  }
+  expect(input.name).toBe("module")
 })

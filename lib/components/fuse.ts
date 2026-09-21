@@ -7,9 +7,9 @@ import {
   schematicOrientation,
   type SchematicOrientation,
 } from "lib/common/schematicOrientation"
-import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { createConnectionsProp } from "lib/common/connectionsProp"
 import { expectTypesMatch } from "lib/typecheck"
+import type { Connections } from "lib/utility-types/connections-and-selectors"
 
 /**
  * Pin labels for fuse component
@@ -18,7 +18,7 @@ export const fusePinLabels = ["pin1", "pin2"] as const
 
 export type FusePinLabels = (typeof fusePinLabels)[number]
 
-export interface FuseProps<PinLabel extends string = FusePinLabels>
+export interface FuseProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   /**
    * Current rating of the fuse in amperes
@@ -40,7 +40,7 @@ export interface FuseProps<PinLabel extends string = FusePinLabels>
   /**
    * Connections to other components
    */
-  connections?: Connections<PinLabel>
+  connections?: Connections<FusePinLabels>
 }
 
 /**
@@ -56,4 +56,4 @@ export const fuseProps = commonComponentProps.extend({
 
 export type InferredFuseProps = z.input<typeof fuseProps>
 
-expectTypesMatch<InferredFuseProps, FuseProps>(true)
+expectTypesMatch<FuseProps, z.input<typeof fuseProps>>(true)

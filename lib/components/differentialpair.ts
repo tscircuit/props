@@ -1,5 +1,10 @@
 import { expectTypesMatch } from "lib/typecheck"
-import { distance, resistance, type LayerRefInput, layer_ref } from "circuit-json"
+import {
+  distance,
+  type LayerRefInput,
+  layer_ref,
+  resistance,
+} from "circuit-json"
 import { z } from "zod"
 
 /**

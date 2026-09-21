@@ -184,6 +184,26 @@ export interface AssemblyScreenProps {
 }
 
 
+export interface AssemblySubassemblyProps {
+  /** Stable identity used by selectors from other assembly elements. */
+  name: string
+  /** Human-facing alternate to the stable name. */
+  displayName?: string
+  /**
+   * Attachment target selector, resolved within the nearest assembly.device.
+   * May select a connector, assembly.screen, assembly.subassembly, or its
+   * assembly.cadassembly alias. Omit for an independently placed assembly.
+   * This establishes attachment, not a copy of the target's geometry.
+   * Target existence, ambiguity, and attachment cycles are checked by core.
+   */
+  connectsTo?: string
+  /** Optional CAD geometry using the existing component cadModel formats. */
+  cadModel?: CadModelProp
+  /** Nested assembly elements or CAD geometry; preserved without parsing. */
+  children?: ReactNode
+}
+
+
 export interface AutorouterConfig {
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"

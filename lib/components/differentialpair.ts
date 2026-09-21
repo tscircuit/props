@@ -1,5 +1,5 @@
 import { expectTypesMatch } from "lib/typecheck"
-import { distance, resistance } from "circuit-json"
+import { distance, resistance, type LayerRefInput, layer_ref } from "circuit-json"
 import { z } from "zod"
 
 /**
@@ -20,6 +20,16 @@ export interface DifferentialPairProps {
   pcbTraceGap?: number | string
   /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
   maxUncoupledLength?: number | string
+  /** Nominal width of each trace in the pair. Raw numbers are millimeters. */
+  traceWidth?: number | string
+  /** Board layer where the differential pair must be routed. */
+  layer?: LayerRefInput
+  /** If true, both traces must be routed on the exact same layer. */
+  requireSameLayer?: boolean
+  /** Edge-to-edge gap required when placing vias along the differential pair. */
+  viaGap?: number | string
+  /** If true, via transitions must be placed symmetrically and matched in quantity. */
+  requireMatchedVias?: boolean
 }
 
 export const differentialPairProps = z.object({
@@ -32,6 +42,11 @@ export const differentialPairProps = z.object({
     .optional(),
   pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
   maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
+  traceWidth: distance.pipe(z.number().positive().finite()).optional(),
+  layer: layer_ref.optional(),
+  requireSameLayer: z.boolean().optional(),
+  viaGap: distance.pipe(z.number().positive().finite()).optional(),
+  requireMatchedVias: z.boolean().optional(),
 })
 
 type InferredDifferentialPairProps = z.input<typeof differentialPairProps>

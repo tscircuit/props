@@ -76,12 +76,14 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<netlabel />`                          | [`NetLabelProps`](#netlabelprops-netlabel)                                                                         |
 | `<opamp />`                             | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                             | [`PanelProps`](#panelprops-panel)                                                                                  |
+| `<pcbbend />`                           | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
 | `<pcbkeepout />`                        | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
 | `<pcbnotedimension />`                  | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
 | `<pcbnoteline />`                       | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
 | `<pcbnotepath />`                       | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
 | `<pcbnoterect />`                       | [`PcbNoteRectProps`](#pcbnoterectprops-pcbnoterect)                                                                |
 | `<pcbnotetext />`                       | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                |
+| `<pcbstiffener />`                      | [`PcbStiffenerProps`](#pcbstiffenerprops-pcbstiffener)                                                             |
 | `<pcbtrace />`                          | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                                                         |
 | `<pinheader />`                         | [`PinHeaderProps`](#pinheaderprops-pinheader)                                                                      |
 | `<pinout />`                            | [`PinoutProps`](#pinoutprops-pinout)                                                                               |
@@ -1477,6 +1479,27 @@ export interface PanelProps extends Omit<
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/panel.ts)
 
+### PcbBendProps `<pcbbend />`
+
+```ts
+export interface PcbBendProps {
+  name?: string;
+  /** Start/end of the bend-zone centerline in the parent PCB coordinate system. */
+  x1: Distance;
+  y1: Distance;
+  x2: Distance;
+  y2: Distance;
+  /** Signed degrees (or an angle string). Positive folds toward the local top face. */
+  bendAngle: number | string;
+  /** Positive neutral-surface radius, in mm or a distance string. */
+  bendRadius: Distance;
+  /** Moving side, looking from (x1, y1) toward (x2, y2) in the flat layout. */
+  bendSide: "left" | "right";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-bend.ts)
+
 ### PcbKeepoutProps `<pcbkeepout />`
 
 ```ts
@@ -1598,6 +1621,14 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-text.ts)
+
+### PcbStiffenerProps `<pcbstiffener />`
+
+```ts
+export type PcbStiffenerProps = z.input<typeof pcbStiffenerProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-stiffener.ts)
 
 ### PcbTraceProps `<pcbtrace />`
 

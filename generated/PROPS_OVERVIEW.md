@@ -1946,6 +1946,22 @@ export interface PanelProps
 }
 
 
+export interface PcbBendProps {
+  name?: string
+  /** Start/end of the bend-zone centerline in the parent PCB coordinate system. */
+  x1: Distance
+  y1: Distance
+  x2: Distance
+  y2: Distance
+  /** Signed degrees (or an angle string). Positive folds toward the local top face. */
+  bendAngle: number | string
+  /** Positive neutral-surface radius, in mm or a distance string. */
+  bendRadius: Distance
+  /** Moving side, looking from (x1, y1) toward (x2, y2) in the flat layout. */
+  bendSide: "left" | "right"
+}
+
+
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number

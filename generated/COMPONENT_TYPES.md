@@ -3567,6 +3567,34 @@ export const panelProps = baseGroupProps
   })
 ```
 
+### pcb-bend
+
+```typescript
+/** A bend on a flat flex PCB. Does not change fabrication coordinates. */
+export interface PcbBendProps {
+  name?: string
+  x1: Distance
+  y1: Distance
+  x2: Distance
+  y2: Distance
+  bendAngle: number | string
+  bendRadius: Distance
+  bendSide: "left" | "right"
+}
+/** Moving side, looking from (x1, y1) toward (x2, y2) in the flat layout. */
+export const pcbBendProps = z
+  .object({
+    name: z.string().optional(),
+    x1: finiteDistance,
+    y1: finiteDistance,
+    x2: finiteDistance,
+    y2: finiteDistance,
+    bendAngle: rotation.pipe(z.number().finite()),
+    bendRadius: distance.pipe(z.number().finite().positive()),
+    bendSide: z.enum(["left", "right"]),
+  })
+```
+
 ### pcb-keepout
 
 ```typescript
@@ -3796,6 +3824,41 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
   fontSize: length.optional(),
   color: z.string().optional(),
 })
+```
+
+### pcb-stiffener
+
+```typescript
+const stiffenerBaseProps = pcbLayoutProps.omit({ layer: true }).extend({
+  name: z.string().optional(),
+  layer: z.enum(["top", "bottom"]),
+  material: z.enum(["fr4", "polyimide", "stainless_steel", "aluminum"]),
+  thickness: positiveDistance,
+  adhesiveThickness: distance
+    .pipe(z.number().finite().nonnegative())
+    .optional(),
+})
+stiffenerBaseProps.extend({
+    shape: z.literal("rect"),
+    width: positiveDistance,
+    height: positiveDistance,
+    outline: z.never().optional(),
+  }),
+stiffenerBaseProps.extend({
+    shape: z.literal("polygon"),
+    outline: z
+      .array(z.object({ x: finiteDistance, y: finiteDistance }))
+      .min(3)
+      .refine((points) => {
+        const twiceArea = points.reduce((sum, p, i) => {
+          const next = points[(i + 1) % points.length]!
+          return sum + p.x * next.y - next.x * p.y
+        }, 0)
+        return Number.isFinite(twiceArea) && twiceArea !== 0
+      }, "Stiffener outline must enclose a nonzero area"),
+    width: z.never().optional(),
+    height: z.never().optional(),
+  }),
 ```
 
 ### pcb-trace

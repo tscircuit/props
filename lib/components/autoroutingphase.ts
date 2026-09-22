@@ -6,9 +6,11 @@ import {
   fanoutTracePath,
 } from "../common/fanoutTracePath"
 import {
+  type AutorouterConfig,
   type AutorouterProp,
   type PreflightRoutingCheckPolicy,
   type RoutingTolerances,
+  autorouterConfig,
   autorouterProp,
   preflightRoutingCheckPolicy,
   routingTolerances,
@@ -26,6 +28,13 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
+  /**
+   * Custom async routing function accepting simple route JSON and returning the
+   * routing result, using the same contract as autorouter.algorithmFn. Parsing
+   * preserves the function unchanged. Omitted by default; no aliases or prop
+   * conflicts are introduced, and existing phases require no migration.
+   */
+  algorithmFn?: AutorouterConfig["algorithmFn"]
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
   /**
@@ -54,6 +63,7 @@ export const autoroutingPhaseProps = z
     key: z.any().optional(),
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
+    algorithmFn: autorouterConfig.shape.algorithmFn,
     preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
     phaseIndex: z.number().optional(),
     pcbTracePaths: z.array(fanoutTracePath).optional(),

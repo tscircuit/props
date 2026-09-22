@@ -360,6 +360,13 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any;
   name?: string;
   autorouter?: AutorouterProp;
+  /**
+   * Custom async routing function accepting simple route JSON and returning the
+   * routing result, using the same contract as autorouter.algorithmFn. Parsing
+   * preserves the function unchanged. Omitted by default; no aliases or prop
+   * conflicts are introduced, and existing phases require no migration.
+   */
+  algorithmFn?: AutorouterConfig["algorithmFn"];
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy;
   phaseIndex?: number;
   /**

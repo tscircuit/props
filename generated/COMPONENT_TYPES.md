@@ -1437,6 +1437,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
+  algorithmFn?: AutorouterConfig["algorithmFn"]
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
   pcbTracePaths?: FanoutTracePath[]
@@ -1464,6 +1465,7 @@ export const autoroutingPhaseProps = z
     key: z.any().optional(),
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
+    algorithmFn: autorouterConfig.shape.algorithmFn,
     preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
     phaseIndex: z.number().optional(),
     pcbTracePaths: z.array(fanoutTracePath).optional(),

@@ -445,6 +445,8 @@ export interface BoardProps extends Omit<
     | "top_tented"
     | "bottom_tented"
     | "exposed";
+  /** Plug both openings of this board's vias; solder-mask tenting is controlled separately. */
+  defaultViaPlugging?: boolean;
   borderRadius?: Distance;
   thickness?: Distance;
   boardAnchorPosition?: Point;

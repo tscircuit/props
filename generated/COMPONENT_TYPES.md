@@ -1543,6 +1543,7 @@ export interface BoardProps
     | "top_tented"
     | "bottom_tented"
     | "exposed"
+  defaultViaPlugging?: boolean
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -1619,6 +1620,7 @@ export const boardProps = subcircuitGroupProps
         return value
       })
       .optional(),
+    defaultViaPlugging: z.boolean().optional(),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),

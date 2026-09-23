@@ -1237,6 +1237,12 @@ export interface CircleHoleProps extends PcbLayoutProps {
   name?: string;
   shape?: "circle";
   diameter?: Distance;
+  /**
+   * Alias for `diameter` matching `<platedhole>`/`<via>` naming.
+   * Supplying both `diameter` and `holeDiameter` with different values is an
+   * error; when both are absent `radius` is used.
+   */
+  holeDiameter?: Distance;
   radius?: Distance;
   solderMaskMargin?: Distance;
   coveredWithSolderMask?: boolean;

@@ -85,6 +85,7 @@ test("circle holes accept holeDiameter as an alias of diameter", () => {
   if (parsed.shape === undefined || parsed.shape === "circle") {
     expect(parsed.diameter).toBe(3.2)
     expect(parsed.radius).toBe(1.6)
+    expect("holeDiameter" in parsed).toBe(false)
   } else {
     throw new Error("Expected circle hole props")
   }

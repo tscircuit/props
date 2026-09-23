@@ -82,9 +82,10 @@ const circleHoleProps = pcbLayoutProps
     }
   })
   .transform((d) => {
-    const diameter = d.diameter ?? d.holeDiameter ?? 2 * d.radius!
+    const { holeDiameter, ...rest } = d
+    const diameter = d.diameter ?? holeDiameter ?? 2 * d.radius!
     return {
-      ...d,
+      ...rest,
       diameter,
       radius: d.radius ?? diameter / 2,
     }

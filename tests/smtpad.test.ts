@@ -5,10 +5,31 @@ import {
   rotatedPillSmtPadProps,
   type PolygonSmtPadProps,
   type RotatedPillSmtPadProps,
+  type RectSmtPadProps,
+  rectSmtPadProps,
   type SmtPadProps,
 } from "lib/components/smtpad"
 import { expectTypeOf } from "expect-type"
 import { z } from "zod"
+
+test("rectangular smt pads only expose cornerRadius for corner rounding", () => {
+  expectTypeOf<RectSmtPadProps>().not.toHaveProperty("rectBorderRadius")
+  expectTypeOf<z.input<typeof rectSmtPadProps>>().not.toHaveProperty(
+    "rectBorderRadius",
+  )
+  expect(rectSmtPadProps.shape).not.toHaveProperty("rectBorderRadius")
+})
+
+test("rectangular smt pads parse cornerRadius as a distance", () => {
+  const rawProps: RectSmtPadProps = {
+    shape: "rect",
+    width: 1.95,
+    height: 0.6,
+    cornerRadius: "0.15mm",
+  }
+
+  expect(smtPadProps.parse(rawProps)).toMatchObject({ cornerRadius: 0.15 })
+})
 
 test("should parse PolygonSmtPadProps", () => {
   const rawProps: PolygonSmtPadProps = {

@@ -2633,6 +2633,12 @@ export interface RoutingTolerances {
   minViaHoleEdgeToViaHoleEdgeClearance?: Distance
   minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
   minTraceToPadEdgeClearance?: Distance
+  /**
+   * Minimum trace copper edge to non-plated hole edge clearance. Numbers are mm;
+   * unit strings are normalized to mm. Must be finite and non-negative. Omitted
+   * leaves the router default unchanged. Independent of pad clearance, with no aliases.
+   */
+  minTraceToHoleEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
   minViaEdgeToPadEdgeClearance?: Distance

@@ -2552,7 +2552,6 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   shape: "rect"
   width: Distance
   height: Distance
-  rectBorderRadius?: Distance
   cornerRadius?: Distance
   portHints?: PortHints
   coveredWithSolderMask?: boolean

@@ -326,7 +326,7 @@ export interface RoutingTolerances {
    * unit strings are normalized to mm. Must be finite and non-negative. Omitted
    * leaves the router default unchanged. Independent of pad clearance, with no aliases.
    */
-  minTraceToHoleClearance?: Distance
+  minTraceToHoleEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
   minViaEdgeToPadEdgeClearance?: Distance
@@ -408,9 +408,9 @@ export const routingTolerances = z.object({
   minViaEdgeToPadEdgeClearance: length.optional(),
   minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
   minTraceToPadEdgeClearance: length.optional(),
-  minTraceToHoleClearance: length
+  minTraceToHoleEdgeClearance: length
     .refine((value) => Number.isFinite(value) && value >= 0, {
-      message: "minTraceToHoleClearance must be finite and non-negative",
+      message: "minTraceToHoleEdgeClearance must be finite and non-negative",
     })
     .optional(),
   minPadEdgeToPadEdgeClearance: length.optional(),

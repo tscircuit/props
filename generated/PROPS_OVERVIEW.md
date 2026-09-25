@@ -2638,7 +2638,7 @@ export interface RoutingTolerances {
    * unit strings are normalized to mm. Must be finite and non-negative. Omitted
    * leaves the router default unchanged. Independent of pad clearance, with no aliases.
    */
-  minTraceToHoleClearance?: Distance
+  minTraceToHoleEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
   minViaEdgeToPadEdgeClearance?: Distance

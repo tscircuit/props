@@ -2807,7 +2807,7 @@ export interface RoutingTolerances {
   minViaHoleEdgeToViaHoleEdgeClearance?: Distance
   minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
   minTraceToPadEdgeClearance?: Distance
-  minTraceToHoleClearance?: Distance
+  minTraceToHoleEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
   minViaEdgeToPadEdgeClearance?: Distance
@@ -2862,9 +2862,9 @@ export const routingTolerances = z.object({
   minViaEdgeToPadEdgeClearance: length.optional(),
   minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
   minTraceToPadEdgeClearance: length.optional(),
-  minTraceToHoleClearance: length
+  minTraceToHoleEdgeClearance: length
     .refine((value) => Number.isFinite(value) && value >= 0, {
-      message: "minTraceToHoleClearance must be finite and non-negative",
+      message: "minTraceToHoleEdgeClearance must be finite and non-negative",
     })
     .optional(),
   minPadEdgeToPadEdgeClearance: length.optional(),

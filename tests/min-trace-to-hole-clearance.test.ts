@@ -14,24 +14,26 @@ test("trace-to-hole clearance parses units, preserves omission and zero, and rej
     routingTolerances,
   ]) {
     expect(
-      schema.parse({ minTraceToHoleClearance: 0.2 }).minTraceToHoleClearance,
+      schema.parse({ minTraceToHoleEdgeClearance: 0.2 })
+        .minTraceToHoleEdgeClearance,
     ).toBe(0.2)
     expect(
-      schema.parse({ minTraceToHoleClearance: "0.2mm" })
-        .minTraceToHoleClearance,
+      schema.parse({ minTraceToHoleEdgeClearance: "0.2mm" })
+        .minTraceToHoleEdgeClearance,
     ).toBe(0.2)
     expect(
-      schema.parse({ minTraceToHoleClearance: "0.01in" })
-        .minTraceToHoleClearance,
+      schema.parse({ minTraceToHoleEdgeClearance: "0.01in" })
+        .minTraceToHoleEdgeClearance,
     ).toBeCloseTo(0.254)
     expect(
-      schema.parse({ minTraceToHoleClearance: 0 }).minTraceToHoleClearance,
+      schema.parse({ minTraceToHoleEdgeClearance: 0 })
+        .minTraceToHoleEdgeClearance,
     ).toBe(0)
-    expect(schema.parse({}).minTraceToHoleClearance).toBeUndefined()
+    expect(schema.parse({}).minTraceToHoleEdgeClearance).toBeUndefined()
     for (const value of [-0.2, "-0.2mm", NaN, Infinity, "invalid"]) {
-      expect(schema.safeParse({ minTraceToHoleClearance: value }).success).toBe(
-        false,
-      )
+      expect(
+        schema.safeParse({ minTraceToHoleEdgeClearance: value }).success,
+      ).toBe(false)
     }
   }
 })

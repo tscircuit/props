@@ -476,7 +476,7 @@ export interface BoardProps
     | "top_tented"
     | "bottom_tented"
     | "exposed"
-  defaultViaPlugging?: boolean
+  plugVias?: boolean
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point

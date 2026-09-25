@@ -3,22 +3,20 @@ import { type BoardProps, boardProps } from "lib/components/board"
 
 test("board via plugging is optional and independent of tenting", () => {
   const props: BoardProps = {
-    defaultViaPlugging: true,
+    plugVias: true,
     defaultViaTenting: false,
   }
 
-  expect(boardProps.parse({})).not.toHaveProperty("defaultViaPlugging")
+  expect(boardProps.parse({})).not.toHaveProperty("plugVias")
   expect(boardProps.parse(props)).toMatchObject({
-    defaultViaPlugging: true,
+    plugVias: true,
     defaultViaTenting: "exposed",
   })
   expect(
-    boardProps.parse({ defaultViaPlugging: false, defaultViaTenting: true }),
+    boardProps.parse({ plugVias: false, defaultViaTenting: true }),
   ).toMatchObject({
-    defaultViaPlugging: false,
+    plugVias: false,
     defaultViaTenting: "top_and_bottom_tented",
   })
-  expect(boardProps.safeParse({ defaultViaPlugging: "true" }).success).toBe(
-    false,
-  )
+  expect(boardProps.safeParse({ plugVias: "true" }).success).toBe(false)
 })

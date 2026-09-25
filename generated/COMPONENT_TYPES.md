@@ -3929,7 +3929,7 @@ export interface PinHeaderProps extends CommonComponentProps {
   schHeight?: number | string
 }
 .extend({
-    pinCount: z.number(),
+    pinCount: z.number().int().positive(),
     pitch: distance.optional(),
     schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
     gender: z

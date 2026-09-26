@@ -22,6 +22,12 @@ const baseTraceProps = z.object({
   width: distance.optional().describe("Alias for trace thickness"),
   schematicRouteHints: z.array(point).optional(),
   pcbRouteHints: z.array(route_hint_point).optional(),
+  pcbTeardrops: z
+    .boolean()
+    .optional()
+    .describe(
+      "Automatically add quadratic teardrops where PCB traces meet wider pads or vias. Disabled when omitted.",
+    ),
   pcbPathRelativeTo: z.string().optional(),
   pcbPath: pcbPath.optional(),
   pcbPaths: z.array(pcbPath).optional(),

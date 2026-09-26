@@ -856,42 +856,16 @@ export const lrPolarPins = [
 
 ```typescript
 export interface PcbPathPoint extends Point {
-  startWidth?: number | string
-  endWidth?: number | string
-  widthInterpolationMode?: "linear" | "quadratic"
   via?: boolean
   fromLayer?: LayerRefInput
   toLayer?: LayerRefInput
 }
-/** Outgoing wire taper profile; no default. Not valid on a via entry. */
 const basePcbPathPoint = point.extend({
-  startWidth: positiveWidth.optional(),
-  endWidth: positiveWidth.optional(),
-  widthInterpolationMode: z.enum(["linear", "quadratic"]).optional(),
   via: z.boolean().optional(),
   fromLayer: layer_ref.optional(),
   toLayer: layer_ref.optional(),
 })
 export const pcbPathPoint = basePcbPathPoint.superRefine((value, ctx) => {
-  const taperFieldCount = [
-    value.startWidth,
-    value.endWidth,
-    value.widthInterpolationMode,
-  ].filter((field) => field !== undefined).length
-  if (taperFieldCount > 0 && taperFieldCount !== 3) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message:
-        "startWidth, endWidth and widthInterpolationMode must be supplied together",
-    })
-  }
-  if (taperFieldCount > 0 && value.via) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Wire taper fields are not allowed on via entries",
-      path: ["via"],
-    })
-  }
   if (value.via) {
     if (!value.toLayer) {
       ctx.addIssue({

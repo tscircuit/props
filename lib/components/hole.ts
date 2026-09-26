@@ -7,6 +7,12 @@ export interface CircleHoleProps extends PcbLayoutProps {
   name?: string
   shape?: "circle"
   diameter?: Distance
+  /**
+   * Alias for `diameter` matching `<platedhole>`/`<via>` naming.
+   * Supplying both `diameter` and `holeDiameter` with different values is an
+   * error; when both are absent `radius` is used.
+   */
+  holeDiameter?: Distance
   radius?: Distance
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
@@ -50,15 +56,40 @@ const circleHoleProps = pcbLayoutProps
     name: z.string().optional(),
     shape: z.literal("circle").optional(),
     diameter: distance.optional(),
+    holeDiameter: distance.optional(),
     radius: distance.optional(),
     solderMaskMargin: distance.optional(),
     coveredWithSolderMask: z.boolean().optional(),
   })
-  .transform((d) => ({
-    ...d,
-    diameter: d.diameter ?? 2 * d.radius!,
-    radius: d.radius ?? d.diameter! / 2,
-  }))
+  .superRefine((d, ctx) => {
+    if (
+      d.diameter != null &&
+      d.holeDiameter != null &&
+      d.diameter !== d.holeDiameter
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          '"diameter" and its alias "holeDiameter" disagree; supply only one',
+      })
+    }
+    if (d.diameter == null && d.holeDiameter == null && d.radius == null) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'circle <hole> requires "diameter" (alias: "holeDiameter") or "radius"',
+      })
+    }
+  })
+  .transform((d) => {
+    const { holeDiameter, ...rest } = d
+    const diameter = d.diameter ?? holeDiameter ?? 2 * d.radius!
+    return {
+      ...rest,
+      diameter,
+      radius: d.radius ?? diameter / 2,
+    }
+  })
 
 const pillHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),

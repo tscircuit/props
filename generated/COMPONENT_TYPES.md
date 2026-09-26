@@ -3155,10 +3155,16 @@ export interface CircleHoleProps extends PcbLayoutProps {
   name?: string
   shape?: "circle"
   diameter?: Distance
+  holeDiameter?: Distance
   radius?: Distance
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
 }
+/**
+   * Alias for `diameter` matching `<platedhole>`/`<via>` naming.
+   * Supplying both `diameter` and `holeDiameter` with different values is an
+   * error; when both are absent `radius` is used.
+   */
 export interface PillHoleProps extends PcbLayoutProps {
   name?: string
   shape: "pill"
@@ -3187,6 +3193,7 @@ export interface RectHoleProps extends PcbLayoutProps {
     name: z.string().optional(),
     shape: z.literal("circle").optional(),
     diameter: distance.optional(),
+    holeDiameter: distance.optional(),
     radius: distance.optional(),
     solderMaskMargin: distance.optional(),
     coveredWithSolderMask: z.boolean().optional(),

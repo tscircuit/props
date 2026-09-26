@@ -22,6 +22,15 @@ const baseTraceProps = z.object({
   width: distance.optional().describe("Alias for trace thickness"),
   schematicRouteHints: z.array(point).optional(),
   pcbRouteHints: z.array(route_hint_point).optional(),
+  pcbTeardrops: z.boolean().optional().describe("Enable PCB trace teardrops."),
+  pcbTeardropStart: z
+    .boolean()
+    .optional()
+    .describe("Teardrop at the start (from) of trace"),
+  pcbTeardropEnd: z
+    .boolean()
+    .optional()
+    .describe("Teardrop at the end (to) of trace"),
   pcbPathRelativeTo: z.string().optional(),
   pcbPath: pcbPath.optional(),
   pcbPaths: z.array(pcbPath).optional(),

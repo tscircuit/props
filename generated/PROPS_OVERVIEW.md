@@ -2096,6 +2096,12 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 
 
 export interface PcbPathPoint extends Point {
+  /** Full width at this point, in mm or a distance string. Requires endWidth and widthInterpolationMode. */
+  startWidth?: number | string
+  /** Full width at the next path point (or the trace destination). */
+  endWidth?: number | string
+  /** Outgoing wire taper profile; no default. Not valid on a via entry. */
+  widthInterpolationMode?: "linear" | "quadratic"
   via?: boolean
   fromLayer?: LayerRefInput
   toLayer?: LayerRefInput

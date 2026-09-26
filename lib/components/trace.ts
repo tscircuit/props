@@ -26,11 +26,11 @@ const baseTraceProps = z.object({
   pcbTeardropStart: z
     .boolean()
     .optional()
-    .describe("Enable a teardrop at the trace start, overriding pcbTeardrops."),
+    .describe("Teardrop at the start (from) of trace"),
   pcbTeardropEnd: z
     .boolean()
     .optional()
-    .describe("Enable a teardrop at the trace end, overriding pcbTeardrops."),
+    .describe("Teardrop at the end (to) of trace"),
   pcbPathRelativeTo: z.string().optional(),
   pcbPath: pcbPath.optional(),
   pcbPaths: z.array(pcbPath).optional(),

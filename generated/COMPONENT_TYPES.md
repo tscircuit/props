@@ -974,6 +974,8 @@ export interface PinAttributeMap {
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability
+  activeFunction?: string
+  packagePin?: string
   providesPower?: boolean
   requiresPower?: boolean
   providesGround?: boolean
@@ -998,7 +1000,7 @@ export interface PinAttributeMap {
   recommendedDecouplingCapacitorCapacitance?: string | number
   isGpio?: boolean
 }
-/** Whether the pin is configured as an open-emitter output. */
+/** Package terminal identifier, such as the BGA ball "U7". */
 export const pinAttributeMap = z.object({
   isInput: z.boolean().optional(),
   isOutput: z.boolean().optional(),
@@ -1013,6 +1015,8 @@ export const pinAttributeMap = z.object({
   capabilities: z.array(pinCapability).optional(),
   activeCapabilities: z.array(pinCapability).optional(),
   activeCapability: pinCapability.optional(),
+  activeFunction: z.string().min(1).optional(),
+  packagePin: z.string().min(1).optional(),
   providesPower: z.boolean().optional(),
   requiresPower: z.boolean().optional(),
   providesGround: z.boolean().optional(),

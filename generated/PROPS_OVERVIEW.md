@@ -2229,6 +2229,10 @@ export interface PinAttributeMap {
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability
+  /** Exact selected function on the physical pin (for example, "spi0_sclk"). */
+  activeFunction?: string
+  /** Package terminal identifier, such as the BGA ball "U7". */
+  packagePin?: string
   providesPower?: boolean
   requiresPower?: boolean
   providesGround?: boolean

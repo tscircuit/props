@@ -76,3 +76,22 @@ test("electrical flags are boolean at compile time", () => {
   const attributes: PinAttributeMap = { isInput: "true" }
   void attributes
 })
+
+test("chip preserves an exact active pin function", () => {
+  const pinAttributes = {
+    pin1: {
+      activeCapability: "spi_sck",
+      activeFunction: "spi0_sclk",
+      packagePin: "U7",
+    },
+  } as const
+  expect(chipProps.parse({ name: "U1", pinAttributes }).pinAttributes).toEqual(
+    pinAttributes,
+  )
+  expect(
+    chipProps.safeParse({
+      name: "U1",
+      pinAttributes: { pin1: { activeFunction: "" } },
+    }).success,
+  ).toBe(false)
+})

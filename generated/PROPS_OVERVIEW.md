@@ -158,12 +158,16 @@ export interface AntennaProps extends CommonComponentProps {
 export interface AssemblyDeviceProps {
   /** Product-level assembly identity. */
   name?: string
+  /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
+  modelUrl?: string
 }
 
 
 export interface AssemblyScreenProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
+  /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
+  modelUrl?: string
   /** Selector for the connector that the screen attaches to. */
   connectsTo: string
   /**
@@ -178,7 +182,7 @@ export interface AssemblyScreenProps {
   height?: Distance
   /**
    * Advanced modelprinter string used to render the screen assembly. Required
-   * when `width` and `height` are omitted.
+   * when `width`, `height`, and `modelUrl` are omitted.
    */
   cadModel?: string
 }
@@ -187,6 +191,8 @@ export interface AssemblyScreenProps {
 export interface AssemblySubassemblyProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
+  /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
+  modelUrl?: string
   /** Human-facing alternate to the stable name. */
   displayName?: string
   /** Optional CAD geometry using the existing component cadModel formats. */

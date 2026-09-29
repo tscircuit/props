@@ -1,3 +1,4 @@
+import { url } from "lib/common/url"
 import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
@@ -6,6 +7,8 @@ import { z } from "zod"
 export interface AssemblySubassemblyProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
+  /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
+  modelUrl?: string
   /** Human-facing alternate to the stable name. */
   displayName?: string
   /** Optional CAD geometry using the existing component cadModel formats. */
@@ -14,14 +17,28 @@ export interface AssemblySubassemblyProps {
   children?: ReactNode
 }
 
-export const assemblySubassemblyProps = z.object({
-  name: z.string().refine((value) => value.trim().length > 0, {
-    message: "name cannot be empty",
-  }),
-  displayName: z.string().optional(),
-  cadModel: cadModelProp.optional(),
-  children: z.custom<ReactNode>().optional(),
-})
+export const assemblySubassemblyProps = z
+  .object({
+    name: z.string().refine((value) => value.trim().length > 0, {
+      message: "name cannot be empty",
+    }),
+    displayName: z.string().optional(),
+    modelUrl: url
+      .refine((value) => value.trim().length > 0, {
+        message: "modelUrl cannot be empty",
+      })
+      .optional(),
+    cadModel: cadModelProp.optional(),
+    children: z.custom<ReactNode>().optional(),
+  })
+  .refine(
+    (assembly) =>
+      assembly.modelUrl === undefined || assembly.cadModel === undefined,
+    {
+      message: "Provide either modelUrl or cadModel, not both",
+      path: ["modelUrl"],
+    },
+  )
 
 export type AssemblySubassemblyPropsInput = z.input<
   typeof assemblySubassemblyProps

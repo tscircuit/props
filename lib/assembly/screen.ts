@@ -1,3 +1,4 @@
+import { url } from "lib/common/url"
 import { type Distance, distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
@@ -5,6 +6,8 @@ import { z } from "zod"
 export interface AssemblyScreenProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
+  /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
+  modelUrl?: string
   /** Selector for the connector that the screen attaches to. */
   connectsTo: string
   /**
@@ -19,7 +22,7 @@ export interface AssemblyScreenProps {
   height?: Distance
   /**
    * Advanced modelprinter string used to render the screen assembly. Required
-   * when `width` and `height` are omitted.
+   * when `width`, `height`, and `modelUrl` are omitted.
    */
   cadModel?: string
 }
@@ -37,12 +40,24 @@ const positiveDistance = (fieldName: "width" | "height") =>
 export const assemblyScreenProps = z
   .object({
     name: nonemptyString("name"),
+    modelUrl: url
+      .refine((value) => value.trim().length > 0, {
+        message: "modelUrl cannot be empty",
+      })
+      .optional(),
     connectsTo: nonemptyString("connectsTo"),
     width: positiveDistance("width").optional(),
     height: positiveDistance("height").optional(),
     cadModel: nonemptyString("cadModel").optional(),
   })
   .superRefine((screen, context) => {
+    if (screen.modelUrl !== undefined && screen.cadModel !== undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Provide either modelUrl or cadModel, not both",
+        path: ["modelUrl"],
+      })
+    }
     const hasWidth = screen.width !== undefined
     const hasHeight = screen.height !== undefined
 
@@ -55,10 +70,14 @@ export const assemblyScreenProps = z
       return
     }
 
-    if (!hasWidth && screen.cadModel === undefined) {
+    if (
+      !hasWidth &&
+      screen.cadModel === undefined &&
+      screen.modelUrl === undefined
+    ) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "provide either width and height or cadModel",
+        message: "provide width and height, cadModel, or modelUrl",
         path: [],
       })
     }

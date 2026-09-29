@@ -11,6 +11,11 @@ import {
 } from "lib/common/schematicOrientation"
 import { schematicPinLabel } from "lib/common/schematicPinLabel"
 
+import {
+  schematicSymbolSize,
+  type SchematicSymbolSize,
+} from "lib/common/schematicSize"
+
 export const diodePins = lrPolarPins
 export type DiodePinLabels = (typeof diodePins)[number]
 export type DiodePinLabelsProp<PinLabel extends string = string> = Partial<
@@ -60,6 +65,7 @@ export const diodeProps = commonComponentProps
     photo: z.boolean().optional(),
     tvs: z.boolean().optional(),
     schOrientation: schematicOrientation.optional(),
+    schSize: schematicSymbolSize.optional(),
     pinLabels: diodePinLabelsProp.optional(),
   })
   .superRefine((data, ctx) => {
@@ -146,6 +152,8 @@ export interface DiodeProps<PinLabel extends string = string>
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation
+  /** Select a compact schematic symbol; omitted, default, and md retain the standard symbol. */
+  schSize?: SchematicSymbolSize
 }
 
 export type InferredDiodeProps = z.input<typeof diodeProps>

@@ -1124,6 +1124,8 @@ export interface DiodeProps<PinLabel extends string = string>
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation
+  /** Select a compact schematic symbol; omitted, default, and md retain the standard symbol. */
+  schSize?: SchematicSymbolSize
 }
 
 

@@ -2314,6 +2314,7 @@ export const differentialPairProps = z.object({
     photo: z.boolean().optional(),
     tvs: z.boolean().optional(),
     schOrientation: schematicOrientation.optional(),
+    schSize: schematicSymbolSize.optional(),
     pinLabels: diodePinLabelsProp.optional(),
   })
 export interface DiodeProps<PinLabel extends string = string>
@@ -2335,6 +2336,7 @@ export interface DiodeProps<PinLabel extends string = string>
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation
+  schSize?: SchematicSymbolSize
 }
 ```
 
@@ -3372,6 +3374,7 @@ export const ledProps = commonComponentProps.extend({
   wavelength: z.string().optional(),
   schDisplayValue: z.string().optional(),
   schOrientation: schematicOrientation.optional(),
+  schSize: schematicSymbolSize.optional(),
   // Numeric keys are accepted for compatibility with legacy generated LED
   // wrappers, then normalized to the canonical pin1/pin2 representation.
   pinLabels: diodePinLabelsProp.or(legacyNumericLedPinLabelsProp).optional(),

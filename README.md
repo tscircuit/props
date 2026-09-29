@@ -902,6 +902,8 @@ export interface DiodeProps<
   photo?: boolean;
   tvs?: boolean;
   schOrientation?: SchematicOrientation;
+  /** Select a compact schematic symbol; omitted, default, and md retain the standard symbol. */
+  schSize?: SchematicSymbolSize;
 }
 ```
 

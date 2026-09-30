@@ -85,6 +85,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<pcbnotetext />`                       | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                |
 | `<pcbstiffener />`                      | [`PcbStiffenerProps`](#pcbstiffenerprops-pcbstiffener)                                                             |
 | `<pcbtrace />`                          | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                                                         |
+| `<pcbvia />`                            | [`PcbViaProps`](#pcbviaprops-pcbvia)                                                                               |
 | `<pinheader />`                         | [`PinHeaderProps`](#pinheaderprops-pinheader)                                                                      |
 | `<pinout />`                            | [`PinoutProps`](#pinoutprops-pinout)                                                                               |
 | `<platedhole />`                        | [`CirclePlatedHoleProps`](#circleplatedholeprops-platedhole)                                                       |
@@ -1643,6 +1644,14 @@ export type PcbTraceProps = z.input<typeof pcbTraceProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-trace.ts)
+
+### PcbViaProps `<pcbvia />`
+
+```ts
+export type PcbViaProps = z.input<typeof pcbViaProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-via.ts)
 
 ### PinHeaderProps `<pinheader />`
 

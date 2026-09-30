@@ -3906,6 +3906,17 @@ export const pcbTraceProps = z.object({
 })
 ```
 
+### pcb-via
+
+```typescript
+.extend({
+    layers: z.array(layer_ref).optional(),
+    isTented: z.boolean().optional(),
+    tentedOnTop: z.boolean().optional(),
+    tentedOnBottom: z.boolean().optional(),
+  })
+```
+
 ### pin-header
 
 ```typescript

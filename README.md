@@ -445,6 +445,12 @@ export interface BoardProps extends Omit<
     | "top_tented"
     | "bottom_tented"
     | "exposed";
+  viaCovering?:
+    | "untented"
+    | "tented"
+    | "plugged"
+    | "epoxy_filled_and_capped"
+    | "copper_paste_filled_and_capped";
   borderRadius?: Distance;
   thickness?: Distance;
   boardAnchorPosition?: Point;

@@ -53,7 +53,7 @@ test("validates and normalizes assembly.screen props", () => {
       name: "SCREEN",
       connectsTo: ".B1 .J1",
     }),
-  ).toThrow("provide width and height, cadModel, or modelUrl")
+  ).toThrow("provide width and height, model, cadModel, or modelUrl")
 
   for (const partialDimensions of [
     { width: "40mm" },

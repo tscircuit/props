@@ -8,6 +8,8 @@ export interface AssemblyScreenProps {
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
   modelUrl?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
+  model?: string
   /** Selector for the connector that the screen attaches to. */
   connectsTo: string
   /**
@@ -22,7 +24,7 @@ export interface AssemblyScreenProps {
   height?: Distance
   /**
    * Advanced modelprinter string used to render the screen assembly. Required
-   * when `width`, `height`, and `modelUrl` are omitted.
+   * when `width`, `height`, `model`, and `modelUrl` are omitted.
    */
   cadModel?: string
 }
@@ -40,6 +42,7 @@ const positiveDistance = (fieldName: "width" | "height") =>
 export const assemblyScreenProps = z
   .object({
     name: nonemptyString("name"),
+    model: z.string().trim().min(1).optional(),
     modelUrl: url
       .refine((value) => value.trim().length > 0, {
         message: "modelUrl cannot be empty",
@@ -51,6 +54,16 @@ export const assemblyScreenProps = z
     cadModel: nonemptyString("cadModel").optional(),
   })
   .superRefine((screen, context) => {
+    if (
+      screen.model !== undefined &&
+      (screen.modelUrl !== undefined || screen.cadModel !== undefined)
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Provide only one of model, modelUrl, or cadModel",
+        path: ["model"],
+      })
+    }
     if (screen.modelUrl !== undefined && screen.cadModel !== undefined) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
@@ -73,11 +86,12 @@ export const assemblyScreenProps = z
     if (
       !hasWidth &&
       screen.cadModel === undefined &&
-      screen.modelUrl === undefined
+      screen.modelUrl === undefined &&
+      screen.model === undefined
     ) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "provide width and height, cadModel, or modelUrl",
+        message: "provide width and height, model, cadModel, or modelUrl",
         path: [],
       })
     }

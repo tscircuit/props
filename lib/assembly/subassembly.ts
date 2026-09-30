@@ -9,6 +9,8 @@ export interface AssemblySubassemblyProps {
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
   modelUrl?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
+  model?: string
   /** Human-facing alternate to the stable name. */
   displayName?: string
   /** Optional CAD geometry using the existing component cadModel formats. */
@@ -23,6 +25,7 @@ export const assemblySubassemblyProps = z
       message: "name cannot be empty",
     }),
     displayName: z.string().optional(),
+    model: z.string().trim().min(1).optional(),
     modelUrl: url
       .refine((value) => value.trim().length > 0, {
         message: "modelUrl cannot be empty",
@@ -37,6 +40,15 @@ export const assemblySubassemblyProps = z
     {
       message: "Provide either modelUrl or cadModel, not both",
       path: ["modelUrl"],
+    },
+  )
+  .refine(
+    (assembly) =>
+      assembly.model === undefined ||
+      (assembly.modelUrl === undefined && assembly.cadModel === undefined),
+    {
+      message: "Provide only one of model, modelUrl, or cadModel",
+      path: ["model"],
     },
   )
 

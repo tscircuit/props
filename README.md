@@ -77,6 +77,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<opamp />`                             | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                             | [`PanelProps`](#panelprops-panel)                                                                                  |
 | `<pcbbend />`                           | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
+| `<pcbcopperpour />`                     | [`PcbCopperPourProps`](#pcbcopperpourprops-pcbcopperpour)                                                          |
 | `<pcbkeepout />`                        | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
 | `<pcbnotedimension />`                  | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
 | `<pcbnoteline />`                       | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
@@ -1513,6 +1514,14 @@ export interface PcbBendProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-bend.ts)
+
+### PcbCopperPourProps `<pcbcopperpour />`
+
+```ts
+export type PcbCopperPourProps = z.input<typeof pcbCopperPourProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-copper-pour.ts)
 
 ### PcbKeepoutProps `<pcbkeepout />`
 

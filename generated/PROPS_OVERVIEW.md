@@ -3009,7 +3009,7 @@ export interface SubcircuitGroupProps
 
   autorouter?: AutorouterProp
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
-  autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
+  autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   /**
    * Selects the local autorouting pipeline. Unknown string values emit a
    * warning and fall back to `latest`.

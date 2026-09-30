@@ -2993,7 +2993,7 @@ export interface SubcircuitGroupProps
 
   autorouter?: AutorouterProp
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
-  autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
+  autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   autorouterVersion?:
     | "beta_pipeline1"
     | "beta_pipeline3"

@@ -24,6 +24,12 @@ const baseTraceProps = z.object({
     .describe(
       "Preserve a source_trace_id when reconstructing a trace from Circuit JSON.",
     ),
+  noSchematicRepresentation: z
+    .boolean()
+    .optional()
+    .describe(
+      "Keep source and PCB connectivity without rendering a schematic trace.",
+    ),
   thickness: distance.optional(),
   width: distance.optional().describe("Alias for trace thickness"),
   schematicRouteHints: z.array(point).optional(),

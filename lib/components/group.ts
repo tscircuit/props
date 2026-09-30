@@ -366,6 +366,7 @@ export interface AutorouterConfig {
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
+    | "dogbone"
     | "bus_lanes"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
@@ -388,6 +389,8 @@ export type AutorouterPreset =
   | "laser_prefab"
   | "single_layer_fanout"
   | "fanout"
+  /** Local pad-to-via fanout without routing to a breakout boundary. */
+  | "dogbone"
   | "bus_lanes"
   | "auto-jumper"
   | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
@@ -462,6 +465,7 @@ export const autorouterConfig = z.object({
       "laser_prefab",
       "single_layer_fanout",
       "fanout",
+      "dogbone",
       "bus_lanes",
       "auto-jumper",
       "sequential-trace",
@@ -487,6 +491,7 @@ export const autorouterPreset = z.union([
   z.literal("laser_prefab"), // Prefabricated PCB with laser copper ablation
   z.literal("single_layer_fanout"),
   z.literal("fanout"),
+  z.literal("dogbone"),
   z.literal("bus_lanes"),
   z.literal("auto-jumper"),
   z.literal("sequential-trace"),

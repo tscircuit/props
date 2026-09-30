@@ -240,6 +240,7 @@ export interface AutorouterConfig {
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
+    | "dogbone"
     | "bus_lanes"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
@@ -554,6 +555,10 @@ export interface BreakoutProps
   /**
    * Autorouter used to escape the components inside the breakout boundary.
    * Defaults to the multilayer fanout autorouter.
+   * `"dogbone"` selects local pad-to-via escapes without boundary routing.
+   * Accepted as a preset string or `{ preset: "dogbone" }`; parsing preserves
+   * the selected form. This adds an explicit preset with no aliases or changes
+   * to the default. Routing requires a core version supporting this preset.
    */
   autorouter?: AutorouterProp
   /**

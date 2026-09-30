@@ -19,6 +19,10 @@ export interface BreakoutProps
   /**
    * Autorouter used to escape the components inside the breakout boundary.
    * Defaults to the multilayer fanout autorouter.
+   * `"dogbone"` selects local pad-to-via escapes without boundary routing.
+   * Accepted as a preset string or `{ preset: "dogbone" }`; parsing preserves
+   * the selected form. This adds an explicit preset with no aliases or changes
+   * to the default. Routing requires a core version supporting this preset.
    */
   autorouter?: AutorouterProp
   /**

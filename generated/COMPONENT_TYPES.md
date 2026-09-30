@@ -2841,6 +2841,7 @@ export interface RoutingTolerances {
    * leaves the router default unchanged. Independent of pad clearance, with no aliases.
    */
 export interface AutorouterConfig {
+  busLanesFanout?: "auto" | "none"
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
@@ -2894,6 +2895,7 @@ export const routingTolerances = z.object({
   minViaPadDiameter: length.optional(),
 })
 export const autorouterConfig = z.object({
+  busLanesFanout: z.enum(["auto", "none"]).optional(),
   serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
@@ -2945,6 +2947,47 @@ export const autorouterConfig = z.object({
     .optional(),
   local: z.boolean().optional(),
 })
+export const autorouterPreset = z.union([
+  z.literal("sequential_trace"),
+  z.literal("subcircuit"),
+  z.literal("default"),
+  z.literal("auto"),
+  z.literal("auto_local"),
+  z.literal("auto_cloud"),
+  z.literal("auto_jumper"),
+  z.literal("tscircuit_beta"),
+  z.literal("krt"),
+  z.literal("freerouting"),
+  z.literal("simplify"),
+  z.literal("laser_prefab"), // Prefabricated PCB with laser copper ablation
+  z.literal("single_layer_fanout"),
+  z.literal("fanout"),
+  z.literal("bus_lanes"),
+  z.literal("auto-jumper"),
+  z.literal("sequential-trace"),
+  z.literal("auto-local"),
+  z.literal("auto-cloud"),
+])
+
+const autorouterString = z.string() as z.ZodType<
+  AutocompleteString<AutorouterPreset>
+>
+
+export const autorouterProp: z.ZodType<AutorouterProp> = z
+  .union([autorouterConfig, autorouterPreset, autorouterString])
+  .superRefine((value, ctx) => {
+    if (
+      typeof value === "object" &&
+      value.busLanesFanout !== undefined &&
+      value.preset !== "bus_lanes"
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["busLanesFanout"],
+        message: "busLanesFanout requires preset bus_lanes",
+      })
+    }
+  })
 export type AutorouterVersion =
   | "beta_pipeline1"
   | "beta_pipeline3"

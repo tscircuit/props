@@ -203,6 +203,8 @@ export interface AssemblySubassemblyProps {
 
 
 export interface AutorouterConfig {
+  /** Local endpoint dogbones for bus_lanes. Omitted/auto enables them; none retains fixed-layer-only routing. Invalid with other presets. */
+  busLanesFanout?: "auto" | "none"
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"

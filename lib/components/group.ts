@@ -335,6 +335,8 @@ export interface RoutingTolerances {
 }
 
 export interface AutorouterConfig {
+  /** Local endpoint dogbones for bus_lanes. Omitted/auto enables them; none retains fixed-layer-only routing. Invalid with other presets. */
+  busLanesFanout?: "auto" | "none"
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
@@ -420,6 +422,7 @@ export const routingTolerances = z.object({
 })
 
 export const autorouterConfig = z.object({
+  busLanesFanout: z.enum(["auto", "none"]).optional(),
   serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
@@ -498,11 +501,21 @@ const autorouterString = z.string() as z.ZodType<
   AutocompleteString<AutorouterPreset>
 >
 
-export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
-  autorouterConfig,
-  autorouterPreset,
-  autorouterString,
-])
+export const autorouterProp: z.ZodType<AutorouterProp> = z
+  .union([autorouterConfig, autorouterPreset, autorouterString])
+  .superRefine((value, ctx) => {
+    if (
+      typeof value === "object" &&
+      value.busLanesFanout !== undefined &&
+      value.preset !== "bus_lanes"
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["busLanesFanout"],
+        message: "busLanesFanout requires preset bus_lanes",
+      })
+    }
+  })
 
 export const autorouterEffortLevel = z.enum(["1x", "2x", "5x", "10x", "100x"])
 

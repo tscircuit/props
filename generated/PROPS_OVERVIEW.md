@@ -160,6 +160,8 @@ export interface AssemblyDeviceProps {
   name?: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
   modelUrl?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
+  model?: string
 }
 
 
@@ -168,6 +170,8 @@ export interface AssemblyScreenProps {
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
   modelUrl?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
+  model?: string
   /** Selector for the connector that the screen attaches to. */
   connectsTo: string
   /**
@@ -182,7 +186,7 @@ export interface AssemblyScreenProps {
   height?: Distance
   /**
    * Advanced modelprinter string used to render the screen assembly. Required
-   * when `width`, `height`, and `modelUrl` are omitted.
+   * when `width`, `height`, `model`, and `modelUrl` are omitted.
    */
   cadModel?: string
 }
@@ -193,6 +197,8 @@ export interface AssemblySubassemblyProps {
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
   modelUrl?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
+  model?: string
   /** Human-facing alternate to the stable name. */
   displayName?: string
   /** Optional CAD geometry using the existing component cadModel formats. */

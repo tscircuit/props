@@ -761,6 +761,8 @@ export interface ChipPropsSU<
   schPinSpacing?: Distance
   schWidth?: Distance
   schHeight?: Distance
+  /** Text rendered in the symbol's value placeholder, such as a part value. */
+  schDisplayValue?: string
   noSchematicRepresentation?: boolean
   /**
    * Whether to show the components from `internalCircuit` in the schematic.

@@ -67,6 +67,8 @@ export interface ChipPropsSU<
   schPinSpacing?: Distance
   schWidth?: Distance
   schHeight?: Distance
+  /** Text rendered in the symbol's value placeholder, such as a part value. */
+  schDisplayValue?: string
   noSchematicRepresentation?: boolean
   /**
    * Whether to show the components from `internalCircuit` in the schematic.
@@ -189,6 +191,7 @@ export const chipProps = commonComponentProps.extend({
   schPinSpacing: distance.optional(),
   schWidth: distance.optional(),
   schHeight: distance.optional(),
+  schDisplayValue: z.string().optional(),
   noSchematicRepresentation: z.boolean().optional(),
   schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),

@@ -1870,6 +1870,7 @@ export interface ChipPropsSU<
   schPinSpacing?: Distance
   schWidth?: Distance
   schHeight?: Distance
+  schDisplayValue?: string
   noSchematicRepresentation?: boolean
   schShowInternalCircuit?: boolean
   internallyConnectedPins?: (string | number)[][]
@@ -1916,6 +1917,7 @@ export const chipProps = commonComponentProps.extend({
   schPinSpacing: distance.optional(),
   schWidth: distance.optional(),
   schHeight: distance.optional(),
+  schDisplayValue: z.string().optional(),
   noSchematicRepresentation: z.boolean().optional(),
   schShowInternalCircuit: z.boolean().optional().default(false),
   noConnect: noConnectProp.optional(),

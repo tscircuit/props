@@ -18,6 +18,12 @@ const baseTraceProps = z.object({
   key: z.string().optional(),
   name: z.string().optional(),
   displayName: z.string().optional(),
+  sourceTraceId: z
+    .string()
+    .optional()
+    .describe(
+      "Preserve a source_trace_id when reconstructing a trace from Circuit JSON.",
+    ),
   thickness: distance.optional(),
   width: distance.optional().describe("Alias for trace thickness"),
   schematicRouteHints: z.array(point).optional(),

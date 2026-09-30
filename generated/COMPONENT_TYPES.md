@@ -3861,6 +3861,21 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
 })
 ```
 
+### pcb-silkscreen-graphic
+
+```typescript
+/**
+ * Advanced escape hatch for inserting already-computed silkscreen geometry.
+ * Prefer `SilkscreenGraphicProps` when the graphic should be derived from an
+ * SVG or PNG image inside tscircuit.
+ */
+export const pcbSilkscreenGraphicProps = z.object({
+  brepShape: brep_shape,
+  imageAsset: asset.optional(),
+  layer: silkscreenLayer,
+})
+```
+
 ### pcb-stiffener
 
 ```typescript

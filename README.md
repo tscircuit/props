@@ -83,6 +83,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<pcbnotepath />`                       | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
 | `<pcbnoterect />`                       | [`PcbNoteRectProps`](#pcbnoterectprops-pcbnoterect)                                                                |
 | `<pcbnotetext />`                       | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                |
+| `<pcbsilkscreengraphic />`              | [`PcbSilkscreenGraphicProps`](#pcbsilkscreengraphicprops-pcbsilkscreengraphic)                                     |
 | `<pcbstiffener />`                      | [`PcbStiffenerProps`](#pcbstiffenerprops-pcbstiffener)                                                             |
 | `<pcbtrace />`                          | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                                                         |
 | `<pinheader />`                         | [`PinHeaderProps`](#pinheaderprops-pinheader)                                                                      |
@@ -1627,6 +1628,16 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-text.ts)
+
+### PcbSilkscreenGraphicProps `<pcbsilkscreengraphic />`
+
+```ts
+export type PcbSilkscreenGraphicProps = z.input<
+  typeof pcbSilkscreenGraphicProps
+>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-silkscreen-graphic.ts)
 
 ### PcbStiffenerProps `<pcbstiffener />`
 

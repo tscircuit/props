@@ -3884,6 +3884,45 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
 })
 ```
 
+### pcb-soldermask-opening
+
+```typescript
+const openingBaseProps = pcbLayoutProps.omit({ layer: true }).extend({
+  name: z.string().optional(),
+  layer: z.enum(["top", "bottom"]),
+})
+openingBaseProps.extend({
+    shape: z.literal("rect"),
+    width: positiveDistance,
+    height: positiveDistance,
+    radius: z.never().optional(),
+    points: z.never().optional(),
+  }),
+openingBaseProps.extend({
+    shape: z.literal("circle"),
+    radius: positiveDistance,
+    width: z.never().optional(),
+    height: z.never().optional(),
+    points: z.never().optional(),
+  }),
+openingBaseProps.extend({
+    shape: z.literal("polygon"),
+    points: z
+      .array(z.object({ x: finiteDistance, y: finiteDistance }))
+      .min(3)
+      .refine((points) => {
+        const twiceArea = points.reduce((sum, point, index) => {
+          const next = points[(index + 1) % points.length]!
+          return sum + point.x * next.y - next.x * point.y
+        }, 0)
+        return Number.isFinite(twiceArea) && twiceArea !== 0
+      }, "Solder-mask opening must enclose a nonzero area"),
+    width: z.never().optional(),
+    height: z.never().optional(),
+    radius: z.never().optional(),
+  }),
+```
+
 ### pcb-stiffener
 
 ```typescript

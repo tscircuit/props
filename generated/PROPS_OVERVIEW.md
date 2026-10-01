@@ -742,6 +742,10 @@ export interface CapacitorProps<PinLabel extends string = string>
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
+  /** Firmware runtime choice. No default; each exporter validates its supported runtimes. */
+  firmwareRtos?: "nortos" | "freertos"
+  /** Firmware low-frequency clock selection. Does not infer a choice from connected crystals. */
+  firmwareLfClockSource?: "internal_rc" | "external_crystal"
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   /**
@@ -2239,6 +2243,14 @@ export interface PillWithRectPadPlatedHoleProps
 
 
 export interface PinAttributeMap {
+  /** Initial GPIO level after driver initialization, not the silicon reset state. No default. */
+  initialOutputState?: "low" | "high"
+  /** GPIO interrupt selection. Use "none" to explicitly disable interrupts. */
+  interruptTrigger?: "none" | "rising" | "falling" | "both"
+  /** Maximum I2C bus bit rate on the configured MCU SCL pin. Numbers are bits/s; e.g. "100kbps". */
+  i2cMaxBitRate?: number | string
+  /** Leave this pin outside generated firmware configuration, for example for debug ownership. */
+  doNotConfigure?: boolean
   /** Whether the pin accepts a signal. */
   isInput?: boolean
   /** Whether the pin drives a signal. */

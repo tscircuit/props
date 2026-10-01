@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { bit_rate } from "circuit-json"
 import { expectTypesMatch } from "../typecheck"
 
 export const pinCapability = z.enum([
@@ -15,6 +16,14 @@ export const pinCapability = z.enum([
 export type PinCapability = z.input<typeof pinCapability>
 
 export interface PinAttributeMap {
+  /** Initial GPIO level after driver initialization, not the silicon reset state. No default. */
+  initialOutputState?: "low" | "high"
+  /** GPIO interrupt selection. Use "none" to explicitly disable interrupts. */
+  interruptTrigger?: "none" | "rising" | "falling" | "both"
+  /** Maximum I2C bus bit rate on the configured MCU SCL pin. Numbers are bits/s; e.g. "100kbps". */
+  i2cMaxBitRate?: number | string
+  /** Leave this pin outside generated firmware configuration, for example for debug ownership. */
+  doNotConfigure?: boolean
   /** Whether the pin accepts a signal. */
   isInput?: boolean
   /** Whether the pin drives a signal. */
@@ -64,6 +73,10 @@ export interface PinAttributeMap {
 }
 
 export const pinAttributeMap = z.object({
+  initialOutputState: z.enum(["low", "high"]).optional(),
+  interruptTrigger: z.enum(["none", "rising", "falling", "both"]).optional(),
+  i2cMaxBitRate: bit_rate.optional(),
+  doNotConfigure: z.boolean().optional(),
   isInput: z.boolean().optional(),
   isOutput: z.boolean().optional(),
   isBidirectional: z.boolean().optional(),
@@ -105,3 +118,6 @@ export const pinAttributeMap = z.object({
 })
 
 expectTypesMatch<PinAttributeMap, z.input<typeof pinAttributeMap>>(true)
+
+/** Canonical pin attributes after unit normalization. */
+export type ParsedPinAttributeMap = z.output<typeof pinAttributeMap>

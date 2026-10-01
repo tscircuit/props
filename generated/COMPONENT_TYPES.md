@@ -961,6 +961,10 @@ export const pcbSxValue = z.object({
 
 ```typescript
 export interface PinAttributeMap {
+  initialOutputState?: "low" | "high"
+  interruptTrigger?: "none" | "rising" | "falling" | "both"
+  i2cMaxBitRate?: number | string
+  doNotConfigure?: boolean
   isInput?: boolean
   isOutput?: boolean
   isBidirectional?: boolean
@@ -1000,6 +1004,10 @@ export interface PinAttributeMap {
 }
 /** Whether the pin is configured as an open-emitter output. */
 export const pinAttributeMap = z.object({
+  initialOutputState: z.enum(["low", "high"]).optional(),
+  interruptTrigger: z.enum(["none", "rising", "falling", "both"]).optional(),
+  i2cMaxBitRate: bit_rate.optional(),
+  doNotConfigure: z.boolean().optional(),
   isInput: z.boolean().optional(),
   isOutput: z.boolean().optional(),
   isBidirectional: z.boolean().optional(),
@@ -1859,6 +1867,8 @@ export interface PinCompatibleVariant {
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
+  firmwareRtos?: "nortos" | "freertos"
+  firmwareLfClockSource?: "internal_rc" | "external_crystal"
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   showPinAliases?: boolean
@@ -1901,6 +1911,8 @@ export const pinCompatibleVariant = z.object({
   supplierPartNumber: z.record(supplier_name, z.array(z.string())).optional(),
 })
 export const chipProps = commonComponentProps.extend({
+  firmwareRtos: z.enum(["nortos", "freertos"]).optional(),
+  firmwareLfClockSource: z.enum(["internal_rc", "external_crystal"]).optional(),
   manufacturerPartNumber: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),

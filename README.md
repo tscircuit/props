@@ -647,6 +647,10 @@ export interface CapacitorProps<
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
+  /** Firmware runtime choice. No default; each exporter validates its supported runtimes. */
+  firmwareRtos?: "nortos" | "freertos";
+  /** Firmware low-frequency clock selection. Does not infer a choice from connected crystals. */
+  firmwareLfClockSource?: "internal_rc" | "external_crystal";
   manufacturerPartNumber?: string;
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>;
   /**

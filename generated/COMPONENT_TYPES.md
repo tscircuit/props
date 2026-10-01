@@ -2882,8 +2882,7 @@ export interface AutorouterConfig {
     | "fanout"
     | "dogbone"
     | "bus_lanes"
-    | "single_layer_bus"
-    | "single_layer_buses"
+    | "single_layer_routing"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
@@ -2950,17 +2949,14 @@ export const autorouterConfig = z.object({
       "fanout",
       "dogbone",
       "bus_lanes",
-      "single_layer_bus",
-      "single_layer_buses",
+      "single_layer_routing",
       "auto-jumper",
       "sequential-trace",
       "auto-local",
       "auto-cloud",
     ])
     .transform((preset) =>
-      preset === "single_layer_bus" || preset === "single_layer_buses"
-        ? "bus_lanes"
-        : preset,
+      preset === "single_layer_routing" ? "bus_lanes" : preset,
     )
     .optional(),
   local: z.boolean().optional(),

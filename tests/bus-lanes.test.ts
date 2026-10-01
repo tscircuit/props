@@ -23,7 +23,7 @@ test("bus_lanes is accepted as an autorouter preset", () => {
   ).toBe("bus_lanes")
 })
 
-for (const alias of ["single_layer_bus", "single_layer_buses"] as const) {
+for (const alias of ["single_layer_routing"] as const) {
   test(`${alias} is a typed alias that normalizes to bus_lanes`, () => {
     const preset: AutorouterPreset = alias
     const config = {
@@ -56,7 +56,7 @@ for (const alias of ["single_layer_bus", "single_layer_buses"] as const) {
   })
 }
 
-test("bus aliases preserve canonical presets, custom strings, and defaults", () => {
+test("single-layer routing preserves canonical presets, custom strings, and defaults", () => {
   expect(autorouterPreset.parse("bus_lanes")).toBe("bus_lanes")
   expect(autorouterConfig.parse({ preset: "bus_lanes" })).toEqual({
     preset: "bus_lanes",

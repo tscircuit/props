@@ -226,9 +226,9 @@ export interface AutorouterConfig {
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   /**
-   * single_layer_bus and single_layer_buses are aliases that parse as bus_lanes.
-   * Omitted leaves the preset unset. Existing presets remain unchanged; no
-   * conflicting fields or migration are introduced.
+   * single_layer_routing is an alias that parses as bus_lanes.
+   * Replaces single_layer_bus and single_layer_buses. Omitted leaves the preset
+   * unset; other presets remain unchanged and no conflicting fields are introduced.
    */
   preset?:
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
@@ -247,8 +247,7 @@ export interface AutorouterConfig {
     | "fanout"
     | "dogbone"
     | "bus_lanes"
-    | "single_layer_bus"
-    | "single_layer_buses"
+    | "single_layer_routing"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"

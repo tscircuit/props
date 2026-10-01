@@ -1562,10 +1562,8 @@ export interface BoardProps
     | "top_tented"
     | "bottom_tented"
     | "exposed"
-  viaCovering?:
-    | "untented"
-    | "tented"
-    | "plugged"
+  viaPlugging?:
+    | "solder_mask_ink"
     | "epoxy_filled_and_capped"
     | "copper_paste_filled_and_capped"
   borderRadius?: Distance
@@ -1644,15 +1642,16 @@ export const boardProps = subcircuitGroupProps
         return value
       })
       .optional(),
-    viaCovering: z
+    viaPlugging: z
       .enum([
-        "untented",
-        "tented",
-        "plugged",
+        "solder_mask_ink",
         "epoxy_filled_and_capped",
         "copper_paste_filled_and_capped",
       ])
-      .optional(),
+      .optional()
+      .describe(
+        "Board-wide via plugging/filling process for fabrication. Omitted leaves it unspecified; existing tenting settings are preserved.",
+      ),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),

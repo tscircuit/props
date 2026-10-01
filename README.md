@@ -445,10 +445,9 @@ export interface BoardProps extends Omit<
     | "top_tented"
     | "bottom_tented"
     | "exposed";
-  viaCovering?:
-    | "untented"
-    | "tented"
-    | "plugged"
+  /** Board-wide via plugging/filling process for fabrication. Omitted leaves it unspecified. */
+  viaPlugging?:
+    | "solder_mask_ink"
     | "epoxy_filled_and_capped"
     | "copper_paste_filled_and_capped";
   borderRadius?: Distance;

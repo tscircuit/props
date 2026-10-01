@@ -28,6 +28,7 @@ export * from "./customDrc"
 
 export * from "./components/board"
 export * from "./components/pcb-bend"
+export * from "./components/pcb-soldermask-opening"
 export * from "./components/pcb-stiffener"
 export * from "./components/panel"
 export * from "./components/subpanel"

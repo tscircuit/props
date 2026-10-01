@@ -83,6 +83,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<pcbnotepath />`                       | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
 | `<pcbnoterect />`                       | [`PcbNoteRectProps`](#pcbnoterectprops-pcbnoterect)                                                                |
 | `<pcbnotetext />`                       | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                |
+| `<pcbsoldermaskopening />`              | [`PcbSoldermaskOpeningProps`](#pcbsoldermaskopeningprops-pcbsoldermaskopening)                                     |
 | `<pcbstiffener />`                      | [`PcbStiffenerProps`](#pcbstiffenerprops-pcbstiffener)                                                             |
 | `<pcbtrace />`                          | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                                                         |
 | `<pinheader />`                         | [`PinHeaderProps`](#pinheaderprops-pinheader)                                                                      |
@@ -1641,6 +1642,16 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-text.ts)
+
+### PcbSoldermaskOpeningProps `<pcbsoldermaskopening />`
+
+```ts
+export type PcbSoldermaskOpeningProps = z.input<
+  typeof pcbSoldermaskOpeningProps
+>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-soldermask-opening.ts)
 
 ### PcbStiffenerProps `<pcbstiffener />`
 

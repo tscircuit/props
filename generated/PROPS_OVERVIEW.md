@@ -225,6 +225,11 @@ export interface AutorouterConfig {
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
+  /**
+   * single_layer_bus and single_layer_buses are aliases that parse as bus_lanes.
+   * Omitted leaves the preset unset. Existing presets remain unchanged; no
+   * conflicting fields or migration are introduced.
+   */
   preset?:
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
@@ -242,6 +247,8 @@ export interface AutorouterConfig {
     | "fanout"
     | "dogbone"
     | "bus_lanes"
+    | "single_layer_bus"
+    | "single_layer_buses"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"

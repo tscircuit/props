@@ -15,6 +15,48 @@ export const pinCapability = z.enum([
 export type PinCapability = z.input<typeof pinCapability>
 
 export interface PinAttributeMap {
+  /** Explicit roles from the component definition. Omitted flags are unknown; no names are interpreted. */
+  /** The pin resets its device when asserted; not a reset output. */
+  isResetInput?: boolean
+  /** The pin is configured as the USB D+ signal. */
+  isUsbDataPositive?: boolean
+  /** The pin is configured as the USB D- signal. */
+  isUsbDataNegative?: boolean
+  /** The positive differential input of a current-sense amplifier. */
+  isCurrentSensePositiveInput?: boolean
+  /** The negative differential input of a current-sense amplifier. */
+  isCurrentSenseNegativeInput?: boolean
+  /** The gate terminal of a MOSFET. */
+  isMosfetGate?: boolean
+  /** A source terminal of a MOSFET. */
+  isMosfetSource?: boolean
+  /** A drain terminal of a MOSFET. */
+  isMosfetDrain?: boolean
+  /** The base terminal of a bipolar transistor. */
+  isTransistorBase?: boolean
+  /** The collector terminal of a bipolar transistor. */
+  isTransistorCollector?: boolean
+  /** The emitter terminal of a bipolar transistor. */
+  isTransistorEmitter?: boolean
+  /** The anode terminal of a diode. */
+  isDiodeAnode?: boolean
+  /** The cathode terminal of a diode. */
+  isDiodeCathode?: boolean
+  /** The inverting signal input of an operational amplifier. */
+  isOpAmpInvertingInput?: boolean
+  /** The non-inverting signal input of an operational amplifier. */
+  isOpAmpNonInvertingInput?: boolean
+  /** The signal output of an operational amplifier. */
+  isOpAmpOutput?: boolean
+  /** One of the two terminals of a relay coil. */
+  isRelayCoil?: boolean
+  /** The common terminal of a relay contact set. */
+  isRelayCommonContact?: boolean
+  /** A relay contact open when the coil is not energized. */
+  isRelayNormallyOpenContact?: boolean
+  /** A relay contact closed when the coil is not energized. */
+  isRelayNormallyClosedContact?: boolean
+
   /** Whether the pin accepts a signal. */
   isInput?: boolean
   /** Whether the pin drives a signal. */
@@ -64,6 +106,27 @@ export interface PinAttributeMap {
 }
 
 export const pinAttributeMap = z.object({
+  isResetInput: z.boolean().optional(),
+  isUsbDataPositive: z.boolean().optional(),
+  isUsbDataNegative: z.boolean().optional(),
+  isCurrentSensePositiveInput: z.boolean().optional(),
+  isCurrentSenseNegativeInput: z.boolean().optional(),
+  isMosfetGate: z.boolean().optional(),
+  isMosfetSource: z.boolean().optional(),
+  isMosfetDrain: z.boolean().optional(),
+  isTransistorBase: z.boolean().optional(),
+  isTransistorCollector: z.boolean().optional(),
+  isTransistorEmitter: z.boolean().optional(),
+  isDiodeAnode: z.boolean().optional(),
+  isDiodeCathode: z.boolean().optional(),
+  isOpAmpInvertingInput: z.boolean().optional(),
+  isOpAmpNonInvertingInput: z.boolean().optional(),
+  isOpAmpOutput: z.boolean().optional(),
+  isRelayCoil: z.boolean().optional(),
+  isRelayCommonContact: z.boolean().optional(),
+  isRelayNormallyOpenContact: z.boolean().optional(),
+  isRelayNormallyClosedContact: z.boolean().optional(),
+
   isInput: z.boolean().optional(),
   isOutput: z.boolean().optional(),
   isBidirectional: z.boolean().optional(),

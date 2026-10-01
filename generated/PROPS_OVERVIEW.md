@@ -2239,6 +2239,48 @@ export interface PillWithRectPadPlatedHoleProps
 
 
 export interface PinAttributeMap {
+  /** Explicit roles from the component definition. Omitted flags are unknown; no names are interpreted. */
+  /** The pin resets its device when asserted; not a reset output. */
+  isResetInput?: boolean
+  /** The pin is configured as the USB D+ signal. */
+  isUsbDataPositive?: boolean
+  /** The pin is configured as the USB D- signal. */
+  isUsbDataNegative?: boolean
+  /** The positive differential input of a current-sense amplifier. */
+  isCurrentSensePositiveInput?: boolean
+  /** The negative differential input of a current-sense amplifier. */
+  isCurrentSenseNegativeInput?: boolean
+  /** The gate terminal of a MOSFET. */
+  isMosfetGate?: boolean
+  /** A source terminal of a MOSFET. */
+  isMosfetSource?: boolean
+  /** A drain terminal of a MOSFET. */
+  isMosfetDrain?: boolean
+  /** The base terminal of a bipolar transistor. */
+  isTransistorBase?: boolean
+  /** The collector terminal of a bipolar transistor. */
+  isTransistorCollector?: boolean
+  /** The emitter terminal of a bipolar transistor. */
+  isTransistorEmitter?: boolean
+  /** The anode terminal of a diode. */
+  isDiodeAnode?: boolean
+  /** The cathode terminal of a diode. */
+  isDiodeCathode?: boolean
+  /** The inverting signal input of an operational amplifier. */
+  isOpAmpInvertingInput?: boolean
+  /** The non-inverting signal input of an operational amplifier. */
+  isOpAmpNonInvertingInput?: boolean
+  /** The signal output of an operational amplifier. */
+  isOpAmpOutput?: boolean
+  /** One of the two terminals of a relay coil. */
+  isRelayCoil?: boolean
+  /** The common terminal of a relay contact set. */
+  isRelayCommonContact?: boolean
+  /** A relay contact open when the coil is not energized. */
+  isRelayNormallyOpenContact?: boolean
+  /** A relay contact closed when the coil is not energized. */
+  isRelayNormallyClosedContact?: boolean
+
   /** Whether the pin accepts a signal. */
   isInput?: boolean
   /** Whether the pin drives a signal. */

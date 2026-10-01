@@ -961,6 +961,27 @@ export const pcbSxValue = z.object({
 
 ```typescript
 export interface PinAttributeMap {
+  isResetInput?: boolean
+  isUsbDataPositive?: boolean
+  isUsbDataNegative?: boolean
+  isCurrentSensePositiveInput?: boolean
+  isCurrentSenseNegativeInput?: boolean
+  isMosfetGate?: boolean
+  isMosfetSource?: boolean
+  isMosfetDrain?: boolean
+  isTransistorBase?: boolean
+  isTransistorCollector?: boolean
+  isTransistorEmitter?: boolean
+  isDiodeAnode?: boolean
+  isDiodeCathode?: boolean
+  isOpAmpInvertingInput?: boolean
+  isOpAmpNonInvertingInput?: boolean
+  isOpAmpOutput?: boolean
+  isRelayCoil?: boolean
+  isRelayCommonContact?: boolean
+  isRelayNormallyOpenContact?: boolean
+  isRelayNormallyClosedContact?: boolean
+
   isInput?: boolean
   isOutput?: boolean
   isBidirectional?: boolean
@@ -1000,6 +1021,27 @@ export interface PinAttributeMap {
 }
 /** Whether the pin is configured as an open-emitter output. */
 export const pinAttributeMap = z.object({
+  isResetInput: z.boolean().optional(),
+  isUsbDataPositive: z.boolean().optional(),
+  isUsbDataNegative: z.boolean().optional(),
+  isCurrentSensePositiveInput: z.boolean().optional(),
+  isCurrentSenseNegativeInput: z.boolean().optional(),
+  isMosfetGate: z.boolean().optional(),
+  isMosfetSource: z.boolean().optional(),
+  isMosfetDrain: z.boolean().optional(),
+  isTransistorBase: z.boolean().optional(),
+  isTransistorCollector: z.boolean().optional(),
+  isTransistorEmitter: z.boolean().optional(),
+  isDiodeAnode: z.boolean().optional(),
+  isDiodeCathode: z.boolean().optional(),
+  isOpAmpInvertingInput: z.boolean().optional(),
+  isOpAmpNonInvertingInput: z.boolean().optional(),
+  isOpAmpOutput: z.boolean().optional(),
+  isRelayCoil: z.boolean().optional(),
+  isRelayCommonContact: z.boolean().optional(),
+  isRelayNormallyOpenContact: z.boolean().optional(),
+  isRelayNormallyClosedContact: z.boolean().optional(),
+
   isInput: z.boolean().optional(),
   isOutput: z.boolean().optional(),
   isBidirectional: z.boolean().optional(),

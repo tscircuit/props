@@ -2132,10 +2132,17 @@ export interface SilkscreenGraphicProps {
    * URL or static-file import for the source image. tscircuit/core converts the
    * image into the pcb_silkscreen_graphic BRep in circuit-json.
    */
-  imageUrl: string;
-  /** Width of the rendered silkscreen graphic on the PCB. */
+  imageUrl?: string;
+  /**
+   * Native geometry in the footprint-local PCB frame: points in mm, +X right,
+   * +Y up, right-handed with +Z above the board. Placement and rotation apply
+   * to every ring; width and height describe layout size without scaling it.
+   * Provide exactly one of brepShape or imageUrl.
+   */
+  brepShape?: z.input<typeof brep_shape>;
+  /** Image width, or native geometry's layout width, on the PCB. */
   width: Distance;
-  /** Height of the rendered silkscreen graphic on the PCB. */
+  /** Image height, or native geometry's layout height, on the PCB. */
   height: Distance;
   /** PCB layer for the silkscreen graphic. */
   layer?: VisibleLayer;

@@ -4757,7 +4757,8 @@ export const silkscreenCircleProps = pcbLayoutProps
 
 ```typescript
 export interface SilkscreenGraphicProps {
-  imageUrl: string
+  imageUrl?: string
+  brepShape?: z.input<typeof brep_shape>
   width: Distance
   height: Distance
   layer?: VisibleLayer
@@ -4790,7 +4791,8 @@ export interface SilkscreenGraphicProps {
 export const silkscreenGraphicProps = pcbLayoutProps
   .omit({ layer: true, pcbStyle: true, pcbSx: true })
   .extend({
-    imageUrl: url,
+    imageUrl: url.optional(),
+    brepShape: brep_shape.optional(),
     width: distance,
     height: distance,
     layer: visible_layer.optional(),

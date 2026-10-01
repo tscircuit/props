@@ -41,3 +41,37 @@ test("should parse a static-file import shaped imageUrl", () => {
   expect(parsed.height).toBe(4)
   expect(parsed.layer).toBe("bottom")
 })
+
+test("preserves native rings and arc bulges without an image", () => {
+  const brepShape = {
+    outer_ring: {
+      vertices: [
+        { x: -1, y: 0, bulge: 1 },
+        { x: 1, y: 0, bulge: 1 },
+      ],
+    },
+    inner_rings: [
+      {
+        vertices: [
+          { x: -0.5, y: 0, bulge: -1 },
+          { x: 0.5, y: 0, bulge: -1 },
+        ],
+      },
+    ],
+  }
+  const raw: SilkscreenGraphicProps = { brepShape, width: "2mm", height: 2 }
+  expect(silkscreenGraphicProps.parse(raw).brepShape).toEqual(brepShape)
+  expect(
+    silkscreenGraphicProps.safeParse({ width: 2, height: 2 }).success,
+  ).toBe(false)
+  expect(
+    silkscreenGraphicProps.safeParse({
+      ...raw,
+      imageUrl: "https://example.com/logo.svg",
+    }).success,
+  ).toBe(false)
+  expect(
+    silkscreenGraphicProps.safeParse({ ...raw, brepShape: { outer_ring: {} } })
+      .success,
+  ).toBe(false)
+})

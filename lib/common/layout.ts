@@ -258,7 +258,11 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * Whether to show this component's CAD model as translucent in the 3D viewer.
    */
   showAsTranslucentModel?: boolean
+  /** Alias for manufacturerPartNumber. No default; use resolveManufacturerPartNumber to resolve aliases. */
+  mpn?: string
+  /** Alias for manufacturerPartNumber. Retained for existing circuits. */
   mfn?: string
+  /** Manufacturer's part number. Aliases must agree when specified together. */
   manufacturerPartNumber?: string
   /**
    * This component will be drawn as part of this section e.g. "Power"
@@ -314,6 +318,7 @@ export const commonComponentProps = commonLayoutProps
         "Whether to show this component's CAD model as translucent in the 3D viewer.",
       ),
     pinAttributes: z.record(z.string(), pinAttributeMap).optional(),
+    mpn: z.string().describe("Manufacturer Part Number").optional(),
     mfn: z.string().describe("Manufacturer Part Number").optional(),
     manufacturerPartNumber: z.string().optional(),
   })

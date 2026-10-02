@@ -7,6 +7,8 @@ import { subcircuitGroupProps, type SubcircuitGroupProps } from "./group"
 
 type MountedBoardChipProps = Pick<
   ChipPropsSU,
+  | "mpn"
+  | "mfn"
   | "manufacturerPartNumber"
   | "pinLabels"
   | "showPinAliases"
@@ -26,6 +28,8 @@ export interface MountedBoardProps
 }
 
 export const mountedboardProps = subcircuitGroupProps.extend({
+  mpn: chipProps.shape.mpn,
+  mfn: chipProps.shape.mfn,
   manufacturerPartNumber: chipProps.shape.manufacturerPartNumber,
   pinLabels: chipProps.shape.pinLabels,
   showPinAliases: chipProps.shape.showPinAliases,

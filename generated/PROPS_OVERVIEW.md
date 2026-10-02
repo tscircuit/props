@@ -170,8 +170,10 @@ export interface AssemblyMotorProps {
   name: string
   /** Human-facing alternate to the stable name. */
   displayName?: string
-  /** Modelprinter string, trimmed; consumers resolve the model internally. */
-  model: string
+  /** NEMA frame standard; required when model is omitted, exclusive with model. */
+  standard?: AssemblyMotorStandard
+  /** Advanced modelprinter string, trimmed; exclusive with standard. */
+  model?: string
   /**
    * Direction from the motor body toward the shaft tip in the right-handed
    * circuit frame: +X right, +Y top, +Z above the board. This is a direction,

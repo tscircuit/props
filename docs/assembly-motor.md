@@ -1,7 +1,16 @@
 # Assembly motor props
 
 `assembly.motor` describes a motor model and the direction its shaft faces.
-Use a modelprinter string directly; authors do not construct modelcdn URLs.
+Choose `standard="nema8"`, `standard="nema17"`, or `standard="nema23"`;
+authors do not construct modelcdn URLs.
+
+```tsx
+<assembly.motor name="MOTOR" standard="nema17" shaftFacingDirection="x+" />
+<assembly.motor name="MOTOR" standard="nema8" shaftFacingDirection="z-" />
+<assembly.motor name="MOTOR" standard="nema23" shaftFacingDirection="z-" />
+```
+
+For a custom body or shaft specification, use a modelprinter string instead:
 
 ```tsx
 <assembly.motor
@@ -11,19 +20,14 @@ Use a modelprinter string directly; authors do not construct modelcdn URLs.
 />
 ```
 
-To point the shaft below the PCB instead:
-
-```tsx
-<assembly.motor name="MOTOR" model="nema17" shaftFacingDirection="z-" />
-```
-
 ## Props
 
 | Prop | Accepted input | Parsed output / default |
 | --- | --- | --- |
 | `name` | Required, nonblank string | Preserved as the stable assembly identity |
 | `displayName` | Optional string | Preserved; omitted by default |
-| `model` | Required, nonblank modelprinter string | Surrounding whitespace trimmed; no default motor |
+| `standard` | `nema8`, `nema17`, `nema23`; required when `model` is omitted | Preserved; no default motor standard |
+| `model` | Nonblank modelprinter string; required when `standard` is omitted | Surrounding whitespace trimmed; no default model |
 | `shaftFacingDirection` | `x+`, `x-`, `y+`, `y-`, `z+`, `z-` | Axis and sign preserved; defaults to `z+` |
 
 Directions use the right-handed circuit coordinate frame: +X right, +Y top,
@@ -33,15 +37,18 @@ The default `z+` matches the native shaft direction of the NEMA models.
 
 There are no direction aliases. Invalid directions are rejected rather than
 interpreted as a rotation. There are no competing `modelUrl` or `cadModel`
-sources on this element; `model` is required. Existing assembly schemas are
-unchanged. For a motor previously described with `assembly.subassembly`, use
+sources on this element. Exactly one of `standard` and `model` is required;
+supplying both is rejected, even if the model describes the same NEMA standard.
+Existing assembly schemas are unchanged. For a motor previously described
+with `assembly.subassembly`, use
 its modelprinter string as `model` and express the shaft axis with
 `shaftFacingDirection` when adopting the motor element in a supporting core.
 
 ## Package boundary
 
-This package exports `AssemblyMotorProps`, `AssemblyMotorPropsInput`,
-`assemblyMotorProps`, and `assemblyProps.motor`. It defines and validates the
-authoring contract. Resolving the model string and rendering/orienting an
-`assembly.motor` are responsibilities of `@tscircuit/core` and its consumers;
-this props change alone does not add runtime rendering support.
+This package exports `AssemblyMotorStandard`, `AssemblyMotorProps`,
+`AssemblyMotorPropsInput`, `assemblyMotorProps`, and `assemblyProps.motor`.
+It defines and validates the authoring contract. Resolving the selected
+standard or model string and rendering/orienting an `assembly.motor` are
+responsibilities of `@tscircuit/core` and its consumers; this props change
+alone does not add runtime rendering support.

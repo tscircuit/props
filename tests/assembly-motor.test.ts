@@ -54,7 +54,44 @@ test("defaults only the shaft direction to the native positive Z axis", () => {
   expect(input).toEqual({ name: "MOTOR", model: "nema17" })
 })
 
-test("rejects missing motor identity or model instead of choosing a motor", () => {
+test("selects each NEMA standard without requiring a modelprinter string", () => {
+  for (const standard of ["nema8", "nema17", "nema23"] as const) {
+    const input: AssemblyMotorPropsInput = {
+      name: "MOTOR",
+      standard,
+      shaftFacingDirection: "x+",
+    }
+    expect(assemblyProps.motor.parse(input)).toEqual({
+      name: "MOTOR",
+      standard,
+      shaftFacingDirection: "x+",
+    })
+  }
+  expect(
+    assemblyMotorProps.parse({ name: "MOTOR", standard: "nema17" }),
+  ).toEqual({
+    name: "MOTOR",
+    standard: "nema17",
+    shaftFacingDirection: "z+",
+  })
+})
+
+test("rejects unsupported standards and competing model selections", () => {
+  for (const standard of ["nema14", "NEMA17", "nema17 ", "", null, 17]) {
+    expect(
+      assemblyMotorProps.safeParse({ name: "MOTOR", standard }).success,
+    ).toBe(false)
+  }
+  expect(() =>
+    assemblyMotorProps.parse({
+      name: "MOTOR",
+      standard: "nema17",
+      model: nema17Model,
+    }),
+  ).toThrow("Provide either standard or model, not both")
+})
+
+test("rejects missing motor identity or selection instead of choosing a motor", () => {
   for (const input of [
     {},
     { name: "MOTOR" },

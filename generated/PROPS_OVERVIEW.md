@@ -165,6 +165,23 @@ export interface AssemblyDeviceProps {
 }
 
 
+export interface AssemblyMotorProps {
+  /** Stable assembly identity used by selectors. */
+  name: string
+  /** Human-facing alternate to the stable name. */
+  displayName?: string
+  /** Modelprinter string, trimmed; consumers resolve the model internally. */
+  model: string
+  /**
+   * Direction from the motor body toward the shaft tip in the right-handed
+   * circuit frame: +X right, +Y top, +Z above the board. This is a direction,
+   * not a position; it does not specify translation or rotation about the
+   * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
+   */
+  shaftFacingDirection?: CadModelAxisDirection
+}
+
+
 export interface AssemblyScreenProps {
   /** Stable product-level identity for the screen assembly. */
   name: string

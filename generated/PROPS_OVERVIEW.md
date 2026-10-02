@@ -165,6 +165,25 @@ export interface AssemblyDeviceProps {
 }
 
 
+export interface AssemblyMotorProps {
+  /** Stable assembly identity used by selectors. */
+  name: string
+  /** Human-facing alternate to the stable name. */
+  displayName?: string
+  /** NEMA frame standard; required when model is omitted, exclusive with model. */
+  standard?: AssemblyMotorStandard
+  /** Advanced modelprinter string, trimmed; exclusive with standard. */
+  model?: string
+  /**
+   * Direction from the motor body toward the shaft tip in the right-handed
+   * circuit frame: +X right, +Y top, +Z above the board. This is a direction,
+   * not a position; it does not specify translation or rotation about the
+   * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
+   */
+  shaftFacingDirection?: CadModelAxisDirection
+}
+
+
 export interface AssemblyScreenProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
@@ -469,6 +488,17 @@ export interface BoardOutlinePoint extends Point {
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
+  /**
+   * Assembly mounting target, such as "NEMA17.backface". Trimmed; omitted
+   * leaves the board unattached. The target face is resolved by the consumer.
+   */
+  mountedTo?: string
+  /**
+   * Nonnegative finite clearance between the target mounting face and the
+   * nearest PCB surface, in millimeters or a unit string. Parsed to mm.
+   * Omitted leaves the gap unset; only meaningful when mountedTo is supplied.
+   */
+  mountGap?: Distance
   /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
   fabricatorPreset?:
     | "jlcpcb_economy"

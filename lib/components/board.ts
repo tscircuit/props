@@ -78,6 +78,17 @@ export const boardOutlinePoint = z
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
+  /**
+   * Assembly mounting target, such as "NEMA17.backface". Trimmed; omitted
+   * leaves the board unattached. The target face is resolved by the consumer.
+   */
+  mountedTo?: string
+  /**
+   * Nonnegative finite clearance between the target mounting face and the
+   * nearest PCB surface, in millimeters or a unit string. Parsed to mm.
+   * Omitted leaves the gap unset; only meaningful when mountedTo is supplied.
+   */
+  mountGap?: Distance
   /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
   fabricatorPreset?:
     | "jlcpcb_economy"
@@ -153,6 +164,20 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
+    mountedTo: z
+      .string()
+      .trim()
+      .min(1)
+      .optional()
+      .describe(
+        'Assembly mounting target, such as "NEMA17.backface". Trimmed; omitted leaves the board unattached. The target face is resolved by the consumer.',
+      ),
+    mountGap: distance
+      .pipe(z.number().nonnegative().finite())
+      .optional()
+      .describe(
+        "Nonnegative finite clearance between the target mounting face and the nearest PCB surface, in millimeters or a unit string, parsed to mm. Omitted leaves the gap unset; only meaningful when mountedTo is supplied.",
+      ),
     fabricatorPreset: z
       .enum([
         "jlcpcb_economy",

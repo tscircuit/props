@@ -420,6 +420,17 @@ export interface BoardProps extends Omit<
   "subcircuit" | "connections" | "outline"
 > {
   title?: string;
+  /**
+   * Assembly mounting target, such as "NEMA17.backface". Trimmed; omitted
+   * leaves the board unattached. The target face is resolved by the consumer.
+   */
+  mountedTo?: string;
+  /**
+   * Nonnegative finite clearance between the target mounting face and the
+   * nearest PCB surface, in millimeters or a unit string. Parsed to mm.
+   * Omitted leaves the gap unset; only meaningful when mountedTo is supplied.
+   */
+  mountGap?: Distance;
   /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
   fabricatorPreset?:
     | "jlcpcb_economy"

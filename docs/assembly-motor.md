@@ -20,6 +20,46 @@ For a custom body or shaft specification, use a modelprinter string instead:
 />
 ```
 
+## Mounting a board to the motor
+
+`<board>` accepts `mountedTo` and `mountGap`, allowing this assembly:
+
+```tsx
+<assembly.device>
+  <assembly.motor name="NEMA17" standard="nema17" />
+
+  <Rp2040MotorController mountedTo="NEMA17.backface" mountGap="6mm" />
+</assembly.device>
+```
+
+The controller component must forward those props to its board:
+
+```tsx
+import type { BoardProps } from "@tscircuit/props"
+
+function Rp2040MotorController(
+  mounting: Pick<BoardProps, "mountedTo" | "mountGap">,
+) {
+  return (
+    <board width="42.3mm" height="42.3mm" {...mounting}>
+      {/* Existing controller components and traces */}
+    </board>
+  )
+}
+```
+
+`mountedTo` is an optional nonblank string, trimmed on parse. It names an
+assembly mounting face: `NEMA17.backface` refers to the named motor's face
+opposite the shaft. Reference resolution is a core responsibility; props
+validation preserves the reference without requiring the target to exist yet.
+
+`mountGap` accepts a nonnegative finite number in mm or a distance string such
+as `"6mm"`, parsed to mm. It describes the clearance between the mounting face
+and the nearest PCB surface. Zero is permitted. Both props are unset by
+default; existing boards keep their current placement. A gap only has mounting
+meaning when `mountedTo` is supplied. There are no aliases or conflicts with
+existing board props. Mounting is board-specific and is not added to groups.
+
 ## Props
 
 | Prop | Accepted input | Parsed output / default |
@@ -50,5 +90,6 @@ This package exports `AssemblyMotorStandard`, `AssemblyMotorProps`,
 `AssemblyMotorPropsInput`, `assemblyMotorProps`, and `assemblyProps.motor`.
 It defines and validates the authoring contract. Resolving the selected
 standard or model string and rendering/orienting an `assembly.motor` are
-responsibilities of `@tscircuit/core` and its consumers; this props change
-alone does not add runtime rendering support.
+responsibilities of `@tscircuit/core` and its consumers, as is placement of
+boards using `mountedTo` and `mountGap`; this props change alone does not add
+runtime rendering or mounting support.

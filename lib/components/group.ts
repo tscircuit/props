@@ -1,22 +1,14 @@
-import {
-  layer_ref,
-  length,
-  distance,
-  type AnyCircuitElement,
-} from "circuit-json"
+import type { PartsEngine } from "../parts-engine"
+import { layer_ref, length, distance } from "circuit-json"
 import type { AutocompleteString } from "lib/common/autocomplete"
 import type { Distance } from "lib/common/distance"
-import {
-  type CommonLayoutProps,
-  commonLayoutProps,
-  type SupplierPartNumbers,
-} from "lib/common/layout"
+import { type CommonLayoutProps, commonLayoutProps } from "lib/common/layout"
 import type { PcbStyle } from "lib/common/pcbStyle"
 import type { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import type { AnySourceComponent, PcbTrace } from "circuit-json"
+import type { PcbTrace } from "circuit-json"
 import {
   manual_edits_file,
   type ManualEditsFile,
@@ -294,21 +286,6 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schGap?: number | string
   schPack?: boolean
   schMatchAdapt?: boolean
-}
-
-export type PartsEngine = {
-  findPart: (params: {
-    sourceComponent: AnySourceComponent
-    footprinterString?: string
-  }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
-  fetchPartCircuitJson?: (params: {
-    supplierPartNumber?: string
-    manufacturerPartNumber?: string
-    platformFetch?: typeof fetch
-  }) =>
-    | Promise<AnyCircuitElement[] | undefined>
-    | AnyCircuitElement[]
-    | undefined
 }
 
 export interface PcbRouteCache {
@@ -824,3 +801,5 @@ expectTypesMatch<
 
 type InferredGroupProps = z.input<typeof groupProps>
 expectTypesMatch<GroupProps, InferredGroupProps>(true)
+
+export type { PartsEngine } from "../parts-engine"

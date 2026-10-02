@@ -2814,20 +2814,6 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schMatchAdapt?: boolean
 }
 /** @deprecated Use `pcbFlex` */
-export type PartsEngine = {
-  findPart: (params: {
-    sourceComponent: AnySourceComponent
-    footprinterString?: string
-  }) => Promise<SupplierPartNumbers> | SupplierPartNumbers
-  fetchPartCircuitJson?: (params: {
-    supplierPartNumber?: string
-    manufacturerPartNumber?: string
-    platformFetch?: typeof fetch
-  }) =>
-    | Promise<AnyCircuitElement[] | undefined>
-    | AnyCircuitElement[]
-    | undefined
-}
 export interface PcbRouteCache {
   pcbTraces: PcbTrace[]
   cacheKey: string

@@ -150,3 +150,9 @@ export * from "./common/fanoutProps"
 export * from "./common/implicitBreakoutPointSolver"
 
 export * from "./common/fanoutTracePath"
+
+export type {
+  DatasheetInformation,
+  FetchDatasheetInformationParams,
+  PartsEnginePlatformFetch,
+} from "./parts-engine"

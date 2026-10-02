@@ -5,7 +5,6 @@ const pcbCopperPourCommonProps = {
   connectsTo: z.string().optional(),
   coveredWithSolderMask: z.boolean().optional().default(true),
   layer: layer_ref,
-  sourceNetId: z.string().optional(),
 }
 
 /**

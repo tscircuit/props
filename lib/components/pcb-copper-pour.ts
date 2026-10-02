@@ -2,6 +2,7 @@ import { brep_shape, distance, layer_ref, point, rotation } from "circuit-json"
 import { z } from "zod"
 
 const pcbCopperPourCommonProps = {
+  connectsTo: z.string().optional(),
   coveredWithSolderMask: z.boolean().optional().default(true),
   layer: layer_ref,
   sourceNetId: z.string().optional(),

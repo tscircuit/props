@@ -9,13 +9,13 @@ const Geometry = () => null
 const jscad = <Geometry />
 
 test("printedpart preserves JSX and parses paired face mounting and distances", () => {
-  const input: AssemblyPrintedPartProps = {
+  const input = {
     name: "SPACER",
     jscad,
     mountedTo: "MOTOR.backface",
     mountFace: "motor",
     mountGap: "2mm",
-  }
+  } satisfies AssemblyPrintedPartProps
   expect(assemblyProps.printedpart).toBe(assemblyPrintedPartProps)
   expect(assemblyPrintedPartProps.parse(input)).toEqual({
     ...input,

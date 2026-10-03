@@ -5,6 +5,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import { isValidElement, type ReactElement } from "react"
 import { z } from "zod"
 
+/** Provide exactly one of jscad, model, modelUrl, or cadModel. */
 export interface AssemblyPrintedPartProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string

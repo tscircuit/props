@@ -194,8 +194,12 @@ export interface AssemblyPrintedPartProps {
    * Named reference rectangles define attachment faces; they add no material.
    * Hooks, async components, and raw kernel geometry are not supported.
    */
-  jscad: ReactElement
-  /** Qualified target face, e.g. "MOTOR.backface" or "SPACER.board". */
+  jscad?: ReactElement
+  /** Modelprinter/footprinter string or model URL. */
+  model?: string
+  modelUrl?: string
+  cadModel?: CadModelProp
+  /** Assembly mounting target. */
   mountedTo?: string
   /** Name of this part's reference rectangle to mate with mountedTo.
    * Both props must be supplied together; outward normals oppose and local
@@ -513,7 +517,7 @@ export interface BoardOutlinePoint extends Point {
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
-  /** Target motor or printed-part face, e.g. "NEMA17.backface" or "SPACER.board". */
+  /** e.g. "NEMA17.backface". */
   mountedTo?: string
   /** Clearance from the mounting face, e.g. "6mm". */
   mountGap?: Distance

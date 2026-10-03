@@ -2,7 +2,6 @@ import { expect, test } from "bun:test"
 import {
   assemblyPrintedPartProps,
   assemblyProps,
-  boardProps,
   type AssemblyPrintedPartProps,
 } from "../lib"
 
@@ -26,9 +25,6 @@ test("printedpart preserves JSX and parses paired face mounting and distances", 
   expect(
     assemblyPrintedPartProps.parse({ name: "FREE", jscad }).mountGap,
   ).toBeUndefined()
-  expect(boardProps.parse({ mountedTo: "SPACER.board" }).mountedTo).toBe(
-    "SPACER.board",
-  )
   for (const extra of [
     { jscad: null },
     { jscad: {} },
@@ -44,5 +40,45 @@ test("printedpart preserves JSX and parses paired face mounting and distances", 
       assemblyPrintedPartProps.safeParse({ name: "SPACER", jscad, ...extra })
         .success,
     ).toBe(false)
+  }
+})
+
+test("printedpart accepts each existing model source and rejects conflicting sources", () => {
+  const sources: Partial<AssemblyPrintedPartProps>[] = [
+    { jscad },
+    { model: "nema17" },
+    { model: "https://example.com/part.glb" },
+    { modelUrl: "./part.stl" },
+    {
+      cadModel: {
+        glbUrl: "./part.glb",
+        positionOffset: { x: "2mm", y: 0, z: 0 },
+      },
+    },
+    { cadModel: { jscad: { type: "cuboid", size: [10, 20, 4] } } },
+    { cadModel: <Geometry /> },
+    { cadModel: null },
+  ]
+  for (const source of sources) {
+    expect(
+      assemblyPrintedPartProps.safeParse({ name: "PART", ...source }).success,
+    ).toBe(true)
+  }
+  for (const source of [{}, { model: " " }, { modelUrl: "" }]) {
+    expect(
+      assemblyPrintedPartProps.safeParse({ name: "PART", ...source }).success,
+    ).toBe(false)
+  }
+  const alternatives = [sources[0]!, sources[1]!, sources[3]!, sources[4]!]
+  for (let i = 0; i < alternatives.length; i++) {
+    for (let j = i + 1; j < alternatives.length; j++) {
+      expect(
+        assemblyPrintedPartProps.safeParse({
+          name: "PART",
+          ...alternatives[i],
+          ...alternatives[j],
+        }).success,
+      ).toBe(false)
+    }
   }
 })

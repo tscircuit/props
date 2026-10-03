@@ -420,7 +420,7 @@ export interface BoardProps extends Omit<
   "subcircuit" | "connections" | "outline"
 > {
   title?: string;
-  /** Target motor or printed-part face, e.g. "NEMA17.backface" or "SPACER.board". */
+  /** e.g. "NEMA17.backface". */
   mountedTo?: string;
   /** Clearance from the mounting face, e.g. "6mm". */
   mountGap?: Distance;

@@ -6,6 +6,7 @@ import {
   type LayerRefInput,
 } from "circuit-json"
 import { z } from "zod"
+import { pcbDdrRouting, type PcbDdrRouting } from "./pcb-ddr-routing"
 
 export type BusName = string
 
@@ -15,6 +16,10 @@ export type BusName = string
  */
 export interface BusProps {
   name?: string
+  /** Retain membership/check constraints without creating an autorouter group. Default false. */
+  routingDisabled?: boolean
+  /** Published DDR routing rules and signal class. No electrical defaults are implied. */
+  pcbDdrRouting?: PcbDdrRouting
   /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[]
   /** If set, every trace in this bus is assigned to this autorouting phase. */
@@ -35,6 +40,8 @@ export interface BusProps {
 
 export const busProps = z.object({
   name: z.string().optional(),
+  routingDisabled: z.boolean().optional(),
+  pcbDdrRouting: pcbDdrRouting.optional(),
   connections: z.array(z.string()).min(1),
   routingPhaseIndex: z.number().nullable().optional(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),

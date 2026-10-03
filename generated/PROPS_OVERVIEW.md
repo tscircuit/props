@@ -625,6 +625,10 @@ export interface BreakoutProps
 
 export interface BusProps {
   name?: string
+  /** Retain membership/check constraints without creating an autorouter group. Default false. */
+  routingDisabled?: boolean
+  /** Published DDR routing rules and signal class. No electrical defaults are implied. */
+  pcbDdrRouting?: PcbDdrRouting
   /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[]
   /** If set, every trace in this bus is assigned to this autorouting phase. */
@@ -1155,6 +1159,8 @@ export interface CutoutApertureProps {
 
 export interface DifferentialPairProps {
   name?: string
+  /** Published DDR routing rules and signal class. No electrical defaults are implied. */
+  pcbDdrRouting?: PcbDdrRouting
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string
   /** Name of the trace or pin carrying the negative signal. */
@@ -2041,6 +2047,19 @@ export interface PcbBendProps {
   tearReliefRadius?: Distance
   /** Moving side, looking from (x1, y1) toward (x2, y2) in the flat layout. */
   bendSide: "left" | "right"
+}
+
+
+export interface PcbDdrRouting {
+  profile: "ti_am335x_ddr3"
+  interfaceName: string
+  signalClass: "dq" | "dqs" | "ck" | "addr_ctrl"
+  topology: "one_x16"
+  /** Required for dq/dqs; omitted for ck/addr_ctrl. */
+  byteIndex?: 0 | 1
+  /** Names of the intended reference nets, without a net. selector prefix. */
+  groundNetName?: string
+  powerNetName?: string
 }
 
 

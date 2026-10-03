@@ -151,3 +151,5 @@ export * from "./common/fanoutProps"
 export * from "./common/implicitBreakoutPointSolver"
 
 export * from "./common/fanoutTracePath"
+
+export { pcbDdrRouting, type PcbDdrRouting } from "./components/pcb-ddr-routing"

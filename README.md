@@ -77,6 +77,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<opamp />`                             | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                             | [`PanelProps`](#panelprops-panel)                                                                                  |
 | `<pcbbend />`                           | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
+| `<pcbddrrouting />`                     | [`PcbDdrRoutingProps`](#pcbddrroutingprops-pcbddrrouting)                                                          |
 | `<pcbkeepout />`                        | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
 | `<pcbnotedimension />`                  | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
 | `<pcbnoteline />`                       | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
@@ -566,6 +567,10 @@ export interface BreakoutPointProps extends Omit<
 ```ts
 export interface BusProps {
   name?: string;
+  /** Retain membership/check constraints without creating an autorouter group. Default false. */
+  routingDisabled?: boolean;
+  /** Published DDR routing rules and signal class. No electrical defaults are implied. */
+  pcbDdrRouting?: PcbDdrRouting;
   /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[];
   /** If set, every trace in this bus is assigned to this autorouting phase. */
@@ -886,6 +891,8 @@ export interface RectCutoutProps extends Omit<
 ```ts
 export interface DifferentialPairProps {
   name?: string;
+  /** Published DDR routing rules and signal class. No electrical defaults are implied. */
+  pcbDdrRouting?: PcbDdrRouting;
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string;
   /** Name of the trace or pin carrying the negative signal. */

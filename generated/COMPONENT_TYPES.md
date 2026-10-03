@@ -1781,6 +1781,8 @@ export const breakoutPointProps = pcbLayoutProps
  */
 export interface BusProps {
   name?: string
+  routingDisabled?: boolean
+  pcbDdrRouting?: PcbDdrRouting
   connections: string[]
   routingPhaseIndex?: number | null
   maxLengthSkew?: number | string
@@ -1793,6 +1795,8 @@ export interface BusProps {
 /** Preferred PCB layers for routing the bus, in priority order. */
 export const busProps = z.object({
   name: z.string().optional(),
+  routingDisabled: z.boolean().optional(),
+  pcbDdrRouting: pcbDdrRouting.optional(),
   connections: z.array(z.string()).min(1),
   routingPhaseIndex: z.number().nullable().optional(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
@@ -2329,6 +2333,7 @@ export const polygonCutoutProps = pcbLayoutProps
  */
 export interface DifferentialPairProps {
   name?: string
+  pcbDdrRouting?: PcbDdrRouting
   positiveConnection: string
   negativeConnection: string
   maxLengthSkew?: number | string
@@ -2339,6 +2344,7 @@ export interface DifferentialPairProps {
 /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
 export const differentialPairProps = z.object({
   name: z.string().optional(),
+  pcbDdrRouting: pcbDdrRouting.optional(),
   positiveConnection: z.string(),
   negativeConnection: z.string(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
@@ -3694,6 +3700,34 @@ export const pcbBendProps = z
     bendRadius: distance.pipe(z.number().finite().positive()),
     tearReliefRadius: distance.pipe(z.number().finite().positive()).optional(),
     bendSide: z.enum(["left", "right"]),
+  })
+```
+
+### pcb-ddr-routing
+
+```typescript
+/** TI SPRS717L routing intent for one point-to-point x16 DDR3 memory.
+ * Selecting the profile supplies the published rule limits, not a stackup,
+ * impedance result, reference plane, or termination circuit. */
+export interface PcbDdrRouting {
+  profile: "ti_am335x_ddr3"
+  interfaceName: string
+  signalClass: "dq" | "dqs" | "ck" | "addr_ctrl"
+  topology: "one_x16"
+  byteIndex?: 0 | 1
+  groundNetName?: string
+  powerNetName?: string
+}
+/** Names of the intended reference nets, without a net. selector prefix. */
+export const pcbDdrRouting = z
+  .object({
+    profile: z.literal("ti_am335x_ddr3"),
+    interfaceName: z.string().min(1),
+    signalClass: z.enum(["dq", "dqs", "ck", "addr_ctrl"]),
+    topology: z.literal("one_x16"),
+    byteIndex: z.union([z.literal(0), z.literal(1)]).optional(),
+    groundNetName: z.string().min(1).optional(),
+    powerNetName: z.string().min(1).optional(),
   })
 ```
 

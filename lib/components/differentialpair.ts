@@ -1,6 +1,7 @@
 import { expectTypesMatch } from "lib/typecheck"
 import { distance, resistance } from "circuit-json"
 import { z } from "zod"
+import { pcbDdrRouting, type PcbDdrRouting } from "./pcb-ddr-routing"
 
 /**
  * Defines matched routing constraints for two named traces that form a
@@ -8,6 +9,8 @@ import { z } from "zod"
  */
 export interface DifferentialPairProps {
   name?: string
+  /** Published DDR routing rules and signal class. No electrical defaults are implied. */
+  pcbDdrRouting?: PcbDdrRouting
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string
   /** Name of the trace or pin carrying the negative signal. */
@@ -24,6 +27,7 @@ export interface DifferentialPairProps {
 
 export const differentialPairProps = z.object({
   name: z.string().optional(),
+  pcbDdrRouting: pcbDdrRouting.optional(),
   positiveConnection: z.string(),
   negativeConnection: z.string(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),

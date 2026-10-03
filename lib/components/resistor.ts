@@ -24,6 +24,7 @@ export type ResistorPinLabels = (typeof resistorPinLabels)[number]
 export interface ResistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   resistance: number | string
+  /** Fraction from 0 to 1, or a percentage string such as "0.5%"; surrounding whitespace is ignored. */
   tolerance?: number | string
   pullupFor?: string
   pullupTo?: string
@@ -69,10 +70,11 @@ export const resistorProps = commonComponentProps.extend({
     .union([z.string(), z.number()])
     .transform((val) => {
       if (typeof val === "string") {
-        if (val.endsWith("%")) {
-          return parseFloat(val.slice(0, -1)) / 100
+        const trimmedTolerance = val.trim()
+        if (trimmedTolerance.endsWith("%")) {
+          return parseFloat(trimmedTolerance.slice(0, -1)) / 100
         }
-        return parseFloat(val)
+        return parseFloat(trimmedTolerance)
       }
       return val
     })

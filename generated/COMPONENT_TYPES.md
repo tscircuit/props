@@ -354,16 +354,93 @@ export type FootprintSoupElements = {
 ### impedanceTarget
 
 ```typescript
-/** Scalar target or an inclusive acceptable range, in ohms. Describes design
- * intent; the physical stackup is still required to check achieved impedance. */
-export type ImpedanceTarget =
-  | number
-  | string
-  | { min: number | string; max: number | string }
-export const impedanceTarget = z.union([
-  positiveImpedance,
-  z
-    .object({ min: positiveImpedance, max: positiveImpedance })
+export const positiveImpedance = z
+  .union([
+    z.number(),
+    z
+      .string()
+      .refine(
+        (value) => !/(?:±|\+\/-)/.test(value),
+        "Use a scalar impedance for explicit bounds",
+      ),
+  ])
+  .pipe(resistance)
+  .pipe(z.number().positive().finite())
+const quantity = /^([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?)\s*(.*?)$/i
+const tolerantImpedance = z
+  .string()
+  .regex(/(?:±|\+\/-)/)
+  .transform((value, ctx) => {
+    const parts = value.trim().split(/\s*(?:±|\+\/-)\s*/)
+    const nominal = parts.length === 2 ? parts[0]!.match(quantity) : null
+    const tolerance = parts.length === 2 ? parts[1]!.match(quantity) : null
+    if (!nominal || !tolerance) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Use a nominal impedance ± an absolute ohm tolerance",
+      })
+      return z.NEVER
+    }
+    const ohmUnit = /^(?:[yzafpnumkKMGTPEZYµμ])?(?:ohms?|Ω)$/i
+    if (
+      (nominal[2] && !ohmUnit.test(nominal[2])) ||
+      (tolerance[2] && !ohmUnit.test(tolerance[2]))
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Use an absolute ohm tolerance, not a percentage or another unit",
+      })
+      return z.NEVER
+    }
+    const nominalValue = resistance.safeParse(
+      `${nominal[1]}${nominal[2] || tolerance[2] || "ohm"}`,
+    )
+    const toleranceValue = resistance.safeParse(
+      `${tolerance[1]}${tolerance[2] || nominal[2] || "ohm"}`,
+    )
+    if (
+      !nominalValue.success ||
+      !toleranceValue.success ||
+      !Number.isFinite(nominalValue.data) ||
+      !Number.isFinite(toleranceValue.data) ||
+      nominalValue.data <= 0 ||
+      toleranceValue.data < 0
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Nominal impedance must be positive and tolerance nonnegative, in ohms",
+      })
+      return z.NEVER
+    }
+    return {
+      nominal: nominalValue.data,
+      min: nominalValue.data - toleranceValue.data,
+      max: nominalValue.data + toleranceValue.data,
+    }
+  })
+export const impedanceTarget = z.union([tolerantImpedance, scalarImpedance])
+expectTypesMatch<ImpedanceTarget, z.input<typeof impedanceTarget>>(true)
+
+export function validateImpedanceTarget(
+  target: z.output<typeof impedanceTarget> | undefined,
+  min: number | undefined,
+  max: number | undefined,
+  ctx: z.RefinementCtx,
+  propName: string,
+) {
+  if (min !== undefined && max !== undefined && min > max)
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: [`${propName}Max`],
+      message: "Maximum impedance cannot be below minimum impedance",
+    })
+  if (typeof target === "object") {
+    for (const [suffix, explicit, derived] of [
+      ["Min", min, target.min],
+      ["Max", max, target.max],
+    ] as const)
 ```
 
 ### implicitBreakoutPointSolver
@@ -1250,19 +1327,6 @@ const widthSpacing = z
   .transform((value) => ({
     widthMultiplier: Number(value.trim().replace(/w$/i, "")),
   }))
-/** Optional tight-escape allowance. The maxLength budget is per signal and
- * shared across all neighbours; overlapping close regions count once.
- * Numeric minimum is mm; width multiples use the same units as TraceSpacing. */
-export interface PcbEscapeSpacing {
-  minimum: TraceSpacing
-  maxLength: number | string
-}
-/** Maximum total routed length at reduced spacing, in mm. */
-export const pcbEscapeSpacing = z
-  .object({
-    minimum: traceSpacing,
-    maxLength: distance.pipe(z.number().nonnegative().finite()),
-  })
 ```
 
 ### url
@@ -1852,12 +1916,13 @@ export interface BusProps {
   lengthTolerance?: number | string
   pcbTraceSpacing?: TraceSpacing
   pcbSpacingToOtherSignals?: TraceSpacing
-  pcbEscapeSpacing?: PcbEscapeSpacing
 
   connections: string[]
   routingPhaseIndex?: number | null
   maxLengthSkew?: number | string
   targetImpedance?: ImpedanceTarget
+  targetImpedanceMin?: number | string
+  targetImpedanceMax?: number | string
   pcbTraceWidth?: number | string
   pcbAllowedLayers?: LayerRefInput[]
   preferredLayer?: LayerRefInput
@@ -1874,12 +1939,13 @@ export const busProps = z
     lengthTolerance: nonnegativeRouteDistance.optional(),
     pcbTraceSpacing: traceSpacing.optional(),
     pcbSpacingToOtherSignals: traceSpacing.optional(),
-    pcbEscapeSpacing: pcbEscapeSpacing.optional(),
 
     connections: z.array(z.string()).min(1),
     routingPhaseIndex: z.number().nullable().optional(),
     maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
     targetImpedance: impedanceTarget.optional(),
+    targetImpedanceMin: positiveImpedance.optional(),
+    targetImpedanceMax: positiveImpedance.optional(),
     pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
     pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
     preferredLayer: layer_ref.optional(),
@@ -2418,12 +2484,13 @@ export interface DifferentialPairProps {
   targetLength?: RouteLength
   lengthTolerance?: number | string
   pcbSpacingToOtherSignals?: TraceSpacing
-  pcbEscapeSpacing?: PcbEscapeSpacing
 
   positiveConnection: string
   negativeConnection: string
   maxLengthSkew?: number | string
   targetDifferentialImpedance?: ImpedanceTarget
+  targetDifferentialImpedanceMin?: number | string
+  targetDifferentialImpedanceMax?: number | string
   pcbTraceGap?: number | string
   maxUncoupledLength?: number | string
 }
@@ -2437,12 +2504,13 @@ export const differentialPairProps = z
     targetLength: routeLength.optional(),
     lengthTolerance: nonnegativeRouteDistance.optional(),
     pcbSpacingToOtherSignals: traceSpacing.optional(),
-    pcbEscapeSpacing: pcbEscapeSpacing.optional(),
 
     positiveConnection: z.string(),
     negativeConnection: z.string(),
     maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
     targetDifferentialImpedance: impedanceTarget.optional(),
+    targetDifferentialImpedanceMin: positiveImpedance.optional(),
+    targetDifferentialImpedanceMax: positiveImpedance.optional(),
     pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
     maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
   })

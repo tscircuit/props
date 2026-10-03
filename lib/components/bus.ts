@@ -5,15 +5,11 @@ import {
   validateRouteLengths,
   type RouteLength,
 } from "../common/routeLength"
-import {
-  traceSpacing,
-  validateTraceSpacing,
-  type TraceSpacing,
-  pcbEscapeSpacing,
-  type PcbEscapeSpacing,
-} from "../common/traceSpacing"
+import { traceSpacing, type TraceSpacing } from "../common/traceSpacing"
 import {
   impedanceTarget,
+  positiveImpedance,
+  validateImpedanceTarget,
   type ImpedanceTarget,
 } from "../common/impedanceTarget"
 import { expectTypesMatch } from "lib/typecheck"
@@ -44,9 +40,6 @@ export interface BusProps {
   pcbTraceSpacing?: TraceSpacing
   /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
   pcbSpacingToOtherSignals?: TraceSpacing
-  /** Optional tight-escape allowance with an explicit shared per-signal length cap.
-   * Applies to declared spacing requirements, never to a pair's pcbTraceGap. */
-  pcbEscapeSpacing?: PcbEscapeSpacing
 
   /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[]
@@ -54,8 +47,11 @@ export interface BusProps {
   routingPhaseIndex?: number | null
   /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
   maxLengthSkew?: number | string
-  /** Intended single-ended impedance or acceptable range. Raw numbers are ohms. */
+  /** Intended single-ended impedance, e.g. "50±25ohm". Raw numbers are ohms. */
   targetImpedance?: ImpedanceTarget
+  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
+  targetImpedanceMin?: number | string
+  targetImpedanceMax?: number | string
   /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
   pcbTraceWidth?: number | string
   /** PCB layers on which the bus may be routed. */
@@ -76,12 +72,13 @@ export const busProps = z
     lengthTolerance: nonnegativeRouteDistance.optional(),
     pcbTraceSpacing: traceSpacing.optional(),
     pcbSpacingToOtherSignals: traceSpacing.optional(),
-    pcbEscapeSpacing: pcbEscapeSpacing.optional(),
 
     connections: z.array(z.string()).min(1),
     routingPhaseIndex: z.number().nullable().optional(),
     maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
     targetImpedance: impedanceTarget.optional(),
+    targetImpedanceMin: positiveImpedance.optional(),
+    targetImpedanceMax: positiveImpedance.optional(),
     pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
     pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
     preferredLayer: layer_ref.optional(),
@@ -89,8 +86,30 @@ export const busProps = z
   })
   .superRefine((props, ctx) => {
     validateRouteLengths(props, ctx)
-    validateTraceSpacing(props, ctx)
+    validateImpedanceTarget(
+      props.targetImpedance,
+      props.targetImpedanceMin,
+      props.targetImpedanceMax,
+      ctx,
+      "targetImpedance",
+    )
   })
+  .transform(
+    ({
+      targetImpedance,
+      ...props
+    }): typeof props & { targetImpedance?: number } => {
+      if (targetImpedance === undefined) return props
+      if (typeof targetImpedance === "number")
+        return { ...props, targetImpedance }
+      return {
+        ...props,
+        targetImpedance: targetImpedance.nominal,
+        targetImpedanceMin: targetImpedance.min,
+        targetImpedanceMax: targetImpedance.max,
+      }
+    },
+  )
 
 type InferredBusProps = z.input<typeof busProps>
 expectTypesMatch<BusProps, InferredBusProps>(true)

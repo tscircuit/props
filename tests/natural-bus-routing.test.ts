@@ -13,29 +13,27 @@ test("bus directly expresses matching, width-relative spacing and impedance rang
     lengthMatchTo: ".DQS0",
     maxLengthSkew: "25mil",
     maxLength: { reference: "longest_manhattan" },
-    targetImpedance: { min: "50ohm", max: "75ohm" },
+    targetImpedanceMin: "50ohm",
+    targetImpedanceMax: "75ohm",
     pcbTraceSpacing: "3w",
     pcbSpacingToOtherSignals: "4w",
-    pcbEscapeSpacing: { minimum: "1w", maxLength: "1250mil" },
   } satisfies BusProps
   expect(busProps.parse(raw)).toEqual({
     ...raw,
     maxLengthSkew: 0.635,
-    targetImpedance: { min: 50, max: 75 },
+    targetImpedanceMin: 50,
+    targetImpedanceMax: 75,
     pcbTraceSpacing: { widthMultiplier: 3 },
     pcbSpacingToOtherSignals: { widthMultiplier: 4 },
-    pcbEscapeSpacing: { minimum: { widthMultiplier: 1 }, maxLength: 31.75 },
   })
   expect(
     differentialPairProps.parse({
       positiveConnection: "P",
       negativeConnection: "N",
       pcbSpacingToOtherSignals: "4w",
-      pcbEscapeSpacing: { minimum: "1w", maxLength: "1250mil" },
     }),
   ).toMatchObject({
     pcbSpacingToOtherSignals: { widthMultiplier: 4 },
-    pcbEscapeSpacing: { minimum: { widthMultiplier: 1 }, maxLength: 31.75 },
   })
 })
 
@@ -59,7 +57,7 @@ test("command bus and clock pair share one length expression without a third ele
     targetLength: target,
     lengthTolerance: "50mil",
     maxLengthSkew: "5mil",
-    targetDifferentialImpedance: { min: "100ohm", max: "150ohm" },
+    targetDifferentialImpedance: "125±25ohm",
     pcbTraceGap: "0.12mm",
   } satisfies DifferentialPairProps
   const parsedBus = busProps.parse(bus),
@@ -68,7 +66,11 @@ test("command bus and clock pair share one length expression without a third ele
   expect(parsedPair.targetLength).toEqual(parsedBus.targetLength)
   expect(parsedPair.lengthTolerance).toBe(1.27)
   expect(parsedPair.maxLengthSkew).toBe(0.127)
-  expect(parsedPair.targetDifferentialImpedance).toEqual({ min: 100, max: 150 })
+  expect(parsedPair).toMatchObject({
+    targetDifferentialImpedance: 125,
+    targetDifferentialImpedanceMin: 100,
+    targetDifferentialImpedanceMax: 150,
+  })
   expect(parsedPair.pcbTraceGap).toBe(0.12)
 })
 
@@ -139,29 +141,6 @@ test("rejects incomplete relationships, impossible bounds and malformed width mu
     { pcbTraceSpacing: "Infinityw" },
     { pcbTraceSpacing: "1e309w" },
     { pcbTraceSpacing: NaN },
-    {
-      pcbTraceSpacing: "3w",
-      pcbEscapeSpacing: { minimum: "1w", maxLength: Infinity },
-    },
-    {
-      pcbTraceSpacing: "3w",
-      pcbEscapeSpacing: { minimum: "0w", maxLength: 20 },
-    },
-    { pcbEscapeSpacing: { minimum: "1w" } },
-    { pcbEscapeSpacing: { maxLength: 20 } },
-    { pcbEscapeSpacing: { minimum: "1w", maxLength: 20 } },
-    {
-      pcbTraceSpacing: "3w",
-      pcbEscapeSpacing: { minimum: "4w", maxLength: 20 },
-    },
-    {
-      pcbSpacingToOtherSignals: "0.2mm",
-      pcbEscapeSpacing: { minimum: "0.3mm", maxLength: 20 },
-    },
-    {
-      pcbSpacingToOtherSignals: "4w",
-      pcbEscapeSpacing: { minimum: "1w", maxLength: -1 },
-    },
   ]
   for (const props of invalid)
     expect(busProps.safeParse({ connections: ["A"], ...props }).success).toBe(
@@ -176,13 +155,12 @@ test("rejects incomplete relationships, impossible bounds and malformed width mu
   ).toBe(false)
 })
 
-test("mixed absolute and relative spacing remains deferred to actual local widths", () => {
+test("spacing props keep XML-friendly author input and leave width evaluation to geometry", () => {
   const parsed = busProps.parse({
     connections: ["A"],
     pcbTraceSpacing: "3w",
-    pcbEscapeSpacing: { minimum: "0.2mm", maxLength: "5mm" },
+    pcbSpacingToOtherSignals: "0.2mm",
   })
   expect(parsed.pcbTraceSpacing).toEqual({ widthMultiplier: 3 })
-  expect(parsed.pcbEscapeSpacing).toEqual({ minimum: 0.2, maxLength: 5 })
-  // Three widths may be above or below 0.2 mm; props cannot decide without copper geometry.
+  expect(parsed.pcbSpacingToOtherSignals).toBe(0.2)
 })

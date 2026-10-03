@@ -18,30 +18,29 @@ const commandLength = {
     lengthMatchTo=".DDR_STROBE0"
     maxLengthSkew="25mil"
     maxLength={{ reference: "longest_manhattan" }}
-    targetImpedance={{ min: "50ohm", max: "75ohm" }}
+    targetImpedanceMin="50ohm"
+    targetImpedanceMax="75ohm"
     pcbTraceSpacing="3w"
     pcbSpacingToOtherSignals="4w"
-    pcbEscapeSpacing={{ minimum: "1w", maxLength: "1250mil" }}
   />
   <differentialpair
     name="DDR_STROBE0"
     positiveConnection={strobePositive0}
     negativeConnection={strobeNegative0}
     maxLengthSkew="5mil"
-    targetDifferentialImpedance={{ min: "100ohm", max: "150ohm" }}
+    targetDifferentialImpedance="125±25ohm"
     pcbTraceGap="0.12mm"
     pcbSpacingToOtherSignals="4w"
-    pcbEscapeSpacing={{ minimum: "1w", maxLength: "1250mil" }}
   />
   <bus
     name="DDR_COMMANDS"
     connections={commandSignals}
     targetLength={commandLength}
     lengthTolerance="50mil"
-    targetImpedance={{ min: "50ohm", max: "75ohm" }}
+    targetImpedanceMin="50ohm"
+    targetImpedanceMax="75ohm"
     pcbTraceSpacing="3w"
     pcbSpacingToOtherSignals="4w"
-    pcbEscapeSpacing={{ minimum: "1w", maxLength: "1250mil" }}
   />
   <differentialpair
     name="DDR_CLOCK"
@@ -50,10 +49,9 @@ const commandLength = {
     maxLengthSkew="5mil"
     targetLength={commandLength}
     lengthTolerance="50mil"
-    targetDifferentialImpedance={{ min: "100ohm", max: "150ohm" }}
+    targetDifferentialImpedance="125±25ohm"
     pcbTraceGap="0.12mm"
     pcbSpacingToOtherSignals="4w"
-    pcbEscapeSpacing={{ minimum: "1w", maxLength: "1250mil" }}
   />
 </>
 ```
@@ -74,16 +72,26 @@ The values above are supplied by the author, not inferred from the signal names.
 
 `pcbSpacingToOtherSignals` applies to traces outside the bus or pair, including unrelated copper traces, rather than requiring a hand-written list of every other bus. Distances can be mm or unit strings. A width-relative string such as `"3w"` means three times the larger local trace width; it parses as `{ widthMultiplier: 3 }`, preserving the rule until copper geometry is available.
 
-`pcbEscapeSpacing={{ minimum, maxLength }}` specifies the optional tight-escape allowance. Both fields are required, with at least one normal spacing requirement. `minimum` accepts a distance or width multiple; `maxLength` is a nonnegative distance. The length cap is shared across all reduced-spacing regions and neighbours for each signal; overlapping regions count once. The escape minimum cannot exceed normal spacing when the values are comparable. Comparing an absolute distance with a width multiple requires actual trace widths. Pair-internal spacing is governed by `pcbTraceGap`, not the reduced-spacing allowance.
+Tight-escape spacing exceptions are not part of this API.
 
 ## Impedance and compatibility
 
-The existing `targetImpedance` and `targetDifferentialImpedance` props accept either their original scalar target or `{ min, max }`. Raw numbers are ohms; unit strings normalize to ohms. Ranges must be ordered, finite and positive. Differential values are differential impedance directly; no single-ended conversion is inferred.
+The existing `targetImpedance` and `targetDifferentialImpedance` props accept a number in ohms, a unit string, or an absolute tolerance string such as `"50±25ohm"`. The latter means nominal 50 ohms and inclusive bounds 25–75 ohms; `"±"` is an absolute tolerance, not a percentage. ASCII `"+/-"` is accepted equivalently. A unit written once applies to both quantities, so `"1±0.1kohm"` means 1000 ± 100 ohms. Explicit units on both quantities are also accepted.
 
-All new props are optional and have no electrical defaults or aliases. Existing scalar impedance values still parse to numbers; range values parse to numeric `{ min, max }`. Distances parse to mm, relative expressions keep their selectors and normalized offset, and width multiples keep their multiplier. Consumers must handle these explicit forms.
+Alternatively, use `targetImpedanceMin` and `targetImpedanceMax`, or `targetDifferentialImpedanceMin` and `targetDifferentialImpedanceMax`. These accept scalar numeric ohms or unit strings. Either bound can be specified independently; bounds alone do not invent a nominal target. Differential values are differential impedance directly, without a single-ended conversion.
+
+```tsx
+<bus connections={dataSignals} targetImpedance="50±25ohm" />
+// Equivalent allowed bounds, without a nominal target:
+<bus connections={dataSignals} targetImpedanceMin="25ohm" targetImpedanceMax="75ohm" />
+```
+
+Parsing expands a tolerance string to flat scalar props: `targetImpedance: 50`, `targetImpedanceMin: 25`, `targetImpedanceMax: 75`. The same normalization applies to differential targets. Existing scalar targets still parse to numbers without inferred tolerances. Bounds must be finite, positive and ordered; tolerance is nonnegative and must leave a positive lower bound. A scalar target must lie within any explicit bounds. When a tolerance string and explicit bounds are both present, they must agree; conflicts are rejected rather than silently replaced.
+
+All new props are optional, with no electrical defaults. Impedance range objects are rejected. Relative length objects remain available in the current length API; this update makes impedance authoring scalar/XML-compatible. Width-relative spacing still parses to a multiplier internally, while its author-facing input is a string.
 
 This PR defines the author-facing props and parsing contract. Core/solver/checks support must be adapted to this API before the example is advertised as executable. Props alone do not establish actual impedance, reference-plane continuity, termination, decoupling, flight time or hardware compliance.
 
-The unmerged `pcbRoutingConstraints` wrapper and `routingDisabled` check-only grouping API are removed. Replace their length/spacing fields with the direct props and `lengthMatchTo`; use existing connections for membership and scalar/range impedance targets for impedance intent. No compatibility alias is retained for the unshipped wrapper.
+The unmerged `pcbRoutingConstraints` wrapper and `routingDisabled` check-only grouping API are removed. Replace their length/spacing fields with the direct props and `lengthMatchTo`; use existing connections for membership and scalar/tolerance or separate bound impedance props for impedance intent. No compatibility alias is retained for the unshipped wrapper.
 
-The unshipped spacing names are replaced by `pcbSpacingToOtherSignals` and the `pcbEscapeSpacing` object; no aliases remain. Omit the object to disable the exception. Parsing normalizes `minimum` to mm or `{ widthMultiplier }` and `maxLength` to mm, without supplying either value automatically.
+`pcbEscapeSpacing` has been removed for now. The unshipped object impedance range is replaced by a tolerance string or separate Min/Max props, with no compatibility alias.

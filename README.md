@@ -582,9 +582,6 @@ export interface BusProps {
   pcbTraceSpacing?: TraceSpacing;
   /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
   pcbSpacingToOtherSignals?: TraceSpacing;
-  /** Optional tight-escape allowance with an explicit shared per-signal length cap.
-   * Applies to declared spacing requirements, never to a pair's pcbTraceGap. */
-  pcbEscapeSpacing?: PcbEscapeSpacing;
 
   /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[];
@@ -592,8 +589,11 @@ export interface BusProps {
   routingPhaseIndex?: number | null;
   /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
   maxLengthSkew?: number | string;
-  /** Intended single-ended impedance or acceptable range. Raw numbers are ohms. */
+  /** Intended single-ended impedance, e.g. "50±25ohm". Raw numbers are ohms. */
   targetImpedance?: ImpedanceTarget;
+  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
+  targetImpedanceMin?: number | string;
+  targetImpedanceMax?: number | string;
   /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
   pcbTraceWidth?: number | string;
   /** PCB layers on which the bus may be routed. */
@@ -919,9 +919,6 @@ export interface DifferentialPairProps {
   lengthTolerance?: number | string;
   /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
   pcbSpacingToOtherSignals?: TraceSpacing;
-  /** Optional tight-escape allowance with an explicit shared per-signal length cap.
-   * Applies to declared spacing requirements, never to a pair's pcbTraceGap. */
-  pcbEscapeSpacing?: PcbEscapeSpacing;
 
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string;
@@ -929,8 +926,11 @@ export interface DifferentialPairProps {
   negativeConnection: string;
   /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
   maxLengthSkew?: number | string;
-  /** Intended differential impedance or acceptable range. Raw numbers are ohms. */
+  /** Intended differential impedance, e.g. "100±10ohm". Raw numbers are ohms. */
   targetDifferentialImpedance?: ImpedanceTarget;
+  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
+  targetDifferentialImpedanceMin?: number | string;
+  targetDifferentialImpedanceMax?: number | string;
   /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
   pcbTraceGap?: number | string;
   /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */

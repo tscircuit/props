@@ -160,7 +160,5 @@ export {
 export {
   traceSpacing,
   type TraceSpacing,
-  pcbEscapeSpacing,
-  type PcbEscapeSpacing,
 } from "./common/traceSpacing"
 export { impedanceTarget, type ImpedanceTarget } from "./common/impedanceTarget"

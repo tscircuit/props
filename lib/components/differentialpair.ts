@@ -5,15 +5,11 @@ import {
   validateRouteLengths,
   type RouteLength,
 } from "../common/routeLength"
-import {
-  traceSpacing,
-  validateTraceSpacing,
-  type TraceSpacing,
-  pcbEscapeSpacing,
-  type PcbEscapeSpacing,
-} from "../common/traceSpacing"
+import { traceSpacing, type TraceSpacing } from "../common/traceSpacing"
 import {
   impedanceTarget,
+  positiveImpedance,
+  validateImpedanceTarget,
   type ImpedanceTarget,
 } from "../common/impedanceTarget"
 import { expectTypesMatch } from "lib/typecheck"
@@ -39,9 +35,6 @@ export interface DifferentialPairProps {
   lengthTolerance?: number | string
   /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
   pcbSpacingToOtherSignals?: TraceSpacing
-  /** Optional tight-escape allowance with an explicit shared per-signal length cap.
-   * Applies to declared spacing requirements, never to a pair's pcbTraceGap. */
-  pcbEscapeSpacing?: PcbEscapeSpacing
 
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string
@@ -49,8 +42,11 @@ export interface DifferentialPairProps {
   negativeConnection: string
   /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
   maxLengthSkew?: number | string
-  /** Intended differential impedance or acceptable range. Raw numbers are ohms. */
+  /** Intended differential impedance, e.g. "100±10ohm". Raw numbers are ohms. */
   targetDifferentialImpedance?: ImpedanceTarget
+  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
+  targetDifferentialImpedanceMin?: number | string
+  targetDifferentialImpedanceMax?: number | string
   /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
   pcbTraceGap?: number | string
   /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
@@ -66,19 +62,42 @@ export const differentialPairProps = z
     targetLength: routeLength.optional(),
     lengthTolerance: nonnegativeRouteDistance.optional(),
     pcbSpacingToOtherSignals: traceSpacing.optional(),
-    pcbEscapeSpacing: pcbEscapeSpacing.optional(),
 
     positiveConnection: z.string(),
     negativeConnection: z.string(),
     maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
     targetDifferentialImpedance: impedanceTarget.optional(),
+    targetDifferentialImpedanceMin: positiveImpedance.optional(),
+    targetDifferentialImpedanceMax: positiveImpedance.optional(),
     pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
     maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
   })
   .superRefine((props, ctx) => {
     validateRouteLengths(props, ctx)
-    validateTraceSpacing(props, ctx)
+    validateImpedanceTarget(
+      props.targetDifferentialImpedance,
+      props.targetDifferentialImpedanceMin,
+      props.targetDifferentialImpedanceMax,
+      ctx,
+      "targetDifferentialImpedance",
+    )
   })
+  .transform(
+    ({
+      targetDifferentialImpedance,
+      ...props
+    }): typeof props & { targetDifferentialImpedance?: number } => {
+      if (targetDifferentialImpedance === undefined) return props
+      if (typeof targetDifferentialImpedance === "number")
+        return { ...props, targetDifferentialImpedance }
+      return {
+        ...props,
+        targetDifferentialImpedance: targetDifferentialImpedance.nominal,
+        targetDifferentialImpedanceMin: targetDifferentialImpedance.min,
+        targetDifferentialImpedanceMax: targetDifferentialImpedance.max,
+      }
+    },
+  )
 
 type InferredDifferentialPairProps = z.input<typeof differentialPairProps>
 expectTypesMatch<DifferentialPairProps, InferredDifferentialPairProps>(true)

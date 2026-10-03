@@ -924,7 +924,11 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * Whether to show this component's CAD model as translucent in the 3D viewer.
    */
   showAsTranslucentModel?: boolean
+  /** Alias for manufacturerPartNumber. No default; use resolveManufacturerPartNumber to resolve aliases. */
+  mpn?: string
+  /** Alias for manufacturerPartNumber. Retained for existing circuits. */
   mfn?: string
+  /** Manufacturer's part number. Aliases must agree when specified together. */
   manufacturerPartNumber?: string
   /**
    * This component will be drawn as part of this section e.g. "Power"
@@ -1044,7 +1048,6 @@ export interface CrystalProps<PinLabel extends string = string>
   /** Maximum allowed PCB trace length between the crystal and its connected component */
   maxTraceLength?: number | string
   manufacturerPartNumber?: string
-  mpn?: string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
   connections?: Connections<CrystalPinLabels>

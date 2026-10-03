@@ -826,7 +826,6 @@ export interface CrystalProps<
   /** Maximum allowed PCB trace length between the crystal and its connected component */
   maxTraceLength?: number | string;
   manufacturerPartNumber?: string;
-  mpn?: string;
   pinVariant?: PinVariant;
   schOrientation?: SchematicOrientation;
   connections?: Connections<CrystalPinLabels>;

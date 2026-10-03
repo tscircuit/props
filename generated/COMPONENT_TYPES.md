@@ -3635,7 +3635,7 @@ export const panelProps = baseGroupProps
 ### pcb-bend
 
 ```typescript
-/** A bend on a flat flex PCB. Does not change fabrication coordinates. */
+/** A bend on a flat flex PCB, with optional tear-relief cutouts. */
 export interface PcbBendProps {
   name?: string
   x1: Distance
@@ -3644,6 +3644,7 @@ export interface PcbBendProps {
   y2: Distance
   bendAngle: number | string
   bendRadius: Distance
+  tearReliefRadius?: Distance
   bendSide: "left" | "right"
 }
 /** Moving side, looking from (x1, y1) toward (x2, y2) in the flat layout. */
@@ -3656,6 +3657,7 @@ export const pcbBendProps = z
     y2: finiteDistance,
     bendAngle: rotation.pipe(z.number().finite()),
     bendRadius: distance.pipe(z.number().finite().positive()),
+    tearReliefRadius: distance.pipe(z.number().finite().positive()).optional(),
     bendSide: z.enum(["left", "right"]),
   })
 ```

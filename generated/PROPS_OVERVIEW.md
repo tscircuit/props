@@ -2019,6 +2019,14 @@ export interface PcbBendProps {
   bendAngle: number | string
   /** Positive neutral-surface radius, in mm or a distance string. */
   bendRadius: Distance
+  /**
+   * Radius of circular tear-relief cutouts centered at both bend endpoints in
+   * the flat PCB. Removes material to round the edge where each cutout meets
+   * the board outline. Finite and positive, in mm or a distance string;
+   * parsed to mm. Omit to leave the outline unchanged (no tear reliefs).
+   * Independent of bendRadius and bendSide; no aliases or conflicting props.
+   */
+  tearReliefRadius?: Distance
   /** Moving side, looking from (x1, y1) toward (x2, y2) in the flat layout. */
   bendSide: "left" | "right"
 }

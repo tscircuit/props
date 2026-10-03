@@ -98,7 +98,7 @@ test("relative offsets stay explicit, including negative offsets and reordered e
       offset: "-5mil",
     },
     maxLength: { reference: "longest_manhattan", of: [".B", ".A"], offset: 0 },
-  }
+  } satisfies BusProps
   expect(busProps.parse(raw).minLength).toEqual({
     ...raw.minLength,
     offset: -0.127,

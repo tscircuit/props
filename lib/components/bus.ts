@@ -9,6 +9,8 @@ import {
   traceSpacing,
   validateTraceSpacing,
   type TraceSpacing,
+  pcbEscapeSpacing,
+  type PcbEscapeSpacing,
 } from "../common/traceSpacing"
 import {
   impedanceTarget,
@@ -41,12 +43,10 @@ export interface BusProps {
    * Raw numbers are mm; "3w" means three times the larger local trace width. */
   pcbTraceSpacing?: TraceSpacing
   /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
-  pcbExternalTraceSpacing?: TraceSpacing
-  /** Reduced centreline spacing allowed only with maxReducedSpacingLength.
-   * Applies to declared spacing requirements, never to the pair's own pcbTraceGap. */
-  pcbReducedTraceSpacing?: TraceSpacing
-  /** Shared per-member length cap for all reduced-spacing intervals, in mm. */
-  maxReducedSpacingLength?: number | string
+  pcbSpacingToOtherSignals?: TraceSpacing
+  /** Optional tight-escape allowance with an explicit shared per-signal length cap.
+   * Applies to declared spacing requirements, never to a pair's pcbTraceGap. */
+  pcbEscapeSpacing?: PcbEscapeSpacing
 
   /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[]
@@ -75,9 +75,8 @@ export const busProps = z
     targetLength: routeLength.optional(),
     lengthTolerance: nonnegativeRouteDistance.optional(),
     pcbTraceSpacing: traceSpacing.optional(),
-    pcbExternalTraceSpacing: traceSpacing.optional(),
-    pcbReducedTraceSpacing: traceSpacing.optional(),
-    maxReducedSpacingLength: nonnegativeRouteDistance.optional(),
+    pcbSpacingToOtherSignals: traceSpacing.optional(),
+    pcbEscapeSpacing: pcbEscapeSpacing.optional(),
 
     connections: z.array(z.string()).min(1),
     routingPhaseIndex: z.number().nullable().optional(),

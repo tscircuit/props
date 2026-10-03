@@ -157,5 +157,10 @@ export {
   type RouteLength,
   type RelativeRouteLength,
 } from "./common/routeLength"
-export { traceSpacing, type TraceSpacing } from "./common/traceSpacing"
+export {
+  traceSpacing,
+  type TraceSpacing,
+  pcbEscapeSpacing,
+  type PcbEscapeSpacing,
+} from "./common/traceSpacing"
 export { impedanceTarget, type ImpedanceTarget } from "./common/impedanceTarget"

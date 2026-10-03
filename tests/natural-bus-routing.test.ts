@@ -15,18 +15,27 @@ test("bus directly expresses matching, width-relative spacing and impedance rang
     maxLength: { reference: "longest_manhattan" },
     targetImpedance: { min: "50ohm", max: "75ohm" },
     pcbTraceSpacing: "3w",
-    pcbExternalTraceSpacing: "4w",
-    pcbReducedTraceSpacing: "1w",
-    maxReducedSpacingLength: "1250mil",
+    pcbSpacingToOtherSignals: "4w",
+    pcbEscapeSpacing: { minimum: "1w", maxLength: "1250mil" },
   } satisfies BusProps
   expect(busProps.parse(raw)).toEqual({
     ...raw,
     maxLengthSkew: 0.635,
     targetImpedance: { min: 50, max: 75 },
     pcbTraceSpacing: { widthMultiplier: 3 },
-    pcbExternalTraceSpacing: { widthMultiplier: 4 },
-    pcbReducedTraceSpacing: { widthMultiplier: 1 },
-    maxReducedSpacingLength: 31.75,
+    pcbSpacingToOtherSignals: { widthMultiplier: 4 },
+    pcbEscapeSpacing: { minimum: { widthMultiplier: 1 }, maxLength: 31.75 },
+  })
+  expect(
+    differentialPairProps.parse({
+      positiveConnection: "P",
+      negativeConnection: "N",
+      pcbSpacingToOtherSignals: "4w",
+      pcbEscapeSpacing: { minimum: "1w", maxLength: "1250mil" },
+    }),
+  ).toMatchObject({
+    pcbSpacingToOtherSignals: { widthMultiplier: 4 },
+    pcbEscapeSpacing: { minimum: { widthMultiplier: 1 }, maxLength: 31.75 },
   })
 })
 
@@ -130,23 +139,28 @@ test("rejects incomplete relationships, impossible bounds and malformed width mu
     { pcbTraceSpacing: "Infinityw" },
     { pcbTraceSpacing: "1e309w" },
     { pcbTraceSpacing: NaN },
-    { pcbReducedTraceSpacing: "1w" },
-    { maxReducedSpacingLength: 20 },
-    { pcbReducedTraceSpacing: "1w", maxReducedSpacingLength: 20 },
     {
       pcbTraceSpacing: "3w",
-      pcbReducedTraceSpacing: "4w",
-      maxReducedSpacingLength: 20,
+      pcbEscapeSpacing: { minimum: "1w", maxLength: Infinity },
     },
     {
-      pcbExternalTraceSpacing: "0.2mm",
-      pcbReducedTraceSpacing: "0.3mm",
-      maxReducedSpacingLength: 20,
+      pcbTraceSpacing: "3w",
+      pcbEscapeSpacing: { minimum: "0w", maxLength: 20 },
+    },
+    { pcbEscapeSpacing: { minimum: "1w" } },
+    { pcbEscapeSpacing: { maxLength: 20 } },
+    { pcbEscapeSpacing: { minimum: "1w", maxLength: 20 } },
+    {
+      pcbTraceSpacing: "3w",
+      pcbEscapeSpacing: { minimum: "4w", maxLength: 20 },
     },
     {
-      pcbExternalTraceSpacing: "4w",
-      pcbReducedTraceSpacing: "1w",
-      maxReducedSpacingLength: -1,
+      pcbSpacingToOtherSignals: "0.2mm",
+      pcbEscapeSpacing: { minimum: "0.3mm", maxLength: 20 },
+    },
+    {
+      pcbSpacingToOtherSignals: "4w",
+      pcbEscapeSpacing: { minimum: "1w", maxLength: -1 },
     },
   ]
   for (const props of invalid)
@@ -166,10 +180,9 @@ test("mixed absolute and relative spacing remains deferred to actual local width
   const parsed = busProps.parse({
     connections: ["A"],
     pcbTraceSpacing: "3w",
-    pcbReducedTraceSpacing: "0.2mm",
-    maxReducedSpacingLength: "5mm",
+    pcbEscapeSpacing: { minimum: "0.2mm", maxLength: "5mm" },
   })
   expect(parsed.pcbTraceSpacing).toEqual({ widthMultiplier: 3 })
-  expect(parsed.pcbReducedTraceSpacing).toBe(0.2)
+  expect(parsed.pcbEscapeSpacing).toEqual({ minimum: 0.2, maxLength: 5 })
   // Three widths may be above or below 0.2 mm; props cannot decide without copper geometry.
 })

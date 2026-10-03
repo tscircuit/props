@@ -9,6 +9,8 @@ import {
   traceSpacing,
   validateTraceSpacing,
   type TraceSpacing,
+  pcbEscapeSpacing,
+  type PcbEscapeSpacing,
 } from "../common/traceSpacing"
 import {
   impedanceTarget,
@@ -36,12 +38,10 @@ export interface DifferentialPairProps {
   /** Allowed deviation above/below targetLength, in mm. */
   lengthTolerance?: number | string
   /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
-  pcbExternalTraceSpacing?: TraceSpacing
-  /** Reduced centreline spacing allowed only with maxReducedSpacingLength.
-   * Applies to declared spacing requirements, never to the pair's own pcbTraceGap. */
-  pcbReducedTraceSpacing?: TraceSpacing
-  /** Shared per-member length cap for all reduced-spacing intervals, in mm. */
-  maxReducedSpacingLength?: number | string
+  pcbSpacingToOtherSignals?: TraceSpacing
+  /** Optional tight-escape allowance with an explicit shared per-signal length cap.
+   * Applies to declared spacing requirements, never to a pair's pcbTraceGap. */
+  pcbEscapeSpacing?: PcbEscapeSpacing
 
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string
@@ -65,9 +65,8 @@ export const differentialPairProps = z
     maxLength: routeLength.optional(),
     targetLength: routeLength.optional(),
     lengthTolerance: nonnegativeRouteDistance.optional(),
-    pcbExternalTraceSpacing: traceSpacing.optional(),
-    pcbReducedTraceSpacing: traceSpacing.optional(),
-    maxReducedSpacingLength: nonnegativeRouteDistance.optional(),
+    pcbSpacingToOtherSignals: traceSpacing.optional(),
+    pcbEscapeSpacing: pcbEscapeSpacing.optional(),
 
     positiveConnection: z.string(),
     negativeConnection: z.string(),

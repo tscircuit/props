@@ -20,9 +20,8 @@ const commandLength = {
     maxLength={{ reference: "longest_manhattan" }}
     targetImpedance={{ min: "50ohm", max: "75ohm" }}
     pcbTraceSpacing="3w"
-    pcbExternalTraceSpacing="4w"
-    pcbReducedTraceSpacing="1w"
-    maxReducedSpacingLength="1250mil"
+    pcbSpacingToOtherSignals="4w"
+    pcbEscapeSpacing={{ minimum: "1w", maxLength: "1250mil" }}
   />
   <differentialpair
     name="DDR_STROBE0"
@@ -31,9 +30,8 @@ const commandLength = {
     maxLengthSkew="5mil"
     targetDifferentialImpedance={{ min: "100ohm", max: "150ohm" }}
     pcbTraceGap="0.12mm"
-    pcbExternalTraceSpacing="4w"
-    pcbReducedTraceSpacing="1w"
-    maxReducedSpacingLength="1250mil"
+    pcbSpacingToOtherSignals="4w"
+    pcbEscapeSpacing={{ minimum: "1w", maxLength: "1250mil" }}
   />
   <bus
     name="DDR_COMMANDS"
@@ -42,9 +40,8 @@ const commandLength = {
     lengthTolerance="50mil"
     targetImpedance={{ min: "50ohm", max: "75ohm" }}
     pcbTraceSpacing="3w"
-    pcbExternalTraceSpacing="4w"
-    pcbReducedTraceSpacing="1w"
-    maxReducedSpacingLength="1250mil"
+    pcbSpacingToOtherSignals="4w"
+    pcbEscapeSpacing={{ minimum: "1w", maxLength: "1250mil" }}
   />
   <differentialpair
     name="DDR_CLOCK"
@@ -55,9 +52,8 @@ const commandLength = {
     lengthTolerance="50mil"
     targetDifferentialImpedance={{ min: "100ohm", max: "150ohm" }}
     pcbTraceGap="0.12mm"
-    pcbExternalTraceSpacing="4w"
-    pcbReducedTraceSpacing="1w"
-    maxReducedSpacingLength="1250mil"
+    pcbSpacingToOtherSignals="4w"
+    pcbEscapeSpacing={{ minimum: "1w", maxLength: "1250mil" }}
   />
 </>
 ```
@@ -76,9 +72,9 @@ The values above are supplied by the author, not inferred from the signal names.
 
 `pcbTraceSpacing` is a bus's minimum centreline spacing between member traces, excluding explicit differential-pair partners. A pair keeps its existing edge-to-edge `pcbTraceGap`; there is no competing internal-spacing prop on the pair.
 
-`pcbExternalTraceSpacing` applies to traces outside the bus or pair, including unrelated copper traces, rather than requiring a hand-written list of every other bus. Distances can be mm or unit strings. A width-relative string such as `"3w"` means three times the larger local trace width; it parses as `{ widthMultiplier: 3 }`, preserving the rule until copper geometry is available.
+`pcbSpacingToOtherSignals` applies to traces outside the bus or pair, including unrelated copper traces, rather than requiring a hand-written list of every other bus. Distances can be mm or unit strings. A width-relative string such as `"3w"` means three times the larger local trace width; it parses as `{ widthMultiplier: 3 }`, preserving the rule until copper geometry is available.
 
-`pcbReducedTraceSpacing` and `maxReducedSpacingLength` must appear together, with at least one normal spacing requirement. The length cap is shared across all reduced-spacing regions and neighbours for each signal; overlapping regions count once. Reduced spacing cannot exceed normal spacing when the values are comparable. Comparing an absolute distance with a width multiple requires actual trace widths. Pair-internal spacing is governed by `pcbTraceGap`, not the reduced-spacing allowance.
+`pcbEscapeSpacing={{ minimum, maxLength }}` specifies the optional tight-escape allowance. Both fields are required, with at least one normal spacing requirement. `minimum` accepts a distance or width multiple; `maxLength` is a nonnegative distance. The length cap is shared across all reduced-spacing regions and neighbours for each signal; overlapping regions count once. The escape minimum cannot exceed normal spacing when the values are comparable. Comparing an absolute distance with a width multiple requires actual trace widths. Pair-internal spacing is governed by `pcbTraceGap`, not the reduced-spacing allowance.
 
 ## Impedance and compatibility
 
@@ -89,3 +85,5 @@ All new props are optional and have no electrical defaults or aliases. Existing 
 This PR defines the author-facing props and parsing contract. Core/solver/checks support must be adapted to this API before the example is advertised as executable. Props alone do not establish actual impedance, reference-plane continuity, termination, decoupling, flight time or hardware compliance.
 
 The unmerged `pcbRoutingConstraints` wrapper and `routingDisabled` check-only grouping API are removed. Replace their length/spacing fields with the direct props and `lengthMatchTo`; use existing connections for membership and scalar/range impedance targets for impedance intent. No compatibility alias is retained for the unshipped wrapper.
+
+The unshipped spacing names are replaced by `pcbSpacingToOtherSignals` and the `pcbEscapeSpacing` object; no aliases remain. Omit the object to disable the exception. Parsing normalizes `minimum` to mm or `{ widthMultiplier }` and `maxLength` to mm, without supplying either value automatically.

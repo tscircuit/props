@@ -17,49 +17,57 @@ const absoluteSpacing = distance.pipe(z.number().positive().finite())
 export const traceSpacing = z.union([widthSpacing, absoluteSpacing])
 expectTypesMatch<TraceSpacing, z.input<typeof traceSpacing>>(true)
 
+/** Optional tight-escape allowance. The maxLength budget is per signal and
+ * shared across all neighbours; overlapping close regions count once.
+ * Numeric minimum is mm; width multiples use the same units as TraceSpacing. */
+export interface PcbEscapeSpacing {
+  minimum: TraceSpacing
+  /** Maximum total routed length at reduced spacing, in mm. */
+  maxLength: number | string
+}
+export const pcbEscapeSpacing = z
+  .object({
+    minimum: traceSpacing,
+    maxLength: distance.pipe(z.number().nonnegative().finite()),
+  })
+  .strict()
+expectTypesMatch<PcbEscapeSpacing, z.input<typeof pcbEscapeSpacing>>(true)
+
 export function validateTraceSpacing(
   props: {
     pcbTraceSpacing?: z.output<typeof traceSpacing>
-    pcbExternalTraceSpacing?: z.output<typeof traceSpacing>
-    pcbReducedTraceSpacing?: z.output<typeof traceSpacing>
-    maxReducedSpacingLength?: number
+    pcbSpacingToOtherSignals?: z.output<typeof traceSpacing>
+    pcbEscapeSpacing?: z.output<typeof pcbEscapeSpacing>
   },
   ctx: z.RefinementCtx,
 ) {
   if (
-    (props.pcbReducedTraceSpacing !== undefined) !==
-    (props.maxReducedSpacingLength !== undefined)
-  )
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["maxReducedSpacingLength"],
-      message:
-        "pcbReducedTraceSpacing and maxReducedSpacingLength must be supplied together",
-    })
-  if (
-    props.pcbReducedTraceSpacing !== undefined &&
+    props.pcbEscapeSpacing !== undefined &&
     props.pcbTraceSpacing === undefined &&
-    props.pcbExternalTraceSpacing === undefined
+    props.pcbSpacingToOtherSignals === undefined
   )
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ["pcbReducedTraceSpacing"],
-      message: "Reduced spacing requires a normal trace spacing requirement",
+      path: ["pcbEscapeSpacing"],
+      message: "Escape spacing requires a normal trace spacing requirement",
     })
-  const reduced = props.pcbReducedTraceSpacing
-  for (const normal of [props.pcbTraceSpacing, props.pcbExternalTraceSpacing]) {
-    if (reduced === undefined || normal === undefined) continue
+  const minimum = props.pcbEscapeSpacing?.minimum
+  for (const normal of [
+    props.pcbTraceSpacing,
+    props.pcbSpacingToOtherSignals,
+  ]) {
+    if (minimum === undefined || normal === undefined) continue
     const wider =
-      typeof reduced === "number" && typeof normal === "number"
-        ? reduced > normal
-        : typeof reduced !== "number" && typeof normal !== "number"
-          ? reduced.widthMultiplier > normal.widthMultiplier
+      typeof minimum === "number" && typeof normal === "number"
+        ? minimum > normal
+        : typeof minimum !== "number" && typeof normal !== "number"
+          ? minimum.widthMultiplier > normal.widthMultiplier
           : false
     if (wider)
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["pcbReducedTraceSpacing"],
-        message: "Reduced spacing cannot exceed normal spacing",
+        path: ["pcbEscapeSpacing", "minimum"],
+        message: "Escape minimum cannot exceed normal spacing",
       })
   }
 }

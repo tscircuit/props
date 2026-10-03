@@ -1250,16 +1250,19 @@ const widthSpacing = z
   .transform((value) => ({
     widthMultiplier: Number(value.trim().replace(/w$/i, "")),
   }))
-export const traceSpacing = z.union([widthSpacing, absoluteSpacing])
-expectTypesMatch<TraceSpacing, z.input<typeof traceSpacing>>(true)
-
-export function validateTraceSpacing(
-  props: {
-    pcbTraceSpacing?: z.output<typeof traceSpacing>
-    pcbExternalTraceSpacing?: z.output<typeof traceSpacing>
-    pcbReducedTraceSpacing?: z.output<typeof traceSpacing>
-    maxReducedSpacingLength?: number
-  },
+/** Optional tight-escape allowance. The maxLength budget is per signal and
+ * shared across all neighbours; overlapping close regions count once.
+ * Numeric minimum is mm; width multiples use the same units as TraceSpacing. */
+export interface PcbEscapeSpacing {
+  minimum: TraceSpacing
+  maxLength: number | string
+}
+/** Maximum total routed length at reduced spacing, in mm. */
+export const pcbEscapeSpacing = z
+  .object({
+    minimum: traceSpacing,
+    maxLength: distance.pipe(z.number().nonnegative().finite()),
+  })
 ```
 
 ### url
@@ -1848,9 +1851,8 @@ export interface BusProps {
   targetLength?: RouteLength
   lengthTolerance?: number | string
   pcbTraceSpacing?: TraceSpacing
-  pcbExternalTraceSpacing?: TraceSpacing
-  pcbReducedTraceSpacing?: TraceSpacing
-  maxReducedSpacingLength?: number | string
+  pcbSpacingToOtherSignals?: TraceSpacing
+  pcbEscapeSpacing?: PcbEscapeSpacing
 
   connections: string[]
   routingPhaseIndex?: number | null
@@ -1871,9 +1873,8 @@ export const busProps = z
     targetLength: routeLength.optional(),
     lengthTolerance: nonnegativeRouteDistance.optional(),
     pcbTraceSpacing: traceSpacing.optional(),
-    pcbExternalTraceSpacing: traceSpacing.optional(),
-    pcbReducedTraceSpacing: traceSpacing.optional(),
-    maxReducedSpacingLength: nonnegativeRouteDistance.optional(),
+    pcbSpacingToOtherSignals: traceSpacing.optional(),
+    pcbEscapeSpacing: pcbEscapeSpacing.optional(),
 
     connections: z.array(z.string()).min(1),
     routingPhaseIndex: z.number().nullable().optional(),
@@ -2416,9 +2417,8 @@ export interface DifferentialPairProps {
   maxLength?: RouteLength
   targetLength?: RouteLength
   lengthTolerance?: number | string
-  pcbExternalTraceSpacing?: TraceSpacing
-  pcbReducedTraceSpacing?: TraceSpacing
-  maxReducedSpacingLength?: number | string
+  pcbSpacingToOtherSignals?: TraceSpacing
+  pcbEscapeSpacing?: PcbEscapeSpacing
 
   positiveConnection: string
   negativeConnection: string
@@ -2436,9 +2436,8 @@ export const differentialPairProps = z
     maxLength: routeLength.optional(),
     targetLength: routeLength.optional(),
     lengthTolerance: nonnegativeRouteDistance.optional(),
-    pcbExternalTraceSpacing: traceSpacing.optional(),
-    pcbReducedTraceSpacing: traceSpacing.optional(),
-    maxReducedSpacingLength: nonnegativeRouteDistance.optional(),
+    pcbSpacingToOtherSignals: traceSpacing.optional(),
+    pcbEscapeSpacing: pcbEscapeSpacing.optional(),
 
     positiveConnection: z.string(),
     negativeConnection: z.string(),

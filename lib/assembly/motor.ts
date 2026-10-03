@@ -23,6 +23,8 @@ export interface AssemblyMotorProps {
    * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
    */
   shaftFacingDirection?: CadModelAxisDirection
+  /** e.g. "jst-ph-6". */
+  wireConnection?: "none" | "stubs" | "jst-ph-6"
 }
 
 export const assemblyMotorProps = z
@@ -34,8 +36,17 @@ export const assemblyMotorProps = z
     standard: z.enum(["nema8", "nema17", "nema23"]).optional(),
     model: z.string().trim().min(1).optional(),
     shaftFacingDirection: cadModelAxisDirection.default("z+"),
+    wireConnection: z.enum(["none", "stubs", "jst-ph-6"]).optional(),
   })
   .superRefine((motor, context) => {
+    if (motor.model !== undefined && motor.wireConnection !== undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Set wireConnection in the custom model string, or use standard",
+        path: ["wireConnection"],
+      })
+    }
     if (motor.standard === undefined && motor.model === undefined) {
       context.addIssue({
         code: z.ZodIssueCode.custom,

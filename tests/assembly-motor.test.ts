@@ -45,7 +45,7 @@ test("accepts all six shaft directions without changing their axis or sign", () 
   }
 })
 
-test("defaults only the shaft direction to the native positive Z axis", () => {
+test("defaults to the native positive Z shaft direction", () => {
   const input: AssemblyMotorPropsInput = { name: "MOTOR", model: "nema17" }
   expect(assemblyMotorProps.parse(input)).toEqual({
     ...input,

@@ -1576,6 +1576,9 @@ export interface BoardProps
   title?: string
   mountedTo?: string
   mountGap?: Distance
+  mountRotationAnchor?: BoardMountRotationAnchor
+  mountRotation?: string
+  mountOrientation?: BoardMountOrientation
   fabricatorPreset?:
     | "jlcpcb_economy"
     | "jlcpcb_standard"
@@ -1620,15 +1623,20 @@ export const boardProps = subcircuitGroupProps
       .trim()
       .min(1)
       .optional()
-      .describe(
-        'Assembly mounting target, such as "NEMA17.backface". Trimmed; omitted leaves the board unattached. The target face is resolved by the consumer.',
-      ),
+      .describe('e.g. "NEMA17.backface".'),
     mountGap: distance
       .pipe(z.number().nonnegative().finite())
       .optional()
-      .describe(
-        "Nonnegative finite clearance between the target mounting face and the nearest PCB surface, in millimeters or a unit string, parsed to mm. Omitted leaves the gap unset; only meaningful when mountedTo is supplied.",
-      ),
+      .describe('Clearance from the mounting face, e.g. "6mm".'),
+    mountRotationAnchor: boardMountRotationAnchor
+      .optional()
+      .describe('e.g. "J_USB" or "rightedge".'),
+    mountRotation: boardMountRotation
+      .optional()
+      .describe('e.g. "calc(NEMA17.wireside-90degcw)".'),
+    mountOrientation: boardMountOrientation
+      .optional()
+      .describe('e.g. "top_layer_toward_mount_face".'),
     fabricatorPreset: z
       .enum([
         "jlcpcb_economy",

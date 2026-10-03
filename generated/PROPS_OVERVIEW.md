@@ -181,6 +181,8 @@ export interface AssemblyMotorProps {
    * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
    */
   shaftFacingDirection?: CadModelAxisDirection
+  /** e.g. "jst-ph-6". */
+  wireConnection?: "none" | "stubs" | "jst-ph-6"
 }
 
 
@@ -488,17 +490,16 @@ export interface BoardOutlinePoint extends Point {
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
-  /**
-   * Assembly mounting target, such as "NEMA17.backface". Trimmed; omitted
-   * leaves the board unattached. The target face is resolved by the consumer.
-   */
+  /** e.g. "NEMA17.backface". */
   mountedTo?: string
-  /**
-   * Nonnegative finite clearance between the target mounting face and the
-   * nearest PCB surface, in millimeters or a unit string. Parsed to mm.
-   * Omitted leaves the gap unset; only meaningful when mountedTo is supplied.
-   */
+  /** Clearance from the mounting face, e.g. "6mm". */
   mountGap?: Distance
+  /** e.g. "J_USB" or "rightedge". */
+  mountRotationAnchor?: BoardMountRotationAnchor
+  /** e.g. "calc(NEMA17.wireside-90degcw)". */
+  mountRotation?: string
+  /** e.g. "top_layer_toward_mount_face". */
+  mountOrientation?: BoardMountOrientation
   /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
   fabricatorPreset?:
     | "jlcpcb_economy"

@@ -32,6 +32,21 @@ export const assemblyMotorRotation = z.union([
       anglePattern.test(value)
         ? Number(value.replace(/deg$/i, ""))
         : value.toLowerCase(),
+    )
+    .refine(
+      (value) => typeof value !== "number" || Number.isFinite(value),
+      "Rotation must be finite",
+    )
+    .refine(
+      (value) =>
+        typeof value !== "string" ||
+        !value.match(/[+-]\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))\s*deg/) ||
+        Number.isFinite(
+          Number(
+            value.match(/[+-]\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))\s*deg/)![1],
+          ),
+        ),
+      "Rotation offset must be finite",
     ),
 ])
 

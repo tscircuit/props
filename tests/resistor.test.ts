@@ -23,6 +23,60 @@ test("should parse tolerance percentage for resistor", () => {
   expect(parsed.tolerance).toBeCloseTo(0.05)
 })
 
+test.each(["0.5% ", " 0.5% ", "\t0.5%\n"])(
+  "should preserve fractional percentage tolerance with surrounding whitespace: %j",
+  (tolerance) => {
+    const parsed = resistorProps.parse({
+      name: "R1",
+      resistance: "1k",
+      tolerance,
+    })
+
+    expect(parsed.tolerance).toBeCloseTo(0.005)
+  },
+)
+
+test.each([" 5% ", " 100% "])(
+  "should accept percentage tolerance with surrounding whitespace: %j",
+  (tolerance) => {
+    const parsed = resistorProps.parse({
+      name: "R1",
+      resistance: "1k",
+      tolerance,
+    })
+
+    expect(parsed.tolerance).toBe(tolerance.includes("100") ? 1 : 0.05)
+  },
+)
+
+test.each([0, 0.005, 1, "0.005", " 0.005 ", "0.5%"])(
+  "should preserve existing numeric and percentage tolerance inputs: %j",
+  (tolerance) => {
+    const parsed = resistorProps.parse({
+      name: "R1",
+      resistance: "1k",
+      tolerance,
+    })
+
+    expect(parsed.tolerance).toBe(
+      typeof tolerance === "number" ? tolerance : 0.005,
+    )
+  },
+)
+
+test.each([" -1% ", " 101% "])(
+  "should reject out-of-range percentage tolerance with whitespace: %j",
+  (tolerance) => {
+    const parsed = resistorProps.safeParse({
+      name: "R1",
+      resistance: "1k",
+      tolerance,
+    })
+
+    expect(parsed.success).toBe(false)
+  },
+)
+
 test("should parse resistance strings to numbers", () => {
   const parsed = resistorProps.parse({
     name: "R3",

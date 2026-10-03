@@ -2665,6 +2665,7 @@ export interface RectSolderPasteProps
 export interface ResistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   resistance: number | string
+  /** Fraction from 0 to 1, or a percentage string such as "0.5%"; surrounding whitespace is ignored. */
   tolerance?: number | string
   pullupFor?: string
   pullupTo?: string

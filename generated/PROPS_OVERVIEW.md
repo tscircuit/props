@@ -1026,10 +1026,14 @@ export interface CopperPourProps {
   layer: LayerRefInput
   connectsTo: string
   /**
-   * Fill with a 45-degree crosshatch (0.25mm copper width, 1mm pitch).
+   * Fill with a 45-degree crosshatch (defaults: 0.25mm copper width, 1mm pitch).
    * Preserves solid copper around boundaries and connections. Defaults to false.
    */
   crosshatch?: boolean
+  /** Repeat spacing perpendicular to the hatch strips. Defaults to 1mm when crosshatch is enabled. */
+  crosshatchPitch?: Distance
+  /** Copper strip width, also used for the solid rim. Defaults to 0.25mm; must be less than the pitch when crosshatch is enabled. */
+  crosshatchWidth?: Distance
   /**
    * Reserves the pour region during autorouting so unrelated traces do not
    * split it. Vias may still cross the region using antipads.

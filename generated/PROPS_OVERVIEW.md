@@ -186,6 +186,29 @@ export interface AssemblyMotorProps {
 }
 
 
+export interface AssemblyPrintedPartProps {
+  /** Stable identity used by assembly mounting selectors. */
+  name: string
+  displayName?: string
+  /** Pure jscad-fiber JSX in right-handed local XYZ, dimensions in millimeters.
+   * Named reference rectangles define attachment faces; they add no material.
+   * Hooks, async components, and raw kernel geometry are not supported.
+   */
+  jscad: ReactElement
+  /** Qualified target face, e.g. "MOTOR.backface" or "SPACER.board". */
+  mountedTo?: string
+  /** Name of this part's reference rectangle to mate with mountedTo.
+   * Both props must be supplied together; outward normals oppose and local
+   * in-plane X directions align. Without them the part uses its local origin.
+   */
+  mountFace?: string
+  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
+   * Requires mountedTo. Positive values separate the mating faces.
+   */
+  mountGap?: Distance
+}
+
+
 export interface AssemblyScreenProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
@@ -490,7 +513,7 @@ export interface BoardOutlinePoint extends Point {
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
-  /** e.g. "NEMA17.backface". */
+  /** Target motor or printed-part face, e.g. "NEMA17.backface" or "SPACER.board". */
   mountedTo?: string
   /** Clearance from the mounting face, e.g. "6mm". */
   mountGap?: Distance

@@ -1751,7 +1751,9 @@ export const boardProps = subcircuitGroupProps
       .trim()
       .min(1)
       .optional()
-      .describe('e.g. "NEMA17.backface".'),
+      .describe(
+        'Target motor or printed-part face, e.g. "NEMA17.backface" or "SPACER.board".',
+      ),
     mountGap: distance
       .pipe(z.number().nonnegative().finite())
       .optional()

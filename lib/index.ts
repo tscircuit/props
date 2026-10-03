@@ -151,3 +151,14 @@ export * from "./common/fanoutProps"
 export * from "./common/implicitBreakoutPointSolver"
 
 export * from "./common/fanoutTracePath"
+
+export {
+  routeLength,
+  type RouteLength,
+  type RelativeRouteLength,
+} from "./common/routeLength"
+export {
+  traceSpacing,
+  type TraceSpacing,
+} from "./common/traceSpacing"
+export { impedanceTarget, type ImpedanceTarget } from "./common/impedanceTarget"

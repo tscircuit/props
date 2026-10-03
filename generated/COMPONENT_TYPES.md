@@ -351,6 +351,98 @@ export type FootprintSoupElements = {
 }
 ```
 
+### impedanceTarget
+
+```typescript
+export const positiveImpedance = z
+  .union([
+    z.number(),
+    z
+      .string()
+      .refine(
+        (value) => !/(?:±|\+\/-)/.test(value),
+        "Use a scalar impedance for explicit bounds",
+      ),
+  ])
+  .pipe(resistance)
+  .pipe(z.number().positive().finite())
+const quantity = /^([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?)\s*(.*?)$/i
+const tolerantImpedance = z
+  .string()
+  .regex(/(?:±|\+\/-)/)
+  .transform((value, ctx) => {
+    const parts = value.trim().split(/\s*(?:±|\+\/-)\s*/)
+    const nominal = parts.length === 2 ? parts[0]!.match(quantity) : null
+    const tolerance = parts.length === 2 ? parts[1]!.match(quantity) : null
+    if (!nominal || !tolerance) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Use a nominal impedance ± an absolute ohm tolerance",
+      })
+      return z.NEVER
+    }
+    const ohmUnit = /^(?:[yzafpnumkKMGTPEZYµμ])?(?:ohms?|Ω)$/i
+    if (
+      (nominal[2] && !ohmUnit.test(nominal[2])) ||
+      (tolerance[2] && !ohmUnit.test(tolerance[2]))
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Use an absolute ohm tolerance, not a percentage or another unit",
+      })
+      return z.NEVER
+    }
+    const nominalValue = resistance.safeParse(
+      `${nominal[1]}${nominal[2] || tolerance[2] || "ohm"}`,
+    )
+    const toleranceValue = resistance.safeParse(
+      `${tolerance[1]}${tolerance[2] || nominal[2] || "ohm"}`,
+    )
+    if (
+      !nominalValue.success ||
+      !toleranceValue.success ||
+      !Number.isFinite(nominalValue.data) ||
+      !Number.isFinite(toleranceValue.data) ||
+      nominalValue.data <= 0 ||
+      toleranceValue.data < 0
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Nominal impedance must be positive and tolerance nonnegative, in ohms",
+      })
+      return z.NEVER
+    }
+    return {
+      nominal: nominalValue.data,
+      min: nominalValue.data - toleranceValue.data,
+      max: nominalValue.data + toleranceValue.data,
+    }
+  })
+export const impedanceTarget = z.union([tolerantImpedance, scalarImpedance])
+expectTypesMatch<ImpedanceTarget, z.input<typeof impedanceTarget>>(true)
+
+export function validateImpedanceTarget(
+  target: z.output<typeof impedanceTarget> | undefined,
+  min: number | undefined,
+  max: number | undefined,
+  ctx: z.RefinementCtx,
+  propName: string,
+) {
+  if (min !== undefined && max !== undefined && min > max)
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: [`${propName}Max`],
+      message: "Maximum impedance cannot be below minimum impedance",
+    })
+  if (typeof target === "object") {
+    for (const [suffix, explicit, derived] of [
+      ["Min", min, target.min],
+      ["Max", max, target.max],
+    ] as const)
+```
+
 ### implicitBreakoutPointSolver
 
 ```typescript
@@ -1088,6 +1180,27 @@ export const resolveManufacturerPartNumber = (
 }
 ```
 
+### routeLength
+
+```typescript
+/** A length measured from the selected signals' pad endpoints, in board-world
+ * XY mm (+X right, +Y up). of accepts trace/port/bus/pair selectors. Without
+ * of, use the current members and any lengthMatchTo members. */
+export interface RelativeRouteLength {
+  reference: "longest_manhattan"
+  of?: string[]
+  offset?: number | string
+}
+export const routeLength = z.union([
+  nonnegativeRouteDistance,
+  z
+    .object({
+      reference: z.literal("longest_manhattan"),
+      of: z.array(z.string().min(1)).min(1).optional(),
+      offset: distance.pipe(z.number().finite()).optional(),
+    })
+```
+
 ### schStyle
 
 ```typescript
@@ -1199,6 +1312,21 @@ export const schematicPinStyle = z.record(
     topMargin: distance.optional(),
     bottomMargin: distance.optional(),
   }),
+```
+
+### traceSpacing
+
+```typescript
+/** Centreline distance in mm, or a multiple of the larger local trace width
+ * written as e.g. "3w". Parsed multiples remain {widthMultiplier: 3} so the
+ * checker can evaluate varying widths without choosing a width in props. */
+export type TraceSpacing = number | string
+const widthSpacing = z
+  .string()
+  .regex(/^\s*(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*w\s*$/i)
+  .transform((value) => ({
+    widthMultiplier: Number(value.trim().replace(/w$/i, "")),
+  }))
 ```
 
 ### url
@@ -1789,27 +1917,48 @@ export const breakoutPointProps = pcbLayoutProps
  */
 export interface BusProps {
   name?: string
+  lengthMatchTo?: string | string[]
+  minLength?: RouteLength
+  maxLength?: RouteLength
+  targetLength?: RouteLength
+  lengthTolerance?: number | string
+  pcbTraceSpacing?: TraceSpacing
+  pcbSpacingToOtherSignals?: TraceSpacing
+
   connections: string[]
   routingPhaseIndex?: number | null
   maxLengthSkew?: number | string
-  targetImpedance?: number | string
+  targetImpedance?: ImpedanceTarget
+  targetImpedanceMin?: number | string
+  targetImpedanceMax?: number | string
   pcbTraceWidth?: number | string
   pcbAllowedLayers?: LayerRefInput[]
   preferredLayer?: LayerRefInput
   preferredLayers?: LayerRefInput[]
 }
 /** Preferred PCB layers for routing the bus, in priority order. */
-export const busProps = z.object({
-  name: z.string().optional(),
-  connections: z.array(z.string()).min(1),
-  routingPhaseIndex: z.number().nullable().optional(),
-  maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
-  targetImpedance: resistance.pipe(z.number().positive().finite()).optional(),
-  pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
-  pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
-  preferredLayer: layer_ref.optional(),
-  preferredLayers: z.array(layer_ref).min(1).optional(),
-})
+export const busProps = z
+  .object({
+    name: z.string().optional(),
+    lengthMatchTo: lengthMatchTo.optional(),
+    minLength: routeLength.optional(),
+    maxLength: routeLength.optional(),
+    targetLength: routeLength.optional(),
+    lengthTolerance: nonnegativeRouteDistance.optional(),
+    pcbTraceSpacing: traceSpacing.optional(),
+    pcbSpacingToOtherSignals: traceSpacing.optional(),
+
+    connections: z.array(z.string()).min(1),
+    routingPhaseIndex: z.number().nullable().optional(),
+    maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
+    targetImpedance: impedanceTarget.optional(),
+    targetImpedanceMin: positiveImpedance.optional(),
+    targetImpedanceMax: positiveImpedance.optional(),
+    pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
+    pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
+    preferredLayer: layer_ref.optional(),
+    preferredLayers: z.array(layer_ref).min(1).optional(),
+  })
 ```
 
 ### cadassembly
@@ -2337,25 +2486,42 @@ export const polygonCutoutProps = pcbLayoutProps
  */
 export interface DifferentialPairProps {
   name?: string
+  lengthMatchTo?: string | string[]
+  minLength?: RouteLength
+  maxLength?: RouteLength
+  targetLength?: RouteLength
+  lengthTolerance?: number | string
+  pcbSpacingToOtherSignals?: TraceSpacing
+
   positiveConnection: string
   negativeConnection: string
   maxLengthSkew?: number | string
-  targetDifferentialImpedance?: number | string
+  targetDifferentialImpedance?: ImpedanceTarget
+  targetDifferentialImpedanceMin?: number | string
+  targetDifferentialImpedanceMax?: number | string
   pcbTraceGap?: number | string
   maxUncoupledLength?: number | string
 }
 /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
-export const differentialPairProps = z.object({
-  name: z.string().optional(),
-  positiveConnection: z.string(),
-  negativeConnection: z.string(),
-  maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
-  targetDifferentialImpedance: resistance
-    .pipe(z.number().positive().finite())
-    .optional(),
-  pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
-  maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
-})
+export const differentialPairProps = z
+  .object({
+    name: z.string().optional(),
+    lengthMatchTo: lengthMatchTo.optional(),
+    minLength: routeLength.optional(),
+    maxLength: routeLength.optional(),
+    targetLength: routeLength.optional(),
+    lengthTolerance: nonnegativeRouteDistance.optional(),
+    pcbSpacingToOtherSignals: traceSpacing.optional(),
+
+    positiveConnection: z.string(),
+    negativeConnection: z.string(),
+    maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
+    targetDifferentialImpedance: impedanceTarget.optional(),
+    targetDifferentialImpedanceMin: positiveImpedance.optional(),
+    targetDifferentialImpedanceMax: positiveImpedance.optional(),
+    pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
+    maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
+  })
 ```
 
 ### diode

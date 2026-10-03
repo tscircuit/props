@@ -2088,6 +2088,8 @@ export interface CopperPourProps {
   layer: LayerRefInput
   connectsTo: string
   crosshatch?: boolean
+  crosshatchPitch?: Distance
+  crosshatchWidth?: Distance
   unbroken?: boolean
   padMargin?: Distance
   traceMargin?: Distance
@@ -2102,26 +2104,29 @@ export interface CopperPourProps {
    * Reserves the pour region during autorouting so unrelated traces do not
    * split it. Vias may still cross the region using antipads.
    */
-export const copperPourProps = z.object({
-  name: z.string().optional(),
-  layer: layer_ref,
-  connectsTo: z.string(),
-  crosshatch: z.boolean().optional(),
-  unbroken: z
-    .boolean()
-    .optional()
-    .describe(
-      "Reserves the pour region during autorouting so unrelated traces do not split it. Vias may still cross the region using antipads.",
-    ),
-  padMargin: distance.optional(),
-  traceMargin: distance.optional(),
-  clearance: distance.optional(),
-  boardEdgeMargin: distance.optional(),
-  cutoutMargin: distance.optional(),
-  useThermalReliefs: z.boolean().optional(),
-  outline: z.array(point).optional(),
-  coveredWithSolderMask: z.boolean().optional().default(true),
-})
+export const copperPourProps = z
+  .object({
+    name: z.string().optional(),
+    layer: layer_ref,
+    connectsTo: z.string(),
+    crosshatch: z.boolean().optional(),
+    crosshatchPitch: distance.pipe(z.number().finite().positive()).optional(),
+    crosshatchWidth: distance.pipe(z.number().finite().positive()).optional(),
+    unbroken: z
+      .boolean()
+      .optional()
+      .describe(
+        "Reserves the pour region during autorouting so unrelated traces do not split it. Vias may still cross the region using antipads.",
+      ),
+    padMargin: distance.optional(),
+    traceMargin: distance.optional(),
+    clearance: distance.optional(),
+    boardEdgeMargin: distance.optional(),
+    cutoutMargin: distance.optional(),
+    useThermalReliefs: z.boolean().optional(),
+    outline: z.array(point).optional(),
+    coveredWithSolderMask: z.boolean().optional().default(true),
+  })
 ```
 
 ### copper-text

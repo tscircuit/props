@@ -1623,30 +1623,20 @@ export const boardProps = subcircuitGroupProps
       .trim()
       .min(1)
       .optional()
-      .describe(
-        'Assembly mounting target, such as "NEMA17.backface". Trimmed; omitted leaves the board unattached. The target face is resolved by the consumer.',
-      ),
+      .describe('e.g. "NEMA17.backface".'),
     mountGap: distance
       .pipe(z.number().nonnegative().finite())
       .optional()
-      .describe(
-        "Nonnegative finite clearance between the target mounting face and the nearest PCB surface, in millimeters or a unit string, parsed to mm. Omitted leaves the gap unset; only meaningful when mountedTo is supplied.",
-      ),
+      .describe('Clearance from the mounting face, e.g. "6mm".'),
     mountRotationAnchor: boardMountRotationAnchor
       .optional()
-      .describe(
-        "Board edge (topedge, bottomedge, leftedge, rightedge) or component identity path, e.g. J_USB. Edges supply outward normals; components supply the direction from the mounting axis to their PCB center. Trimmed and case-preserved. Omitted uses rightedge when mountRotation is supplied; parsed output stays unset. Only meaningful with mountedTo and mountRotation.",
-      ),
+      .describe('e.g. "J_USB" or "rightedge".'),
     mountRotation: boardMountRotation
       .optional()
-      .describe(
-        "Qualified assembly direction, e.g. NEMA17.wireside, or calc(NEMA17.wireside-90degcw). Aligns mountRotationAnchor to the referenced direction. Clockwise is viewed looking at the mounting face. Only degcw/degccw adjustments are accepted; standalone angles/numbers are rejected. Trimmed and otherwise preserved for consumer resolution. Omitted leaves alignment unset; only meaningful with mountedTo. No aliases; replaces the unreleased assembly.motor motorRotation prop.",
-      ),
+      .describe('e.g. "calc(NEMA17.wireside-90degcw)".'),
     mountOrientation: boardMountOrientation
       .optional()
-      .describe(
-        "Which PCB layer faces the mount face: top_layer_toward_mount_face or bottom_layer_toward_mount_face. Omitted leaves orientation unset. Only meaningful with mountedTo; independent of mountGap, with no implied contact or clearance. No flush/away aliases.",
-      ),
+      .describe('e.g. "top_layer_toward_mount_face".'),
     fabricatorPreset: z
       .enum([
         "jlcpcb_economy",

@@ -19,10 +19,6 @@ const expression = new RegExp(
   `^calc\\(\\s*(${referencePattern})\\s*(?:([+-])\\s*((?:\\d+(?:\\.\\d*)?|\\.\\d+))\\s*(degcw|degccw))?\\s*\\)$`,
 )
 
-/** Qualified named direction, optionally adjusted by explicit clockwise or
- * counterclockwise degrees. Keep reference identity and the expression intact
- * for assembly resolution; never evaluate arbitrary arithmetic or scripts.
- */
 export const boardMountRotation = z
   .string()
   .trim()

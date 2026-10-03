@@ -181,9 +181,7 @@ export interface AssemblyMotorProps {
    * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
    */
   shaftFacingDirection?: CadModelAxisDirection
-  /** Visual wire termination for standard motors; custom model strings own
-   * this parameter instead. Defaults to the modelprinter standard (stubs).
-   */
+  /** e.g. "jst-ph-6". */
   wireConnection?: "none" | "stubs" | "jst-ph-6"
 }
 
@@ -492,43 +490,15 @@ export interface BoardOutlinePoint extends Point {
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
-  /**
-   * Assembly mounting target, such as "NEMA17.backface". Trimmed; omitted
-   * leaves the board unattached. The target face is resolved by the consumer.
-   */
+  /** e.g. "NEMA17.backface". */
   mountedTo?: string
-  /**
-   * Nonnegative finite clearance between the target mounting face and the
-   * nearest PCB surface, in millimeters or a unit string. Parsed to mm.
-   * Omitted leaves the gap unset; only meaningful when mountedTo is supplied.
-   */
+  /** Clearance from the mounting face, e.g. "6mm". */
   mountGap?: Distance
-  /**
-   * Board edge (topedge, bottomedge, leftedge, rightedge) or component identity
-   * path, e.g. J_USB. Edges supply their outward normal; a component supplies
-   * the direction from the board's mounting axis to its PCB center. Trimmed
-   * and case-preserved. Omitted uses rightedge when mountRotation is supplied;
-   * parsed output stays unset. Only meaningful with mountedTo and mountRotation.
-   */
+  /** e.g. "J_USB" or "rightedge". */
   mountRotationAnchor?: BoardMountRotationAnchor
-  /**
-   * Qualified assembly direction, e.g. NEMA17.wireside, or a relative expression
-   * such as calc(NEMA17.wireside-90degcw). Aligns mountRotationAnchor to that
-   * direction. Clockwise is viewed looking at the referenced mounting face;
-   * a negative clockwise angle is counterclockwise. degcw and degccw are the
-   * only angle units; standalone angles/numbers are not accepted. Trimmed and
-   * otherwise preserved for consumer resolution. Omitted leaves alignment
-   * unset; only meaningful with mountedTo. No aliases. Replaces the unreleased
-   * assembly.motor motorRotation prop, with alignment owned by this board.
-   */
+  /** e.g. "calc(NEMA17.wireside-90degcw)". */
   mountRotation?: string
-  /**
-   * Which PCB layer faces the referenced mounting face:
-   * top_layer_toward_mount_face or bottom_layer_toward_mount_face.
-   * Exact canonical enum; no flush/away aliases. Omitted leaves orientation
-   * unset, preserving the consumer's existing behavior. Only meaningful with mountedTo. Independent
-   * of mountGap: a toward orientation does not imply contact or zero clearance.
-   */
+  /** e.g. "top_layer_toward_mount_face". */
   mountOrientation?: BoardMountOrientation
   /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
   fabricatorPreset?:

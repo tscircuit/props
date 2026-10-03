@@ -66,6 +66,45 @@ capability table said rigid-flex was unsupported while the FAQ described
 case-by-case evaluation. A flex circuit with bonded reinforcement is distinct
 from an integrated rigid-flex stackup.
 
+## Rounded tear reliefs at bend endpoints
+
+Use `tearReliefRadius` to request circular material-removing cutouts at both
+bend centerline endpoints. Where the circles intersect the board outline, they
+form rounded relief notches intended to reduce tearing at the flex edges.
+For example, with the bridge outline above:
+
+```tsx
+<pcbbend
+  name="B1"
+  x1={0} y1={-5}
+  x2={0} y2={5}
+  bendAngle={90}
+  bendRadius="3mm"
+  bendSide="right"
+  tearReliefRadius="0.5mm"
+/>
+```
+
+The cutout circles are centered at `(x1, y1)` and `(x2, y2)` in the parent's
+flat PCB coordinates, each with the specified radius. This example requests
+semicircular notches in the bridge's two straight edges. The reliefs remove
+material from the flat fabrication outline; they are not just a 3D appearance
+setting. Folding still leaves component and routing coordinates in the flat
+layout unchanged.
+
+`tearReliefRadius` accepts a finite positive number in millimeters or a distance
+string, normalized to millimeters. Omitted or `undefined` means no tear reliefs;
+there is no implicit radius. Zero, negative, nonfinite, and invalid distances
+are rejected. The radius is independent of `bendRadius`, `bendSide`, and
+`bendAngle`, including a zero angle. It has no aliases or conflicting props.
+Existing `<pcbbend />` usage needs no migration.
+
+This package defines and validates the API only. Creating the cutouts in the
+board geometry, displaying them, and including them in fabrication exports
+require downstream implementation. Board-level checks must handle outline
+intersections, overlapping reliefs, remaining flex width, and copper clearance;
+the props parser has no board geometry with which to validate these.
+
 ## Polygon stiffener in a reusable group
 
 ```tsx
@@ -110,7 +149,8 @@ from an integrated rigid-flex stackup.
   `adhesiveThickness` is finite and nonnegative. It is separate from material
   thickness, and remains unspecified if omitted. Manufacturer thickness
   conventions may include adhesive and must be translated at export time.
-- All bend geometry and stiffener shape/material/face/thickness are required.
+- Bend endpoints, angle, radius, and side are required; tear reliefs are optional.
+  Stiffener shape/material/face/thickness are required.
   Optional `name` follows existing stable identity conventions. No new prop has
   an implicit design-value default or alias. Rectangle `outline` and polygon
   `width`/`height` are conflicting geometry and are rejected. Other unknown keys

@@ -625,18 +625,36 @@ export interface BreakoutProps
 
 export interface BusProps {
   name?: string
-  /** Retain membership/check constraints without creating an autorouter group. Default false. */
-  routingDisabled?: boolean
-  /** Explicit reusable length, spacing, membership and impedance-target checks. */
-  pcbRoutingConstraints?: PcbRoutingConstraints
+  /** Match these trace/port/bus/pair selectors as well as this element's members.
+   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
+  lengthMatchTo?: string | string[]
+  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
+  minLength?: RouteLength
+  maxLength?: RouteLength
+  /** Nominal member length, absolute or relative to selected endpoints.
+   * Requires an explicit lengthTolerance, including zero for exact matching. */
+  targetLength?: RouteLength
+  /** Allowed deviation above/below targetLength, in mm. */
+  lengthTolerance?: number | string
+  /** Minimum centreline spacing between bus members, excluding declared pair partners.
+   * Raw numbers are mm; "3w" means three times the larger local trace width. */
+  pcbTraceSpacing?: TraceSpacing
+  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
+  pcbExternalTraceSpacing?: TraceSpacing
+  /** Reduced centreline spacing allowed only with maxReducedSpacingLength.
+   * Applies to declared spacing requirements, never to the pair's own pcbTraceGap. */
+  pcbReducedTraceSpacing?: TraceSpacing
+  /** Shared per-member length cap for all reduced-spacing intervals, in mm. */
+  maxReducedSpacingLength?: number | string
+
   /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[]
   /** If set, every trace in this bus is assigned to this autorouting phase. */
   routingPhaseIndex?: number | null
   /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
   maxLengthSkew?: number | string
-  /** Intended single-ended characteristic impedance. Raw numbers are ohms. */
-  targetImpedance?: number | string
+  /** Intended single-ended impedance or acceptable range. Raw numbers are ohms. */
+  targetImpedance?: ImpedanceTarget
   /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
   pcbTraceWidth?: number | string
   /** PCB layers on which the bus may be routed. */
@@ -1159,16 +1177,33 @@ export interface CutoutApertureProps {
 
 export interface DifferentialPairProps {
   name?: string
-  /** Explicit reusable length, spacing, membership and impedance-target checks. */
-  pcbRoutingConstraints?: PcbRoutingConstraints
+  /** Match these trace/port/bus/pair selectors as well as this element's members.
+   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
+  lengthMatchTo?: string | string[]
+  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
+  minLength?: RouteLength
+  maxLength?: RouteLength
+  /** Nominal member length, absolute or relative to selected endpoints.
+   * Requires an explicit lengthTolerance, including zero for exact matching. */
+  targetLength?: RouteLength
+  /** Allowed deviation above/below targetLength, in mm. */
+  lengthTolerance?: number | string
+  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
+  pcbExternalTraceSpacing?: TraceSpacing
+  /** Reduced centreline spacing allowed only with maxReducedSpacingLength.
+   * Applies to declared spacing requirements, never to the pair's own pcbTraceGap. */
+  pcbReducedTraceSpacing?: TraceSpacing
+  /** Shared per-member length cap for all reduced-spacing intervals, in mm. */
+  maxReducedSpacingLength?: number | string
+
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string
   /** Name of the trace or pin carrying the negative signal. */
   negativeConnection: string
   /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
   maxLengthSkew?: number | string
-  /** Intended differential characteristic impedance. Raw numbers are ohms. */
-  targetDifferentialImpedance?: number | string
+  /** Intended differential impedance or acceptable range. Raw numbers are ohms. */
+  targetDifferentialImpedance?: ImpedanceTarget
   /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
   pcbTraceGap?: number | string
   /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
@@ -2203,33 +2238,6 @@ export interface PcbRouteCache {
 }
 
 
-export interface PcbRoutingConstraints {
-  expectedTraceCount?: number
-  /** Without a reference, min/max are absolute lengths. With a reference,
-   * they are offsets from its longest pad-to-pad Manhattan distance.
-   * Both reference fields must be supplied together. */
-  lengthBounds?: {
-    referenceBus?: string
-    referenceMetric?: "longest_manhattan"
-    min?: number | string
-    max?: number | string
-  }
-  /** Centreline spacing uses the larger local trace width. Each rule applies
-   * to members of otherBus; self comparisons are skipped. Reduced spacing
-   * needs a multiplier and maxReducedSpacingLength (union of intervals). */
-  spacing?: Array<{
-    otherBus: string
-    centerlineWidthMultiplier: number
-    reducedCenterlineWidthMultiplier?: number
-  }>
-  /** Maximum total reduced-spacing length per signal across all spacing rules. */
-  maxReducedSpacingLength?: number | string
-  /** Acceptable declared target (single-ended for buses, differential for pairs).
-   * Actual impedance still needs stackup analysis. */
-  impedanceBounds?: { min?: number | string; max?: number | string }
-}
-
-
 export interface PcbStyle {
   silkscreenFontSize?: string | number
   viaPadDiameter?: string | number
@@ -2692,6 +2700,14 @@ export interface RectSolderPasteProps
   shape: "rect"
   width: Distance
   height: Distance
+}
+
+
+export interface RelativeRouteLength {
+  reference: "longest_manhattan"
+  of?: string[]
+  /** Offset added to the reference distance. Raw numbers are mm; may be negative. */
+  offset?: number | string
 }
 
 

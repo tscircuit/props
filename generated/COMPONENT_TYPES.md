@@ -351,6 +351,14 @@ export type FootprintSoupElements = {
 }
 ```
 
+### impedanceTarget
+
+```typescript
+export const impedanceTarget = z.union([
+  positiveImpedance,
+  z.object({min:positiveImpedance,max:positiveImpedance}).strict().refine(r=>r.min<=r.max,"Impedance range must be ordered"),
+```
+
 ### implicitBreakoutPointSolver
 
 ```typescript
@@ -1088,6 +1096,26 @@ export const resolveManufacturerPartNumber = (
 }
 ```
 
+### routeLength
+
+```typescript
+/** A length measured from the selected signals' pad endpoints, in board-world
+ * XY mm (+X right, +Y up). of accepts trace/port/bus/pair selectors. Without
+ * of, use the current members and any lengthMatchTo members. */
+export interface RelativeRouteLength {
+  reference: "longest_manhattan"
+  of?: string[]
+  offset?: number | string
+}
+export const routeLength = z.union([
+  nonnegativeRouteDistance,
+  z.object({
+    reference: z.literal("longest_manhattan"),
+    of: z.array(z.string().min(1)).min(1).optional(),
+    offset: distance.pipe(z.number().finite()).optional(),
+  }).strict(),
+```
+
 ### schStyle
 
 ```typescript
@@ -1199,6 +1227,39 @@ export const schematicPinStyle = z.record(
     topMargin: distance.optional(),
     bottomMargin: distance.optional(),
   }),
+```
+
+### traceSpacing
+
+```typescript
+/** Centreline distance in mm, or a multiple of the larger local trace width
+ * written as e.g. "3w". Parsed multiples remain {widthMultiplier: 3} so the
+ * checker can evaluate varying widths without choosing a width in props. */
+export type TraceSpacing = number | string
+const widthSpacing = z.string()
+  .regex(/^\s*(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*w\s*$/i)
+  .transform(value => ({widthMultiplier:Number(value.trim().replace(/w$/i,""))}))
+export const traceSpacing = z.union([widthSpacing,absoluteSpacing])
+expectTypesMatch<TraceSpacing,z.input<typeof traceSpacing>>(true)
+
+export function validateTraceSpacing(props:{
+  pcbTraceSpacing?:z.output<typeof traceSpacing>
+  pcbExternalTraceSpacing?:z.output<typeof traceSpacing>
+  pcbReducedTraceSpacing?:z.output<typeof traceSpacing>
+  maxReducedSpacingLength?:number
+},ctx:z.RefinementCtx){
+  if ((props.pcbReducedTraceSpacing !== undefined) !== (props.maxReducedSpacingLength !== undefined))
+    ctx.addIssue({code:z.ZodIssueCode.custom,path:["maxReducedSpacingLength"],message:"pcbReducedTraceSpacing and maxReducedSpacingLength must be supplied together"})
+  if(props.pcbReducedTraceSpacing !== undefined && props.pcbTraceSpacing === undefined && props.pcbExternalTraceSpacing === undefined)
+    ctx.addIssue({code:z.ZodIssueCode.custom,path:["pcbReducedTraceSpacing"],message:"Reduced spacing requires a normal trace spacing requirement"})
+  const reduced=props.pcbReducedTraceSpacing
+  for(const normal of [props.pcbTraceSpacing,props.pcbExternalTraceSpacing]){
+    if(reduced === undefined || normal === undefined)continue
+    const wider=typeof reduced === "number" && typeof normal === "number" ? reduced > normal
+      : typeof reduced !== "number" && typeof normal !== "number" ? reduced.widthMultiplier > normal.widthMultiplier : false
+    if(wider)ctx.addIssue({code:z.ZodIssueCode.custom,path:["pcbReducedTraceSpacing"],message:"Reduced spacing cannot exceed normal spacing"})
+  }
+}
 ```
 
 ### url
@@ -1781,12 +1842,20 @@ export const breakoutPointProps = pcbLayoutProps
  */
 export interface BusProps {
   name?: string
-  routingDisabled?: boolean
-  pcbRoutingConstraints?: PcbRoutingConstraints
+  lengthMatchTo?: string | string[]
+  minLength?: RouteLength
+  maxLength?: RouteLength
+  targetLength?: RouteLength
+  lengthTolerance?: number | string
+  pcbTraceSpacing?: TraceSpacing
+  pcbExternalTraceSpacing?: TraceSpacing
+  pcbReducedTraceSpacing?: TraceSpacing
+  maxReducedSpacingLength?: number | string
+
   connections: string[]
   routingPhaseIndex?: number | null
   maxLengthSkew?: number | string
-  targetImpedance?: number | string
+  targetImpedance?: ImpedanceTarget
   pcbTraceWidth?: number | string
   pcbAllowedLayers?: LayerRefInput[]
   preferredLayer?: LayerRefInput
@@ -1795,16 +1864,27 @@ export interface BusProps {
 /** Preferred PCB layers for routing the bus, in priority order. */
 export const busProps = z.object({
   name: z.string().optional(),
-  routingDisabled: z.boolean().optional(),
-  pcbRoutingConstraints: pcbRoutingConstraints.optional(),
+  lengthMatchTo: lengthMatchTo.optional(),
+  minLength: routeLength.optional(),
+  maxLength: routeLength.optional(),
+  targetLength: routeLength.optional(),
+  lengthTolerance: nonnegativeRouteDistance.optional(),
+  pcbTraceSpacing: traceSpacing.optional(),
+  pcbExternalTraceSpacing: traceSpacing.optional(),
+  pcbReducedTraceSpacing: traceSpacing.optional(),
+  maxReducedSpacingLength: nonnegativeRouteDistance.optional(),
+
   connections: z.array(z.string()).min(1),
   routingPhaseIndex: z.number().nullable().optional(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
-  targetImpedance: resistance.pipe(z.number().positive().finite()).optional(),
+  targetImpedance: impedanceTarget.optional(),
   pcbTraceWidth: distance.pipe(z.number().positive().finite()).optional(),
   pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
   preferredLayer: layer_ref.optional(),
   preferredLayers: z.array(layer_ref).min(1).optional(),
+}).superRefine((props, ctx) => {
+  validateRouteLengths(props,ctx)
+  validateTraceSpacing(props,ctx)
 })
 ```
 
@@ -2333,26 +2413,43 @@ export const polygonCutoutProps = pcbLayoutProps
  */
 export interface DifferentialPairProps {
   name?: string
-  pcbRoutingConstraints?: PcbRoutingConstraints
+  lengthMatchTo?: string | string[]
+  minLength?: RouteLength
+  maxLength?: RouteLength
+  targetLength?: RouteLength
+  lengthTolerance?: number | string
+  pcbExternalTraceSpacing?: TraceSpacing
+  pcbReducedTraceSpacing?: TraceSpacing
+  maxReducedSpacingLength?: number | string
+
   positiveConnection: string
   negativeConnection: string
   maxLengthSkew?: number | string
-  targetDifferentialImpedance?: number | string
+  targetDifferentialImpedance?: ImpedanceTarget
   pcbTraceGap?: number | string
   maxUncoupledLength?: number | string
 }
 /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
 export const differentialPairProps = z.object({
   name: z.string().optional(),
-  pcbRoutingConstraints: pcbRoutingConstraints.optional(),
+  lengthMatchTo: lengthMatchTo.optional(),
+  minLength: routeLength.optional(),
+  maxLength: routeLength.optional(),
+  targetLength: routeLength.optional(),
+  lengthTolerance: nonnegativeRouteDistance.optional(),
+  pcbExternalTraceSpacing: traceSpacing.optional(),
+  pcbReducedTraceSpacing: traceSpacing.optional(),
+  maxReducedSpacingLength: nonnegativeRouteDistance.optional(),
+
   positiveConnection: z.string(),
   negativeConnection: z.string(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
-  targetDifferentialImpedance: resistance
-    .pipe(z.number().positive().finite())
-    .optional(),
+  targetDifferentialImpedance: impedanceTarget.optional(),
   pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
   maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
+}).superRefine((props, ctx) => {
+  validateRouteLengths(props,ctx)
+  validateTraceSpacing(props,ctx)
 })
 ```
 
@@ -3941,55 +4038,6 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
   fontSize: length.optional(),
   color: z.string().optional(),
 })
-```
-
-### pcb-routing-constraints
-
-```typescript
-/** Check constraints on a bus or pair, without protocol/vendor defaults.
- * Numeric distances are mm; impedance values are ohms. All fields are optional.
- * referenceBus/otherBus use bus names in the same subcircuit. */
-export interface PcbRoutingConstraints {
-  expectedTraceCount?: number
-  lengthBounds?: {
-    referenceBus?: string
-    referenceMetric?: "longest_manhattan"
-    min?: number | string
-    max?: number | string
-  }
-  spacing?: Array<{
-    otherBus: string
-    centerlineWidthMultiplier: number
-    reducedCenterlineWidthMultiplier?: number
-  }>
-  maxReducedSpacingLength?: number | string
-  impedanceBounds?: { min?: number | string; max?: number | string }
-}
-/** Acceptable declared target (single-ended for buses, differential for pairs).
-   * Actual impedance still needs stackup analysis. */
-export const pcbRoutingConstraints = z.object({
-  expectedTraceCount: z.number().int().positive().optional(),
-  lengthBounds: z.object({
-    referenceBus: z.string().min(1).optional(),
-    referenceMetric: z.literal("longest_manhattan").optional(),
-    min: finiteDistance.optional(),
-    max: finiteDistance.optional(),
-  }).refine((b) => Boolean(b.referenceBus) === Boolean(b.referenceMetric) &&
-    (b.min !== undefined || b.max !== undefined) &&
-    !(b.min !== undefined && b.max !== undefined && b.min > b.max) &&
-    (b.referenceBus !== undefined || (b.min ?? 0) >= 0 && (b.max ?? 0) >= 0),
-    "Provide ordered bounds and both reference fields for relative lengths").optional(),
-  spacing: z.array(z.object({
-    otherBus: z.string().min(1),
-    centerlineWidthMultiplier: z.number().positive().finite(),
-    reducedCenterlineWidthMultiplier: z.number().positive().finite().optional(),
-  }).refine((s) => (s.reducedCenterlineWidthMultiplier ?? s.centerlineWidthMultiplier) <= s.centerlineWidthMultiplier,
-    "Reduced spacing cannot exceed normal spacing")).min(1).optional(),
-  maxReducedSpacingLength: finiteDistance.pipe(z.number().nonnegative()).optional(),
-  impedanceBounds: z.object({ min: impedance.optional(), max: impedance.optional() })
-    .refine((b) => (b.min !== undefined || b.max !== undefined) &&
-      !(b.min !== undefined && b.max !== undefined && b.min > b.max), "Provide ordered min/max bounds").optional(),
-}).refine((c) => Boolean(c.spacing?.some(s => s.reducedCenterlineWidthMultiplier !== undefined)) === (c.maxReducedSpacingLength !== undefined),
 ```
 
 ### pcb-soldermask-opening

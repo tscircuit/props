@@ -181,6 +181,15 @@ export interface AssemblyMotorProps {
    * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
    */
   shaftFacingDirection?: CadModelAxisDirection
+  /** Degrees around the shaft (default 0). A reference expression aims that
+   * named side at the requested angle from assembly +X in the shaft plane.
+   * e.g. calc(wireside+90deg) aims the wire exit toward assembly +Y for z+/z-.
+   */
+  motorRotation?: number | string
+  /** Visual wire termination for standard motors; custom model strings own
+   * this parameter instead. Defaults to the modelprinter standard (stubs).
+   */
+  wireConnection?: "none" | "stubs" | "jst-ph-6"
 }
 
 

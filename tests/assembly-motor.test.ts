@@ -20,6 +20,7 @@ test("assembly.motor registers its schema and preserves modelprinter usage", () 
   const input: AssemblyMotorPropsInput = props
   expect(assemblyProps.motor.parse(input)).toEqual({
     ...input,
+    motorRotation: 0,
     model: nema17Model,
     shaftFacingDirection: "z-",
   })
@@ -45,10 +46,11 @@ test("accepts all six shaft directions without changing their axis or sign", () 
   }
 })
 
-test("defaults only the shaft direction to the native positive Z axis", () => {
+test("defaults to the native positive Z shaft direction and zero rotation", () => {
   const input: AssemblyMotorPropsInput = { name: "MOTOR", model: "nema17" }
   expect(assemblyMotorProps.parse(input)).toEqual({
     ...input,
+    motorRotation: 0,
     shaftFacingDirection: "z+",
   })
   expect(input).toEqual({ name: "MOTOR", model: "nema17" })
@@ -64,6 +66,7 @@ test("selects each NEMA standard without requiring a modelprinter string", () =>
     expect(assemblyProps.motor.parse(input)).toEqual({
       name: "MOTOR",
       standard,
+      motorRotation: 0,
       shaftFacingDirection: "x+",
     })
   }
@@ -72,6 +75,7 @@ test("selects each NEMA standard without requiring a modelprinter string", () =>
   ).toEqual({
     name: "MOTOR",
     standard: "nema17",
+    motorRotation: 0,
     shaftFacingDirection: "z+",
   })
 })

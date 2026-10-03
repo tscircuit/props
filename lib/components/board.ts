@@ -5,6 +5,13 @@ import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { subcircuitGroupProps, type SubcircuitGroupProps } from "./group"
+import {
+  boardMountOrientation,
+  boardMountRotation,
+  boardMountRotationAnchor,
+  type BoardMountOrientation,
+  type BoardMountRotationAnchor,
+} from "../assembly/board-mounting"
 
 const boardColorPresets = [
   "not_specified",
@@ -89,6 +96,33 @@ export interface BoardProps
    * Omitted leaves the gap unset; only meaningful when mountedTo is supplied.
    */
   mountGap?: Distance
+  /**
+   * Board edge (topedge, bottomedge, leftedge, rightedge) or component identity
+   * path, e.g. J_USB. Edges supply their outward normal; a component supplies
+   * the direction from the board's mounting axis to its PCB center. Trimmed
+   * and case-preserved. Omitted uses rightedge when mountRotation is supplied;
+   * parsed output stays unset. Only meaningful with mountedTo and mountRotation.
+   */
+  mountRotationAnchor?: BoardMountRotationAnchor
+  /**
+   * Qualified assembly direction, e.g. NEMA17.wireside, or a relative expression
+   * such as calc(NEMA17.wireside-90degcw). Aligns mountRotationAnchor to that
+   * direction. Clockwise is viewed looking at the referenced mounting face;
+   * a negative clockwise angle is counterclockwise. degcw and degccw are the
+   * only angle units; standalone angles/numbers are not accepted. Trimmed and
+   * otherwise preserved for consumer resolution. Omitted leaves alignment
+   * unset; only meaningful with mountedTo. No aliases. Replaces the unreleased
+   * assembly.motor motorRotation prop, with alignment owned by this board.
+   */
+  mountRotation?: string
+  /**
+   * Which PCB layer faces the referenced mounting face:
+   * top_layer_toward_mount_face or bottom_layer_toward_mount_face.
+   * Exact canonical enum; no flush/away aliases. Omitted leaves orientation
+   * unset, preserving the consumer's existing behavior. Only meaningful with mountedTo. Independent
+   * of mountGap: a toward orientation does not imply contact or zero clearance.
+   */
+  mountOrientation?: BoardMountOrientation
   /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
   fabricatorPreset?:
     | "jlcpcb_economy"
@@ -177,6 +211,21 @@ export const boardProps = subcircuitGroupProps
       .optional()
       .describe(
         "Nonnegative finite clearance between the target mounting face and the nearest PCB surface, in millimeters or a unit string, parsed to mm. Omitted leaves the gap unset; only meaningful when mountedTo is supplied.",
+      ),
+    mountRotationAnchor: boardMountRotationAnchor
+      .optional()
+      .describe(
+        "Board edge (topedge, bottomedge, leftedge, rightedge) or component identity path, e.g. J_USB. Edges supply outward normals; components supply the direction from the mounting axis to their PCB center. Trimmed and case-preserved. Omitted uses rightedge when mountRotation is supplied; parsed output stays unset. Only meaningful with mountedTo and mountRotation.",
+      ),
+    mountRotation: boardMountRotation
+      .optional()
+      .describe(
+        "Qualified assembly direction, e.g. NEMA17.wireside, or calc(NEMA17.wireside-90degcw). Aligns mountRotationAnchor to the referenced direction. Clockwise is viewed looking at the mounting face. Only degcw/degccw adjustments are accepted; standalone angles/numbers are rejected. Trimmed and otherwise preserved for consumer resolution. Omitted leaves alignment unset; only meaningful with mountedTo. No aliases; replaces the unreleased assembly.motor motorRotation prop.",
+      ),
+    mountOrientation: boardMountOrientation
+      .optional()
+      .describe(
+        "Which PCB layer faces the mount face: top_layer_toward_mount_face or bottom_layer_toward_mount_face. Omitted leaves orientation unset. Only meaningful with mountedTo; independent of mountGap, with no implied contact or clearance. No flush/away aliases.",
       ),
     fabricatorPreset: z
       .enum([

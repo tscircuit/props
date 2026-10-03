@@ -4,6 +4,7 @@ import { assemblyMotorProps } from "./motor"
 import { assemblyScreenProps } from "./screen"
 import { assemblySubassemblyProps } from "./subassembly"
 
+export * from "./board-mounting"
 export * from "./device"
 export * from "./motor"
 export * from "./screen"

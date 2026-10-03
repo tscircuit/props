@@ -152,4 +152,7 @@ export * from "./common/implicitBreakoutPointSolver"
 
 export * from "./common/fanoutTracePath"
 
-export { pcbDdrRouting, type PcbDdrRouting } from "./components/pcb-ddr-routing"
+export {
+  pcbRoutingConstraints,
+  type PcbRoutingConstraints,
+} from "./components/pcb-routing-constraints"

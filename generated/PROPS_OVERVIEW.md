@@ -627,8 +627,8 @@ export interface BusProps {
   name?: string
   /** Retain membership/check constraints without creating an autorouter group. Default false. */
   routingDisabled?: boolean
-  /** Published DDR routing rules and signal class. No electrical defaults are implied. */
-  pcbDdrRouting?: PcbDdrRouting
+  /** Explicit reusable length, spacing, membership and impedance-target checks. */
+  pcbRoutingConstraints?: PcbRoutingConstraints
   /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[]
   /** If set, every trace in this bus is assigned to this autorouting phase. */
@@ -1159,8 +1159,8 @@ export interface CutoutApertureProps {
 
 export interface DifferentialPairProps {
   name?: string
-  /** Published DDR routing rules and signal class. No electrical defaults are implied. */
-  pcbDdrRouting?: PcbDdrRouting
+  /** Explicit reusable length, spacing, membership and impedance-target checks. */
+  pcbRoutingConstraints?: PcbRoutingConstraints
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string
   /** Name of the trace or pin carrying the negative signal. */
@@ -2050,19 +2050,6 @@ export interface PcbBendProps {
 }
 
 
-export interface PcbDdrRouting {
-  profile: "ti_am335x_ddr3"
-  interfaceName: string
-  signalClass: "dq" | "dqs" | "ck" | "addr_ctrl"
-  topology: "one_x16"
-  /** Required for dq/dqs; omitted for ck/addr_ctrl. */
-  byteIndex?: 0 | 1
-  /** Names of the intended reference nets, without a net. selector prefix. */
-  groundNetName?: string
-  powerNetName?: string
-}
-
-
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
@@ -2213,6 +2200,33 @@ export interface PcbPathPoint extends Point {
 export interface PcbRouteCache {
   pcbTraces: PcbTrace[]
   cacheKey: string
+}
+
+
+export interface PcbRoutingConstraints {
+  expectedTraceCount?: number
+  /** Without a reference, min/max are absolute lengths. With a reference,
+   * they are offsets from its longest pad-to-pad Manhattan distance.
+   * Both reference fields must be supplied together. */
+  lengthBounds?: {
+    referenceBus?: string
+    referenceMetric?: "longest_manhattan"
+    min?: number | string
+    max?: number | string
+  }
+  /** Centreline spacing uses the larger local trace width. Each rule applies
+   * to members of otherBus; self comparisons are skipped. Reduced spacing
+   * needs a multiplier and maxReducedSpacingLength (union of intervals). */
+  spacing?: Array<{
+    otherBus: string
+    centerlineWidthMultiplier: number
+    reducedCenterlineWidthMultiplier?: number
+  }>
+  /** Maximum total reduced-spacing length per signal across all spacing rules. */
+  maxReducedSpacingLength?: number | string
+  /** Acceptable declared target (single-ended for buses, differential for pairs).
+   * Actual impedance still needs stackup analysis. */
+  impedanceBounds?: { min?: number | string; max?: number | string }
 }
 
 

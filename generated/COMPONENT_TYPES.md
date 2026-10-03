@@ -1782,7 +1782,7 @@ export const breakoutPointProps = pcbLayoutProps
 export interface BusProps {
   name?: string
   routingDisabled?: boolean
-  pcbDdrRouting?: PcbDdrRouting
+  pcbRoutingConstraints?: PcbRoutingConstraints
   connections: string[]
   routingPhaseIndex?: number | null
   maxLengthSkew?: number | string
@@ -1796,7 +1796,7 @@ export interface BusProps {
 export const busProps = z.object({
   name: z.string().optional(),
   routingDisabled: z.boolean().optional(),
-  pcbDdrRouting: pcbDdrRouting.optional(),
+  pcbRoutingConstraints: pcbRoutingConstraints.optional(),
   connections: z.array(z.string()).min(1),
   routingPhaseIndex: z.number().nullable().optional(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
@@ -2333,7 +2333,7 @@ export const polygonCutoutProps = pcbLayoutProps
  */
 export interface DifferentialPairProps {
   name?: string
-  pcbDdrRouting?: PcbDdrRouting
+  pcbRoutingConstraints?: PcbRoutingConstraints
   positiveConnection: string
   negativeConnection: string
   maxLengthSkew?: number | string
@@ -2344,7 +2344,7 @@ export interface DifferentialPairProps {
 /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
 export const differentialPairProps = z.object({
   name: z.string().optional(),
-  pcbDdrRouting: pcbDdrRouting.optional(),
+  pcbRoutingConstraints: pcbRoutingConstraints.optional(),
   positiveConnection: z.string(),
   negativeConnection: z.string(),
   maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
@@ -3703,34 +3703,6 @@ export const pcbBendProps = z
   })
 ```
 
-### pcb-ddr-routing
-
-```typescript
-/** TI SPRS717L routing intent for one point-to-point x16 DDR3 memory.
- * Selecting the profile supplies the published rule limits, not a stackup,
- * impedance result, reference plane, or termination circuit. */
-export interface PcbDdrRouting {
-  profile: "ti_am335x_ddr3"
-  interfaceName: string
-  signalClass: "dq" | "dqs" | "ck" | "addr_ctrl"
-  topology: "one_x16"
-  byteIndex?: 0 | 1
-  groundNetName?: string
-  powerNetName?: string
-}
-/** Names of the intended reference nets, without a net. selector prefix. */
-export const pcbDdrRouting = z
-  .object({
-    profile: z.literal("ti_am335x_ddr3"),
-    interfaceName: z.string().min(1),
-    signalClass: z.enum(["dq", "dqs", "ck", "addr_ctrl"]),
-    topology: z.literal("one_x16"),
-    byteIndex: z.union([z.literal(0), z.literal(1)]).optional(),
-    groundNetName: z.string().min(1).optional(),
-    powerNetName: z.string().min(1).optional(),
-  })
-```
-
 ### pcb-keepout
 
 ```typescript
@@ -3969,6 +3941,55 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
   fontSize: length.optional(),
   color: z.string().optional(),
 })
+```
+
+### pcb-routing-constraints
+
+```typescript
+/** Check constraints on a bus or pair, without protocol/vendor defaults.
+ * Numeric distances are mm; impedance values are ohms. All fields are optional.
+ * referenceBus/otherBus use bus names in the same subcircuit. */
+export interface PcbRoutingConstraints {
+  expectedTraceCount?: number
+  lengthBounds?: {
+    referenceBus?: string
+    referenceMetric?: "longest_manhattan"
+    min?: number | string
+    max?: number | string
+  }
+  spacing?: Array<{
+    otherBus: string
+    centerlineWidthMultiplier: number
+    reducedCenterlineWidthMultiplier?: number
+  }>
+  maxReducedSpacingLength?: number | string
+  impedanceBounds?: { min?: number | string; max?: number | string }
+}
+/** Acceptable declared target (single-ended for buses, differential for pairs).
+   * Actual impedance still needs stackup analysis. */
+export const pcbRoutingConstraints = z.object({
+  expectedTraceCount: z.number().int().positive().optional(),
+  lengthBounds: z.object({
+    referenceBus: z.string().min(1).optional(),
+    referenceMetric: z.literal("longest_manhattan").optional(),
+    min: finiteDistance.optional(),
+    max: finiteDistance.optional(),
+  }).refine((b) => Boolean(b.referenceBus) === Boolean(b.referenceMetric) &&
+    (b.min !== undefined || b.max !== undefined) &&
+    !(b.min !== undefined && b.max !== undefined && b.min > b.max) &&
+    (b.referenceBus !== undefined || (b.min ?? 0) >= 0 && (b.max ?? 0) >= 0),
+    "Provide ordered bounds and both reference fields for relative lengths").optional(),
+  spacing: z.array(z.object({
+    otherBus: z.string().min(1),
+    centerlineWidthMultiplier: z.number().positive().finite(),
+    reducedCenterlineWidthMultiplier: z.number().positive().finite().optional(),
+  }).refine((s) => (s.reducedCenterlineWidthMultiplier ?? s.centerlineWidthMultiplier) <= s.centerlineWidthMultiplier,
+    "Reduced spacing cannot exceed normal spacing")).min(1).optional(),
+  maxReducedSpacingLength: finiteDistance.pipe(z.number().nonnegative()).optional(),
+  impedanceBounds: z.object({ min: impedance.optional(), max: impedance.optional() })
+    .refine((b) => (b.min !== undefined || b.max !== undefined) &&
+      !(b.min !== undefined && b.max !== undefined && b.min > b.max), "Provide ordered min/max bounds").optional(),
+}).refine((c) => Boolean(c.spacing?.some(s => s.reducedCenterlineWidthMultiplier !== undefined)) === (c.maxReducedSpacingLength !== undefined),
 ```
 
 ### pcb-soldermask-opening

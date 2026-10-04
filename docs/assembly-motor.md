@@ -20,6 +20,58 @@ For a custom body or shaft specification, use a modelprinter string instead:
 />
 ```
 
+## Mounting a motor to a named face
+
+Use the same face-mating props as `assembly.printedpart`:
+
+```tsx
+<assembly.device>
+  <assembly.printedpart name="FRAME" jscad={<PrinterFrame />} />
+  <assembly.motor
+    name="X_MOTOR"
+    standard="nema17"
+    mountedTo="FRAME.xMotor"
+    mountFace="frontface"
+    mountGap="0mm"
+  />
+</assembly.device>
+```
+
+`PrinterFrame` defines a named JSCAD reference rectangle `xMotor` at the
+attachment point. `mountedTo` names that target; `mountFace` names the face on
+the motor. Supply both or neither. At zero gap their origins coincide,
+outward normals oppose, and in-plane X directions align. Positive `mountGap`
+separates the motor face from the target along the target's outward normal.
+The mount determines translation and all three rotation axes, including roll.
+
+For NEMA models, `frontface` is the shaft-side body mounting plane, excluding
+the raised pilot and shaft, with origin `[0, 0, 0]` and outward normal `+Z`.
+`backface` is the opposite body plane, with origin `[0, 0, -bodyLength]` and
+outward normal `-Z`. Both use local `+X` as the in-plane X direction. These
+are model-local frames before mounting. A frontface mount points the shaft
+opposite the target normal; a backface mount points it along the target normal.
+Face mating aligns frames, not bolt holes; the bracket must provide matching
+holes and any necessary pilot or shaft clearance.
+
+Omit `shaftFacingDirection` for mounted motors. Providing it together with
+`mountedTo` is rejected, even for `"z+"`, rather than introducing competing
+orientation constraints. Mounted motors leave the parsed direction unset;
+unmounted motors retain the existing `"z+"` default.
+Consumers of parsed props must allow an unset direction for mounted motors
+and derive it from the resolved face transform.
+
+Mounting references are trimmed strings. `mountedTo` requires `part.face`
+syntax, and `mountFace` must be nonblank. The schema accepts custom face names;
+core resolves the selected model's faces and reports missing targets/faces,
+ambiguous targets, cycles, or incompatible placement constraints. Model
+selection rules are unchanged. `mountGap` accepts nonnegative finite mm values
+or unit strings and parses to mm; it requires `mountedTo`. Omission stays
+`undefined` in parsed props and means zero clearance in core.
+
+There are no mounting aliases. Existing unmounted motors and boards mounted
+to a motor need no migration. Adopting motor mounting requires a supporting
+core version; this props proposal alone does not implement placement.
+
 ## Mounting a board to the motor
 
 `<board>` accepts `mountedTo` and `mountGap`, allowing this assembly:
@@ -68,7 +120,10 @@ existing board props. Mounting is board-specific and is not added to groups.
 | `displayName` | Optional string | Preserved; omitted by default |
 | `standard` | `nema8`, `nema17`, `nema23`; required when `model` is omitted | Preserved; no default motor standard |
 | `model` | Nonblank modelprinter string; required when `standard` is omitted | Surrounding whitespace trimmed; no default model |
-| `shaftFacingDirection` | `x+`, `x-`, `y+`, `y-`, `z+`, `z-` | Axis and sign preserved; defaults to `z+` |
+| `shaftFacingDirection` | `x+`, `x-`, `y+`, `y-`, `z+`, `z-`; omit when mounted | Defaults to `z+` only when unmounted |
+| `mountedTo` | Optional `part.face` string; paired with `mountFace` | Trimmed; unset by default |
+| `mountFace` | Optional nonblank motor face name; paired with `mountedTo` | Trimmed; unset by default |
+| `mountGap` | Nonnegative finite mm number or distance string; requires `mountedTo` | Parsed to mm; unset means zero clearance |
 
 Directions use the right-handed circuit coordinate frame: +X right, +Y top,
 +Z above the board. The direction points from the motor body toward the shaft

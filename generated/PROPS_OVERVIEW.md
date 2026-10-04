@@ -195,6 +195,18 @@ export interface AssemblyMotorProps {
   shaftFacingDirection?: CadModelAxisDirection
   /** e.g. "jst-ph-6". */
   wireConnection?: "none" | "stubs" | "jst-ph-6"
+  /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
+   * Face mating determines orientation, so shaftFacingDirection must be omitted.
+   */
+  mountedTo?: string
+  /** This motor's mating face, e.g. "frontface" or "backface".
+   * Outward normals oppose and in-plane X directions align with the target.
+   */
+  mountFace?: string
+  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
+   * Requires mountedTo. Positive values separate the mating faces.
+   */
+  mountGap?: Distance
 }
 
 

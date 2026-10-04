@@ -2,6 +2,7 @@ import {
   type CadModelAxisDirection,
   cadModelAxisDirection,
 } from "lib/common/cadModel"
+import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
@@ -25,6 +26,18 @@ export interface AssemblyMotorProps {
   shaftFacingDirection?: CadModelAxisDirection
   /** e.g. "jst-ph-6". */
   wireConnection?: "none" | "stubs" | "jst-ph-6"
+  /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
+   * Face mating determines orientation, so shaftFacingDirection must be omitted.
+   */
+  mountedTo?: string
+  /** This motor's mating face, e.g. "frontface" or "backface".
+   * Outward normals oppose and in-plane X directions align with the target.
+   */
+  mountFace?: string
+  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
+   * Requires mountedTo. Positive values separate the mating faces.
+   */
+  mountGap?: Distance
 }
 
 export const assemblyMotorProps = z
@@ -35,10 +48,41 @@ export const assemblyMotorProps = z
     displayName: z.string().optional(),
     standard: z.enum(["nema8", "nema17", "nema23"]).optional(),
     model: z.string().trim().min(1).optional(),
-    shaftFacingDirection: cadModelAxisDirection.default("z+"),
+    shaftFacingDirection: cadModelAxisDirection.optional(),
     wireConnection: z.enum(["none", "stubs", "jst-ph-6"]).optional(),
+    mountedTo: z
+      .string()
+      .trim()
+      .regex(/^.+\.[^.]+$/, "Expected part.face")
+      .optional(),
+    mountFace: z.string().trim().min(1).optional(),
+    mountGap: distance.pipe(z.number().nonnegative().finite()).optional(),
   })
   .superRefine((motor, context) => {
+    if ((motor.mountedTo === undefined) !== (motor.mountFace === undefined)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Provide mountedTo and mountFace together",
+        path: ["mountFace"],
+      })
+    }
+    if (motor.mountGap !== undefined && motor.mountedTo === undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "mountGap requires mountedTo",
+        path: ["mountGap"],
+      })
+    }
+    if (
+      motor.mountedTo !== undefined &&
+      motor.shaftFacingDirection !== undefined
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Mounted motors derive shaft direction from the mating faces",
+        path: ["shaftFacingDirection"],
+      })
+    }
     if (motor.model !== undefined && motor.wireConnection !== undefined) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
@@ -62,6 +106,14 @@ export const assemblyMotorProps = z
       })
     }
   })
+  .transform((motor) =>
+    motor.mountedTo === undefined
+      ? {
+          ...motor,
+          shaftFacingDirection: motor.shaftFacingDirection ?? ("z+" as const),
+        }
+      : motor,
+  )
 
 export type AssemblyMotorPropsInput = z.input<typeof assemblyMotorProps>
 

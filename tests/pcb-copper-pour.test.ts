@@ -6,20 +6,14 @@ test("pcbcopperpour parses each supported precomputed shape", () => {
     pcbCopperPourProps.parse({
       shape: "rect",
       layer: "top",
-      pcbX: "1mm",
-      pcbY: "2mm",
       width: "3mm",
       height: "4mm",
-      pcbRotation: "90deg",
     }),
   ).toEqual({
     shape: "rect",
     layer: "top",
-    pcbX: 1,
-    pcbY: 2,
     width: 3,
     height: 4,
-    pcbRotation: 90,
     coveredWithSolderMask: true,
   })
 
@@ -29,6 +23,9 @@ test("pcbcopperpour parses each supported precomputed shape", () => {
       layer: "inner2",
       connectsTo: "net.GND",
       coveredWithSolderMask: false,
+      pcbX: "1mm",
+      pcbY: "2mm",
+      pcbRotation: "90deg",
       points: [
         { x: -1, y: -1 },
         { x: 1, y: -1 },
@@ -40,6 +37,9 @@ test("pcbcopperpour parses each supported precomputed shape", () => {
     layer: "inner2",
     connectsTo: "net.GND",
     coveredWithSolderMask: false,
+    pcbX: 1,
+    pcbY: 2,
+    pcbRotation: 90,
     points: [
       { x: -1, y: -1 },
       { x: 1, y: -1 },
@@ -51,6 +51,7 @@ test("pcbcopperpour parses each supported precomputed shape", () => {
     pcbCopperPourProps.parse({
       shape: "brep",
       layer: "bottom",
+      pcbX: "2mm",
       brepShape: {
         outer_ring: {
           vertices: [
@@ -65,6 +66,7 @@ test("pcbcopperpour parses each supported precomputed shape", () => {
     shape: "brep",
     layer: "bottom",
     coveredWithSolderMask: true,
+    pcbX: 2,
     brepShape: {
       outer_ring: {
         vertices: [

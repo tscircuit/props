@@ -3874,20 +3874,32 @@ export const pcbBendProps = z
 ### pcb-copper-pour
 
 ```typescript
-/**
- * Advanced escape hatch for inserting already-computed PCB copper geometry.
- * Prefer `CopperPourProps` when the pour should be solved from an outline and
- * electrical net inside tscircuit.
- */
-export const pcbCopperPourProps = z.discriminatedUnion("shape", [
-  z.object({
-    ...pcbCopperPourCommonProps,
+const pcbCopperPourBaseProps = pcbLayoutProps.omit({ layer: true }).extend({
+  name: z.string().optional(),
+  connectsTo: z.string().optional(),
+  coveredWithSolderMask: z.boolean().optional().default(true),
+  layer: layer_ref,
+})
+pcbCopperPourBaseProps.extend({
     shape: z.literal("rect"),
-    pcbX: distance,
-    pcbY: distance,
-    width: distance,
-    height: distance,
-    pcbRotation: rotation.optional(),
+    width: positiveDistance,
+    height: positiveDistance,
+    points: z.never().optional(),
+    brepShape: z.never().optional(),
+  }),
+pcbCopperPourBaseProps.extend({
+    shape: z.literal("polygon"),
+    points: polygonPoints,
+    width: z.never().optional(),
+    height: z.never().optional(),
+    brepShape: z.never().optional(),
+  }),
+pcbCopperPourBaseProps.extend({
+    shape: z.literal("brep"),
+    brepShape: brep_shape,
+    width: z.never().optional(),
+    height: z.never().optional(),
+    points: z.never().optional(),
   }),
 ```
 

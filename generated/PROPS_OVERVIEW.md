@@ -553,6 +553,11 @@ export interface BoardProps
     | "top_tented"
     | "bottom_tented"
     | "exposed"
+  /** Board-wide via plugging/filling process for fabrication. Omitted leaves it unspecified. */
+  viaPlugging?:
+    | "solder_mask_ink"
+    | "epoxy_filled_and_capped"
+    | "copper_paste_filled_and_capped"
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point

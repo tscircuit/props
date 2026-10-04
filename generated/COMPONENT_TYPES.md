@@ -5150,6 +5150,7 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
   anchorAlignment: ninePointAnchor.default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
+  mirrored: z.boolean().optional(),
   isKnockout: z.boolean().optional(),
   knockoutPadding: length.optional(),
   knockoutPaddingLeft: length.optional(),

@@ -21,7 +21,10 @@ const pcbCopperPourBaseProps = pcbLayoutProps.omit({ layer: true }).extend({
 })
 
 /**
- * Advanced escape hatch for inserting already-computed PCB copper geometry.
+ * Advanced escape hatch for inserting one already-computed PCB copper region.
+ * Use one `<pcbcopperpour />` per disconnected region; B-rep inner rings are
+ * voids within that region.
+ *
  * Prefer `CopperPourProps` when the pour should be solved from an outline and
  * electrical net inside tscircuit.
  */

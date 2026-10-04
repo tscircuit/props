@@ -48,6 +48,10 @@ export type InternalCircuitElement = ReactElement<
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
+  /** Firmware runtime choice. No default; each exporter validates its supported runtimes. */
+  firmwareRtos?: "nortos" | "freertos"
+  /** Firmware low-frequency clock selection. Does not infer a choice from connected crystals. */
+  firmwareLfClockSource?: "internal_rc" | "external_crystal"
   manufacturerPartNumber?: string
   pinLabels?: PinLabelsProp<SchematicPinLabel, PinLabel>
   /**
@@ -174,6 +178,8 @@ export const pinCompatibleVariant = z.object({
 })
 
 export const chipProps = commonComponentProps.extend({
+  firmwareRtos: z.enum(["nortos", "freertos"]).optional(),
+  firmwareLfClockSource: z.enum(["internal_rc", "external_crystal"]).optional(),
   manufacturerPartNumber: z.string().optional(),
   pinLabels: pinLabelsProp.optional(),
   showPinAliases: z.boolean().optional(),

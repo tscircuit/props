@@ -18,7 +18,7 @@ test.each([...electricalFlags])(
   "chip preserves true and false for %s",
   (flag) => {
     for (const value of [true, false]) {
-      const attributes: PinAttributeMap = { [flag]: value }
+      const attributes = { [flag]: value } satisfies PinAttributeMap
       expect(
         chipProps.parse({ name: "U1", pinAttributes: { pin1: attributes } })
           .pinAttributes?.pin1,
@@ -45,7 +45,7 @@ test.each([...electricalFlags])("rejects non-boolean values for %s", (flag) => {
 })
 
 test("electrical flags compose with existing attributes without inferred defaults", () => {
-  const pinAttributes: Record<string, PinAttributeMap> = {
+  const pinAttributes = {
     pin1: {},
     pin2: { isBidirectional: true, isGpio: true },
     pin3: { requiresPower: true, requiresVoltage: "3.3V" },
@@ -64,7 +64,7 @@ test("electrical flags compose with existing attributes without inferred default
     },
     pin11: { canUseOpenDrain: true, isUsingOpenDrain: true },
     pin12: { doNotConnect: true },
-  }
+  } satisfies Record<string, PinAttributeMap>
   expect(chipProps.parse({ name: "U1", pinAttributes }).pinAttributes).toEqual(
     pinAttributes,
   )

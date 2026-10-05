@@ -1074,6 +1074,7 @@ export interface PinAttributeMap {
   requiresGround?: boolean
   providesVoltage?: string | number
   requiresVoltage?: string | number
+  requiredVoltageTolerance?: number | string
   doNotConnect?: boolean
   includeInBoardPinout?: boolean
   highlightColor?: string
@@ -1092,7 +1093,10 @@ export interface PinAttributeMap {
   recommendedDecouplingCapacitorCapacitance?: string | number
   isGpio?: boolean
 }
-/** Whether the pin is configured as an open-emitter output. */
+/**
+   * Allowed relative deviation from requiresVoltage, e.g. 0.05 or "5%" for ±5%.
+   * Parsed as a fraction from 0 to 1; omitted values remain undefined.
+   */
 export const pinAttributeMap = z.object({
   isInput: z.boolean().optional(),
   isOutput: z.boolean().optional(),
@@ -1113,6 +1117,24 @@ export const pinAttributeMap = z.object({
   requiresGround: z.boolean().optional(),
   providesVoltage: z.union([z.string(), z.number()]).optional(),
   requiresVoltage: z.union([z.string(), z.number()]).optional(),
+  requiredVoltageTolerance: z
+    .union([
+      z.number(),
+      z
+        .string()
+        .trim()
+        .regex(
+          /^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*%?$/,
+          "Expected a tolerance fraction or percentage",
+        )
+        .transform((value) =>
+          value.endsWith("%")
+            ? Number(value.slice(0, -1)) / 100
+            : Number(value),
+        ),
+    ])
+    .pipe(z.number().finite().min(0).max(1))
+    .optional(),
   doNotConnect: z.boolean().optional(),
   includeInBoardPinout: z.boolean().optional(),
   highlightColor: z.string().optional(),

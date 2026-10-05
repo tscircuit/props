@@ -2413,6 +2413,11 @@ export interface PinAttributeMap {
   requiresGround?: boolean
   providesVoltage?: string | number
   requiresVoltage?: string | number
+  /**
+   * Allowed relative deviation from requiresVoltage, e.g. 0.05 or "5%" for ±5%.
+   * Parsed as a fraction from 0 to 1; omitted values remain undefined.
+   */
+  requiredVoltageTolerance?: number | string
   doNotConnect?: boolean
   includeInBoardPinout?: boolean
   highlightColor?: string

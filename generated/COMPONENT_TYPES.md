@@ -2010,6 +2010,7 @@ export const cadassemblyProps = z.object({
 ### cadmodel
 
 ```typescript
+/** Parsed CAD model props. Author model strings with CadModelPropsInput. */
 export interface CadModelProps extends CadModelBase {
   modelUrl: string
   stepUrl?: string
@@ -2023,10 +2024,15 @@ export interface CadModelProps extends CadModelBase {
   pcbOffsetY?: Distance
   pcbZ?: Distance
 }
+/** Canonical model URL after parsing; authored model strings resolve to this field. */
 const cadModelBaseWithUrl = cadModelBase.extend({
   modelUrl: url,
   stepUrl: url.optional(),
 })
+  .extend({
+    model: z.string().trim().min(1).optional(),
+    modelUrl: url.optional(),
+  })
 ```
 
 ### capacitor

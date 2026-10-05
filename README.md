@@ -632,6 +632,7 @@ export interface CadAssemblyProps {
 
 ```ts
 export interface CadModelProps extends CadModelBase {
+  /** Canonical model URL after parsing; authored model strings resolve to this field. */
   modelUrl: string;
   stepUrl?: string;
   pcbX?: Distance;

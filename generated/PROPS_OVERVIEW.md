@@ -1491,7 +1491,7 @@ export interface FanoutProps {
 export interface FetchPartAvailabilityParams {
   supplierName: SupplierName
   supplierPartNumber: string
-  platformFetch?: typeof fetch
+  platformFetch?: PartAvailabilityPlatformFetch
   signal?: AbortSignal
 }
 

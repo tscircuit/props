@@ -971,7 +971,7 @@ export const lrPolarPins = [
 export interface FetchPartAvailabilityParams {
   supplierName: SupplierName
   supplierPartNumber: string
-  platformFetch?: typeof fetch
+  platformFetch?: PartAvailabilityPlatformFetch
   signal?: AbortSignal
 }
 export interface PartAvailability {
@@ -3083,10 +3083,9 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 }
 /** @deprecated Use `pcbFlex` */
 export type PartsEngine = {
-  fetchPartAvailability?: (params: FetchPartAvailabilityParams) =>
-    | Promise<PartAvailability | undefined>
-    | PartAvailability
-    | undefined
+  fetchPartAvailability?: (
+    params: FetchPartAvailabilityParams,
+  ) => Promise<PartAvailability | undefined> | PartAvailability | undefined
   findPart: (params: {
     sourceComponent: AnySourceComponent
     footprinterString?: string

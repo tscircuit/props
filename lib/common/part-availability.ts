@@ -1,9 +1,14 @@
 import type { SupplierName } from "./layout"
 
+export type PartAvailabilityPlatformFetch = (
+  input: Parameters<typeof fetch>[0],
+  init?: Parameters<typeof fetch>[1],
+) => ReturnType<typeof fetch>
+
 export interface FetchPartAvailabilityParams {
   supplierName: SupplierName
   supplierPartNumber: string
-  platformFetch?: typeof fetch
+  platformFetch?: PartAvailabilityPlatformFetch
   signal?: AbortSignal
 }
 

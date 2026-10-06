@@ -437,6 +437,14 @@ export interface BoardProps extends Omit<
     | "jlcpcb_economy_20260912"
     | "jlcpcb_standard_20260912";
   material?: "fr4" | "fr1" | "flex";
+  /**
+   * Physical copper/dielectric sequence using the canonical Circuit JSON schema.
+   * Numeric dimensions are explicitly millimeters; missing quantities stay unknown.
+   * `source` preserves specified/assumed provenance, without manufacturing verification.
+   * Optional with no default or aliases. Copper count must match `layers` when rendered.
+   * Material and fabricator presets do not populate this field; existing boards need no migration.
+   */
+  stackup?: PcbStackupInput;
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10;
   /**

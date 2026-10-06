@@ -1,4 +1,5 @@
 import type { AutocompleteString } from "lib/common/autocomplete"
+import { pcb_stackup, type PcbStackupInput } from "circuit-json"
 import { distance, type Distance } from "lib/common/distance"
 import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
@@ -102,6 +103,14 @@ export interface BoardProps
     | "jlcpcb_economy_20260912"
     | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
+  /**
+   * Physical copper/dielectric sequence using the canonical Circuit JSON schema.
+   * Numeric dimensions are explicitly millimeters; missing quantities stay unknown.
+   * `source` preserves specified/assumed provenance, without manufacturing verification.
+   * Optional with no default or aliases. Copper count must match `layers` when rendered.
+   * Material and fabricator presets do not populate this field; existing boards need no migration.
+   */
+  stackup?: PcbStackupInput
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   /**
@@ -201,6 +210,11 @@ export const boardProps = subcircuitGroupProps
         "Fabricator preset, preserved as supplied. Omitted leaves the preset unset.",
       ),
     material: z.enum(["fr4", "fr1", "flex"]).default("fr4"),
+    stackup: pcb_stackup
+      .optional()
+      .describe(
+        "Physical copper/dielectric sequence in canonical Circuit JSON form. Dimensions are numeric millimeters; missing quantities remain unknown. Specified/assumed provenance is preserved. No default, aliases or fabricator inference; copper count must match board layers when rendered. Existing boards need no migration.",
+      ),
     layers: z
       .union([
         z.literal(1),

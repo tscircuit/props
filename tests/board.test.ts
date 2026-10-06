@@ -1,6 +1,64 @@
 import { expect, test } from "bun:test"
 import { boardProps, type BoardProps } from "lib/components/board"
 
+test("fabricatorPreset accepts the supported presets unchanged", () => {
+  for (const fabricatorPreset of [
+    "jlcpcb_economy",
+    "jlcpcb_standard",
+    "jlcpcb_economy_20260912",
+    "jlcpcb_standard_20260912",
+  ] as const) {
+    const raw: BoardProps = { fabricatorPreset }
+    expect(boardProps.parse(raw).fabricatorPreset).toBe(fabricatorPreset)
+  }
+})
+
+test("fabricatorPreset is optional without a default", () => {
+  expect(boardProps.parse({}).fabricatorPreset).toBeUndefined()
+})
+
+test("fabricatorPreset rejects unsupported values", () => {
+  for (const fabricatorPreset of [
+    "jlcpcb",
+    "jlcpcb_economy_20260913",
+    "",
+    null,
+    123,
+  ]) {
+    expect(boardProps.safeParse({ fabricatorPreset }).success).toBe(false)
+  }
+})
+
+test("via stitching is opt-in and pitch does not enable it", () => {
+  const defaults = boardProps.parse({})
+  expect(defaults.enableViaStitching).toBe(false)
+  expect(defaults.viaStitchPitch).toBeUndefined()
+  expect(boardProps.parse({ viaStitchPitch: "1mm" }).enableViaStitching).toBe(
+    false,
+  )
+  expect(
+    boardProps.parse({ enableViaStitching: false }).enableViaStitching,
+  ).toBe(false)
+  expect(boardProps.safeParse({ enableViaStitching: "true" }).success).toBe(
+    false,
+  )
+})
+
+test("via stitch pitch accepts distances and normalizes to millimeters", () => {
+  for (const pitch of [2.54, "2.54mm", "0.1in"]) {
+    const raw: BoardProps = { enableViaStitching: true, viaStitchPitch: pitch }
+    const parsed = boardProps.parse(raw)
+    expect(parsed.enableViaStitching).toBe(true)
+    expect(parsed.viaStitchPitch).toBeCloseTo(2.54)
+  }
+})
+
+test("via stitch pitch rejects nonpositive and nonfinite distances", () => {
+  for (const pitch of [0, -1, "0mm", "-1mm", Infinity, NaN, "invalid"]) {
+    expect(boardProps.safeParse({ viaStitchPitch: pitch }).success).toBe(false)
+  }
+})
+
 // ensure square and area props parse correctly
 
 test("should parse square and area props", () => {

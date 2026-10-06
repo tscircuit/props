@@ -5,6 +5,13 @@ import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { subcircuitGroupProps, type SubcircuitGroupProps } from "./group"
+import {
+  boardMountOrientation,
+  boardMountRotation,
+  boardMountRotationAnchor,
+  type BoardMountOrientation,
+  type BoardMountRotationAnchor,
+} from "../assembly/board-mounting"
 
 const boardColorPresets = [
   "not_specified",
@@ -78,6 +85,22 @@ export const boardOutlinePoint = z
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
+  /** e.g. "NEMA17.backface". */
+  mountedTo?: string
+  /** Clearance from the mounting face, e.g. "6mm". */
+  mountGap?: Distance
+  /** e.g. "J_USB" or "rightedge". */
+  mountRotationAnchor?: BoardMountRotationAnchor
+  /** e.g. "calc(NEMA17.wireside-90degcw)". */
+  mountRotation?: string
+  /** e.g. "top_layer_toward_mount_face". */
+  mountOrientation?: BoardMountOrientation
+  /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
+  fabricatorPreset?:
+    | "jlcpcb_economy"
+    | "jlcpcb_standard"
+    | "jlcpcb_economy_20260912"
+    | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
@@ -86,6 +109,18 @@ export interface BoardProps
    * false, which restricts newly generated vias to the full board stack.
    */
   allowBlindAndBuriedVias?: boolean
+  /**
+   * Whether to route remaining unrouted connections after explicit routing phases.
+   * Omitted leaves the setting unset, preserving the consumer's default behavior.
+   */
+  routeRemaining?: boolean
+  defaultViaTenting?:
+    | boolean
+    | "both_sides"
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed"
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
@@ -124,6 +159,10 @@ export interface BoardProps
    * to false.
    */
   automaticPoursEnabled?: boolean
+  /** Whether to stitch copper pours on the same net across layers with vias. Defaults to false. */
+  enableViaStitching?: boolean
+  /** Positive center-to-center stitching via spacing in millimeters or a unit string. Omitted uses the solver default. Does not enable stitching by itself. */
+  viaStitchPitch?: Distance
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
 }
@@ -131,6 +170,36 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
+    mountedTo: z
+      .string()
+      .trim()
+      .min(1)
+      .optional()
+      .describe('e.g. "NEMA17.backface".'),
+    mountGap: distance
+      .pipe(z.number().nonnegative().finite())
+      .optional()
+      .describe('Clearance from the mounting face, e.g. "6mm".'),
+    mountRotationAnchor: boardMountRotationAnchor
+      .optional()
+      .describe('e.g. "J_USB" or "rightedge".'),
+    mountRotation: boardMountRotation
+      .optional()
+      .describe('e.g. "calc(NEMA17.wireside-90degcw)".'),
+    mountOrientation: boardMountOrientation
+      .optional()
+      .describe('e.g. "top_layer_toward_mount_face".'),
+    fabricatorPreset: z
+      .enum([
+        "jlcpcb_economy",
+        "jlcpcb_standard",
+        "jlcpcb_economy_20260912",
+        "jlcpcb_standard_20260912",
+      ])
+      .optional()
+      .describe(
+        "Fabricator preset, preserved as supplied. Omitted leaves the preset unset.",
+      ),
     material: z.enum(["fr4", "fr1", "flex"]).default("fr4"),
     layers: z
       .union([
@@ -148,6 +217,31 @@ export const boardProps = subcircuitGroupProps
       .describe(
         "Whether the autorouter may generate blind and buried vias. Defaults to false, which restricts newly generated vias to the full board stack.",
       ),
+    routeRemaining: z
+      .boolean()
+      .optional()
+      .describe(
+        "Whether to route remaining unrouted connections after explicit routing phases. Boolean values are preserved; omitted leaves the setting unset. No aliases or prop conflicts are introduced, and existing boards require no migration.",
+      ),
+    defaultViaTenting: z
+      .union([
+        z.boolean(),
+        z.enum([
+          "both_sides",
+          "top_and_bottom_tented",
+          "top_tented",
+          "bottom_tented",
+          "exposed",
+        ]),
+      ])
+      .transform((value) => {
+        if (value === true || value === "both_sides") {
+          return "top_and_bottom_tented" as const
+        }
+        if (value === false) return "exposed" as const
+        return value
+      })
+      .optional(),
     borderRadius: distance.optional(),
     thickness: distance.optional(),
     boardAnchorPosition: point.optional(),
@@ -175,6 +269,18 @@ export const boardProps = subcircuitGroupProps
       .default(false)
       .describe(
         "Whether implicit copper pours should be generated automatically. Defaults to false.",
+      ),
+    enableViaStitching: z
+      .boolean()
+      .default(false)
+      .describe(
+        "Whether to stitch copper pours on the same net across layers with vias. Defaults to false.",
+      ),
+    viaStitchPitch: distance
+      .pipe(z.number().positive().finite())
+      .optional()
+      .describe(
+        "Positive center-to-center stitching via spacing in millimeters or a unit string, parsed to millimeters. Omitted uses the solver default. Does not enable stitching by itself.",
       ),
     schematicDisabled: z.boolean().optional(),
   })

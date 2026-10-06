@@ -1,3 +1,7 @@
+import {
+  fanoutTracePath,
+  type FanoutTracePath,
+} from "lib/common/fanoutTracePath"
 import { distance, type Distance } from "lib/common/distance"
 import { type FanoutProps, fanoutProps } from "lib/common/fanoutProps"
 import { expectTypesMatch } from "lib/typecheck"
@@ -15,8 +19,25 @@ export interface BreakoutProps
   /**
    * Autorouter used to escape the components inside the breakout boundary.
    * Defaults to the multilayer fanout autorouter.
+   * `"dogbone"` selects local pad-to-via escapes without boundary routing.
+   * Accepted as a preset string or `{ preset: "dogbone" }`; parsing preserves
+   * the selected form. This adds an explicit preset with no aliases or changes
+   * to the default. Routing requires a core version supporting this preset.
    */
   autorouter?: AutorouterProp
+  /**
+   * Saved port-to-exit wire/via routes in the fanout's local PCB frame.
+   * Numeric distances are mm; unit strings are normalized to mm. Each route
+   * must start at its selected port and end at its fanout exit. Layers name
+   * physical board layers. Either endpoint may be a via when permitted by
+   * the circuit's routing rules (e.g. allowViaInPad for a via at a pad).
+   * Core creates the exits and preserves saved copper.
+   * When supplied, replaces automatic routing (including `autorouter`) for
+   * this fanout and must cover all its routing connections. Do not also add
+   * a breakoutpoint/fanoutpoint for the same port. Omitted by default; existing
+   * automatic fanouts are unchanged. No aliases or migration are required.
+   */
+  pcbTracePaths?: FanoutTracePath[]
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance
@@ -35,6 +56,7 @@ const nonnegativeFanoutMargin = distance.refine((value) => value >= 0, {
 
 export const breakoutProps = subcircuitGroupProps.extend({
   autorouter: autorouterProp.default("fanout"),
+  pcbTracePaths: z.array(fanoutTracePath).optional(),
   padding: distance.optional(),
   paddingLeft: distance.optional(),
   paddingRight: distance.optional(),

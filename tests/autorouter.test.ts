@@ -14,6 +14,14 @@ test("supports freerouting preset", () => {
   expect(result).toBe("freerouting")
 })
 
+test("supports simplify preset", () => {
+  const result = autorouterProp.parse("simplify")
+  expect(result).toBe("simplify")
+
+  const configResult = autorouterProp.parse({ preset: "simplify" })
+  expect(configResult).toMatchObject({ preset: "simplify" })
+})
+
 test("supports snake_case presets", () => {
   const result = autorouterProp.parse("auto_cloud")
   expect(result).toBe("auto_cloud")

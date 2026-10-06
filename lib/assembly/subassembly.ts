@@ -3,6 +3,10 @@ import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
 import { z } from "zod"
+import {
+  assemblyCableConnectorProps,
+  type AssemblyCableConnectorProps,
+} from "./cable-connector"
 
 export interface AssemblySubassemblyProps {
   /** Stable identity used by selectors from other assembly elements. */
@@ -17,6 +21,10 @@ export interface AssemblySubassemblyProps {
   cadModel?: CadModelProp
   /** Nested assembly elements or CAD geometry; preserved without parsing. */
   children?: ReactNode
+  /** Named physical cable interfaces on the imported CAD model. Connect using
+   * `from="MOTOR.phases"`; coordinates follow the CAD model's offset/rotation.
+   */
+  cableConnectors?: Record<string, AssemblyCableConnectorProps>
 }
 
 export const assemblySubassemblyProps = z
@@ -33,6 +41,17 @@ export const assemblySubassemblyProps = z
       .optional(),
     cadModel: cadModelProp.optional(),
     children: z.custom<ReactNode>().optional(),
+    cableConnectors: z
+      .record(
+        z
+          .string()
+          .regex(
+            /^[A-Za-z][A-Za-z0-9_]*$/,
+            "Connector names must be simple identifiers",
+          ),
+        assemblyCableConnectorProps,
+      )
+      .optional(),
   })
   .refine(
     (assembly) =>

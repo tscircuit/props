@@ -34,24 +34,24 @@ export interface ConnectorProps extends ChipPropsSU {
   bulletGender?: "male" | "female"
 }
 
+export const bulletDiameter = distance.pipe(
+  z.union([
+    z.literal(2),
+    z.literal(3),
+    z.literal(3.5),
+    z.literal(4),
+    z.literal(5),
+    z.literal(5.5),
+    z.literal(6),
+    z.literal(8),
+  ]),
+)
+
 export const connectorProps = chipProps
   .extend({
     standard: connectorStandard.optional(),
     pinCount: z.number().int().positive().optional(),
-    bulletDiameter: distance
-      .pipe(
-        z.union([
-          z.literal(2),
-          z.literal(3),
-          z.literal(3.5),
-          z.literal(4),
-          z.literal(5),
-          z.literal(5.5),
-          z.literal(6),
-          z.literal(8),
-        ]),
-      )
-      .optional(),
+    bulletDiameter: bulletDiameter.optional(),
     bulletGender: z.enum(["male", "female"]).optional(),
   })
   .superRefine((connector, ctx) => {

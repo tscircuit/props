@@ -155,6 +155,23 @@ export interface AntennaProps extends CommonComponentProps {
 }
 
 
+export interface AssemblyCableConnectorProps {
+  standard: "bullet"
+  bulletDiameter: Distance
+  /** Gender on the CAD assembly; the cable uses the opposite gender. */
+  bulletGender: "male" | "female"
+  /** Number of independent circuits; defaults to one, 1–16. */
+  pinCount?: number
+  /** Mating center relative to the CAD placement anchor, in physical mm,
+   * right-handed model-local +X/+Y/+Z, before its rotation and positionOffset.
+   * Do not use mesh file units; this is already a physical offset in mm.
+   */
+  position: { x: Distance; y: Distance; z: Distance }
+  /** Outward mating axis in that same model-local frame. Required. */
+  facingDirection: CadModelAxisDirection
+}
+
+
 export interface AssemblyCableProps {
   /** Stable assembly identity for the cable. */
   name: string
@@ -277,6 +294,10 @@ export interface AssemblySubassemblyProps {
   cadModel?: CadModelProp
   /** Nested assembly elements or CAD geometry; preserved without parsing. */
   children?: ReactNode
+  /** Named physical cable interfaces on the imported CAD model. Connect using
+   * `from="MOTOR.phases"`; coordinates follow the CAD model's offset/rotation.
+   */
+  cableConnectors?: Record<string, AssemblyCableConnectorProps>
 }
 
 

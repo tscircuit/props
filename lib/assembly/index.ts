@@ -8,6 +8,7 @@ import { assemblySubassemblyProps } from "./subassembly"
 
 export * from "./board-mounting"
 export * from "./cable"
+export * from "./cable-connector"
 export * from "./device"
 export * from "./motor"
 export * from "./printedpart"

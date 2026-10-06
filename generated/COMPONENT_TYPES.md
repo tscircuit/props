@@ -1735,6 +1735,7 @@ export interface BoardProps
     | "jlcpcb_economy_20260912"
     | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
+  stackup?: PcbStackupInput
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   allowBlindAndBuriedVias?: boolean
   routeRemaining?: boolean
@@ -1799,6 +1800,11 @@ export const boardProps = subcircuitGroupProps
         "Fabricator preset, preserved as supplied. Omitted leaves the preset unset.",
       ),
     material: z.enum(["fr4", "fr1", "flex"]).default("fr4"),
+    stackup: pcb_stackup
+      .optional()
+      .describe(
+        "Physical copper/dielectric sequence in canonical Circuit JSON form. Dimensions are numeric millimeters; missing quantities remain unknown. Specified/assumed provenance is preserved. No default, aliases or fabricator inference; copper count must match board layers when rendered. Existing boards need no migration.",
+      ),
     layers: z
       .union([
         z.literal(1),

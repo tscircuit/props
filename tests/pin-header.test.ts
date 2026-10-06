@@ -54,9 +54,7 @@ test("should reject fractional, zero, negative, and infinite pinCount values", (
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(
-        result.error.issues.some((issue) =>
-          issue.path.includes("pinCount"),
-        ),
+        result.error.issues.some((issue) => issue.path.includes("pinCount")),
       ).toBe(true)
     }
   }

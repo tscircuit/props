@@ -737,6 +737,11 @@ export interface ConnectorProps extends ChipPropsSU {
    * Number of electrical circuits in the connector
    */
   pinCount?: number;
+
+  /** Nominal bullet contact diameter in mm or a length string; required for bullet. */
+  bulletDiameter?: number | string;
+  /** Gender of the endpoint connector; the attached cable uses the opposite gender. */
+  bulletGender?: "male" | "female";
 }
 ```
 

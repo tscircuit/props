@@ -15,6 +15,26 @@ export const pinCapability = z.enum([
 export type PinCapability = z.input<typeof pinCapability>
 
 export interface PinAttributeMap {
+  /** Whether the pin accepts a signal. */
+  isInput?: boolean
+  /** Whether the pin drives a signal. */
+  isOutput?: boolean
+  /** Whether the pin can both accept and drive signals. */
+  isBidirectional?: boolean
+  /** Whether the pin is a passive component terminal. */
+  isPassive?: boolean
+  /** Whether the pin supports a high-impedance output state. */
+  canUseTriState?: boolean
+  /** Whether the pin is configured for tri-state operation, not its instantaneous impedance. */
+  isUsingTriState?: boolean
+  /** Whether the pin supports an open-collector output. */
+  canUseOpenCollector?: boolean
+  /** Whether the pin is configured as an open-collector output. */
+  isUsingOpenCollector?: boolean
+  /** Whether the pin supports an open-emitter output. */
+  canUseOpenEmitter?: boolean
+  /** Whether the pin is configured as an open-emitter output. */
+  isUsingOpenEmitter?: boolean
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability
@@ -24,6 +44,11 @@ export interface PinAttributeMap {
   requiresGround?: boolean
   providesVoltage?: string | number
   requiresVoltage?: string | number
+  /**
+   * Allowed relative deviation from requiresVoltage, e.g. 0.05 or "5%" for ±5%.
+   * Parsed as a fraction from 0 to 1; omitted values remain undefined.
+   */
+  requiredVoltageTolerance?: number | string
   doNotConnect?: boolean
   includeInBoardPinout?: boolean
   highlightColor?: string
@@ -44,6 +69,16 @@ export interface PinAttributeMap {
 }
 
 export const pinAttributeMap = z.object({
+  isInput: z.boolean().optional(),
+  isOutput: z.boolean().optional(),
+  isBidirectional: z.boolean().optional(),
+  isPassive: z.boolean().optional(),
+  canUseTriState: z.boolean().optional(),
+  isUsingTriState: z.boolean().optional(),
+  canUseOpenCollector: z.boolean().optional(),
+  isUsingOpenCollector: z.boolean().optional(),
+  canUseOpenEmitter: z.boolean().optional(),
+  isUsingOpenEmitter: z.boolean().optional(),
   capabilities: z.array(pinCapability).optional(),
   activeCapabilities: z.array(pinCapability).optional(),
   activeCapability: pinCapability.optional(),
@@ -53,6 +88,24 @@ export const pinAttributeMap = z.object({
   requiresGround: z.boolean().optional(),
   providesVoltage: z.union([z.string(), z.number()]).optional(),
   requiresVoltage: z.union([z.string(), z.number()]).optional(),
+  requiredVoltageTolerance: z
+    .union([
+      z.number(),
+      z
+        .string()
+        .trim()
+        .regex(
+          /^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*%?$/,
+          "Expected a tolerance fraction or percentage",
+        )
+        .transform((value) =>
+          value.endsWith("%")
+            ? Number(value.slice(0, -1)) / 100
+            : Number(value),
+        ),
+    ])
+    .pipe(z.number().finite().min(0).max(1))
+    .optional(),
   doNotConnect: z.boolean().optional(),
   includeInBoardPinout: z.boolean().optional(),
   highlightColor: z.string().optional(),

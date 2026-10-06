@@ -1,7 +1,12 @@
 import { expect, test } from "bun:test"
 import { busProps, type BusProps } from "lib/components/bus"
 
-test("busProps accepts two or more connection references", () => {
+test("busProps accepts one or more connection references", () => {
+  expect(busProps.parse({ name: "RESET", connections: ["RESET_n"] })).toEqual({
+    name: "RESET",
+    connections: ["RESET_n"],
+  })
+
   const rawProps = {
     name: "DATA",
     connections: ["D0", ".U1 > .D1"],
@@ -9,6 +14,10 @@ test("busProps accepts two or more connection references", () => {
   } satisfies BusProps
 
   expect(busProps.parse(rawProps)).toEqual(rawProps)
+})
+
+test("busProps rejects an empty connections array", () => {
+  expect(() => busProps.parse({ connections: [] })).toThrow()
 })
 
 test("busProps accepts preferred routing layers", () => {

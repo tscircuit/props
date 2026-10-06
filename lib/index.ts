@@ -4,8 +4,10 @@ export * from "./assembly"
 export * from "./enclosure"
 export * from "./common/portHints"
 export * from "./common/layout"
+export * from "./common/resolveManufacturerPartNumber"
 export * from "./common/pinAttributeMap"
 export * from "./common/point3"
+export * from "./common/pcbPath"
 export * from "./common/portHints"
 export * from "./common/footprintProp"
 export * from "./common/symbolProp"
@@ -26,6 +28,9 @@ export * from "./common/kicadPinMetadata"
 export * from "./customDrc"
 
 export * from "./components/board"
+export * from "./components/pcb-bend"
+export * from "./components/pcb-soldermask-opening"
+export * from "./components/pcb-stiffener"
 export * from "./components/panel"
 export * from "./components/subpanel"
 export * from "./components/breakout"
@@ -57,6 +62,7 @@ export * from "./components/drc-check"
 export * from "./components/smtpad"
 export * from "./components/solderpaste"
 export * from "./components/hole"
+export * from "./components/antenna"
 export * from "./components/trace"
 export * from "./components/bus"
 export * from "./components/differentialpair"
@@ -121,6 +127,7 @@ export * from "./components/schematic-row"
 export * from "./components/schematic-cell"
 export * from "./components/schematic-section"
 export * from "./components/schematic-sheet"
+export * from "./components/schematic-graphic"
 export * from "./components/copper-text"
 export * from "./components/silkscreen-text"
 export * from "./components/silkscreen-path"
@@ -142,3 +149,16 @@ export * from "./common/ninePointAnchor"
 export * from "./common/fanoutBoundaryPadding"
 export * from "./common/fanoutProps"
 export * from "./common/implicitBreakoutPointSolver"
+
+export * from "./common/fanoutTracePath"
+
+export {
+  routeLength,
+  type RouteLength,
+  type RelativeRouteLength,
+} from "./common/routeLength"
+export {
+  traceSpacing,
+  type TraceSpacing,
+} from "./common/traceSpacing"
+export { impedanceTarget, type ImpedanceTarget } from "./common/impedanceTarget"

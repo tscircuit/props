@@ -29,6 +29,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<analogsimulation />`                  | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                                                 |
 | `<analog.sweepparameter />`             | [`AnalogResistanceSweepParameterProps`](#analogresistancesweepparameterprops-analogsweepparameter)                 |
 | `<analog.transientsimulation />`        | [`AnalogTransientSimulationProps`](#analogtransientsimulationprops-analogtransientsimulation)                      |
+| `<antenna />`                           | [`AntennaProps`](#antennaprops-antenna)                                                                            |
 | `<autoroutingphase />`                  | [`AutoroutingPhaseProps`](#autoroutingphaseprops-autoroutingphase)                                                 |
 | `<battery />`                           | [`BatteryProps`](#batteryprops-battery)                                                                            |
 | `<board />`                             | [`BoardProps`](#boardprops-board)                                                                                  |
@@ -75,12 +76,15 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<netlabel />`                          | [`NetLabelProps`](#netlabelprops-netlabel)                                                                         |
 | `<opamp />`                             | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                             | [`PanelProps`](#panelprops-panel)                                                                                  |
+| `<pcbbend />`                           | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
 | `<pcbkeepout />`                        | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
 | `<pcbnotedimension />`                  | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
 | `<pcbnoteline />`                       | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
 | `<pcbnotepath />`                       | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
 | `<pcbnoterect />`                       | [`PcbNoteRectProps`](#pcbnoterectprops-pcbnoterect)                                                                |
 | `<pcbnotetext />`                       | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                |
+| `<pcbsoldermaskopening />`              | [`PcbSoldermaskOpeningProps`](#pcbsoldermaskopeningprops-pcbsoldermaskopening)                                     |
+| `<pcbstiffener />`                      | [`PcbStiffenerProps`](#pcbstiffenerprops-pcbstiffener)                                                             |
 | `<pcbtrace />`                          | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                                                         |
 | `<pinheader />`                         | [`PinHeaderProps`](#pinheaderprops-pinheader)                                                                      |
 | `<pinout />`                            | [`PinoutProps`](#pinoutprops-pinout)                                                                               |
@@ -95,6 +99,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<schematicbox />`                      | [`SchematicBoxProps`](#schematicboxprops-schematicbox)                                                             |
 | `<schematiccell />`                     | [`SchematicCellProps`](#schematiccellprops-schematiccell)                                                          |
 | `<schematiccircle />`                   | [`SchematicCircleProps`](#schematiccircleprops-schematiccircle)                                                    |
+| `<schematicgraphic />`                  | [`SchematicGraphicProps`](#schematicgraphicprops-schematicgraphic)                                                 |
 | `<schematicline />`                     | [`SchematicLineProps`](#schematiclineprops-schematicline)                                                          |
 | `<schematicpath />`                     | [`SchematicPathProps`](#schematicpathprops-schematicpath)                                                          |
 | `<schematicrect />`                     | [`SchematicRectProps`](#schematicrectprops-schematicrect)                                                          |
@@ -194,6 +199,7 @@ export interface SubcircuitGroupProps extends BaseGroupProps {
   pcbRouteCache?: PcbRouteCache;
 
   autorouter?: AutorouterProp;
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy;
   exposedNets?: string[];
   exposeNets?: boolean;
 
@@ -324,6 +330,32 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/analogtransientsimulation.ts)
 
+### AntennaProps `<antenna />`
+
+```ts
+export interface AntennaProps extends CommonComponentProps {
+  /**
+   * Band-qualified PCB-trace topology to generate. The encoded band is enough
+   * to select the geometry without frequencyBand. No shape is assumed when
+   * omitted. An explicit pcbPath takes precedence when both are provided.
+   */
+  antennaShape?: AntennaShape;
+  /**
+   * Nominal operating band or multiband configuration. This is redundant when
+   * antennaShape is present; the band encoded in antennaShape controls generated
+   * geometry.
+   */
+  frequencyBand?: AntennaFrequencyBand;
+  /**
+   * Explicit antenna path. Entries use the same selector, point, and via
+   * syntax as trace pcbPath entries.
+   */
+  pcbPath?: PcbPath;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/antenna.ts)
+
 ### AutoroutingPhaseProps `<autoroutingphase />`
 
 ```ts
@@ -331,7 +363,22 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any;
   name?: string;
   autorouter?: AutorouterProp;
+  /**
+   * Custom async routing function accepting simple route JSON and returning the
+   * routing result, using the same contract as autorouter.algorithmFn. Parsing
+   * preserves the function unchanged. Omitted by default; no aliases or prop
+   * conflicts are introduced, and existing phases require no migration.
+   */
+  algorithmFn?: AutorouterConfig["algorithmFn"];
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy;
   phaseIndex?: number;
+  /**
+   * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.
+   * Numeric distances are mm; unit strings are normalized to mm. Omitted by
+   * default; an empty array is accepted. No aliases or prop conflicts are
+   * introduced, and existing phases require no migration.
+   */
+  pcbTracePaths?: FanoutTracePath[];
   region?: {
     shape?: "rect";
     minX: number;
@@ -341,6 +388,8 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   };
   connection?: string;
   connections?: string[];
+  // Reroutes traces selected by region or connection. The simplify autorouter
+  // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean;
 }
 ```
@@ -365,12 +414,28 @@ export interface BatteryProps<
 
 ### BoardProps `<board />`
 
-```ts
+````ts
 export interface BoardProps extends Omit<
   SubcircuitGroupProps,
-  "subcircuit" | "connections"
+  "subcircuit" | "connections" | "outline"
 > {
   title?: string;
+  /** e.g. "NEMA17.backface". */
+  mountedTo?: string;
+  /** Clearance from the mounting face, e.g. "6mm". */
+  mountGap?: Distance;
+  /** e.g. "J_USB" or "rightedge". */
+  mountRotationAnchor?: BoardMountRotationAnchor;
+  /** e.g. "calc(NEMA17.wireside-90degcw)". */
+  mountRotation?: string;
+  /** e.g. "top_layer_toward_mount_face". */
+  mountOrientation?: BoardMountOrientation;
+  /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
+  fabricatorPreset?:
+    | "jlcpcb_economy"
+    | "jlcpcb_standard"
+    | "jlcpcb_economy_20260912"
+    | "jlcpcb_standard_20260912";
   material?: "fr4" | "fr1" | "flex";
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10;
@@ -379,11 +444,35 @@ export interface BoardProps extends Omit<
    * false, which restricts newly generated vias to the full board stack.
    */
   allowBlindAndBuriedVias?: boolean;
+  /**
+   * Whether to route remaining unrouted connections after explicit routing phases.
+   * Omitted leaves the setting unset, preserving the consumer's default behavior.
+   */
+  routeRemaining?: boolean;
+  defaultViaTenting?:
+    | boolean
+    | "both_sides"
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed";
   borderRadius?: Distance;
   thickness?: Distance;
   boardAnchorPosition?: Point;
   anchorAlignment?: z.infer<typeof ninePointAnchor>;
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>;
+  /**
+   * Points defining the board edge. Set `isCastellatedHole` on a point to
+   * place a castellated plated hole centered on that location.
+   *
+   * @example
+   * ```tsx
+   * { x: "-5mm", y: 0, isCastellatedHole: true,
+   *   holeDiameter: "0.8mm", padDiameter: "1.2mm",
+   *   connectsTo: "net.GND" }
+   * ```
+   */
+  outline?: BoardOutlinePoint[];
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor;
   /** Color of the top solder mask */
@@ -400,10 +489,19 @@ export interface BoardProps extends Omit<
   doubleSidedAssembly?: boolean;
   /** Whether vias may be placed inside PCB pads */
   isViaInPadAllowed?: boolean;
+  /**
+   * Whether implicit copper pours should be generated automatically. Defaults
+   * to false.
+   */
+  automaticPoursEnabled?: boolean;
+  /** Whether to stitch copper pours on the same net across layers with vias. Defaults to false. */
+  enableViaStitching?: boolean;
+  /** Positive center-to-center stitching via spacing in millimeters or a unit string. Omitted uses the solver default. Does not enable stitching by itself. */
+  viaStitchPitch?: Distance;
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean;
 }
-```
+````
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/board.ts)
 
@@ -415,8 +513,25 @@ export interface BreakoutProps
   /**
    * Autorouter used to escape the components inside the breakout boundary.
    * Defaults to the multilayer fanout autorouter.
+   * `"dogbone"` selects local pad-to-via escapes without boundary routing.
+   * Accepted as a preset string or `{ preset: "dogbone" }`; parsing preserves
+   * the selected form. This adds an explicit preset with no aliases or changes
+   * to the default. Routing requires a core version supporting this preset.
    */
   autorouter?: AutorouterProp;
+  /**
+   * Saved port-to-exit wire/via routes in the fanout's local PCB frame.
+   * Numeric distances are mm; unit strings are normalized to mm. Each route
+   * must start at its selected port and end at its fanout exit. Layers name
+   * physical board layers. Either endpoint may be a via when permitted by
+   * the circuit's routing rules (e.g. allowViaInPad for a via at a pad).
+   * Core creates the exits and preserves saved copper.
+   * When supplied, replaces automatic routing (including `autorouter`) for
+   * this fanout and must cover all its routing connections. Do not also add
+   * a breakoutpoint/fanoutpoint for the same port. Omitted by default; existing
+   * automatic fanouts are unchanged. No aliases or migration are required.
+   */
+  pcbTracePaths?: FanoutTracePath[];
   padding?: Distance;
   paddingLeft?: Distance;
   paddingRight?: Distance;
@@ -450,14 +565,34 @@ export interface BreakoutPointProps extends Omit<
 ```ts
 export interface BusProps {
   name?: string;
-  /** Trace names or port selectors for the connections in the bus. */
+  /** Match these trace/port/bus/pair selectors as well as this element's members.
+   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
+  lengthMatchTo?: string | string[];
+  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
+  minLength?: RouteLength;
+  maxLength?: RouteLength;
+  /** Nominal member length, absolute or relative to selected endpoints.
+   * Requires an explicit lengthTolerance, including zero for exact matching. */
+  targetLength?: RouteLength;
+  /** Allowed deviation above/below targetLength, in mm. */
+  lengthTolerance?: number | string;
+  /** Minimum centreline spacing between bus members, excluding declared pair partners.
+   * Raw numbers are mm; "3w" means three times the larger local trace width. */
+  pcbTraceSpacing?: TraceSpacing;
+  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
+  pcbSpacingToOtherSignals?: TraceSpacing;
+
+  /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[];
   /** If set, every trace in this bus is assigned to this autorouting phase. */
   routingPhaseIndex?: number | null;
   /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
   maxLengthSkew?: number | string;
-  /** Intended single-ended characteristic impedance. Raw numbers are ohms. */
-  targetImpedance?: number | string;
+  /** Intended single-ended impedance, e.g. "50±25ohm". Raw numbers are ohms. */
+  targetImpedance?: ImpedanceTarget;
+  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
+  targetImpedanceMin?: number | string;
+  targetImpedanceMax?: number | string;
   /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
   pcbTraceWidth?: number | string;
   /** PCB layers on which the bus may be routed. */
@@ -497,6 +632,7 @@ export interface CadAssemblyProps {
 
 ```ts
 export interface CadModelProps extends CadModelBase {
+  /** Canonical model URL after parsing; authored model strings resolve to this field. */
   modelUrl: string;
   stepUrl?: string;
   pcbX?: Distance;
@@ -642,6 +778,15 @@ export interface CopperPourProps {
   layer: LayerRefInput;
   connectsTo: string;
   /**
+   * Fill with a 45-degree crosshatch (defaults: 0.25mm copper width, 1mm pitch).
+   * Preserves solid copper around boundaries and connections. Defaults to false.
+   */
+  crosshatch?: boolean;
+  /** Repeat spacing perpendicular to the hatch strips. Defaults to 1mm when crosshatch is enabled. */
+  crosshatchPitch?: Distance;
+  /** Copper strip width, also used for the solid rim. Defaults to 0.25mm; must be less than the pitch when crosshatch is enabled. */
+  crosshatchWidth?: Distance;
+  /**
    * Reserves the pour region during autorouting so unrelated traces do not
    * split it. Vias may still cross the region using antipads.
    */
@@ -710,7 +855,6 @@ export interface CrystalProps<
   /** Maximum allowed PCB trace length between the crystal and its connected component */
   maxTraceLength?: number | string;
   manufacturerPartNumber?: string;
-  mpn?: string;
   pinVariant?: PinVariant;
   schOrientation?: SchematicOrientation;
   connections?: Connections<CrystalPinLabels>;
@@ -762,14 +906,31 @@ export interface RectCutoutProps extends Omit<
 ```ts
 export interface DifferentialPairProps {
   name?: string;
+  /** Match these trace/port/bus/pair selectors as well as this element's members.
+   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
+  lengthMatchTo?: string | string[];
+  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
+  minLength?: RouteLength;
+  maxLength?: RouteLength;
+  /** Nominal member length, absolute or relative to selected endpoints.
+   * Requires an explicit lengthTolerance, including zero for exact matching. */
+  targetLength?: RouteLength;
+  /** Allowed deviation above/below targetLength, in mm. */
+  lengthTolerance?: number | string;
+  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
+  pcbSpacingToOtherSignals?: TraceSpacing;
+
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string;
   /** Name of the trace or pin carrying the negative signal. */
   negativeConnection: string;
   /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
   maxLengthSkew?: number | string;
-  /** Intended differential characteristic impedance. Raw numbers are ohms. */
-  targetDifferentialImpedance?: number | string;
+  /** Intended differential impedance, e.g. "100±10ohm". Raw numbers are ohms. */
+  targetDifferentialImpedance?: ImpedanceTarget;
+  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
+  targetDifferentialImpedanceMin?: number | string;
+  targetDifferentialImpedanceMax?: number | string;
   /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
   pcbTraceGap?: number | string;
   /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
@@ -802,6 +963,8 @@ export interface DiodeProps<
   photo?: boolean;
   tvs?: boolean;
   schOrientation?: SchematicOrientation;
+  /** Select a compact schematic symbol; omitted, default, and md retain the standard symbol. */
+  schSize?: SchematicSymbolSize;
 }
 ```
 
@@ -836,7 +999,14 @@ export interface FabricationNoteDimensionProps extends Omit<
   from: string | Point;
   to: string | Point;
   text?: string;
+  /** Offset distance in mm, or a unit-bearing string. Defaults to no offset. */
   offset?: string | number;
+  /**
+   * Unitless direction in footprint-local coordinates (+X right, +Y up).
+   * Preserved as supplied; omitted uses the perpendicular to from -> to.
+   * The direction rotates/mirrors with the footprint, without translation.
+   */
+  offsetDirection?: { x: number; y: number };
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
@@ -1379,6 +1549,35 @@ export interface PanelProps extends Omit<
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/panel.ts)
 
+### PcbBendProps `<pcbbend />`
+
+```ts
+export interface PcbBendProps {
+  name?: string;
+  /** Start/end of the bend-zone centerline in the parent PCB coordinate system. */
+  x1: Distance;
+  y1: Distance;
+  x2: Distance;
+  y2: Distance;
+  /** Signed degrees (or an angle string). Positive folds toward the local top face. */
+  bendAngle: number | string;
+  /** Positive neutral-surface radius, in mm or a distance string. */
+  bendRadius: Distance;
+  /**
+   * Radius of circular tear-relief cutouts centered at both bend endpoints in
+   * the flat PCB. Removes material to round the edge where each cutout meets
+   * the board outline. Finite and positive, in mm or a distance string;
+   * parsed to mm. Omit to leave the outline unchanged (no tear reliefs).
+   * Independent of bendRadius and bendSide; no aliases or conflicting props.
+   */
+  tearReliefRadius?: Distance;
+  /** Moving side, looking from (x1, y1) toward (x2, y2) in the flat layout. */
+  bendSide: "left" | "right";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-bend.ts)
+
 ### PcbKeepoutProps `<pcbkeepout />`
 
 ```ts
@@ -1405,7 +1604,14 @@ export interface PcbNoteDimensionProps extends Omit<
   from: string | Point;
   to: string | Point;
   text?: string;
+  /** Offset distance in mm, or a unit-bearing string. Defaults to no offset. */
   offset?: string | number;
+  /**
+   * Unitless direction in footprint-local coordinates (+X right, +Y up).
+   * Preserved as supplied; omitted uses the perpendicular to from -> to.
+   * The direction rotates/mirrors with the footprint, without translation.
+   */
+  offsetDirection?: { x: number; y: number };
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
@@ -1500,6 +1706,24 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-text.ts)
+
+### PcbSoldermaskOpeningProps `<pcbsoldermaskopening />`
+
+```ts
+export type PcbSoldermaskOpeningProps = z.input<
+  typeof pcbSoldermaskOpeningProps
+>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-soldermask-opening.ts)
+
+### PcbStiffenerProps `<pcbstiffener />`
+
+```ts
+export type PcbStiffenerProps = z.input<typeof pcbStiffenerProps>;
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-stiffener.ts)
 
 ### PcbTraceProps `<pcbtrace />`
 
@@ -1809,6 +2033,26 @@ export interface SchematicCircleProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-circle.ts)
 
+### SchematicGraphicProps `<schematicgraphic />`
+
+```ts
+export interface SchematicGraphicProps {
+  /** URL or static-file import for the canonical source SVG asset. */
+  imageUrl?: string;
+  /**
+   * Complete SVG markup, including its dimensions or viewBox. Used as the
+   * source when imageUrl is omitted, or as fallback content when both exist.
+   */
+  svgContent?: string;
+  /** Optional rendered width of the graphic. */
+  width?: Distance;
+  /** Optional rendered height of the graphic. */
+  height?: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-graphic.ts)
+
 ### SchematicLineProps `<schematicline />`
 
 ```ts
@@ -1890,9 +2134,15 @@ export interface SchematicSectionProps {
 
 ```ts
 export interface SchematicSheetProps {
-  name: string;
-  displayName: string;
+  name?: string;
+  displayName?: string;
   sheetIndex?: number;
+  /** Sheet size used to render the schematic. Defaults to A4. */
+  sheetSize?: SchematicSheetSize;
+  /** Explicit schematic sheet width. Overrides the width from sheetSize. */
+  sheetWidth?: Distance;
+  /** Explicit schematic sheet height. Overrides the height from sheetSize. */
+  sheetHeight?: Distance;
   children?: any;
 }
 ```
@@ -2138,6 +2388,13 @@ export type SubcircuitProps = SubcircuitGroupProps;
 export interface SwitchProps extends CommonComponentProps {
   type?: "spst" | "spdt" | "dpst" | "dpdt";
   pinLabels?: PinLabelsProp<SchematicPinLabel>;
+  /**
+   * Pin names or aliases intentionally left unconnected. Accepts mutable or
+   * readonly arrays, using the same label validation as chip noConnect.
+   * Omitted or empty arrays mark no pins. Parsed labels are preserved and
+   * matching source ports get do_not_connect; explicit connections are not removed.
+   */
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[];
   isNormallyClosed?: boolean;
   spdt?: boolean;
   spst?: boolean;
@@ -2258,6 +2515,13 @@ export interface ViaProps extends CommonLayoutProps {
   outerDiameter?: number | string;
   connectsTo?: string | string[];
   netIsAssignable?: boolean;
+  tented?:
+    | boolean
+    | "both_sides"
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed";
 }
 ```
 
@@ -2319,14 +2583,25 @@ export interface VoltageSourceProps<
 export interface PlatformConfig {
   partsEngine?: PartsEngine;
 
+  /** Optional fabricator-specific DRC provider. No checks run when omitted. */
+  fabricatorEngine?: FabricatorEngine;
+
   autorouter?: AutorouterProp;
 
   autorouterMap?: Record<string, AutorouterDefinition>;
 
+  /** Use networked Pipeline9 node solving at effort 1. Omitted or false keeps local routing.
+   * Explicit alternative pipelines and effort levels retain their local solver.
+   */
+  useCloudAutorouter?: boolean;
+
   /**
    * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
    * Defaults to false because these presets are otherwise disabled.
+   * This also applies to the sequential-trace and auto-cloud aliases.
    * Platforms should only enable this temporarily while migrating projects.
+   * For sequential_trace / sequential-trace, use the default autorouter with
+   * <autoroutingphase /> or <fanout /> elements as needed instead.
    */
   allowLegacyAutorouters?: boolean;
 
@@ -2365,6 +2640,11 @@ export interface PlatformConfig {
   routingDisabled?: boolean;
   schematicDisabled?: boolean;
   partsEngineDisabled?: boolean;
+  /**
+   * Disables analog simulation model processing and simulator execution.
+   * Defaults to false.
+   */
+  analogSimulationDisabled?: boolean;
   drcChecksDisabled?: boolean;
   netlistDrcChecksDisabled?: boolean;
   routingDrcChecksDisabled?: boolean;
@@ -2424,6 +2704,7 @@ export interface ProjectConfig extends Pick<
   | "defaultSpiceEngine"
   | "pcbDisabled"
   | "schematicDisabled"
+  | "analogSimulationDisabled"
 > {}
 ```
 

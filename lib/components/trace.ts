@@ -1,6 +1,7 @@
-import { distance, layer_ref, route_hint_point } from "circuit-json"
+import { distance, route_hint_point } from "circuit-json"
 import { z } from "zod"
 import { point } from "../common/point"
+import { pcbPath } from "../common/pcbPath"
 
 export const portRef = z.union([
   z.string(),
@@ -13,32 +14,6 @@ export const portRef = z.union([
   ),
 ])
 
-const pcbPathPoint = point
-  .extend({
-    via: z.boolean().optional(),
-    fromLayer: layer_ref.optional(),
-    toLayer: layer_ref.optional(),
-  })
-  .superRefine((value, ctx) => {
-    if (value.via) {
-      if (!value.toLayer) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "toLayer is required when via is true",
-          path: ["toLayer"],
-        })
-      }
-    } else if (value.fromLayer || value.toLayer) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "fromLayer/toLayer are only allowed when via is true",
-        path: ["via"],
-      })
-    }
-  })
-
-const pcbPath = z.array(z.union([pcbPathPoint, z.string()]))
-
 const baseTraceProps = z.object({
   key: z.string().optional(),
   name: z.string().optional(),
@@ -47,6 +22,15 @@ const baseTraceProps = z.object({
   width: distance.optional().describe("Alias for trace thickness"),
   schematicRouteHints: z.array(point).optional(),
   pcbRouteHints: z.array(route_hint_point).optional(),
+  pcbTeardrops: z.boolean().optional().describe("Enable PCB trace teardrops."),
+  pcbTeardropStart: z
+    .boolean()
+    .optional()
+    .describe("Teardrop at the start (from) of trace"),
+  pcbTeardropEnd: z
+    .boolean()
+    .optional()
+    .describe("Teardrop at the end (to) of trace"),
   pcbPathRelativeTo: z.string().optional(),
   pcbPath: pcbPath.optional(),
   pcbPaths: z.array(pcbPath).optional(),

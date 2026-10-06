@@ -1,4 +1,6 @@
 import { z } from "zod"
+import type { AnyCircuitElement, PcbBoard } from "circuit-json"
+import type { BoardProps } from "./components/board"
 import type { AutocompleteString } from "./common/autocomplete"
 import { type CadModelProp, cadModelProp } from "./common/cadModel"
 import { type PcbStyle, pcbStyle } from "./common/pcbStyle"
@@ -67,14 +69,25 @@ type EsModuleImportResult = {
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
+  /** Optional fabricator-specific DRC provider. No checks run when omitted. */
+  fabricatorEngine?: FabricatorEngine
+
   autorouter?: AutorouterProp
 
   autorouterMap?: Record<string, AutorouterDefinition>
 
+  /** Use networked Pipeline9 node solving at effort 1. Omitted or false keeps local routing.
+   * Explicit alternative pipelines and effort levels retain their local solver.
+   */
+  useCloudAutorouter?: boolean
+
   /**
    * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
    * Defaults to false because these presets are otherwise disabled.
+   * This also applies to the sequential-trace and auto-cloud aliases.
    * Platforms should only enable this temporarily while migrating projects.
+   * For sequential_trace / sequential-trace, use the default autorouter with
+   * <autoroutingphase /> or <fanout /> elements as needed instead.
    */
   allowLegacyAutorouters?: boolean
 
@@ -113,6 +126,11 @@ export interface PlatformConfig {
   routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
+  /**
+   * Disables analog simulation model processing and simulator execution.
+   * Defaults to false.
+   */
+  analogSimulationDisabled?: boolean
   drcChecksDisabled?: boolean
   netlistDrcChecksDisabled?: boolean
   routingDrcChecksDisabled?: boolean
@@ -233,8 +251,31 @@ const localCacheEngine = z.custom<LocalCacheEngine>(
     typeof value.setItem === "function",
 )
 
+export interface FabricatorDrcCheckParams {
+  /** Board subtree in Circuit JSON world coordinates: +X right, +Y up, +Z above; positions and distances in mm. */
+  circuitJson: AnyCircuitElement[]
+  fabricatorPreset: NonNullable<BoardProps["fabricatorPreset"]>
+  pcbBoardId: PcbBoard["pcb_board_id"]
+}
+
+export interface FabricatorEngine {
+  /** Return diagnostic records for the selected preset without modifying the input. */
+  runDrcChecks: (
+    params: FabricatorDrcCheckParams,
+  ) => AnyCircuitElement[] | Promise<AnyCircuitElement[]>
+}
+
+export const fabricatorEngine = z.custom<FabricatorEngine>(
+  (value) =>
+    typeof value === "object" &&
+    value !== null &&
+    "runDrcChecks" in value &&
+    typeof value.runDrcChecks === "function",
+)
+
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
+  fabricatorEngine: fabricatorEngine.optional(),
   autorouter: autorouterProp.optional(),
   autorouterMap: z.record(z.string(), autorouterDefinition).optional(),
   allowLegacyAutorouters: z.boolean().optional(),
@@ -260,12 +301,14 @@ export const platformConfig = z.object({
   defaultSpiceEngine: defaultSpiceEngine.optional(),
   unitPreference: z.enum(["mm", "in", "mil"]).optional(),
   localCacheEngine: localCacheEngine.optional(),
+  useCloudAutorouter: z.boolean().optional(),
   enablePartOrientationAnalysis: z.boolean().optional(),
   pcbPackSolverTimeoutMs: z.number().finite().positive().optional(),
   pcbDisabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),
   partsEngineDisabled: z.boolean().optional(),
+  analogSimulationDisabled: z.boolean().optional(),
   drcChecksDisabled: z.boolean().optional(),
   netlistDrcChecksDisabled: z.boolean().optional(),
   routingDrcChecksDisabled: z.boolean().optional(),

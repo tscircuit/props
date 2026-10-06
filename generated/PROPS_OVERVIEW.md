@@ -134,9 +134,149 @@ export interface AnalogVoltageSweepParameterProps
 }
 
 
+export interface AntennaProps extends CommonComponentProps {
+  /**
+   * Band-qualified PCB-trace topology to generate. The encoded band is enough
+   * to select the geometry without frequencyBand. No shape is assumed when
+   * omitted. An explicit pcbPath takes precedence when both are provided.
+   */
+  antennaShape?: AntennaShape
+  /**
+   * Nominal operating band or multiband configuration. This is redundant when
+   * antennaShape is present; the band encoded in antennaShape controls generated
+   * geometry.
+   */
+  frequencyBand?: AntennaFrequencyBand
+  /**
+   * Explicit antenna path. Entries use the same selector, point, and via
+   * syntax as trace pcbPath entries.
+   */
+  pcbPath?: PcbPath
+}
+
+
+export interface AssemblyCableProps {
+  /** Stable assembly identity for the cable. */
+  name: string
+  /** Start connector selector or named assembly reference, e.g. MOTOR.wireside. */
+  from: string
+  /** End connector selector or named assembly reference. */
+  to: string
+  /** Optional USB-C-to-USB-C preset. Omit to infer the cable from its endpoints. */
+  standard?: AssemblyCableStandard
+}
+
+
 export interface AssemblyDeviceProps {
   /** Product-level assembly identity. */
   name?: string
+  /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
+  modelUrl?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
+  model?: string
+}
+
+
+export interface AssemblyMotorProps {
+  /** Stable assembly identity used by selectors. */
+  name: string
+  /** Human-facing alternate to the stable name. */
+  displayName?: string
+  /** NEMA frame standard; required when model is omitted, exclusive with model. */
+  standard?: AssemblyMotorStandard
+  /** Advanced modelprinter string, trimmed; exclusive with standard. */
+  model?: string
+  /**
+   * Direction from the motor body toward the shaft tip in the right-handed
+   * circuit frame: +X right, +Y top, +Z above the board. This is a direction,
+   * not a position; it does not specify translation or rotation about the
+   * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
+   */
+  shaftFacingDirection?: CadModelAxisDirection
+  /** e.g. "jst-ph-6". */
+  wireConnection?: "none" | "stubs" | "jst-ph-6"
+  /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
+   * Face mating determines orientation, so shaftFacingDirection must be omitted.
+   */
+  mountedTo?: string
+  /** This motor's mating face, e.g. "frontface" or "backface".
+   * Outward normals oppose and in-plane X directions align with the target.
+   */
+  mountFace?: string
+  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
+   * Requires mountedTo. Positive values separate the mating faces.
+   */
+  mountGap?: Distance
+}
+
+
+export interface AssemblyPrintedPartProps {
+  /** Stable identity used by assembly mounting selectors. */
+  name: string
+  displayName?: string
+  /** Pure jscad-fiber JSX in right-handed local XYZ, dimensions in millimeters.
+   * Named reference rectangles define attachment faces; they add no material.
+   * Hooks, async components, and raw kernel geometry are not supported.
+   */
+  jscad?: ReactElement
+  /** Modelprinter/footprinter string or model URL. */
+  model?: string
+  modelUrl?: string
+  cadModel?: CadModelProp
+  /** Assembly mounting target. */
+  mountedTo?: string
+  /** Name of this part's reference rectangle to mate with mountedTo.
+   * Both props must be supplied together; outward normals oppose and local
+   * in-plane X directions align. Without them the part uses its local origin.
+   */
+  mountFace?: string
+  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
+   * Requires mountedTo. Positive values separate the mating faces.
+   */
+  mountGap?: Distance
+}
+
+
+export interface AssemblyScreenProps {
+  /** Stable product-level identity for the screen assembly. */
+  name: string
+  /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
+  modelUrl?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
+  model?: string
+  /** Selector for the connector that the screen attaches to. */
+  connectsTo: string
+  /**
+   * Outer width of the screen body, including its bezel but excluding the flex
+   * cable. When supplied, it must be provided together with `height`.
+   */
+  width?: Distance
+  /**
+   * Outer height of the screen body, including its bezel but excluding the flex
+   * cable. When supplied, it must be provided together with `width`.
+   */
+  height?: Distance
+  /**
+   * Advanced modelprinter string used to render the screen assembly. Required
+   * when `width`, `height`, `model`, and `modelUrl` are omitted.
+   */
+  cadModel?: string
+}
+
+
+export interface AssemblySubassemblyProps {
+  /** Stable identity used by selectors from other assembly elements. */
+  name: string
+  /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
+  modelUrl?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
+  model?: string
+  /** Human-facing alternate to the stable name. */
+  displayName?: string
+  /** Optional CAD geometry using the existing component cadModel formats. */
+  cadModel?: CadModelProp
+  /** Nested assembly elements or CAD geometry; preserved without parsing. */
+  children?: ReactNode
 }
 
 
@@ -150,15 +290,20 @@ export interface AutorouterConfig {
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean
   groupMode?:
-    | "sequential_trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
+  /**
+   * single_layer_routing is an alias that parses as bus_lanes.
+   * Replaces single_layer_bus and single_layer_buses. Omitted leaves the preset
+   * unset; other presets remain unchanged and no conflicting fields are introduced.
+   */
   preset?:
-    | "sequential_trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
     | "default"
     | "auto"
@@ -168,11 +313,15 @@ export interface AutorouterConfig {
     | "tscircuit_beta"
     | "krt"
     | "freerouting"
+    | "simplify"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
+    | "dogbone"
+    | "bus_lanes"
+    | "single_layer_routing"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
@@ -196,7 +345,22 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
+  /**
+   * Custom async routing function accepting simple route JSON and returning the
+   * routing result, using the same contract as autorouter.algorithmFn. Parsing
+   * preserves the function unchanged. Omitted by default; no aliases or prop
+   * conflicts are introduced, and existing phases require no migration.
+   */
+  algorithmFn?: AutorouterConfig["algorithmFn"]
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
+  /**
+   * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.
+   * Numeric distances are mm; unit strings are normalized to mm. Omitted by
+   * default; an empty array is accepted. No aliases or prop conflicts are
+   * introduced, and existing phases require no migration.
+   */
+  pcbTracePaths?: FanoutTracePath[]
   region?: {
     shape?: "rect"
     minX: number
@@ -206,6 +370,8 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   }
   connection?: string
   connections?: string[]
+  // Reroutes traces selected by region or connection. The simplify autorouter
+  // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
 }
 
@@ -360,9 +526,37 @@ export interface BatteryProps<PinLabel extends string = string>
 }
 
 
+export interface BoardOutlinePoint extends Point {
+  /** Marks this outline point as the center of a castellated plated hole */
+  isCastellatedHole?: boolean
+  /** Diameter of the drilled hole. Required when `isCastellatedHole` is true. */
+  holeDiameter?: Distance
+  /** Diameter of the copper pad. Required when `isCastellatedHole` is true. */
+  padDiameter?: Distance
+  /** Connection target or targets for the castellated hole */
+  connectsTo?: string | string[]
+}
+
+
 export interface BoardProps
-  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections"> {
+  extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
   title?: string
+  /** e.g. "NEMA17.backface". */
+  mountedTo?: string
+  /** Clearance from the mounting face, e.g. "6mm". */
+  mountGap?: Distance
+  /** e.g. "J_USB" or "rightedge". */
+  mountRotationAnchor?: BoardMountRotationAnchor
+  /** e.g. "calc(NEMA17.wireside-90degcw)". */
+  mountRotation?: string
+  /** e.g. "top_layer_toward_mount_face". */
+  mountOrientation?: BoardMountOrientation
+  /** Fabricator preset, preserved as supplied. Omitted leaves the preset unset. */
+  fabricatorPreset?:
+    | "jlcpcb_economy"
+    | "jlcpcb_standard"
+    | "jlcpcb_economy_20260912"
+    | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
@@ -371,11 +565,35 @@ export interface BoardProps
    * false, which restricts newly generated vias to the full board stack.
    */
   allowBlindAndBuriedVias?: boolean
+  /**
+   * Whether to route remaining unrouted connections after explicit routing phases.
+   * Omitted leaves the setting unset, preserving the consumer's default behavior.
+   */
+  routeRemaining?: boolean
+  defaultViaTenting?:
+    | boolean
+    | "both_sides"
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed"
   borderRadius?: Distance
   thickness?: Distance
   boardAnchorPosition?: Point
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
+  /**
+   * Points defining the board edge. Set `isCastellatedHole` on a point to
+   * place a castellated plated hole centered on that location.
+   *
+   * @example
+   * ```tsx
+   * { x: "-5mm", y: 0, isCastellatedHole: true,
+   *   holeDiameter: "0.8mm", padDiameter: "1.2mm",
+   *   connectsTo: "net.GND" }
+   * ```
+   */
+  outline?: BoardOutlinePoint[]
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor
   /** Color of the top solder mask */
@@ -392,6 +610,15 @@ export interface BoardProps
   doubleSidedAssembly?: boolean
   /** Whether vias may be placed inside PCB pads */
   isViaInPadAllowed?: boolean
+  /**
+   * Whether implicit copper pours should be generated automatically. Defaults
+   * to false.
+   */
+  automaticPoursEnabled?: boolean
+  /** Whether to stitch copper pours on the same net across layers with vias. Defaults to false. */
+  enableViaStitching?: boolean
+  /** Positive center-to-center stitching via spacing in millimeters or a unit string. Omitted uses the solver default. Does not enable stitching by itself. */
+  viaStitchPitch?: Distance
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
 }
@@ -416,8 +643,25 @@ export interface BreakoutProps
   /**
    * Autorouter used to escape the components inside the breakout boundary.
    * Defaults to the multilayer fanout autorouter.
+   * `"dogbone"` selects local pad-to-via escapes without boundary routing.
+   * Accepted as a preset string or `{ preset: "dogbone" }`; parsing preserves
+   * the selected form. This adds an explicit preset with no aliases or changes
+   * to the default. Routing requires a core version supporting this preset.
    */
   autorouter?: AutorouterProp
+  /**
+   * Saved port-to-exit wire/via routes in the fanout's local PCB frame.
+   * Numeric distances are mm; unit strings are normalized to mm. Each route
+   * must start at its selected port and end at its fanout exit. Layers name
+   * physical board layers. Either endpoint may be a via when permitted by
+   * the circuit's routing rules (e.g. allowViaInPad for a via at a pad).
+   * Core creates the exits and preserves saved copper.
+   * When supplied, replaces automatic routing (including `autorouter`) for
+   * this fanout and must cover all its routing connections. Do not also add
+   * a breakoutpoint/fanoutpoint for the same port. Omitted by default; existing
+   * automatic fanouts are unchanged. No aliases or migration are required.
+   */
+  pcbTracePaths?: FanoutTracePath[]
   padding?: Distance
   paddingLeft?: Distance
   paddingRight?: Distance
@@ -433,14 +677,34 @@ export interface BreakoutProps
 
 export interface BusProps {
   name?: string
-  /** Trace names or port selectors for the connections in the bus. */
+  /** Match these trace/port/bus/pair selectors as well as this element's members.
+   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
+  lengthMatchTo?: string | string[]
+  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
+  minLength?: RouteLength
+  maxLength?: RouteLength
+  /** Nominal member length, absolute or relative to selected endpoints.
+   * Requires an explicit lengthTolerance, including zero for exact matching. */
+  targetLength?: RouteLength
+  /** Allowed deviation above/below targetLength, in mm. */
+  lengthTolerance?: number | string
+  /** Minimum centreline spacing between bus members, excluding declared pair partners.
+   * Raw numbers are mm; "3w" means three times the larger local trace width. */
+  pcbTraceSpacing?: TraceSpacing
+  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
+  pcbSpacingToOtherSignals?: TraceSpacing
+
+  /** One or more trace names or port selectors for the connections in the bus. */
   connections: string[]
   /** If set, every trace in this bus is assigned to this autorouting phase. */
   routingPhaseIndex?: number | null
   /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
   maxLengthSkew?: number | string
-  /** Intended single-ended characteristic impedance. Raw numbers are ohms. */
-  targetImpedance?: number | string
+  /** Intended single-ended impedance, e.g. "50±25ohm". Raw numbers are ohms. */
+  targetImpedance?: ImpedanceTarget
+  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
+  targetImpedanceMin?: number | string
+  targetImpedanceMax?: number | string
   /** Explicit PCB trace width for every bus member. Raw numbers are millimeters. */
   pcbTraceWidth?: number | string
   /** PCB layers on which the bus may be routed. */
@@ -536,6 +800,7 @@ export interface CadModelObj extends CadModelBase {
 
 
 export interface CadModelProps extends CadModelBase {
+  /** Canonical model URL after parsing; authored model strings resolve to this field. */
   modelUrl: string
   stepUrl?: string
   pcbX?: Distance
@@ -732,7 +997,11 @@ export interface CommonComponentProps<PinLabel extends string = string>
    * Whether to show this component's CAD model as translucent in the 3D viewer.
    */
   showAsTranslucentModel?: boolean
+  /** Alias for manufacturerPartNumber. No default; use resolveManufacturerPartNumber to resolve aliases. */
+  mpn?: string
+  /** Alias for manufacturerPartNumber. Retained for existing circuits. */
   mfn?: string
+  /** Manufacturer's part number. Aliases must agree when specified together. */
   manufacturerPartNumber?: string
   /**
    * This component will be drawn as part of this section e.g. "Power"
@@ -830,6 +1099,15 @@ export interface CopperPourProps {
   layer: LayerRefInput
   connectsTo: string
   /**
+   * Fill with a 45-degree crosshatch (defaults: 0.25mm copper width, 1mm pitch).
+   * Preserves solid copper around boundaries and connections. Defaults to false.
+   */
+  crosshatch?: boolean
+  /** Repeat spacing perpendicular to the hatch strips. Defaults to 1mm when crosshatch is enabled. */
+  crosshatchPitch?: Distance
+  /** Copper strip width, also used for the solid rim. Defaults to 0.25mm; must be less than the pitch when crosshatch is enabled. */
+  crosshatchWidth?: Distance
+  /**
    * Reserves the pour region during autorouting so unrelated traces do not
    * split it. Vias may still cross the region using antipads.
    */
@@ -852,7 +1130,6 @@ export interface CrystalProps<PinLabel extends string = string>
   /** Maximum allowed PCB trace length between the crystal and its connected component */
   maxTraceLength?: number | string
   manufacturerPartNumber?: string
-  mpn?: string
   pinVariant?: PinVariant
   schOrientation?: SchematicOrientation
   connections?: Connections<CrystalPinLabels>
@@ -951,14 +1228,31 @@ export interface CutoutApertureProps {
 
 export interface DifferentialPairProps {
   name?: string
+  /** Match these trace/port/bus/pair selectors as well as this element's members.
+   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
+  lengthMatchTo?: string | string[]
+  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
+  minLength?: RouteLength
+  maxLength?: RouteLength
+  /** Nominal member length, absolute or relative to selected endpoints.
+   * Requires an explicit lengthTolerance, including zero for exact matching. */
+  targetLength?: RouteLength
+  /** Allowed deviation above/below targetLength, in mm. */
+  lengthTolerance?: number | string
+  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
+  pcbSpacingToOtherSignals?: TraceSpacing
+
   /** Name of the trace or pin carrying the positive signal. */
   positiveConnection: string
   /** Name of the trace or pin carrying the negative signal. */
   negativeConnection: string
   /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
   maxLengthSkew?: number | string
-  /** Intended differential characteristic impedance. Raw numbers are ohms. */
-  targetDifferentialImpedance?: number | string
+  /** Intended differential impedance, e.g. "100±10ohm". Raw numbers are ohms. */
+  targetDifferentialImpedance?: ImpedanceTarget
+  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
+  targetDifferentialImpedanceMin?: number | string
+  targetDifferentialImpedanceMax?: number | string
   /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
   pcbTraceGap?: number | string
   /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
@@ -985,6 +1279,8 @@ export interface DiodeProps<PinLabel extends string = string>
   photo?: boolean
   tvs?: boolean
   schOrientation?: SchematicOrientation
+  /** Select a compact schematic symbol; omitted, default, and md retain the standard symbol. */
+  schSize?: SchematicSymbolSize
 }
 
 
@@ -1107,7 +1403,14 @@ export interface FabricationNoteDimensionProps
   from: string | Point
   to: string | Point
   text?: string
+  /** Offset distance in mm, or a unit-bearing string. Defaults to no offset. */
   offset?: string | number
+  /**
+   * Unitless direction in footprint-local coordinates (+X right, +Y up).
+   * Preserved as supplied; omitted uses the perpendicular to from -> to.
+   * The direction rotates/mirrors with the footprint, without translation.
+   */
+  offsetDirection?: { x: number; y: number }
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
@@ -1130,6 +1433,22 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
+}
+
+
+export interface FabricatorDrcCheckParams {
+  /** Board subtree in Circuit JSON world coordinates: +X right, +Y up, +Z above; positions and distances in mm. */
+  circuitJson: AnyCircuitElement[]
+  fabricatorPreset: NonNullable<BoardProps["fabricatorPreset"]>
+  pcbBoardId: PcbBoard["pcb_board_id"]
+}
+
+
+export interface FabricatorEngine {
+  /** Return diagnostic records for the selected preset without modifying the input. */
+  runDrcChecks: (
+    params: FabricatorDrcCheckParams,
+  ) => AnyCircuitElement[] | Promise<AnyCircuitElement[]>
 }
 
 
@@ -1791,6 +2110,30 @@ export interface PanelProps
 }
 
 
+export interface PcbBendProps {
+  name?: string
+  /** Start/end of the bend-zone centerline in the parent PCB coordinate system. */
+  x1: Distance
+  y1: Distance
+  x2: Distance
+  y2: Distance
+  /** Signed degrees (or an angle string). Positive folds toward the local top face. */
+  bendAngle: number | string
+  /** Positive neutral-surface radius, in mm or a distance string. */
+  bendRadius: Distance
+  /**
+   * Radius of circular tear-relief cutouts centered at both bend endpoints in
+   * the flat PCB. Removes material to round the edge where each cutout meets
+   * the board outline. Finite and positive, in mm or a distance string;
+   * parsed to mm. Omit to leave the outline unchanged (no tear reliefs).
+   * Independent of bendRadius and bendSide; no aliases or conflicting props.
+   */
+  tearReliefRadius?: Distance
+  /** Moving side, looking from (x1, y1) toward (x2, y2) in the flat layout. */
+  bendSide: "left" | "right"
+}
+
+
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
@@ -1844,7 +2187,14 @@ export interface PcbNoteDimensionProps
   from: string | Point
   to: string | Point
   text?: string
+  /** Offset distance in mm, or a unit-bearing string. Defaults to no offset. */
   offset?: string | number
+  /**
+   * Unitless direction in footprint-local coordinates (+X right, +Y up).
+   * Preserved as supplied; omitted uses the perpendicular to from -> to.
+   * The direction rotates/mirrors with the footprint, without translation.
+   */
+  offsetDirection?: { x: number; y: number }
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
@@ -1921,6 +2271,13 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
+}
+
+
+export interface PcbPathPoint extends Point {
+  via?: boolean
+  fromLayer?: LayerRefInput
+  toLayer?: LayerRefInput
 }
 
 
@@ -2028,6 +2385,26 @@ export interface PillWithRectPadPlatedHoleProps
 
 
 export interface PinAttributeMap {
+  /** Whether the pin accepts a signal. */
+  isInput?: boolean
+  /** Whether the pin drives a signal. */
+  isOutput?: boolean
+  /** Whether the pin can both accept and drive signals. */
+  isBidirectional?: boolean
+  /** Whether the pin is a passive component terminal. */
+  isPassive?: boolean
+  /** Whether the pin supports a high-impedance output state. */
+  canUseTriState?: boolean
+  /** Whether the pin is configured for tri-state operation, not its instantaneous impedance. */
+  isUsingTriState?: boolean
+  /** Whether the pin supports an open-collector output. */
+  canUseOpenCollector?: boolean
+  /** Whether the pin is configured as an open-collector output. */
+  isUsingOpenCollector?: boolean
+  /** Whether the pin supports an open-emitter output. */
+  canUseOpenEmitter?: boolean
+  /** Whether the pin is configured as an open-emitter output. */
+  isUsingOpenEmitter?: boolean
   capabilities?: Array<PinCapability>
   activeCapabilities?: Array<PinCapability>
   activeCapability?: PinCapability
@@ -2037,6 +2414,11 @@ export interface PinAttributeMap {
   requiresGround?: boolean
   providesVoltage?: string | number
   requiresVoltage?: string | number
+  /**
+   * Allowed relative deviation from requiresVoltage, e.g. 0.05 or "5%" for ±5%.
+   * Parsed as a fraction from 0 to 1; omitted values remain undefined.
+   */
+  requiredVoltageTolerance?: number | string
   doNotConnect?: boolean
   includeInBoardPinout?: boolean
   highlightColor?: string
@@ -2196,14 +2578,25 @@ export interface PinSideDefinition {
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
+  /** Optional fabricator-specific DRC provider. No checks run when omitted. */
+  fabricatorEngine?: FabricatorEngine
+
   autorouter?: AutorouterProp
 
   autorouterMap?: Record<string, AutorouterDefinition>
 
+  /** Use networked Pipeline9 node solving at effort 1. Omitted or false keeps local routing.
+   * Explicit alternative pipelines and effort levels retain their local solver.
+   */
+  useCloudAutorouter?: boolean
+
   /**
    * Allows the deprecated sequential_trace and auto_cloud autorouter presets.
    * Defaults to false because these presets are otherwise disabled.
+   * This also applies to the sequential-trace and auto-cloud aliases.
    * Platforms should only enable this temporarily while migrating projects.
+   * For sequential_trace / sequential-trace, use the default autorouter with
+   * <autoroutingphase /> or <fanout /> elements as needed instead.
    */
   allowLegacyAutorouters?: boolean
 
@@ -2242,6 +2635,11 @@ export interface PlatformConfig {
   routingDisabled?: boolean
   schematicDisabled?: boolean
   partsEngineDisabled?: boolean
+  /**
+   * Disables analog simulation model processing and simulator execution.
+   * Defaults to false.
+   */
+  analogSimulationDisabled?: boolean
   drcChecksDisabled?: boolean
   netlistDrcChecksDisabled?: boolean
   routingDrcChecksDisabled?: boolean
@@ -2359,6 +2757,14 @@ export interface RectSolderPasteProps
 }
 
 
+export interface RelativeRouteLength {
+  reference: "longest_manhattan"
+  of?: string[]
+  /** Offset added to the reference distance. Raw numbers are mm; may be negative. */
+  offset?: number | string
+}
+
+
 export interface ResistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   resistance: number | string
@@ -2419,6 +2825,12 @@ export interface RoutingTolerances {
   minViaHoleEdgeToViaHoleEdgeClearance?: Distance
   minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
   minTraceToPadEdgeClearance?: Distance
+  /**
+   * Minimum trace copper edge to non-plated hole edge clearance. Numbers are mm;
+   * unit strings are normalized to mm. Must be finite and non-negative. Omitted
+   * leaves the router default unchanged. Independent of pad clearance, with no aliases.
+   */
+  minTraceToHoleEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
   minViaEdgeToPadEdgeClearance?: Distance
@@ -2487,6 +2899,21 @@ export interface SchematicCircleProps {
   isFilled?: boolean
   fillColor?: string
   isDashed?: boolean
+}
+
+
+export interface SchematicGraphicProps {
+  /** URL or static-file import for the canonical source SVG asset. */
+  imageUrl?: string
+  /**
+   * Complete SVG markup, including its dimensions or viewBox. Used as the
+   * source when imageUrl is omitted, or as fallback content when both exist.
+   */
+  svgContent?: string
+  /** Optional rendered width of the graphic. */
+  width?: Distance
+  /** Optional rendered height of the graphic. */
+  height?: Distance
 }
 
 
@@ -2567,9 +2994,15 @@ export interface SchematicSectionProps {
 
 
 export interface SchematicSheetProps {
-  name: string
-  displayName: string
+  name?: string
+  displayName?: string
   sheetIndex?: number
+  /** Sheet size used to render the schematic. Defaults to A4. */
+  sheetSize?: SchematicSheetSize
+  /** Explicit schematic sheet width. Overrides the width from sheetSize. */
+  sheetWidth?: Distance
+  /** Explicit schematic sheet height. Overrides the height from sheetSize. */
+  sheetHeight?: Distance
   children?: any
 }
 
@@ -2748,7 +3181,8 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
-  autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
+  autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   /**
    * Selects the local autorouting pipeline. Unknown string values emit a
    * warning and fall back to `latest`.
@@ -2824,6 +3258,13 @@ export interface SupplierProps {
 export interface SwitchProps extends CommonComponentProps {
   type?: "spst" | "spdt" | "dpst" | "dpdt"
   pinLabels?: PinLabelsProp<SchematicPinLabel>
+  /**
+   * Pin names or aliases intentionally left unconnected. Accepts mutable or
+   * readonly arrays, using the same label validation as chip noConnect.
+   * Omitted or empty arrays mark no pins. Parsed labels are preserved and
+   * matching source ports get do_not_connect; explicit connections are not removed.
+   */
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[]
   isNormallyClosed?: boolean
   spdt?: boolean
   spst?: boolean
@@ -2902,6 +3343,13 @@ export interface ViaProps extends CommonLayoutProps {
   outerDiameter?: number | string
   connectsTo?: string | string[]
   netIsAssignable?: boolean
+  tented?:
+    | boolean
+    | "both_sides"
+    | "top_and_bottom_tented"
+    | "top_tented"
+    | "bottom_tented"
+    | "exposed"
 }
 
 

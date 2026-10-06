@@ -224,6 +224,7 @@ function generateInterfaceDefinitions(
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   exposedNets?: string[]
   exposeNets?: boolean
 

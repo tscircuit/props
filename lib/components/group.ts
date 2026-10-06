@@ -321,6 +321,12 @@ export interface RoutingTolerances {
   minViaHoleEdgeToViaHoleEdgeClearance?: Distance
   minPlatedHoleDrillEdgeToDrillEdgeClearance?: Distance
   minTraceToPadEdgeClearance?: Distance
+  /**
+   * Minimum trace copper edge to non-plated hole edge clearance. Numbers are mm;
+   * unit strings are normalized to mm. Must be finite and non-negative. Omitted
+   * leaves the router default unchanged. Independent of pad clearance, with no aliases.
+   */
+  minTraceToHoleEdgeClearance?: Distance
   minPadEdgeToPadEdgeClearance?: Distance
   minBoardEdgeClearance?: Distance
   minViaEdgeToPadEdgeClearance?: Distance
@@ -338,15 +344,20 @@ export interface AutorouterConfig {
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean
   groupMode?:
-    | "sequential_trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
+  /**
+   * single_layer_routing is an alias that parses as bus_lanes.
+   * Replaces single_layer_bus and single_layer_buses. Omitted leaves the preset
+   * unset; other presets remain unchanged and no conflicting fields are introduced.
+   */
   preset?:
-    | "sequential_trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
     | "subcircuit"
     | "default"
     | "auto"
@@ -356,17 +367,21 @@ export interface AutorouterConfig {
     | "tscircuit_beta"
     | "krt"
     | "freerouting"
+    | "simplify"
     | "laser_prefab" // Prefabricated PCB with laser copper ablation
     | "single_layer_fanout"
     | "fanout"
+    | "dogbone"
+    | "bus_lanes"
+    | "single_layer_routing"
     | /** @deprecated Use "auto_jumper" */ "auto-jumper"
-    | /** @deprecated Use "sequential_trace" */ "sequential-trace"
+    | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
 
 export type AutorouterPreset =
-  | "sequential_trace"
+  | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
   | "subcircuit"
   | "default"
   | "auto"
@@ -376,11 +391,17 @@ export type AutorouterPreset =
   | "tscircuit_beta"
   | "krt"
   | "freerouting"
+  | "simplify"
   | "laser_prefab"
   | "single_layer_fanout"
   | "fanout"
+  /** Local pad-to-via fanout without routing to a breakout boundary. */
+  | "dogbone"
+  | "bus_lanes"
+  /** Alias for bus_lanes; parsing normalizes to bus_lanes. */
+  | "single_layer_routing"
   | "auto-jumper"
-  | "sequential-trace"
+  | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   | "auto-local"
   | "auto-cloud"
 
@@ -398,6 +419,11 @@ export const routingTolerances = z.object({
   minViaEdgeToPadEdgeClearance: length.optional(),
   minPlatedHoleDrillEdgeToDrillEdgeClearance: length.optional(),
   minTraceToPadEdgeClearance: length.optional(),
+  minTraceToHoleEdgeClearance: length
+    .refine((value) => Number.isFinite(value) && value >= 0, {
+      message: "minTraceToHoleEdgeClearance must be finite and non-negative",
+    })
+    .optional(),
   minPadEdgeToPadEdgeClearance: length.optional(),
   minBoardEdgeClearance: length.optional(),
   minViaHoleDiameter: length.optional(),
@@ -443,14 +469,21 @@ export const autorouterConfig = z.object({
       "tscircuit_beta",
       "krt",
       "freerouting",
+      "simplify",
       "laser_prefab",
       "single_layer_fanout",
       "fanout",
+      "dogbone",
+      "bus_lanes",
+      "single_layer_routing",
       "auto-jumper",
       "sequential-trace",
       "auto-local",
       "auto-cloud",
     ])
+    .transform((preset) =>
+      preset === "single_layer_routing" ? "bus_lanes" : preset,
+    )
     .optional(),
   local: z.boolean().optional(),
 })
@@ -466,9 +499,13 @@ export const autorouterPreset = z.union([
   z.literal("tscircuit_beta"),
   z.literal("krt"),
   z.literal("freerouting"),
+  z.literal("simplify"),
   z.literal("laser_prefab"), // Prefabricated PCB with laser copper ablation
   z.literal("single_layer_fanout"),
   z.literal("fanout"),
+  z.literal("dogbone"),
+  z.literal("bus_lanes"),
+  z.literal("single_layer_routing").transform(() => "bus_lanes" as const),
   z.literal("auto-jumper"),
   z.literal("sequential-trace"),
   z.literal("auto-local"),
@@ -485,7 +522,24 @@ export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
   autorouterString,
 ])
 
-export const autorouterEffortLevel = z.enum(["1x", "2x", "5x", "10x", "100x"])
+export const autorouterEffortLevel = z.enum([
+  "1x",
+  "1.5x",
+  "2x",
+  "5x",
+  "10x",
+  "100x",
+])
+
+export const preflightRoutingCheckPolicy = z.enum([
+  "none",
+  "basic",
+  "conservative",
+])
+
+export type PreflightRoutingCheckPolicy = z.infer<
+  typeof preflightRoutingCheckPolicy
+>
 
 export type AutorouterVersion =
   | "beta_pipeline1"
@@ -538,7 +592,8 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
-  autorouterEffortLevel?: "1x" | "2x" | "5x" | "10x" | "100x"
+  preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
+  autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   /**
    * Selects the local autorouting pipeline. Unknown string values emit a
    * warning and fall back to `latest`.
@@ -728,6 +783,7 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: autorouterVersion.optional(),
   square: z.boolean().optional(),

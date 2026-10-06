@@ -38,7 +38,7 @@ Bullet connectors use `standard="bullet"`, a required `bulletDiameter` (2, 3,
 3.5, 4, 5, 5.5, 6, or 8 mm), and a required `bulletGender="male" | "female"`.
 Length strings such as `"3.5mm"` normalize to millimeters. A bullet group has 1–16
 contacts; `pinCount` defaults to 1. Set `pinCount={3}` on both endpoint connectors
-for three bullet contacts and three insulated wires, emitting `bullet3_3.5mm_female_male`. Supply a footprint for each PCB
+for three bullet contacts and three insulated wires, emitting `bullet3_d3.5mm_afemale_bmale`. Supply a footprint for each PCB
 connector, as for other custom connectors.
 
 ```tsx
@@ -50,7 +50,7 @@ connector, as for other custom connectors.
 ```
 
 Each cable end has the opposite gender of its selected connector. The example
-emits `bullet_3.5mm_female_male`. Same-gender PCB endpoints produce a cable
+emits `bullet_d3.5mm_afemale_bmale`. Same-gender PCB endpoints produce a cable
 with two ends of the opposite gender. Endpoint diameters and contact counts must match; mismatches
 are errors. Omitting the cable's `standard` infers `bullet` from the endpoints.
 There are no aliases, and existing USB-C/JST usage requires no migration.

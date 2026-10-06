@@ -29,7 +29,7 @@ test("standard motor wire termination remains selectable without motor rotation 
         standard: "nema17",
         wireConnection,
       }).wireConnection,
-    ).toBe("jst6_ph")
+    ).toBe(wireConnection)
     expect(
       assemblyMotorProps.safeParse({
         name: "M1",

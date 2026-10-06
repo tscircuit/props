@@ -179,7 +179,9 @@ export interface AssemblyCableProps {
   from: string
   /** End connector selector or named assembly reference. */
   to: string
-  /** Optional cable standard; bullet size and end genders are inferred from endpoints. Omit to infer the cable from its endpoints. */
+  /** Optional cable standard. adaptercable composes independent ends; omit to
+   * infer an adapter or an existing same-end preset from the endpoints.
+   */
   standard?: AssemblyCableStandard
 }
 

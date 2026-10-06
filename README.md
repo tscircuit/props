@@ -2588,6 +2588,13 @@ export interface VoltageSourceProps<
 export interface PlatformConfig {
   partsEngine?: PartsEngine;
 
+  /**
+   * Check JLCPCB supplier stock through jlcsearch during rendering and warn when
+   * availability cannot be confirmed. Omitted or false performs no checks.
+   * Enabling this adds network requests and non-deterministic diagnostics.
+   */
+  checkAvailability?: boolean;
+
   /** Optional fabricator-specific DRC provider. No checks run when omitted. */
   fabricatorEngine?: FabricatorEngine;
 

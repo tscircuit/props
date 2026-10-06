@@ -69,6 +69,13 @@ type EsModuleImportResult = {
 export interface PlatformConfig {
   partsEngine?: PartsEngine
 
+  /**
+   * Check JLCPCB supplier stock through jlcsearch during rendering and warn when
+   * availability cannot be confirmed. Omitted or false performs no checks.
+   * Enabling this adds network requests and non-deterministic diagnostics.
+   */
+  checkAvailability?: boolean
+
   /** Optional fabricator-specific DRC provider. No checks run when omitted. */
   fabricatorEngine?: FabricatorEngine
 
@@ -275,6 +282,12 @@ export const fabricatorEngine = z.custom<FabricatorEngine>(
 
 export const platformConfig = z.object({
   partsEngine: partsEngine.optional(),
+  checkAvailability: z
+    .boolean()
+    .describe(
+      "Opt in to networked JLCPCB availability checks during rendering. Disabled by default; enabling adds non-deterministic diagnostics.",
+    )
+    .optional(),
   fabricatorEngine: fabricatorEngine.optional(),
   autorouter: autorouterProp.optional(),
   autorouterMap: z.record(z.string(), autorouterDefinition).optional(),

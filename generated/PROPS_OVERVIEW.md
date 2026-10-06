@@ -212,8 +212,10 @@ export interface AssemblyMotorProps {
    * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
    */
   shaftFacingDirection?: CadModelAxisDirection
-  /** e.g. "jst-ph-6". */
-  wireConnection?: "none" | "stubs" | "jst-ph-6"
+  /** Cable connection string, e.g. "jst6_ph".
+   * Omit to use the model's default termination.
+   */
+  wireConnection?: string
   /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
    * Face mating determines orientation, so shaftFacingDirection must be omitted.
    */
@@ -1514,6 +1516,14 @@ export interface FanoutProps {
 }
 
 
+export interface FetchPartAvailabilityParams {
+  supplierName: SupplierName
+  supplierPartNumber: string
+  platformFetch?: PartAvailabilityPlatformFetch
+  signal?: AbortSignal
+}
+
+
 export interface FiducialProps extends CommonComponentProps {
   soldermaskPullback?: Distance
   padDiameter: Distance
@@ -2138,6 +2148,18 @@ export interface PanelProps
 }
 
 
+export interface PartAvailability {
+  /** Available unit count; null means availability could not be confirmed. */
+  stock: number | null
+  /** Unit price at the supplier's lowest quantity tier; null means unknown. */
+  price: number | null
+  /** ISO 4217 currency code, such as USD; null when the price is unknown. */
+  currency: string | null
+  /** ISO timestamp of this lookup, rather than a guarantee of stock freshness. */
+  checkedAt?: string
+}
+
+
 export interface PcbBendProps {
   name?: string
   /** Start/end of the bend-zone centerline in the parent PCB coordinate system. */
@@ -2605,6 +2627,13 @@ export interface PinSideDefinition {
 
 export interface PlatformConfig {
   partsEngine?: PartsEngine
+
+  /**
+   * Check JLCPCB supplier stock through jlcsearch during rendering and warn when
+   * availability cannot be confirmed. Omitted or false performs no checks.
+   * Enabling this adds network requests and non-deterministic diagnostics.
+   */
+  checkAvailability?: boolean
 
   /** Optional fabricator-specific DRC provider. No checks run when omitted. */
   fabricatorEngine?: FabricatorEngine

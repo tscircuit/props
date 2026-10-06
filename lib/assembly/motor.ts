@@ -24,8 +24,11 @@ export interface AssemblyMotorProps {
    * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
    */
   shaftFacingDirection?: CadModelAxisDirection
-  /** e.g. "jst-ph-6". */
-  wireConnection?: "none" | "stubs" | "jst-ph-6"
+  /** Six-pin JST PH termination: "jst6_ph", matching footprinter.
+   * Legacy "jst-ph-6" and "jst_ph_6" inputs normalize to "jst6_ph".
+   * Omit to use the model's default termination.
+   */
+  wireConnection?: "none" | "stubs" | "jst6_ph" | "jst-ph-6" | "jst_ph_6"
   /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
    * Face mating determines orientation, so shaftFacingDirection must be omitted.
    */
@@ -49,7 +52,12 @@ export const assemblyMotorProps = z
     standard: z.enum(["nema8", "nema17", "nema23"]).optional(),
     model: z.string().trim().min(1).optional(),
     shaftFacingDirection: cadModelAxisDirection.optional(),
-    wireConnection: z.enum(["none", "stubs", "jst-ph-6"]).optional(),
+    wireConnection: z
+      .enum(["none", "stubs", "jst6_ph", "jst-ph-6", "jst_ph_6"])
+      .transform((value) =>
+        value === "jst-ph-6" || value === "jst_ph_6" ? "jst6_ph" : value,
+      )
+      .optional(),
     mountedTo: z
       .string()
       .trim()

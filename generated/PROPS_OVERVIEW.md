@@ -1488,6 +1488,14 @@ export interface FanoutProps {
 }
 
 
+export interface FetchPartAvailabilityParams {
+  supplierName: SupplierName
+  supplierPartNumber: string
+  platformFetch?: typeof fetch
+  signal?: AbortSignal
+}
+
+
 export interface FiducialProps extends CommonComponentProps {
   soldermaskPullback?: Distance
   padDiameter: Distance
@@ -2109,6 +2117,18 @@ export interface PanelProps
   edgePaddingTop?: Distance
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
+}
+
+
+export interface PartAvailability {
+  /** Available unit count; null means availability could not be confirmed. */
+  stock: number | null
+  /** Unit price at the supplier's lowest quantity tier; null means unknown. */
+  price: number | null
+  /** ISO 4217 currency code, such as USD; null when the price is unknown. */
+  currency: string | null
+  /** ISO timestamp of this lookup, rather than a guarantee of stock freshness. */
+  checkedAt?: string
 }
 
 

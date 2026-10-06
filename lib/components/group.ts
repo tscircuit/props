@@ -34,6 +34,10 @@ import {
 import { url } from "lib/common/url"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import type { ImplicitBreakoutPointSolverFn } from "lib/common/implicitBreakoutPointSolver"
+import type {
+  FetchPartAvailabilityParams,
+  PartAvailability,
+} from "lib/common/part-availability"
 
 export const layoutConfig = z.object({
   layoutMode: z
@@ -297,6 +301,10 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 }
 
 export type PartsEngine = {
+  /** Optional stock and price lookup. Return undefined for unsupported suppliers. */
+  fetchPartAvailability?: (
+    params: FetchPartAvailabilityParams,
+  ) => Promise<PartAvailability | undefined> | PartAvailability | undefined
   findPart: (params: {
     sourceComponent: AnySourceComponent
     footprinterString?: string

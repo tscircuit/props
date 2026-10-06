@@ -965,6 +965,23 @@ export const lrPolarPins = [
 ] as const
 ```
 
+### part-availability
+
+```typescript
+export interface FetchPartAvailabilityParams {
+  supplierName: SupplierName
+  supplierPartNumber: string
+  platformFetch?: typeof fetch
+  signal?: AbortSignal
+}
+export interface PartAvailability {
+  stock: number | null
+  price: number | null
+  currency: string | null
+  checkedAt?: string
+}
+```
+
 ### pcbPath
 
 ```typescript
@@ -3066,6 +3083,10 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 }
 /** @deprecated Use `pcbFlex` */
 export type PartsEngine = {
+  fetchPartAvailability?: (params: FetchPartAvailabilityParams) =>
+    | Promise<PartAvailability | undefined>
+    | PartAvailability
+    | undefined
   findPart: (params: {
     sourceComponent: AnySourceComponent
     footprinterString?: string
@@ -3079,6 +3100,7 @@ export type PartsEngine = {
     | AnyCircuitElement[]
     | undefined
 }
+/** Optional stock and price lookup. Return undefined for unsupported suppliers. */
 export interface PcbRouteCache {
   pcbTraces: PcbTrace[]
   cacheKey: string

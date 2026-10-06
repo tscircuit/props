@@ -2689,6 +2689,8 @@ export const fabricationNotePathProps = pcbLayoutProps
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),
     color: z.string().optional(),
+    isFilled: z.boolean().optional(),
+    hasStroke: z.boolean().optional(),
   })
 ```
 

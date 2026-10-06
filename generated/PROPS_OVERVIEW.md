@@ -194,7 +194,6 @@ export interface AssemblyMotorProps {
    */
   shaftFacingDirection?: CadModelAxisDirection
   /** Cable connection string, e.g. "jst6_ph".
-   * Legacy "jst-ph-6" and "jst_ph_6" inputs normalize to "jst6_ph".
    * Omit to use the model's default termination.
    */
   wireConnection?: string

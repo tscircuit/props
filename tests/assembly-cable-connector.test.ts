@@ -9,7 +9,7 @@ test("CAD cable connectors validate mating interfaces and normalize physical len
     pinCount: 3,
     position: { x: "10mm", y: 2, z: "5mm" },
     facingDirection: "x+",
-  }
+  } as const
   expect(
     assemblySubassemblyProps.parse({
       name: "MOTOR",

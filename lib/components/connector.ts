@@ -24,7 +24,7 @@ export interface ConnectorProps extends ChipPropsSU {
   standard?: ConnectorStandard
 
   /**
-   * Number of electrical circuits in the connector
+   * Number of electrical circuits in the connector; bullet groups support 1–16 (default 1)
    */
   pinCount?: number
 
@@ -64,11 +64,11 @@ export const connectorProps = chipProps
             message: `${field} is required for bullet connectors`,
           })
       }
-      if (connector.pinCount !== undefined && connector.pinCount !== 1)
+      if (connector.pinCount !== undefined && connector.pinCount > 16)
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["pinCount"],
-          message: "A bullet connector has one electrical contact",
+          message: "Bullet groups support 1 to 16 electrical contacts",
         })
     } else if (
       connector.bulletDiameter !== undefined ||

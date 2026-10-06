@@ -1081,7 +1081,7 @@ export interface ConnectorProps extends ChipPropsSU {
   standard?: ConnectorStandard
 
   /**
-   * Number of electrical circuits in the connector
+   * Number of electrical circuits in the connector; bullet groups support 1–16 (default 1)
    */
   pinCount?: number
 

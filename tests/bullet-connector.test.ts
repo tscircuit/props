@@ -17,7 +17,7 @@ test("bullet connector props require a supported diameter and endpoint gender", 
     { bulletGender: "male" },
     { bulletDiameter: 7, bulletGender: "male" },
     { bulletDiameter: 4, bulletGender: "socket" },
-    { bulletDiameter: 4, bulletGender: "male", pinCount: 2 },
+    { bulletDiameter: 4, bulletGender: "male", pinCount: 17 },
   ]) {
     expect(
       connectorProps.safeParse({ name: "J1", standard: "bullet", ...fields })
@@ -39,4 +39,29 @@ test("bullet connector props require a supported diameter and endpoint gender", 
       standard: "bullet",
     }).standard,
   ).toBe("bullet")
+})
+
+test("bullet groups accept a contact count and reject out-of-range counts", () => {
+  for (const pinCount of [1, 2, 3, 6, 16]) {
+    expect(
+      connectorProps.parse({
+        name: "J1",
+        standard: "bullet",
+        bulletDiameter: 3.5,
+        bulletGender: "male",
+        pinCount,
+      }).pinCount,
+    ).toBe(pinCount)
+  }
+  for (const pinCount of [0, -1, 1.5, 17]) {
+    expect(
+      connectorProps.safeParse({
+        name: "J1",
+        standard: "bullet",
+        bulletDiameter: 3.5,
+        bulletGender: "male",
+        pinCount,
+      }).success,
+    ).toBe(false)
+  }
 })

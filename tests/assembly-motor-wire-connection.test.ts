@@ -2,7 +2,13 @@ import { expect, test } from "bun:test"
 import { assemblyMotorProps } from "lib"
 
 test("standard motor wire termination remains selectable without motor rotation offsets", () => {
-  for (const wireConnection of ["none", "stubs", "jst6_ph"] as const) {
+  for (const wireConnection of [
+    "none",
+    "stubs",
+    "jst6_ph",
+    "jst4_sh",
+    "custom_connection",
+  ]) {
     expect(
       assemblyMotorProps.parse({
         name: "M1",
@@ -36,7 +42,7 @@ test("standard motor wire termination remains selectable without motor rotation 
     assemblyMotorProps.safeParse({
       name: "M1",
       standard: "nema17",
-      wireConnection: "jst6-ph",
+      wireConnection: 6,
     }).success,
   ).toBe(false)
   expect(

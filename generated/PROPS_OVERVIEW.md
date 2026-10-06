@@ -193,11 +193,11 @@ export interface AssemblyMotorProps {
    * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
    */
   shaftFacingDirection?: CadModelAxisDirection
-  /** Six-pin JST PH termination: "jst6_ph", matching footprinter.
+  /** Cable connection string, e.g. "jst6_ph".
    * Legacy "jst-ph-6" and "jst_ph_6" inputs normalize to "jst6_ph".
    * Omit to use the model's default termination.
    */
-  wireConnection?: "none" | "stubs" | "jst6_ph" | "jst-ph-6" | "jst_ph_6"
+  wireConnection?: string
   /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
    * Face mating determines orientation, so shaftFacingDirection must be omitted.
    */

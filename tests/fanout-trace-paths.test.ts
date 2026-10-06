@@ -1,0 +1,164 @@
+import { expect, test } from "bun:test"
+import {
+  autoroutingPhaseProps,
+  type AutoroutingPhaseProps,
+  breakoutProps,
+  fanoutTracePath,
+  type BreakoutProps,
+  type FanoutTracePath,
+} from "../lib"
+
+const path: FanoutTracePath = {
+  connection: "U1.1",
+  route: [
+    { route_type: "wire", x: "0mm", y: 0, width: "0.2mm", layer: "top" },
+    {
+      route_type: "via",
+      x: "1mm",
+      y: "1mm",
+      from_layer: "top",
+      to_layer: "bottom",
+      via_diameter: "0.6mm",
+      via_hole_diameter: "0.3mm",
+    },
+    { route_type: "wire", x: "0.3cm", y: 1, width: 0.2, layer: "bottom" },
+  ],
+}
+
+test.each([
+  ["breakout", breakoutProps],
+  ["autorouting phase", autoroutingPhaseProps],
+] as const)(
+  "%s retains JSON-serializable saved routes and normalizes distances",
+  (_name, schema) => {
+    const props: BreakoutProps & AutoroutingPhaseProps = {
+      pcbTracePaths: [path],
+    }
+    const original = JSON.stringify(props)
+    const parsed = schema.parse(JSON.parse(original))
+    expect(parsed.pcbTracePaths).toEqual([
+      {
+        connection: "U1.1",
+        route: [
+          { route_type: "wire", x: 0, y: 0, width: 0.2, layer: "top" },
+          {
+            route_type: "via",
+            x: 1,
+            y: 1,
+            from_layer: "top",
+            to_layer: "bottom",
+            via_diameter: 0.6,
+            via_hole_diameter: 0.3,
+          },
+          { route_type: "wire", x: 3, y: 1, width: 0.2, layer: "bottom" },
+        ],
+      },
+    ])
+    expect(JSON.stringify(props)).toBe(original)
+    expect(schema.parse({}).pcbTracePaths).toBeUndefined()
+    expect(schema.parse({ pcbTracePaths: [] }).pcbTracePaths).toEqual([])
+  },
+)
+
+test("saved fanout paths reject invalid geometry and layer transitions", () => {
+  const wire = { route_type: "wire", x: 0, y: 0, width: 0.2, layer: "top" }
+  for (const invalid of [
+    { connection: "", route: [wire, wire] },
+    { connection: "U1.1", route: [] },
+    { connection: "U1.1", route: [wire] },
+    { connection: "U1.1", route: [wire, { ...wire, x: Number.NaN }] },
+    { connection: "U1.1", route: [wire, { ...wire, width: 0 }] },
+    { connection: "U1.1", route: [wire, { ...wire, layer: "bottom" }] },
+    {
+      connection: "U1.1",
+      route: [
+        wire,
+        {
+          route_type: "via",
+          x: 1,
+          y: 1,
+          from_layer: "inner1",
+          to_layer: "bottom",
+        },
+      ],
+    },
+    {
+      connection: "U1.1",
+      route: [
+        {
+          route_type: "via",
+          x: 0,
+          y: 0,
+          from_layer: "top",
+          to_layer: "bottom",
+        },
+        wire,
+      ],
+    },
+    {
+      connection: "U1.1",
+      route: [wire, { ...path.route[1], from_layer: "inner1" }, path.route[2]],
+    },
+  ]) {
+    expect(fanoutTracePath.safeParse(invalid).success).toBe(false)
+    expect(
+      autoroutingPhaseProps.safeParse({ pcbTracePaths: [invalid] }).success,
+    ).toBe(false)
+  }
+})
+
+const topToBottomVia = {
+  route_type: "via" as const,
+  x: 0,
+  y: 0,
+  from_layer: "top" as const,
+  to_layer: "bottom" as const,
+}
+const topWire = {
+  route_type: "wire" as const,
+  x: 1,
+  y: 1,
+  width: 0.2,
+  layer: "top" as const,
+}
+
+test.each([
+  ["start", [topToBottomVia, { ...topWire, layer: "bottom" }]],
+  ["end", [topWire, topToBottomVia]],
+  [
+    "both",
+    [
+      topToBottomVia,
+      { ...topWire, layer: "bottom" },
+      { ...topToBottomVia, x: 2, from_layer: "bottom", to_layer: "top" },
+    ],
+  ],
+  [
+    "consecutive vias",
+    [
+      topToBottomVia,
+      { ...topToBottomVia, x: 2, from_layer: "bottom", to_layer: "top" },
+    ],
+  ],
+] satisfies [string, FanoutTracePath["route"]][])(
+  "saved fanout paths accept vias at %s with continuous layers",
+  (_name, route) => {
+    const savedPath = { connection: "U1.1", route } satisfies FanoutTracePath
+    const original = JSON.stringify(savedPath)
+    const parsed = breakoutProps.parse({
+      autorouter: { allowViaInPad: true },
+      pcbTracePaths: [savedPath],
+    })
+    expect(parsed.pcbTracePaths).toEqual([savedPath])
+    expect(JSON.stringify(savedPath)).toBe(original)
+  },
+)
+
+test("consecutive endpoint vias must have continuous layers", () => {
+  expect(
+    fanoutTracePath.safeParse({
+      connection: "U1.1",
+      route: [topToBottomVia, { ...topToBottomVia, x: 2 }],
+    }).success,
+  ).toBe(false)
+})

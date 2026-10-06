@@ -13,6 +13,7 @@ test("projectConfig only includes project-specific fields", () => {
     defaultSpiceEngine: "spicey",
     pcbDisabled: true,
     schematicDisabled: true,
+    analogSimulationDisabled: true,
     partsEngineDisabled: true,
     footprintLibraryMap: {},
   })
@@ -28,6 +29,7 @@ test("projectConfig only includes project-specific fields", () => {
     defaultSpiceEngine: "spicey",
     pcbDisabled: true,
     schematicDisabled: true,
+    analogSimulationDisabled: true,
   })
 })
 
@@ -35,11 +37,13 @@ test("projectConfig includes disabled rendering flags when provided", () => {
   const config = projectConfig.parse({
     pcbDisabled: true,
     schematicDisabled: false,
+    analogSimulationDisabled: true,
   })
 
   expect(config).toEqual({
     pcbDisabled: true,
     schematicDisabled: false,
+    analogSimulationDisabled: true,
   })
 })
 

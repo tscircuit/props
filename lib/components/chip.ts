@@ -142,7 +142,7 @@ const connectionTarget = z
   .or(z.array(z.string()).readonly())
   .or(z.array(z.string()))
 
-const noConnectProp = z
+export const noConnectProp = z
   .array(schematicPinLabel)
   .readonly()
   .or(z.array(schematicPinLabel))

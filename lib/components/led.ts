@@ -5,6 +5,8 @@ import { createConnectionsProp } from "lib/common/connectionsProp"
 import { diodePinLabelsProp } from "lib/components/diode"
 import { schematicPinLabel } from "lib/common/schematicPinLabel"
 
+import { schematicSymbolSize } from "lib/common/schematicSize"
+
 export type LedPinLabels = (typeof lrPolarPins)[number]
 
 const legacyNumericLedPinLabelsProp = z
@@ -24,6 +26,8 @@ export const ledProps = commonComponentProps.extend({
   wavelength: z.string().optional(),
   schDisplayValue: z.string().optional(),
   schOrientation: schematicOrientation.optional(),
+  /** Select a compact schematic symbol; omitted, default, and md retain the standard symbol. */
+  schSize: schematicSymbolSize.optional(),
   // Numeric keys are accepted for compatibility with legacy generated LED
   // wrappers, then normalized to the canonical pin1/pin2 representation.
   pinLabels: diodePinLabelsProp.or(legacyNumericLedPinLabelsProp).optional(),

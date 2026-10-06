@@ -129,3 +129,62 @@ test("cadmodel accepts modelBoardNormalDirection and pcbRotationOffset", () => {
   expect(parsed.modelBoardNormalDirection).toBe("z+")
   expect(parsed.pcbRotationOffset).toBe(90)
 })
+
+test("cadmodel model strings resolve to the canonical modelUrl props", () => {
+  for (const model of [
+    "soic8",
+    "pinrow4_p2.54mm",
+    "flexscreen_w16_h10_flex5_sitsflat",
+    "soic8_bodyWidth=4",
+  ]) {
+    const transforms = {
+      pcbX: "1cm",
+      pcbZ: 4,
+      rotationOffset: { x: 0, y: 0, z: 90 },
+      modelUnitToMmScale: 1,
+      stepUrl: "/part.step",
+      showAsTranslucentModel: true,
+    }
+    const raw: CadModelPropsInput = { model: `  ${model}  `, ...transforms }
+    expect(cadmodelProps.parse(raw)).toEqual(
+      cadmodelProps.parse({
+        modelUrl: `https://modelcdn.tscircuit.com/jscad_models/${encodeURIComponent(model)}.glb`,
+        ...transforms,
+      }),
+    )
+    expect(raw.model).toBe(`  ${model}  `)
+  }
+})
+
+test("cadmodel model URLs preserve imported geometry and transforms", () => {
+  for (const model of [
+    "https://example.com/part.glb",
+    "http://example.com/part.step#ext=step",
+  ]) {
+    expect(cadmodelProps.parse({ model, pcbZ: 4 })).toEqual(
+      cadmodelProps.parse({ modelUrl: model, pcbZ: 4 }),
+    )
+  }
+})
+
+test("cadmodel rejects missing, invalid, or conflicting model sources", () => {
+  for (const raw of [
+    {},
+    { stepUrl: "/part.step" },
+    { model: "" },
+    { model: "  " },
+    { model: null },
+    { model: 123 },
+    { model: "soic8", modelUrl: "/part.glb" },
+  ]) {
+    expect(cadmodelProps.safeParse(raw).success).toBe(false)
+  }
+})
+
+test("cadmodel preserves legacy URL and null inputs", () => {
+  expect(cadmodelProps.parse(null)).toBeNull()
+  expect(cadmodelProps.parse("/part.glb")).toBe("/part.glb")
+  expect(cadmodelProps.parse({ modelUrl: { default: "/part.glb" } })).toEqual({
+    modelUrl: "/part.glb",
+  })
+})

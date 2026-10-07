@@ -9,6 +9,10 @@ export interface SchematicSheetProps {
   name?: string
   displayName?: string
   sheetIndex?: number
+  /** Horizontal center of the sheet in schematic coordinates. */
+  schX?: Distance
+  /** Vertical center of the sheet in schematic coordinates. */
+  schY?: Distance
   /** Sheet size used to render the schematic. Defaults to A4. */
   sheetSize?: SchematicSheetSize
   /** Explicit schematic sheet width. Overrides the width from sheetSize. */
@@ -22,6 +26,8 @@ export const schematicSheetProps = z.object({
   name: z.string().optional(),
   displayName: z.string().optional(),
   sheetIndex: z.number().optional(),
+  schX: distance.optional(),
+  schY: distance.optional(),
   sheetSize: z.enum(["A4", "ANSI_B"]).default("A4"),
   sheetWidth: distance.pipe(z.number().positive()).optional(),
   sheetHeight: distance.pipe(z.number().positive()).optional(),

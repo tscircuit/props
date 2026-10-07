@@ -44,6 +44,17 @@ test("should parse explicit schematic sheet dimensions", () => {
   expect(parsed.sheetHeight).toBeCloseTo(279.4)
 })
 
+test("should parse an explicit schematic sheet center", () => {
+  const parsed = schematicSheetProps.parse({
+    name: "offset",
+    schX: "1in",
+    schY: "-0.5in",
+  })
+
+  expect(parsed.schX).toBeCloseTo(25.4)
+  expect(parsed.schY).toBeCloseTo(-12.7)
+})
+
 test("should parse schematic sheet without children", () => {
   const raw: SchematicSheetProps = {
     name: "power",

@@ -4976,6 +4976,8 @@ export interface SchematicSheetProps {
   name?: string
   displayName?: string
   sheetIndex?: number
+  schX?: Distance
+  schY?: Distance
   sheetSize?: SchematicSheetSize
   sheetWidth?: Distance
   sheetHeight?: Distance
@@ -4986,6 +4988,8 @@ export const schematicSheetProps = z.object({
   name: z.string().optional(),
   displayName: z.string().optional(),
   sheetIndex: z.number().optional(),
+  schX: distance.optional(),
+  schY: distance.optional(),
   sheetSize: z.enum(["A4", "ANSI_B"]).default("A4"),
   sheetWidth: distance.pipe(z.number().positive()).optional(),
   sheetHeight: distance.pipe(z.number().positive()).optional(),

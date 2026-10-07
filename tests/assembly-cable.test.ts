@@ -14,7 +14,11 @@ test("assembly.cable accepts motor references and scoped connector selectors", (
     to: ".CONTROLLER > .J_MOTOR",
   }
   const props: AssemblyCablePropsInput = input
-  expect(assemblyProps.cable.parse(props)).toEqual(input)
+  expect(assemblyProps.cable.parse(props)).toEqual({
+    name: "MOTOR_CABLE",
+    from: "MOTOR.wireside",
+    to: ".CONTROLLER > .J_MOTOR",
+  })
   expect(assemblyCableProps.parse(props).standard).toBeUndefined()
 })
 

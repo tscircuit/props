@@ -1,9 +1,10 @@
 import { expectTypesMatch } from "lib/typecheck"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import { z } from "zod"
 
 export type AssemblyCableStandard = "usb_c"
 
-export interface AssemblyCableProps {
+export interface AssemblyCableProps extends ExplodeProps {
   /** Stable assembly identity for the cable. */
   name: string
   /** Start connector selector or named assembly reference, e.g. MOTOR.wireside. */
@@ -22,6 +23,7 @@ export const assemblyCableProps = z.object({
   to: z.string().trim().min(1),
   standard: z.literal("usb_c").optional(),
   model: z.string().trim().min(1).optional(),
+  ...explodeProps.shape,
 })
 
 export type AssemblyCablePropsInput = z.input<typeof assemblyCableProps>

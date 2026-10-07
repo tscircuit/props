@@ -1,9 +1,10 @@
 import { url } from "lib/common/url"
 import { type Distance, distance } from "lib/common/distance"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface AssemblyScreenProps {
+export interface AssemblyScreenProps extends ExplodeProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -52,6 +53,7 @@ export const assemblyScreenProps = z
     width: positiveDistance("width").optional(),
     height: positiveDistance("height").optional(),
     cadModel: nonemptyString("cadModel").optional(),
+    ...explodeProps.shape,
   })
   .superRefine((screen, context) => {
     if (

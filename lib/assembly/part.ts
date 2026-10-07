@@ -1,10 +1,11 @@
 import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import { url } from "lib/common/url"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 /** A generic component of an assembly, with optional CAD geometry. */
-export interface AssemblyPartProps {
+export interface AssemblyPartProps extends ExplodeProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -26,6 +27,7 @@ export const assemblyPartProps = z
       .refine((value) => value.trim().length > 0, "modelUrl cannot be empty")
       .optional(),
     cadModel: cadModelProp.optional(),
+    ...explodeProps.shape,
   })
   .refine(
     (part) =>

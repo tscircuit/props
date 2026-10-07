@@ -177,6 +177,40 @@ export const pcbCoordinate = calcString.or(baseDistance)
 export { length }
 ```
 
+### exploded-view
+
+```typescript
+export const explodeDirectionNames = [
+  "right",
+  "left",
+  "top",
+  "bottom",
+  "above",
+  "below",
+] as const
+/** Unitless direction in the right-handed circuit-world frame: +X right,
+ * +Y top, and +Z above the board. This is a direction, not a position.
+ */
+export interface ExplodeDirectionVector {
+  x: number
+  y: number
+  z: number
+}
+export interface ExplodeProps {
+  explodeDirection?: ExplodeDirection
+  explodeDistance?: Distance
+}
+/** Travel at a fully exploded view, in millimeters or a unit string.
+   * Must be provided together with explodeDirection.
+   */
+export const explodeProps = z.object({
+  explodeDirection: z
+    .union([z.enum(explodeDirectionNames), explodeDirectionVector])
+    .optional(),
+  explodeDistance: distance.pipe(z.number().positive().finite()).optional(),
+})
+```
+
 ### fanoutBoundaryPadding
 
 ```typescript
@@ -885,7 +919,8 @@ export const supplierProps = z.object({
   supplierPartNumbers: z.record(supplier_name, z.array(z.string())).optional(),
 })
 export interface CommonComponentProps<PinLabel extends string = string>
-  extends CommonLayoutProps {
+  extends CommonLayoutProps,
+    ExplodeProps {
   key?: any
   name: string
   displayName?: string
@@ -952,6 +987,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
     mpn: z.string().describe("Manufacturer Part Number").optional(),
     mfn: z.string().describe("Manufacturer Part Number").optional(),
     manufacturerPartNumber: z.string().optional(),
+    ...explodeProps.shape,
   })
 export const lrPolarPins = [
   "pin1",
@@ -2979,7 +3015,10 @@ export const border = z.object({
   dashed: z.boolean().optional(),
   solid: z.boolean().optional(),
 })
-export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
+export interface BaseGroupProps
+  extends CommonLayoutProps,
+    LayoutConfig,
+    ExplodeProps {
   name?: string
   key?: any
   children?: any
@@ -3325,6 +3364,7 @@ export interface NonSubcircuitGroupProps extends BaseGroupProps {
   subcircuit?: false | undefined
 }
 export const baseGroupProps = commonLayoutProps.extend({
+  ...explodeProps.shape,
   name: z.string().optional(),
   children: z.any().optional(),
   schTitle: z.string().optional(),

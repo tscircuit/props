@@ -1,10 +1,11 @@
 import { url } from "lib/common/url"
 import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
 import { z } from "zod"
 
-export interface AssemblySubassemblyProps {
+export interface AssemblySubassemblyProps extends ExplodeProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -33,6 +34,7 @@ export const assemblySubassemblyProps = z
       .optional(),
     cadModel: cadModelProp.optional(),
     children: z.custom<ReactNode>().optional(),
+    ...explodeProps.shape,
   })
   .refine(
     (assembly) =>

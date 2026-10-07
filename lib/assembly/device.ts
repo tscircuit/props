@@ -1,8 +1,9 @@
 import { url } from "lib/common/url"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface AssemblyDeviceProps {
+export interface AssemblyDeviceProps extends ExplodeProps {
   /** Product-level assembly identity. */
   name?: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -20,6 +21,7 @@ export const assemblyDeviceProps = z
         message: "modelUrl cannot be empty",
       })
       .optional(),
+    ...explodeProps.shape,
   })
   .refine(
     (device) => device.model === undefined || device.modelUrl === undefined,

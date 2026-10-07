@@ -1165,7 +1165,8 @@ export interface FuseProps<
 ### BaseGroupProps
 
 ```ts
-export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
+export interface BaseGroupProps
+  extends CommonLayoutProps, LayoutConfig, ExplodeProps {
   name?: string;
   key?: any;
   children?: any;

@@ -1,8 +1,9 @@
 import { type Distance, distance } from "lib/common/distance"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface EnclosureFdmBoxProps {
+export interface EnclosureFdmBoxProps extends ExplodeProps {
   /** Stable enclosure identity. */
   name?: string
   /** The name or selector of the board enclosed by this box. */
@@ -60,6 +61,7 @@ export const enclosureFdmBoxProps = z.object({
   lidLipDepth: distance.optional(),
   disableCutouts: z.boolean().optional(),
   showHiddenEdges: z.boolean().optional(),
+  ...explodeProps.shape,
 })
 
 export type EnclosureFdmBoxPropsInput = z.input<typeof enclosureFdmBoxProps>

@@ -214,6 +214,20 @@ export interface AssemblyMotorProps {
 }
 
 
+export interface AssemblyPartProps {
+  /** Stable identity used by assembly selectors. */
+  name: string
+  /** Human-facing alternate to the stable name. */
+  displayName?: string
+  /** Modelprinter/footprinter string, trimmed; mutually exclusive with modelUrl and cadModel. */
+  model?: string
+  /** Imported CAD model URL; mutually exclusive with model and cadModel. */
+  modelUrl?: string
+  /** Existing component CAD model formats; mutually exclusive with model and modelUrl. */
+  cadModel?: CadModelProp
+}
+
+
 export interface AssemblyPrintedPartProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string

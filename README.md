@@ -733,9 +733,6 @@ export interface ConnectorProps extends ChipPropsSU {
    */
   standard?: ConnectorStandard;
 
-  /** Modelprinter specification for the physical connector model. */
-  model?: string;
-
   /**
    * Number of electrical circuits in the connector
    */

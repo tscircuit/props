@@ -155,19 +155,6 @@ export interface AntennaProps extends CommonComponentProps {
 }
 
 
-export interface AssemblyCableConnectorProps {
-  /** Modelprinter specification for the physical mating interface. */
-  model: string
-  /** Mating center relative to the CAD placement anchor, in physical mm,
-   * right-handed model-local +X/+Y/+Z, before its rotation and positionOffset.
-   * Do not use mesh file units; this is already a physical offset in mm.
-   */
-  position: { x: Distance; y: Distance; z: Distance }
-  /** Outward mating axis in that same model-local frame. Required. */
-  facingDirection: CadModelAxisDirection
-}
-
-
 export interface AssemblyCableProps {
   /** Stable assembly identity for the cable. */
   name: string
@@ -175,10 +162,10 @@ export interface AssemblyCableProps {
   from: string
   /** End connector selector or named assembly reference. */
   to: string
-  /** Optional cable standard. adaptercable composes independent ends; omit to
-   * infer an adapter or an existing same-end preset from the endpoints.
-   */
+  /** Optional USB-C-to-USB-C preset. Omit to infer the cable from its endpoints. */
   standard?: AssemblyCableStandard
+  /** Explicit cable model specification. Omit to infer the cable from its endpoints. */
+  model?: string
 }
 
 
@@ -294,10 +281,6 @@ export interface AssemblySubassemblyProps {
   cadModel?: CadModelProp
   /** Nested assembly elements or CAD geometry; preserved without parsing. */
   children?: ReactNode
-  /** Named physical cable interfaces on the imported CAD model. Connect using
-   * `from="MOTOR.phases"`; coordinates follow the CAD model's offset/rotation.
-   */
-  cableConnectors?: Record<string, AssemblyCableConnectorProps>
 }
 
 
@@ -1100,9 +1083,6 @@ export interface ConnectorProps extends ChipPropsSU {
    * Connector interface or product family, e.g. usb_c, m2, jst_ph
    */
   standard?: ConnectorStandard
-
-  /** Modelprinter specification for the physical connector model. */
-  model?: string
 
   /**
    * Number of electrical circuits in the connector

@@ -34,16 +34,6 @@ test("assembly.cable accepts the USB-C preset and trims endpoint references", ()
   })
 })
 
-test("assembly.cable accepts independent-ended adapter composition", () => {
-  const input: AssemblyCableProps = {
-    name: "PHASE_LEADS",
-    from: "MOTOR.phases",
-    to: ".J_PHASES",
-    standard: "adaptercable",
-  }
-  expect(assemblyCableProps.parse(input)).toEqual(input)
-})
-
 test("assembly.cable requires an identity and two nonempty endpoint strings", () => {
   const valid = {
     name: "MOTOR_CABLE",
@@ -62,4 +52,18 @@ test("assembly.cable requires an identity and two nonempty endpoint strings", ()
       false,
     )
   }
+})
+
+test("assembly.cable accepts an explicit model without changing standard behavior", () => {
+  const input = {
+    name: "C1",
+    from: ".J1",
+    to: ".J2",
+    model: "adaptercable_a(jst_sh_pins4)_b(jst_ph_pins4)",
+  }
+  expect(assemblyCableProps.parse(input)).toEqual(input)
+  for (const model of ["", " ", 4, null])
+    expect(assemblyCableProps.safeParse({ ...input, model }).success).toBe(
+      false,
+    )
 })

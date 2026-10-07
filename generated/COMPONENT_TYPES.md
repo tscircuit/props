@@ -2177,8 +2177,6 @@ export const chipProps = commonComponentProps.extend({
 export interface ConnectorProps extends ChipPropsSU {
   standard?: ConnectorStandard
 
-  model?: string
-
   pinCount?: number
 }
 /**
@@ -2186,7 +2184,6 @@ export interface ConnectorProps extends ChipPropsSU {
    */
 export const connectorProps = chipProps.extend({
   standard: connectorStandard.optional(),
-  model: z.string().trim().min(1).optional(),
   pinCount: z.number().int().positive().optional(),
 })
 ```

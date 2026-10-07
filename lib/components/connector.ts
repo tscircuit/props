@@ -21,9 +21,6 @@ export interface ConnectorProps extends ChipPropsSU {
    */
   standard?: ConnectorStandard
 
-  /** Modelprinter specification for the physical connector model. */
-  model?: string
-
   /**
    * Number of electrical circuits in the connector
    */
@@ -32,11 +29,8 @@ export interface ConnectorProps extends ChipPropsSU {
 
 export const connectorProps = chipProps.extend({
   standard: connectorStandard.optional(),
-  model: z.string().trim().min(1).optional(),
   pinCount: z.number().int().positive().optional(),
 })
-
-export type ParsedConnectorProps = z.output<typeof connectorProps>
 
 type InferredConnectorProps = z.input<typeof connectorProps>
 expectTypesMatch<ConnectorProps, InferredConnectorProps>(true)

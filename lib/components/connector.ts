@@ -24,7 +24,7 @@ export interface ConnectorProps extends ChipPropsSU {
   standard?: ConnectorStandard
 
   /** Physical connector model specification, e.g. bullet3_d3.5mm_gmale. */
-  modelprinterString?: string
+  model?: string
 
   /**
    * Number of electrical circuits in the connector; bullet groups support 1–16 (default 1)
@@ -53,7 +53,7 @@ export const bulletDiameter = distance.pipe(
 export const connectorProps = chipProps
   .extend({
     standard: connectorStandard.optional(),
-    modelprinterString: z.string().optional(),
+    model: z.string().trim().min(1).optional(),
     pinCount: z.number().int().positive().optional(),
     bulletDiameter: bulletDiameter.optional(),
     bulletGender: z.enum(["male", "female"]).optional(),

@@ -5058,10 +5058,19 @@ export interface SchematicTableProps {
 ### schematic-text
 
 ```typescript
+export const schematicTextSpan = z.object({
+  text: z.string().min(1),
+  overline: z.boolean().optional(),
+})
+export interface SchematicTextSpan {
+  text: string
+  overline?: boolean
+}
+/** Draw an overline above this span, typically for an active-low signal. */
 export const schematicTextProps = z.object({
   schX: distance.optional(),
   schY: distance.optional(),
-  text: z.string(),
+  text: z.union([z.string(), z.array(schematicTextSpan).min(1)]),
   fontSize: z.number().default(1),
   anchor: z
     .union([fivePointAnchor.describe("legacy"), ninePointAnchor])
@@ -5069,10 +5078,11 @@ export const schematicTextProps = z.object({
   color: z.string().default("#000000"),
   schRotation: rotation.default(0),
 })
+/** Plain text, or ordered spans when only part of the text needs an overline. */
 export interface SchematicTextProps {
   schX?: Distance
   schY?: Distance
-  text: string
+  text: string | SchematicTextSpan[]
   fontSize?: number
   anchor?: z.infer<typeof fivePointAnchor> | z.infer<typeof ninePointAnchor>
   color?: string

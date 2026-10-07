@@ -3071,11 +3071,19 @@ export interface SchematicTableProps {
 export interface SchematicTextProps {
   schX?: Distance
   schY?: Distance
-  text: string
+  /** Plain text, or ordered spans when only part of the text needs an overline. */
+  text: string | SchematicTextSpan[]
   fontSize?: number
   anchor?: z.infer<typeof fivePointAnchor> | z.infer<typeof ninePointAnchor>
   color?: string
   schRotation?: number | string
+}
+
+
+export interface SchematicTextSpan {
+  text: string
+  /** Draw an overline above this span, typically for an active-low signal. */
+  overline?: boolean
 }
 
 

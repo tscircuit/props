@@ -9,7 +9,7 @@ test("should parse schematic text with all fields", () => {
   const raw: SchematicTextProps = {
     schX: 10,
     schY: 20,
-    text: "Label",
+    text: [{ text: "La" }, { text: "bel", overline: true }],
     fontSize: 2,
     anchor: "center",
     color: "#FF0000",
@@ -19,7 +19,7 @@ test("should parse schematic text with all fields", () => {
   const parsed = schematicTextProps.parse(raw)
   expect(parsed.schX).toBe(10)
   expect(parsed.schY).toBe(20)
-  expect(parsed.text).toBe("Label")
+  expect(parsed.text).toEqual([{ text: "La" }, { text: "bel", overline: true }])
   expect(parsed.fontSize).toBe(2)
   expect(parsed.anchor).toBe("center")
   expect(parsed.color).toBe("#FF0000")
@@ -38,4 +38,12 @@ test("should parse schematic text with only required fields", () => {
   expect(parsed.anchor).toBe("center")
   expect(parsed.color).toBe("#000000")
   expect(parsed.schRotation).toBe(0)
+})
+
+test("should reject empty rich text", () => {
+  expect(
+    schematicTextProps.safeParse({
+      text: [],
+    }).success,
+  ).toBe(false)
 })

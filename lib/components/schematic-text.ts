@@ -5,10 +5,24 @@ import { fivePointAnchor } from "lib/common/fivePointAnchor"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Distance } from "lib/common/distance"
 
+export const schematicTextSpan = z.object({
+  text: z.string().min(1),
+  overline: z.boolean().optional(),
+})
+
+export interface SchematicTextSpan {
+  text: string
+  /** Draw an overline above this span, typically for an active-low signal. */
+  overline?: boolean
+}
+
+expectTypesMatch<SchematicTextSpan, z.input<typeof schematicTextSpan>>(true)
+
 export const schematicTextProps = z.object({
   schX: distance.optional(),
   schY: distance.optional(),
-  text: z.string(),
+  /** Plain text, or ordered spans when only part of the text needs an overline. */
+  text: z.union([z.string(), z.array(schematicTextSpan).min(1)]),
   fontSize: z.number().default(1),
   anchor: z
     .union([fivePointAnchor.describe("legacy"), ninePointAnchor])
@@ -20,7 +34,8 @@ export const schematicTextProps = z.object({
 export interface SchematicTextProps {
   schX?: Distance
   schY?: Distance
-  text: string
+  /** Plain text, or ordered spans when only part of the text needs an overline. */
+  text: string | SchematicTextSpan[]
   fontSize?: number
   anchor?: z.infer<typeof fivePointAnchor> | z.infer<typeof ninePointAnchor>
   color?: string

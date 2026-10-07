@@ -2177,6 +2177,8 @@ export const chipProps = commonComponentProps.extend({
 export interface ConnectorProps extends ChipPropsSU {
   standard?: ConnectorStandard
 
+  modelprinterString?: string
+
   pinCount?: number
 
   bulletDiameter?: number | string
@@ -2184,6 +2186,7 @@ export interface ConnectorProps extends ChipPropsSU {
 }
 .extend({
     standard: connectorStandard.optional(),
+    modelprinterString: z.string().optional(),
     pinCount: z.number().int().positive().optional(),
     bulletDiameter: bulletDiameter.optional(),
     bulletGender: z.enum(["male", "female"]).optional(),

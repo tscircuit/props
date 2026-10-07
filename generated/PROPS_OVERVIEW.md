@@ -1105,6 +1105,9 @@ export interface ConnectorProps extends ChipPropsSU {
    */
   standard?: ConnectorStandard
 
+  /** Physical connector model specification, e.g. bullet3_d3.5mm_gmale. */
+  modelprinterString?: string
+
   /**
    * Number of electrical circuits in the connector; bullet groups support 1–16 (default 1)
    */

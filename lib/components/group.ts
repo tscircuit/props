@@ -343,6 +343,14 @@ export interface RoutingTolerances {
 }
 
 export interface AutorouterConfig {
+  /**
+   * Suppress suboptimal component orientation warnings for this autorouter.
+   * Accepts true/false, preserved unchanged; omitted inherits the enclosing
+   * routing settings, with warnings enabled when no setting is supplied.
+   * A direct routing-scope prop takes precedence when both are provided.
+   * No aliases or migration are required. Requires core support to take effect.
+   */
+  ignoreSuboptimalOrientationWarnings?: boolean
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
@@ -439,6 +447,12 @@ export const routingTolerances = z.object({
 })
 
 export const autorouterConfig = z.object({
+  ignoreSuboptimalOrientationWarnings: z
+    .boolean()
+    .optional()
+    .describe(
+      "Suppress suboptimal component orientation warnings during autorouting. Accepts true/false unchanged; omitted inherits routing settings, with warnings enabled by default. Direct routing-scope props override the same autorouter config option. Requires core support; no aliases or migration.",
+    ),
   serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
@@ -600,6 +614,14 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  /**
+   * Suppress suboptimal component orientation warnings in this routing scope.
+   * Accepts true/false, preserved unchanged; omitted inherits enclosing scope
+   * or platform settings, falling back to false. Overrides the same option in
+   * this scope's autorouter config; phase settings may override this scope.
+   * No aliases or migration are required. Requires core support to take effect.
+   */
+  ignoreSuboptimalOrientationWarnings?: boolean
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   /**
@@ -791,6 +813,8 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  ignoreSuboptimalOrientationWarnings:
+    autorouterConfig.shape.ignoreSuboptimalOrientationWarnings,
   preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: autorouterVersion.optional(),

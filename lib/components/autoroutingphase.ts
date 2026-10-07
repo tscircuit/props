@@ -29,6 +29,14 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   name?: string
   autorouter?: AutorouterProp
   /**
+   * Suppress suboptimal component orientation warnings for this phase.
+   * Accepts true/false, preserved unchanged; omitted inherits enclosing routing
+   * settings, with warnings enabled by default. Overrides the same option in
+   * this phase's autorouter config. Explicit false overrides inherited suppression.
+   * No aliases or migration are required. Requires core support to take effect.
+   */
+  ignoreSuboptimalOrientationWarnings?: boolean
+  /**
    * Custom async routing function accepting simple route JSON and returning the
    * routing result, using the same contract as autorouter.algorithmFn. Parsing
    * preserves the function unchanged. Omitted by default; no aliases or prop
@@ -63,6 +71,8 @@ export const autoroutingPhaseProps = z
     key: z.any().optional(),
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
+    ignoreSuboptimalOrientationWarnings:
+      autorouterConfig.shape.ignoreSuboptimalOrientationWarnings,
     algorithmFn: autorouterConfig.shape.algorithmFn,
     preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
     phaseIndex: z.number().optional(),

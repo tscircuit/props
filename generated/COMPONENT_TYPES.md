@@ -2180,17 +2180,15 @@ export interface ConnectorProps extends ChipPropsSU {
   model?: string
 
   pinCount?: number
-
-  bulletDiameter?: number | string
-  bulletGender?: "male" | "female"
 }
-.extend({
-    standard: connectorStandard.optional(),
-    model: z.string().trim().min(1).optional(),
-    pinCount: z.number().int().positive().optional(),
-    bulletDiameter: bulletDiameter.optional(),
-    bulletGender: z.enum(["male", "female"]).optional(),
-  })
+/**
+   * Number of electrical circuits in the connector
+   */
+export const connectorProps = chipProps.extend({
+  standard: connectorStandard.optional(),
+  model: z.string().trim().min(1).optional(),
+  pinCount: z.number().int().positive().optional(),
+})
 ```
 
 ### constrainedlayout

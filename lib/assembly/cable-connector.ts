@@ -1,5 +1,4 @@
 import { z } from "zod"
-import { bulletDiameter } from "../components/connector"
 import { point3 } from "../common/point3"
 import {
   type CadModelAxisDirection,
@@ -10,12 +9,8 @@ import { expectTypesMatch } from "lib/typecheck"
 
 /** A physical cable interface on imported CAD, independent of PCB footprints. */
 export interface AssemblyCableConnectorProps {
-  standard: "bullet"
-  bulletDiameter: Distance
-  /** Gender on the CAD assembly; the cable uses the opposite gender. */
-  bulletGender: "male" | "female"
-  /** Number of independent circuits; defaults to one, 1–16. */
-  pinCount?: number
+  /** Modelprinter specification for the physical mating interface. */
+  model: string
   /** Mating center relative to the CAD placement anchor, in physical mm,
    * right-handed model-local +X/+Y/+Z, before its rotation and positionOffset.
    * Do not use mesh file units; this is already a physical offset in mm.
@@ -27,10 +22,7 @@ export interface AssemblyCableConnectorProps {
 
 export const assemblyCableConnectorProps = z
   .object({
-    standard: z.literal("bullet"),
-    bulletDiameter,
-    bulletGender: z.enum(["male", "female"]),
-    pinCount: z.number().int().min(1).max(16).optional(),
+    model: z.string().trim().min(1),
     position: point3,
     facingDirection: cadModelAxisDirection,
   })

@@ -733,18 +733,13 @@ export interface ConnectorProps extends ChipPropsSU {
    */
   standard?: ConnectorStandard;
 
-  /** Physical connector model specification, e.g. bullet3_d3.5mm_gmale. */
+  /** Modelprinter specification for the physical connector model. */
   model?: string;
 
   /**
-   * Number of electrical circuits in the connector; bullet groups support 1–16 (default 1)
+   * Number of electrical circuits in the connector
    */
   pinCount?: number;
-
-  /** Nominal bullet contact diameter in mm or a length string; required for bullet. */
-  bulletDiameter?: number | string;
-  /** Gender of the endpoint connector; the attached cable uses the opposite gender. */
-  bulletGender?: "male" | "female";
 }
 ```
 

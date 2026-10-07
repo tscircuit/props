@@ -10,9 +10,6 @@ for (const standard of connectorStandard.options) {
     const raw: ConnectorProps = {
       name: "conn",
       standard,
-      ...(standard === "bullet"
-        ? { bulletDiameter: 4, bulletGender: "male" as const }
-        : {}),
     }
     const parsed = connectorProps.parse(raw)
     expect(parsed.standard).toBe(standard)

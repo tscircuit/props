@@ -156,12 +156,8 @@ export interface AntennaProps extends CommonComponentProps {
 
 
 export interface AssemblyCableConnectorProps {
-  standard: "bullet"
-  bulletDiameter: Distance
-  /** Gender on the CAD assembly; the cable uses the opposite gender. */
-  bulletGender: "male" | "female"
-  /** Number of independent circuits; defaults to one, 1–16. */
-  pinCount?: number
+  /** Modelprinter specification for the physical mating interface. */
+  model: string
   /** Mating center relative to the CAD placement anchor, in physical mm,
    * right-handed model-local +X/+Y/+Z, before its rotation and positionOffset.
    * Do not use mesh file units; this is already a physical offset in mm.
@@ -1105,18 +1101,13 @@ export interface ConnectorProps extends ChipPropsSU {
    */
   standard?: ConnectorStandard
 
-  /** Physical connector model specification, e.g. bullet3_d3.5mm_gmale. */
+  /** Modelprinter specification for the physical connector model. */
   model?: string
 
   /**
-   * Number of electrical circuits in the connector; bullet groups support 1–16 (default 1)
+   * Number of electrical circuits in the connector
    */
   pinCount?: number
-
-  /** Nominal bullet contact diameter in mm or a length string; required for bullet. */
-  bulletDiameter?: number | string
-  /** Gender of the endpoint connector; the attached cable uses the opposite gender. */
-  bulletGender?: "male" | "female"
 }
 
 

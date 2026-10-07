@@ -1,11 +1,9 @@
 import { chipProps, type ChipPropsSU } from "./chip"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import { distance } from "lib/common/distance"
 
 export const connectorStandard = z.enum([
   "usb_c",
-  "bullet",
   "m2",
   "jst_sh",
   "jst_gh",
@@ -23,67 +21,20 @@ export interface ConnectorProps extends ChipPropsSU {
    */
   standard?: ConnectorStandard
 
-  /** Physical connector model specification, e.g. bullet3_d3.5mm_gmale. */
+  /** Modelprinter specification for the physical connector model. */
   model?: string
 
   /**
-   * Number of electrical circuits in the connector; bullet groups support 1–16 (default 1)
+   * Number of electrical circuits in the connector
    */
   pinCount?: number
-
-  /** Nominal bullet contact diameter in mm or a length string; required for bullet. */
-  bulletDiameter?: number | string
-  /** Gender of the endpoint connector; the attached cable uses the opposite gender. */
-  bulletGender?: "male" | "female"
 }
 
-export const bulletDiameter = distance.pipe(
-  z.union([
-    z.literal(2),
-    z.literal(3),
-    z.literal(3.5),
-    z.literal(4),
-    z.literal(5),
-    z.literal(5.5),
-    z.literal(6),
-    z.literal(8),
-  ]),
-)
-
-export const connectorProps = chipProps
-  .extend({
-    standard: connectorStandard.optional(),
-    model: z.string().trim().min(1).optional(),
-    pinCount: z.number().int().positive().optional(),
-    bulletDiameter: bulletDiameter.optional(),
-    bulletGender: z.enum(["male", "female"]).optional(),
-  })
-  .superRefine((connector, ctx) => {
-    if (connector.standard === "bullet") {
-      for (const field of ["bulletDiameter", "bulletGender"] as const) {
-        if (connector[field] === undefined)
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: [field],
-            message: `${field} is required for bullet connectors`,
-          })
-      }
-      if (connector.pinCount !== undefined && connector.pinCount > 16)
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["pinCount"],
-          message: "Bullet groups support 1 to 16 electrical contacts",
-        })
-    } else if (
-      connector.bulletDiameter !== undefined ||
-      connector.bulletGender !== undefined
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "bulletDiameter and bulletGender require standard=bullet",
-      })
-    }
-  })
+export const connectorProps = chipProps.extend({
+  standard: connectorStandard.optional(),
+  model: z.string().trim().min(1).optional(),
+  pinCount: z.number().int().positive().optional(),
+})
 
 export type ParsedConnectorProps = z.output<typeof connectorProps>
 

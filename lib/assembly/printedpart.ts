@@ -1,4 +1,5 @@
 import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import { url } from "lib/common/url"
 import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
@@ -6,7 +7,7 @@ import { isValidElement, type ReactElement } from "react"
 import { z } from "zod"
 
 /** Provide exactly one of jscad, model, modelUrl, or cadModel. */
-export interface AssemblyPrintedPartProps {
+export interface AssemblyPrintedPartProps extends ExplodeProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -51,6 +52,7 @@ export const assemblyPrintedPartProps = z
       .optional(),
     mountFace: z.string().trim().min(1).optional(),
     mountGap: distance.pipe(z.number().nonnegative().finite()).optional(),
+    ...explodeProps.shape,
   })
   .superRefine((part, ctx) => {
     if (

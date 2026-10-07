@@ -155,7 +155,7 @@ export interface AntennaProps extends CommonComponentProps {
 }
 
 
-export interface AssemblyCableProps {
+export interface AssemblyCableProps extends ExplodeProps {
   /** Stable assembly identity for the cable. */
   name: string
   /** Start connector selector or named assembly reference, e.g. MOTOR.wireside. */
@@ -169,7 +169,7 @@ export interface AssemblyCableProps {
 }
 
 
-export interface AssemblyDeviceProps {
+export interface AssemblyDeviceProps extends ExplodeProps {
   /** Product-level assembly identity. */
   name?: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -179,7 +179,7 @@ export interface AssemblyDeviceProps {
 }
 
 
-export interface AssemblyMotorProps {
+export interface AssemblyMotorProps extends ExplodeProps {
   /** Stable assembly identity used by selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -214,7 +214,7 @@ export interface AssemblyMotorProps {
 }
 
 
-export interface AssemblyPartProps {
+export interface AssemblyPartProps extends ExplodeProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -228,7 +228,7 @@ export interface AssemblyPartProps {
 }
 
 
-export interface AssemblyPrintedPartProps {
+export interface AssemblyPrintedPartProps extends ExplodeProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -255,7 +255,7 @@ export interface AssemblyPrintedPartProps {
 }
 
 
-export interface AssemblyScreenProps {
+export interface AssemblyScreenProps extends ExplodeProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -282,7 +282,7 @@ export interface AssemblyScreenProps {
 }
 
 
-export interface AssemblySubassemblyProps {
+export interface AssemblySubassemblyProps extends ExplodeProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -394,7 +394,10 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
 }
 
 
-export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
+export interface BaseGroupProps
+  extends CommonLayoutProps,
+    LayoutConfig,
+    ExplodeProps {
   name?: string
   key?: any
   children?: any
@@ -988,7 +991,8 @@ export interface CircularHoleWithRectPlatedProps
 
 
 export interface CommonComponentProps<PinLabel extends string = string>
-  extends CommonLayoutProps {
+  extends CommonLayoutProps,
+    ExplodeProps {
   key?: any
   name: string
   displayName?: string
@@ -1361,7 +1365,7 @@ export interface EditTraceHintEvent extends BaseManualEditEvent {
 }
 
 
-export interface EnclosureFdmBoxProps {
+export interface EnclosureFdmBoxProps extends ExplodeProps {
   /** Stable enclosure identity. */
   name?: string
   /** The name or selector of the board enclosed by this box. */
@@ -1402,6 +1406,25 @@ export interface EnclosureFdmBoxProps {
   disableCutouts?: boolean
   /** Show edges hidden behind the enclosure surface in compatible 3D viewers. */
   showHiddenEdges?: boolean
+}
+
+
+export interface ExplodeDirectionVector {
+  x: number
+  y: number
+  z: number
+}
+
+
+export interface ExplodeProps {
+  /** Direction from the assembled position toward this part's exploded position.
+   * Must be provided together with explodeDistance.
+   */
+  explodeDirection?: ExplodeDirection
+  /** Travel at a fully exploded view, in millimeters or a unit string.
+   * Must be provided together with explodeDirection.
+   */
+  explodeDistance?: Distance
 }
 
 

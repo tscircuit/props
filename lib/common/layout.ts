@@ -8,6 +8,7 @@ import {
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
+import { type ExplodeProps, explodeProps } from "./exploded-view"
 import { pcbCoordinate } from "./distance"
 import { type FootprintProp, footprintProp } from "./footprintProp"
 import {
@@ -231,7 +232,8 @@ export const supplierProps = z.object({
 expectTypesMatch<SupplierProps, z.input<typeof supplierProps>>(true)
 
 export interface CommonComponentProps<PinLabel extends string = string>
-  extends CommonLayoutProps {
+  extends CommonLayoutProps,
+    ExplodeProps {
   key?: any
   name: string
   displayName?: string
@@ -321,6 +323,7 @@ export const commonComponentProps = commonLayoutProps
     mpn: z.string().describe("Manufacturer Part Number").optional(),
     mfn: z.string().describe("Manufacturer Part Number").optional(),
     manufacturerPartNumber: z.string().optional(),
+    ...explodeProps.shape,
   })
 
 type InferredCommonComponentProps = z.input<typeof commonComponentProps>

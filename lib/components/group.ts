@@ -5,6 +5,7 @@ import {
   type AnyCircuitElement,
 } from "circuit-json"
 import type { AutocompleteString } from "lib/common/autocomplete"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import type { Distance } from "lib/common/distance"
 import {
   type CommonLayoutProps,
@@ -168,7 +169,10 @@ export const border = z.object({
   solid: z.boolean().optional(),
 })
 
-export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
+export interface BaseGroupProps
+  extends CommonLayoutProps,
+    LayoutConfig,
+    ExplodeProps {
   name?: string
   key?: any
   children?: any
@@ -674,6 +678,7 @@ export interface NonSubcircuitGroupProps extends BaseGroupProps {
 export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps
 
 export const baseGroupProps = commonLayoutProps.extend({
+  ...explodeProps.shape,
   name: z.string().optional(),
   children: z.any().optional(),
   schTitle: z.string().optional(),

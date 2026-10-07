@@ -1,4 +1,5 @@
 export * from "./common/direction"
+export * from "./common/exploded-view"
 export * from "./common/commonShape"
 export * from "./assembly"
 export * from "./enclosure"

@@ -2,13 +2,14 @@ import {
   type CadModelAxisDirection,
   cadModelAxisDirection,
 } from "lib/common/cadModel"
+import { type ExplodeProps, explodeProps } from "lib/common/exploded-view"
 import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export type AssemblyMotorStandard = "nema8" | "nema17" | "nema23"
 
-export interface AssemblyMotorProps {
+export interface AssemblyMotorProps extends ExplodeProps {
   /** Stable assembly identity used by selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -59,6 +60,7 @@ export const assemblyMotorProps = z
       .optional(),
     mountFace: z.string().trim().min(1).optional(),
     mountGap: distance.pipe(z.number().nonnegative().finite()).optional(),
+    ...explodeProps.shape,
   })
   .superRefine((motor, context) => {
     if ((motor.mountedTo === undefined) !== (motor.mountFace === undefined)) {

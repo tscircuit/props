@@ -24,6 +24,17 @@ export type CadModelAxisDirection = (typeof cadModelAxisDirections)[number]
 
 export const cadModelAxisDirection = z.enum(cadModelAxisDirections)
 
+export const cadModelOriginAlignments = [
+  "unknown",
+  "center",
+  "center_of_component_on_board_surface",
+  "bottom_center_of_component",
+] as const
+
+export type CadModelOriginAlignment = (typeof cadModelOriginAlignments)[number]
+
+export const cadModelOriginAlignment = z.enum(cadModelOriginAlignments)
+
 export interface CadModelBase {
   rotationOffset?:
     | number
@@ -38,6 +49,11 @@ export interface CadModelBase {
     y: number | string
     z: number | string
   }
+  /**
+   * Alignment used to infer the point on the model that Core places at the
+   * component position when modelOriginPosition is not provided.
+   */
+  modelOriginAlignment?: CadModelOriginAlignment
   /**
    * Axis-aligned extent of the model measured in its own coordinate frame, the
    * same frame as `modelOriginPosition`.
@@ -72,6 +88,7 @@ export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
   positionOffset: point3.optional(),
   modelOriginPosition: point3.optional(),
+  modelOriginAlignment: cadModelOriginAlignment.optional(),
   modelBounds: z.object({ min: point3, max: point3 }).optional(),
   size: point3.optional(),
   modelUnitToMmScale: distance.optional(),

@@ -18,6 +18,12 @@ export const cadModelAxisDirections = [
   "z+",
   "z-",
 ] as const
+export const cadModelOriginAlignments = [
+  "unknown",
+  "center",
+  "center_of_component_on_board_surface",
+  "bottom_center_of_component",
+] as const
 export interface CadModelBase {
   rotationOffset?:
     | number
@@ -32,6 +38,7 @@ export interface CadModelBase {
     y: number | string
     z: number | string
   }
+  modelOriginAlignment?: CadModelOriginAlignment
   modelBounds?: {
     min: { x: number | string; y: number | string; z: number | string }
     max: { x: number | string; y: number | string; z: number | string }
@@ -65,6 +72,7 @@ export const cadModelBase = z.object({
   rotationOffset: z.number().or(rotationPoint3).optional(),
   positionOffset: point3.optional(),
   modelOriginPosition: point3.optional(),
+  modelOriginAlignment: cadModelOriginAlignment.optional(),
   modelBounds: z.object({ min: point3, max: point3 }).optional(),
   size: point3.optional(),
   modelUnitToMmScale: distance.optional(),

@@ -752,6 +752,11 @@ export interface CadModelBase {
     z: number | string
   }
   /**
+   * Alignment used to infer the point on the model that Core places at the
+   * component position when modelOriginPosition is not provided.
+   */
+  modelOriginAlignment?: CadModelOriginAlignment
+  /**
    * Axis-aligned extent of the model measured in its own coordinate frame, the
    * same frame as `modelOriginPosition`.
    *

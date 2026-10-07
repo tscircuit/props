@@ -164,6 +164,8 @@ export interface AssemblyCableProps {
   to: string
   /** Optional USB-C-to-USB-C preset. Omit to infer the cable from its endpoints. */
   standard?: AssemblyCableStandard
+  /** Explicit cable model specification. Omit to infer the cable from its endpoints. */
+  model?: string
 }
 
 

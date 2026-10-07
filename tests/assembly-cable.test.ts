@@ -53,3 +53,17 @@ test("assembly.cable requires an identity and two nonempty endpoint strings", ()
     )
   }
 })
+
+test("assembly.cable accepts an explicit model without changing standard behavior", () => {
+  const input = {
+    name: "C1",
+    from: ".J1",
+    to: ".J2",
+    model: "adaptercable_a(jst_sh_pins4)_b(jst_ph_pins4)",
+  }
+  expect(assemblyCableProps.parse(input)).toEqual(input)
+  for (const model of ["", " ", 4, null])
+    expect(assemblyCableProps.safeParse({ ...input, model }).success).toBe(
+      false,
+    )
+})

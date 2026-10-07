@@ -33,3 +33,14 @@ are inferred; there are no corresponding props or aliases.
 This is an additive props API and requires no migration. The schema validates
 the inputs; endpoint resolution, routing, and rendering require support in core
 and the CAD renderer.
+
+## Explicit cable models
+
+Set `model` to use a cable specification instead of inferring it from the endpoints.
+
+```tsx
+<assembly.cable name="C1" from=".J1" to=".J2"
+  model="adaptercable_a(jst_sh_pins4)_b(jst_ph_pins4)" />
+```
+
+`standard` retains its existing meaning. Omitting `model` preserves endpoint inference.

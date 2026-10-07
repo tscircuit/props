@@ -12,6 +12,8 @@ export interface AssemblyCableProps {
   to: string
   /** Optional USB-C-to-USB-C preset. Omit to infer the cable from its endpoints. */
   standard?: AssemblyCableStandard
+  /** Explicit cable model specification. Omit to infer the cable from its endpoints. */
+  model?: string
 }
 
 export const assemblyCableProps = z.object({
@@ -19,6 +21,7 @@ export const assemblyCableProps = z.object({
   from: z.string().trim().min(1),
   to: z.string().trim().min(1),
   standard: z.literal("usb_c").optional(),
+  model: z.string().trim().min(1).optional(),
 })
 
 export type AssemblyCablePropsInput = z.input<typeof assemblyCableProps>

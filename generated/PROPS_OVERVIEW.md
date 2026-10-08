@@ -274,10 +274,10 @@ export interface AssemblyReferenceSurfaceProps {
    * Reversing the normal retains the local X tangent. Replaces positive/negative.
    */
   normalDirection?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
-  /** Local origin offsets, in mm or unit strings; each defaults to zero. */
-  xOffset?: Distance
-  yOffset?: Distance
-  zOffset?: Distance
+  /** Surface center offsets from the part origin, in mm or unit strings; each defaults to zero. */
+  centerXOffset?: Distance
+  centerYOffset?: Distance
+  centerZOffset?: Distance
   /** Optional rectangular extents along the tangent and its perpendicular.
    * Supply width and height together. Mounting uses the center, not the edges.
    */

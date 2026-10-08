@@ -23,27 +23,32 @@ test("reference surfaces normalize unit-aware offsets and optional rectangular e
     assemblyReferenceSurfaceProps.parse({
       shape: "rect",
       plane: "xy",
-      zOffset: "1mm",
+      centerZOffset: "1mm",
     }),
   ).toEqual({
     name: "anchor",
     shape: "rect",
     plane: "xy",
     normalDirection: "z+",
-    xOffset: 0,
-    yOffset: 0,
-    zOffset: 1,
+    centerXOffset: 0,
+    centerYOffset: 0,
+    centerZOffset: 1,
   })
   expect(
     assemblyReferenceSurfaceProps.parse({
       name: " board ",
       plane: "yz",
       normalDirection: "x-",
-      xOffset: "-0.1in",
+      centerXOffset: "-0.1in",
       width: "1in",
       height: "2mm",
     }),
-  ).toMatchObject({ name: "board", xOffset: -2.54, width: 25.4, height: 2 })
+  ).toMatchObject({
+    name: "board",
+    centerXOffset: -2.54,
+    width: 25.4,
+    height: 2,
+  })
 })
 
 test("reference surfaces reject invalid dimensions, names, planes and offsets", () => {
@@ -57,8 +62,8 @@ test("reference surfaces reject invalid dimensions, names, planes and offsets", 
     { plane: "xy", normalDirection: "x+" },
     { plane: "xz", normalDirection: "z-" },
     { plane: "yz", normalDirection: "y+" },
-    { zOffset: Infinity },
-    { xOffset: "nope" },
+    { centerZOffset: Infinity },
+    { centerXOffset: "nope" },
     { width: 10 },
     { width: 0, height: 10 },
     { width: 10, height: -1 },

@@ -83,6 +83,8 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<pcbnotepath />`                       | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
 | `<pcbnoterect />`                       | [`PcbNoteRectProps`](#pcbnoterectprops-pcbnoterect)                                                                |
 | `<pcbnotetext />`                       | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                |
+| `<pcbreturncurrentexcitation />`        | [`PcbReturnCurrentExcitationProps`](#pcbreturncurrentexcitationprops-pcbreturncurrentexcitation)                   |
+| `<pcbreturncurrentsimulation />`        | [`PcbReturnCurrentSimulationProps`](#pcbreturncurrentsimulationprops-pcbreturncurrentsimulation)                   |
 | `<pcbsoldermaskopening />`              | [`PcbSoldermaskOpeningProps`](#pcbsoldermaskopeningprops-pcbsoldermaskopening)                                     |
 | `<pcbstiffener />`                      | [`PcbStiffenerProps`](#pcbstiffenerprops-pcbstiffener)                                                             |
 | `<pcbtrace />`                          | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                                                         |
@@ -1706,6 +1708,52 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-text.ts)
+
+### PcbReturnCurrentExcitationProps `<pcbreturncurrentexcitation />`
+
+```ts
+export interface PcbReturnCurrentExcitationProps {
+  /** Readable excitation name for diagnostics; not stored on its Circuit JSON record. */
+  name?: string;
+  /** Signal driver port selector, e.g. ".U1 > .OUT". */
+  source: string;
+  /** Signal receiving port selector, e.g. ".U2 > .IN". */
+  load: string;
+  /** Ground net selector, e.g. "net.GND"; its copper and connections must already exist. */
+  ground: string;
+  /** Positive in-phase peak signal current. Numbers are amperes, not RMS; strings use ampere units. */
+  current: number | string;
+  /** Load-side GND port where positive return current enters the return conductor. */
+  returnSource: string;
+  /** Driver-side GND port where positive return current leaves the return conductor. */
+  returnSink: string;
+  /** Positive real source-port resistance. Numbers are ohms; complex impedances are unsupported. */
+  sourceImpedance: number | string;
+  /** Positive real load-port resistance. Numbers are ohms; complex impedances are unsupported. */
+  loadImpedance: number | string;
+  /** Optional trace selector to disambiguate multiple routes between the signal ports. */
+  trace?: string;
+  /** Contact layer for a load-side PCB port spanning multiple copper layers. */
+  returnSourceLayer?: LayerRefInput;
+  /** Contact layer for a driver-side PCB port spanning multiple copper layers. */
+  returnSinkLayer?: LayerRefInput;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-return-current-excitation.ts)
+
+### PcbReturnCurrentSimulationProps `<pcbreturncurrentsimulation />`
+
+```ts
+export interface PcbReturnCurrentSimulationProps {
+  /** Stable identity and readable name for the experiment. */
+  name?: string;
+  /** One or more nested pcbreturncurrentexcitation elements. */
+  children?: ReactNode;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-return-current-simulation.ts)
 
 ### PcbSoldermaskOpeningProps `<pcbsoldermaskopening />`
 

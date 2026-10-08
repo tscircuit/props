@@ -4162,6 +4162,64 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
 })
 ```
 
+### pcb-return-current-excitation
+
+```typescript
+/** A signal driver/load pair and its explicit ground return terminals.
+ * Selectors resolve inside the containing board/subcircuit. The initial core
+ * implementation accepts physical PCB ports/pads, not standalone via contacts.
+ * This definition neither connects the selected pins nor runs a simulation.
+ */
+export interface PcbReturnCurrentExcitationProps {
+  name?: string
+  source: string
+  load: string
+  ground: string
+  current: number | string
+  returnSource: string
+  returnSink: string
+  sourceImpedance: number | string
+  loadImpedance: number | string
+  trace?: string
+  returnSourceLayer?: LayerRefInput
+  returnSinkLayer?: LayerRefInput
+}
+/** Contact layer for a driver-side PCB port spanning multiple copper layers. */
+export const pcbReturnCurrentExcitationProps = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    source: selector,
+    load: selector,
+    ground: selector,
+    current: positiveCurrent,
+    returnSource: selector,
+    returnSink: selector,
+    sourceImpedance: positiveResistance,
+    loadImpedance: positiveResistance,
+    trace: selector.optional(),
+    returnSourceLayer: layer_ref.optional(),
+    returnSinkLayer: layer_ref.optional(),
+  })
+```
+
+### pcb-return-current-simulation
+
+```typescript
+/** Defines a pending PCB return-current experiment; rendering does not run it.
+ * Frequency, mesh and sampling settings are supplied to the simulation CLI.
+ */
+export interface PcbReturnCurrentSimulationProps {
+  name?: string
+  children?: ReactNode
+}
+/** One or more nested pcbreturncurrentexcitation elements. */
+export const pcbReturnCurrentSimulationProps = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    children: z.custom<ReactNode>().optional(),
+  })
+```
+
 ### pcb-soldermask-opening
 
 ```typescript

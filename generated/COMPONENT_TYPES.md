@@ -1114,64 +1114,65 @@ export interface PinAttributeMap {
    * Allowed relative deviation from requiresVoltage, e.g. 0.05 or "5%" for ±5%.
    * Parsed as a fraction from 0 to 1; omitted values remain undefined.
    */
-export const pinAttributeMap = z.object({
-  isInput: z.boolean().optional(),
-  isOutput: z.boolean().optional(),
-  isBidirectional: z.boolean().optional(),
-  isPassive: z.boolean().optional(),
-  canUseTriState: z.boolean().optional(),
-  isUsingTriState: z.boolean().optional(),
-  canUseOpenCollector: z.boolean().optional(),
-  isUsingOpenCollector: z.boolean().optional(),
-  canUseOpenEmitter: z.boolean().optional(),
-  isUsingOpenEmitter: z.boolean().optional(),
-  capabilities: z.array(pinCapability).optional(),
-  activeCapabilities: z.array(pinCapability).optional(),
-  activeCapability: pinCapability.optional(),
-  providesPower: z.boolean().optional(),
-  requiresPower: z.boolean().optional(),
-  providesGround: z.boolean().optional(),
-  requiresGround: z.boolean().optional(),
-  providesVoltage: z.union([z.string(), z.number()]).optional(),
-  requiresVoltage: z.union([z.string(), z.number()]).optional(),
-  requiredVoltageTolerance: z
-    .union([
-      z.number(),
-      z
-        .string()
-        .trim()
-        .regex(
-          /^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*%?$/,
-          "Expected a tolerance fraction or percentage",
-        )
-        .transform((value) =>
-          value.endsWith("%")
-            ? Number(value.slice(0, -1)) / 100
-            : Number(value),
-        ),
-    ])
-    .pipe(z.number().finite().min(0).max(1))
-    .optional(),
-  doNotConnect: z.boolean().optional(),
-  includeInBoardPinout: z.boolean().optional(),
-  highlightColor: z.string().optional(),
-  mustBeConnected: z.boolean().optional(),
-  canUseInternalPullup: z.boolean().optional(),
-  isUsingInternalPullup: z.boolean().optional(),
-  needsExternalPullup: z.boolean().optional(),
-  canUseInternalPulldown: z.boolean().optional(),
-  isUsingInternalPulldown: z.boolean().optional(),
-  needsExternalPulldown: z.boolean().optional(),
-  canUseOpenDrain: z.boolean().optional(),
-  isUsingOpenDrain: z.boolean().optional(),
-  canUsePushPull: z.boolean().optional(),
-  isUsingPushPull: z.boolean().optional(),
-  shouldHaveDecouplingCapacitor: z.boolean().optional(),
-  recommendedDecouplingCapacitorCapacitance: z
-    .union([z.string(), z.number()])
-    .optional(),
-  isGpio: z.boolean().optional(),
-})
+export const pinAttributeMap = z
+  .object({
+    isInput: z.boolean().optional(),
+    isOutput: z.boolean().optional(),
+    isBidirectional: z.boolean().optional(),
+    isPassive: z.boolean().optional(),
+    canUseTriState: z.boolean().optional(),
+    isUsingTriState: z.boolean().optional(),
+    canUseOpenCollector: z.boolean().optional(),
+    isUsingOpenCollector: z.boolean().optional(),
+    canUseOpenEmitter: z.boolean().optional(),
+    isUsingOpenEmitter: z.boolean().optional(),
+    capabilities: z.array(pinCapability).optional(),
+    activeCapabilities: z.array(pinCapability).optional(),
+    activeCapability: pinCapability.optional(),
+    providesPower: z.boolean().optional(),
+    requiresPower: z.boolean().optional(),
+    providesGround: z.boolean().optional(),
+    requiresGround: z.boolean().optional(),
+    providesVoltage: z.union([z.string(), z.number()]).optional(),
+    requiresVoltage: z.union([z.string(), z.number()]).optional(),
+    requiredVoltageTolerance: z
+      .union([
+        z.number(),
+        z
+          .string()
+          .trim()
+          .regex(
+            /^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*%?$/,
+            "Expected a tolerance fraction or percentage",
+          )
+          .transform((value) =>
+            value.endsWith("%")
+              ? Number(value.slice(0, -1)) / 100
+              : Number(value),
+          ),
+      ])
+      .pipe(z.number().finite().min(0).max(1))
+      .optional(),
+    doNotConnect: z.boolean().optional(),
+    includeInBoardPinout: z.boolean().optional(),
+    highlightColor: z.string().optional(),
+    mustBeConnected: z.boolean().optional(),
+    canUseInternalPullup: z.boolean().optional(),
+    isUsingInternalPullup: z.boolean().optional(),
+    needsExternalPullup: z.boolean().optional(),
+    canUseInternalPulldown: z.boolean().optional(),
+    isUsingInternalPulldown: z.boolean().optional(),
+    needsExternalPulldown: z.boolean().optional(),
+    canUseOpenDrain: z.boolean().optional(),
+    isUsingOpenDrain: z.boolean().optional(),
+    canUsePushPull: z.boolean().optional(),
+    isUsingPushPull: z.boolean().optional(),
+    shouldHaveDecouplingCapacitor: z.boolean().optional(),
+    recommendedDecouplingCapacitorCapacitance: z
+      .union([z.string(), z.number()])
+      .optional(),
+    isGpio: z.boolean().optional(),
+  })
 ```
 
 ### point

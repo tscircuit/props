@@ -8,6 +8,11 @@ This repo contains all the prop definitions and zod parsers for tscircuit builti
 This repo is the source-of-truth for defining the React props, API changes begin here. The focus of the API is on ergonomics for
 the user (unlike [circuit-json](https://github.com/tscircuit/circuit-json) which focuses on ergonomics for a renderer)
 
+Pin attributes accept only their declared TSX names. Unknown names, including
+misspellings and Circuit JSON snake-case names, produce a validation error at the
+affected `pinAttributes` entry instead of being silently removed. Existing
+attributes remain optional; validation does not select a pin function or add defaults.
+
 ```ts
 import type { ResistorProps, ResistorPropsInput } from "@tscircuit/props";
 import { resistorProps } from "@tscircuit/props";

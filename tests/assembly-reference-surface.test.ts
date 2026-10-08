@@ -2,6 +2,22 @@ import { expect, test } from "bun:test"
 import { assemblyReferenceSurfaceProps, assemblyProps } from "lib"
 
 test("reference surfaces normalize unit-aware offsets and optional rectangular extents", () => {
+  for (const [plane, axis] of [
+    ["xy", "z"],
+    ["xz", "y"],
+    ["yz", "x"],
+  ] as const) {
+    expect(assemblyReferenceSurfaceProps.parse({ plane }).normalDirection).toBe(
+      `${axis}+`,
+    )
+    for (const sign of ["+", "-"])
+      expect(
+        assemblyReferenceSurfaceProps.parse({
+          plane,
+          normalDirection: `${axis}${sign}`,
+        }).normalDirection,
+      ).toBe(`${axis}${sign}`)
+  }
   expect(assemblyProps.referencesurface).toBe(assemblyReferenceSurfaceProps)
   expect(
     assemblyReferenceSurfaceProps.parse({
@@ -13,7 +29,7 @@ test("reference surfaces normalize unit-aware offsets and optional rectangular e
     name: "anchor",
     shape: "rect",
     plane: "xy",
-    normalDirection: "positive",
+    normalDirection: "z+",
     xOffset: 0,
     yOffset: 0,
     zOffset: 1,
@@ -22,7 +38,7 @@ test("reference surfaces normalize unit-aware offsets and optional rectangular e
     assemblyReferenceSurfaceProps.parse({
       name: " board ",
       plane: "yz",
-      normalDirection: "negative",
+      normalDirection: "x-",
       xOffset: "-0.1in",
       width: "1in",
       height: "2mm",
@@ -36,6 +52,11 @@ test("reference surfaces reject invalid dimensions, names, planes and offsets", 
     { shape: "circle" },
     { plane: "xyz" },
     { normalDirection: "up" },
+    { normalDirection: "positive" },
+    { normalDirection: "negative" },
+    { plane: "xy", normalDirection: "x+" },
+    { plane: "xz", normalDirection: "z-" },
+    { plane: "yz", normalDirection: "y+" },
     { zOffset: Infinity },
     { xOffset: "nope" },
     { width: 10 },

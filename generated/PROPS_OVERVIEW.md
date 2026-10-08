@@ -270,8 +270,10 @@ export interface AssemblyReferenceSurfaceProps {
   shape?: "rect"
   /** Defaults to xy. Positive normals: xy +Z, xz +Y, yz +X. */
   plane?: "xy" | "xz" | "yz"
-  /** Reverse the plane's normal while retaining its local X tangent. */
-  normalDirection?: "positive" | "negative"
+  /** Outward normal, perpendicular to plane. Defaults: xy z+, xz y+, yz x+.
+   * Reversing the normal retains the local X tangent. Replaces positive/negative.
+   */
+  normalDirection?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
   /** Local origin offsets, in mm or unit strings; each defaults to zero. */
   xOffset?: Distance
   yOffset?: Distance

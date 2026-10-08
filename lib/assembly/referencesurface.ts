@@ -12,8 +12,10 @@ export interface AssemblyReferenceSurfaceProps {
   shape?: "rect"
   /** Defaults to xy. Positive normals: xy +Z, xz +Y, yz +X. */
   plane?: "xy" | "xz" | "yz"
-  /** Reverse the plane's normal while retaining its local X tangent. */
-  normalDirection?: "positive" | "negative"
+  /** Outward normal, perpendicular to plane. Defaults: xy z+, xz y+, yz x+.
+   * Reversing the normal retains the local X tangent. Replaces positive/negative.
+   */
+  normalDirection?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
   /** Local origin offsets, in mm or unit strings; each defaults to zero. */
   xOffset?: Distance
   yOffset?: Distance
@@ -33,7 +35,7 @@ export const assemblyReferenceSurfaceProps = z
     name: z.string().trim().min(1).default("anchor"),
     shape: z.literal("rect").default("rect"),
     plane: z.enum(["xy", "xz", "yz"]).default("xy"),
-    normalDirection: z.enum(["positive", "negative"]).default("positive"),
+    normalDirection: z.enum(["x+", "x-", "y+", "y-", "z+", "z-"]).optional(),
     xOffset: offset.default(0),
     yOffset: offset.default(0),
     zOffset: offset.default(0),
@@ -48,6 +50,26 @@ export const assemblyReferenceSurfaceProps = z
       path: ["width"],
     },
   )
+  .superRefine((surface, ctx) => {
+    const normalAxis =
+      surface.plane === "xy" ? "z" : surface.plane === "xz" ? "y" : "x"
+    if (surface.normalDirection && surface.normalDirection[0] !== normalAxis)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["normalDirection"],
+        message: `normalDirection must be ${normalAxis}+ or ${normalAxis}- for plane ${surface.plane}`,
+      })
+  })
+  .transform((surface) => ({
+    ...surface,
+    normalDirection:
+      surface.normalDirection ??
+      (surface.plane === "xy"
+        ? ("z+" as const)
+        : surface.plane === "xz"
+          ? ("y+" as const)
+          : ("x+" as const)),
+  }))
 
 export type AssemblyReferenceSurfacePropsInput = z.input<
   typeof assemblyReferenceSurfaceProps

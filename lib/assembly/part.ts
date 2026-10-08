@@ -2,6 +2,7 @@ import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { url } from "lib/common/url"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import type { ReactNode } from "react"
 
 /** A generic component of an assembly, with optional CAD geometry. */
 export interface AssemblyPartProps {
@@ -15,6 +16,8 @@ export interface AssemblyPartProps {
   modelUrl?: string
   /** Existing component CAD model formats; mutually exclusive with model and modelUrl. */
   cadModel?: CadModelProp
+  /** Reference surfaces defining named mounting frames for this part. */
+  children?: ReactNode
 }
 
 export const assemblyPartProps = z
@@ -26,6 +29,7 @@ export const assemblyPartProps = z
       .refine((value) => value.trim().length > 0, "modelUrl cannot be empty")
       .optional(),
     cadModel: cadModelProp.optional(),
+    children: z.custom<ReactNode>().optional(),
   })
   .refine(
     (part) =>

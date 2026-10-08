@@ -2,7 +2,7 @@ import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { url } from "lib/common/url"
 import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
-import { isValidElement, type ReactElement } from "react"
+import { isValidElement, type ReactElement, type ReactNode } from "react"
 import { z } from "zod"
 
 /** Provide exactly one of jscad, model, modelUrl, or cadModel. */
@@ -10,6 +10,12 @@ export interface AssemblyPrintedPartProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
+  /** Color for the rendered printed part. Omit to retain authored materials. */
+  color?: string
+  /** Printable material classification; omitted when unspecified. */
+  material?: "pla" | "petg" | "nylon"
+  /** Reference surfaces defining named mounting frames, alongside CAD children. */
+  children?: ReactNode
   /** Pure jscad-fiber JSX in right-handed local XYZ, dimensions in millimeters.
    * Named reference rectangles define attachment faces; they add no material.
    * Hooks, async components, and raw kernel geometry are not supported.
@@ -36,6 +42,9 @@ export const assemblyPrintedPartProps = z
   .object({
     name: z.string().trim().min(1),
     displayName: z.string().optional(),
+    color: z.string().trim().min(1).optional(),
+    material: z.enum(["pla", "petg", "nylon"]).optional(),
+    children: z.custom<ReactNode>().optional(),
     jscad: z
       .custom<ReactElement>(isValidElement, "Expected jscad-fiber JSX")
       .optional(),

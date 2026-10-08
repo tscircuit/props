@@ -225,6 +225,8 @@ export interface AssemblyPartProps {
   modelUrl?: string
   /** Existing component CAD model formats; mutually exclusive with model and modelUrl. */
   cadModel?: CadModelProp
+  /** Reference surfaces defining named mounting frames for this part. */
+  children?: ReactNode
 }
 
 
@@ -232,6 +234,12 @@ export interface AssemblyPrintedPartProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
+  /** Color for the rendered printed part. Omit to retain authored materials. */
+  color?: string
+  /** Printable material classification; omitted when unspecified. */
+  material?: "pla" | "petg" | "nylon"
+  /** Reference surfaces defining named mounting frames, alongside CAD children. */
+  children?: ReactNode
   /** Pure jscad-fiber JSX in right-handed local XYZ, dimensions in millimeters.
    * Named reference rectangles define attachment faces; they add no material.
    * Hooks, async components, and raw kernel geometry are not supported.
@@ -252,6 +260,29 @@ export interface AssemblyPrintedPartProps {
    * Requires mountedTo. Positive values separate the mating faces.
    */
   mountGap?: Distance
+}
+
+
+export interface AssemblyReferenceSurfaceProps {
+  /** Unique within the part; defaults to "anchor". Use PART.name to mount to it. */
+  name?: string
+  /** Reference shape; defaults to rect. Does not create solid geometry. */
+  shape?: "rect"
+  /** Defaults to xy. Positive normals: xy +Z, xz +Y, yz +X. */
+  plane?: "xy" | "xz" | "yz"
+  /** Outward normal, perpendicular to plane. Defaults: xy z+, xz y+, yz x+.
+   * Reversing the normal retains the local X tangent. Replaces positive/negative.
+   */
+  normalDirection?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
+  /** Surface center offsets from the part origin, in mm or unit strings; each defaults to zero. */
+  centerXOffset?: Distance
+  centerYOffset?: Distance
+  centerZOffset?: Distance
+  /** Optional rectangular extents along the tangent and its perpendicular.
+   * Supply width and height together. Mounting uses the center, not the edges.
+   */
+  width?: Distance
+  height?: Distance
 }
 
 

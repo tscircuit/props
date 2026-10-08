@@ -54,3 +54,19 @@ test("projectConfig includes snapshotsDir when provided", () => {
 
   expect(config.snapshotsDir).toBe("tests/__snapshots__")
 })
+
+test("PCB style checking is an optional boolean preserved in platform and project configuration", async () => {
+  const { platformConfig } = await import("../lib/platformConfig")
+  for (const schema of [platformConfig, projectConfig]) {
+    expect(schema.parse({}).pcbStyleChecksEnabled).toBeUndefined()
+    expect(
+      schema.parse({ pcbStyleChecksEnabled: false }).pcbStyleChecksEnabled,
+    ).toBe(false)
+    expect(
+      schema.parse({ pcbStyleChecksEnabled: true }).pcbStyleChecksEnabled,
+    ).toBe(true)
+    expect(schema.safeParse({ pcbStyleChecksEnabled: "true" }).success).toBe(
+      false,
+    )
+  }
+})

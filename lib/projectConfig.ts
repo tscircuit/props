@@ -13,6 +13,7 @@ export interface ProjectConfig
     | "includeBoardFiles"
     | "snapshotsDir"
     | "defaultSpiceEngine"
+    | "pcbStyleChecksEnabled"
     | "pcbDisabled"
     | "schematicDisabled"
     | "analogSimulationDisabled"
@@ -29,6 +30,7 @@ export const projectConfig = platformConfigObject.pick({
   includeBoardFiles: true,
   snapshotsDir: true,
   defaultSpiceEngine: true,
+  pcbStyleChecksEnabled: true,
   pcbDisabled: true,
   schematicDisabled: true,
   analogSimulationDisabled: true,

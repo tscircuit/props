@@ -2654,6 +2654,8 @@ export interface PlatformConfig {
   analogSimulationDisabled?: boolean;
   drcChecksDisabled?: boolean;
   netlistDrcChecksDisabled?: boolean;
+  /** Opt in to warnings for PCB segments longer than 5 mm and more than 4° from a multiple of 45°. Omitted or false disables these checks. */
+  pcbStyleChecksEnabled?: boolean;
   routingDrcChecksDisabled?: boolean;
   placementDrcChecksDisabled?: boolean;
   pinSpecificationDrcChecksDisabled?: boolean;
@@ -2709,6 +2711,7 @@ export interface ProjectConfig extends Pick<
   | "includeBoardFiles"
   | "snapshotsDir"
   | "defaultSpiceEngine"
+  | "pcbStyleChecksEnabled"
   | "pcbDisabled"
   | "schematicDisabled"
   | "analogSimulationDisabled"

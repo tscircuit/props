@@ -10,7 +10,7 @@ test("reference surfaces normalize unit-aware offsets and optional rectangular e
     expect(assemblyReferenceSurfaceProps.parse({ plane }).normalDirection).toBe(
       `${axis}+`,
     )
-    for (const sign of ["+", "-"])
+    for (const sign of ["+", "-"] as const)
       expect(
         assemblyReferenceSurfaceProps.parse({
           plane,

@@ -1874,6 +1874,9 @@ export interface CirclePlatedHoleProps extends Omit<
   portHints?: PortHints;
   solderMaskMargin?: Distance;
   coveredWithSolderMask?: boolean;
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean;
 }
 ```
 

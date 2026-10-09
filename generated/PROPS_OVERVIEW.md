@@ -972,6 +972,9 @@ export interface CirclePlatedHoleProps
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 
@@ -1015,6 +1018,9 @@ export interface CircularHoleWithRectPlatedProps
   holeOffsetY?: number | string
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 
@@ -1664,6 +1670,9 @@ export interface HoleWithPolygonPadPlatedHoleProps
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 
@@ -2128,6 +2137,9 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   /** @deprecated use holeHeight */
   innerHeight?: number | string
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 
@@ -2410,6 +2422,9 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 
@@ -2450,6 +2465,9 @@ export interface PillWithRectPadPlatedHoleProps
   rectBorderRadius?: number | string
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 

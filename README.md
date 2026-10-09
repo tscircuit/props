@@ -78,6 +78,9 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<panel />`                                 | [`PanelProps`](#panelprops-panel)                                                                                  |
 | `<pcbbend />`                               | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
 | `<pcbkeepout />`                            | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
+| `<simulation.pcbnoisechannel />`            | [`PcbNoiseChannelProps`](#pcbnoisechannelprops-simulationpcbnoisechannel)                                          |
+| `<simulation.pcbnoiseeye />`                | [`PcbNoiseEyeProps`](#pcbnoiseeyeprops-simulationpcbnoiseeye)                                                      |
+| `<simulation.pcbnoisesimulation />`         | [`PcbNoiseSimulationProps`](#pcbnoisesimulationprops-simulationpcbnoisesimulation)                                 |
 | `<pcbnotedimension />`                      | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
 | `<pcbnoteline />`                           | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
 | `<pcbnotepath />`                           | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
@@ -1587,6 +1590,74 @@ export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-keepout.ts)
+
+<a id="pcbnoisechannelprops-simulationpcbnoisechannel"></a>
+
+### PcbNoiseChannelProps `<simulation.pcbnoisechannel />`
+
+```ts
+export interface PcbNoiseChannelProps {
+  name: string;
+  role: "aggressor" | "victim";
+  source: string;
+  sourceReference: string;
+  load: string;
+  loadReference: string;
+  /** Required by core for a contact spanning multiple copper layers. */
+  sourceLayer?: LayerRefInput;
+  sourceReferenceLayer?: LayerRefInput;
+  loadLayer?: LayerRefInput;
+  loadReferenceLayer?: LayerRefInput;
+  /** Real Thevenin resistance in ohms, independent of extraction impedance. */
+  sourceImpedance: number | string;
+  /** Real load resistance in ohms. */
+  loadImpedance: number | string;
+  /** DC load bias in volts, required even when zero. */
+  loadBiasVoltage: number | string;
+  /** Positive farads selects parallel RC; omission explicitly selects a resistor. */
+  loadCapacitance?: number | string;
+  waveform: PcbNoiseWaveform;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-channel.ts)
+
+<a id="pcbnoiseeyeprops-simulationpcbnoiseeye"></a>
+
+### PcbNoiseEyeProps `<simulation.pcbnoiseeye />`
+
+```ts
+export interface PcbNoiseEyeProps {
+  /** Selects this channel's passive load-voltage observation. Requires an active PRBS channel. */
+  channel: string;
+  /** source explicitly selects nominal PRBS timing; advanced known_ui/explicit_clock stay explicit. */
+  timing: PcbNoiseEyeTiming;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-eye.ts)
+
+<a id="pcbnoisesimulationprops-simulationpcbnoisesimulation"></a>
+
+### PcbNoiseSimulationProps `<simulation.pcbnoisesimulation />`
+
+```ts
+export interface PcbNoiseSimulationProps {
+  name?: string;
+  /** Record duration. Numbers are seconds; unit strings include ns, ps and s. */
+  duration: number | string;
+  /** Full-resolution sample interval in seconds, never display decimation. */
+  sampleInterval: number | string;
+  /** Paired reference run: hold only these named aggressor channels' sources at the explicit voltage. */
+  baseline?: {
+    quietChannels: string[];
+    voltage: number | string;
+  };
+  children?: ReactNode;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-simulation.ts)
 
 ### PcbNoteDimensionProps `<pcbnotedimension />`
 

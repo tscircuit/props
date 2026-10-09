@@ -12,7 +12,7 @@ function extractInterfaces(content: string): string[] {
   let captureComments = ""
   let bracketCount = 0
 
-  for (const line of lines) {
+  for (const [index, line] of lines.entries()) {
     // Capture JSDoc comments
     if (line.trim().startsWith("/**")) {
       captureComments = `${line}\n`
@@ -46,9 +46,16 @@ function extractInterfaces(content: string): string[] {
       bracketCount += (line.match(/{/g) || []).length
       bracketCount -= (line.match(/}/g) || []).length
 
+      // A closing brace ends a union member, not necessarily the type alias.
+      const nextLine = lines
+        .slice(index + 1)
+        .find((entry) => entry.trim())
+        ?.trim()
+      const unionContinues = nextLine?.startsWith("|")
+
       // End capture based on context
       if (
-        (bracketCount === 0 && line.includes("}")) || // Interface/type end
+        (bracketCount === 0 && line.includes("}") && !unionContinues) || // Interface/type end
         line.trim().endsWith(";") || // Simple type end
         (line.includes(" as const") && line.includes("]")) // Const array end
       ) {

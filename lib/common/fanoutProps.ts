@@ -1,4 +1,9 @@
-import { type LayerRef, type LayerRefInput, layer_ref } from "circuit-json"
+import {
+  type LayerRef,
+  type LayerRefInput,
+  layer_ref,
+  layer_string,
+} from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import type { BusName } from "../components/bus"
@@ -116,7 +121,7 @@ export const fanoutProps = z.object({
   fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
   fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
   fanoutPourNetMap: z
-    .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+    .record(layer_string, z.union([z.string(), z.array(z.string()).min(1)]))
     .optional(),
 })
 

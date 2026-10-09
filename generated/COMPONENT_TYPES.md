@@ -269,7 +269,7 @@ export const fanoutProps = z.object({
   fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
   fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
   fanoutPourNetMap: z
-    .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+    .record(layer_string, z.union([z.string(), z.array(z.string()).min(1)]))
     .optional(),
 })
 ```
@@ -3955,6 +3955,170 @@ pcbLayoutProps.omit({ pcbRotation: true }).extend({
         'Component selectors excluded from the keepout, such as ".ANT1"',
       ),
   }),
+```
+
+### pcb-noise-channel
+
+```typescript
+/** DC volts or deterministic NRZ PRBS. Parsed PRBS carries the stable
+ * lfsr_fibonacci algorithm, version 1 and 10_90 edge convention. */
+export type PcbNoiseWaveform =
+  | { kind: "dc"; voltage: number | string }
+  | {
+      kind: "prbs"
+      order: 7 | 9 | 11 | 15 | 23 | 31
+      baudRate: number | string
+      lowVoltage: number | string
+      highVoltage: number | string
+      riseTime: number | string
+      fallTime: number | string
+      seed: number
+    }
+/** One driven signal path with an explicit source, load and physical references.
+ * Selectors resolve existing PCB contacts after routing; they do not create copper.
+ * Positive voltage is signal minus reference. References may be shared.
+ * Core creates `${name}_tx`/`${name}_rx` ports, `${name}_source` excitation,
+ * `${name}_load` termination and passive observations: `${name}_source_voltage`,
+ * `${name}_load_voltage`, `${name}_source_current` and `${name}_load_current`.
+ * Positive terminal current enters the PCB at each signal contact.
+ */
+export interface PcbNoiseChannelProps {
+  name: string
+  role: "aggressor" | "victim"
+  source: string
+  sourceReference: string
+  load: string
+  loadReference: string
+  sourceLayer?: LayerRefInput
+  sourceReferenceLayer?: LayerRefInput
+  loadLayer?: LayerRefInput
+  loadReferenceLayer?: LayerRefInput
+  sourceImpedance: number | string
+  loadImpedance: number | string
+  loadBiasVoltage: number | string
+  loadCapacitance?: number | string
+  waveform: PcbNoiseWaveform
+}
+/** Positive farads selects parallel RC; omission explicitly selects a resistor. */
+export const pcbNoiseChannelProps = z
+  .object({
+    name: selector,
+    role: z.enum(["aggressor", "victim"]),
+    source: selector,
+    sourceReference: selector,
+    load: selector,
+    loadReference: selector,
+    sourceLayer: layer_ref.optional(),
+    sourceReferenceLayer: layer_ref.optional(),
+    loadLayer: layer_ref.optional(),
+    loadReferenceLayer: layer_ref.optional(),
+    sourceImpedance: resistance,
+    loadImpedance: resistance,
+    loadBiasVoltage: strictQuantity("V", "volts", "0V"),
+    loadCapacitance: positiveQuantity("F", "farads", "1pF").optional(),
+    waveform: z.discriminatedUnion("kind", [
+      prbs,
+      z
+        .object({
+          kind: z.literal("dc"),
+          voltage: strictQuantity("V", "volts", "0V"),
+        })
+        .strict(),
+    ]),
+  })
+```
+
+### pcb-noise-eye
+
+```typescript
+export interface PcbNoiseTimeInterval {
+  start: number | string
+  end: number | string
+}
+export type PcbNoiseEyeOrigin =
+  | { kind: "authored_epoch"; epoch: number | string }
+  | { kind: "one_phase_estimate"; trainingInterval: PcbNoiseTimeInterval }
+/** Seconds and volts, with an explicit timing origin and no clock default. */
+export type PcbNoiseEyeTiming =
+  | {
+      kind: "source"
+      channel: string
+      sampleOffset: number | string
+    }
+  | {
+      kind: "known_ui"
+      unitInterval: number | string
+      sampleOffset: number | string
+      epoch?: number | string
+      origin?: PcbNoiseEyeOrigin
+    }
+  | {
+      kind: "explicit_clock"
+      clock:
+        | { kind: "observation"; clockObservation: string }
+        | { kind: "authored_edges"; edgeSource: string }
+      edge: "rising" | "falling" | "both"
+      threshold: number | string
+      uiPerSelectedEdge: number
+      sampleOffset: number | string
+      interpretation: "actual_receiver_clock" | "nominal_reference"
+    }
+/** Digital active-NRZ eye request. Analysis uses full-resolution voltages and explicit timing. */
+export interface PcbNoiseEyeProps {
+  channel: string
+  timing: PcbNoiseEyeTiming
+}
+/** source explicitly selects nominal PRBS timing; advanced known_ui/explicit_clock stay explicit. */
+export const pcbNoiseEyeProps = z
+  .object({
+    channel: z.string().trim().min(1),
+    timing: z.union([
+      z
+        .object({
+          kind: z.literal("source"),
+          channel: z.string().trim().min(1),
+          sampleOffset: offset,
+        })
+        .strict(),
+      knownUi,
+      explicitClock,
+    ]),
+  })
+```
+
+### pcb-noise-simulation
+
+```typescript
+/** Defines a pending physical PCB noise experiment. Rendering does not run a solver. */
+export interface PcbNoiseSimulationProps {
+  name?: string
+  duration: number | string
+  sampleInterval: number | string
+  baseline?: {
+    quietChannels: string[]
+    voltage: number | string
+  }
+  children?: ReactNode
+}
+/** Paired reference run: hold only these named aggressor channels' sources at the explicit voltage. */
+export const pcbNoiseSimulationProps = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    duration: positiveQuantity("s", "seconds", "512ns"),
+    sampleInterval: positiveQuantity("s", "seconds", "20ps"),
+    baseline: z
+      .object({
+        quietChannels: z.array(z.string().trim().min(1)).min(1),
+        voltage: strictQuantity("V", "volts", "0V"),
+      })
+      .strict()
+      .refine((v) => new Set(v.quietChannels).size === v.quietChannels.length, {
+        message: "Baseline channel names must be unique",
+        path: ["quietChannels"],
+      })
+      .optional(),
+    children: z.custom<ReactNode>().optional(),
+  })
 ```
 
 ### pcb-note-dimension

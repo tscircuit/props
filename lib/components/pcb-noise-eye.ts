@@ -15,9 +15,16 @@ export type PcbNoiseEyeOrigin =
   | { kind: "authored_epoch"; epoch: number | string }
   | { kind: "one_phase_estimate"; trainingInterval: PcbNoiseTimeInterval }
 
-/** Seconds and volts, with an explicit timing origin and no synthetic clock default.
- * recovered_clock is a reserved typed input: validation rejects it as unsupported. */
+/** Seconds and volts, with an explicit timing origin and no clock default. */
 export type PcbNoiseEyeTiming =
+  | {
+      /** Nominal authored PRBS symbol clock, including symbols without data transitions.
+       * Core derives UI from baud rate and a zero epoch; this is not receiver recovery. */
+      kind: "source"
+      channel: string
+      /** Seconds from each symbol boundary; must be less than the referenced PRBS UI. */
+      sampleOffset: number | string
+    }
   | {
       kind: "known_ui"
       unitInterval: number | string
@@ -39,28 +46,12 @@ export type PcbNoiseEyeTiming =
       /** Authored transmitter edges are allowed only with nominal_reference. */
       interpretation: "actual_receiver_clock" | "nominal_reference"
     }
-  | {
-      /** Reserved input: validation rejects recovery until a verified provider exists. */
-      kind: "recovered_clock"
-      method: "edge_lattice"
-      baudSearchRange: [number | string, number | string]
-      trainingInterval: PcbNoiseTimeInterval
-    }
-  | {
-      /** Reserved input: CDR requires explicit loop parameters and remains unsupported. */
-      kind: "recovered_clock"
-      method: "cdr"
-      baudSearchRange: [number | string, number | string]
-      trainingInterval: PcbNoiseTimeInterval
-      loopBandwidth: number | string
-      damping: number
-    }
 
 /** Digital active-NRZ eye request. Analysis uses full-resolution voltages and explicit timing. */
 export interface PcbNoiseEyeProps {
-  observation: string
-  modulation: "nrz"
-  /** known_ui or explicit_clock. Reserved recovered_clock inputs are rejected. */
+  /** Selects this channel's passive load-voltage observation. Requires an active PRBS channel. */
+  channel: string
+  /** source explicitly selects nominal PRBS timing; advanced known_ui/explicit_clock stay explicit. */
   timing: PcbNoiseEyeTiming
 }
 
@@ -138,39 +129,27 @@ const explicitClock = z
       path: ["interpretation"],
     },
   )
-const recovery = {
-  kind: z.literal("recovered_clock"),
-  baudSearchRange: z.tuple([
-    positiveQuantity("Hz|baud|symbols/s", "symbols per second", "500MHz"),
-    positiveQuantity("Hz|baud|symbols/s", "symbols per second", "600MHz"),
-  ]),
-  trainingInterval: interval,
-}
-
 export const pcbNoiseEyeProps = z
   .object({
-    observation: z.string().trim().min(1),
-    modulation: z.literal("nrz"),
+    channel: z.string().trim().min(1),
     timing: z.union([
-      knownUi,
-      explicitClock,
-      z.object({ ...recovery, method: z.literal("edge_lattice") }).strict(),
       z
         .object({
-          ...recovery,
-          method: z.literal("cdr"),
-          loopBandwidth: positiveQuantity("Hz", "hertz", "1MHz"),
-          damping: z.number().finite().positive(),
+          kind: z.literal("source"),
+          channel: z.string().trim().min(1),
+          sampleOffset: offset,
         })
         .strict(),
+      knownUi,
+      explicitClock,
     ]),
   })
   .strict()
-  .superRefine(({ observation, timing }, ctx) => {
+  .superRefine(({ channel, timing }, ctx) => {
     if (
       timing.kind === "explicit_clock" &&
       timing.clock.kind === "observation" &&
-      timing.clock.clockObservation === observation
+      timing.clock.clockObservation === `${channel}_voltage`
     ) {
       ctx.addIssue({
         code: "custom",
@@ -179,16 +158,7 @@ export const pcbNoiseEyeProps = z
       })
     }
   })
-  .transform(({ timing, ...props }, ctx) => {
-    if (timing.kind === "recovered_clock") {
-      ctx.addIssue({
-        code: "custom",
-        message:
-          "recovered_clock is unsupported; use known_ui or explicit_clock",
-        path: ["timing", "kind"],
-      })
-      return z.NEVER
-    }
+  .transform(({ timing, ...props }) => {
     if (timing.kind === "known_ui") {
       return {
         ...props,

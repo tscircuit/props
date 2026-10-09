@@ -16,10 +16,7 @@ const namespacedAnalogComponentNames = new Set([
 const namespacedSimulationComponentNames = new Set([
   "pcbreturncurrentexcitation",
   "pcbnoisesimulation",
-  "pcbnoiseport",
-  "pcbnoiseexcitation",
-  "pcbnoisetermination",
-  "pcbnoiseobservation",
+  "pcbnoisechannel",
   "pcbnoiseeye",
 
   "pcbreturncurrentsimulation",

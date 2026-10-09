@@ -2240,39 +2240,35 @@ export interface PcbLayoutProps {
 }
 
 
-export interface PcbNoiseExcitationProps {
-  /** Defaults in core to `${port}_source` for stable experiment-local identity. */
-  name?: string
-  port: string
+export interface PcbNoiseChannelProps {
+  name: string
   role: "aggressor" | "victim"
-  sourceModel: PcbNoiseSourceModel
+  source: string
+  sourceReference: string
+  load: string
+  loadReference: string
+  /** Required by core for a contact spanning multiple copper layers. */
+  sourceLayer?: LayerRefInput
+  sourceReferenceLayer?: LayerRefInput
+  loadLayer?: LayerRefInput
+  loadReferenceLayer?: LayerRefInput
+  /** Real Thevenin resistance in ohms, independent of extraction impedance. */
+  sourceImpedance: number | string
+  /** Real load resistance in ohms. */
+  loadImpedance: number | string
+  /** DC load bias in volts, required even when zero. */
+  loadBiasVoltage: number | string
+  /** Positive farads selects parallel RC; omission explicitly selects a resistor. */
+  loadCapacitance?: number | string
   waveform: PcbNoiseWaveform
 }
 
 
 export interface PcbNoiseEyeProps {
-  observation: string
-  modulation: "nrz"
-  /** known_ui or explicit_clock. Reserved recovered_clock inputs are rejected. */
+  /** Selects this channel's passive load-voltage observation. Requires an active PRBS channel. */
+  channel: string
+  /** source explicitly selects nominal PRBS timing; advanced known_ui/explicit_clock stay explicit. */
   timing: PcbNoiseEyeTiming
-}
-
-
-export interface PcbNoiseObservationProps {
-  name: string
-  port: string
-  quantity: "voltage" | "current"
-}
-
-
-export interface PcbNoisePortProps {
-  name: string
-  signal: string
-  reference: string
-  /** Required by core when the signal contact spans multiple copper layers. */
-  signalLayer?: LayerRefInput
-  /** Required by core when the reference contact spans multiple copper layers. */
-  referenceLayer?: LayerRefInput
 }
 
 
@@ -2282,29 +2278,12 @@ export interface PcbNoiseSimulationProps {
   duration: number | string
   /** Full-resolution sample interval in seconds, never display decimation. */
   sampleInterval: number | string
-  /** Paired reference run: hold only these named sources at the explicit voltage. */
+  /** Paired reference run: hold only these named aggressor channels' sources at the explicit voltage. */
   baseline?: {
-    kind: "quiet_sources"
-    sourceNames: string[]
+    quietChannels: string[]
     voltage: number | string
   }
   children?: ReactNode
-}
-
-
-export interface PcbNoiseSourceModel {
-  kind: "thevenin"
-  /** Real output resistance in ohms; independent of extraction reference impedance. */
-  resistance: number | string
-}
-
-
-export interface PcbNoiseTerminationProps {
-  /** Defaults in core to `${port}_termination` for stable experiment-local identity. */
-  name?: string
-  port: string
-  /** Numbers are ohms, farads and volts. DC bias is required even when zero. */
-  model: PcbNoiseTerminationModel
 }
 
 

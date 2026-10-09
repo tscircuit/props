@@ -1,15 +1,10 @@
+import { layer_ref, type LayerRefInput } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { positiveQuantity, strictQuantity } from "../simulation/strict-quantity"
 
-export interface PcbNoiseSourceModel {
-  kind: "thevenin"
-  /** Real output resistance in ohms; independent of extraction reference impedance. */
-  resistance: number | string
-}
-
-/** DC volts, or deterministic NRZ PRBS with volts, seconds and symbols/second.
- * PRBS algorithm/version and a nonzero initial state are required. No defaults. */
+/** DC volts or deterministic NRZ PRBS. Parsed PRBS carries the stable
+ * lfsr_fibonacci algorithm, version 1 and 10_90 edge convention. */
 export type PcbNoiseWaveform =
   | { kind: "dc"; voltage: number | string }
   | {
@@ -22,23 +17,41 @@ export type PcbNoiseWaveform =
       /** Positive 10–90% transition times in seconds; ideal steps are unsupported. */
       riseTime: number | string
       fallTime: number | string
-      edgeTimeConvention: "10_90"
-      /** Nonzero initial LFSR state, less than 2**order; no random implicit seed. */
+      /** Nonzero initial LFSR state, less than 2**order. */
       seed: number
-      algorithm: "lfsr_fibonacci"
-      algorithmVersion: "1"
     }
 
-/** Explicit voltage driver. Use DC for a quiet victim; a quiet victim has no digital eye. */
-export interface PcbNoiseExcitationProps {
-  /** Defaults in core to `${port}_source` for stable experiment-local identity. */
-  name?: string
-  port: string
+/** One driven signal path with an explicit source, load and physical references.
+ * Selectors resolve existing PCB contacts after routing; they do not create copper.
+ * Positive voltage is signal minus reference. References may be shared.
+ * Core creates `${name}_tx`/`${name}_rx` ports, `${name}_source` excitation,
+ * `${name}_load` termination and `${name}_voltage` load-voltage observation.
+ */
+export interface PcbNoiseChannelProps {
+  name: string
   role: "aggressor" | "victim"
-  sourceModel: PcbNoiseSourceModel
+  source: string
+  sourceReference: string
+  load: string
+  loadReference: string
+  /** Required by core for a contact spanning multiple copper layers. */
+  sourceLayer?: LayerRefInput
+  sourceReferenceLayer?: LayerRefInput
+  loadLayer?: LayerRefInput
+  loadReferenceLayer?: LayerRefInput
+  /** Real Thevenin resistance in ohms, independent of extraction impedance. */
+  sourceImpedance: number | string
+  /** Real load resistance in ohms. */
+  loadImpedance: number | string
+  /** DC load bias in volts, required even when zero. */
+  loadBiasVoltage: number | string
+  /** Positive farads selects parallel RC; omission explicitly selects a resistor. */
+  loadCapacitance?: number | string
   waveform: PcbNoiseWaveform
 }
 
+const selector = z.string().trim().min(1)
+const resistance = positiveQuantity("ohms?|Ohms?|Ω", "ohms", "50ohm")
 const prbs = z
   .object({
     kind: z.literal("prbs"),
@@ -59,24 +72,26 @@ const prbs = z
     highVoltage: strictQuantity("V", "volts", "1V"),
     riseTime: positiveQuantity("s", "seconds", "200ps"),
     fallTime: positiveQuantity("s", "seconds", "200ps"),
-    edgeTimeConvention: z.literal("10_90"),
     seed: z.number().int().positive(),
-    algorithm: z.literal("lfsr_fibonacci"),
-    algorithmVersion: z.literal("1"),
   })
   .strict()
 
-export const pcbNoiseExcitationProps = z
+export const pcbNoiseChannelProps = z
   .object({
-    name: z.string().trim().min(1).optional(),
-    port: z.string().trim().min(1),
+    name: selector,
     role: z.enum(["aggressor", "victim"]),
-    sourceModel: z
-      .object({
-        kind: z.literal("thevenin"),
-        resistance: positiveQuantity("ohms?|Ohms?|Ω", "ohms", "50ohm"),
-      })
-      .strict(),
+    source: selector,
+    sourceReference: selector,
+    load: selector,
+    loadReference: selector,
+    sourceLayer: layer_ref.optional(),
+    sourceReferenceLayer: layer_ref.optional(),
+    loadLayer: layer_ref.optional(),
+    loadReferenceLayer: layer_ref.optional(),
+    sourceImpedance: resistance,
+    loadImpedance: resistance,
+    loadBiasVoltage: strictQuantity("V", "volts", "0V"),
+    loadCapacitance: positiveQuantity("F", "farads", "1pF").optional(),
     waveform: z.discriminatedUnion("kind", [
       prbs,
       z
@@ -115,8 +130,19 @@ export const pcbNoiseExcitationProps = z
       }
     }
   })
+  .transform(({ waveform, ...props }) => ({
+    ...props,
+    waveform:
+      waveform.kind === "prbs"
+        ? {
+            ...waveform,
+            algorithm: "lfsr_fibonacci" as const,
+            algorithmVersion: "1" as const,
+            edgeTimeConvention: "10_90" as const,
+          }
+        : waveform,
+  }))
 
-expectTypesMatch<
-  PcbNoiseExcitationProps,
-  z.input<typeof pcbNoiseExcitationProps>
->(true)
+expectTypesMatch<PcbNoiseChannelProps, z.input<typeof pcbNoiseChannelProps>>(
+  true,
+)

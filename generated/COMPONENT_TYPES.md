@@ -3957,15 +3957,11 @@ pcbLayoutProps.omit({ pcbRotation: true }).extend({
   }),
 ```
 
-### pcb-noise-excitation
+### pcb-noise-channel
 
 ```typescript
-export interface PcbNoiseSourceModel {
-  kind: "thevenin"
-  resistance: number | string
-}
-/** DC volts, or deterministic NRZ PRBS with volts, seconds and symbols/second.
- * PRBS algorithm/version and a nonzero initial state are required. No defaults. */
+/** DC volts or deterministic NRZ PRBS. Parsed PRBS carries the stable
+ * lfsr_fibonacci algorithm, version 1 and 10_90 edge convention. */
 export type PcbNoiseWaveform =
   | { kind: "dc"; voltage: number | string }
   | {
@@ -3976,31 +3972,48 @@ export type PcbNoiseWaveform =
       highVoltage: number | string
       riseTime: number | string
       fallTime: number | string
-      edgeTimeConvention: "10_90"
       seed: number
-      algorithm: "lfsr_fibonacci"
-      algorithmVersion: "1"
     }
-/** Explicit voltage driver. Use DC for a quiet victim; a quiet victim has no digital eye. */
-export interface PcbNoiseExcitationProps {
-  name?: string
-  port: string
+/** One driven signal path with an explicit source, load and physical references.
+ * Selectors resolve existing PCB contacts after routing; they do not create copper.
+ * Positive voltage is signal minus reference. References may be shared.
+ * Core creates `${name}_tx`/`${name}_rx` ports, `${name}_source` excitation,
+ * `${name}_load` termination and `${name}_voltage` load-voltage observation.
+ */
+export interface PcbNoiseChannelProps {
+  name: string
   role: "aggressor" | "victim"
-  sourceModel: PcbNoiseSourceModel
+  source: string
+  sourceReference: string
+  load: string
+  loadReference: string
+  sourceLayer?: LayerRefInput
+  sourceReferenceLayer?: LayerRefInput
+  loadLayer?: LayerRefInput
+  loadReferenceLayer?: LayerRefInput
+  sourceImpedance: number | string
+  loadImpedance: number | string
+  loadBiasVoltage: number | string
+  loadCapacitance?: number | string
   waveform: PcbNoiseWaveform
 }
-/** Defaults in core to `${port}_source` for stable experiment-local identity. */
-export const pcbNoiseExcitationProps = z
+/** Positive farads selects parallel RC; omission explicitly selects a resistor. */
+export const pcbNoiseChannelProps = z
   .object({
-    name: z.string().trim().min(1).optional(),
-    port: z.string().trim().min(1),
+    name: selector,
     role: z.enum(["aggressor", "victim"]),
-    sourceModel: z
-      .object({
-        kind: z.literal("thevenin"),
-        resistance: positiveQuantity("ohms?|Ohms?|Ω", "ohms", "50ohm"),
-      })
-      .strict(),
+    source: selector,
+    sourceReference: selector,
+    load: selector,
+    loadReference: selector,
+    sourceLayer: layer_ref.optional(),
+    sourceReferenceLayer: layer_ref.optional(),
+    loadLayer: layer_ref.optional(),
+    loadReferenceLayer: layer_ref.optional(),
+    sourceImpedance: resistance,
+    loadImpedance: resistance,
+    loadBiasVoltage: strictQuantity("V", "volts", "0V"),
+    loadCapacitance: positiveQuantity("F", "farads", "1pF").optional(),
     waveform: z.discriminatedUnion("kind", [
       prbs,
       z
@@ -4023,9 +4036,13 @@ export interface PcbNoiseTimeInterval {
 export type PcbNoiseEyeOrigin =
   | { kind: "authored_epoch"; epoch: number | string }
   | { kind: "one_phase_estimate"; trainingInterval: PcbNoiseTimeInterval }
-/** Seconds and volts, with an explicit timing origin and no synthetic clock default.
- * recovered_clock is a reserved typed input: validation rejects it as unsupported. */
+/** Seconds and volts, with an explicit timing origin and no clock default. */
 export type PcbNoiseEyeTiming =
+  | {
+      kind: "source"
+      channel: string
+      sampleOffset: number | string
+    }
   | {
       kind: "known_ui"
       unitInterval: number | string
@@ -4044,86 +4061,26 @@ export type PcbNoiseEyeTiming =
       sampleOffset: number | string
       interpretation: "actual_receiver_clock" | "nominal_reference"
     }
-  | {
-      kind: "recovered_clock"
-      method: "edge_lattice"
-      baudSearchRange: [number | string, number | string]
-      trainingInterval: PcbNoiseTimeInterval
-    }
-  | {
-      kind: "recovered_clock"
-      method: "cdr"
-      baudSearchRange: [number | string, number | string]
-      trainingInterval: PcbNoiseTimeInterval
-      loopBandwidth: number | string
-      damping: number
-    }
 /** Digital active-NRZ eye request. Analysis uses full-resolution voltages and explicit timing. */
 export interface PcbNoiseEyeProps {
-  observation: string
-  modulation: "nrz"
+  channel: string
   timing: PcbNoiseEyeTiming
 }
-/** known_ui or explicit_clock. Reserved recovered_clock inputs are rejected. */
+/** source explicitly selects nominal PRBS timing; advanced known_ui/explicit_clock stay explicit. */
 export const pcbNoiseEyeProps = z
   .object({
-    observation: z.string().trim().min(1),
-    modulation: z.literal("nrz"),
+    channel: z.string().trim().min(1),
     timing: z.union([
-      knownUi,
-      explicitClock,
-      z.object({ ...recovery, method: z.literal("edge_lattice") }).strict(),
       z
         .object({
-          ...recovery,
-          method: z.literal("cdr"),
-          loopBandwidth: positiveQuantity("Hz", "hertz", "1MHz"),
-          damping: z.number().finite().positive(),
+          kind: z.literal("source"),
+          channel: z.string().trim().min(1),
+          sampleOffset: offset,
         })
         .strict(),
+      knownUi,
+      explicitClock,
     ]),
-  })
-```
-
-### pcb-noise-observation
-
-```typescript
-/** Passive measurement of a physical port. Observing does not add a source or load. */
-export interface PcbNoiseObservationProps {
-  name: string
-  port: string
-  quantity: "voltage" | "current"
-}
-export const pcbNoiseObservationProps = z
-  .object({
-    name: z.string().trim().min(1),
-    port: z.string().trim().min(1),
-    quantity: z.enum(["voltage", "current"]),
-  })
-```
-
-### pcb-noise-port
-
-```typescript
-/** A physical terminal voltage/current pair. Positive voltage is signal minus reference.
- * Selectors resolve existing PCB ports after routing; they do not create copper.
- * The same physical reference contact may be shared by multiple noise ports.
- */
-export interface PcbNoisePortProps {
-  name: string
-  signal: string
-  reference: string
-  signalLayer?: LayerRefInput
-  referenceLayer?: LayerRefInput
-}
-/** Required by core when the reference contact spans multiple copper layers. */
-export const pcbNoisePortProps = z
-  .object({
-    name: z.string().trim().min(1),
-    signal: z.string().trim().min(1),
-    reference: z.string().trim().min(1),
-    signalLayer: layer_ref.optional(),
-    referenceLayer: layer_ref.optional(),
   })
 ```
 
@@ -4136,13 +4093,12 @@ export interface PcbNoiseSimulationProps {
   duration: number | string
   sampleInterval: number | string
   baseline?: {
-    kind: "quiet_sources"
-    sourceNames: string[]
+    quietChannels: string[]
     voltage: number | string
   }
   children?: ReactNode
 }
-/** Paired reference run: hold only these named sources at the explicit voltage. */
+/** Paired reference run: hold only these named aggressor channels' sources at the explicit voltage. */
 export const pcbNoiseSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
@@ -4150,56 +4106,16 @@ export const pcbNoiseSimulationProps = z
     sampleInterval: positiveQuantity("s", "seconds", "20ps"),
     baseline: z
       .object({
-        kind: z.literal("quiet_sources"),
-        sourceNames: z.array(z.string().trim().min(1)).min(1),
+        quietChannels: z.array(z.string().trim().min(1)).min(1),
         voltage: strictQuantity("V", "volts", "0V"),
       })
       .strict()
-      .refine((v) => new Set(v.sourceNames).size === v.sourceNames.length, {
-        message: "Baseline source names must be unique",
-        path: ["sourceNames"],
+      .refine((v) => new Set(v.quietChannels).size === v.quietChannels.length, {
+        message: "Baseline channel names must be unique",
+        path: ["quietChannels"],
       })
       .optional(),
     children: z.custom<ReactNode>().optional(),
-  })
-```
-
-### pcb-noise-termination
-
-```typescript
-/** Explicit load resistance in ohms, positive capacitance in farads and bias in volts. */
-export type PcbNoiseTerminationModel =
-  | {
-      kind: "resistor"
-      resistance: number | string
-      biasVoltage: number | string
-    }
-  | {
-      kind: "parallel_rc"
-      resistance: number | string
-      capacitance: number | string
-      biasVoltage: number | string
-    }
-export interface PcbNoiseTerminationProps {
-  name?: string
-  port: string
-  model: PcbNoiseTerminationModel
-}
-/** Numbers are ohms, farads and volts. DC bias is required even when zero. */
-export const pcbNoiseTerminationProps = z
-  .object({
-    name: z.string().trim().min(1).optional(),
-    port: z.string().trim().min(1),
-    model: z.discriminatedUnion("kind", [
-      z.object({ kind: z.literal("resistor"), ...electrical }).strict(),
-      z
-        .object({
-          kind: z.literal("parallel_rc"),
-          ...electrical,
-          capacitance: positiveQuantity("F", "farads", "1pF"),
-        })
-        .strict(),
-    ]),
   })
 ```
 

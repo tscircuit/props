@@ -18,6 +18,9 @@ export interface CirclePlatedHoleProps
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
@@ -36,6 +39,9 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   /** @deprecated use holeHeight */
   innerHeight?: number | string
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
@@ -58,6 +64,9 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 export interface CircularHoleWithRectPlatedProps
@@ -76,6 +85,9 @@ export interface CircularHoleWithRectPlatedProps
   holeOffsetY?: number | string
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 export interface PillWithRectPadPlatedHoleProps
@@ -95,6 +107,9 @@ export interface PillWithRectPadPlatedHoleProps
   rectBorderRadius?: number | string
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 export interface HoleWithPolygonPadPlatedHoleProps
@@ -112,6 +127,9 @@ export interface HoleWithPolygonPadPlatedHoleProps
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
+  // Opt into solder paste on both outer layers for pin-in-paste assembly.
+  // Omitted or false does not request paste.
+  solderPaste?: boolean
 }
 
 export type PlatedHoleProps =
@@ -186,6 +204,7 @@ const platedHolePropsByShape = z
       portHints: portHints.optional(),
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
+      solderPaste: z.boolean().optional(),
     }),
     pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
@@ -200,6 +219,7 @@ const platedHolePropsByShape = z
       portHints: portHints.optional(),
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
+      solderPaste: z.boolean().optional(),
     }),
     pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
@@ -217,6 +237,7 @@ const platedHolePropsByShape = z
       holeOffsetY: distance.optional(),
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
+      solderPaste: z.boolean().optional(),
     }),
     pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
@@ -233,6 +254,7 @@ const platedHolePropsByShape = z
       holeOffsetY: distance.optional(),
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
+      solderPaste: z.boolean().optional(),
     }),
     pcbLayoutProps.omit({ layer: true }).extend({
       name: z.string().optional(),
@@ -250,6 +272,7 @@ const platedHolePropsByShape = z
       holeOffsetY: distance.optional(),
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
+      solderPaste: z.boolean().optional(),
     }),
     pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
@@ -265,6 +288,7 @@ const platedHolePropsByShape = z
       portHints: portHints.optional(),
       solderMaskMargin: distance.optional(),
       coveredWithSolderMask: z.boolean().optional(),
+      solderPaste: z.boolean().optional(),
     }),
   ])
   .transform((a) => {

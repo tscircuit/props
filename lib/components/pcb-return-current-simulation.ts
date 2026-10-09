@@ -8,7 +8,7 @@ import { z } from "zod"
 export interface PcbReturnCurrentSimulationProps {
   /** Stable identity and readable name for the experiment. */
   name?: string
-  /** One or more nested pcbreturncurrentexcitation elements. */
+  /** One or more nested simulation.pcbreturncurrentexcitation elements. */
   children?: ReactNode
 }
 

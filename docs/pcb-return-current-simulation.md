@@ -1,13 +1,15 @@
 # PCB return-current experiment props
 
-`<pcbreturncurrentsimulation>` describes a pending experiment containing one or
-more `<pcbreturncurrentexcitation>` elements. Core emits the corresponding
+`<simulation.pcbreturncurrentsimulation>` describes a pending experiment containing one or
+more `<simulation.pcbreturncurrentexcitation>` elements. Core emits the corresponding
 Circuit JSON definitions after the PCB routes exist. Rendering the TSX does not
 run an EM solver.
 
 ```tsx
-<pcbreturncurrentsimulation name="DDR D13 return path">
-  <pcbreturncurrentexcitation
+import { simulation } from "@tscircuit/core"
+
+<simulation.pcbreturncurrentsimulation name="DDR D13 return path">
+  <simulation.pcbreturncurrentexcitation
     name="D13"
     source=".U1 > .DDR_D13"
     load=".U2 > .DQ13"
@@ -18,8 +20,22 @@ run an EM solver.
     sourceImpedance="25ohm"
     loadImpedance="100ohm"
   />
-</pcbreturncurrentsimulation>
+</simulation.pcbreturncurrentsimulation>
 ```
+
+The props package exports matching validators through `simulationProps`:
+
+```ts
+import { simulationProps } from "@tscircuit/props"
+
+const experiment = simulationProps.pcbreturncurrentsimulation.parse({
+  name: "DDR D13 return path",
+})
+```
+
+`simulationProps.pcbreturncurrentexcitation` validates the nested excitation.
+These namespace entries share the existing `pcbReturnCurrentSimulationProps`
+and `pcbReturnCurrentExcitationProps` validators and TypeScript interfaces.
 
 All five selectors and all three electrical values are required. The selected
 ground pins must already connect to the selected ground net; these props do not
@@ -57,7 +73,9 @@ experiment schema cannot store them. Supply them when running the emitted
 definitions, for example `--frequency-hz 100000000 --cell-size 0.05`. No solver
 or run parameters are inferred by TSX rendering.
 
-This is a new API with no aliases or migration requirements. Unknown props are
+Core also accepts the flat `<pcbreturncurrentsimulation>` and
+`<pcbreturncurrentexcitation>` forms with identical props. This is a new props
+API with no property aliases or migration requirements. Unknown props are
 rejected, including unsupported run settings and the CLI's `sourceReference`
 and `loadReference` names. Existing analog simulation and component props keep
 their existing behavior.

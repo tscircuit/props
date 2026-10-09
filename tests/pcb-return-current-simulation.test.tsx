@@ -5,6 +5,7 @@ import {
   pcbReturnCurrentSimulationProps,
   type PcbReturnCurrentExcitationProps,
   type PcbReturnCurrentSimulationProps,
+  simulationProps,
 } from "lib/index"
 
 const excitation: PcbReturnCurrentExcitationProps = {
@@ -23,12 +24,12 @@ test("pending experiment and explicit terminal props are exported and normalize 
     name: " DDR data ",
     children: ["nested excitation"],
   }
-  expect(pcbReturnCurrentSimulationProps.parse(simulation)).toEqual({
+  expect(simulationProps.pcbreturncurrentsimulation.parse(simulation)).toEqual({
     name: "DDR data",
     children: ["nested excitation"],
   })
   expect(pcbReturnCurrentSimulationProps.parse({})).toEqual({})
-  const parsed = pcbReturnCurrentExcitationProps.parse({
+  const parsed = simulationProps.pcbreturncurrentexcitation.parse({
     ...excitation,
     name: " D13 ",
     source: " .U1 > .OUT ",
@@ -50,6 +51,12 @@ test("pending experiment and explicit terminal props are exported and normalize 
   expectTypeOf(parsed.current).toEqualTypeOf<number>()
   expectTypeOf(parsed.sourceImpedance).toEqualTypeOf<number>()
   expectTypeOf(parsed.loadImpedance).toEqualTypeOf<number>()
+  expect(simulationProps.pcbreturncurrentsimulation).toBe(
+    pcbReturnCurrentSimulationProps,
+  )
+  expect(simulationProps.pcbreturncurrentexcitation).toBe(
+    pcbReturnCurrentExcitationProps,
+  )
 })
 
 test("current and resistance unit strings preserve physical dimensions and SI prefix case", () => {

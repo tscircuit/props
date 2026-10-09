@@ -4212,7 +4212,7 @@ export interface PcbReturnCurrentSimulationProps {
   name?: string
   children?: ReactNode
 }
-/** One or more nested pcbreturncurrentexcitation elements. */
+/** One or more nested simulation.pcbreturncurrentexcitation elements. */
 export const pcbReturnCurrentSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),

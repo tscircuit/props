@@ -13,8 +13,16 @@ const namespacedAnalogComponentNames = new Set([
   "analogtransientsimulation",
 ])
 
+const namespacedSimulationComponentNames = new Set([
+  "pcbreturncurrentexcitation",
+  "pcbreturncurrentsimulation",
+])
+
 function getComponentTagName(componentName: string): string {
   const lowercaseComponentName = componentName.toLowerCase()
+  if (namespacedSimulationComponentNames.has(lowercaseComponentName)) {
+    return `simulation.${lowercaseComponentName}`
+  }
   if (!namespacedAnalogComponentNames.has(lowercaseComponentName)) {
     return lowercaseComponentName
   }
@@ -143,7 +151,7 @@ function generateComponentsTable(
   const rows = components.map((comp) => {
     const componentTagName = getComponentTagName(comp.name)
     // Link to the section in the document instead of GitHub
-    const sectionLink = `#${comp.props.toLowerCase()}-${comp.name.toLowerCase()}`
+    const sectionLink = `#${comp.props.toLowerCase()}-${componentTagName.replaceAll(".", "")}`
     return `| \`<${componentTagName} />\` | [\`${comp.props}\`](${sectionLink}) |`
   })
 
@@ -261,9 +269,14 @@ function generateInterfaceDefinitions(
       comp.name !== "Common" && comp.name !== "Group"
         ? ` \`<${getComponentTagName(comp.name)} />\``
         : ""
+    const sectionAnchor = namespacedSimulationComponentNames.has(
+      comp.name.toLowerCase(),
+    )
+      ? `<a id="${comp.props.toLowerCase()}-${getComponentTagName(comp.name).replaceAll(".", "")}"></a>\n\n`
+      : ""
 
     return `
-### ${comp.props}${componentHeader}
+${sectionAnchor}### ${comp.props}${componentHeader}
 
 \`\`\`ts
 ${comp.interfaceDefinition}

@@ -385,6 +385,15 @@ test("explicit clock never invents receiver timing or symbol edge mapping", () =
       },
     }).success,
   ).toBe(true)
+  expect(
+    pcbNoiseEyeProps.safeParse({
+      ...eye,
+      timing: {
+        ...timing,
+        clock: { kind: "observation", clockObservation: eye.observation },
+      },
+    }).success,
+  ).toBe(false)
   for (const field of [
     "clock",
     "edge",

@@ -166,6 +166,19 @@ export const pcbNoiseEyeProps = z
     ]),
   })
   .strict()
+  .superRefine(({ observation, timing }, ctx) => {
+    if (
+      timing.kind === "explicit_clock" &&
+      timing.clock.kind === "observation" &&
+      timing.clock.clockObservation === observation
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "The eye data observation cannot also be its clock",
+        path: ["timing", "clock", "clockObservation"],
+      })
+    }
+  })
   .transform(({ timing, ...props }, ctx) => {
     if (timing.kind === "recovered_clock") {
       ctx.addIssue({

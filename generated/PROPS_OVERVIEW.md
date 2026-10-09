@@ -2240,6 +2240,80 @@ export interface PcbLayoutProps {
 }
 
 
+export interface PcbNoiseExcitationProps {
+  /** Defaults in core to `${port}_source` for stable experiment-local identity. */
+  name?: string
+  port: string
+  role: "aggressor" | "victim"
+  sourceModel: PcbNoiseSourceModel
+  waveform: PcbNoiseWaveform
+}
+
+
+export interface PcbNoiseEyeProps {
+  observation: string
+  modulation: "nrz"
+  /** known_ui or explicit_clock. Reserved recovered_clock inputs are rejected. */
+  timing: PcbNoiseEyeTiming
+}
+
+
+export interface PcbNoiseObservationProps {
+  name: string
+  port: string
+  quantity: "voltage" | "current"
+}
+
+
+export interface PcbNoisePortProps {
+  name: string
+  signal: string
+  reference: string
+  /** Required by core when the signal contact spans multiple copper layers. */
+  signalLayer?: LayerRefInput
+  /** Required by core when the reference contact spans multiple copper layers. */
+  referenceLayer?: LayerRefInput
+}
+
+
+export interface PcbNoiseSimulationProps {
+  name?: string
+  /** Record duration. Numbers are seconds; unit strings include ns, ps and s. */
+  duration: number | string
+  /** Full-resolution sample interval in seconds, never display decimation. */
+  sampleInterval: number | string
+  /** Paired reference run: hold only these named sources at the explicit voltage. */
+  baseline?: {
+    kind: "quiet_sources"
+    sourceNames: string[]
+    voltage: number | string
+  }
+  children?: ReactNode
+}
+
+
+export interface PcbNoiseSourceModel {
+  kind: "thevenin"
+  /** Real output resistance in ohms; independent of extraction reference impedance. */
+  resistance: number | string
+}
+
+
+export interface PcbNoiseTerminationProps {
+  /** Defaults in core to `${port}_termination` for stable experiment-local identity. */
+  name?: string
+  port: string
+  /** Numbers are ohms, farads and volts. DC bias is required even when zero. */
+  model: PcbNoiseTerminationModel
+}
+
+
+export interface PcbNoiseTimeInterval {
+  start: number | string
+  end: number | string
+}
+
+
 export interface PcbNoteDimensionProps
   extends Omit<
     PcbLayoutProps,

@@ -78,6 +78,12 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<panel />`                                 | [`PanelProps`](#panelprops-panel)                                                                                  |
 | `<pcbbend />`                               | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
 | `<pcbkeepout />`                            | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
+| `<simulation.pcbnoiseexcitation />`         | [`PcbNoiseExcitationProps`](#pcbnoiseexcitationprops-simulationpcbnoiseexcitation)                                 |
+| `<simulation.pcbnoiseeye />`                | [`PcbNoiseEyeProps`](#pcbnoiseeyeprops-simulationpcbnoiseeye)                                                      |
+| `<simulation.pcbnoiseobservation />`        | [`PcbNoiseObservationProps`](#pcbnoiseobservationprops-simulationpcbnoiseobservation)                              |
+| `<simulation.pcbnoiseport />`               | [`PcbNoisePortProps`](#pcbnoiseportprops-simulationpcbnoiseport)                                                   |
+| `<simulation.pcbnoisesimulation />`         | [`PcbNoiseSimulationProps`](#pcbnoisesimulationprops-simulationpcbnoisesimulation)                                 |
+| `<simulation.pcbnoisetermination />`        | [`PcbNoiseTerminationProps`](#pcbnoiseterminationprops-simulationpcbnoisetermination)                              |
 | `<pcbnotedimension />`                      | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
 | `<pcbnoteline />`                           | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
 | `<pcbnotepath />`                           | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
@@ -1587,6 +1593,109 @@ export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-keepout.ts)
+
+<a id="pcbnoiseexcitationprops-simulationpcbnoiseexcitation"></a>
+
+### PcbNoiseExcitationProps `<simulation.pcbnoiseexcitation />`
+
+```ts
+export interface PcbNoiseExcitationProps {
+  /** Defaults in core to `${port}_source` for stable experiment-local identity. */
+  name?: string;
+  port: string;
+  role: "aggressor" | "victim";
+  sourceModel: PcbNoiseSourceModel;
+  waveform: PcbNoiseWaveform;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-excitation.ts)
+
+<a id="pcbnoiseeyeprops-simulationpcbnoiseeye"></a>
+
+### PcbNoiseEyeProps `<simulation.pcbnoiseeye />`
+
+```ts
+export interface PcbNoiseEyeProps {
+  observation: string;
+  modulation: "nrz";
+  /** known_ui or explicit_clock. Reserved recovered_clock inputs are rejected. */
+  timing: PcbNoiseEyeTiming;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-eye.ts)
+
+<a id="pcbnoiseobservationprops-simulationpcbnoiseobservation"></a>
+
+### PcbNoiseObservationProps `<simulation.pcbnoiseobservation />`
+
+```ts
+export interface PcbNoiseObservationProps {
+  name: string;
+  port: string;
+  quantity: "voltage" | "current";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-observation.ts)
+
+<a id="pcbnoiseportprops-simulationpcbnoiseport"></a>
+
+### PcbNoisePortProps `<simulation.pcbnoiseport />`
+
+```ts
+export interface PcbNoisePortProps {
+  name: string;
+  signal: string;
+  reference: string;
+  /** Required by core when the signal contact spans multiple copper layers. */
+  signalLayer?: LayerRefInput;
+  /** Required by core when the reference contact spans multiple copper layers. */
+  referenceLayer?: LayerRefInput;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-port.ts)
+
+<a id="pcbnoisesimulationprops-simulationpcbnoisesimulation"></a>
+
+### PcbNoiseSimulationProps `<simulation.pcbnoisesimulation />`
+
+```ts
+export interface PcbNoiseSimulationProps {
+  name?: string;
+  /** Record duration. Numbers are seconds; unit strings include ns, ps and s. */
+  duration: number | string;
+  /** Full-resolution sample interval in seconds, never display decimation. */
+  sampleInterval: number | string;
+  /** Paired reference run: hold only these named sources at the explicit voltage. */
+  baseline?: {
+    kind: "quiet_sources";
+    sourceNames: string[];
+    voltage: number | string;
+  };
+  children?: ReactNode;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-simulation.ts)
+
+<a id="pcbnoiseterminationprops-simulationpcbnoisetermination"></a>
+
+### PcbNoiseTerminationProps `<simulation.pcbnoisetermination />`
+
+```ts
+export interface PcbNoiseTerminationProps {
+  /** Defaults in core to `${port}_termination` for stable experiment-local identity. */
+  name?: string;
+  port: string;
+  /** Numbers are ohms, farads and volts. DC bias is required even when zero. */
+  model: PcbNoiseTerminationModel;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-noise-termination.ts)
 
 ### PcbNoteDimensionProps `<pcbnotedimension />`
 

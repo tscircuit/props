@@ -92,7 +92,7 @@ test("advanced known-UI and explicit-clock timing preserve origins and reject co
       ...eye,
       timing: {
         ...timing,
-        clock: { kind: "observation", clockObservation: "victim_voltage" },
+        clock: { kind: "observation", clockObservation: "victim_load_voltage" },
       },
     }).success,
   ).toBe(false)

@@ -26,7 +26,7 @@ export type PcbNoiseWaveform =
  * Positive voltage is signal minus reference. References may be shared.
  * Core creates `${name}_tx`/`${name}_rx` ports, `${name}_source` excitation,
  * `${name}_load` termination and passive observations: `${name}_source_voltage`,
- * `${name}_voltage` (load voltage), `${name}_source_current` and `${name}_load_current`.
+ * `${name}_load_voltage`, `${name}_source_current` and `${name}_load_current`.
  * Positive terminal current enters the PCB at each signal contact.
  */
 export interface PcbNoiseChannelProps {

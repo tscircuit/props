@@ -269,7 +269,7 @@ export const fanoutProps = z.object({
   fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
   fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
   fanoutPourNetMap: z
-    .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+    .record(layer_string, z.union([z.string(), z.array(z.string()).min(1)]))
     .optional(),
 })
 ```
@@ -3979,7 +3979,7 @@ export type PcbNoiseWaveform =
  * Positive voltage is signal minus reference. References may be shared.
  * Core creates `${name}_tx`/`${name}_rx` ports, `${name}_source` excitation,
  * `${name}_load` termination and passive observations: `${name}_source_voltage`,
- * `${name}_voltage` (load voltage), `${name}_source_current` and `${name}_load_current`.
+ * `${name}_load_voltage`, `${name}_source_current` and `${name}_load_current`.
  * Positive terminal current enters the PCB at each signal contact.
  */
 export interface PcbNoiseChannelProps {

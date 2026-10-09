@@ -149,7 +149,7 @@ export const pcbNoiseEyeProps = z
     if (
       timing.kind === "explicit_clock" &&
       timing.clock.kind === "observation" &&
-      timing.clock.clockObservation === `${channel}_voltage`
+      timing.clock.clockObservation === `${channel}_load_voltage`
     ) {
       ctx.addIssue({
         code: "custom",

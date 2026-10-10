@@ -9,6 +9,7 @@ import {
   type AutorouterProp,
   type PartsEngine,
   autorouterProp,
+  autorouterConfig,
   partsEngine,
 } from "./components/group"
 import { expectTypesMatch } from "./typecheck"
@@ -80,6 +81,14 @@ export interface PlatformConfig {
   fabricatorEngine?: FabricatorEngine
 
   autorouter?: AutorouterProp
+  /**
+   * Default suppression of suboptimal component orientation warnings.
+   * Accepts true/false, preserved unchanged; omitted leaves warnings enabled.
+   * Overrides the same option in the platform autorouter config; routing-scope
+   * and phase settings take precedence over this platform default.
+   * No aliases or migration are required. Requires core support to take effect.
+   */
+  ignoreSuboptimalOrientationWarnings?: boolean
 
   autorouterMap?: Record<string, AutorouterDefinition>
 
@@ -290,6 +299,8 @@ export const platformConfig = z.object({
     .optional(),
   fabricatorEngine: fabricatorEngine.optional(),
   autorouter: autorouterProp.optional(),
+  ignoreSuboptimalOrientationWarnings:
+    autorouterConfig.shape.ignoreSuboptimalOrientationWarnings,
   autorouterMap: z.record(z.string(), autorouterDefinition).optional(),
   allowLegacyAutorouters: z.boolean().optional(),
   registryApiUrl: url.optional(),

@@ -1651,6 +1651,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   key?: any
   name?: string
   autorouter?: AutorouterProp
+  ignoreSuboptimalOrientationWarnings?: boolean
   algorithmFn?: AutorouterConfig["algorithmFn"]
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
@@ -1679,6 +1680,8 @@ export const autoroutingPhaseProps = z
     key: z.any().optional(),
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
+    ignoreSuboptimalOrientationWarnings:
+      autorouterConfig.shape.ignoreSuboptimalOrientationWarnings,
     algorithmFn: autorouterConfig.shape.algorithmFn,
     preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
     phaseIndex: z.number().optional(),
@@ -3124,6 +3127,7 @@ export interface RoutingTolerances {
    * leaves the router default unchanged. Independent of pad clearance, with no aliases.
    */
 export interface AutorouterConfig {
+  ignoreSuboptimalOrientationWarnings?: boolean
   serverUrl?: string
   inputFormat?: "simplified" | "circuit-json"
   serverMode?: "job" | "solve-endpoint"
@@ -3179,6 +3183,12 @@ export const routingTolerances = z.object({
   minViaPadDiameter: length.optional(),
 })
 export const autorouterConfig = z.object({
+  ignoreSuboptimalOrientationWarnings: z
+    .boolean()
+    .optional()
+    .describe(
+      "Suppress suboptimal component orientation warnings during autorouting. Accepts true/false unchanged; omitted inherits routing settings, with warnings enabled by default. Direct routing-scope props override the same autorouter config option. Requires core support; no aliases or migration.",
+    ),
   serverUrl: url.optional(),
   inputFormat: z.enum(["simplified", "circuit-json"]).optional(),
   serverMode: z.enum(["job", "solve-endpoint"]).optional(),
@@ -3280,6 +3290,7 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  ignoreSuboptimalOrientationWarnings?: boolean
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   autorouterVersion?:
@@ -3439,6 +3450,8 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  ignoreSuboptimalOrientationWarnings:
+    autorouterConfig.shape.ignoreSuboptimalOrientationWarnings,
   preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: autorouterVersion.optional(),

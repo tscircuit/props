@@ -16,7 +16,44 @@ test("circle holes compute missing diameter and accept pcbRotation", () => {
   if (parsed.shape === undefined || parsed.shape === "circle") {
     expect(parsed.radius).toBe(2)
     expect(parsed.diameter).toBe(4)
+    expect(parsed.holeDiameter).toBe(4)
     expect(parsed.pcbRotation).toBe(90)
+  } else {
+    throw new Error("Expected circle hole props")
+  }
+})
+
+test("circle holes accept holeDiameter and compute diameter and radius", () => {
+  const raw: HoleProps = {
+    holeDiameter: "3.2mm",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof holeProps>>()
+
+  const parsed = holeProps.parse(raw)
+
+  if (parsed.shape === undefined || parsed.shape === "circle") {
+    expect(parsed.holeDiameter).toBe(3.2)
+    expect(parsed.diameter).toBe(3.2)
+    expect(parsed.radius).toBe(1.6)
+  } else {
+    throw new Error("Expected circle hole props")
+  }
+})
+
+test("circle holes with diameter populate holeDiameter", () => {
+  const raw: HoleProps = {
+    diameter: 4,
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof holeProps>>()
+
+  const parsed = holeProps.parse(raw)
+
+  if (parsed.shape === undefined || parsed.shape === "circle") {
+    expect(parsed.holeDiameter).toBe(4)
+    expect(parsed.diameter).toBe(4)
+    expect(parsed.radius).toBe(2)
   } else {
     throw new Error("Expected circle hole props")
   }

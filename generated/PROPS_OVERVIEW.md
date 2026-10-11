@@ -2603,9 +2603,9 @@ export interface PinHeaderProps extends CommonComponentProps {
   schFacingDirection?: "up" | "down" | "left" | "right"
 
   /**
-   * Whether the header is male, female, or unpopulated
+   * Whether the header is male or female
    */
-  gender?: "male" | "female" | "unpopulated"
+  gender?: "male" | "female"
 
   /**
    * Mount the header on the top of the board, so it is connected to from

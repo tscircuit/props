@@ -1,5 +1,7 @@
 import { assemblyCadAssemblyProps } from "./cadassembly"
 import { assemblyCableProps } from "./cable"
+import { assemblyBoltProps } from "./bolt"
+import { assemblyFastenerProps } from "./fastener"
 import { assemblyDeviceProps } from "./device"
 import { assemblyPartProps } from "./part"
 import { assemblyReferenceSurfaceProps } from "./referencesurface"
@@ -9,6 +11,8 @@ import { assemblyScreenProps } from "./screen"
 import { assemblySubassemblyProps } from "./subassembly"
 
 export * from "./board-mounting"
+export * from "./bolt"
+export * from "./fastener"
 export * from "./cable"
 export * from "./device"
 export * from "./motor"
@@ -20,6 +24,8 @@ export * from "./subassembly"
 export * from "./cadassembly"
 
 export const assemblyProps = {
+  bolt: assemblyBoltProps,
+  fastener: assemblyFastenerProps,
   cable: assemblyCableProps,
   device: assemblyDeviceProps,
   motor: assemblyMotorProps,

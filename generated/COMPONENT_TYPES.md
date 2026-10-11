@@ -2074,11 +2074,13 @@ export interface CapacitorProps<PinLabel extends string = string>
   bypassFor?: string
   bypassTo?: string
   maxDecouplingTraceLength?: number | string
+  capacitorRole?: CapacitorRole
   schOrientation?: SchematicOrientation
   schSize?: SchematicSymbolSize
   connections?: Connections<CapacitorPinLabels>
 }
-/** Maximum allowed PCB trace length between this capacitor and the component it decouples */
+/** Electrical role. No default is assumed; roles other than decoupling disable
+   * automatic decoupling limits. Explicit trace maxLength remains independent. */
 export const capacitorProps = commonComponentProps.extend({
   capacitance,
   maxVoltageRating: voltage.optional(),
@@ -2089,6 +2091,7 @@ export const capacitorProps = commonComponentProps.extend({
   bypassFor: z.string().optional(),
   bypassTo: z.string().optional(),
   maxDecouplingTraceLength: distance.optional(),
+  capacitorRole: capacitor_role.optional(),
   schOrientation: schematicOrientation.optional(),
   schSize: schematicSymbolSize.optional(),
   connections: createConnectionsProp(capacitorPinLabels).optional(),

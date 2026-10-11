@@ -667,6 +667,9 @@ export interface CapacitorProps<
   bypassTo?: string;
   /** Maximum allowed PCB trace length between this capacitor and the component it decouples */
   maxDecouplingTraceLength?: number | string;
+  /** Electrical role. No default is assumed; roles other than decoupling disable
+   * automatic decoupling limits. Explicit trace maxLength remains independent. */
+  capacitorRole?: CapacitorRole;
   schOrientation?: SchematicOrientation;
   schSize?: SchematicSymbolSize;
   connections?: Connections<CapacitorPinLabels>;

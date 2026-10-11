@@ -48,6 +48,22 @@ test("should allow optional connections", () => {
   expect(parsed.connections).toBeUndefined()
 })
 
+test("pin header gender accepts male and female but rejects unpopulated", () => {
+  expect(
+    pinHeaderProps.parse({ name: "J1", pinCount: 6, gender: "male" }).gender,
+  ).toBe("male")
+  expect(
+    pinHeaderProps.parse({ name: "J1", pinCount: 6, gender: "female" }).gender,
+  ).toBe("female")
+  expect(
+    pinHeaderProps.safeParse({
+      name: "J1",
+      pinCount: 6,
+      gender: "unpopulated",
+    }).success,
+  ).toBe(false)
+})
+
 test("should parse rightAngle property", () => {
   const rawProps: PinHeaderProps = {
     name: "header",

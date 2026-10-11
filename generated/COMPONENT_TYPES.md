@@ -4314,7 +4314,7 @@ export interface PinHeaderProps extends CommonComponentProps {
 
   schFacingDirection?: "up" | "down" | "left" | "right"
 
-  gender?: "male" | "female" | "unpopulated"
+  gender?: "male" | "female"
 
   connectsFromAbove?: boolean
 
@@ -4354,10 +4354,7 @@ export interface PinHeaderProps extends CommonComponentProps {
     pinCount: z.number(),
     pitch: distance.optional(),
     schFacingDirection: z.enum(["up", "down", "left", "right"]).optional(),
-    gender: z
-      .enum(["male", "female", "unpopulated"])
-      .optional()
-      .default("male"),
+    gender: z.enum(["male", "female"]).optional().default("male"),
     showSilkscreenPinLabels: z.boolean().optional(),
     pcbPinLabels: z.record(z.string(), z.string()).optional(),
     doubleRow: z.boolean().optional(),

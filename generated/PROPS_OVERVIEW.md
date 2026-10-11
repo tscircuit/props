@@ -155,6 +155,22 @@ export interface AntennaProps extends CommonComponentProps {
 }
 
 
+export interface AssemblyBoltProps extends AssemblyFastenerProps {
+  /** Nominal thread diameter in mm or a unit string. Required with length
+   * when no model, modelUrl, or cadModel is supplied.
+   */
+  diameter?: Distance
+  /** Shaft length in mm or a unit string, excluding the head (including the
+   * head for countersunk bolts). Required with diameter for dimensional bolts.
+   */
+  length?: Distance
+  /** Optional thread pitch in mm or a unit string. No pitch is inferred. */
+  threadPitch?: Distance
+  /** Head shape for dimensional bolts; defaults to socket. */
+  headType?: AssemblyBoltHeadType
+}
+
+
 export interface AssemblyCableProps {
   /** Stable assembly identity for the cable. */
   name: string
@@ -176,6 +192,26 @@ export interface AssemblyDeviceProps {
   modelUrl?: string
   /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
   model?: string
+}
+
+
+export interface AssemblyFastenerProps extends AssemblyPartProps {
+  /** Qualified reference surface, e.g. "FRAME.boltHole". Implies fastening.
+   * Without mountFace, use the fastener's authored local mounting origin.
+   */
+  mountedTo?: string
+  /** Common fastener vocabulary for mountedTo; parsed output uses mountedTo.
+   * Both may be supplied only when their trimmed values agree.
+   */
+  fastenedTo?: string
+  /** Optional named mating face on this fastener; requires a mounting target.
+   * When supplied, outward normals oppose and in-plane X directions align.
+   */
+  mountFace?: string
+  /** Nonnegative surface clearance in mm or a unit string; defaults to zero
+   * in the consumer. Requires a mounting target; omitted values stay omitted.
+   */
+  mountGap?: Distance
 }
 
 

@@ -53,7 +53,7 @@ test("solderPaste accepts explicit booleans on every plated-hole shape", () => {
   >()
 })
 
-test("omitted and undefined solderPaste stay unspecified", () => {
+test("omitted and undefined solderPaste stay unspecified for core default behavior", () => {
   for (const hole of holes) {
     expect(platedHoleProps.parse(hole).solderPaste).toBeUndefined()
     expect(

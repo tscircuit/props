@@ -4348,8 +4348,8 @@ export interface CirclePlatedHoleProps
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
-  // Opt into solder paste on both outer layers for pin-in-paste assembly.
-  // Omitted or false does not request paste.
+  // Set false to suppress automatic stencil paste for this plated hole.
+  // Omitted or true leaves the existing per-shape behavior unchanged.
   solderPaste?: boolean
 }
 export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
@@ -4366,8 +4366,8 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   innerWidth?: number | string
   innerHeight?: number | string
   coveredWithSolderMask?: boolean
-  // Opt into solder paste on both outer layers for pin-in-paste assembly.
-  // Omitted or false does not request paste.
+  // Set false to suppress automatic stencil paste for this plated hole.
+  // Omitted or true leaves the existing per-shape behavior unchanged.
   solderPaste?: boolean
 }
 /** @deprecated use holeHeight */
@@ -4389,8 +4389,8 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
-  // Opt into solder paste on both outer layers for pin-in-paste assembly.
-  // Omitted or false does not request paste.
+  // Set false to suppress automatic stencil paste for this plated hole.
+  // Omitted or true leaves the existing per-shape behavior unchanged.
   solderPaste?: boolean
 }
 /** @deprecated use holeHeight */
@@ -4410,8 +4410,8 @@ export interface CircularHoleWithRectPlatedProps
   holeOffsetY?: number | string
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
-  // Opt into solder paste on both outer layers for pin-in-paste assembly.
-  // Omitted or false does not request paste.
+  // Set false to suppress automatic stencil paste for this plated hole.
+  // Omitted or true leaves the existing per-shape behavior unchanged.
   solderPaste?: boolean
 }
 export interface PillWithRectPadPlatedHoleProps
@@ -4431,8 +4431,8 @@ export interface PillWithRectPadPlatedHoleProps
   rectBorderRadius?: number | string
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
-  // Opt into solder paste on both outer layers for pin-in-paste assembly.
-  // Omitted or false does not request paste.
+  // Set false to suppress automatic stencil paste for this plated hole.
+  // Omitted or true leaves the existing per-shape behavior unchanged.
   solderPaste?: boolean
 }
 export interface HoleWithPolygonPadPlatedHoleProps
@@ -4450,8 +4450,8 @@ export interface HoleWithPolygonPadPlatedHoleProps
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
-  // Opt into solder paste on both outer layers for pin-in-paste assembly.
-  // Omitted or false does not request paste.
+  // Set false to suppress automatic stencil paste for this plated hole.
+  // Omitted or true leaves the existing per-shape behavior unchanged.
   solderPaste?: boolean
 }
 export type PlatedHoleProps =

@@ -245,6 +245,13 @@ export interface CommonComponentProps<PinLabel extends string = string>
   symbolName?: string
   doNotPlace?: boolean
   /**
+   * Whether this component is surface mounted. True marks it as SMT; false
+   * marks it as through hole. Omit to let core infer the mounting style from
+   * the footprint. Parsed unchanged, with no aliases or schema conflicts.
+   * Core determines solder paste generation, including for plated-hole pads.
+   */
+  isSmt?: boolean
+  /**
    * Allows the PCB component to hang off the board (e.g. for USB ports or displays)
    */
   allowOffBoard?: boolean
@@ -299,6 +306,12 @@ export const commonComponentProps = commonLayoutProps
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    isSmt: z
+      .boolean()
+      .optional()
+      .describe(
+        "Whether this component is surface mounted. True marks it as SMT; false marks it as through hole. Omit to let core infer mounting style from the footprint. Parsed unchanged with no aliases or schema conflicts; core determines solder paste generation, including for plated-hole pads.",
+      ),
     allowOffBoard: z
       .boolean()
       .optional()

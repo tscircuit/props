@@ -898,6 +898,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  isSmt?: boolean
   allowOffBoard?: boolean
   obstructsWithinBounds?: boolean
   showAsTranslucentModel?: boolean
@@ -930,6 +931,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    isSmt: z
+      .boolean()
+      .optional()
+      .describe(
+        "Whether this component is surface mounted. True marks it as SMT; false marks it as through hole. Omit to let core infer mounting style from the footprint. Parsed unchanged with no aliases or schema conflicts; core determines solder paste generation, including for plated-hole pads.",
+      ),
     allowOffBoard: z
       .boolean()
       .optional()

@@ -1,9 +1,19 @@
-import { type FanoutProps, fanoutProps } from "lib/common/fanoutProps"
+import {
+  type BusFanoutDirection,
+  type FanoutPourNetMap,
+  busFanoutDirection,
+} from "lib/common/fanoutProps"
+import {
+  type FanoutBoundaryPadding,
+  fanoutBoundaryPadding,
+} from "lib/common/fanoutBoundaryPadding"
+import type { BusName } from "./bus"
 import {
   layer_ref,
   length,
   distance,
   type AnyCircuitElement,
+  type LayerRefInput,
 } from "circuit-json"
 import type { AutocompleteString } from "lib/common/autocomplete"
 import type { Distance } from "lib/common/distance"
@@ -585,8 +595,15 @@ const autorouterVersion = z
 
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
-    RoutingTolerances,
-    FanoutProps {
+    RoutingTolerances {
+  /** Default fanout direction per bus in board coordinates; phases may override. */
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  /** Default padding from source pads to the fanout boundary; phases may override. */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
+  /** Default layers available to boundary-terminated fanout; phases may override. */
+  fanoutRoutingLayers?: LayerRefInput[]
+  /** Default plane nets by layer for source-only fanout; phases may override. */
+  fanoutPourNetMap?: FanoutPourNetMap
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   /**
@@ -783,7 +800,12 @@ export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
 // Inputs and normalization are identical to fanoutProps; no aliases or
 // implicit layer/net choices are introduced. Existing callers need no migration.
 export const subcircuitGroupProps = baseGroupProps.extend({
-  ...fanoutProps.shape,
+  busFanoutDirections: z.record(busFanoutDirection).optional(),
+  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
+  fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
+  fanoutPourNetMap: z
+    .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+    .optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

@@ -3313,8 +3313,15 @@ export interface StampboardProps extends BoardProps {
 
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
-    RoutingTolerances,
-    FanoutProps {
+    RoutingTolerances {
+  /** Default fanout direction per bus in board coordinates; phases may override. */
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  /** Default padding from source pads to the fanout boundary; phases may override. */
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
+  /** Default layers available to boundary-terminated fanout; phases may override. */
+  fanoutRoutingLayers?: LayerRefInput[]
+  /** Default plane nets by layer for source-only fanout; phases may override. */
+  fanoutPourNetMap?: FanoutPourNetMap
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   /**

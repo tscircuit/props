@@ -3269,7 +3269,8 @@ const autorouterVersion = z
   })
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
-    RoutingTolerances {
+    RoutingTolerances,
+    FanoutProps {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   placementDrcChecksDisabled?: boolean
@@ -3425,6 +3426,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
+  ...fanoutProps.shape,
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

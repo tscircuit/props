@@ -1,3 +1,4 @@
+import { type FanoutProps, fanoutProps } from "lib/common/fanoutProps"
 import {
   layer_ref,
   length,
@@ -584,7 +585,8 @@ const autorouterVersion = z
 
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
-    RoutingTolerances {
+    RoutingTolerances,
+    FanoutProps {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   /**
@@ -776,7 +778,12 @@ export const baseGroupProps = commonLayoutProps.extend({
 
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
 
+// Fanout controls are optional subcircuit defaults. An autorouting phase
+// overrides each supplied value; omitted values retain the group default.
+// Inputs and normalization are identical to fanoutProps; no aliases or
+// implicit layer/net choices are introduced. Existing callers need no migration.
 export const subcircuitGroupProps = baseGroupProps.extend({
+  ...fanoutProps.shape,
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

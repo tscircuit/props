@@ -3313,7 +3313,8 @@ export interface StampboardProps extends BoardProps {
 
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
-    RoutingTolerances {
+    RoutingTolerances,
+    FanoutProps {
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   /**

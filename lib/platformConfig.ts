@@ -117,17 +117,7 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string
 
-  /**
-   * Base URL for runtime JavaScript bundles, including an absolute URL or a
-   * relative path such as "/jscdn" or "./jscdn". Loaders append the package
-   * name, version and entrypoint, and use platformFetch when provided.
-   * Omitted preserves the loader's default CDN behavior. A configured base
-   * must not fall back to a public CDN when a bundle is unavailable.
-   * This controls JavaScript package loading; other resources and services
-   * still require their own platform configuration.
-   */
   jscdnBaseUrl?: string
-
   projectName?: string
   projectBaseUrl?: string
   version?: string
@@ -305,12 +295,7 @@ export const platformConfig = z.object({
   allowLegacyAutorouters: z.boolean().optional(),
   registryApiUrl: url.optional(),
   cloudAutorouterUrl: url.optional(),
-  jscdnBaseUrl: url
-    .refine(
-      (value) => value.trim().length > 0,
-      "jscdnBaseUrl must not be empty",
-    )
-    .optional(),
+  jscdnBaseUrl: url.optional(),
   projectName: z.string().optional(),
   projectBaseUrl: url.optional(),
   version: z.string().optional(),

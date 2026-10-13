@@ -1069,14 +1069,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
   symbolName?: string
   doNotPlace?: boolean
   /**
-   * PCB assembly intent. "smt" requests reflow soldering with solder paste on
-   * solderable footprint pads, including plated-hole pads used for reflow.
-   * "through_hole" does not request paste on plated-hole pads automatically.
-   * Omit to preserve existing footprint-based behavior. Parsed unchanged;
-   * no aliases or conflicts with footprint geometry. Paste generation is
-   * implemented by core, not this props schema.
+   * Whether this component is surface mounted. True marks it as SMT; false
+   * marks it as through hole. Omit to let core infer the mounting style from
+   * the footprint. Parsed unchanged, with no aliases or schema conflicts.
+   * Core determines solder paste generation, including for plated-hole pads.
    */
-  pcbMountingStyle?: "smt" | "through_hole"
+  isSmt?: boolean
   /**
    * Allows the PCB component to hang off the board (e.g. for USB ports or displays)
    */

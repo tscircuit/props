@@ -2683,6 +2683,7 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string;
 
+  jscdnBaseUrl?: string;
   projectName?: string;
   projectBaseUrl?: string;
   version?: string;

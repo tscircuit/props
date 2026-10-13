@@ -117,6 +117,7 @@ export interface PlatformConfig {
 
   cloudAutorouterUrl?: string
 
+  jscdnBaseUrl?: string
   projectName?: string
   projectBaseUrl?: string
   version?: string
@@ -294,6 +295,7 @@ export const platformConfig = z.object({
   allowLegacyAutorouters: z.boolean().optional(),
   registryApiUrl: url.optional(),
   cloudAutorouterUrl: url.optional(),
+  jscdnBaseUrl: url.optional(),
   projectName: z.string().optional(),
   projectBaseUrl: url.optional(),
   version: z.string().optional(),

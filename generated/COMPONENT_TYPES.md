@@ -898,6 +898,7 @@ export interface CommonComponentProps<PinLabel extends string = string>
   children?: any
   symbolName?: string
   doNotPlace?: boolean
+  pcbMountingStyle?: "smt" | "through_hole"
   allowOffBoard?: boolean
   obstructsWithinBounds?: boolean
   showAsTranslucentModel?: boolean
@@ -930,6 +931,12 @@ export interface CommonComponentProps<PinLabel extends string = string>
     children: z.any().optional(),
     symbolName: z.string().optional(),
     doNotPlace: z.boolean().optional(),
+    pcbMountingStyle: z
+      .enum(["smt", "through_hole"])
+      .optional()
+      .describe(
+        'PCB assembly intent: "smt" requests reflow solder paste on solderable footprint pads, including plated-hole pads used for reflow; "through_hole" does not request paste on plated-hole pads automatically. Omitted values preserve existing footprint-based behavior. Parsed unchanged with no aliases or footprint geometry conflicts; core implements paste generation.',
+      ),
     allowOffBoard: z
       .boolean()
       .optional()

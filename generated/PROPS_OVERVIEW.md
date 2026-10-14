@@ -886,8 +886,9 @@ export interface CadModelObj extends CadModelBase {
 
 export interface CadModelProps extends CadModelBase {
   /** Canonical model URL after parsing; authored model strings resolve to this field. */
-  modelUrl: string
-  stepUrl?: string
+  modelUrl?: string
+  /** Procedural model operation tree. */
+  jscad?: Record<string, any>
   pcbX?: Distance
   pcbY?: Distance
   pcbLeftEdgeX?: Distance

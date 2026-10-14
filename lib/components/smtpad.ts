@@ -23,6 +23,9 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -41,6 +44,9 @@ export interface RotatedRectSmtPadProps
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -51,6 +57,9 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -63,6 +72,9 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -77,6 +89,9 @@ export interface RotatedPillSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -88,6 +103,9 @@ export interface PolygonSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -119,6 +137,7 @@ export const rectSmtPadProps = pcbLayoutProps
     solderMaskMarginRight: distance.optional(),
     solderMaskMarginTop: distance.optional(),
     solderMaskMarginBottom: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 type InferredRectSmtPadProps = z.input<typeof rectSmtPadProps>
@@ -140,6 +159,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     solderMaskMarginRight: distance.optional(),
     solderMaskMarginTop: distance.optional(),
     solderMaskMarginBottom: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 type InferredRotatedRectSmtPadProps = z.input<typeof rotatedRectSmtPadProps>
@@ -154,6 +174,7 @@ export const circleSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 type InferredCircleSmtPadProps = z.input<typeof circleSmtPadProps>
@@ -170,6 +191,7 @@ export const pillSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 type InferredPillSmtPadProps = z.input<typeof pillSmtPadProps>
@@ -187,6 +209,7 @@ export const rotatedPillSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 type InferredRotatedPillSmtPadProps = z.input<typeof rotatedPillSmtPadProps>
@@ -201,6 +224,7 @@ export const polygonSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 type InferredPolygonSmtPadProps = z.input<typeof polygonSmtPadProps>

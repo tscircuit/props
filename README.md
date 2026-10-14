@@ -2358,6 +2358,9 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderMaskMarginRight?: Distance;
   solderMaskMarginTop?: Distance;
   solderMaskMarginBottom?: Distance;
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean;
   solderPasteMargin?: Distance;
 }
 ```

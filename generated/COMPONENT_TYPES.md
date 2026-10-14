@@ -5290,6 +5290,9 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 export interface RotatedRectSmtPadProps
@@ -5307,6 +5310,9 @@ export interface RotatedRectSmtPadProps
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -5316,6 +5322,9 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -5327,6 +5336,9 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 export interface RotatedPillSmtPadProps
@@ -5340,6 +5352,9 @@ export interface RotatedPillSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 export interface PolygonSmtPadProps
@@ -5350,6 +5365,9 @@ export interface PolygonSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 export const rectSmtPadProps = pcbLayoutProps
@@ -5368,6 +5386,7 @@ export const rectSmtPadProps = pcbLayoutProps
     solderMaskMarginRight: distance.optional(),
     solderMaskMarginTop: distance.optional(),
     solderMaskMarginBottom: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 export const rotatedRectSmtPadProps = pcbLayoutProps
@@ -5386,6 +5405,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     solderMaskMarginRight: distance.optional(),
     solderMaskMarginTop: distance.optional(),
     solderMaskMarginBottom: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 export const circleSmtPadProps = pcbLayoutProps
@@ -5397,6 +5417,7 @@ export const circleSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 export const pillSmtPadProps = pcbLayoutProps
@@ -5410,6 +5431,7 @@ export const pillSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 export const rotatedPillSmtPadProps = pcbLayoutProps
@@ -5424,6 +5446,7 @@ export const rotatedPillSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 export const polygonSmtPadProps = pcbLayoutProps
@@ -5435,6 +5458,7 @@ export const polygonSmtPadProps = pcbLayoutProps
     portHints: portHints.optional(),
     coveredWithSolderMask: z.boolean().optional(),
     solderMaskMargin: distance.optional(),
+    noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
   })
 ```

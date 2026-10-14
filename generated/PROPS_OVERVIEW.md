@@ -1024,6 +1024,9 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -2508,6 +2511,9 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -2849,6 +2855,9 @@ export interface PolygonSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -2901,6 +2910,9 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -2953,6 +2965,9 @@ export interface RotatedPillSmtPadProps
   portHints?: PortHints
   coveredWithSolderMask?: boolean
   solderMaskMargin?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 
@@ -2972,6 +2987,9 @@ export interface RotatedRectSmtPadProps
   solderMaskMarginRight?: Distance
   solderMaskMarginTop?: Distance
   solderMaskMarginBottom?: Distance
+  // Disable solder paste without affecting the solder mask.
+  // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
+  noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
 

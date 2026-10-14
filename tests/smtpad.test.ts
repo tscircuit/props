@@ -171,3 +171,48 @@ test("should parse solder paste margin on every smtpad shape", () => {
   if (polygon.shape !== "polygon") throw new Error("Expected polygon")
   expect(polygon.solderPasteMargin).toBe(0)
 })
+
+const smtPadShapes: SmtPadProps[] = [
+  { shape: "rect", width: 2, height: 1 },
+  { shape: "rotated_rect", width: 2, height: 1, ccwRotation: 45 },
+  { shape: "circle", radius: 0.5 },
+  { shape: "pill", width: 2, height: 1, radius: 0.5 },
+  { shape: "rotated_pill", width: 2, height: 1, radius: 0.5, ccwRotation: 45 },
+  {
+    shape: "polygon",
+    points: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+    ],
+  },
+]
+
+for (const pad of smtPadShapes) {
+  test(`${pad.shape} accepts optional noSolderPaste independently of solder mask`, () => {
+    expect(smtPadProps.parse(pad).noSolderPaste).toBeUndefined()
+    for (const noSolderPaste of [true, false]) {
+      for (const coveredWithSolderMask of [true, false]) {
+        const rawProps: SmtPadProps = {
+          ...pad,
+          noSolderPaste,
+          coveredWithSolderMask,
+          solderPasteMargin: "0.1mm",
+        }
+        expect(smtPadProps.parse(rawProps)).toMatchObject({
+          noSolderPaste,
+          coveredWithSolderMask,
+          solderPasteMargin: 0.1,
+        })
+      }
+    }
+  })
+
+  test(`${pad.shape} rejects non-boolean noSolderPaste`, () => {
+    for (const noSolderPaste of ["true", "false", 0, 1, null]) {
+      expect(smtPadProps.safeParse({ ...pad, noSolderPaste }).success).toBe(
+        false,
+      )
+    }
+  })
+}

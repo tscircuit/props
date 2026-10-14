@@ -2036,8 +2036,9 @@ export const cadassemblyProps = z.object({
 ```typescript
 /** Parsed CAD model props. Author model strings with CadModelPropsInput. */
 export interface CadModelProps extends CadModelBase {
-  modelUrl: string
+  modelUrl?: string
   stepUrl?: string
+  jscad?: CadModelJscad["jscad"]
   pcbX?: Distance
   pcbY?: Distance
   pcbLeftEdgeX?: Distance
@@ -2048,14 +2049,21 @@ export interface CadModelProps extends CadModelBase {
   pcbOffsetY?: Distance
   pcbZ?: Distance
 }
-/** Canonical model URL after parsing; authored model strings resolve to this field. */
+/** Procedural model operation tree. */
 const cadModelBaseWithUrl = cadModelBase.extend({
   modelUrl: url,
   stepUrl: url.optional(),
+  jscad: z.never().optional(),
 })
+  .extend({
+    model: z.never().optional(),
+    modelUrl: z.never().optional(),
+    stepUrl: z.never().optional(),
+  })
   .extend({
     model: z.string().trim().min(1).optional(),
     modelUrl: url.optional(),
+    jscad: z.never().optional(),
   })
 ```
 

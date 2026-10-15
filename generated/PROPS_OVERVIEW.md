@@ -455,8 +455,9 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   }
   connection?: string
   connections?: string[]
-  // Reroutes traces selected by region or connection. The simplify autorouter
-  // may omit a selector to simplify every existing trace in the phase.
+  // Reroutes traces selected by region or connection. Without either selector,
+  // reroutes every connection in the subcircuit. The simplify autorouter may
+  // also omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
 }
 

@@ -1021,6 +1021,43 @@ export const pcbPathPoint = basePcbPathPoint.superRefine((value, ctx) => {
 })
 ```
 
+### pcbPostRoutingHook
+
+```typescript
+/** Every PCB circuit-json element: pads, holes, traces, vias, silkscreen, keepouts, notes, errors... */
+export type PcbCircuitElement = Extract<
+  AnyCircuitElement,
+  { type: `pcb_${string}` }
+export type PcbCircuitElementType = PcbCircuitElement["type"]
+
+export type PcbPostRoutingHookElementInput<
+  T extends PcbCircuitElementType = PcbCircuitElementType,
+> = { type: T } & Partial<Extract<PcbCircuitElement, { type: T }>>
+/**
+ * What a post-routing hook receives. It runs after autorouting and teardrops,
+ * before copper pours, via stitching and PCB design rule checks, so whatever it
+ * changes is poured around, checked and exported.
+ *
+ * Every change made through the context is recorded. Before the hook runs
+ * again (after re-routing), the recorded changes are undone, so the hook always
+ * starts from the routed board.
+ */
+export interface PcbPostRoutingHookContext {
+  readonly subcircuitId: string | undefined
+  getCircuitJson(): AnyCircuitElement[]
+  getPcbPort(selector: string): PcbPort | undefined
+  getPcbComponent(selector: string): PcbComponent | undefined
+  insert<T extends PcbCircuitElementType>(
+    element: PcbPostRoutingHookElementInput<T>,
+  ): Extract<PcbCircuitElement, { type: T }>
+  update(
+    id: string,
+    patch: Record<string, unknown>,
+  ): PcbCircuitElement
+  remove(id: string): void
+}
+```
+
 ### pcbStyle
 
 ```typescript
@@ -3287,6 +3324,7 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
+  pcbPostRoutingHook?: PcbPostRoutingHook
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   autorouterVersion?:
@@ -3446,6 +3484,12 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
+  pcbPostRoutingHook: z
+    .custom<PcbPostRoutingHook>(
+      (v) => typeof v === "function" || v === undefined,
+      { message: "pcbPostRoutingHook must be a function" },
+    )
+    .optional(),
   preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: autorouterVersion.optional(),

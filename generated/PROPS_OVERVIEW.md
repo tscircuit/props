@@ -2396,36 +2396,47 @@ export interface PcbPathPoint extends Point {
 }
 
 
-export interface PcbPostRoutingHookContext {
-  /** subcircuit_id of the board or subcircuit group running the hook. */
+export interface PcbPostRoutingContext {
+  /** subcircuit_id of the board or subcircuit group running the step. */
   readonly subcircuitId: string | undefined
   /**
-   * The circuit as it is now, including the hook's own changes so far. Returns
-   * a copy; edit through insert/update/remove.
+   * The circuit as it is now, including earlier steps' changes. Returns a copy;
+   * edit through insert/update/remove, or return elements from `render`.
    */
   getCircuitJson(): AnyCircuitElement[]
   /**
-   * The pcb_port for a selector relative to the group running the hook, e.g.
-   * ".U1 > .pin1". Use its pcb_port_id and pcb_component_id to attach copper to
-   * a port's component and net.
+   * The pcb_port for a selector relative to the board or subcircuit, e.g.
+   * ".U1 > .pin1". Use its pcb_port_id and pcb_component_id to attach copper
+   * to a port's component and net.
    */
   getPcbPort(selector: string): PcbPort | undefined
-  /** The pcb_component for a selector relative to the group, e.g. ".U1". */
+  /** The pcb_component for a selector relative to the board or subcircuit, e.g. ".U1". */
   getPcbComponent(selector: string): PcbComponent | undefined
   /** Inserts a PCB element and returns it with its generated id. */
   insert<T extends PcbCircuitElementType>(
-    element: PcbPostRoutingHookElementInput<T>,
+    element: PcbPostRoutingElementInput<T>,
   ): Extract<PcbCircuitElement, { type: T }>
   /**
    * Changes fields of a PCB element by id (any `pcb_*` element, including those
    * created by routing or by footprints). The type and id cannot change.
    */
-  update(
-    id: string,
-    patch: Record<string, unknown>,
-  ): PcbCircuitElement
+  update(id: string, patch: Record<string, unknown>): PcbCircuitElement
   /** Removes a PCB element by id. */
   remove(id: string): void
+}
+
+
+export interface PcbPostRoutingStepProps {
+  name?: string
+  /**
+   * Steps of a board or subcircuit run in ascending order. Steps with the same
+   * order run in the order they appear. Defaults to 0.
+   */
+  order?: number
+  /** Edits the routed PCB as circuit-json: insert, update or remove any pcb_* element. */
+  fn?: PcbPostRoutingFn
+  /** Returns PCB primitives as JSX, added beside the step. */
+  render?: PcbPostRoutingRenderFn
 }
 
 
@@ -3388,12 +3399,6 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
-  /**
-   * Advanced: user code that runs after this subcircuit is routed and can
-   * insert, update or remove PCB elements before copper pours and PCB design
-   * rule checks. See PcbPostRoutingHookContext.
-   */
-  pcbPostRoutingHook?: PcbPostRoutingHook
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   /**

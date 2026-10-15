@@ -34,7 +34,6 @@ import {
 import { url } from "lib/common/url"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import type { ImplicitBreakoutPointSolverFn } from "lib/common/implicitBreakoutPointSolver"
-import type { PcbPostRoutingHook } from "lib/common/pcbPostRoutingHook"
 import type {
   FetchPartAvailabilityParams,
   PartAvailability,
@@ -601,12 +600,6 @@ export interface SubcircuitGroupProps
   pcbRouteCache?: PcbRouteCache
 
   autorouter?: AutorouterProp
-  /**
-   * Advanced: user code that runs after this subcircuit is routed and can
-   * insert, update or remove PCB elements before copper pours and PCB design
-   * rule checks. See PcbPostRoutingHookContext.
-   */
-  pcbPostRoutingHook?: PcbPostRoutingHook
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   autorouterEffortLevel?: "1x" | "1.5x" | "2x" | "5x" | "10x" | "100x"
   /**
@@ -798,12 +791,6 @@ export const subcircuitGroupProps = baseGroupProps.extend({
   _subcircuitCachingEnabled: z.boolean().optional(),
   pcbRouteCache: z.custom<PcbRouteCache>((v) => true).optional(),
   autorouter: autorouterProp.optional(),
-  pcbPostRoutingHook: z
-    .custom<PcbPostRoutingHook>(
-      (v) => typeof v === "function" || v === undefined,
-      { message: "pcbPostRoutingHook must be a function" },
-    )
-    .optional(),
   preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
   autorouterEffortLevel: autorouterEffortLevel.optional(),
   autorouterVersion: autorouterVersion.optional(),

@@ -3465,8 +3465,18 @@ export interface SymbolProps {
   height?: string | number
   /** Resize independently by default; contain uses one scale to fit the requested dimensions. */
   fit?: "fill" | "contain"
-  /** Include ports and their stems in sizing bounds. Defaults to true; false measures artwork only. */
-  sizeIncludesPorts?: boolean
+  /**
+   * Source sizing rectangle in symbol-local coordinates (mm, +X right, +Y up).
+   * With width/height, maps this rectangle to the symbol position; all artwork
+   * and ports use the same transform. Omitted uses automatic bounds including ports.
+   * Width and height must be positive. No aliases; no change to existing defaults.
+   */
+  viewbox?: {
+    x: number | string
+    y: number | string
+    width: number | string
+    height: number | string
+  }
   name?: string
 }
 

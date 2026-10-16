@@ -2494,6 +2494,13 @@ export interface SymbolProps {
    * symbol's primitives and ports.
    */
   viewbox?: SymbolViewbox;
+  /**
+   * Which measured bounds are fitted into `width` / `height` when no `viewbox` is given:
+   * - "shape_and_port_bounds" (default): the drawing and the ports, so port stubs count towards the size;
+   * - "shape_bounds": the drawing only, so the drawing itself comes out at the size asked for.
+   * Giving both `viewbox` and `viewboxPreset` is an error.
+   */
+  viewboxPreset?: "shape_bounds" | "shape_and_port_bounds";
   name?: string;
 }
 ```

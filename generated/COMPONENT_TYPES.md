@@ -5599,12 +5599,14 @@ export interface SymbolProps {
   height?: string | number
   objectFit?: "fill" | "contain"
   viewbox?: SymbolViewbox
+  viewboxPreset?: "shape_bounds" | "shape_and_port_bounds"
   name?: string
 }
 /**
-   * The region of the symbol's own coordinates (mm, y up) that is fitted into `width` / `height`, like SVG's
-   * `viewBox` (`x`, `y` is the region's minimum corner). Without it, the region is the measured bounds of the
-   * symbol's primitives and ports.
+   * Which measured bounds are fitted into `width` / `height` when no `viewbox` is given:
+   * - "shape_and_port_bounds" (default): the drawing and the ports, so port stubs count towards the size;
+   * - "shape_bounds": the drawing only, so the drawing itself comes out at the size asked for.
+   * Giving both `viewbox` and `viewboxPreset` is an error.
    */
 export interface SymbolViewbox {
   x: string | number
@@ -5628,7 +5630,10 @@ export const symbolProps = z.object({
   height: distance.optional(),
   objectFit: z.enum(["fill", "contain"]).optional(),
   viewbox: symbolViewbox.optional(),
+  viewboxPreset: z.enum(["shape_bounds", "shape_and_port_bounds"]).optional(),
   name: z.string().optional(),
+}).refine((p) => !(p.viewbox && p.viewboxPreset), {
+  message: "give a symbol viewbox or a viewboxPreset, not both",
 })
 ```
 

@@ -27,6 +27,13 @@ export interface SymbolProps {
    * symbol's primitives and ports.
    */
   viewbox?: SymbolViewbox
+  /**
+   * Which measured bounds are fitted into `width` / `height` when no `viewbox` is given:
+   * - "shape_and_port_bounds" (default): the drawing and the ports, so port stubs count towards the size;
+   * - "shape_bounds": the drawing only, so the drawing itself comes out at the size asked for.
+   * Giving both `viewbox` and `viewboxPreset` is an error.
+   */
+  viewboxPreset?: "shape_bounds" | "shape_and_port_bounds"
   name?: string
 }
 
@@ -48,17 +55,22 @@ export const symbolViewbox = z
     message: "viewbox width and height must be greater than 0",
   })
 
-export const symbolProps = z.object({
-  originalFacingDirection: z
-    .enum(["up", "down", "left", "right"])
-    .default("right")
-    .optional(),
-  width: distance.optional(),
-  height: distance.optional(),
-  objectFit: z.enum(["fill", "contain"]).optional(),
-  viewbox: symbolViewbox.optional(),
-  name: z.string().optional(),
-})
+export const symbolProps = z
+  .object({
+    originalFacingDirection: z
+      .enum(["up", "down", "left", "right"])
+      .default("right")
+      .optional(),
+    width: distance.optional(),
+    height: distance.optional(),
+    objectFit: z.enum(["fill", "contain"]).optional(),
+    viewbox: symbolViewbox.optional(),
+    viewboxPreset: z.enum(["shape_bounds", "shape_and_port_bounds"]).optional(),
+    name: z.string().optional(),
+  })
+  .refine((p) => !(p.viewbox && p.viewboxPreset), {
+    message: "give a symbol viewbox or a viewboxPreset, not both",
+  })
 
 export type SymbolPropsInput = z.input<typeof symbolProps>
 type InferredSymbolProps = z.input<typeof symbolProps>

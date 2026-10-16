@@ -21,8 +21,32 @@ export interface SymbolProps {
    *   centred.
    */
   objectFit?: "fill" | "contain"
+  /**
+   * The region of the symbol's own coordinates (mm, y up) that is fitted into `width` / `height`, like SVG's
+   * `viewBox` (`x`, `y` is the region's minimum corner). Without it, the region is the measured bounds of the
+   * symbol's primitives and ports.
+   */
+  viewbox?: SymbolViewbox
   name?: string
 }
+
+export interface SymbolViewbox {
+  x: string | number
+  y: string | number
+  width: string | number
+  height: string | number
+}
+
+export const symbolViewbox = z
+  .object({
+    x: distance,
+    y: distance,
+    width: distance,
+    height: distance,
+  })
+  .refine((v) => v.width > 0 && v.height > 0, {
+    message: "viewbox width and height must be greater than 0",
+  })
 
 export const symbolProps = z.object({
   originalFacingDirection: z
@@ -32,6 +56,7 @@ export const symbolProps = z.object({
   width: distance.optional(),
   height: distance.optional(),
   objectFit: z.enum(["fill", "contain"]).optional(),
+  viewbox: symbolViewbox.optional(),
   name: z.string().optional(),
 })
 

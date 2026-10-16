@@ -2488,6 +2488,12 @@ export interface SymbolProps {
    *   centred.
    */
   objectFit?: "fill" | "contain";
+  /**
+   * The region of the symbol's own coordinates (mm, y up) that is fitted into `width` / `height`, like SVG's
+   * `viewBox` (`x`, `y` is the region's minimum corner). Without it, the region is the measured bounds of the
+   * symbol's primitives and ports.
+   */
+  viewbox?: SymbolViewbox;
   name?: string;
 }
 ```

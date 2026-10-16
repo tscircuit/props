@@ -5598,16 +5598,27 @@ export interface SymbolProps {
   width?: string | number
   height?: string | number
   objectFit?: "fill" | "contain"
+  viewbox?: SymbolViewbox
   name?: string
 }
 /**
-   * How the symbol's drawing is fitted into `width` / `height`, following CSS `object-fit`:
-   * - "fill" (default): each axis is scaled separately to the given size, so the drawing can stretch; with only
-   *   `width` (or only `height`) given, only that axis is scaled.
-   * - "contain": one scale factor for both axes, the largest at which the drawing fits inside the given size
-   *   (with only `width` or only `height` given, that dimension sets it); the drawing keeps its proportions and is
-   *   centred.
+   * The region of the symbol's own coordinates (mm, y up) that is fitted into `width` / `height`, like SVG's
+   * `viewBox` (`x`, `y` is the region's minimum corner). Without it, the region is the measured bounds of the
+   * symbol's primitives and ports.
    */
+export interface SymbolViewbox {
+  x: string | number
+  y: string | number
+  width: string | number
+  height: string | number
+}
+export const symbolViewbox = z
+  .object({
+    x: distance,
+    y: distance,
+    width: distance,
+    height: distance,
+  })
 export const symbolProps = z.object({
   originalFacingDirection: z
     .enum(["up", "down", "left", "right"])
@@ -5616,6 +5627,7 @@ export const symbolProps = z.object({
   width: distance.optional(),
   height: distance.optional(),
   objectFit: z.enum(["fill", "contain"]).optional(),
+  viewbox: symbolViewbox.optional(),
   name: z.string().optional(),
 })
 ```

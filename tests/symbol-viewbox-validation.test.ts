@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import { symbolProps } from "lib/components/symbol"
 
-test.failing("symbol viewbox requires increasing bounds on both axes", () => {
+test("symbol viewbox requires increasing bounds on both axes", () => {
   for (const bounds of [
     { minX: 0, maxX: 0, minY: 0, maxY: 1 },
     { minX: 1, maxX: 0, minY: 0, maxY: 1 },

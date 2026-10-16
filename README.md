@@ -2479,6 +2479,15 @@ export interface SymbolProps {
   originalFacingDirection?: "up" | "down" | "left" | "right";
   width?: string | number;
   height?: string | number;
+  /**
+   * How the symbol's drawing is fitted into `width` / `height`, following CSS `object-fit`:
+   * - "fill" (default): each axis is scaled separately to the given size, so the drawing can stretch; with only
+   *   `width` (or only `height`) given, only that axis is scaled.
+   * - "contain": one scale factor for both axes, the largest at which the drawing fits inside the given size
+   *   (with only `width` or only `height` given, that dimension sets it); the drawing keeps its proportions and is
+   *   centred.
+   */
+  objectFit?: "fill" | "contain";
   name?: string;
 }
 ```

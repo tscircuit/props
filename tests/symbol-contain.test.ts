@@ -6,12 +6,12 @@ test("symbol preserves opt-in uniform fitting and explicit local viewbox", () =>
     width: "2mm",
     height: "1.2mm",
     fit: "contain",
-    viewbox: { x: "-0.5mm", y: "-0.5mm", width: "1mm", height: "1mm" },
+    viewbox: { minX: "-0.5mm", maxX: "0.5mm", minY: "-0.5mm", maxY: "0.5mm" },
   })
   expect(parsed).toMatchObject({
     width: 2,
     height: 1.2,
     fit: "contain",
-    viewbox: { x: -0.5, y: -0.5, width: 1, height: 1 },
+    viewbox: { minX: -0.5, maxX: 0.5, minY: -0.5, maxY: 0.5 },
   })
 })

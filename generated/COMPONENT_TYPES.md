@@ -5597,20 +5597,20 @@ export interface SymbolProps {
   originalFacingDirection?: "up" | "down" | "left" | "right"
   width?: string | number
   height?: string | number
-  fit?: "fill" | "contain"
+  fit?: "fill" | "contain" | "stretch"
   viewbox?: {
-    x: number | string
-    y: number | string
-    width: number | string
-    height: number | string
+    minX: number | string
+    maxX: number | string
+    minY: number | string
+    maxY: number | string
   }
   name?: string
 }
 /**
-   * Source sizing rectangle in symbol-local coordinates (mm, +X right, +Y up).
-   * With width/height, maps this rectangle to the symbol position; all artwork
+   * Source sizing bounds in the local symbol coordinate space (mm, +X right, +Y up).
+   * With width/height, maps the bounds center to the symbol position; all artwork
    * and ports use the same transform. Omitted uses automatic bounds including ports.
-   * Width and height must be positive. No aliases; no change to existing defaults.
+   * maxX must exceed minX and maxY must exceed minY. No aliases; no change to existing defaults.
    */
 export const symbolProps = z.object({
   originalFacingDirection: z
@@ -5619,13 +5619,21 @@ export const symbolProps = z.object({
     .optional(),
   width: distance.optional(),
   height: distance.optional(),
-  fit: z.enum(["fill", "contain"]).optional(),
+  fit: z.enum(["fill", "contain", "stretch"]).optional(),
   viewbox: z
     .object({
-      x: distance,
-      y: distance,
-      width: distance.pipe(z.number().positive()),
-      height: distance.pipe(z.number().positive()),
+      minX: distance,
+      maxX: distance,
+      minY: distance,
+      maxY: distance,
+    })
+    .refine((bounds) => bounds.maxX > bounds.minX, {
+      message: "viewbox maxX must exceed minX",
+      path: ["maxX"],
+    })
+    .refine((bounds) => bounds.maxY > bounds.minY, {
+      message: "viewbox maxY must exceed minY",
+      path: ["maxY"],
     })
     .optional(),
   name: z.string().optional(),

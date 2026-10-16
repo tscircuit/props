@@ -12,6 +12,10 @@ export interface SymbolProps {
   originalFacingDirection?: "up" | "down" | "left" | "right"
   width?: string | number
   height?: string | number
+  /** Resize independently by default; contain uses one scale to fit the requested dimensions. */
+  fit?: "fill" | "contain"
+  /** Include ports and their stems in sizing bounds. Defaults to true; false measures artwork only. */
+  sizeIncludesPorts?: boolean
   name?: string
 }
 
@@ -22,6 +26,8 @@ export const symbolProps = z.object({
     .optional(),
   width: distance.optional(),
   height: distance.optional(),
+  fit: z.enum(["fill", "contain"]).optional(),
+  sizeIncludesPorts: z.boolean().optional(),
   name: z.string().optional(),
 })
 

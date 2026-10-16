@@ -5597,14 +5597,11 @@ export interface SymbolProps {
   originalFacingDirection?: "up" | "down" | "left" | "right"
   width?: string | number
   height?: string | number
+  fit?: "fill" | "contain"
+  sizeIncludesPorts?: boolean
   name?: string
 }
-/**
-   * The facing direction that the symbol is designed for. If you set this to "right",
-   * then it means the children were intended to represent the symbol facing right.
-   * Generally, you shouldn't set this except where it can help prevent confusion
-   * because you have a complex symbol. Default is "right" and this is most intuitive.
-   */
+/** Include ports and their stems in sizing bounds. Defaults to true; false measures artwork only. */
 export const symbolProps = z.object({
   originalFacingDirection: z
     .enum(["up", "down", "left", "right"])
@@ -5612,6 +5609,8 @@ export const symbolProps = z.object({
     .optional(),
   width: distance.optional(),
   height: distance.optional(),
+  fit: z.enum(["fill", "contain"]).optional(),
+  sizeIncludesPorts: z.boolean().optional(),
   name: z.string().optional(),
 })
 ```

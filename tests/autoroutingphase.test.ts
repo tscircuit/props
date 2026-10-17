@@ -249,12 +249,14 @@ test("autorouting phase accepts bounds-only reroute region", () => {
   })
 })
 
-test("autorouting phase requires region when reroute is provided", () => {
-  expect(() =>
-    autoroutingPhaseProps.parse({
-      reroute: false,
-    }),
-  ).toThrow(
-    "region, connection, or connections is required when reroute is provided",
-  )
+test("autorouting phase accepts an unbounded reroute", () => {
+  const raw: AutoroutingPhaseProps = {
+    phaseIndex: 1,
+    reroute: true,
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof autoroutingPhaseProps>>()
+  const parsed = autoroutingPhaseProps.parse(raw)
+  expect(parsed.phaseIndex).toBe(1)
+  expect(parsed.reroute).toBe(true)
 })

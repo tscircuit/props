@@ -87,33 +87,6 @@ export interface AnalogDcSweepSimulationProps
 }
 
 
-export interface AnalogDigitalStimulusProps {
-  name: string
-  /** Selector for the external analog.transientsimulation experiment. */
-  simulationRef: string
-  /** Selector for the physical source pin driven by this stimulus. */
-  drives: string
-  unitInterval: number | string
-  startTime: number | string
-  /** Initial bit before optional inversion. No traffic defaults are inferred. */
-  initialState: 0 | 1
-  inverted?: boolean
-  pattern: { type: "bits"; bits: string; repeat: boolean }
-}
-
-
-export interface AnalogEyeDiagramProps {
-  name: string
-  simulationRef: string
-  probeRef: string
-  unitInterval: number | string
-  timeOrigin: number | string
-  /** Omitted gate endpoints use the experiment's recorded start/end times. */
-  startTime?: number | string
-  endTime?: number | string
-}
-
-
 export interface AnalogInductanceSweepParameterProps
   extends AnalogSweepCoordinatesProps {
   parameterType: "inductance"
@@ -150,10 +123,6 @@ export interface AnalogTransientSimulationProps
   startTime?: number | string
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string
-  /** External mode declares the experiment for a separate runner; render does not execute it. Omission preserves native execution. */
-  executionMode?: "native" | "external"
-  /** Physical pin selectors and per-experiment direction/enable states. Requires external mode. */
-  ibisPinStates?: Record<string, IbisPinRunState>
 }
 
 
@@ -1741,12 +1710,6 @@ export interface HoleWithPolygonPadPlatedHoleProps
   portHints?: PortHints
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
-}
-
-
-export interface IbisModelProps extends IbisModelDefinition {
-  /** Selector for exactly one source component in this subcircuit. */
-  componentRef: string
 }
 
 

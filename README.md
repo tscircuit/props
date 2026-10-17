@@ -83,6 +83,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<pcbnotepath />`                           | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
 | `<pcbnoterect />`                           | [`PcbNoteRectProps`](#pcbnoterectprops-pcbnoterect)                                                                |
 | `<pcbnotetext />`                           | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                |
+| `<pcbpostroutingstep />`                    | [`PcbPostRoutingStepProps`](#pcbpostroutingstepprops-pcbpostroutingstep)                                           |
 | `<simulation.pcbreturncurrentexcitation />` | [`PcbReturnCurrentExcitationProps`](#pcbreturncurrentexcitationprops-simulationpcbreturncurrentexcitation)         |
 | `<simulation.pcbreturncurrentsimulation />` | [`PcbReturnCurrentSimulationProps`](#pcbreturncurrentsimulationprops-simulationpcbreturncurrentsimulation)         |
 | `<pcbsoldermaskopening />`                  | [`PcbSoldermaskOpeningProps`](#pcbsoldermaskopeningprops-pcbsoldermaskopening)                                     |
@@ -1708,6 +1709,25 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-text.ts)
+
+### PcbPostRoutingStepProps `<pcbpostroutingstep />`
+
+```ts
+export interface PcbPostRoutingStepProps {
+  name?: string;
+  /**
+   * Steps of a board or subcircuit run in ascending order. Steps with the same
+   * order run in the order they appear. Defaults to 0.
+   */
+  order?: number;
+  /** Edits the routed PCB as circuit-json: insert, update or remove any pcb_* element. */
+  fn?: PcbPostRoutingFn;
+  /** Returns PCB primitives as JSX, added beside the step. */
+  render?: PcbPostRoutingRenderFn;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-post-routing-step.ts)
 
 <a id="pcbreturncurrentexcitationprops-simulationpcbreturncurrentexcitation"></a>
 

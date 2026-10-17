@@ -1021,6 +1021,46 @@ export const pcbPathPoint = basePcbPathPoint.superRefine((value, ctx) => {
 })
 ```
 
+### pcbPostRouting
+
+```typescript
+/** Every PCB circuit-json element: pads, holes, traces, vias, silkscreen, keepouts, notes, errors... */
+export type PcbCircuitElement = Extract<
+  AnyCircuitElement,
+  { type: `pcb_${string}` }
+export type PcbCircuitElementType = PcbCircuitElement["type"]
+
+export type PcbPostRoutingElementInput<
+  T extends PcbCircuitElementType = PcbCircuitElementType,
+> = { type: T } & Partial<Extract<PcbCircuitElement, { type: T }>>
+/**
+ * What a `<pcbpostroutingstep />` receives. Steps run after autorouting and
+ * teardrops, before copper pours, via stitching and PCB design rule checks, so
+ * whatever they change is poured around, checked and exported.
+ *
+ * Every change a step makes is recorded. Before the steps run again (after
+ * re-routing), the recorded changes are undone, so each run starts from the
+ * routed board.
+ */
+export interface PcbPostRoutingContext {
+  readonly subcircuitId: string | undefined
+  getCircuitJson(): AnyCircuitElement[]
+  getPcbPort(selector: string): PcbPort | undefined
+  getPcbComponent(selector: string): PcbComponent | undefined
+  insert<T extends PcbCircuitElementType>(
+    element: PcbPostRoutingElementInput<T>,
+  ): Extract<PcbCircuitElement, { type: T }>
+  update(id: string, patch: Record<string, unknown>): PcbCircuitElement
+  remove(id: string): void
+}
+export const pcbPostRoutingFn = z.custom<PcbPostRoutingFn>(
+  (value) => typeof value === "function",
+  { message: "fn must be a function" },
+export const pcbPostRoutingRenderFn = z.custom<PcbPostRoutingRenderFn>(
+  (value) => typeof value === "function",
+  { message: "render must be a function" },
+```
+
 ### pcbStyle
 
 ```typescript
@@ -4167,6 +4207,30 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
   fontSize: length.optional(),
   color: z.string().optional(),
 })
+```
+
+### pcb-post-routing-step
+
+```typescript
+/**
+ * User code that changes the PCB after its board or subcircuit is routed, before
+ * copper pours, via stitching and PCB design rule checks. A board may hold any
+ * number of steps, anywhere in its tree, including inside components.
+ */
+export interface PcbPostRoutingStepProps {
+  name?: string
+  order?: number
+  fn?: PcbPostRoutingFn
+  render?: PcbPostRoutingRenderFn
+}
+/** Returns PCB primitives as JSX, added beside the step. */
+export const pcbPostRoutingStepProps = z
+  .object({
+    name: z.string().optional(),
+    order: z.number().optional(),
+    fn: pcbPostRoutingFn.optional(),
+    render: pcbPostRoutingRenderFn.optional(),
+  })
 ```
 
 ### pcb-return-current-excitation

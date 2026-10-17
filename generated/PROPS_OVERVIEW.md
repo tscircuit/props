@@ -2396,6 +2396,50 @@ export interface PcbPathPoint extends Point {
 }
 
 
+export interface PcbPostRoutingContext {
+  /** subcircuit_id of the board or subcircuit group running the step. */
+  readonly subcircuitId: string | undefined
+  /**
+   * The circuit as it is now, including earlier steps' changes. Returns a copy;
+   * edit through insert/update/remove, or return elements from `render`.
+   */
+  getCircuitJson(): AnyCircuitElement[]
+  /**
+   * The pcb_port for a selector relative to the board or subcircuit, e.g.
+   * ".U1 > .pin1". Use its pcb_port_id and pcb_component_id to attach copper
+   * to a port's component and net.
+   */
+  getPcbPort(selector: string): PcbPort | undefined
+  /** The pcb_component for a selector relative to the board or subcircuit, e.g. ".U1". */
+  getPcbComponent(selector: string): PcbComponent | undefined
+  /** Inserts a PCB element and returns it with its generated id. */
+  insert<T extends PcbCircuitElementType>(
+    element: PcbPostRoutingElementInput<T>,
+  ): Extract<PcbCircuitElement, { type: T }>
+  /**
+   * Changes fields of a PCB element by id (any `pcb_*` element, including those
+   * created by routing or by footprints). The type and id cannot change.
+   */
+  update(id: string, patch: Record<string, unknown>): PcbCircuitElement
+  /** Removes a PCB element by id. */
+  remove(id: string): void
+}
+
+
+export interface PcbPostRoutingStepProps {
+  name?: string
+  /**
+   * Steps of a board or subcircuit run in ascending order. Steps with the same
+   * order run in the order they appear. Defaults to 0.
+   */
+  order?: number
+  /** Edits the routed PCB as circuit-json: insert, update or remove any pcb_* element. */
+  fn?: PcbPostRoutingFn
+  /** Returns PCB primitives as JSX, added beside the step. */
+  render?: PcbPostRoutingRenderFn
+}
+
+
 export interface PcbReturnCurrentExcitationProps {
   /** Readable excitation name for diagnostics; not stored on its Circuit JSON record. */
   name?: string

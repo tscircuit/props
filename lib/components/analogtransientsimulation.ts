@@ -15,9 +15,7 @@ export interface AnalogTransientSimulationProps
   startTime?: number | string
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string
-  /** External mode declares the experiment for a separate runner; render does not execute it. Omission preserves native execution. */
-  executionMode?: "native" | "external"
-  /** Physical pin selectors and per-experiment direction/enable states. Requires external mode. */
+  /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
   ibisPinStates?: Record<string, IbisPinRunState>
 }
 
@@ -32,15 +30,14 @@ export const analogTransientSimulationProps = z
     duration: positiveMilliseconds.default("10ms"),
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
-    executionMode: z.enum(["native", "external"]).optional(),
     ibisPinStates: z.record(z.string().min(1), ibisPinRunState).optional(),
   })
   .superRefine((simulation, context) => {
-    if (simulation.ibisPinStates && simulation.executionMode !== "external") {
+    if (simulation.ibisPinStates && simulation.spiceEngine !== "pcb_spice") {
       context.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["ibisPinStates"],
-        message: "IBIS pin states require executionMode=external",
+        message: "IBIS pin states require spiceEngine=pcb_spice",
       })
     }
     if (

@@ -3518,6 +3518,13 @@ export interface ToolingrailProps {
 export interface TransistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
+  /**
+   * Physical package pins mapped to semantic terminal names (and optional aliases).
+   * For MMBT3904 SOT-23: { pin1: "base", pin2: "emitter", pin3: "collector" }.
+   * Use full terminal names to retain schematic and simulation semantics.
+   * Omit to retain the symbol's default pin order; no package pinout is inferred.
+   */
+  pinLabels?: PinLabelsProp<string, PinLabel>
   connections?: Connections<transistorPinsLabels>
 }
 

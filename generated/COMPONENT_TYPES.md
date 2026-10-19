@@ -5742,10 +5742,18 @@ export const transistorPinsLabels = [
 export interface TransistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
+  pinLabels?: PinLabelsProp<string, PinLabel>
   connections?: Connections<transistorPinsLabels>
 }
+/**
+   * Physical package pins mapped to semantic terminal names (and optional aliases).
+   * For MMBT3904 SOT-23: { pin1: "base", pin2: "emitter", pin3: "collector" }.
+   * Use full terminal names to retain schematic and simulation semantics.
+   * Omit to retain the symbol's default pin order; no package pinout is inferred.
+   */
 export const transistorProps = commonComponentProps.extend({
   type: z.enum(["npn", "pnp", "bjt", "jfet", "mosfet", "igbt"]),
+  pinLabels: pinLabelsProp.optional(),
   connections: createConnectionsProp(transistorPinsLabels).optional(),
 })
 export const transistorPins = [

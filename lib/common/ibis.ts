@@ -22,8 +22,23 @@ export const ibisPinReferences = z
   .strict()
 export type IbisPinReferences = z.input<typeof ibisPinReferences>
 
+/** Same location rules as circuit-json's simulation_ibis_model asset. */
+const ibisAssetPath = z
+  .string()
+  .min(1)
+  .regex(/^(?!\s|[a-z][a-z\d+.-]*:|[/\\])[^\\\u0000-\u001f\u007f]+$/i)
+
+export const ibisModelAsset = asset.extend({
+  project_relative_path: ibisAssetPath,
+  url: z
+    .string()
+    .url()
+    .regex(/^https?:\/\//i)
+    .or(ibisAssetPath),
+})
+
 export const ibisModelDefinition = z.object({
-  ibisModelAsset: asset,
+  ibisModelAsset,
   ibisComponentName: z.string().min(1),
   ibisPinNameToPortLabel: z
     .record(z.string().min(1), z.string().min(1))

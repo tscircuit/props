@@ -2,6 +2,9 @@ import { ms } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
+/** Matches circuit-json's simulation_digital_stimulus pattern limit. */
+const MAX_TRANSMITTED_BITS = 65536
+
 /** Binary traffic for one external transient. Numeric times are milliseconds. */
 export interface AnalogDigitalStimulusProps {
   name: string
@@ -37,8 +40,14 @@ export const analogDigitalStimulusProps = z
       .object({
         transmissionType: z.literal("bits"),
         bits: z.union([
-          z.string().regex(/^[01]+$/),
-          z.array(z.union([z.literal(0), z.literal(1)])).nonempty(),
+          z
+            .string()
+            .regex(/^[01]+$/)
+            .max(MAX_TRANSMITTED_BITS),
+          z
+            .array(z.union([z.literal(0), z.literal(1)]))
+            .nonempty()
+            .max(MAX_TRANSMITTED_BITS),
         ]),
         repeat: z.boolean(),
       })

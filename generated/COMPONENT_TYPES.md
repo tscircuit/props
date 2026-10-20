@@ -381,8 +381,17 @@ export const ibisPinReferences = z
     external: z.string().min(1).optional(),
   })
   .strict()
+/** Same location rules as circuit-json's simulation_ibis_model asset. */
+export const ibisModelAsset = asset.extend({
+  project_relative_path: ibisAssetPath,
+  url: z
+    .string()
+    .url()
+    .regex(/^https?:\/\//i)
+    .or(ibisAssetPath),
+})
 export const ibisModelDefinition = z.object({
-  ibisModelAsset: asset,
+  ibisModelAsset,
   ibisComponentName: z.string().min(1),
   ibisPinNameToPortLabel: z
     .record(z.string().min(1), z.string().min(1))
@@ -1620,8 +1629,14 @@ export const analogDigitalStimulusProps = z
       .object({
         transmissionType: z.literal("bits"),
         bits: z.union([
-          z.string().regex(/^[01]+$/),
-          z.array(z.union([z.literal(0), z.literal(1)])).nonempty(),
+          z
+            .string()
+            .regex(/^[01]+$/)
+            .max(MAX_TRANSMITTED_BITS),
+          z
+            .array(z.union([z.literal(0), z.literal(1)]))
+            .nonempty()
+            .max(MAX_TRANSMITTED_BITS),
         ]),
         repeat: z.boolean(),
       })

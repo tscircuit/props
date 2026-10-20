@@ -65,3 +65,20 @@ test.each(["012", "", [], [2], [0, 2]].map((bits) => [bits] as const))(
     ).toBe(false)
   },
 )
+
+test("transmitted bit patterns are capped at 65,536 bits", () => {
+  const stimulus = (bits: string | (0 | 1)[]) =>
+    analogDigitalStimulusProps.safeParse({
+      name: "data",
+      simulationRef: ".sim",
+      sourcePinRef: ".U1 > .DQ",
+      bitDuration: "1ns",
+      startTime: 0,
+      initialState: 0,
+      transmittedData: { transmissionType: "bits", bits, repeat: false },
+    }).success
+  expect(stimulus("1".repeat(65536))).toBe(true)
+  expect(stimulus("1".repeat(65537))).toBe(false)
+  expect(stimulus(Array<0 | 1>(65536).fill(1))).toBe(true)
+  expect(stimulus(Array<0 | 1>(65537).fill(1))).toBe(false)
+})

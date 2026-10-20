@@ -8,20 +8,24 @@ export interface AnalogDigitalStimulusProps {
   /** Selector for the external analog.transientsimulation experiment. */
   simulationRef: string
   /** Selector for the physical source pin driven by this stimulus. */
-  drives: string
-  unitInterval: number | string
+  sourcePinRef: string
+  bitDuration: number | string
   startTime: number | string
   /** Initial bit before optional inversion. No traffic defaults are inferred. */
   initialState: 0 | 1
   inverted?: boolean
-  pattern: { type: "bits"; bits: string; repeat: boolean }
+  transmittedData: {
+    transmissionType: "bits"
+    bits: string | [0 | 1, ...(0 | 1)[]]
+    repeat: boolean
+  }
 }
 export const analogDigitalStimulusProps = z
   .object({
     name: z.string().min(1),
     simulationRef: z.string().min(1),
-    drives: z.string().min(1),
-    unitInterval: ms.refine(
+    sourcePinRef: z.string().min(1),
+    bitDuration: ms.refine(
       (milliseconds) => Number.isFinite(milliseconds) && milliseconds > 0,
     ),
     startTime: ms.refine(
@@ -29,10 +33,13 @@ export const analogDigitalStimulusProps = z
     ),
     initialState: z.union([z.literal(0), z.literal(1)]),
     inverted: z.boolean().default(false),
-    pattern: z
+    transmittedData: z
       .object({
-        type: z.literal("bits"),
-        bits: z.string().regex(/^[01]+$/),
+        transmissionType: z.literal("bits"),
+        bits: z.union([
+          z.string().regex(/^[01]+$/),
+          z.array(z.union([z.literal(0), z.literal(1)])).nonempty(),
+        ]),
         repeat: z.boolean(),
       })
       .strict(),

@@ -351,6 +351,42 @@ export type FootprintSoupElements = {
 }
 ```
 
+### ibis
+
+```typescript
+/** Direction is explicit per experiment. Only outputs accept an enable state. */
+export const ibisPinRunState = z.discriminatedUnion("isOutput", [
+  z.object({ isOutput: z.literal(false) }).strict(),
+/** Reference values are labels on the same chip, never inferred supply rails. */
+export const ibisPinReferences = z
+  .object({
+    pullup: z.string().min(1).optional(),
+    pulldown: z.string().min(1).optional(),
+    powerClamp: z.string().min(1).optional(),
+    groundClamp: z.string().min(1).optional(),
+    external: z.string().min(1).optional(),
+  })
+export const ibisModelDefinition = z.object({
+  ibisModelAsset: asset,
+  ibisComponentName: z.string().min(1),
+  ibisPinNameToPortLabel: z
+    .record(z.string().min(1), z.string().min(1))
+    .refine((pins) => Object.keys(pins).length > 0),
+  ibisPinNameToModelName: z
+    .record(z.string().min(1), z.string().min(1))
+    .optional(),
+  ibisPinNameToReferencePortLabels: z
+    .record(z.string().min(1), ibisPinReferences)
+    .optional(),
+  modelValueCorner: z.union([
+    z.literal("typical"),
+    z.literal("minimum"),
+    z.literal("maximum"),
+  ]),
+  includePackageParasitics: z.boolean(),
+})
+```
+
 ### impedanceTarget
 
 ```typescript
@@ -1475,6 +1511,81 @@ export const analogDcSweepSimulationProps = z
   })
 ```
 
+### analogdigitalstimulus
+
+```typescript
+/** Binary traffic for one external transient. Numeric times are milliseconds. */
+export interface AnalogDigitalStimulusProps {
+  name: string
+  simulationRef: string
+  sourcePinRef: string
+  bitDuration: number | string
+  startTime: number | string
+  initialState: 0 | 1
+  inverted?: boolean
+  transmittedData: {
+    transmissionType: "bits"
+    bits: string | [0 | 1, ...(0 | 1)[]]
+    repeat: boolean
+  }
+}
+/** Initial bit before optional inversion. No traffic defaults are inferred. */
+export const analogDigitalStimulusProps = z
+  .object({
+    name: z.string().min(1),
+    simulationRef: z.string().min(1),
+    sourcePinRef: z.string().min(1),
+    bitDuration: ms.refine(
+      (milliseconds) => Number.isFinite(milliseconds) && milliseconds > 0,
+    ),
+    startTime: ms.refine(
+      (milliseconds) => Number.isFinite(milliseconds) && milliseconds >= 0,
+    ),
+    initialState: z.union([z.literal(0), z.literal(1)]),
+    inverted: z.boolean().default(false),
+    transmittedData: z
+      .object({
+        transmissionType: z.literal("bits"),
+        bits: z.union([
+          z.string().regex(/^[01]+$/),
+          z.array(z.union([z.literal(0), z.literal(1)])).nonempty(),
+        ]),
+        repeat: z.boolean(),
+      })
+      .strict(),
+  })
+```
+
+### analogeyediagram
+
+```typescript
+/** Fixed-origin eye measurement. Numeric times are milliseconds; no compliance threshold is implied. */
+export interface AnalogEyeDiagramProps {
+  name: string
+  simulationRef: string
+  probeRef: string
+  unitInterval: number | string
+  timeOrigin: number | string
+  startTime?: number | string
+  endTime?: number | string
+}
+/** Omitted gate endpoints use the experiment's recorded start/end times. */
+export const analogEyeDiagramProps = z
+  .object({
+    name: z.string().min(1),
+    simulationRef: z.string().min(1),
+    probeRef: z.string().min(1),
+    unitInterval: finiteMilliseconds.refine((milliseconds) => milliseconds > 0),
+    timeOrigin: finiteMilliseconds,
+    startTime: finiteMilliseconds
+      .refine((milliseconds) => milliseconds >= 0)
+      .optional(),
+    endTime: finiteMilliseconds
+      .refine((milliseconds) => milliseconds > 0)
+      .optional(),
+  })
+```
+
 ### analogsimulation
 
 ```typescript
@@ -1597,14 +1708,16 @@ export interface AnalogTransientSimulationProps
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
+  ibisPinStates?: Record<string, IbisPinRunState>
 }
-/** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
+/** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
 export const analogTransientSimulationProps = z
   .object({
     ...analogAnalysisSimulationBaseProps,
     duration: positiveMilliseconds.default("10ms"),
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
+    ibisPinStates: z.record(z.string().min(1), ibisPinRunState).optional(),
   })
 ```
 
@@ -3533,6 +3646,15 @@ const rectHoleProps = pcbLayoutProps.extend({
   solderMaskMargin: distance.optional(),
   coveredWithSolderMask: z.boolean().optional(),
 })
+```
+
+### ibismodel
+
+```typescript
+/** Declares a model for an existing chip. Rendering never fetches or converts the source. */
+export interface IbisModelProps extends IbisModelDefinition {
+  componentRef: string
+}
 ```
 
 ### inductor

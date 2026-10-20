@@ -26,6 +26,8 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<analog.acsweepsimulation />`              | [`AnalogAcSweepSimulationProps`](#analogacsweepsimulationprops-analogacsweepsimulation)                            |
 | `<analog.dcoperatingpointsimulation />`     | [`AnalogDcOperatingPointSimulationProps`](#analogdcoperatingpointsimulationprops-analogdcoperatingpointsimulation) |
 | `<analog.dcsweepsimulation />`              | [`AnalogDcSweepSimulationProps`](#analogdcsweepsimulationprops-analogdcsweepsimulation)                            |
+| `<analog.digitalstimulus />`                | [`AnalogDigitalStimulusProps`](#analogdigitalstimulusprops-analogdigitalstimulus)                                  |
+| `<analog.eyediagram />`                     | [`AnalogEyeDiagramProps`](#analogeyediagramprops-analogeyediagram)                                                 |
 | `<analogsimulation />`                      | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                                                 |
 | `<analog.sweepparameter />`                 | [`AnalogResistanceSweepParameterProps`](#analogresistancesweepparameterprops-analogsweepparameter)                 |
 | `<analog.transientsimulation />`            | [`AnalogTransientSimulationProps`](#analogtransientsimulationprops-analogtransientsimulation)                      |
@@ -64,6 +66,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<fuse />`                                  | [`FuseProps`](#fuseprops-fuse)                                                                                     |
 | `<group />`                                 | [`BaseGroupProps`](#basegroupprops-group)                                                                          |
 | `<hole />`                                  | [`CircleHoleProps`](#circleholeprops-hole)                                                                         |
+| `<ibismodel />`                             | [`IbisModelProps`](#ibismodelprops-ibismodel)                                                                      |
 | `<inductor />`                              | [`InductorProps`](#inductorprops-inductor)                                                                         |
 | `<interconnect />`                          | [`InterconnectProps`](#interconnectprops-interconnect)                                                             |
 | `<internalcircuit />`                       | [`InternalCircuitProps`](#internalcircuitprops-internalcircuit)                                                    |
@@ -288,6 +291,47 @@ export interface AnalogDcSweepSimulationProps extends AnalogAnalysisSimulationBa
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/analogdcsweepsimulation.ts)
 
+### AnalogDigitalStimulusProps `<analog.digitalstimulus />`
+
+```ts
+export interface AnalogDigitalStimulusProps {
+  name: string;
+  /** Selector for the external analog.transientsimulation experiment. */
+  simulationRef: string;
+  /** Selector for the physical source pin driven by this stimulus. */
+  sourcePinRef: string;
+  bitDuration: number | string;
+  startTime: number | string;
+  /** Initial bit before optional inversion. No traffic defaults are inferred. */
+  initialState: 0 | 1;
+  inverted?: boolean;
+  transmittedData: {
+    transmissionType: "bits";
+    bits: string | [0 | 1, ...(0 | 1)[]];
+    repeat: boolean;
+  };
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogdigitalstimulus.ts)
+
+### AnalogEyeDiagramProps `<analog.eyediagram />`
+
+```ts
+export interface AnalogEyeDiagramProps {
+  name: string;
+  simulationRef: string;
+  probeRef: string;
+  unitInterval: number | string;
+  timeOrigin: number | string;
+  /** Omitted gate endpoints use the experiment's recorded start/end times. */
+  startTime?: number | string;
+  endTime?: number | string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogeyediagram.ts)
+
 ### AnalogSimulationProps `<analogsimulation />`
 
 ```ts
@@ -327,6 +371,8 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
   startTime?: number | string;
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string;
+  /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
+  ibisPinStates?: Record<string, IbisPinRunState>;
 }
 ```
 
@@ -1316,6 +1362,17 @@ export interface CircleHoleProps extends PcbLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
+
+### IbisModelProps `<ibismodel />`
+
+```ts
+export interface IbisModelProps extends IbisModelDefinition {
+  /** Selector for exactly one source component in this subcircuit. */
+  componentRef: string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/ibismodel.ts)
 
 ### InductorProps `<inductor />`
 

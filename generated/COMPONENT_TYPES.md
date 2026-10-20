@@ -124,6 +124,14 @@ export const cadModelProp = z.union([
   z.custom<ReactElement>((v) => {
     return v && typeof v === "object" && "type" in v && "props" in v
   }),
+  cadModelStl,
+  cadModelObj,
+  cadModelGltf,
+  cadModelGlb,
+  cadModelStep,
+  cadModelWrl,
+  cadModelJscad,
+])
 ```
 
 ### commonShape
@@ -204,6 +212,7 @@ export const fanoutBoundaryPadding = z.union([
     bottom: nonnegativeDistance.optional(),
     left: nonnegativeDistance.optional(),
   }),
+])
 ```
 
 ### fanoutProps
@@ -264,6 +273,7 @@ export const busFanoutDirection = z.union([
   z.object({
     direction: z.union([ninePointAnchor, canonicalBusFanoutDirection]),
   }),
+])
 export const fanoutProps = z.object({
   busFanoutDirections: z.record(busFanoutDirection).optional(),
   fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
@@ -357,6 +367,10 @@ export type FootprintSoupElements = {
 /** Direction is explicit per experiment. Only outputs accept an enable state. */
 export const ibisPinRunState = z.discriminatedUnion("isOutput", [
   z.object({ isOutput: z.literal(false) }).strict(),
+  z
+    .object({ isOutput: z.literal(true), isOutputEnabled: z.boolean() })
+    .strict(),
+])
 /** Reference values are labels on the same chip, never inferred supply rails. */
 export const ibisPinReferences = z
   .object({
@@ -366,6 +380,7 @@ export const ibisPinReferences = z
     groundClamp: z.string().min(1).optional(),
     external: z.string().min(1).optional(),
   })
+  .strict()
 export const ibisModelDefinition = z.object({
   ibisModelAsset: asset,
   ibisComponentName: z.string().min(1),
@@ -1281,6 +1296,8 @@ export const routeLength = z.union([
       of: z.array(z.string().min(1)).min(1).optional(),
       offset: distance.pipe(z.number().finite()).optional(),
     })
+    .strict(),
+])
 ```
 
 ### schStyle
@@ -1394,6 +1411,7 @@ export const schematicPinStyle = z.record(
     topMargin: distance.optional(),
     bottomMargin: distance.optional(),
   }),
+)
 ```
 
 ### traceSpacing
@@ -1477,6 +1495,49 @@ export const analogAcSweepSimulationProps = z
     samplesPerInterval: z.number().int().positive().optional(),
     sampleCount: z.number().int().positive().optional(),
   })
+  .superRefine((simulation, context) => {
+    if (simulation.stopFrequency <= simulation.startFrequency) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["stopFrequency"],
+        message: "stopFrequency must be greater than startFrequency",
+      })
+    }
+
+    if (simulation.sweepType === "linear") {
+      if (simulation.sampleCount === undefined) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["sampleCount"],
+          message: "sampleCount is required for a linear AC sweep",
+        })
+      }
+      if (simulation.samplesPerInterval !== undefined) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["samplesPerInterval"],
+          message:
+            "samplesPerInterval is only valid for decade or octave sweeps",
+        })
+      }
+      return
+    }
+
+    if (simulation.samplesPerInterval === undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["samplesPerInterval"],
+        message: "samplesPerInterval is required for decade or octave sweeps",
+      })
+    }
+    if (simulation.sampleCount !== undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["sampleCount"],
+        message: "sampleCount is only valid for a linear sweep",
+      })
+    }
+  })
 ```
 
 ### analogdcoperatingpointsimulation
@@ -1508,6 +1569,18 @@ export const analogDcSweepSimulationProps = z
       (sweepStep) => sweepStep !== 0,
       "sweepStep must be nonzero",
     ),
+  })
+  .superRefine((simulation, context) => {
+    if (
+      Math.sign(simulation.sweepStop - simulation.sweepStart) !==
+      Math.sign(simulation.sweepStep)
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["sweepStep"],
+        message: "sweepStep must move from sweepStart toward sweepStop",
+      })
+    }
   })
 ```
 
@@ -1554,6 +1627,7 @@ export const analogDigitalStimulusProps = z
       })
       .strict(),
   })
+  .strict()
 ```
 
 ### analogeyediagram
@@ -1583,6 +1657,20 @@ export const analogEyeDiagramProps = z
     endTime: finiteMilliseconds
       .refine((milliseconds) => milliseconds > 0)
       .optional(),
+  })
+  .strict()
+  .superRefine((eye, context) => {
+    if (
+      eye.startTime !== undefined &&
+      eye.endTime !== undefined &&
+      eye.startTime >= eye.endTime
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["endTime"],
+        message: "Eye gate end must follow its start",
+      })
+    }
   })
 ```
 
@@ -1674,30 +1762,35 @@ export const analogResistanceSweepParameterProps = z
     parameterType: z.literal("resistance"),
     resistorRef: z.string().min(1),
   })
+  .strict()
 export const analogCapacitanceSweepParameterProps = z
   .object({
     ...createAnalogSweepCoordinateProps(capacitanceSweepQuantity),
     parameterType: z.literal("capacitance"),
     capacitorRef: z.string().min(1),
   })
+  .strict()
 export const analogInductanceSweepParameterProps = z
   .object({
     ...createAnalogSweepCoordinateProps(inductanceSweepQuantity),
     parameterType: z.literal("inductance"),
     inductorRef: z.string().min(1),
   })
+  .strict()
 export const analogVoltageSweepParameterProps = z
   .object({
     ...createAnalogSweepCoordinateProps(voltageSweepQuantity),
     parameterType: z.literal("voltage"),
     net: z.string().min(1),
   })
+  .strict()
 export const analogCurrentSweepParameterProps = z
   .object({
     ...createAnalogSweepCoordinateProps(currentSweepQuantity),
     parameterType: z.literal("current"),
     currentSourceRef: z.string().min(1),
   })
+  .strict()
 ```
 
 ### analogtransientsimulation
@@ -1718,6 +1811,25 @@ export const analogTransientSimulationProps = z
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
     ibisPinStates: z.record(z.string().min(1), ibisPinRunState).optional(),
+  })
+  .superRefine((simulation, context) => {
+    if (simulation.ibisPinStates && simulation.spiceEngine !== "pcb_spice") {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["ibisPinStates"],
+        message: "IBIS pin states require spiceEngine=pcb_spice",
+      })
+    }
+    if (
+      simulation.startTime < 0 ||
+      simulation.startTime > simulation.duration
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["startTime"],
+        message: "startTime must be between zero and duration",
+      })
+    }
   })
 ```
 
@@ -1818,6 +1930,33 @@ export const autoroutingPhaseProps = z
     reroute: z.boolean().optional(),
     ...fanoutProps.shape,
   })
+  .superRefine((value, ctx) => {
+    const isSimplifyAutorouter =
+      value.autorouter === "simplify" ||
+      (typeof value.autorouter === "object" &&
+        value.autorouter?.preset === "simplify")
+
+    if (isSimplifyAutorouter && value.reroute !== true) {
+      console.warn(
+        'The "simplify" autorouter preset should only be used with reroute=true',
+      )
+    }
+
+    if (
+      value.reroute !== undefined &&
+      !(isSimplifyAutorouter && value.reroute === true) &&
+      value.region === undefined &&
+      value.connection === undefined &&
+      value.connections === undefined
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "region, connection, or connections is required when reroute is provided",
+        path: ["region"],
+      })
+    }
+  })
 ```
 
 ### battery
@@ -1857,6 +1996,38 @@ export const boardOutlinePoint = z
     holeDiameter: distance.optional(),
     padDiameter: distance.optional(),
     connectsTo: z.string().or(z.array(z.string())).optional(),
+  })
+  .superRefine((outlinePoint, ctx) => {
+    if (outlinePoint.isCastellatedHole) {
+      if (outlinePoint.holeDiameter === undefined) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["holeDiameter"],
+          message: "holeDiameter is required for a castellated hole",
+        })
+      }
+      if (outlinePoint.padDiameter === undefined) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["padDiameter"],
+          message: "padDiameter is required for a castellated hole",
+        })
+      }
+      return
+    }
+
+    if (
+      outlinePoint.holeDiameter !== undefined ||
+      outlinePoint.padDiameter !== undefined ||
+      outlinePoint.connectsTo !== undefined
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["isCastellatedHole"],
+        message:
+          "isCastellatedHole must be true when castellated hole props are provided",
+      })
+    }
   })
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
@@ -2118,6 +2289,32 @@ export const busProps = z
     preferredLayer: layer_ref.optional(),
     preferredLayers: z.array(layer_ref).min(1).optional(),
   })
+  .superRefine((props, ctx) => {
+    validateRouteLengths(props, ctx)
+    validateImpedanceTarget(
+      props.targetImpedance,
+      props.targetImpedanceMin,
+      props.targetImpedanceMax,
+      ctx,
+      "targetImpedance",
+    )
+  })
+  .transform(
+    ({
+      targetImpedance,
+      ...props
+    }): typeof props & { targetImpedance?: number } => {
+      if (targetImpedance === undefined) return props
+      if (typeof targetImpedance === "number")
+        return { ...props, targetImpedance }
+      return {
+        ...props,
+        targetImpedance: targetImpedance.nominal,
+        targetImpedanceMin: targetImpedance.min,
+        targetImpedanceMax: targetImpedance.max,
+      }
+    },
+  )
 ```
 
 ### cadassembly
@@ -2449,6 +2646,18 @@ export const copperPourProps = z
     outline: z.array(point).optional(),
     coveredWithSolderMask: z.boolean().optional().default(true),
   })
+  .superRefine((props, ctx) => {
+    if (
+      props.crosshatch &&
+      (props.crosshatchWidth ?? 0.25) >= (props.crosshatchPitch ?? 1)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["crosshatchWidth"],
+        message: "crosshatchWidth must be less than crosshatchPitch",
+      })
+    }
+  })
 ```
 
 ### copper-text
@@ -2687,6 +2896,32 @@ export const differentialPairProps = z
     pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
     maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
   })
+  .superRefine((props, ctx) => {
+    validateRouteLengths(props, ctx)
+    validateImpedanceTarget(
+      props.targetDifferentialImpedance,
+      props.targetDifferentialImpedanceMin,
+      props.targetDifferentialImpedanceMax,
+      ctx,
+      "targetDifferentialImpedance",
+    )
+  })
+  .transform(
+    ({
+      targetDifferentialImpedance,
+      ...props
+    }): typeof props & { targetDifferentialImpedance?: number } => {
+      if (targetDifferentialImpedance === undefined) return props
+      if (typeof targetDifferentialImpedance === "number")
+        return { ...props, targetDifferentialImpedance }
+      return {
+        ...props,
+        targetDifferentialImpedance: targetDifferentialImpedance.nominal,
+        targetDifferentialImpedanceMin: targetDifferentialImpedance.min,
+        targetDifferentialImpedanceMax: targetDifferentialImpedance.max,
+      }
+    },
+  )
 ```
 
 ### diode
@@ -4049,6 +4284,10 @@ export const pcbBendProps = z
     tearReliefRadius: distance.pipe(z.number().finite().positive()).optional(),
     bendSide: z.enum(["left", "right"]),
   })
+  .refine(({ x1, y1, x2, y2 }) => x1 !== x2 || y1 !== y2, {
+    message: "Bend centerline endpoints must be distinct",
+    path: ["x2"],
+  })
 ```
 
 ### pcb-keepout
@@ -4329,6 +4568,7 @@ export const pcbReturnCurrentExcitationProps = z
     returnSourceLayer: layer_ref.optional(),
     returnSinkLayer: layer_ref.optional(),
   })
+  .strict()
 ```
 
 ### pcb-return-current-simulation
@@ -4347,6 +4587,7 @@ export const pcbReturnCurrentSimulationProps = z
     name: z.string().trim().min(1).optional(),
     children: z.custom<ReactNode>().optional(),
   })
+  .strict()
 ```
 
 ### pcb-soldermask-opening
@@ -4939,6 +5180,28 @@ export const schematicBoxProps = z
     titleInside: z.boolean().default(false),
     strokeStyle: z.enum(["solid", "dashed"]).default("solid"),
   })
+  .refine(
+    (elm) =>
+      (elm.width !== undefined && elm.height !== undefined) ||
+      (Array.isArray(elm.overlay) && elm.overlay.length > 0),
+    {
+      message:
+        "Must provide either both `width` and `height`, or a non-empty `overlay` array.",
+    },
+  )
+  .refine(
+    (elm) =>
+      !(
+        elm.width !== undefined &&
+        elm.height !== undefined &&
+        Array.isArray(elm.overlay) &&
+        elm.overlay.length > 0
+      ),
+    {
+      message:
+        "Cannot provide both `width`/`height` and `overlay` at the same time.",
+    },
+  )
 export interface SchematicBoxProps {
   name?: string
   chipRef?: string
@@ -5041,6 +5304,14 @@ export const schematicGraphicProps = z
       .optional(),
     width: positiveDistance("width").optional(),
     height: positiveDistance("height").optional(),
+  })
+  .superRefine(({ imageUrl, svgContent }, ctx) => {
+    if (imageUrl === undefined && svgContent === undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "At least one of imageUrl or svgContent is required",
+      })
+    }
   })
 ```
 
@@ -5834,6 +6105,13 @@ export const traceHintProps = z.object({
 export const portRef = z.union([
   z.string(),
   z.custom<{ getPortSelector: () => string }>(
+    (v) =>
+      typeof v === "object" &&
+      v !== null &&
+      "getPortSelector" in v &&
+      typeof v.getPortSelector === "function",
+  ),
+])
 baseTraceProps.extend({
     path: z.array(portRef),
   }),

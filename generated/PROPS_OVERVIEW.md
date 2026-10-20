@@ -48,7 +48,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   /** Stable identity for the simulation experiment. */
   name?: string
   /** SPICE implementation used to run this analysis. */
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
   /** Numerical solver settings forwarded to the selected SPICE engine. */
   spiceOptions?: SpiceOptions
   /** Render each probe with an independent vertical graph scale. */
@@ -87,6 +87,37 @@ export interface AnalogDcSweepSimulationProps
 }
 
 
+export interface AnalogDigitalStimulusProps {
+  name: string
+  /** Selector for the external analog.transientsimulation experiment. */
+  simulationRef: string
+  /** Selector for the physical source pin driven by this stimulus. */
+  sourcePinRef: string
+  bitDuration: number | string
+  startTime: number | string
+  /** Initial bit before optional inversion. No traffic defaults are inferred. */
+  initialState: 0 | 1
+  inverted?: boolean
+  transmittedData: {
+    transmissionType: "bits"
+    bits: string | [0 | 1, ...(0 | 1)[]]
+    repeat: boolean
+  }
+}
+
+
+export interface AnalogEyeDiagramProps {
+  name: string
+  simulationRef: string
+  probeRef: string
+  unitInterval: number | string
+  timeOrigin: number | string
+  /** Omitted gate endpoints use the experiment's recorded start/end times. */
+  startTime?: number | string
+  endTime?: number | string
+}
+
+
 export interface AnalogInductanceSweepParameterProps
   extends AnalogSweepCoordinatesProps {
   parameterType: "inductance"
@@ -109,7 +140,7 @@ export interface AnalogSimulationProps {
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
@@ -123,6 +154,8 @@ export interface AnalogTransientSimulationProps
   startTime?: number | string
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string
+  /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
+  ibisPinStates?: Record<string, IbisPinRunState>
 }
 
 
@@ -1713,6 +1746,12 @@ export interface HoleWithPolygonPadPlatedHoleProps
 }
 
 
+export interface IbisModelProps extends IbisModelDefinition {
+  /** Selector for exactly one source component in this subcircuit. */
+  componentRef: string
+}
+
+
 export interface ImplicitBreakoutBounds {
   readonly minX: number
   readonly maxX: number
@@ -2789,7 +2828,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[]
   snapshotsDir?: string
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
 
   unitPreference?: "mm" | "in" | "mil"
 

@@ -10,14 +10,14 @@ export interface AnalogSimulationProps {
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
 
-const spiceEngine = z.custom<AutocompleteString<"spicey" | "ngspice">>(
-  (value) => typeof value === "string",
-)
+const spiceEngine = z.custom<
+  AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+>((value) => typeof value === "string")
 
 export interface SpiceOptions {
   method?: "trap" | "gear"
@@ -37,7 +37,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   /** Stable identity for the simulation experiment. */
   name?: string
   /** SPICE implementation used to run this analysis. */
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
   /** Numerical solver settings forwarded to the selected SPICE engine. */
   spiceOptions?: SpiceOptions
   /** Render each probe with an independent vertical graph scale. */

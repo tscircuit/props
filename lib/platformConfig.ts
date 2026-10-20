@@ -126,7 +126,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[]
   snapshotsDir?: string
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
 
   unitPreference?: "mm" | "in" | "mil"
 
@@ -220,9 +220,9 @@ const spiceEngineZod = z.object({
     ),
 })
 
-const defaultSpiceEngine = z.custom<AutocompleteString<"spicey" | "ngspice">>(
-  (value) => typeof value === "string",
-)
+const defaultSpiceEngine = z.custom<
+  AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+>((value) => typeof value === "string")
 
 const autorouterInstance = z.object({
   run: z

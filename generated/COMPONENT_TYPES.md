@@ -1595,7 +1595,7 @@ export interface AnalogSimulationProps {
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
@@ -1607,7 +1607,7 @@ export interface SpiceOptions {
 }
 export interface AnalogAnalysisSimulationBaseProps {
   name?: string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
   children?: ReactNode

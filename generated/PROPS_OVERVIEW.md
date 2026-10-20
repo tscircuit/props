@@ -48,7 +48,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   /** Stable identity for the simulation experiment. */
   name?: string
   /** SPICE implementation used to run this analysis. */
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
   /** Numerical solver settings forwarded to the selected SPICE engine. */
   spiceOptions?: SpiceOptions
   /** Render each probe with an independent vertical graph scale. */
@@ -140,7 +140,7 @@ export interface AnalogSimulationProps {
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
@@ -2828,7 +2828,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[]
   snapshotsDir?: string
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
 
   unitPreference?: "mm" | "in" | "mil"
 

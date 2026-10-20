@@ -341,7 +341,7 @@ export interface AnalogSimulationProps {
   duration?: number | string;
   startTime?: number | string;
   timePerStep?: number | string;
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice">;
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">;
   spiceOptions?: SpiceOptions;
   graphIndependentAxes?: boolean;
 }
@@ -2766,7 +2766,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[];
   snapshotsDir?: string;
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">;
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">;
 
   unitPreference?: "mm" | "in" | "mil";
 

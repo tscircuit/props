@@ -168,6 +168,3 @@ export {
   type TraceSpacing,
 } from "./common/traceSpacing"
 export { impedanceTarget, type ImpedanceTarget } from "./common/impedanceTarget"
-
-export * from "./components/engineering-drawing"
-export * from "./components/engineering-view"

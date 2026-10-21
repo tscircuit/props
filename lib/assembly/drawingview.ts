@@ -5,7 +5,7 @@ import { expectTypesMatch } from "lib/typecheck"
 
 /** Axis names use tscircuit CAD coordinates: mm, +Z up. The camera sits on
  * the named side of the model and looks toward its center. */
-export type EngineeringViewDirection =
+export type AssemblyDrawingViewDirection =
   | "x+"
   | "x-"
   | "y+"
@@ -13,9 +13,8 @@ export type EngineeringViewDirection =
   | "z+"
   | "z-"
   | "isometric"
-export type EngineeringViewStyle = "edges" | "shaded" | "shaded-edges"
 
-export interface EngineeringSectionPlane {
+export interface AssemblyDrawingSectionPlane {
   axis: "x" | "y" | "z"
   /** Plane coordinate in CAD world space, numeric mm or a distance string. */
   offset: Distance
@@ -25,18 +24,18 @@ export interface EngineeringSectionPlane {
   hatchSpacing?: Distance
 }
 
-export const engineeringSectionPlane = z.object({
+export const assemblyDrawingSectionPlane = z.object({
   axis: z.enum(["x", "y", "z"]),
   offset: distance.pipe(z.number().finite()),
   keepSide: z.enum(["less", "greater"]),
   hatchSpacing: distance.pipe(z.number().finite().positive()).default(1),
 })
 
-/** An orthographic viewport within an engineeringdrawing. */
-export interface EngineeringViewProps {
+/** An orthographic viewport within an assembly.drawing. */
+export interface AssemblyDrawingViewProps {
   name?: string
   displayName?: string
-  direction: EngineeringViewDirection
+  direction: AssemblyDrawingViewDirection
   /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
   x?: Distance
   y?: Distance
@@ -45,15 +44,13 @@ export interface EngineeringViewProps {
   height: Distance
   /** Model-to-paper ratio: 1 is 1:1, 0.5 is 1:2. Omit to fit the viewport. */
   scale?: number
-  /** Defaults to edges: white opaque surfaces and black visible edges. */
-  style?: EngineeringViewStyle
   /** Draw obscured edges as dashed strokes. Defaults to false. */
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
-  section?: EngineeringSectionPlane
+  section?: AssemblyDrawingSectionPlane
 }
 
-export const engineeringViewProps = z.object({
+export const assemblyDrawingViewProps = z.object({
   name: z.string().optional(),
   displayName: z.string().optional(),
   direction: z.enum(["x+", "x-", "y+", "y-", "z+", "z-", "isometric"]),
@@ -62,16 +59,18 @@ export const engineeringViewProps = z.object({
   width: distance.pipe(z.number().finite().positive()),
   height: distance.pipe(z.number().finite().positive()),
   scale: z.number().finite().positive().optional(),
-  style: z.enum(["edges", "shaded", "shaded-edges"]).default("edges"),
   showHiddenEdges: z.boolean().default(false),
-  section: engineeringSectionPlane.optional(),
+  section: assemblyDrawingSectionPlane.optional(),
 })
 
-export type InferredEngineeringViewProps = z.input<typeof engineeringViewProps>
+export type InferredAssemblyDrawingViewProps = z.input<
+  typeof assemblyDrawingViewProps
+>
 expectTypesMatch<
-  EngineeringSectionPlane,
-  z.input<typeof engineeringSectionPlane>
+  AssemblyDrawingSectionPlane,
+  z.input<typeof assemblyDrawingSectionPlane>
 >(true)
-expectTypesMatch<EngineeringViewProps, z.input<typeof engineeringViewProps>>(
-  true,
-)
+expectTypesMatch<
+  AssemblyDrawingViewProps,
+  z.input<typeof assemblyDrawingViewProps>
+>(true)

@@ -4,7 +4,7 @@ import type { Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 
 /** A paper-space drawing of one circuit/assembly, containing engineering views. */
-export interface EngineeringDrawingProps {
+export interface AssemblyDrawingProps {
   name?: string
   displayName?: string
   /** Circuit selector for the board, group or assembly to draw. */
@@ -15,7 +15,7 @@ export interface EngineeringDrawingProps {
   children?: any
 }
 
-export const engineeringDrawingProps = z.object({
+export const assemblyDrawingProps = z.object({
   name: z.string().optional(),
   displayName: z.string().optional(),
   target: z.string().min(1),
@@ -24,10 +24,7 @@ export const engineeringDrawingProps = z.object({
   children: z.any().optional(),
 })
 
-export type InferredEngineeringDrawingProps = z.input<
-  typeof engineeringDrawingProps
->
-expectTypesMatch<
-  EngineeringDrawingProps,
-  z.input<typeof engineeringDrawingProps>
->(true)
+export type InferredAssemblyDrawingProps = z.input<typeof assemblyDrawingProps>
+expectTypesMatch<AssemblyDrawingProps, z.input<typeof assemblyDrawingProps>>(
+  true,
+)

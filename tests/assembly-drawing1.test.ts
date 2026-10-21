@@ -1,16 +1,22 @@
 import { expect, test } from "bun:test"
-import { engineeringDrawingProps, engineeringViewProps } from "../lib"
+import {
+  assemblyProps,
+  assemblyDrawingProps,
+  assemblyDrawingViewProps,
+} from "../lib"
 
-test("drawing paper and section distances normalize to mm", () => {
+test("assembly drawing schemas are registered and distances normalize to mm", () => {
+  expect(assemblyProps.drawing).toBe(assemblyDrawingProps)
+  expect(assemblyProps.drawingview).toBe(assemblyDrawingViewProps)
   expect(
-    engineeringDrawingProps.parse({
+    assemblyDrawingProps.parse({
       target: "board",
       width: "210mm",
       height: "29.7cm",
     }),
   ).toEqual({ target: "board", width: 210, height: 297 })
   expect(
-    engineeringViewProps.parse({
+    assemblyDrawingViewProps.parse({
       direction: "z+",
       width: "4cm",
       height: 30,
@@ -22,7 +28,6 @@ test("drawing paper and section distances normalize to mm", () => {
     height: 30,
     x: 0,
     y: 0,
-    style: "edges",
     showHiddenEdges: false,
     section: { axis: "x", offset: -2, keepSide: "greater", hatchSpacing: 1 },
   })

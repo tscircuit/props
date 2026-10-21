@@ -60,7 +60,7 @@ test("converts signed offsets to finite millimeters and leaves absent axes omitt
   }
   const props: AssemblyExplosionMovePropsInput = input
   expect(assemblyExplosionMoveProps.parse(props)).toEqual({
-    targetRef: "cover",
+    targetRefs: ["cover"],
     offX: -20,
     offY: 0,
     offZ: 25.4,
@@ -68,14 +68,80 @@ test("converts signed offsets to finite millimeters and leaves absent axes omitt
   for (const axis of ["offX", "offY", "offZ"] as const) {
     expect(
       assemblyExplosionMoveProps.parse({ targetRef: "cover", [axis]: 0 }),
-    ).toEqual({ targetRef: "cover", [axis]: 0 })
+    ).toEqual({ targetRefs: ["cover"], [axis]: 0 })
     expect(
       assemblyExplosionMoveProps.parse({
         targetRef: "cover.window",
         [axis]: "-5mm",
       }),
-    ).toEqual({ targetRef: "cover.window", [axis]: -5 })
+    ).toEqual({ targetRefs: ["cover.window"], [axis]: -5 })
   }
+})
+
+test("normalizes comma-separated and array move targets to the same trimmed references", () => {
+  for (const targetRefs of [
+    " shell, cover.window ",
+    [" shell ", " cover.window "],
+  ]) {
+    const input: AssemblyExplosionMoveProps = { targetRefs, offZ: "2cm" }
+    const props: AssemblyExplosionMovePropsInput = input
+    const parsed = assemblyExplosionMoveProps.parse(props)
+    const references: string[] = parsed.targetRefs
+    expect(parsed).toEqual({ targetRefs: ["shell", "cover.window"], offZ: 20 })
+    expect(references).toEqual(["shell", "cover.window"])
+  }
+  expect(
+    assemblyExplosionMoveProps.parse({ targetRefs: " cover ", offZ: 0 }),
+  ).toEqual({ targetRefs: ["cover"], offZ: 0 })
+  // Preserve authored order and duplicates; core moves the union of targets once.
+  expect(
+    assemblyExplosionMoveProps.parse({
+      targetRefs: ["cover", "cover.window", "cover"],
+      offX: 1,
+    }),
+  ).toEqual({ targetRefs: ["cover", "cover.window", "cover"], offX: 1 })
+})
+
+test("rejects empty target lists, invalid members, and conflicting target props", () => {
+  for (const targetRefs of [
+    [],
+    "",
+    " ",
+    ",",
+    "cover,",
+    ",cover",
+    "cover, ,window",
+    [""],
+    ["cover", " "],
+    ["cover", 1],
+    [null],
+    null,
+    1,
+    {},
+  ]) {
+    expect(
+      assemblyExplosionMoveProps.safeParse({ targetRefs, offZ: 10 }).success,
+    ).toBe(false)
+  }
+  for (const targetRefs of ["cover", ["window"]]) {
+    const result = assemblyExplosionMoveProps.safeParse({
+      targetRef: "cover",
+      targetRefs,
+      offZ: 10,
+    })
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(
+        result.error.issues.some(
+          (issue) =>
+            issue.message === "Provide exactly one of targetRefs or targetRef",
+        ),
+      ).toBe(true)
+    }
+  }
+  expect(
+    assemblyExplosionMoveProps.safeParse({ targetRefs: ["cover"] }).success,
+  ).toBe(false)
 })
 
 test("rejects invalid move targets, missing offsets, and nonfinite distances", () => {
@@ -117,11 +183,19 @@ test("TSX preserves move targets and ordered children inside subassemblies", () 
         createElement("assembly.explosion.move", props),
     },
   }
-  const firstMove = <assembly.explosion.move targetRef="cover" offZ="12mm" />
-  const secondMove = <assembly.explosion.move targetRef="cover" offX="60mm" />
+  const firstMove = (
+    <assembly.explosion.move targetRefs="cover, window" offZ="12mm" />
+  )
+  const secondMove = (
+    <assembly.explosion.move targetRefs={["cover", "window"]} offX="60mm" />
+  )
   expect(assemblyExplosionMoveProps.parse(firstMove.props)).toEqual({
-    targetRef: "cover",
+    targetRefs: ["cover", "window"],
     offZ: 12,
+  })
+  expect(assemblyExplosionMoveProps.parse(secondMove.props)).toEqual({
+    targetRefs: ["cover", "window"],
+    offX: 60,
   })
   const stage = (
     <assembly.explosion.stage

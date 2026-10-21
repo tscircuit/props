@@ -1,9 +1,10 @@
 # Assembly Explosion Stage and Move Elements
 
 `assembly.explosion.stage` names an explosion step, and
-`assembly.explosion.move` declares one straight movement. Stages are direct
-children of their owning device or subassembly. There is no explosion container,
-`run`, `detach`, `translate`, or explicit collision-check element.
+`assembly.explosion.move` declares one straight movement for one or more targets.
+Stages are direct children of their owning device or subassembly. There is no
+explosion container, `run`, `detach`, `translate`, or explicit collision-check
+element.
 
 ```tsx
 <assembly.device name="instrument">
@@ -12,27 +13,28 @@ children of their owning device or subassembly. There is no explosion container,
   <assembly.subassembly name="cover">
     <assembly.part name="shell" modelUrl="./shell.step" />
     <assembly.part name="window" modelUrl="./window.step" />
+    <assembly.part name="seal" modelUrl="./seal.step" />
 
     <assembly.explosion.stage name="remove-window">
-      <assembly.explosion.move targetRef="window" offZ="15mm" />
+      <assembly.explosion.move targetRefs="window, seal" offZ="15mm" />
     </assembly.explosion.stage>
   </assembly.subassembly>
 
   <assembly.explosion.stage name="lift-cover">
-    <assembly.explosion.move targetRef="cover" offZ="12mm" />
+    <assembly.explosion.move targetRefs={["cover"]} offZ="12mm" />
   </assembly.explosion.stage>
 
   <assembly.explosion.stage
     name="remove-cover"
     nextStageRef="cover.remove-window"
   >
-    <assembly.explosion.move targetRef="cover" offX="60mm" />
+    <assembly.explosion.move targetRefs={["cover"]} offX="60mm" />
   </assembly.explosion.stage>
 </assembly.device>
 ```
 
 The intended sequence lifts the intact cover, moves it sideways, then removes
-the window at the cover's new location.
+the window and its seal together at the cover's new location.
 
 ## Accepted props and canonical output
 
@@ -48,30 +50,56 @@ no ordering references or children are synthesized.
 
 `AssemblyExplosionMoveProps` / `assemblyExplosionMoveProps` accept:
 
-- `targetRef`: required nonblank string identifying a part or subassembly relative
-  to the stage owner. Qualified names can address descendants. React reserves
-  `ref`, so this API uses an ordinary prop named `targetRef`.
+- `targetRefs`: preferred target selector, accepting a comma-separated string or
+  an array of strings. Each reference identifies a part or subassembly relative
+  to the stage owner; qualified names can address descendants. String input is
+  split on commas, and every reference is trimmed. Array entries each identify
+  one target and are also trimmed. The resulting list must contain at least one
+  reference, and every member must be nonblank.
+- `targetRef`: compatibility input alias accepting one nonblank string. It is
+  trimmed and normalized to the one-element list `targetRefs: [reference]`.
+  React reserves `ref`, so selectors use ordinary props instead.
+- Exactly one of `targetRefs` and `targetRef` is required. Neither has a default.
+  Supplying both is an error, even when they select the same target.
 - `offX`, `offY`, `offZ`: optional signed distances, with at least one required.
   Numbers mean millimeters; unit strings use the existing distance parser.
   Parsed offsets are finite numbers in millimeters. Negative and explicit zero
   offsets are accepted. Omitted axes stay omitted and mean zero in the consumer.
 
-All supplied axes move together along one straight segment, incrementally from
-the current pose. Displacements use the owning assembly's coordinate frame,
-captured when the move begins. Sequential moves accumulate. An L-shaped path
-uses two moves rather than one diagonal move:
+The canonical parsed selector is always `targetRefs: string[]`; parsed output
+never retains `targetRef`. For example, `targetRefs=" module, battery "` and
+`targetRefs={[" module ", "battery"]}` both produce
+`targetRefs: ["module", "battery"]`. Empty lists, empty comma-separated members,
+and blank array entries fail validation rather than being silently removed.
+
+All selected targets and all supplied axes move together along one straight
+segment, incrementally from their current poses. Every target receives the same
+displacement in the stage owner's coordinate frame, captured when the move
+begins. The offsets are not interpreted separately in each target's local frame.
+Sequential moves accumulate. An L-shaped path uses two moves rather than one
+diagonal move:
 
 ```tsx
 <assembly.explosion.stage name="extract-module">
-  <assembly.explosion.move targetRef="module" offZ="10mm" />
-  <assembly.explosion.move targetRef="module" offX="40mm" />
+  <assembly.explosion.move targetRefs={["module", "battery"]} offZ="10mm" />
+  <assembly.explosion.move targetRefs={["module", "battery"]} offX="40mm" />
 </assembly.explosion.stage>
 ```
 
-These are additive APIs with no aliases or migration of existing assembly props.
+Existing single-target authors can keep the compatibility form:
+
+```tsx
+<assembly.explosion.move targetRef="module" offZ="10mm" />
+```
+
+To migrate, replace it with `targetRefs="module"` or `targetRefs={["module"]}`;
+the parsed result and movement are the same. Use `targetRefs` for new examples
+and for moves with several targets. Do not supply both selector props.
+
 Unknown fields are stripped, matching existing assembly Zod objects; TypeScript
-rejects fields outside the declared interfaces. Empty references, invalid or
-nonfinite distances, and moves without offsets fail props validation.
+rejects fields outside the declared interfaces. Missing or conflicting selectors,
+empty references, invalid or nonfinite distances, and moves without offsets
+fail props validation.
 
 Validators are exported individually and as `assemblyProps.explosion.stage` and
 `assemblyProps.explosion.move`. `assemblyExplosionProps` exposes the same nested
@@ -104,8 +132,22 @@ scope, self-references, cycles, and invalid move targets as check errors. Props
 validation cannot resolve these relationships without the assembly tree.
 
 Moves retain their resulting poses across stages. Moving a subassembly carries
-all its descendants in their current relative poses. A removed subassembly stays
-in the scene, and its child stages execute relative to its displaced frame.
+all its descendants in their current relative poses. Multiple selected targets
+move together using the same stage-owner displacement. Resolve the selected
+targets first, then move the union of their descendants: duplicate references or
+an overlapping parent/child selection must never apply the displacement twice
+to a descendant. At partial motion progress, apply the same fraction of the
+displacement to every selected target and descendant, preserving their relative
+poses.
+
+When showing explosion guides, capture each distinct explicitly selected target's
+anchor before the move and draw its guide to the displaced anchor. Duplicate
+references to the same target produce one guide. An explicitly selected parent
+and child can each have a guide, while the child still moves only once. Relative
+and qualified references resolve by the same rules for both selector forms.
+
+A removed subassembly stays in the scene, and its child stages execute relative
+to its displaced frame.
 Logical containment is preserved; removal does not hide geometry or require a
 detach operation. Evaluation starts from the assembled pose, and viewer scrubbing
 must reconstruct this state deterministically rather than repeatedly applying
@@ -119,8 +161,9 @@ the same resolved sequence and transforms.
 
 Check each move's full swept path, not only its endpoints or animation frames.
 Previously displaced geometry remains an obstacle. Moving a rigid subassembly
-checks its constituent solids against external geometry; moving a child also
-checks its path against its siblings and other surrounding solids. Validate the
+checks its constituent solids against external geometry. A move with several
+targets checks the union of their moving solids against geometry outside that
+selection; a selected child's unmoved siblings remain obstacles. Validate the
 initial geometry as well. Bounding boxes can accelerate candidate selection but
 must not fill holes or cavities for the final collision decision.
 

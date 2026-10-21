@@ -196,10 +196,15 @@ export interface AssemblyDeviceProps {
 
 
 export interface AssemblyExplosionMoveProps {
-  /** Part or subassembly identity relative to the stage owner. Uses targetRef
-   * because React reserves ref rather than forwarding it as an ordinary prop.
+  /** Parts or subassemblies to move together, relative to the stage owner.
+   * Accepts a comma-separated string or an array; parsed as a nonempty array of
+   * trimmed references. Supply exactly one of targetRefs or targetRef.
    */
-  targetRef: string
+  targetRefs?: string | string[]
+  /** Single-target compatibility alias for targetRefs. Parsed as targetRefs:
+   * [targetRef]; cannot be combined with targetRefs. React reserves ref.
+   */
+  targetRef?: string
   /** Signed X displacement in the stage owner's frame, in mm or a unit string.
    * Omitted axes mean zero in the consumer; parsed props remain omitted.
    */

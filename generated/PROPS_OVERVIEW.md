@@ -228,6 +228,39 @@ export interface AssemblyDeviceProps {
 }
 
 
+export interface AssemblyExplosionMoveProps {
+  /** Parts or subassemblies to move together, relative to the stage owner.
+   * Accepts a comma-separated string or an array; parsed as a nonempty array of
+   * trimmed references. Supply exactly one of targetRefs or targetRef.
+   */
+  targetRefs?: string | string[]
+  /** Single-target compatibility alias for targetRefs. Parsed as targetRefs:
+   * [targetRef]; cannot be combined with targetRefs. React reserves ref.
+   */
+  targetRef?: string
+  /** Signed X displacement in the stage owner's frame, in mm or a unit string.
+   * Omitted axes mean zero in the consumer; parsed props remain omitted.
+   */
+  offX?: Distance
+  /** Signed Y displacement in the stage owner's frame, in mm or a unit string. */
+  offY?: Distance
+  /** Signed Z displacement in the stage owner's frame, in mm or a unit string. */
+  offZ?: Distance
+}
+
+
+export interface AssemblyExplosionStageProps {
+  /** Stable stage identity, unique within the owning assembly. */
+  name: string
+  /** Stage that must execute after this one; qualified names may cross assembly scopes. */
+  nextStageRef?: string
+  /** Stage that must execute before this one; qualified names may cross assembly scopes. */
+  prevStageRef?: string
+  /** Ordered explosion moves; preserved unchanged for the consumer. */
+  children?: ReactNode
+}
+
+
 export interface AssemblyFastenerProps extends AssemblyPartProps {
   /** Qualified reference surface, e.g. "FRAME.boltHole". Implies fastening.
    * Without mountFace, use the fastener's authored local mounting origin.

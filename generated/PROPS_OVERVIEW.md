@@ -2783,6 +2783,16 @@ export interface PlatformConfig {
 
   autorouter?: AutorouterProp
 
+  /**
+   * Requested local autorouting thread count: a positive safe integer. Hosts
+   * supporting Bun/Node routing workers may use values above 1; 1 requests
+   * inline solving. Browsers remain single-threaded and cloud routing is
+   * unaffected. Omitted leaves the host default unchanged. Parsed values are
+   * preserved; there are no aliases or conflicts with autorouter selection.
+   * Existing configurations require no migration.
+   */
+  autorouterThreads?: number
+
   autorouterMap?: Record<string, AutorouterDefinition>
 
   /** Use networked Pipeline9 node solving at effort 1. Omitted or false keeps local routing.

@@ -57,6 +57,8 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 | `<differentialpair />`                      | [`DifferentialPairProps`](#differentialpairprops-differentialpair)                                                 |
 | `<diode />`                                 | [`DiodeProps`](#diodeprops-diode)                                                                                  |
 | `<drccheck />`                              | [`DrcCheckProps`](#drccheckprops-drccheck)                                                                         |
+| `<engineeringdrawing />`                    | [`EngineeringDrawingProps`](#engineeringdrawingprops-engineeringdrawing)                                           |
+| `<engineeringview />`                       | [`EngineeringViewProps`](#engineeringviewprops-engineeringview)                                                    |
 | `<fabricationnotedimension />`              | [`FabricationNoteDimensionProps`](#fabricationnotedimensionprops-fabricationnotedimension)                         |
 | `<fabricationnotepath />`                   | [`FabricationNotePathProps`](#fabricationnotepathprops-fabricationnotepath)                                        |
 | `<fabricationnoterect />`                   | [`FabricationNoteRectProps`](#fabricationnoterectprops-fabricationnoterect)                                        |
@@ -1028,6 +1030,49 @@ export interface DrcCheckProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/drc-check.ts)
+
+### EngineeringDrawingProps `<engineeringdrawing />`
+
+```ts
+export interface EngineeringDrawingProps {
+  name?: string;
+  displayName?: string;
+  /** Circuit selector for the board, group or assembly to draw. */
+  target: string;
+  /** Paper dimensions in mm when numeric; unit strings are accepted. */
+  width: Distance;
+  height: Distance;
+  children?: any;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/engineering-drawing.ts)
+
+### EngineeringViewProps `<engineeringview />`
+
+```ts
+export interface EngineeringViewProps {
+  name?: string;
+  displayName?: string;
+  direction: EngineeringViewDirection;
+  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
+  x?: Distance;
+  y?: Distance;
+  /** Paper-space viewport size; dimensions must be positive. */
+  width: Distance;
+  height: Distance;
+  /** Model-to-paper ratio: 1 is 1:1, 0.5 is 1:2. Omit to fit the viewport. */
+  scale?: number;
+  /** Defaults to edges: white opaque surfaces and black visible edges. */
+  style?: EngineeringViewStyle;
+  /** Draw obscured edges as dashed strokes. Defaults to false. */
+  showHiddenEdges?: boolean;
+  /** A planar cut with diagonal hatching on closed cut surfaces. */
+  section?: EngineeringSectionPlane;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/engineering-view.ts)
 
 ### FabricationNoteDimensionProps `<fabricationnotedimension />`
 

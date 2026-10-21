@@ -2991,6 +2991,75 @@ export const drcCheckProps = z.object({
 })
 ```
 
+### engineering-drawing
+
+```typescript
+/** A paper-space drawing of one circuit/assembly, containing engineering views. */
+export interface EngineeringDrawingProps {
+  name?: string
+  displayName?: string
+  target: string
+  width: Distance
+  height: Distance
+  children?: any
+}
+/** Paper dimensions in mm when numeric; unit strings are accepted. */
+export const engineeringDrawingProps = z.object({
+  name: z.string().optional(),
+  displayName: z.string().optional(),
+  target: z.string().min(1),
+  width: distance.pipe(z.number().finite().positive()),
+  height: distance.pipe(z.number().finite().positive()),
+  children: z.any().optional(),
+})
+```
+
+### engineering-view
+
+```typescript
+export interface EngineeringSectionPlane {
+  axis: "x" | "y" | "z"
+  offset: Distance
+  keepSide: "less" | "greater"
+  hatchSpacing?: Distance
+}
+/** Physical distance between 45-degree strokes on the model. Defaults to 1mm. */
+export const engineeringSectionPlane = z.object({
+  axis: z.enum(["x", "y", "z"]),
+  offset: distance.pipe(z.number().finite()),
+  keepSide: z.enum(["less", "greater"]),
+  hatchSpacing: distance.pipe(z.number().finite().positive()).default(1),
+})
+/** An orthographic viewport within an engineeringdrawing. */
+export interface EngineeringViewProps {
+  name?: string
+  displayName?: string
+  direction: EngineeringViewDirection
+  x?: Distance
+  y?: Distance
+  width: Distance
+  height: Distance
+  scale?: number
+  style?: EngineeringViewStyle
+  showHiddenEdges?: boolean
+  section?: EngineeringSectionPlane
+}
+/** A planar cut with diagonal hatching on closed cut surfaces. */
+export const engineeringViewProps = z.object({
+  name: z.string().optional(),
+  displayName: z.string().optional(),
+  direction: z.enum(["x+", "x-", "y+", "y-", "z+", "z-", "isometric"]),
+  x: distance.pipe(z.number().finite()).default(0),
+  y: distance.pipe(z.number().finite()).default(0),
+  width: distance.pipe(z.number().finite().positive()),
+  height: distance.pipe(z.number().finite().positive()),
+  scale: z.number().finite().positive().optional(),
+  style: z.enum(["edges", "shaded", "shaded-edges"]).default("edges"),
+  showHiddenEdges: z.boolean().default(false),
+  section: engineeringSectionPlane.optional(),
+})
+```
+
 ### fabrication-note-dimension
 
 ```typescript

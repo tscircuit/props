@@ -1515,6 +1515,50 @@ export interface EnclosureFdmBoxProps {
 }
 
 
+export interface EngineeringDrawingProps {
+  name?: string
+  displayName?: string
+  /** Circuit selector for the board, group or assembly to draw. */
+  target: string
+  /** Paper dimensions in mm when numeric; unit strings are accepted. */
+  width: Distance
+  height: Distance
+  children?: any
+}
+
+
+export interface EngineeringSectionPlane {
+  axis: "x" | "y" | "z"
+  /** Plane coordinate in CAD world space, numeric mm or a distance string. */
+  offset: Distance
+  /** Retain coordinates <= offset or >= offset, respectively. */
+  keepSide: "less" | "greater"
+  /** Physical distance between 45-degree strokes on the model. Defaults to 1mm. */
+  hatchSpacing?: Distance
+}
+
+
+export interface EngineeringViewProps {
+  name?: string
+  displayName?: string
+  direction: EngineeringViewDirection
+  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
+  x?: Distance
+  y?: Distance
+  /** Paper-space viewport size; dimensions must be positive. */
+  width: Distance
+  height: Distance
+  /** Model-to-paper ratio: 1 is 1:1, 0.5 is 1:2. Omit to fit the viewport. */
+  scale?: number
+  /** Defaults to edges: white opaque surfaces and black visible edges. */
+  style?: EngineeringViewStyle
+  /** Draw obscured edges as dashed strokes. Defaults to false. */
+  showHiddenEdges?: boolean
+  /** A planar cut with diagonal hatching on closed cut surfaces. */
+  section?: EngineeringSectionPlane
+}
+
+
 export interface FabricationNoteDimensionProps
   extends Omit<
     PcbLayoutProps,

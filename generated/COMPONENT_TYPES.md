@@ -2059,6 +2059,7 @@ export interface BoardProps
     | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
+  stackupPreset?: JlcpcbStackupPreset
   allowBlindAndBuriedVias?: boolean
   routeRemaining?: boolean
   defaultViaTenting?:
@@ -2132,6 +2133,12 @@ export const boardProps = subcircuitGroupProps
         z.literal(10),
       ])
       .default(2),
+    stackupPreset: z
+      .enum(jlcpcbStackupPresets)
+      .optional()
+      .describe(
+        'JLC stackup template code, e.g. "JLC04161H-3313". The renderer resolves it into a full pcb_stackup in Circuit JSON. Accepted codes are preserved unchanged; omitted leaves the preset unset. No aliases or prop conflicts are introduced, and existing boards require no migration.',
+      ),
     allowBlindAndBuriedVias: z
       .boolean()
       .default(false)

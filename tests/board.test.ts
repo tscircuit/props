@@ -1,5 +1,23 @@
 import { expect, test } from "bun:test"
 import { boardProps, type BoardProps } from "lib/components/board"
+import { jlcpcbStackupPresets, type JlcpcbStackupPreset } from "lib"
+
+test("stackupPreset accepts the supported JLC code unchanged", () => {
+  const stackupPreset: JlcpcbStackupPreset = "JLC04161H-3313"
+  const raw: BoardProps = { layers: 4, thickness: "1.6mm", stackupPreset }
+  expect(jlcpcbStackupPresets).toEqual([stackupPreset])
+  expect(boardProps.parse(raw).stackupPreset).toBe(stackupPreset)
+})
+
+test("stackupPreset is optional without a default", () => {
+  expect(boardProps.parse({}).stackupPreset).toBeUndefined()
+})
+
+test("stackupPreset rejects unknown and blank codes", () => {
+  for (const stackupPreset of ["JLC_UNKNOWN", "", " ", null, 123]) {
+    expect(boardProps.safeParse({ stackupPreset }).success).toBe(false)
+  }
+})
 
 test("fabricatorPreset accepts the supported presets unchanged", () => {
   for (const fabricatorPreset of [

@@ -30,6 +30,10 @@ export type BoardColor = AutocompleteString<BoardColorPreset>
 
 const boardColor = z.custom<BoardColor>((value) => typeof value === "string")
 
+export const jlcpcbStackupPresets = ["JLC04161H-3313"] as const
+
+export type JlcpcbStackupPreset = (typeof jlcpcbStackupPresets)[number]
+
 export interface BoardOutlinePoint extends Point {
   /** Marks this outline point as the center of a castellated plated hole */
   isCastellatedHole?: boolean
@@ -104,6 +108,10 @@ export interface BoardProps
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
+  /**
+   * JLC stackup template code, e.g. "JLC04161H-3313". The renderer resolves it into a full pcb_stackup in Circuit JSON.
+   */
+  stackupPreset?: JlcpcbStackupPreset
   /**
    * Whether the autorouter may generate blind and buried vias. Defaults to
    * false, which restricts newly generated vias to the full board stack.
@@ -211,6 +219,12 @@ export const boardProps = subcircuitGroupProps
         z.literal(10),
       ])
       .default(2),
+    stackupPreset: z
+      .enum(jlcpcbStackupPresets)
+      .optional()
+      .describe(
+        'JLC stackup template code, e.g. "JLC04161H-3313". The renderer resolves it into a full pcb_stackup in Circuit JSON. Accepted codes are preserved unchanged; omitted leaves the preset unset. No aliases or prop conflicts are introduced, and existing boards require no migration.',
+      ),
     allowBlindAndBuriedVias: z
       .boolean()
       .default(false)

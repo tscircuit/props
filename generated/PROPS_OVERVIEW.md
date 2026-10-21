@@ -679,6 +679,10 @@ export interface BoardProps
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   /**
+   * JLC stackup template code, e.g. "JLC04161H-3313". The renderer resolves it into a full pcb_stackup in Circuit JSON.
+   */
+  stackupPreset?: JlcpcbStackupPreset
+  /**
    * Whether the autorouter may generate blind and buried vias. Defaults to
    * false, which restricts newly generated vias to the full board stack.
    */

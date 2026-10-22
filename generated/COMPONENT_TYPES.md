@@ -2058,6 +2058,7 @@ export interface BoardProps
     | "jlcpcb_economy_20260912"
     | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
+  coverlayColor?: "yellow" | "black" | "white"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   allowBlindAndBuriedVias?: boolean
   routeRemaining?: boolean
@@ -2122,6 +2123,12 @@ export const boardProps = subcircuitGroupProps
         "Fabricator preset, preserved as supplied. Omitted leaves the preset unset.",
       ),
     material: z.enum(["fr4", "fr1", "flex"]).default("fr4"),
+    coverlayColor: z
+      .enum(["yellow", "black", "white"])
+      .optional()
+      .describe(
+        "Both-face coverlay appearance for flex boards only. Overrides solderMaskColor; omitted preserves existing appearance. No aliases.",
+      ),
     layers: z
       .union([
         z.literal(1),

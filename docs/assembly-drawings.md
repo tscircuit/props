@@ -112,14 +112,14 @@ Specify either `size` or both custom `width`/`height`; combining them is an erro
 selected geometry; they do not author a replacement numeric value or move it.
 Core registration and reference resolution remain follow-up work.
 
-A reference points to an edge actually exported by the model. For example, the
-rectangular-tube model's `.drawing().namedEdges` metadata defines named straight
-segments such as `outer_top`, with model-local `start` and `end` points. Core can
-expose those model-defined edges under the part identity:
+A reference points to native geometry defined by the model, such as a named
+edge exposed by a JSCAD model. Core can expose those names under the owning
+part's identity. The dimension references the model; it does not supply or
+reconstruct the edge geometry:
 
 ```tsx
 // The model defining .tube exports a named edge with name: "outer_top".
-// Its endpoints come from the model's geometry/parameters, not this drawing.
+// Its geometry is resolved from the model, not authored in this drawing.
 <assembly.drawing.partview partRef=".tube" name="end-view" direction="z+"
   width="100mm" height="80mm">
   <assembly.drawing.dimension name="top-edge" edgeRef=".tube > .outer_top"
@@ -131,15 +131,21 @@ expose those model-defined edges under the part identity:
 resolve to one model-defined named edge belonging to the part selected by the
 enclosing view. Missing or ambiguous selectors are core errors. There is no
 preset lookup: a string such as `overall_width` does not manufacture an edge.
-The props schema preserves the selector; Circuit JSON stores the resolved
-`cad_named_edge_id` with its `drawing_part_view_id`.
+The props schema preserves the selector. The proposed Circuit JSON association
+stores the owning `cad_component_id` and opaque `edge_name` with its
+`drawing_part_view_id`. A model-aware exporter obtains geometry from the owning
+model through its native resolver; Circuit JSON does not serialize an edge's
+geometry or topology.
 
-Named edges are authored analytic segments or measurement datums whose names
-remain independent of mesh triangle indices and B-rep ordering. A model may
-explicitly define a nominal envelope datum for a rounded part; the drawing must
-still reference that exported definition. Model-local points use CAD mm (+Z up).
-Core must apply the same model-to-world transform as the geometry before
-emitting `cad_named_edge` endpoints.
+Names must come from the source model's available named geometry: for example,
+STEP topology/native labels, producer-authored glTF metadata, or JSCAD named
+geometry. Mesh triangle indices or B-rep ordering do not automatically become
+stable edge names. Edges can include curves and richer topology; they are not
+defined as two endpoints by this API. The initial linear annotation only accepts
+geometry the resolver supports as a linear measurement. Unsupported or curved
+references must report an error rather than silently becoming a two-point chord.
+The model resolver applies the same model-to-world placement as the rendered
+geometry before measurement; drawing intent does not duplicate those transforms.
 
 Use an explicit boolean target when the intent is an inferred overall size:
 
@@ -164,10 +170,11 @@ View extent modes infer `horizontal` or `vertical` orientation respectively;
 passing an explicit `orientation`, even the matching one, is an error.
 
 For named-edge dimensions only, `orientation` accepts `horizontal`, `vertical`,
-or `aligned` (default). Aligned measures the true 3D segment length; horizontal
-and vertical measure its component on the view's right/up axes. A section cut
-does not redefine the referenced segment. Canonical parsed props contain the
-resolved orientation while preserving the selector or boolean target.
+or `aligned` (default). For a supported linear model edge, aligned measures its
+true 3D length; horizontal and vertical measure its component on the view's
+right/up axes. A section cut does not redefine the referenced model edge.
+Canonical parsed props contain the resolved orientation while preserving the
+selector or boolean target.
 
 `offset` accepts a finite signed numeric distance in paper mm or a unit string
 and defaults to 8mm. Positive/negative offsets select opposite sides of the

@@ -3,8 +3,8 @@ import { distance } from "circuit-json"
 import type { Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 
-/** A linear dimension of a model-defined edge or the visible geometry's extent.
- * Targets use CAD world coordinates (+Z up, mm). Placement uses paper mm.
+/** A linear dimension referencing native model geometry or the view's extent.
+ * Geometry is resolved from the owning model; placement uses paper mm.
  */
 export interface AssemblyDrawingDimensionProps {
   name?: string
@@ -14,7 +14,7 @@ export interface AssemblyDrawingDimensionProps {
   widthOfView?: boolean
   /** Dimension the selected geometry's vertical extent in the view's model axes. Conflicts with edgeRef, widthOfView=true, and explicit orientation. */
   heightOfView?: boolean
-  /** Named-edge dimensions only: aligned measures true 3D length; horizontal/vertical measure the view-axis component. Defaults to aligned. */
+  /** Named-edge linear measurement: aligned or the horizontal/vertical view-axis component. Defaults to aligned. */
   orientation?: "horizontal" | "vertical" | "aligned"
   /** Signed offset of the dimension line in paper mm; unit strings accepted. Defaults to 8mm. */
   offset?: Distance

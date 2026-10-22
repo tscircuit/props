@@ -709,6 +709,8 @@ export interface BoardProps
     | "jlcpcb_economy_20260912"
     | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
+  /** Both-face coverlay appearance for flex boards only. Overrides solderMaskColor; omitted preserves existing appearance. */
+  coverlayColor?: "yellow" | "black" | "white"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
   /**

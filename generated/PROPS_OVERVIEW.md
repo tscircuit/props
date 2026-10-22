@@ -228,6 +228,71 @@ export interface AssemblyDeviceProps {
 }
 
 
+export interface AssemblyDrawingPageProps {
+  name?: string
+  displayName?: string
+  /** Standard sheet size; landscape by default. Mutually exclusive with width/height. */
+  size?: AssemblyDrawingPageSize
+  orientation?: "landscape" | "portrait"
+  /** Custom paper dimensions in mm when numeric; unit strings are accepted. */
+  width?: Distance
+  height?: Distance
+  children?: any
+}
+
+
+export interface AssemblyDrawingPartViewProps {
+  name?: string
+  displayName?: string
+  /** Selector for the board, group or assembly geometry shown in this view. */
+  partRef: string
+  direction: AssemblyDrawingPartViewDirection
+  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
+  centerX?: Distance
+  centerY?: Distance
+  /** Sibling part-view selector; infer centerX with this viewport left of the reference. Conflicts with rightOfRef and centerX. */
+  leftOfRef?: string
+  /** Sibling part-view selector; infer centerX with this viewport right of the reference. Conflicts with leftOfRef and centerX. */
+  rightOfRef?: string
+  /** Sibling part-view selector; infer centerY with this viewport above the reference. Conflicts with belowRef and centerY. */
+  aboveRef?: string
+  /** Sibling part-view selector; infer centerY with this viewport below the reference. Conflicts with aboveRef and centerY. */
+  belowRef?: string
+  /** Paper-space viewport size; dimensions must be positive. */
+  width: Distance
+  height: Distance
+  /** Draw obscured edges as dashed strokes. Defaults to false. */
+  showHiddenEdges?: boolean
+  /** A planar cut with diagonal hatching on closed cut surfaces. */
+  section?: AssemblyDrawingSectionPlane
+}
+
+
+export interface AssemblyDrawingSectionPlane {
+  axis: "x" | "y" | "z"
+  /** Plane coordinate in CAD world space, numeric mm or a distance string. */
+  offset: Distance
+  /** Retain coordinates <= offset or >= offset, respectively. */
+  keepSide: "less" | "greater"
+  /** Physical distance between 45-degree strokes on the model. Defaults to 1mm. */
+  hatchSpacing?: Distance
+}
+
+
+export interface AssemblyDrawingTitleBlockProps {
+  name?: string
+  title: string
+  legalOwner?: string
+  identificationNumber?: string
+  revisionIndex?: string
+  dateOfIssue?: string
+  creator?: string
+  approvalPerson?: string
+  sheetNumber?: number
+  numberOfSheets?: number
+}
+
+
 export interface AssemblyExplosionMoveProps {
   /** Parts or subassemblies to move together, relative to the stage owner.
    * Accepts a comma-separated string or an array; parsed as a nonempty array of

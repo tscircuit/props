@@ -1,3 +1,4 @@
+import { assemblyDrawingProps } from "./drawing"
 import { assemblyCadAssemblyProps } from "./cadassembly"
 import { assemblyCableProps } from "./cable"
 import { assemblyBoltProps } from "./bolt"
@@ -11,6 +12,7 @@ import { assemblyScreenProps } from "./screen"
 import { assemblySubassemblyProps } from "./subassembly"
 import { assemblyExplosionProps } from "./explosion"
 
+export * from "./drawing"
 export * from "./board-mounting"
 export * from "./bolt"
 export * from "./fastener"
@@ -26,6 +28,7 @@ export * from "./cadassembly"
 export * from "./explosion"
 
 export const assemblyProps = {
+  drawing: assemblyDrawingProps,
   explosion: assemblyExplosionProps,
   bolt: assemblyBoltProps,
   fastener: assemblyFastenerProps,

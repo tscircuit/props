@@ -230,9 +230,13 @@ export interface AssemblyDeviceProps {
 
 export interface AssemblyDrawingDimensionProps {
   name?: string
-  /** Stable semantic edge name on the selected part, e.g. overall_width; never a mesh edge index. */
-  edgeRef: string
-  /** Aligned measures true 3D length; horizontal/vertical measure the view-axis component. Defaults to aligned. */
+  /** Selector for a model-defined named edge, e.g. .tube > .outer_top; never a preset or mesh edge index. */
+  edgeRef?: string
+  /** Dimension the selected geometry's horizontal extent in the view's model axes. Conflicts with edgeRef, heightOfView=true, and explicit orientation. */
+  widthOfView?: boolean
+  /** Dimension the selected geometry's vertical extent in the view's model axes. Conflicts with edgeRef, widthOfView=true, and explicit orientation. */
+  heightOfView?: boolean
+  /** Named-edge dimensions only: aligned measures true 3D length; horizontal/vertical measure the view-axis component. Defaults to aligned. */
   orientation?: "horizontal" | "vertical" | "aligned"
   /** Signed offset of the dimension line in paper mm; unit strings accepted. Defaults to 8mm. */
   offset?: Distance

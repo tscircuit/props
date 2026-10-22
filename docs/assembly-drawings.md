@@ -104,59 +104,78 @@ These references guide sizes and metadata terminology. This proposal does not cl
 
 Specify either `size` or both custom `width`/`height`; combining them is an error. Standard dimensions resolve to numeric mm in parsed props. Orientation is only valid with a named size. Title blocks are optional page children; sheet counts must be positive integers and sheetNumber cannot exceed numberOfSheets. Dates remain caller-authored strings (no locale conversion). TSX registration/emission in core remains a follow-up.
 
-## Named-edge linear dimensions
+## Linear dimensions from model edges or view geometry
 
 `assemblyProps.drawing.dimension` validates the proposed
-`<assembly.drawing.dimension>` child of a part view. Dimensions describe a
-measurement of the selected geometry; they do not author a replacement numeric
-value or move geometry. Core registration and resolving the association remain
-follow-up work.
+`<assembly.drawing.dimension>` child of a part view. Select exactly one target:
+`edgeRef`, `widthOfView={true}`, or `heightOfView={true}`. Dimensions measure the
+selected geometry; they do not author a replacement numeric value or move it.
+Core registration and reference resolution remain follow-up work.
+
+A reference points to an edge actually exported by the model. For example, the
+rectangular-tube model's `.drawing().namedEdges` metadata defines named straight
+segments such as `outer_top`, with model-local `start` and `end` points. Core can
+expose those model-defined edges under the part identity:
 
 ```tsx
-<assembly.drawing.page name="rectangular-tube" size="iso_a4">
-  <assembly.drawing.titleblock title="Rectangular tube" identificationNumber="TUBE-001" />
-  <assembly.drawing.partview partRef=".tube" name="end-view" direction="z+"
-    width="100mm" height="80mm">
-    <assembly.drawing.dimension name="width" edgeRef="overall_width"
-      orientation="horizontal" offset="-8mm" />
-    <assembly.drawing.dimension name="height" edgeRef="overall_height"
-      orientation="vertical" offset="8mm" />
-    <assembly.drawing.dimension edgeRef="wall_thickness" precision={2} />
-  </assembly.drawing.partview>
-</assembly.drawing.page>
+// The model defining .tube exports a named edge with name: "outer_top".
+// Its endpoints come from the model's geometry/parameters, not this drawing.
+<assembly.drawing.partview partRef=".tube" name="end-view" direction="z+"
+  width="100mm" height="80mm">
+  <assembly.drawing.dimension name="top-edge" edgeRef=".tube > .outer_top"
+    offset="-8mm" />
+</assembly.drawing.partview>
 ```
 
-Named edges are authored analytic reference segments or measurement datums, such
-as modelprinter's rectangular-tube `overall_width`, `overall_height`, and
-`wall_thickness`. Their stable semantic names are independent of mesh triangle
-indices and B-rep edge ordering. An envelope span can represent the nominal size
-of a rounded part; naming a datum does not claim it is an extracted topological
-edge. The source definition uses model-local CAD coordinates in mm (+Z up); core
-must apply the same part-to-world transform as the geometry before emitting its
-`cad_named_edge` record.
+`edgeRef` is a nonempty selector string (outer whitespace is trimmed). It must
+resolve to one model-defined named edge belonging to the part selected by the
+enclosing view. Missing or ambiguous selectors are core errors. There is no
+preset lookup: a string such as `overall_width` does not manufacture an edge.
+The props schema preserves the selector; Circuit JSON stores the resolved
+`cad_named_edge_id` with its `drawing_part_view_id`.
 
-`edgeRef` is a required nonempty edge name (outer whitespace is trimmed). It is
-resolved within the part selected by the enclosing view; missing or ambiguous
-names must be reported by core rather than silently selecting an edge. The
-canonical props preserve the name. Circuit JSON stores the resolved
-`cad_named_edge_id` association on `drawing_dimension` with its
-`drawing_part_view_id`; no model coordinates or measured value are duplicated in
-this TSX prop.
+Named edges are authored analytic segments or measurement datums whose names
+remain independent of mesh triangle indices and B-rep ordering. A model may
+explicitly define a nominal envelope datum for a rounded part; the drawing must
+still reference that exported definition. Model-local points use CAD mm (+Z up).
+Core must apply the same model-to-world transform as the geometry before
+emitting `cad_named_edge` endpoints.
 
-`orientation` accepts `horizontal`, `vertical`, or `aligned` (default). Aligned
-measures the named segment's true 3D length; horizontal and vertical measure its
-component on the view's right and up axes respectively. The label is a measured
-mm value and remains independent of paper scaling. `offset` accepts a finite
-signed numeric distance in paper mm or a unit string and defaults to 8mm. It is
-not model-space clearance: positive/negative offsets select opposite sides of
-the projected dimension line. `precision` is an integer from 0 through 6
-(default 1) controlling decimal places. Section views retain the named reference
-measurement; clipping does not redefine the segment.
+Use an explicit boolean target when the intent is an inferred overall size:
 
-These are new unreleased props with no aliases or migration behavior. Unknown
-keys are stripped by the schema; fields such as `value` and `edgeIndex` are not
-interpreted as overrides or aliases. Circular, radial, angular, toleranced, and
-GD&T annotations are intentionally outside this first linear-dimension contract.
+```tsx
+<assembly.drawing.partview partRef=".tube" name="end-view" direction="z+"
+  width="100mm" height="80mm">
+  <assembly.drawing.dimension widthOfView offset="-8mm" />
+  <assembly.drawing.dimension heightOfView offset="8mm" />
+</assembly.drawing.partview>
+```
+
+`widthOfView` measures the selected geometry's extent on the view's model-space
+right axis; `heightOfView` measures its extent on the up axis. These are physical
+model measurements in mm, independent of viewport width/height, pixel allocation,
+or paper scale. For a section view, extents come from the section's retained
+geometry. No edge reference or synthetic named edge is required for either mode.
+
+Exactly one target must be selected. `false` does not select a boolean target:
+`edgeRef` with `widthOfView={false}` is allowed; both booleans false without an
+edge is invalid. An edge plus a true boolean, or both booleans true, is invalid.
+View extent modes infer `horizontal` or `vertical` orientation respectively;
+passing an explicit `orientation`, even the matching one, is an error.
+
+For named-edge dimensions only, `orientation` accepts `horizontal`, `vertical`,
+or `aligned` (default). Aligned measures the true 3D segment length; horizontal
+and vertical measure its component on the view's right/up axes. A section cut
+does not redefine the referenced segment. Canonical parsed props contain the
+resolved orientation while preserving the selector or boolean target.
+
+`offset` accepts a finite signed numeric distance in paper mm or a unit string
+and defaults to 8mm. Positive/negative offsets select opposite sides of the
+projected dimension line. It is not model-space clearance. `precision` is an
+integer from 0 through 6 (default 1) controlling decimal places in the measured
+mm value. There are no aliases or numeric/text overrides; unknown keys are
+stripped rather than interpreted as aliases. Circular, radial, angular,
+toleranced, and GD&T annotations remain outside this initial linear contract.
 References: [AutoCAD aligned dimensions](https://help.autodesk.com/cloudhelp/2027/ENG/AutoCAD-Core/files/GUID-D7C05A85-8985-4576-B22C-5A795DD5B179.htm)
 and [FreeCAD TechDraw length dimensions](https://github.com/FreeCAD/FreeCAD-documentation/blob/main/wiki/TechDraw_LengthDimension.md)
 provide conventional geometry-linked dimension terminology; this proposal does

@@ -228,6 +228,19 @@ export interface AssemblyDeviceProps {
 }
 
 
+export interface AssemblyDrawingDimensionProps {
+  name?: string
+  /** Stable semantic edge name on the selected part, e.g. overall_width; never a mesh edge index. */
+  edgeRef: string
+  /** Aligned measures true 3D length; horizontal/vertical measure the view-axis component. Defaults to aligned. */
+  orientation?: "horizontal" | "vertical" | "aligned"
+  /** Signed offset of the dimension line in paper mm; unit strings accepted. Defaults to 8mm. */
+  offset?: Distance
+  /** Number of decimal places in the measured mm value, 0–6. Defaults to 1. */
+  precision?: number
+}
+
+
 export interface AssemblyDrawingPageProps {
   name?: string
   displayName?: string
@@ -265,6 +278,8 @@ export interface AssemblyDrawingPartViewProps {
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
   section?: AssemblyDrawingSectionPlane
+  /** Nested assembly.drawing.dimension annotations; these do not change the selected geometry. */
+  children?: any
 }
 
 

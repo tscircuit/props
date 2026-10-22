@@ -228,15 +228,34 @@ export interface AssemblyDeviceProps {
 }
 
 
-export interface AssemblyDrawingProps {
+export interface AssemblyDrawingPageProps {
   name?: string
   displayName?: string
-  /** Circuit selector for the board, group or assembly to draw. */
-  target: string
   /** Paper dimensions in mm when numeric; unit strings are accepted. */
   width: Distance
   height: Distance
   children?: any
+}
+
+
+export interface AssemblyDrawingPartViewProps {
+  name?: string
+  displayName?: string
+  /** Selector for the board, group or assembly geometry shown in this view. */
+  target: string
+  direction: AssemblyDrawingPartViewDirection
+  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
+  x?: Distance
+  y?: Distance
+  /** Paper-space viewport size; dimensions must be positive. */
+  width: Distance
+  height: Distance
+  /** Model-to-paper ratio: 1 is 1:1, 0.5 is 1:2. Omit to fit the viewport. */
+  scale?: number
+  /** Draw obscured edges as dashed strokes. Defaults to false. */
+  showHiddenEdges?: boolean
+  /** A planar cut with diagonal hatching on closed cut surfaces. */
+  section?: AssemblyDrawingSectionPlane
 }
 
 
@@ -251,22 +270,36 @@ export interface AssemblyDrawingSectionPlane {
 }
 
 
-export interface AssemblyDrawingViewProps {
-  name?: string
-  displayName?: string
-  direction: AssemblyDrawingViewDirection
-  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
-  x?: Distance
-  y?: Distance
-  /** Paper-space viewport size; dimensions must be positive. */
-  width: Distance
-  height: Distance
-  /** Model-to-paper ratio: 1 is 1:1, 0.5 is 1:2. Omit to fit the viewport. */
-  scale?: number
-  /** Draw obscured edges as dashed strokes. Defaults to false. */
-  showHiddenEdges?: boolean
-  /** A planar cut with diagonal hatching on closed cut surfaces. */
-  section?: AssemblyDrawingSectionPlane
+export interface AssemblyExplosionMoveProps {
+  /** Parts or subassemblies to move together, relative to the stage owner.
+   * Accepts a comma-separated string or an array; parsed as a nonempty array of
+   * trimmed references. Supply exactly one of targetRefs or targetRef.
+   */
+  targetRefs?: string | string[]
+  /** Single-target compatibility alias for targetRefs. Parsed as targetRefs:
+   * [targetRef]; cannot be combined with targetRefs. React reserves ref.
+   */
+  targetRef?: string
+  /** Signed X displacement in the stage owner's frame, in mm or a unit string.
+   * Omitted axes mean zero in the consumer; parsed props remain omitted.
+   */
+  offX?: Distance
+  /** Signed Y displacement in the stage owner's frame, in mm or a unit string. */
+  offY?: Distance
+  /** Signed Z displacement in the stage owner's frame, in mm or a unit string. */
+  offZ?: Distance
+}
+
+
+export interface AssemblyExplosionStageProps {
+  /** Stable stage identity, unique within the owning assembly. */
+  name: string
+  /** Stage that must execute after this one; qualified names may cross assembly scopes. */
+  nextStageRef?: string
+  /** Stage that must execute before this one; qualified names may cross assembly scopes. */
+  prevStageRef?: string
+  /** Ordered explosion moves; preserved unchanged for the consumer. */
+  children?: ReactNode
 }
 
 

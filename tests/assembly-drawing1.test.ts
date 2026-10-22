@@ -1,28 +1,29 @@
 import { expect, test } from "bun:test"
 import {
   assemblyProps,
-  assemblyDrawingProps,
-  assemblyDrawingViewProps,
+  assemblyDrawingPageProps,
+  assemblyDrawingPartViewProps,
 } from "../lib"
 
 test("assembly drawing schemas are registered and distances normalize to mm", () => {
-  expect(assemblyProps.drawing).toBe(assemblyDrawingProps)
-  expect(assemblyProps.drawingview).toBe(assemblyDrawingViewProps)
+  expect(assemblyProps.drawing.page).toBe(assemblyDrawingPageProps)
+  expect(assemblyProps.drawing.partview).toBe(assemblyDrawingPartViewProps)
   expect(
-    assemblyDrawingProps.parse({
-      target: "board",
+    assemblyDrawingPageProps.parse({
       width: "210mm",
       height: "29.7cm",
     }),
-  ).toEqual({ target: "board", width: 210, height: 297 })
+  ).toEqual({ width: 210, height: 297 })
   expect(
-    assemblyDrawingViewProps.parse({
+    assemblyDrawingPartViewProps.parse({
+      target: ".housing",
       direction: "z+",
       width: "4cm",
       height: 30,
       section: { axis: "x", offset: "-2mm", keepSide: "greater" },
     }),
   ).toEqual({
+    target: ".housing",
     direction: "z+",
     width: 40,
     height: 30,

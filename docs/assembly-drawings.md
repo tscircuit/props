@@ -1,21 +1,21 @@
 # Assembly drawing props specification
 
-The `assemblyProps.drawing` and `assemblyProps.drawingview` schemas define the
-proposed `<assembly.drawing>` and `<assembly.drawingview>` TSX elements. This package exports and validates props; registering the intrinsic
+The `assemblyProps.drawing.page` and `assemblyProps.drawing.partview` schemas define the
+proposed `<assembly.drawing.page>` and `<assembly.drawing.partview>` TSX elements. This package exports and validates props; registering the intrinsic
 TSX elements, selecting circuit geometry and emitting drawing output require a
 follow-up in core/exporters. This example describes the intended authoring API,
 not an already supported core runtime feature.
 
 ```tsx
-<assembly.drawing name="housing-drawing" target=".housing" width="210mm" height="297mm">
-  <assembly.drawingview name="plan" direction="z+" width="80mm" height="60mm"
+<assembly.drawing.page name="housing-drawing" width="210mm" height="297mm">
+  <assembly.drawing.partview target=".housing" name="plan" direction="z+" width="80mm" height="60mm"
     x="-45mm" y="60mm" showHiddenEdges />
-  <assembly.drawingview name="section-a" displayName="A–A" direction="x+"
+  <assembly.drawing.partview target=".housing" name="section-a" displayName="A–A" direction="x+"
     width="80mm" height="60mm" x="45mm" y="60mm" scale={0.5}
     section={{ axis: "x", offset: "5mm", keepSide: "less", hatchSpacing: "1mm" }} />
-  <assembly.drawingview name="overview" direction="isometric" width="160mm" height="100mm"
+  <assembly.drawing.partview target=".housing" name="overview" direction="isometric" width="160mm" height="100mm"
     y="-50mm" />
-</assembly.drawing>
+</assembly.drawing.page>
 ```
 
 All model coordinates use tscircuit CAD world coordinates, in mm with +Z up.
@@ -42,8 +42,8 @@ coordinates <= offset; `greater` keeps >= offset. Closed cut faces use diagonal
 Hatch spacing defaults to 1mm in model space and must be positive. Hatching follows
 any model-to-paper scaling. Hidden edges apply to the retained section geometry.
 
-These names replace the unreleased `<engineeringdrawing>` / `<engineeringview>`
-proposal; those names and the former `style` prop are not exposed. There are no
-aliases or conflicting alternate representations. Existing components are
-unchanged. Projection is fixed to orthographic, so physical scale has one unambiguous meaning. Paper layout, drawing
-titles, dimensions and section callout annotations remain downstream work.
+These are new, unreleased components; no aliases or migration behavior are provided.
+Projection is orthographic. Each part view selects its own geometry with `target`;
+a page only describes paper layout. There are no image URLs or generated asset
+records in the drawing configuration. Core resolves selectors to Circuit JSON
+source IDs. Dimension annotations remain downstream work.

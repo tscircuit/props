@@ -5,7 +5,7 @@ import { expectTypesMatch } from "lib/typecheck"
 
 /** Axis names use tscircuit CAD coordinates: mm, +Z up. The camera sits on
  * the named side of the model and looks toward its center. */
-export type AssemblyDrawingViewDirection =
+export type AssemblyDrawingPartViewDirection =
   | "x+"
   | "x-"
   | "y+"
@@ -31,11 +31,13 @@ export const assemblyDrawingSectionPlane = z.object({
   hatchSpacing: distance.pipe(z.number().finite().positive()).default(1),
 })
 
-/** An orthographic viewport within an assembly.drawing. */
-export interface AssemblyDrawingViewProps {
+/** An orthographic viewport within an assembly.drawing.page. */
+export interface AssemblyDrawingPartViewProps {
   name?: string
   displayName?: string
-  direction: AssemblyDrawingViewDirection
+  /** Selector for the board, group or assembly geometry shown in this view. */
+  target: string
+  direction: AssemblyDrawingPartViewDirection
   /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
   x?: Distance
   y?: Distance
@@ -50,9 +52,10 @@ export interface AssemblyDrawingViewProps {
   section?: AssemblyDrawingSectionPlane
 }
 
-export const assemblyDrawingViewProps = z.object({
+export const assemblyDrawingPartViewProps = z.object({
   name: z.string().optional(),
   displayName: z.string().optional(),
+  target: z.string().min(1),
   direction: z.enum(["x+", "x-", "y+", "y-", "z+", "z-", "isometric"]),
   x: distance.pipe(z.number().finite()).default(0),
   y: distance.pipe(z.number().finite()).default(0),
@@ -63,14 +66,14 @@ export const assemblyDrawingViewProps = z.object({
   section: assemblyDrawingSectionPlane.optional(),
 })
 
-export type InferredAssemblyDrawingViewProps = z.input<
-  typeof assemblyDrawingViewProps
+export type InferredAssemblyDrawingPartViewProps = z.input<
+  typeof assemblyDrawingPartViewProps
 >
 expectTypesMatch<
   AssemblyDrawingSectionPlane,
   z.input<typeof assemblyDrawingSectionPlane>
 >(true)
 expectTypesMatch<
-  AssemblyDrawingViewProps,
-  z.input<typeof assemblyDrawingViewProps>
+  AssemblyDrawingPartViewProps,
+  z.input<typeof assemblyDrawingPartViewProps>
 >(true)

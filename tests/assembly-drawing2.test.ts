@@ -1,11 +1,16 @@
 import { expect, test } from "bun:test"
-import { assemblyDrawingProps, assemblyDrawingViewProps } from "../lib"
+import { assemblyDrawingPageProps, assemblyDrawingPartViewProps } from "../lib"
 
 test("drawing intent is explicit and invalid sizes/planes are rejected", () => {
   expect(
-    assemblyDrawingProps.safeParse({ width: 210, height: 297 }).success,
+    assemblyDrawingPageProps.safeParse({ width: 0, height: 297 }).success,
   ).toBe(false)
-  const view = { direction: "isometric", width: 80, height: 60 }
+  const view = {
+    target: ".housing",
+    direction: "isometric",
+    width: 80,
+    height: 60,
+  }
   for (const patch of [
     { width: 0 },
     { height: -1 },
@@ -16,10 +21,10 @@ test("drawing intent is explicit and invalid sizes/planes are rejected", () => {
     { section: { axis: "z", offset: 2, keepSide: "less", hatchSpacing: 0 } },
   ])
     expect(
-      assemblyDrawingViewProps.safeParse({ ...view, ...patch }).success,
+      assemblyDrawingPartViewProps.safeParse({ ...view, ...patch }).success,
     ).toBe(false)
   expect(
-    assemblyDrawingViewProps.parse({
+    assemblyDrawingPartViewProps.parse({
       ...view,
       scale: 0.5,
       showHiddenEdges: true,

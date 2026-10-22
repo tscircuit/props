@@ -16,7 +16,7 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 // { resistance: 10_000 }
 ```
 
-Assembly drawing props: [`<assembly.drawing>` and `<assembly.drawingview>`](docs/assembly-drawings.md).
+Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partview>`](docs/assembly-drawings.md).
 
 <!-- COMPONENT_TABLE_START -->
 

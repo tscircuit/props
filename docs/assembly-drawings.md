@@ -8,13 +8,40 @@ not an already supported core runtime feature.
 
 ```tsx
 <assembly.drawing.page name="housing-drawing" width="210mm" height="297mm">
-  <assembly.drawing.partview partRef=".housing" name="plan" direction="z+" width="80mm" height="60mm"
-    centerX="-45mm" centerY="60mm" showHiddenEdges />
-  <assembly.drawing.partview partRef=".housing" name="section-a" displayName="A–A" direction="x+"
-    width="80mm" height="60mm" centerX="45mm" centerY="60mm"
-    section={{ axis: "x", offset: "5mm", keepSide: "less", hatchSpacing: "1mm" }} />
-  <assembly.drawing.partview partRef=".housing" name="overview" direction="isometric" width="160mm" height="100mm"
-    centerY="-50mm" />
+  <assembly.drawing.partview
+    partRef=".housing"
+    name="plan"
+    direction="z+"
+    width="80mm"
+    height="60mm"
+    centerX="-45mm"
+    centerY="60mm"
+    showHiddenEdges
+  />
+  <assembly.drawing.partview
+    partRef=".housing"
+    name="section-a"
+    displayName="A–A"
+    direction="x+"
+    width="80mm"
+    height="60mm"
+    centerX="45mm"
+    centerY="60mm"
+    section={{
+      axis: "x",
+      offset: "5mm",
+      keepSide: "less",
+      hatchSpacing: "1mm",
+    }}
+  />
+  <assembly.drawing.partview
+    partRef=".housing"
+    name="overview"
+    direction="isometric"
+    width="160mm"
+    height="100mm"
+    centerY="-50mm"
+  />
 </assembly.drawing.page>
 ```
 
@@ -34,12 +61,29 @@ Part views can infer placement from sibling views on the same page:
 
 ```tsx
 <assembly.drawing.page size="iso_a4">
-  <assembly.drawing.partview partRef=".housing" name="plan" direction="z+"
-    width="80mm" height="60mm" />
-  <assembly.drawing.partview partRef=".housing" name="side" direction="x+"
-    width="80mm" height="60mm" rightOfRef=".plan" />
-  <assembly.drawing.partview partRef=".housing" name="overview" direction="isometric"
-    width="80mm" height="60mm" belowRef=".plan" />
+  <assembly.drawing.partview
+    partRef=".housing"
+    name="plan"
+    direction="z+"
+    width="80mm"
+    height="60mm"
+  />
+  <assembly.drawing.partview
+    partRef=".housing"
+    name="side"
+    direction="x+"
+    width="80mm"
+    height="60mm"
+    rightOfRef=".plan"
+  />
+  <assembly.drawing.partview
+    partRef=".housing"
+    name="overview"
+    direction="isometric"
+    width="80mm"
+    height="60mm"
+    belowRef=".plan"
+  />
 </assembly.drawing.page>
 ```
 
@@ -95,10 +139,21 @@ These references guide sizes and metadata terminology. This proposal does not cl
 
 ```tsx
 <assembly.drawing.page name="housing" size="iso_a4" orientation="landscape">
-  <assembly.drawing.titleblock title="Housing" identificationNumber="H-001"
-    revisionIndex="A" legalOwner="Example Ltd" creator="Designer"
-    sheetNumber={1} numberOfSheets={1} />
-  <assembly.drawing.partview partRef=".housing" direction="z+" width="100mm" height="100mm" />
+  <assembly.drawing.titleblock
+    title="Housing"
+    identificationNumber="H-001"
+    revisionIndex="A"
+    legalOwner="Example Ltd"
+    creator="Designer"
+    sheetNumber={1}
+    numberOfSheets={1}
+  />
+  <assembly.drawing.partview
+    partRef=".housing"
+    direction="z+"
+    width="100mm"
+    height="100mm"
+  />
 </assembly.drawing.page>
 ```
 
@@ -112,18 +167,53 @@ Specify either `size` or both custom `width`/`height`; combining them is an erro
 selected geometry; they do not author a replacement numeric value or move it.
 Core registration and reference resolution remain follow-up work.
 
-A reference points to native geometry defined by the model, such as a named
-edge exposed by a JSCAD model. Core can expose those names under the owning
-part's identity. The dimension references the model; it does not supply or
-reconstruct the edge geometry:
+A reference points to native geometry named by the model. For JSCAD, the model's
+Fiber TSX declares names on its construction features:
 
 ```tsx
-// The model defining .tube exports a named edge with name: "outer_top".
+// Inside the model component: construction helpers return unnamed geometry.
+const {
+  solid,
+  outer: outerProfile,
+  topPath,
+} = createRectangularTubeConstruction(parameters)
+
+return (
+  <>
+    <Custom geometry={solid} />
+    <Custom name="outer_profile" geometry={outerProfile} reference />
+    {topPath && <Custom name="outer_top" geometry={topPath} reference />}
+  </>
+)
+```
+
+`Custom` comes from `jscad-fiber/headless`. A `reference` marker contributes no
+visible solid. `renderToJscadModel` from `jscad-fiber/model` collects the visible
+`geometries` and named `referenceFeatures`; each feature retains its native
+geometry and full 4×4 column-major ancestor `matrix` in CAD mm, +Z up. Names are
+declared in TSX rather than supplied in an author-built `namedEdges` map. The
+`createRectangularTubeModel` convenience constructor renders that same component.
+The collector does not require a viewer; native `Custom` geometry is explicitly
+unsupported by the separate pure JSON headless renderer.
+
+Core can expose these names under the owning part's identity. The dimension
+references the model; it does not supply or reconstruct the edge geometry:
+
+```tsx
+// The model defining .tube declares <Custom name="outer_top" ... reference />.
 // Its geometry is resolved from the model, not authored in this drawing.
-<assembly.drawing.partview partRef=".tube" name="end-view" direction="z+"
-  width="100mm" height="80mm">
-  <assembly.drawing.dimension name="top-edge" edgeRef=".tube > .outer_top"
-    offset="-8mm" />
+<assembly.drawing.partview
+  partRef=".tube"
+  name="end-view"
+  direction="z+"
+  width="100mm"
+  height="80mm"
+>
+  <assembly.drawing.dimension
+    name="top-edge"
+    edgeRef=".tube > .outer_top"
+    offset="-8mm"
+  />
 </assembly.drawing.partview>
 ```
 
@@ -133,25 +223,35 @@ enclosing view. Missing or ambiguous selectors are core errors. There is no
 preset lookup: a string such as `overall_width` does not manufacture an edge.
 The props schema preserves the selector. The proposed Circuit JSON association
 stores the owning `cad_component_id` and opaque `edge_name` with its
-`drawing_part_view_id`. A model-aware exporter obtains geometry from the owning
-model through its native resolver; Circuit JSON does not serialize an edge's
-geometry or topology.
+`drawing_part_view_id`. The boolean targets map directly to `width_of_view: true`
+or `height_of_view: true`; there is no target enum or implicit target default.
+Exactly one complete owner/name pair or true view flag is required. False view
+flags are unselected and omitted from parsed Circuit JSON. A model-aware exporter
+obtains geometry from the owning model through its native resolver; Circuit JSON
+does not serialize a feature's geometry or topology.
 
 Names must come from the source model's available named geometry: for example,
 STEP topology/native labels, producer-authored glTF metadata, or JSCAD named
 geometry. Mesh triangle indices or B-rep ordering do not automatically become
 stable edge names. Edges can include curves and richer topology; they are not
-defined as two endpoints by this API. The initial linear annotation only accepts
-geometry the resolver supports as a linear measurement. Unsupported or curved
-references must report an error rather than silently becoming a two-point chord.
-The model resolver applies the same model-to-world placement as the rendered
-geometry before measurement; drawing intent does not duplicate those transforms.
+defined as two endpoints by this API. Horizontal and vertical dimensions use the
+full native path's extent on the view axes, including curved or closed profiles.
+Aligned dimensions initially support straight open edges. Unsupported geometry
+must report an error rather than silently becoming a two-point chord. The model
+reader applies the full collected Fiber matrix, then its caller applies any
+outer CAD-component placement exactly once before measurement. Drawing intent
+does not duplicate those transforms.
 
 Use an explicit boolean target when the intent is an inferred overall size:
 
 ```tsx
-<assembly.drawing.partview partRef=".tube" name="end-view" direction="z+"
-  width="100mm" height="80mm">
+<assembly.drawing.partview
+  partRef=".tube"
+  name="end-view"
+  direction="z+"
+  width="100mm"
+  height="80mm"
+>
   <assembly.drawing.dimension widthOfView offset="-8mm" />
   <assembly.drawing.dimension heightOfView offset="8mm" />
 </assembly.drawing.partview>
@@ -171,8 +271,8 @@ passing an explicit `orientation`, even the matching one, is an error.
 
 For named-edge dimensions only, `orientation` accepts `horizontal`, `vertical`,
 or `aligned` (default). For a supported linear model edge, aligned measures its
-true 3D length; horizontal and vertical measure its component on the view's
-right/up axes. A section cut does not redefine the referenced model edge.
+true 3D length; horizontal and vertical measure the complete native geometry's
+extent on the view's right/up axes. A section cut does not redefine the referenced model edge.
 Canonical parsed props contain the resolved orientation while preserving the
 selector or boolean target.
 

@@ -36,16 +36,14 @@ export interface AssemblyDrawingPartViewProps {
   name?: string
   displayName?: string
   /** Selector for the board, group or assembly geometry shown in this view. */
-  target: string
+  partRef: string
   direction: AssemblyDrawingPartViewDirection
   /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
-  x?: Distance
-  y?: Distance
+  centerX?: Distance
+  centerY?: Distance
   /** Paper-space viewport size; dimensions must be positive. */
   width: Distance
   height: Distance
-  /** Model-to-paper ratio: 1 is 1:1, 0.5 is 1:2. Omit to fit the viewport. */
-  scale?: number
   /** Draw obscured edges as dashed strokes. Defaults to false. */
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
@@ -55,13 +53,12 @@ export interface AssemblyDrawingPartViewProps {
 export const assemblyDrawingPartViewProps = z.object({
   name: z.string().optional(),
   displayName: z.string().optional(),
-  target: z.string().min(1),
+  partRef: z.string().min(1),
   direction: z.enum(["x+", "x-", "y+", "y-", "z+", "z-", "isometric"]),
-  x: distance.pipe(z.number().finite()).default(0),
-  y: distance.pipe(z.number().finite()).default(0),
+  centerX: distance.pipe(z.number().finite()).default(0),
+  centerY: distance.pipe(z.number().finite()).default(0),
   width: distance.pipe(z.number().finite().positive()),
   height: distance.pipe(z.number().finite().positive()),
-  scale: z.number().finite().positive().optional(),
   showHiddenEdges: z.boolean().default(false),
   section: assemblyDrawingSectionPlane.optional(),
 })

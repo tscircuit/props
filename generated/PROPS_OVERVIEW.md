@@ -245,16 +245,14 @@ export interface AssemblyDrawingPartViewProps {
   name?: string
   displayName?: string
   /** Selector for the board, group or assembly geometry shown in this view. */
-  target: string
+  partRef: string
   direction: AssemblyDrawingPartViewDirection
   /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
-  x?: Distance
-  y?: Distance
+  centerX?: Distance
+  centerY?: Distance
   /** Paper-space viewport size; dimensions must be positive. */
   width: Distance
   height: Distance
-  /** Model-to-paper ratio: 1 is 1:1, 0.5 is 1:2. Omit to fit the viewport. */
-  scale?: number
   /** Draw obscured edges as dashed strokes. Defaults to false. */
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */

@@ -8,13 +8,13 @@ not an already supported core runtime feature.
 
 ```tsx
 <assembly.drawing.page name="housing-drawing" width="210mm" height="297mm">
-  <assembly.drawing.partview target=".housing" name="plan" direction="z+" width="80mm" height="60mm"
-    x="-45mm" y="60mm" showHiddenEdges />
-  <assembly.drawing.partview target=".housing" name="section-a" displayName="A–A" direction="x+"
-    width="80mm" height="60mm" x="45mm" y="60mm" scale={0.5}
+  <assembly.drawing.partview partRef=".housing" name="plan" direction="z+" width="80mm" height="60mm"
+    centerX="-45mm" centerY="60mm" showHiddenEdges />
+  <assembly.drawing.partview partRef=".housing" name="section-a" displayName="A–A" direction="x+"
+    width="80mm" height="60mm" centerX="45mm" centerY="60mm"
     section={{ axis: "x", offset: "5mm", keepSide: "less", hatchSpacing: "1mm" }} />
-  <assembly.drawing.partview target=".housing" name="overview" direction="isometric" width="160mm" height="100mm"
-    y="-50mm" />
+  <assembly.drawing.partview partRef=".housing" name="overview" direction="isometric" width="160mm" height="100mm"
+    centerY="-50mm" />
 </assembly.drawing.page>
 ```
 
@@ -26,10 +26,9 @@ Renderers must convert these coordinates into their model coordinate system
 (e.g. glTF +Y up) at the boundary, including section offsets and retained sides.
 
 Drawing width/height and viewport width/height are required positive distances.
-Numeric distances mean mm; unit strings parse to numeric mm. View x/y default to
+Numeric distances mean mm; unit strings parse to numeric mm. View centerX/centerY default to
 zero, measured from the paper center, +X right and +Y up. All views are
-orthographic. Scale is an optional positive finite model-to-paper ratio; omission
-means automatic fit. At explicit scale, excess geometry is clipped to the viewport.
+orthographic and automatically fit the selected geometry to the viewport.
 
 Views use outline rendering, with opaque white surfaces, black visible boundary,
 crease and silhouette edges, and omitted hidden edges. `showHiddenEdges` enables
@@ -43,7 +42,11 @@ Hatch spacing defaults to 1mm in model space and must be positive. Hatching foll
 any model-to-paper scaling. Hidden edges apply to the retained section geometry.
 
 These are new, unreleased components; no aliases or migration behavior are provided.
-Projection is orthographic. Each part view selects its own geometry with `target`;
+Use `partRef` to select geometry and `centerX`/`centerY` to position the viewport;
+`target`, `x`, `y`, and `scale` are not supported props. Unknown keys are stripped
+by the schema rather than treated as aliases. A nonempty `partRef` is required,
+and viewport centers accept finite numeric mm or unit strings.
+Projection is orthographic. Each part view selects its own geometry with `partRef`;
 a page only describes paper layout. There are no image URLs or generated asset
 records in the drawing configuration. Core resolves selectors to Circuit JSON
 source IDs. Dimension annotations remain downstream work.
@@ -64,7 +67,7 @@ These references guide sizes and metadata terminology. This proposal does not cl
   <assembly.drawing.titleblock title="Housing" identificationNumber="H-001"
     revisionIndex="A" legalOwner="Example Ltd" creator="Designer"
     sheetNumber={1} numberOfSheets={1} />
-  <assembly.drawing.partview target=".housing" direction="z+" width="100mm" height="100mm" />
+  <assembly.drawing.partview partRef=".housing" direction="z+" width="100mm" height="100mm" />
 </assembly.drawing.page>
 ```
 

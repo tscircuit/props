@@ -16,19 +16,19 @@ test("assembly drawing schemas are registered and distances normalize to mm", ()
   ).toEqual({ width: 210, height: 297 })
   expect(
     assemblyDrawingPartViewProps.parse({
-      target: ".housing",
+      partRef: ".housing",
       direction: "z+",
       width: "4cm",
       height: 30,
       section: { axis: "x", offset: "-2mm", keepSide: "greater" },
     }),
   ).toEqual({
-    target: ".housing",
+    partRef: ".housing",
     direction: "z+",
     width: 40,
     height: 30,
-    x: 0,
-    y: 0,
+    centerX: 0,
+    centerY: 0,
     showHiddenEdges: false,
     section: { axis: "x", offset: -2, keepSide: "greater", hatchSpacing: 1 },
   })

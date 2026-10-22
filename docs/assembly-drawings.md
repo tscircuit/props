@@ -167,40 +167,59 @@ Specify either `size` or both custom `width`/`height`; combining them is an erro
 selected geometry; they do not author a replacement numeric value or move it.
 Core registration and reference resolution remain follow-up work.
 
-A reference points to native geometry named by the model. For JSCAD, the model's
-Fiber TSX declares names on its construction features:
+Name the extrusion's actual cap outlines in the model's Fiber TSX. A sharp
+40 × 20 × 80 mm tube with 3 mm walls can declare its outer and bore outlines
+where those shapes are constructed:
 
 ```tsx
-// Inside the model component: construction helpers return unnamed geometry.
-const {
-  solid,
-  outer: outerProfile,
-  topPath,
-} = createRectangularTubeConstruction(parameters)
+import { ExtrudeLinear, Rectangle, Subtract } from "jscad-fiber/model"
 
-return (
-  <>
-    <Custom geometry={solid} />
-    <Custom name="outer_profile" geometry={outerProfile} reference />
-    {topPath && <Custom name="outer_top" geometry={topPath} reference />}
-  </>
-)
+function TubeModel() {
+  return (
+    <Subtract>
+      <ExtrudeLinear
+        height={80}
+        topOutlineName="outer_top"
+        bottomOutlineName="outer_bottom"
+      >
+        <Rectangle size={[40, 20]} />
+      </ExtrudeLinear>
+      <ExtrudeLinear
+        height={80}
+        topOutlineName="inner_top"
+        bottomOutlineName="inner_bottom"
+      >
+        <Rectangle size={[34, 14]} />
+      </ExtrudeLinear>
+    </Subtract>
+  )
+}
 ```
 
-`Custom` comes from `jscad-fiber/headless`. A `reference` marker contributes no
-visible solid. `renderToJscadModel` from `jscad-fiber/model` collects the visible
-`geometries` and named `referenceFeatures`; each feature retains its native
-geometry and full 4×4 column-major ancestor `matrix` in CAD mm, +Z up. Names are
-declared in TSX rather than supplied in an author-built `namedEdges` map. The
-`createRectangularTubeModel` convenience constructor renders that same component.
-The collector does not require a viewer; native `Custom` geometry is explicitly
-unsupported by the separate pure JSON headless renderer.
+The extrusion supplies the native closed profile and its end placement. Names
+are nonblank and unique within a model. `bottomOutlineName` identifies the authored
+start at local Z=0; `topOutlineName` identifies the signed-height end, including
+any extrusion twist. Enclosing center/offset and rotations place the outline
+alongside the solid. Names refer to the constructed profiles, with no duplicate
+edge coordinates or separate feature map authored by the model.
+
+`renderToJscadModel` from `jscad-fiber/model` collects the visible `geometries`
+and named `referenceFeatures`. Each feature retains its native geometry and full
+4×4 column-major ancestor `matrix` in CAD mm, +Z up. The outline declarations
+add no extra material. The `createRectangularTubeModel` convenience constructor
+renders the same registered component; the collector requires no viewer.
+
+The closed `outer_top` outline spans 40 mm horizontally, while the closed
+`inner_top` bore outline spans 34 mm. These are native profile extents, not
+straight edges or perimeter lengths. A closed outline requires an explicit
+horizontal or vertical dimension orientation; default `aligned` only supports
+straight open edges.
 
 Core can expose these names under the owning part's identity. The dimension
 references the model; it does not supply or reconstruct the edge geometry:
 
 ```tsx
-// The model defining .tube declares <Custom name="outer_top" ... reference />.
+// The model defining .tube declares topOutlineName="inner_top".
 // Its geometry is resolved from the model, not authored in this drawing.
 <assembly.drawing.partview
   partRef=".tube"
@@ -210,15 +229,16 @@ references the model; it does not supply or reconstruct the edge geometry:
   height="80mm"
 >
   <assembly.drawing.dimension
-    name="top-edge"
-    edgeRef=".tube > .outer_top"
+    name="bore-width"
+    edgeRef=".tube > .inner_top"
+    orientation="horizontal"
     offset="-8mm"
   />
 </assembly.drawing.partview>
 ```
 
 `edgeRef` is a nonempty selector string (outer whitespace is trimmed). It must
-resolve to one model-defined named edge belonging to the part selected by the
+resolve to one model-defined named outline or edge belonging to the part selected by the
 enclosing view. Missing or ambiguous selectors are core errors. There is no
 preset lookup: a string such as `overall_width` does not manufacture an edge.
 The props schema preserves the selector. The proposed Circuit JSON association

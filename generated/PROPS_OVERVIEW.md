@@ -247,9 +247,17 @@ export interface AssemblyDrawingPartViewProps {
   /** Selector for the board, group or assembly geometry shown in this view. */
   partRef: string
   direction: AssemblyDrawingPartViewDirection
-  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0. */
+  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance
   centerY?: Distance
+  /** Sibling part-view selector; infer centerX with this viewport left of the reference. Conflicts with rightOfRef and centerX. */
+  leftOfRef?: string
+  /** Sibling part-view selector; infer centerX with this viewport right of the reference. Conflicts with leftOfRef and centerX. */
+  rightOfRef?: string
+  /** Sibling part-view selector; infer centerY with this viewport above the reference. Conflicts with belowRef and centerY. */
+  aboveRef?: string
+  /** Sibling part-view selector; infer centerY with this viewport below the reference. Conflicts with aboveRef and centerY. */
+  belowRef?: string
   /** Paper-space viewport size; dimensions must be positive. */
   width: Distance
   height: Distance

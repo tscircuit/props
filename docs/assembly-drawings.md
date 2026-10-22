@@ -27,8 +27,39 @@ Renderers must convert these coordinates into their model coordinate system
 
 Drawing width/height and viewport width/height are required positive distances.
 Numeric distances mean mm; unit strings parse to numeric mm. View centerX/centerY default to
-zero, measured from the paper center, +X right and +Y up. All views are
+zero on axes without a relative reference, measured from the paper center, +X right and +Y up. All views are
 orthographic and automatically fit the selected geometry to the viewport.
+
+Part views can infer placement from sibling views on the same page:
+
+```tsx
+<assembly.drawing.page size="iso_a4">
+  <assembly.drawing.partview partRef=".housing" name="plan" direction="z+"
+    width="80mm" height="60mm" />
+  <assembly.drawing.partview partRef=".housing" name="side" direction="x+"
+    width="80mm" height="60mm" rightOfRef=".plan" />
+  <assembly.drawing.partview partRef=".housing" name="overview" direction="isometric"
+    width="80mm" height="60mm" belowRef=".plan" />
+</assembly.drawing.page>
+```
+
+`leftOfRef`/`rightOfRef` infer the horizontal center; `aboveRef`/`belowRef`
+infer the vertical center. Each accepts a nonempty selector string (outer whitespace
+is trimmed) identifying exactly one sibling part view. References describe viewport
+placement, not model geometry. Inferred centers place the corresponding viewport
+edges adjacent: horizontal center separation is half the sum of viewport widths;
+vertical separation is half the sum of heights. There is no implicit gap.
+An unconstrained axis defaults to zero; it does not inherit the referenced center.
+For an offset reference, use an explicit center on the other axis or a second reference.
+
+Opposing references on the same axis are mutually exclusive. An explicit `centerX`
+conflicts with either horizontal reference, including an explicit zero; likewise
+`centerY` conflicts with either vertical reference. A horizontal and vertical reference
+can be combined, and explicit positioning on the other axis is allowed. Parsed props
+retain the selectors and leave inferred centers undefined for downstream layout.
+The props schema validates these local constraints; resolving names, forward
+references, missing/ambiguous targets, self-references and dependency cycles requires
+page-aware layout in core/exporters and remains follow-up work.
 
 Views use outline rendering, with opaque white surfaces, black visible boundary,
 crease and silhouette edges, and omitted hidden edges. `showHiddenEdges` enables

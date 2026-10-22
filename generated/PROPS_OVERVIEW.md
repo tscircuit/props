@@ -231,9 +231,12 @@ export interface AssemblyDeviceProps {
 export interface AssemblyDrawingPageProps {
   name?: string
   displayName?: string
-  /** Paper dimensions in mm when numeric; unit strings are accepted. */
-  width: Distance
-  height: Distance
+  /** Standard sheet size; landscape by default. Mutually exclusive with width/height. */
+  size?: AssemblyDrawingPageSize
+  orientation?: "landscape" | "portrait"
+  /** Custom paper dimensions in mm when numeric; unit strings are accepted. */
+  width?: Distance
+  height?: Distance
   children?: any
 }
 
@@ -267,6 +270,20 @@ export interface AssemblyDrawingSectionPlane {
   keepSide: "less" | "greater"
   /** Physical distance between 45-degree strokes on the model. Defaults to 1mm. */
   hatchSpacing?: Distance
+}
+
+
+export interface AssemblyDrawingTitleBlockProps {
+  name?: string
+  title: string
+  legalOwner?: string
+  identificationNumber?: string
+  revisionIndex?: string
+  dateOfIssue?: string
+  creator?: string
+  approvalPerson?: string
+  sheetNumber?: number
+  numberOfSheets?: number
 }
 
 

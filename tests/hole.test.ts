@@ -72,3 +72,28 @@ test("pill holes without required dimensions throw", () => {
 
   expect(() => holeProps.parse(raw)).toThrow()
 })
+
+test("circle holes accept holeDiameter alias and compute radius", () => {
+  const raw: HoleProps = {
+    holeDiameter: "1mm",
+    pcbX: 0,
+    pcbY: 5,
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof holeProps>>()
+
+  const parsed = holeProps.parse(raw)
+
+  if (parsed.shape === undefined || parsed.shape === "circle") {
+    expect(parsed.diameter).toBe(1)
+    expect(parsed.radius).toBe(0.5)
+    expect(Number.isNaN(parsed.diameter)).toBe(false)
+  } else {
+    throw new Error("Expected circle hole props")
+  }
+})
+
+test("circle holes without diameter, holeDiameter, or radius throw instead of producing NaN", () => {
+  expect(() => holeProps.parse({ pcbX: 0, pcbY: 5 })).toThrow()
+  expect(() => holeProps.parse({ shape: "circle", pcbX: 0, pcbY: 5 })).toThrow()
+})

@@ -92,7 +92,7 @@ test("assembly.cable keeps omitted waypoints omitted", () => {
   expect(props).not.toHaveProperty("waypoints")
 })
 
-test("assembly.cable accepts an empty waypoint list for automatic routing", () => {
+test("assembly.cable preserves an empty waypoint list", () => {
   expect(
     assemblyCableProps.parse({
       name: "C1",

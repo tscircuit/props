@@ -1,7 +1,11 @@
 # Assembly cables
 
-`AssemblyCableProps` describes a cable between two assembly endpoints. Its
-validator is exported as `assemblyCableProps` and `assemblyProps.cable`.
+A cable needs more than a start and an end when a holder blocks the direct
+route. `waypoints` lets the author say: go around this side, pass through this
+clip, then reach the motor.
+
+`AssemblyCableProps` describes those inputs. Its validator is exported as
+`assemblyCableProps` and `assemblyProps.cable`.
 
 ```tsx
 <assembly.cable
@@ -29,8 +33,8 @@ validator is exported as `assemblyCableProps` and `assemblyProps.cable`.
 
 Endpoints can be connector selectors or named assembly references. The initial
 `usb_c` preset represents a USB-C-to-USB-C cable. Omitting `standard` leaves
-cable selection to endpoint inference. Position, orientation, route, and length
-are inferred unless intermediate route points are supplied with `waypoints`.
+cable selection to endpoint inference. `waypoints` supplies intermediate route
+points; endpoint and connector resolution retain their existing behavior.
 
 This is an additive props API and requires no migration. The schema validates
 the inputs; endpoint resolution, routing, and rendering require support in core
@@ -82,3 +86,19 @@ aliases or conflicts with `standard` or `model`; endpoint resolution and cable
 selection retain their existing behavior. This additive prop requires no
 migration. Waypoints control the displayed route; they do not enforce bend
 radius or check collisions with moving parts.
+
+## Why waypoint control helps
+
+The same gimbal and cable endpoints are shown in both snapshots. Without
+waypoints, the inferred wire crosses the phone. With waypoints, the author can
+guide it around the holder.
+
+| Without waypoints | With waypoints |
+| --- | --- |
+| ![Automatic wires cross the phone](assets/assembly-cable-without-waypoints.png) | ![Authored waypoints guide wires around the holder](assets/assembly-cable-with-waypoints.png) |
+
+**Companion core preview:** these are actual CAD renders from
+[core PR #4868](https://github.com/tscircuit/core/pull/4868), using its gimbal
+fixture. This props PR validates and preserves the points; the companion core
+change makes cables follow them. These images demonstrate static routing, not
+cable movement or automatic collision avoidance.

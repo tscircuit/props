@@ -156,8 +156,6 @@ export interface AnalogTransientSimulationProps
   timePerStep?: number | string
   /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
   ibisPinStates?: Record<string, IbisPinRunState>
-  /** PCB channel extraction settings. Requires spiceEngine="pcb_spice". */
-  pcbSpiceChannel?: PcbSpiceChannelProps
 }
 
 
@@ -2574,61 +2572,6 @@ export interface PcbReturnCurrentSimulationProps {
 export interface PcbRouteCache {
   pcbTraces: PcbTrace[]
   cacheKey: string
-}
-
-
-export interface PcbSpiceChannelProps {
-  /** Extract real routes and ground pours, or use declared stage profiles. */
-  reduction: "routed-copper" | "straightened-stages"
-  /** Uniform pi sections per stage, from 1 through 128. */
-  sections: number
-  /** One to three coupled lanes in matrix order, with physical port selectors. */
-  lanes: Array<{ name: string; from: string; to: string }>
-  /** Physical port selector whose net is the channel reference ground. */
-  referencePinRef: string
-  /** Component selectors of passives included in the simulated scope. */
-  passiveComponentRefs?: string[]
-  extraction: {
-    /** Frequencies accept units such as "1GHz"; raw numbers are Hz. */
-    minimumFrequency: number | string
-    maximumFrequency: number | string
-    modelFrequency: number | string
-    filaments: number
-    /** Positive integer strictly greater than filaments. */
-    refinementFilaments: number
-    convergenceTolerance: number
-    capacitanceTolerance: number
-    reciprocityTolerance: number
-    dcResistanceTolerance: number
-    /** Lengths accept units; raw numbers are mm. */
-    maxPanelLength: number | string
-    /** Required by the routed-copper extraction pipeline. */
-    groundMeshSize?: number | string
-  }
-  /** Homogeneous override; routed copper otherwise uses the PCB stackup. */
-  relativePermittivity?: number
-  via?: {
-    /** Length in mm; otherwise uses the stackup's plated hole copper. */
-    platingThickness?: number | string
-    equivalentWidth?: number | string
-    omitThroughViaStubs?: boolean
-  }
-  /** Per-layer profiles for straightened-stages, keyed by top, inner1, via, etc. */
-  straightenedStageProfiles?: Record<
-    string,
-    {
-      spacing: number | string
-      relativePermittivity: number
-      return: {
-        width: number | string
-        thickness: number | string
-        lengthFactor: number
-        /** Signed coordinates in mm. */
-        centerY: number | string
-        centerZ: number | string
-      }
-    }
-  >
 }
 
 

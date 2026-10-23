@@ -14,6 +14,11 @@ export interface AssemblyCableProps {
   standard?: AssemblyCableStandard
   /** Explicit cable model specification. Omit to infer the cable from its endpoints. */
   model?: string
+  /** Ordered intermediate cable points in the right-handed circuit world frame,
+   * in mm: +X right, +Y top, +Z above the board. Each x/y/z must be finite.
+   * Omit or pass [] to keep automatic routing. Endpoints remain from/to.
+   */
+  waypoints?: { x: number; y: number; z: number }[]
 }
 
 export const assemblyCableProps = z.object({
@@ -22,6 +27,15 @@ export const assemblyCableProps = z.object({
   to: z.string().trim().min(1),
   standard: z.literal("usb_c").optional(),
   model: z.string().trim().min(1).optional(),
+  waypoints: z
+    .array(
+      z.object({
+        x: z.number().finite(),
+        y: z.number().finite(),
+        z: z.number().finite(),
+      }),
+    )
+    .optional(),
 })
 
 export type AssemblyCablePropsInput = z.input<typeof assemblyCableProps>

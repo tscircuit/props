@@ -1,9 +1,0 @@
-node_modules
-dist
-.vscode
-.aider*
-package-lock.json
-.env
-.yalc
-yalc.*
-**/.claude/settings.local.json

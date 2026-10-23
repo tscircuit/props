@@ -1753,6 +1753,12 @@ export interface FootprintProps {
    */
   originalLayer?: LayerRef
   /**
+   * Suppress automatic pad and plated-hole paste inside this footprint.
+   * Explicit solderpaste apertures still render. Omitted or false retains
+   * automatic paste, including each pad's existing noSolderPaste setting.
+   */
+  noSolderPaste?: boolean
+  /**
    * Serialized circuit JSON describing a precompiled footprint
    */
   circuitJson?: any[]

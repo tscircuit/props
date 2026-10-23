@@ -3253,6 +3253,7 @@ export interface FootprintProps {
   children?: any
   name?: string
   originalLayer?: LayerRef
+  noSolderPaste?: boolean
   circuitJson?: any[]
   src?: FootprintProp
   insertionDirection?: FootprintInsertionDirection
@@ -3281,6 +3282,7 @@ export const footprintProps = z.object({
   children: z.any().optional(),
   name: z.string().optional(),
   originalLayer: layer_ref.default("top").optional(),
+  noSolderPaste: z.boolean().optional(),
   circuitJson: z.array(z.any()).optional(),
   src: footprintProp.describe("Can be a footprint or kicad string").optional(),
   insertionDirection: footprintInsertionDirection

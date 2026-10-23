@@ -215,6 +215,11 @@ export interface AssemblyCableProps {
   standard?: AssemblyCableStandard
   /** Explicit cable model specification. Omit to infer the cable from its endpoints. */
   model?: string
+  /** Ordered intermediate cable points in the right-handed circuit world frame,
+   * in mm: +X right, +Y top, +Z above the board. Each x/y/z must be finite.
+   * Omit or pass [] to keep automatic routing. Endpoints remain from/to.
+   */
+  waypoints?: { x: number; y: number; z: number }[]
 }
 
 

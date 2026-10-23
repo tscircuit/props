@@ -56,6 +56,8 @@ export interface AssemblyDrawingPartViewProps {
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
   section?: AssemblyDrawingSectionPlane
+  /** Nested assembly.drawing.dimension annotations; these do not change the selected geometry. */
+  children?: any
 }
 
 export const assemblyDrawingPartViewProps = z
@@ -74,6 +76,7 @@ export const assemblyDrawingPartViewProps = z
     height: distance.pipe(z.number().finite().positive()),
     showHiddenEdges: z.boolean().default(false),
     section: assemblyDrawingSectionPlane.optional(),
+    children: z.any().optional(),
   })
   .superRefine((view, ctx) => {
     for (const [center, negative, positive] of [

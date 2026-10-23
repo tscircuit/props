@@ -228,6 +228,18 @@ export interface AssemblyDeviceProps {
 }
 
 
+export interface AssemblyDrawingDimensionProps {
+  /** Stable circuit identity; does not choose a measurement or its formatting. */
+  name?: string
+  /** Selector for one model-defined named edge or outline, e.g. .tube > .inner_top; never a preset or mesh edge index. */
+  edgeRef?: string
+  /** Request the selected geometry's width in the view. Conflicts with edgeRef and heightOfView=true. */
+  widthOfView?: boolean
+  /** Request the selected geometry's height in the view. Conflicts with edgeRef and widthOfView=true. */
+  heightOfView?: boolean
+}
+
+
 export interface AssemblyDrawingPageProps {
   name?: string
   displayName?: string
@@ -265,6 +277,8 @@ export interface AssemblyDrawingPartViewProps {
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
   section?: AssemblyDrawingSectionPlane
+  /** Nested assembly.drawing.dimension annotations; these do not change the selected geometry. */
+  children?: any
 }
 
 

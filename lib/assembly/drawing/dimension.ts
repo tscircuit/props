@@ -1,25 +1,18 @@
 import { z } from "zod"
-import { distance } from "circuit-json"
-import type { Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 
-/** A linear dimension referencing native model geometry or the view's extent.
- * Geometry is resolved from the owning model; placement uses paper mm.
+/** Authoring intent for a dimension of model geometry or a part view's extent.
+ * Core resolves geometry, measurement text and paper placement in a follow-up.
  */
 export interface AssemblyDrawingDimensionProps {
+  /** Stable circuit identity; does not choose a measurement or its formatting. */
   name?: string
-  /** Selector for a model-defined named edge, e.g. .tube > .outer_top; never a preset or mesh edge index. */
+  /** Selector for one model-defined named edge or outline, e.g. .tube > .inner_top; never a preset or mesh edge index. */
   edgeRef?: string
-  /** Dimension the selected geometry's horizontal extent in the view's model axes. Conflicts with edgeRef, heightOfView=true, and explicit orientation. */
+  /** Request the selected geometry's width in the view. Conflicts with edgeRef and heightOfView=true. */
   widthOfView?: boolean
-  /** Dimension the selected geometry's vertical extent in the view's model axes. Conflicts with edgeRef, widthOfView=true, and explicit orientation. */
+  /** Request the selected geometry's height in the view. Conflicts with edgeRef and widthOfView=true. */
   heightOfView?: boolean
-  /** Named-edge linear measurement: aligned or the horizontal/vertical view-axis component. Defaults to aligned. */
-  orientation?: "horizontal" | "vertical" | "aligned"
-  /** Signed offset of the dimension line in paper mm; unit strings accepted. Defaults to 8mm. */
-  offset?: Distance
-  /** Number of decimal places in the measured mm value, 0–6. Defaults to 1. */
-  precision?: number
 }
 
 export const assemblyDrawingDimensionProps = z
@@ -28,9 +21,6 @@ export const assemblyDrawingDimensionProps = z
     edgeRef: z.string().trim().min(1).optional(),
     widthOfView: z.boolean().optional(),
     heightOfView: z.boolean().optional(),
-    orientation: z.enum(["horizontal", "vertical", "aligned"]).optional(),
-    offset: distance.pipe(z.number().finite()).default(8),
-    precision: z.number().int().min(0).max(6).default(1),
   })
   .superRefine((dimension, ctx) => {
     const targets = [
@@ -44,25 +34,7 @@ export const assemblyDrawingDimensionProps = z
         message:
           "Specify exactly one of edgeRef, widthOfView=true, or heightOfView=true",
       })
-    if (
-      dimension.orientation !== undefined &&
-      (dimension.widthOfView === true || dimension.heightOfView === true)
-    )
-      ctx.addIssue({
-        code: "custom",
-        path: ["orientation"],
-        message: "View extent dimensions infer orientation; omit orientation",
-      })
   })
-  .transform((dimension) => ({
-    ...dimension,
-    orientation:
-      dimension.widthOfView === true
-        ? ("horizontal" as const)
-        : dimension.heightOfView === true
-          ? ("vertical" as const)
-          : (dimension.orientation ?? "aligned"),
-  }))
 
 export type InferredAssemblyDrawingDimensionProps = z.input<
   typeof assemblyDrawingDimensionProps

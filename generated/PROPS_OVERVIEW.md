@@ -229,19 +229,14 @@ export interface AssemblyDeviceProps {
 
 
 export interface AssemblyDrawingDimensionProps {
+  /** Stable circuit identity; does not choose a measurement or its formatting. */
   name?: string
-  /** Selector for a model-defined named edge, e.g. .tube > .outer_top; never a preset or mesh edge index. */
+  /** Selector for one model-defined named edge or outline, e.g. .tube > .inner_top; never a preset or mesh edge index. */
   edgeRef?: string
-  /** Dimension the selected geometry's horizontal extent in the view's model axes. Conflicts with edgeRef, heightOfView=true, and explicit orientation. */
+  /** Request the selected geometry's width in the view. Conflicts with edgeRef and heightOfView=true. */
   widthOfView?: boolean
-  /** Dimension the selected geometry's vertical extent in the view's model axes. Conflicts with edgeRef, widthOfView=true, and explicit orientation. */
+  /** Request the selected geometry's height in the view. Conflicts with edgeRef and widthOfView=true. */
   heightOfView?: boolean
-  /** Named-edge linear measurement: aligned or the horizontal/vertical view-axis component. Defaults to aligned. */
-  orientation?: "horizontal" | "vertical" | "aligned"
-  /** Signed offset of the dimension line in paper mm; unit strings accepted. Defaults to 8mm. */
-  offset?: Distance
-  /** Number of decimal places in the measured mm value, 0–6. Defaults to 1. */
-  precision?: number
 }
 
 

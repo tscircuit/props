@@ -1,48 +1,51 @@
 import { expect, test } from "bun:test"
 import { createElement } from "react"
+import { expectTypeOf } from "expect-type"
 import {
   assemblyProps,
   assemblyDrawingDimensionProps,
   assemblyDrawingPartViewProps,
+  type AssemblyDrawingDimensionProps,
+  type InferredAssemblyDrawingDimensionProps,
 } from "../lib"
 
-test("dimension targets preserve edge selectors and infer view-extent orientation", () => {
+test("dimension props preserve only authoring intent and stable identity", () => {
+  expectTypeOf<keyof AssemblyDrawingDimensionProps>().toEqualTypeOf<
+    "name" | "edgeRef" | "widthOfView" | "heightOfView"
+  >()
+  expectTypeOf<InferredAssemblyDrawingDimensionProps>().toEqualTypeOf<AssemblyDrawingDimensionProps>()
   expect(assemblyProps.drawing.dimension).toBe(assemblyDrawingDimensionProps)
   expect(
-    assemblyDrawingDimensionProps.parse({ edgeRef: " .tube > .outer_top " }),
-  ).toEqual({
-    edgeRef: ".tube > .outer_top",
-    orientation: "aligned",
-    offset: 8,
-    precision: 1,
-  })
+    assemblyDrawingDimensionProps.parse({ edgeRef: " .tube > .inner_top " }),
+  ).toEqual({ edgeRef: ".tube > .inner_top" })
   expect(
     assemblyDrawingDimensionProps.parse({
-      name: "tube-width",
-      edgeRef: ".tube > .outer_top",
-      orientation: "horizontal",
-      offset: "-1.2cm",
-      precision: 2,
+      name: "bore-width",
+      edgeRef: ".tube > .inner_top",
     }),
-  ).toEqual({
-    name: "tube-width",
-    edgeRef: ".tube > .outer_top",
-    orientation: "horizontal",
-    offset: -12,
-    precision: 2,
-  })
+  ).toEqual({ name: "bore-width", edgeRef: ".tube > .inner_top" })
   expect(assemblyDrawingDimensionProps.parse({ widthOfView: true })).toEqual({
     widthOfView: true,
-    orientation: "horizontal",
-    offset: 8,
-    precision: 1,
   })
   expect(assemblyDrawingDimensionProps.parse({ heightOfView: true })).toEqual({
     heightOfView: true,
-    orientation: "vertical",
-    offset: 8,
-    precision: 1,
   })
+  for (const target of [
+    { edgeRef: ".tube > .inner_top" },
+    { widthOfView: true },
+    { heightOfView: true },
+  ])
+    expect(
+      assemblyDrawingDimensionProps.parse({
+        ...target,
+        orientation: "horizontal",
+        offset: "-8mm",
+        precision: 2,
+        start: { x: -17, y: 18 },
+        end: { x: 17, y: 18 },
+        text: "34.0",
+      }),
+    ).toEqual(target)
   const child = createElement("assembly.drawing.dimension", {
     heightOfView: true,
   })

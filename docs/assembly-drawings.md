@@ -159,20 +159,21 @@ These references guide sizes and metadata terminology. This proposal does not cl
 
 Specify either `size` or both custom `width`/`height`; combining them is an error. Standard dimensions resolve to numeric mm in parsed props. Orientation is only valid with a named size. Title blocks are optional page children; sheet counts must be positive integers and sheetNumber cannot exceed numberOfSheets. Dates remain caller-authored strings (no locale conversion). TSX registration/emission in core remains a follow-up.
 
-## Linear dimensions from model edges or view geometry
+## Dimension intent from model features or view extents
 
 `assemblyProps.drawing.dimension` validates the proposed
-`<assembly.drawing.dimension>` child of a part view. Select exactly one target:
-`edgeRef`, `widthOfView={true}`, or `heightOfView={true}`. Dimensions measure the
-selected geometry; they do not author a replacement numeric value or move it.
-Core registration and reference resolution remain follow-up work.
+`<assembly.drawing.dimension>` child of a part view. Its only props are optional
+`name` and exactly one target: `edgeRef`, `widthOfView={true}`, or
+`heightOfView={true}`. `name` is stable circuit identity; it does not choose an
+axis, placement or text formatting. This package validates authoring intent.
+Registering the TSX element and resolving dimensions in core remain follow-up work.
 
 Name the extrusion's actual cap outlines in the model's Fiber TSX. A sharp
 40 × 20 × 80 mm tube with 3 mm walls can declare its outer and bore outlines
 where those shapes are constructed:
 
 ```tsx
-import { ExtrudeLinear, Rectangle, Subtract } from "jscad-fiber/model"
+import { ExtrudeLinear, Rectangle, Subtract } from "jscad-fiber/model";
 
 function TubeModel() {
   return (
@@ -192,35 +193,30 @@ function TubeModel() {
         <Rectangle size={[34, 14]} />
       </ExtrudeLinear>
     </Subtract>
-  )
+  );
 }
 ```
 
 The extrusion supplies the native closed profile and its end placement. Names
 are nonblank and unique within a model. `bottomOutlineName` identifies the authored
 start at local Z=0; `topOutlineName` identifies the signed-height end, including
-any extrusion twist. Enclosing center/offset and rotations place the outline
-alongside the solid. Names refer to the constructed profiles, with no duplicate
-edge coordinates or separate feature map authored by the model.
+any extrusion twist in radians. Enclosing center/offset and rotations place the
+outline alongside the solid. Names identify construction features before later
+booleans. The model does not author duplicate edge coordinates or a separate
+feature map.
 
-`renderToJscadModel` from `jscad-fiber/model` collects the visible `geometries`
-and named `referenceFeatures`. Each feature retains its native geometry and full
-4×4 column-major ancestor `matrix` in CAD mm, +Z up. The outline declarations
-add no extra material. The `createRectangularTubeModel` convenience constructor
-renders the same registered component; the collector requires no viewer.
+The companion [Fiber proposal](https://github.com/tscircuit/jscad-fiber/pull/142)
+collects native geometry and full 4×4 column-major placement matrices through
+`renderToJscadModel`. The [JSCAD tube proposal](https://github.com/tscircuit/jscad-electronics/pull/504)
+uses the same registered component for its convenience constructor. These features
+remain owned by the model. The closed `outer_top` spans 40 mm horizontally and
+the closed `inner_top` bore spans 34 mm; those spans are neither straight edges
+nor perimeter lengths.
 
-The closed `outer_top` outline spans 40 mm horizontally, while the closed
-`inner_top` bore outline spans 34 mm. These are native profile extents, not
-straight edges or perimeter lengths. A closed outline requires an explicit
-horizontal or vertical dimension orientation; default `aligned` only supports
-straight open edges.
-
-Core can expose these names under the owning part's identity. The dimension
-references the model; it does not supply or reconstruct the edge geometry:
+The intended drawing authoring API selects the model feature:
 
 ```tsx
 // The model defining .tube declares topOutlineName="inner_top".
-// Its geometry is resolved from the model, not authored in this drawing.
 <assembly.drawing.partview
   partRef=".tube"
   name="end-view"
@@ -228,41 +224,27 @@ references the model; it does not supply or reconstruct the edge geometry:
   width="100mm"
   height="80mm"
 >
-  <assembly.drawing.dimension
-    name="bore-width"
-    edgeRef=".tube > .inner_top"
-    orientation="horizontal"
-    offset="-8mm"
-  />
+  <assembly.drawing.dimension name="bore-width" edgeRef=".tube > .inner_top" />
 </assembly.drawing.partview>
 ```
 
-`edgeRef` is a nonempty selector string (outer whitespace is trimmed). It must
-resolve to one model-defined named outline or edge belonging to the part selected by the
-enclosing view. Missing or ambiguous selectors are core errors. There is no
-preset lookup: a string such as `overall_width` does not manufacture an edge.
-The props schema preserves the selector. The proposed Circuit JSON association
-stores the owning `cad_component_id` and opaque `edge_name` with its
-`drawing_part_view_id`. The boolean targets map directly to `width_of_view: true`
-or `height_of_view: true`; there is no target enum or implicit target default.
-Exactly one complete owner/name pair or true view flag is required. False view
-flags are unselected and omitted from parsed Circuit JSON. A model-aware exporter
-obtains geometry from the owning model through its native resolver; Circuit JSON
-does not serialize a feature's geometry or topology.
+`edgeRef` accepts a nonempty selector string and trims outer whitespace. It must
+identify one model-defined named feature belonging to the part selected by the
+enclosing view. Core will need to reject missing or ambiguous targets. A string
+such as `overall_width` does not manufacture a feature. Names come from the
+source model's available geometry, such as STEP topology/native labels,
+producer-authored glTF metadata, or named JSCAD geometry. Mesh triangle indices
+and B-rep ordering do not automatically become stable names.
 
-Names must come from the source model's available named geometry: for example,
-STEP topology/native labels, producer-authored glTF metadata, or JSCAD named
-geometry. Mesh triangle indices or B-rep ordering do not automatically become
-stable edge names. Edges can include curves and richer topology; they are not
-defined as two endpoints by this API. Horizontal and vertical dimensions use the
-full native path's extent on the view axes, including curved or closed profiles.
-Aligned dimensions initially support straight open edges. Unsupported geometry
-must report an error rather than silently becoming a two-point chord. The model
-reader applies the full collected Fiber matrix, then its caller applies any
-outer CAD-component placement exactly once before measurement. Drawing intent
-does not duplicate those transforms.
+Named geometry can include curved or closed outlines. Core's planned dimension
+layout will infer an appropriate projected axis, witness points and line
+placement from the selected geometry and view. The drawing does not specify
+orientation or replace an outline with an authored two-point chord. The model
+reader applies its collected placement and CAD instance placement when core
+resolves the geometry; the props retain only the selector.
 
-Use an explicit boolean target when the intent is an inferred overall size:
+Use the boolean targets when the intent is the selected view geometry's overall
+width or height:
 
 ```tsx
 <assembly.drawing.partview
@@ -272,38 +254,38 @@ Use an explicit boolean target when the intent is an inferred overall size:
   width="100mm"
   height="80mm"
 >
-  <assembly.drawing.dimension widthOfView offset="-8mm" />
-  <assembly.drawing.dimension heightOfView offset="8mm" />
+  <assembly.drawing.dimension name="overall-width" widthOfView />
+  <assembly.drawing.dimension name="overall-height" heightOfView />
 </assembly.drawing.partview>
 ```
 
-`widthOfView` measures the selected geometry's extent on the view's model-space
-right axis; `heightOfView` measures its extent on the up axis. These are physical
-model measurements in mm, independent of viewport width/height, pixel allocation,
-or paper scale. For a section view, extents come from the section's retained
-geometry. No edge reference or synthetic named edge is required for either mode.
+These targets request physical model extents on the view's right/up axes,
+independent of viewport width/height, pixel allocation or paper scaling.
+A section view's requested extent concerns its retained geometry. Computing
+those measurements and their paper placement is future core work.
 
 Exactly one target must be selected. `false` does not select a boolean target:
-`edgeRef` with `widthOfView={false}` is allowed; both booleans false without an
-edge is invalid. An edge plus a true boolean, or both booleans true, is invalid.
-View extent modes infer `horizontal` or `vertical` orientation respectively;
-passing an explicit `orientation`, even the matching one, is an error.
+`edgeRef` with `widthOfView={false}` is allowed, while both booleans false
+without an edge is invalid. An edge plus a true boolean, or both booleans true,
+is invalid. Canonical parsed props preserve the trimmed selector, supplied
+boolean flags and optional identity. There is no implicit target or layout
+default.
 
-For named-edge dimensions only, `orientation` accepts `horizontal`, `vertical`,
-or `aligned` (default). For a supported linear model edge, aligned measures its
-true 3D length; horizontal and vertical measure the complete native geometry's
-extent on the view's right/up axes. A section cut does not redefine the referenced model edge.
-Canonical parsed props contain the resolved orientation while preserving the
-selector or boolean target.
+The proposed resolved Circuit JSON output is `drawing_dimension_line`.
+Core will produce its required `start` and `end` line endpoints in
+page-centered paper mm (+X right, +Y up), plus required `text` containing the
+preformatted measurement. Optional `edge_ref_start` and `edge_ref_end` are
+paper-space witness points, and optional `edge_ref_name` is the exact source
+feature name, such as `inner_top`. These are resolved drawing fields, not TSX
+dimension props. The exporter consumes the resulting paper primitives directly.
+No native edge geometry or universal topology schema is serialized into the
+drawing record. Emitting these resolved records and choosing their text and
+placement remain future core responsibilities.
 
-`offset` accepts a finite signed numeric distance in paper mm or a unit string
-and defaults to 8mm. Positive/negative offsets select opposite sides of the
-projected dimension line. It is not model-space clearance. `precision` is an
-integer from 0 through 6 (default 1) controlling decimal places in the measured
-mm value. There are no aliases or numeric/text overrides; unknown keys are
-stripped rather than interpreted as aliases. Circular, radial, angular,
-toleranced, and GD&T annotations remain outside this initial linear contract.
-References: [AutoCAD aligned dimensions](https://help.autodesk.com/cloudhelp/2027/ENG/AutoCAD-Core/files/GUID-D7C05A85-8985-4576-B22C-5A795DD5B179.htm)
-and [FreeCAD TechDraw length dimensions](https://github.com/FreeCAD/FreeCAD-documentation/blob/main/wiki/TechDraw_LengthDimension.md)
-provide conventional geometry-linked dimension terminology; this proposal does
-not claim full standards compliance.
+This unreleased props API removes `orientation`, `offset` and `precision`.
+They have no aliases or migration shims and are not offered by the exported
+types. Remove them from drawing TSX. As with other props objects, unknown keys
+are stripped by the runtime schema; they never enter canonical parsed dimension
+props. Measurement values, formatted text, endpoint coordinates and witness
+points are also outside the authoring props. Circular, radial, angular,
+toleranced and GD&T annotations remain outside this initial proposal.

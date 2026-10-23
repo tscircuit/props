@@ -86,19 +86,3 @@ aliases or conflicts with `standard` or `model`; endpoint resolution and cable
 selection retain their existing behavior. This additive prop requires no
 migration. Waypoints control the displayed route; they do not enforce bend
 radius or check collisions with moving parts.
-
-## Why waypoint control helps
-
-The same gimbal and cable endpoints are shown in both snapshots. Without
-waypoints, the inferred wire crosses the phone. With waypoints, the author can
-guide it around the holder.
-
-| Without waypoints | With waypoints |
-| --- | --- |
-| ![Automatic wires cross the phone](assets/assembly-cable-without-waypoints.png) | ![Authored waypoints guide wires around the holder](assets/assembly-cable-with-waypoints.png) |
-
-**Companion core preview:** these are actual CAD renders from
-[core PR #4868](https://github.com/tscircuit/core/pull/4868), using its gimbal
-fixture. This props PR validates and preserves the points; the companion core
-change makes cables follow them. These images demonstrate static routing, not
-cable movement or automatic collision avoidance.

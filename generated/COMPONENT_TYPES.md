@@ -384,6 +384,10 @@ export const ibisPinReferences = z
 /** Same location rules as circuit-json's simulation_ibis_model asset. */
 export const ibisModelAsset = asset.extend({
   project_relative_path: ibisAssetPath,
+  sha256: z
+    .string()
+    .regex(/^[a-f0-9]{64}$/i)
+    .optional(),
   url: z
     .string()
     .url()
@@ -1817,17 +1821,127 @@ export interface AnalogTransientSimulationProps
   startTime?: number | string
   timePerStep?: number | string
   ibisPinStates?: Record<string, IbisPinRunState>
+  pcbSpiceChannel?: PcbSpiceChannelProps
 }
-/** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
+/** Channel settings parsed to Hz and mm. No extraction defaults are inferred. */
+export interface PcbSpiceChannelProps {
+  reduction: "routed-copper" | "straightened-stages"
+  sections: number
+  lanes: Array<{ name: string; from: string; to: string }>
+  referencePinRef: string
+  passiveComponentRefs?: string[]
+  extraction: {
+    minimumFrequency: number | string
+    maximumFrequency: number | string
+    modelFrequency: number | string
+    filaments: number
+    refinementFilaments: number
+    convergenceTolerance: number
+    capacitanceTolerance: number
+    reciprocityTolerance: number
+    dcResistanceTolerance: number
+    maxPanelLength: number | string
+    groundMeshSize?: number | string
+  }
+  relativePermittivity?: number
+  via?: {
+    platingThickness?: number | string
+    equivalentWidth?: number | string
+    omitThroughViaStubs?: boolean
+  }
+  straightenedStageProfiles?: Record<
+    string,
+    {
+      spacing: number | string
+      relativePermittivity: number
+      return: {
+        width: number | string
+        thickness: number | string
+        lengthFactor: number
+        centerY: number | string
+        centerZ: number | string
+      }
+    }
+  >
+}
+/** Signed coordinates in mm. */
+export const pcbSpiceChannelProps = z.object({
+  reduction: z.enum(["routed-copper", "straightened-stages"]),
+  sections: z.number().int().min(1).max(128),
+  lanes: z
+    .array(
+      z.object({
+        name: z.string().min(1),
+        from: z.string().min(1),
+        to: z.string().min(1),
+      }),
+    )
+    .min(1)
+    .max(3),
+  referencePinRef: z.string().min(1),
+  passiveComponentRefs: z.array(z.string().min(1)).optional(),
+  extraction: z
+    .object({
+      minimumFrequency: positiveFrequency,
+      maximumFrequency: positiveFrequency,
+      modelFrequency: positiveFrequency,
+      filaments: z.number().int().positive(),
+      refinementFilaments: z.number().int().positive(),
+      convergenceTolerance: z.number().finite().positive(),
+      capacitanceTolerance: z.number().finite().positive(),
+      reciprocityTolerance: z.number().finite().positive(),
+      dcResistanceTolerance: z.number().finite().positive(),
+      maxPanelLength: positiveLength,
+      groundMeshSize: positiveLength.optional(),
+    })
+    .refine(
+      (extraction) => extraction.refinementFilaments > extraction.filaments,
+      {
+        path: ["refinementFilaments"],
+        message: "refinementFilaments must be greater than filaments",
+      },
+    ),
+  relativePermittivity: z.number().finite().positive().optional(),
+  via: z
+    .object({
+      platingThickness: positiveLength.optional(),
+      equivalentWidth: positiveLength.optional(),
+      omitThroughViaStubs: z.boolean().optional(),
+    })
+    .optional(),
+  straightenedStageProfiles: z
+    .record(
+      z.object({
+        spacing: positiveLength,
+        relativePermittivity: z.number().finite().positive(),
+        return: z.object({
+          width: positiveLength,
+          thickness: positiveLength,
+          lengthFactor: z.number().finite().positive(),
+          centerY: signedLength,
+          centerZ: signedLength,
+        }),
+      }),
+    )
+    .optional(),
+})
 export const analogTransientSimulationProps = z
   .object({
     ...analogAnalysisSimulationBaseProps,
     duration: positiveMilliseconds.default("10ms"),
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
+    pcbSpiceChannel: pcbSpiceChannelProps.optional(),
     ibisPinStates: z.record(z.string().min(1), ibisPinRunState).optional(),
   })
   .superRefine((simulation, context) => {
+    if (simulation.pcbSpiceChannel && simulation.spiceEngine !== "pcb_spice") {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["pcbSpiceChannel"],
+        message: "PCB SPICE channel settings require spiceEngine=pcb_spice",
+      })
+    }
     if (simulation.ibisPinStates && simulation.spiceEngine !== "pcb_spice") {
       context.addIssue({
         code: z.ZodIssueCode.custom,

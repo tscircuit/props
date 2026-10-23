@@ -30,6 +30,10 @@ const ibisAssetPath = z
 
 export const ibisModelAsset = asset.extend({
   project_relative_path: ibisAssetPath,
+  sha256: z
+    .string()
+    .regex(/^[a-f0-9]{64}$/i)
+    .optional(),
   url: z
     .string()
     .url()

@@ -46,3 +46,17 @@ for (const pinCount of [0, -1, 2.5, Number.POSITIVE_INFINITY]) {
     expect(() => connectorProps.parse({ name: "conn", pinCount })).toThrow()
   })
 }
+
+test("should parse optional accessibleFromBoardEdge boolean on connector", () => {
+  expect(
+    connectorProps.parse({ name: "J1", accessibleFromBoardEdge: false })
+      .accessibleFromBoardEdge,
+  ).toBe(false)
+  expect(
+    connectorProps.parse({ name: "J1", accessibleFromBoardEdge: true })
+      .accessibleFromBoardEdge,
+  ).toBe(true)
+  expect(
+    connectorProps.parse({ name: "J1" }).accessibleFromBoardEdge,
+  ).toBeUndefined()
+})

@@ -25,11 +25,23 @@ export interface ConnectorProps extends ChipPropsSU {
    * Number of electrical circuits in the connector
    */
   pinCount?: number
+
+  /**
+   * Whether the connector must face a board edge for external access.
+   * Set to false for internal board-to-flex or enclosure-internal sockets.
+   */
+  accessibleFromBoardEdge?: boolean
 }
 
 export const connectorProps = chipProps.extend({
   standard: connectorStandard.optional(),
   pinCount: z.number().int().positive().optional(),
+  accessibleFromBoardEdge: z
+    .boolean()
+    .optional()
+    .describe(
+      "Whether the connector must face a board edge for external access. Set to false for internal board-to-flex or enclosure-internal sockets.",
+    ),
 })
 
 type InferredConnectorProps = z.input<typeof connectorProps>

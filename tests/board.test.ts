@@ -272,3 +272,21 @@ test("should parse placementDrcChecksDisabled prop", () => {
   const parsed = boardProps.parse(raw)
   expect(parsed.placementDrcChecksDisabled).toBe(true)
 })
+
+test("jlcpcbStackup accepts non-empty trimmed construction codes and rejects blank strings", () => {
+  const parsed = boardProps.parse({
+    width: 100,
+    height: 100,
+    layers: 4,
+    thickness: 1,
+    fabricatorPreset: "jlcpcb_standard",
+    jlcpcbStackup: " JLC04101H-3313 ",
+  })
+  expect(parsed.jlcpcbStackup).toBe("JLC04101H-3313")
+  expect(
+    boardProps.parse({ width: 20, height: 20 }).jlcpcbStackup,
+  ).toBeUndefined()
+  expect(() =>
+    boardProps.parse({ width: 20, height: 20, jlcpcbStackup: "   " }),
+  ).toThrow()
+})

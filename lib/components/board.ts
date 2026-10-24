@@ -101,6 +101,8 @@ export interface BoardProps
     | "jlcpcb_standard"
     | "jlcpcb_economy_20260912"
     | "jlcpcb_standard_20260912"
+  /** Explicit JLCPCB stackup construction code, e.g. "JLC04101H-3313". */
+  jlcpcbStackup?: string
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
@@ -199,6 +201,14 @@ export const boardProps = subcircuitGroupProps
       .optional()
       .describe(
         "Fabricator preset, preserved as supplied. Omitted leaves the preset unset.",
+      ),
+    jlcpcbStackup: z
+      .string()
+      .trim()
+      .min(1)
+      .optional()
+      .describe(
+        'Explicit JLCPCB stackup construction code, e.g. "JLC04101H-3313".',
       ),
     material: z.enum(["fr4", "fr1", "flex"]).default("fr4"),
     layers: z

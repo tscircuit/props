@@ -375,6 +375,7 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
   timePerStep?: number | string;
   /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
   ibisPinStates?: Record<string, IbisPinRunState>;
+  pcbSpiceChannel?: PcbSpiceChannelProps;
 }
 ```
 
@@ -1129,6 +1130,12 @@ export interface FootprintProps {
    * "top" and this is most intuitive.
    */
   originalLayer?: LayerRef;
+  /**
+   * Suppress automatic pad and plated-hole paste inside this footprint.
+   * Explicit solderpaste apertures still render. Omitted or false retains
+   * automatic paste, including each pad's existing noSolderPaste setting.
+   */
+  noSolderPaste?: boolean;
   /**
    * Serialized circuit JSON describing a precompiled footprint
    */

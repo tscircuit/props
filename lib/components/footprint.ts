@@ -56,6 +56,12 @@ export interface FootprintProps {
    */
   originalLayer?: LayerRef
   /**
+   * Suppress automatic pad and plated-hole paste inside this footprint.
+   * Explicit solderpaste apertures still render. Omitted or false retains
+   * automatic paste, including each pad's existing noSolderPaste setting.
+   */
+  noSolderPaste?: boolean
+  /**
    * Serialized circuit JSON describing a precompiled footprint
    */
   circuitJson?: any[]
@@ -107,6 +113,7 @@ export const footprintProps = z.object({
   children: z.any().optional(),
   name: z.string().optional(),
   originalLayer: layer_ref.default("top").optional(),
+  noSolderPaste: z.boolean().optional(),
   circuitJson: z.array(z.any()).optional(),
   src: footprintProp.describe("Can be a footprint or kicad string").optional(),
   insertionDirection: footprintInsertionDirection

@@ -11,7 +11,15 @@ import {
 
 test("dimension props preserve only authoring intent and stable identity", () => {
   expectTypeOf<keyof AssemblyDrawingDimensionProps>().toEqualTypeOf<
-    "name" | "edgeRef" | "widthOfView" | "heightOfView"
+    | "name"
+    | "edgeRef"
+    | "widthOfView"
+    | "heightOfView"
+    | "fromRef"
+    | "toRef"
+    | "fromAnchor"
+    | "toAnchor"
+    | "axis"
   >()
   expectTypeOf<InferredAssemblyDrawingDimensionProps>().toEqualTypeOf<AssemblyDrawingDimensionProps>()
   expect(assemblyProps.drawing.dimension).toBe(assemblyDrawingDimensionProps)

@@ -2545,7 +2545,8 @@ export interface SymbolProps {
    * Source sizing bounds in the local symbol coordinate space (mm, +X right, +Y up).
    * With width/height, maps the bounds center to the symbol position; all artwork
    * and ports use the same transform. Omitted uses automatic bounds including ports.
-   * maxX must exceed minX and maxY must exceed minY. No aliases; no change to existing defaults.
+   * maxX must exceed minX and maxY must exceed minY. Other shapes are rejected
+   * with a diagnostic listing the required bounds. No aliases; existing defaults are unchanged.
    */
   viewbox?: {
     minX: number | string;

@@ -1,10 +1,11 @@
 import fs from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import ts from "typescript"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-function extractInterfaces(content: string): string[] {
+export function extractInterfaces(content: string): string[] {
   const interfaces: string[] = []
   const lines = content.split("\n")
   let currentInterface = ""
@@ -60,7 +61,31 @@ function extractInterfaces(content: string): string[] {
     }
   }
 
-  return interfaces
+  // Preserve the legacy selection of documented declarations, but use the
+  // parser's statement boundaries to complete truncated validator expressions.
+  const source = ts.createSourceFile(
+    "props.ts",
+    content,
+    ts.ScriptTarget.Latest,
+  )
+  const declarations = source.statements.filter(ts.isVariableStatement)
+  return interfaces.map((definition, index) => {
+    const match = /^export (?:const|let|var) (\w+)\s*=/m.exec(definition)
+    if (!match) return definition
+    const statement = declarations.find((statement) =>
+      statement.declarationList.declarations.some(
+        (declaration) => declaration.name.getText(source) === match[1],
+      ),
+    )
+    const declaration = definition.slice(match.index).trimEnd()
+    // Extended props are already emitted as a separate legacy block.
+    if (interfaces[index + 1]?.trimStart().startsWith(".extend(")) {
+      return definition
+    }
+    return statement?.getText(source).startsWith(declaration)
+      ? `${definition.slice(0, match.index)}${statement.getText(source)}\n`
+      : definition
+  })
 }
 
 function generateComponentTypesDoc() {
@@ -133,4 +158,6 @@ function generateComponentTypesDoc() {
   )
 }
 
-generateComponentTypesDoc()
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  generateComponentTypesDoc()
+}

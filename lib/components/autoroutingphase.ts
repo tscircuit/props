@@ -94,21 +94,33 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
-    pcbTestPoints: z.object({
-      layer: z.enum(["top", "bottom"]),
-      diameter: distance.pipe(z.number().finite().positive()),
-      clearance: distance.pipe(z.number().finite().nonnegative()),
-      minProbeSpacing: distance.pipe(z.number().finite().nonnegative()),
-      maxDetour: distance.pipe(z.number().finite().nonnegative()),
-    }).optional(),
+    pcbTestPoints: z
+      .object({
+        layer: z.enum(["top", "bottom"]),
+        diameter: distance.pipe(z.number().finite().positive()),
+        clearance: distance.pipe(z.number().finite().nonnegative()),
+        minProbeSpacing: distance.pipe(z.number().finite().nonnegative()),
+        maxDetour: distance.pipe(z.number().finite().nonnegative()),
+      })
+      .optional(),
     ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
-    if (value.pcbTestPoints && (value.reroute !== true ||
-      !(value.connection || value.connections?.length) || value.region ||
-      value.pcbTracePaths || value.autorouter || value.algorithmFn)) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["pcbTestPoints"],
-        message: "pcbTestPoints requires reroute=true and explicit connections, and cannot combine with region, pcbTracePaths, autorouter, or algorithmFn" })
+    if (
+      value.pcbTestPoints &&
+      (value.reroute !== true ||
+        !(value.connection || value.connections?.length) ||
+        value.region ||
+        value.pcbTracePaths ||
+        value.autorouter ||
+        value.algorithmFn)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["pcbTestPoints"],
+        message:
+          "pcbTestPoints requires reroute=true and explicit connections, and cannot combine with region, pcbTracePaths, autorouter, or algorithmFn",
+      })
     }
     const isSimplifyAutorouter =
       value.autorouter === "simplify" ||

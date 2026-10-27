@@ -1097,6 +1097,8 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
+  /** This artwork supplies the component's polarity indication. Omitted means no claim. */
+  isPolarityMarking?: boolean;
 }
 ```
 

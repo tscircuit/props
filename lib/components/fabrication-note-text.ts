@@ -14,6 +14,8 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
+  /** This artwork supplies the component's polarity indication. Omitted means no claim. */
+  isPolarityMarking?: boolean
 }
 
 export const fabricationNoteTextProps = pcbLayoutProps.extend({
@@ -24,6 +26,8 @@ export const fabricationNoteTextProps = pcbLayoutProps.extend({
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
   color: z.string().optional(),
+  /** This artwork supplies the component's polarity indication. Omitted means no claim. */
+  isPolarityMarking: z.boolean().optional(),
 })
 
 expectTypesMatch<

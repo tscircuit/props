@@ -3187,6 +3187,7 @@ export const fabricationNotePathProps = pcbLayoutProps
     color: z.string().optional(),
     isFilled: z.boolean().optional(),
     hasStroke: z.boolean().optional(),
+    isPolarityMarking: z.boolean().optional(),
   })
 ```
 
@@ -3221,7 +3222,9 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
+  isPolarityMarking?: boolean
 }
+/** This artwork supplies the component's polarity indication. Omitted means no claim. */
 export const fabricationNoteTextProps = pcbLayoutProps.extend({
   text: z.string(),
   anchorAlignment: z
@@ -3230,6 +3233,7 @@ export const fabricationNoteTextProps = pcbLayoutProps.extend({
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
   color: z.string().optional(),
+  isPolarityMarking: z.boolean().optional(),
 })
 ```
 

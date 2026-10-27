@@ -22,5 +22,7 @@ export const fabricationNotePathProps = pcbLayoutProps
     isFilled: z.boolean().optional(),
     /** Draw the route's outline. Omitted means true; false disables it. */
     hasStroke: z.boolean().optional(),
+    /** This artwork supplies the component's polarity indication. Omitted means no claim. */
+    isPolarityMarking: z.boolean().optional(),
   })
 export type FabricationNotePathProps = z.input<typeof fabricationNotePathProps>

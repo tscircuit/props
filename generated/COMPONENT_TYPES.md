@@ -2023,12 +2023,19 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   // Reroutes traces selected by region or connection. The simplify autorouter
   // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
+  pcbTestPoints?: {
+    layer: "top" | "bottom"
+    diameter: Distance
+    clearance: Distance
+    minProbeSpacing: Distance
+    maxDetour: Distance
+  }
 }
 /**
-   * Saved PCB wire/via routes using the same format as fanout pcbTracePaths.
-   * Numeric distances are mm; unit strings are normalized to mm. Omitted by
-   * default; an empty array is accepted. No aliases or prop conflicts are
-   * introduced, and existing phases require no migration.
+   * Add one exposed probe pad to each selected routed trace. Requires reroute=true
+   * and explicit connection(s); conflicts with region, pcbTracePaths, autorouter,
+   * and algorithmFn. All dimensions accept mm numbers or unit strings and parse
+   * to mm. No defaults or aliases; omitted phases retain existing behavior.
    */
 export const autoroutingPhaseProps = z
   .object({
@@ -2052,9 +2059,22 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
+    pcbTestPoints: z.object({
+      layer: z.enum(["top", "bottom"]),
+      diameter: distance.pipe(z.number().finite().positive()),
+      clearance: distance.pipe(z.number().finite().nonnegative()),
+      minProbeSpacing: distance.pipe(z.number().finite().nonnegative()),
+      maxDetour: distance.pipe(z.number().finite().nonnegative()),
+    }).optional(),
     ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
+    if (value.pcbTestPoints && (value.reroute !== true ||
+      !(value.connection || value.connections?.length) || value.region ||
+      value.pcbTracePaths || value.autorouter || value.algorithmFn)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["pcbTestPoints"],
+        message: "pcbTestPoints requires reroute=true and explicit connections, and cannot combine with region, pcbTracePaths, autorouter, or algorithmFn" })
+    }
     const isSimplifyAutorouter =
       value.autorouter === "simplify" ||
       (typeof value.autorouter === "object" &&

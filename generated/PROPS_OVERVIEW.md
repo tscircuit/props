@@ -156,6 +156,7 @@ export interface AnalogTransientSimulationProps
   timePerStep?: number | string
   /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
   ibisPinStates?: Record<string, IbisPinRunState>
+  pcbSpiceChannel?: PcbSpiceChannelProps
 }
 
 
@@ -225,6 +226,126 @@ export interface AssemblyDeviceProps {
   modelUrl?: string
   /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
   model?: string
+}
+
+
+export interface AssemblyDrawingDimensionProps {
+  /** Stable circuit identity; does not choose a measurement or its formatting. */
+  name?: string
+  /** Selector for one model-defined named edge or outline, e.g. .tube > .inner_top; never a preset or mesh edge index. */
+  edgeRef?: string
+  /** Request the selected geometry's width in the view. Conflicts with edgeRef and heightOfView=true. */
+  widthOfView?: boolean
+  /** Request the selected geometry's height in the view. Conflicts with edgeRef and widthOfView=true. */
+  heightOfView?: boolean
+  /** Paired selectors for holes, boards or named model outlines. Both are required; conflicts with edgeRef and true view targets. */
+  fromRef?: string
+  toRef?: string
+  /** Anchor on the reference's projected bounds. Defaults to center; directions are relative to the drawing view, not CAD world axes. */
+  fromAnchor?: AssemblyDrawingDimensionAnchor
+  toAnchor?: AssemblyDrawingDimensionAnchor
+  /** Measure separation on the view's horizontal (x) or vertical (y) axis. Omitted chooses the larger separation, x on ties. Requires paired references. */
+  axis?: "x" | "y"
+}
+
+
+export interface AssemblyDrawingPageProps {
+  name?: string
+  displayName?: string
+  /** Standard sheet size; landscape by default. Mutually exclusive with width/height. */
+  size?: AssemblyDrawingPageSize
+  orientation?: "landscape" | "portrait"
+  /** Custom paper dimensions in mm when numeric; unit strings are accepted. */
+  width?: Distance
+  height?: Distance
+  children?: any
+}
+
+
+export interface AssemblyDrawingPartViewProps {
+  name?: string
+  displayName?: string
+  /** Selector for the board, group or assembly geometry shown in this view. */
+  partRef: string
+  direction: AssemblyDrawingPartViewDirection
+  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
+  centerX?: Distance
+  centerY?: Distance
+  /** Sibling part-view selector; infer centerX with this viewport left of the reference. Conflicts with rightOfRef and centerX. */
+  leftOfRef?: string
+  /** Sibling part-view selector; infer centerX with this viewport right of the reference. Conflicts with leftOfRef and centerX. */
+  rightOfRef?: string
+  /** Sibling part-view selector; infer centerY with this viewport above the reference. Conflicts with belowRef and centerY. */
+  aboveRef?: string
+  /** Sibling part-view selector; infer centerY with this viewport below the reference. Conflicts with aboveRef and centerY. */
+  belowRef?: string
+  /** Paper-space viewport size; dimensions must be positive. */
+  width: Distance
+  height: Distance
+  /** Draw obscured edges as dashed strokes. Defaults to false. */
+  showHiddenEdges?: boolean
+  /** A planar cut with diagonal hatching on closed cut surfaces. */
+  section?: AssemblyDrawingSectionPlane
+  /** Nested assembly.drawing.dimension annotations; these do not change the selected geometry. */
+  children?: any
+}
+
+
+export interface AssemblyDrawingSectionPlane {
+  axis: "x" | "y" | "z"
+  /** Plane coordinate in CAD world space, numeric mm or a distance string. */
+  offset: Distance
+  /** Retain coordinates <= offset or >= offset, respectively. */
+  keepSide: "less" | "greater"
+  /** Physical distance between 45-degree strokes on the model. Defaults to 1mm. */
+  hatchSpacing?: Distance
+}
+
+
+export interface AssemblyDrawingTitleBlockProps {
+  name?: string
+  title: string
+  legalOwner?: string
+  identificationNumber?: string
+  revisionIndex?: string
+  dateOfIssue?: string
+  creator?: string
+  approvalPerson?: string
+  sheetNumber?: number
+  numberOfSheets?: number
+}
+
+
+export interface AssemblyExplosionMoveProps {
+  /** Parts or subassemblies to move together, relative to the stage owner.
+   * Accepts a comma-separated string or an array; parsed as a nonempty array of
+   * trimmed references. Supply exactly one of targetRefs or targetRef.
+   */
+  targetRefs?: string | string[]
+  /** Single-target compatibility alias for targetRefs. Parsed as targetRefs:
+   * [targetRef]; cannot be combined with targetRefs. React reserves ref.
+   */
+  targetRef?: string
+  /** Signed X displacement in the stage owner's frame, in mm or a unit string.
+   * Omitted axes mean zero in the consumer; parsed props remain omitted.
+   */
+  offX?: Distance
+  /** Signed Y displacement in the stage owner's frame, in mm or a unit string. */
+  offY?: Distance
+  /** Signed Z displacement in the stage owner's frame, in mm or a unit string. */
+  offZ?: Distance
+}
+
+
+export interface AssemblyExplosionStageProps {
+  /** Stable stage identity, unique within the owning assembly. */
+  name: string
+  /** Stage that must execute after this one; qualified names may cross assembly scopes. */
+  nextStageRef?: string
+  /** Stage that must execute before this one; qualified names may cross assembly scopes. */
+  prevStageRef?: string
+  /** Ordered explosion moves; preserved unchanged for the consumer. */
+  children?: ReactNode
 }
 
 
@@ -2477,6 +2598,48 @@ export interface PcbRouteCache {
 }
 
 
+export interface PcbSpiceChannelProps {
+  reduction: "routed-copper" | "straightened-stages"
+  sections: number
+  lanes: Array<{ name: string; from: string; to: string }>
+  referencePinRef: string
+  passiveComponentRefs?: string[]
+  extraction: {
+    minimumFrequency: number | string
+    maximumFrequency: number | string
+    modelFrequency: number | string
+    filaments: number
+    refinementFilaments: number
+    convergenceTolerance: number
+    capacitanceTolerance: number
+    reciprocityTolerance: number
+    dcResistanceTolerance: number
+    maxPanelLength: number | string
+    groundMeshSize?: number | string
+  }
+  relativePermittivity?: number
+  via?: {
+    platingThickness?: number | string
+    equivalentWidth?: number | string
+    omitThroughViaStubs?: boolean
+  }
+  straightenedStageProfiles?: Record<
+    string,
+    {
+      spacing: number | string
+      relativePermittivity: number
+      return: {
+        width: number | string
+        thickness: number | string
+        lengthFactor: number
+        centerY: number | string
+        centerZ: number | string
+      }
+    }
+  >
+}
+
+
 export interface PcbStyle {
   silkscreenFontSize?: string | number
   viaPadDiameter?: string | number
@@ -2782,6 +2945,16 @@ export interface PlatformConfig {
   fabricatorEngine?: FabricatorEngine
 
   autorouter?: AutorouterProp
+
+  /**
+   * Requested local autorouting thread count: a positive safe integer. Hosts
+   * supporting Bun/Node routing workers may use values above 1; 1 requests
+   * inline solving. Browsers remain single-threaded and cloud routing is
+   * unaffected. Omitted leaves the host default unchanged. Parsed values are
+   * preserved; there are no aliases or conflicts with autorouter selection.
+   * Existing configurations require no migration.
+   */
+  autorouterThreads?: number
 
   autorouterMap?: Record<string, AutorouterDefinition>
 
@@ -3558,6 +3731,13 @@ export interface ToolingrailProps {
 export interface TransistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
+  /**
+   * Physical package pins mapped to semantic terminal names (and optional aliases).
+   * For MMBT3904 SOT-23: { pin1: "base", pin2: "emitter", pin3: "collector" }.
+   * Use full terminal names to retain schematic and simulation semantics.
+   * Omit to retain the symbol's default pin order; no package pinout is inferred.
+   */
+  pinLabels?: PinLabelsProp<string, PinLabel>
   connections?: Connections<transistorPinsLabels>
 }
 

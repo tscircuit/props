@@ -16,6 +16,8 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 // { resistance: 10_000 }
 ```
 
+Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partview>`](docs/assembly-drawings.md).
+
 <!-- COMPONENT_TABLE_START -->
 
 ## Available Components
@@ -373,6 +375,7 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
   timePerStep?: number | string;
   /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
   ibisPinStates?: Record<string, IbisPinRunState>;
+  pcbSpiceChannel?: PcbSpiceChannelProps;
 }
 ```
 
@@ -2624,6 +2627,13 @@ export interface TransistorProps<
   PinLabel extends string = string,
 > extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt";
+  /**
+   * Physical package pins mapped to semantic terminal names (and optional aliases).
+   * For MMBT3904 SOT-23: { pin1: "base", pin2: "emitter", pin3: "collector" }.
+   * Use full terminal names to retain schematic and simulation semantics.
+   * Omit to retain the symbol's default pin order; no package pinout is inferred.
+   */
+  pinLabels?: PinLabelsProp<string, PinLabel>;
   connections?: Connections<transistorPinsLabels>;
 }
 ```
@@ -2721,6 +2731,16 @@ export interface PlatformConfig {
   fabricatorEngine?: FabricatorEngine;
 
   autorouter?: AutorouterProp;
+
+  /**
+   * Requested local autorouting thread count: a positive safe integer. Hosts
+   * supporting Bun/Node routing workers may use values above 1; 1 requests
+   * inline solving. Browsers remain single-threaded and cloud routing is
+   * unaffected. Omitted leaves the host default unchanged. Parsed values are
+   * preserved; there are no aliases or conflicts with autorouter selection.
+   * Existing configurations require no migration.
+   */
+  autorouterThreads?: number;
 
   autorouterMap?: Record<string, AutorouterDefinition>;
 

@@ -6,25 +6,25 @@ test("test-point autorouter accepts hoisted options and rejects conflicting mode
     autoroutingPhaseProps.parse({
       reroute: true,
       addTestPoints: true,
-      maxDetour: "10mm",
+      testPointMaxDetour: "10mm",
     }),
-  ).toEqual({ reroute: true, addTestPoints: true, maxDetour: 10 })
+  ).toEqual({ reroute: true, addTestPoints: true, testPointMaxDetour: 10 })
   const input = {
     reroute: true,
     addTestPoints: true,
     connection: "net.SDA",
-    layer: "bottom" as const,
-    diameter: "1mm",
-    clearance: "0.2mm",
-    minProbeSpacing: "100mil",
-    maxDetour: "10mm",
+    testPointLayer: "bottom" as const,
+    testPointDiameter: "1mm",
+    testPointClearance: "0.2mm",
+    testPointMinProbeSpacing: "100mil",
+    testPointMaxDetour: "10mm",
   }
   expect(autoroutingPhaseProps.parse(input)).toEqual({
     ...input,
-    diameter: 1,
-    clearance: 0.2,
-    minProbeSpacing: 2.54,
-    maxDetour: 10,
+    testPointDiameter: 1,
+    testPointClearance: 0.2,
+    testPointMinProbeSpacing: 2.54,
+    testPointMaxDetour: 10,
   })
   for (const patch of [
     { reroute: false },
@@ -33,19 +33,19 @@ test("test-point autorouter accepts hoisted options and rejects conflicting mode
     { algorithmFn: async () => ({}) },
     { region: { minX: 0, maxX: 1, minY: 0, maxY: 1 } },
     { pcbTracePaths: [] },
-    { diameter: -1 },
-    { diameter: 0 },
-    { clearance: -1 },
-    { minProbeSpacing: -1 },
-    { maxDetour: -1 },
+    { testPointDiameter: -1 },
+    { testPointDiameter: 0 },
+    { testPointClearance: -1 },
+    { testPointMinProbeSpacing: -1 },
+    { testPointMaxDetour: -1 },
     { addTestPoints: false },
   ])
     expect(
       autoroutingPhaseProps.safeParse({ ...input, ...patch }).success,
     ).toBe(false)
-  expect(autoroutingPhaseProps.safeParse({ maxDetour: "10mm" }).success).toBe(
-    false,
-  )
+  expect(
+    autoroutingPhaseProps.safeParse({ testPointMaxDetour: "10mm" }).success,
+  ).toBe(false)
   expect(autoroutingPhaseProps.parse({ addTestPoints: false })).toEqual({
     addTestPoints: false,
   })

@@ -65,15 +65,15 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
    */
   addTestPoints?: boolean
   /** Test-point layer; defaults to bottom when addTestPoints is enabled. */
-  layer?: "top" | "bottom"
+  testPointLayer?: "top" | "bottom"
   /** Probe pad diameter, mm or unit string; defaults to 1 mm. Must be positive. */
-  diameter?: Distance
+  testPointDiameter?: Distance
   /** Copper edge clearance, mm or unit string; defaults to 0.2 mm. */
-  clearance?: Distance
+  testPointClearance?: Distance
   /** Minimum probe center spacing, mm or unit string; defaults to 2.54 mm. */
-  minProbeSpacing?: Distance
+  testPointMinProbeSpacing?: Distance
   /** Maximum local trace detour, mm or unit string; defaults to 1 mm. */
-  maxDetour?: Distance
+  testPointMaxDetour?: Distance
 }
 
 export const autoroutingPhaseProps = z
@@ -99,13 +99,17 @@ export const autoroutingPhaseProps = z
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
     addTestPoints: z.boolean().optional(),
-    layer: z.enum(["top", "bottom"]).optional(),
-    diameter: distance.pipe(z.number().finite().positive()).optional(),
-    clearance: distance.pipe(z.number().finite().nonnegative()).optional(),
-    minProbeSpacing: distance
+    testPointLayer: z.enum(["top", "bottom"]).optional(),
+    testPointDiameter: distance.pipe(z.number().finite().positive()).optional(),
+    testPointClearance: distance
       .pipe(z.number().finite().nonnegative())
       .optional(),
-    maxDetour: distance.pipe(z.number().finite().nonnegative()).optional(),
+    testPointMinProbeSpacing: distance
+      .pipe(z.number().finite().nonnegative())
+      .optional(),
+    testPointMaxDetour: distance
+      .pipe(z.number().finite().nonnegative())
+      .optional(),
     ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
@@ -125,11 +129,11 @@ export const autoroutingPhaseProps = z
       })
     }
     for (const option of [
-      "layer",
-      "diameter",
-      "clearance",
-      "minProbeSpacing",
-      "maxDetour",
+      "testPointLayer",
+      "testPointDiameter",
+      "testPointClearance",
+      "testPointMinProbeSpacing",
+      "testPointMaxDetour",
     ] as const) {
       if (value[option] !== undefined && !value.addTestPoints) {
         ctx.addIssue({

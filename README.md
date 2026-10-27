@@ -450,15 +450,15 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
    */
   addTestPoints?: boolean;
   /** Test-point layer; defaults to bottom when addTestPoints is enabled. */
-  layer?: "top" | "bottom";
+  testPointLayer?: "top" | "bottom";
   /** Probe pad diameter, mm or unit string; defaults to 1 mm. Must be positive. */
-  diameter?: Distance;
+  testPointDiameter?: Distance;
   /** Copper edge clearance, mm or unit string; defaults to 0.2 mm. */
-  clearance?: Distance;
+  testPointClearance?: Distance;
   /** Minimum probe center spacing, mm or unit string; defaults to 2.54 mm. */
-  minProbeSpacing?: Distance;
+  testPointMinProbeSpacing?: Distance;
   /** Maximum local trace detour, mm or unit string; defaults to 1 mm. */
-  maxDetour?: Distance;
+  testPointMaxDetour?: Distance;
 }
 ```
 

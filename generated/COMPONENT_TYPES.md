@@ -2024,11 +2024,11 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
   addTestPoints?: boolean
-  layer?: "top" | "bottom"
-  diameter?: Distance
-  clearance?: Distance
-  minProbeSpacing?: Distance
-  maxDetour?: Distance
+  testPointLayer?: "top" | "bottom"
+  testPointDiameter?: Distance
+  testPointClearance?: Distance
+  testPointMinProbeSpacing?: Distance
+  testPointMaxDetour?: Distance
 }
 /** Maximum local trace detour, mm or unit string; defaults to 1 mm. */
 export const autoroutingPhaseProps = z
@@ -2054,13 +2054,17 @@ export const autoroutingPhaseProps = z
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
     addTestPoints: z.boolean().optional(),
-    layer: z.enum(["top", "bottom"]).optional(),
-    diameter: distance.pipe(z.number().finite().positive()).optional(),
-    clearance: distance.pipe(z.number().finite().nonnegative()).optional(),
-    minProbeSpacing: distance
+    testPointLayer: z.enum(["top", "bottom"]).optional(),
+    testPointDiameter: distance.pipe(z.number().finite().positive()).optional(),
+    testPointClearance: distance
       .pipe(z.number().finite().nonnegative())
       .optional(),
-    maxDetour: distance.pipe(z.number().finite().nonnegative()).optional(),
+    testPointMinProbeSpacing: distance
+      .pipe(z.number().finite().nonnegative())
+      .optional(),
+    testPointMaxDetour: distance
+      .pipe(z.number().finite().nonnegative())
+      .optional(),
     ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
@@ -2080,11 +2084,11 @@ export const autoroutingPhaseProps = z
       })
     }
     for (const option of [
-      "layer",
-      "diameter",
-      "clearance",
-      "minProbeSpacing",
-      "maxDetour",
+      "testPointLayer",
+      "testPointDiameter",
+      "testPointClearance",
+      "testPointMinProbeSpacing",
+      "testPointMaxDetour",
     ] as const) {
       if (value[option] !== undefined && !value.addTestPoints) {
         ctx.addIssue({

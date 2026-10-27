@@ -238,6 +238,14 @@ export interface AssemblyDrawingDimensionProps {
   widthOfView?: boolean
   /** Request the selected geometry's height in the view. Conflicts with edgeRef and widthOfView=true. */
   heightOfView?: boolean
+  /** Paired selectors for holes, boards or named model outlines. Both are required; conflicts with edgeRef and true view targets. */
+  fromRef?: string
+  toRef?: string
+  /** Anchor on the reference's projected bounds. Defaults to center; directions are relative to the drawing view, not CAD world axes. */
+  fromAnchor?: AssemblyDrawingDimensionAnchor
+  toAnchor?: AssemblyDrawingDimensionAnchor
+  /** Measure separation on the view's horizontal (x) or vertical (y) axis. Omitted chooses the larger separation, x on ties. Requires paired references. */
+  axis?: "x" | "y"
 }
 
 

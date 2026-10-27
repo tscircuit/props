@@ -58,18 +58,22 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
   /**
-   * Add one exposed probe pad to each selected routed trace. Requires reroute=true
-   * and explicit connection(s); conflicts with region, pcbTracePaths, autorouter,
-   * and algorithmFn. All dimensions accept mm numbers or unit strings and parse
-   * to mm. No defaults or aliases; omitted phases retain existing behavior.
+   * Select the test-point autorouter. Requires reroute=true; omitted/false leaves
+   * existing routing unchanged. Optional connection(s) select traces, otherwise
+   * all routed traces are selected. Conflicts with region, pcbTracePaths,
+   * autorouter and algorithmFn. No alias for the unreleased pcbTestPoints object.
    */
-  pcbTestPoints?: {
-    layer: "top" | "bottom"
-    diameter: Distance
-    clearance: Distance
-    minProbeSpacing: Distance
-    maxDetour: Distance
-  }
+  addTestPoints?: boolean
+  /** Test-point layer; defaults to bottom when addTestPoints is enabled. */
+  layer?: "top" | "bottom"
+  /** Probe pad diameter, mm or unit string; defaults to 1 mm. Must be positive. */
+  diameter?: Distance
+  /** Copper edge clearance, mm or unit string; defaults to 0.2 mm. */
+  clearance?: Distance
+  /** Minimum probe center spacing, mm or unit string; defaults to 2.54 mm. */
+  minProbeSpacing?: Distance
+  /** Maximum local trace detour, mm or unit string; defaults to 1 mm. */
+  maxDetour?: Distance
 }
 
 export const autoroutingPhaseProps = z
@@ -94,22 +98,20 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
-    pcbTestPoints: z
-      .object({
-        layer: z.enum(["top", "bottom"]),
-        diameter: distance.pipe(z.number().finite().positive()),
-        clearance: distance.pipe(z.number().finite().nonnegative()),
-        minProbeSpacing: distance.pipe(z.number().finite().nonnegative()),
-        maxDetour: distance.pipe(z.number().finite().nonnegative()),
-      })
+    addTestPoints: z.boolean().optional(),
+    layer: z.enum(["top", "bottom"]).optional(),
+    diameter: distance.pipe(z.number().finite().positive()).optional(),
+    clearance: distance.pipe(z.number().finite().nonnegative()).optional(),
+    minProbeSpacing: distance
+      .pipe(z.number().finite().nonnegative())
       .optional(),
+    maxDetour: distance.pipe(z.number().finite().nonnegative()).optional(),
     ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
     if (
-      value.pcbTestPoints &&
+      value.addTestPoints &&
       (value.reroute !== true ||
-        !(value.connection || value.connections?.length) ||
         value.region ||
         value.pcbTracePaths ||
         value.autorouter ||
@@ -117,10 +119,25 @@ export const autoroutingPhaseProps = z
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["pcbTestPoints"],
+        path: ["addTestPoints"],
         message:
-          "pcbTestPoints requires reroute=true and explicit connections, and cannot combine with region, pcbTracePaths, autorouter, or algorithmFn",
+          "addTestPoints requires reroute=true and cannot combine with region, pcbTracePaths, autorouter, or algorithmFn",
       })
+    }
+    for (const option of [
+      "layer",
+      "diameter",
+      "clearance",
+      "minProbeSpacing",
+      "maxDetour",
+    ] as const) {
+      if (value[option] !== undefined && !value.addTestPoints) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [option],
+          message: `${option} requires addTestPoints=true`,
+        })
+      }
     }
     const isSimplifyAutorouter =
       value.autorouter === "simplify" ||
@@ -135,7 +152,10 @@ export const autoroutingPhaseProps = z
 
     if (
       value.reroute !== undefined &&
-      !(isSimplifyAutorouter && value.reroute === true) &&
+      !(
+        (isSimplifyAutorouter || value.addTestPoints) &&
+        value.reroute === true
+      ) &&
       value.region === undefined &&
       value.connection === undefined &&
       value.connections === undefined

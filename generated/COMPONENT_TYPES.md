@@ -2023,20 +2023,14 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   // Reroutes traces selected by region or connection. The simplify autorouter
   // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
-  pcbTestPoints?: {
-    layer: "top" | "bottom"
-    diameter: Distance
-    clearance: Distance
-    minProbeSpacing: Distance
-    maxDetour: Distance
-  }
+  addTestPoints?: boolean
+  layer?: "top" | "bottom"
+  diameter?: Distance
+  clearance?: Distance
+  minProbeSpacing?: Distance
+  maxDetour?: Distance
 }
-/**
-   * Add one exposed probe pad to each selected routed trace. Requires reroute=true
-   * and explicit connection(s); conflicts with region, pcbTracePaths, autorouter,
-   * and algorithmFn. All dimensions accept mm numbers or unit strings and parse
-   * to mm. No defaults or aliases; omitted phases retain existing behavior.
-   */
+/** Maximum local trace detour, mm or unit string; defaults to 1 mm. */
 export const autoroutingPhaseProps = z
   .object({
     key: z.any().optional(),
@@ -2059,22 +2053,20 @@ export const autoroutingPhaseProps = z
     connection: z.string().optional(),
     connections: z.array(z.string()).optional(),
     reroute: z.boolean().optional(),
-    pcbTestPoints: z
-      .object({
-        layer: z.enum(["top", "bottom"]),
-        diameter: distance.pipe(z.number().finite().positive()),
-        clearance: distance.pipe(z.number().finite().nonnegative()),
-        minProbeSpacing: distance.pipe(z.number().finite().nonnegative()),
-        maxDetour: distance.pipe(z.number().finite().nonnegative()),
-      })
+    addTestPoints: z.boolean().optional(),
+    layer: z.enum(["top", "bottom"]).optional(),
+    diameter: distance.pipe(z.number().finite().positive()).optional(),
+    clearance: distance.pipe(z.number().finite().nonnegative()).optional(),
+    minProbeSpacing: distance
+      .pipe(z.number().finite().nonnegative())
       .optional(),
+    maxDetour: distance.pipe(z.number().finite().nonnegative()).optional(),
     ...fanoutProps.shape,
   })
   .superRefine((value, ctx) => {
     if (
-      value.pcbTestPoints &&
+      value.addTestPoints &&
       (value.reroute !== true ||
-        !(value.connection || value.connections?.length) ||
         value.region ||
         value.pcbTracePaths ||
         value.autorouter ||
@@ -2082,10 +2074,25 @@ export const autoroutingPhaseProps = z
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        path: ["pcbTestPoints"],
+        path: ["addTestPoints"],
         message:
-          "pcbTestPoints requires reroute=true and explicit connections, and cannot combine with region, pcbTracePaths, autorouter, or algorithmFn",
+          "addTestPoints requires reroute=true and cannot combine with region, pcbTracePaths, autorouter, or algorithmFn",
       })
+    }
+    for (const option of [
+      "layer",
+      "diameter",
+      "clearance",
+      "minProbeSpacing",
+      "maxDetour",
+    ] as const) {
+      if (value[option] !== undefined && !value.addTestPoints) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [option],
+          message: `${option} requires addTestPoints=true`,
+        })
+      }
     }
     const isSimplifyAutorouter =
       value.autorouter === "simplify" ||
@@ -2100,7 +2107,10 @@ export const autoroutingPhaseProps = z
 
     if (
       value.reroute !== undefined &&
-      !(isSimplifyAutorouter && value.reroute === true) &&
+      !(
+        (isSimplifyAutorouter || value.addTestPoints) &&
+        value.reroute === true
+      ) &&
       value.region === undefined &&
       value.connection === undefined &&
       value.connections === undefined

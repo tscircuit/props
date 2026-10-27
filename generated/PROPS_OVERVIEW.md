@@ -613,18 +613,22 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   // may omit a selector to simplify every existing trace in the phase.
   reroute?: boolean
   /**
-   * Add one exposed probe pad to each selected routed trace. Requires reroute=true
-   * and explicit connection(s); conflicts with region, pcbTracePaths, autorouter,
-   * and algorithmFn. All dimensions accept mm numbers or unit strings and parse
-   * to mm. No defaults or aliases; omitted phases retain existing behavior.
+   * Select the test-point autorouter. Requires reroute=true; omitted/false leaves
+   * existing routing unchanged. Optional connection(s) select traces, otherwise
+   * all routed traces are selected. Conflicts with region, pcbTracePaths,
+   * autorouter and algorithmFn. No alias for the unreleased pcbTestPoints object.
    */
-  pcbTestPoints?: {
-    layer: "top" | "bottom"
-    diameter: Distance
-    clearance: Distance
-    minProbeSpacing: Distance
-    maxDetour: Distance
-  }
+  addTestPoints?: boolean
+  /** Test-point layer; defaults to bottom when addTestPoints is enabled. */
+  layer?: "top" | "bottom"
+  /** Probe pad diameter, mm or unit string; defaults to 1 mm. Must be positive. */
+  diameter?: Distance
+  /** Copper edge clearance, mm or unit string; defaults to 0.2 mm. */
+  clearance?: Distance
+  /** Minimum probe center spacing, mm or unit string; defaults to 2.54 mm. */
+  minProbeSpacing?: Distance
+  /** Maximum local trace detour, mm or unit string; defaults to 1 mm. */
+  maxDetour?: Distance
 }
 
 

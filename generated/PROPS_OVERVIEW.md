@@ -1075,6 +1075,11 @@ export interface CapacitorProps<PinLabel extends string = string>
   maxVoltageRating?: number | string
   schShowRatings?: boolean
   polarized?: boolean
+  /** Generate automatic PCB polarity fabrication notes. Defaults to true.
+   * Only applies when polarized is true.
+   * Set false when the footprint already supplies the desired polarity artwork.
+   * Does not change electrical polarity or remove authored fabrication notes. */
+  pcbAutoPolarityMarkings?: boolean
   decouplingFor?: string
   decouplingTo?: string
   bypassFor?: string
@@ -1530,6 +1535,10 @@ export interface DiodeProps<PinLabel extends string = string>
   schOrientation?: SchematicOrientation
   /** Select a compact schematic symbol; omitted, default, and md retain the standard symbol. */
   schSize?: SchematicSymbolSize
+  /** Generate automatic PCB polarity fabrication notes. Defaults to true.
+   * Set false when the footprint already supplies the desired polarity artwork.
+   * Does not change electrical polarity or remove authored fabrication notes. */
+  pcbAutoPolarityMarkings?: boolean
 }
 
 
@@ -1682,8 +1691,6 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
-  /** This artwork supplies the component's polarity indication. Omitted means no claim. */
-  isPolarityMarking?: boolean
 }
 
 

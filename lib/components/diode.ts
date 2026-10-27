@@ -67,6 +67,10 @@ export const diodeProps = commonComponentProps
     schOrientation: schematicOrientation.optional(),
     schSize: schematicSymbolSize.optional(),
     pinLabels: diodePinLabelsProp.optional(),
+    /** Generate automatic PCB polarity fabrication notes. Defaults to true.
+     * Set false when the footprint already supplies the desired polarity artwork.
+     * Does not change electrical polarity or remove authored fabrication notes. */
+    pcbAutoPolarityMarkings: z.boolean().optional().default(true),
   })
   .superRefine((data, ctx) => {
     // Check if multiple boolean flags are set directly
@@ -154,6 +158,10 @@ export interface DiodeProps<PinLabel extends string = string>
   schOrientation?: SchematicOrientation
   /** Select a compact schematic symbol; omitted, default, and md retain the standard symbol. */
   schSize?: SchematicSymbolSize
+  /** Generate automatic PCB polarity fabrication notes. Defaults to true.
+   * Set false when the footprint already supplies the desired polarity artwork.
+   * Does not change electrical polarity or remove authored fabrication notes. */
+  pcbAutoPolarityMarkings?: boolean
 }
 
 export type InferredDiodeProps = z.input<typeof diodeProps>

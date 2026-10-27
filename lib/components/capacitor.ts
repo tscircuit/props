@@ -33,6 +33,11 @@ export interface CapacitorProps<PinLabel extends string = string>
   maxVoltageRating?: number | string
   schShowRatings?: boolean
   polarized?: boolean
+  /** Generate automatic PCB polarity fabrication notes. Defaults to true.
+   * Only applies when polarized is true.
+   * Set false when the footprint already supplies the desired polarity artwork.
+   * Does not change electrical polarity or remove authored fabrication notes. */
+  pcbAutoPolarityMarkings?: boolean
   decouplingFor?: string
   decouplingTo?: string
   bypassFor?: string
@@ -49,6 +54,11 @@ export const capacitorProps = commonComponentProps.extend({
   maxVoltageRating: voltage.optional(),
   schShowRatings: z.boolean().optional().default(false),
   polarized: z.boolean().optional().default(false),
+  /** Generate automatic PCB polarity fabrication notes. Defaults to true.
+   * Only applies when polarized is true.
+   * Set false when the footprint already supplies the desired polarity artwork.
+   * Does not change electrical polarity or remove authored fabrication notes. */
+  pcbAutoPolarityMarkings: z.boolean().optional().default(true),
   decouplingFor: z.string().optional(),
   decouplingTo: z.string().optional(),
   bypassFor: z.string().optional(),

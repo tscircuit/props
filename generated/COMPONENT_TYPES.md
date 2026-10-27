@@ -2510,6 +2510,7 @@ export interface CapacitorProps<PinLabel extends string = string>
   maxVoltageRating?: number | string
   schShowRatings?: boolean
   polarized?: boolean
+  pcbAutoPolarityMarkings?: boolean
   decouplingFor?: string
   decouplingTo?: string
   bypassFor?: string
@@ -2525,6 +2526,7 @@ export const capacitorProps = commonComponentProps.extend({
   maxVoltageRating: voltage.optional(),
   schShowRatings: z.boolean().optional().default(false),
   polarized: z.boolean().optional().default(false),
+  pcbAutoPolarityMarkings: z.boolean().optional().default(true),
   decouplingFor: z.string().optional(),
   decouplingTo: z.string().optional(),
   bypassFor: z.string().optional(),
@@ -3063,7 +3065,11 @@ export const differentialPairProps = z
     schOrientation: schematicOrientation.optional(),
     schSize: schematicSymbolSize.optional(),
     pinLabels: diodePinLabelsProp.optional(),
+    pcbAutoPolarityMarkings: z.boolean().optional().default(true),
   })
+/** Generate automatic PCB polarity fabrication notes. Defaults to true.
+     * Set false when the footprint already supplies the desired polarity artwork.
+     * Does not change electrical polarity or remove authored fabrication notes. */
 export interface DiodeProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   pinLabels?: DiodePinLabelsProp<PinLabel>
@@ -3084,6 +3090,7 @@ export interface DiodeProps<PinLabel extends string = string>
   tvs?: boolean
   schOrientation?: SchematicOrientation
   schSize?: SchematicSymbolSize
+  pcbAutoPolarityMarkings?: boolean
 }
 ```
 
@@ -3187,7 +3194,6 @@ export const fabricationNotePathProps = pcbLayoutProps
     color: z.string().optional(),
     isFilled: z.boolean().optional(),
     hasStroke: z.boolean().optional(),
-    isPolarityMarking: z.boolean().optional(),
   })
 ```
 
@@ -3222,9 +3228,7 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
   font?: "tscircuit2024"
   fontSize?: string | number
   color?: string
-  isPolarityMarking?: boolean
 }
-/** This artwork supplies the component's polarity indication. Omitted means no claim. */
 export const fabricationNoteTextProps = pcbLayoutProps.extend({
   text: z.string(),
   anchorAlignment: z
@@ -3233,7 +3237,6 @@ export const fabricationNoteTextProps = pcbLayoutProps.extend({
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
   color: z.string().optional(),
-  isPolarityMarking: z.boolean().optional(),
 })
 ```
 
@@ -4162,6 +4165,7 @@ export const ledProps = commonComponentProps.extend({
   pinLabels: diodePinLabelsProp.or(legacyNumericLedPinLabelsProp).optional(),
   connections: createConnectionsProp(lrPolarPins).optional(),
   laser: z.boolean().optional(),
+  pcbAutoPolarityMarkings: z.boolean().optional().default(true),
 })
 ```
 

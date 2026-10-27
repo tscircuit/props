@@ -33,6 +33,10 @@ export const ledProps = commonComponentProps.extend({
   pinLabels: diodePinLabelsProp.or(legacyNumericLedPinLabelsProp).optional(),
   connections: createConnectionsProp(lrPolarPins).optional(),
   laser: z.boolean().optional(),
+  /** Generate automatic PCB polarity fabrication notes. Defaults to true.
+   * Set false when the footprint already supplies the desired polarity artwork.
+   * Does not change electrical polarity or remove authored fabrication notes. */
+  pcbAutoPolarityMarkings: z.boolean().optional().default(true),
 })
 export const ledPins = lrPolarPins
 export type LedProps = z.input<typeof ledProps>

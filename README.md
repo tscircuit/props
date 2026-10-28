@@ -375,7 +375,6 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
   timePerStep?: number | string;
   /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
   ibisPinStates?: Record<string, IbisPinRunState>;
-  pcbSpiceChannel?: PcbSpiceChannelProps;
 }
 ```
 

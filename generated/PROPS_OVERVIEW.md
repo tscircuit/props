@@ -216,6 +216,11 @@ export interface AssemblyCableProps {
   standard?: AssemblyCableStandard
   /** Explicit cable model specification. Omit to infer the cable from its endpoints. */
   model?: string
+  waypoints?: { x: number; y: number; z: number }[]
+  /** Reference endpoint for waypoint offsets. Required when waypoints is defined. */
+  waypointAnchor?: "start" | "end"
+  /** Board orientation for waypoint axes. Required when waypoints is defined. */
+  waypointAxisOrientation?: "board_at_start" | "board_at_end"
 }
 
 

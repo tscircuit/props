@@ -22,23 +22,24 @@ clip, then reach the motor.
 />
 ```
 
-| Prop        | Accepted input                                                                  | Parsed output                                                     |
-| ----------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `name`      | Required nonempty string                                                        | Trimmed cable identity                                            |
-| `from`      | Required nonempty string                                                        | Trimmed start endpoint reference                                  |
-| `to`        | Required nonempty string                                                        | Trimmed end endpoint reference                                    |
-| `standard`  | Optional `"usb_c"`                                                              | Unchanged; omitted when not supplied                              |
-| `model`     | Optional nonempty string                                                        | Trimmed explicit cable model specification                        |
-| `waypoints` | Optional array of `{ x: number, y: number, z: number }`; all coordinates finite | Points preserved in the supplied order; omitted when not supplied |
+| Prop                      | Accepted input                                                                  | Parsed output                                                     |
+| ------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `name`                    | Required nonempty string                                                        | Trimmed cable identity                                            |
+| `from`                    | Required nonempty string                                                        | Trimmed start endpoint reference                                  |
+| `to`                      | Required nonempty string                                                        | Trimmed end endpoint reference                                    |
+| `standard`                | Optional `"usb_c"`                                                              | Unchanged; omitted when not supplied                              |
+| `model`                   | Optional nonempty string                                                        | Trimmed explicit cable model specification                        |
+| `waypoints`               | Optional array of `{ x: number, y: number, z: number }`; all coordinates finite | Points preserved in the supplied order; omitted when not supplied |
+| `waypointAnchor`          | `"start"` or `"end"`; required when `waypoints` is defined                      | Unchanged; no default                                             |
+| `waypointAxisOrientation` | `"board_at_start"` or `"board_at_end"`; required when `waypoints` is defined    | Unchanged; no default                                             |
 
 Endpoints can be connector selectors or named assembly references. The initial
 `usb_c` preset represents a USB-C-to-USB-C cable. Omitting `standard` leaves
 cable selection to endpoint inference. `waypoints` supplies intermediate route
 points; endpoint and connector resolution retain their existing behavior.
 
-This is an additive props API and requires no migration. The schema validates
-the inputs; endpoint resolution, routing, and rendering require support in core
-and the CAD renderer.
+The schema validates the inputs; endpoint resolution, routing, and rendering
+require support in core and the CAD renderer.
 
 ## Explicit cable models
 
@@ -64,6 +65,8 @@ Use `waypoints` to guide a cable past a holder or through cable clips:
   name="PITCH_CABLE"
   from=".CONTROLLER > .J_PITCH"
   to="PITCH_MOTOR.wireside"
+  waypointAnchor="start"
+  waypointAxisOrientation="board_at_start"
   waypoints={[
     { x: -35, y: 0, z: 8 },
     { x: -35, y: 45.5, z: 8 },
@@ -73,16 +76,20 @@ Use `waypoints` to guide a cable past a holder or through cable clips:
 ```
 
 The route starts at `from`, passes through each waypoint in order, and ends at
-`to`. Waypoints are positions in the right-handed **circuit world frame**, in
-millimeters: +X points right, +Y points toward the top of the board, and +Z
-points above it. They are not relative to either endpoint or a parent
-subassembly. Supply all three axes as finite numbers; unit strings, `NaN`, and
-infinities are rejected. The coordinates above are illustrative; choose points
-for the holder dimensions in your assembly.
+`to`. `waypointAnchor` chooses the reference endpoint for waypoint offsets:
+`"start"` uses `from`, and `"end"` uses `to`. `waypointAxisOrientation` selects
+the board orientation at the start or end for the waypoint axes. These choices
+are independent and have no defaults.
 
-Omitting `waypoints` or supplying `[]` preserves automatic routing. The schema
-preserves an explicit empty array and does not insert a default. There are no
-aliases or conflicts with `standard` or `model`; endpoint resolution and cable
-selection retain their existing behavior. This additive prop requires no
-migration. Waypoints control the displayed route; they do not enforce bend
-radius or check collisions with moving parts.
+Supply all three coordinates in millimeters as finite numbers; unit strings,
+`NaN`, and infinities are rejected. The coordinates above are illustrative;
+choose points for the holder dimensions in your assembly.
+
+Whenever `waypoints` is defined, both `waypointAnchor` and
+`waypointAxisOrientation` are required, including for `waypoints={[]}`. An empty
+array preserves automatic routing. Omitting `waypoints` leaves all three props
+optional; the schema does not insert defaults. Existing waypoint inputs must
+add both props. There are no aliases or conflicts with `standard` or `model`;
+endpoint resolution and cable selection retain their existing behavior.
+Waypoints control the displayed route; they do not enforce bend radius or
+check collisions with moving parts.

@@ -68,11 +68,13 @@ test("assembly.cable accepts an explicit model without changing standard behavio
     )
 })
 
-test("assembly.cable preserves ordered numeric circuit-world waypoints", () => {
+test("assembly.cable preserves ordered numeric waypoints anchored at the start", () => {
   const input: AssemblyCableProps = {
     name: "PITCH_CABLE",
     from: ".CONTROLLER > .J_PITCH",
     to: "PITCH_MOTOR.wireside",
+    waypointAnchor: "start",
+    waypointAxisOrientation: "board_at_start",
     waypoints: [
       { x: -35, y: 0, z: 8 },
       { x: -35, y: 45.5, z: 8 },
@@ -83,13 +85,109 @@ test("assembly.cable preserves ordered numeric circuit-world waypoints", () => {
   expect(assemblyCableProps.parse(props)).toEqual(input)
 })
 
-test("assembly.cable keeps omitted waypoints omitted", () => {
-  const props = assemblyCableProps.parse({
+test("assembly.cable accepts waypoints anchored and oriented at the end", () => {
+  const input: AssemblyCableProps = {
     name: "C1",
     from: ".J1",
     to: ".J2",
-  })
-  expect(props).not.toHaveProperty("waypoints")
+    waypointAnchor: "end",
+    waypointAxisOrientation: "board_at_end",
+    waypoints: [{ x: 1, y: 2, z: 3 }],
+  }
+  expect(assemblyProps.cable.parse(input)).toEqual(input)
+})
+
+test("assembly.cable keeps omitted waypoints and their context omitted", () => {
+  const input = {
+    name: "C1",
+    from: ".J1",
+    to: ".J2",
+  }
+  expect(assemblyCableProps.parse(input)).toEqual(input)
+})
+
+test("assembly.cable requires an anchor when waypoints are defined", () => {
+  expect(
+    assemblyCableProps.safeParse({
+      name: "C1",
+      from: ".J1",
+      to: ".J2",
+      waypointAxisOrientation: "board_at_start",
+      waypoints: [{ x: 1, y: 2, z: 3 }],
+    }).error?.issues,
+  ).toEqual([
+    {
+      code: "custom",
+      path: ["waypointAnchor"],
+      message: "waypointAnchor is required when waypoints is defined",
+    },
+  ])
+})
+
+test("assembly.cable requires an axis orientation when waypoints are defined", () => {
+  expect(
+    assemblyCableProps.safeParse({
+      name: "C1",
+      from: ".J1",
+      to: ".J2",
+      waypointAnchor: "start",
+      waypoints: [{ x: 1, y: 2, z: 3 }],
+    }).error?.issues,
+  ).toEqual([
+    {
+      code: "custom",
+      path: ["waypointAxisOrientation"],
+      message: "waypointAxisOrientation is required when waypoints is defined",
+    },
+  ])
+})
+
+test("assembly.cable requires both context props for an empty waypoint list", () => {
+  expect(
+    assemblyProps.cable.safeParse({
+      name: "C1",
+      from: ".J1",
+      to: ".J2",
+      waypoints: [],
+    }).error?.issues,
+  ).toEqual([
+    {
+      code: "custom",
+      path: ["waypointAnchor"],
+      message: "waypointAnchor is required when waypoints is defined",
+    },
+    {
+      code: "custom",
+      path: ["waypointAxisOrientation"],
+      message: "waypointAxisOrientation is required when waypoints is defined",
+    },
+  ])
+})
+
+test("assembly.cable rejects an invalid waypoint anchor", () => {
+  expect(
+    assemblyCableProps.safeParse({
+      name: "C1",
+      from: ".J1",
+      to: ".J2",
+      waypointAnchor: "middle",
+      waypointAxisOrientation: "board_at_start",
+      waypoints: [{ x: 1, y: 2, z: 3 }],
+    }).success,
+  ).toBe(false)
+})
+
+test("assembly.cable rejects an invalid waypoint axis orientation", () => {
+  expect(
+    assemblyCableProps.safeParse({
+      name: "C1",
+      from: ".J1",
+      to: ".J2",
+      waypointAnchor: "start",
+      waypointAxisOrientation: "world",
+      waypoints: [{ x: 1, y: 2, z: 3 }],
+    }).success,
+  ).toBe(false)
 })
 
 test("assembly.cable preserves an empty waypoint list", () => {
@@ -98,6 +196,8 @@ test("assembly.cable preserves an empty waypoint list", () => {
       name: "C1",
       from: ".J1",
       to: ".J2",
+      waypointAnchor: "start",
+      waypointAxisOrientation: "board_at_start",
       waypoints: [],
     }).waypoints,
   ).toEqual([])
@@ -109,6 +209,8 @@ test("assembly.cable requires all three waypoint coordinates", () => {
       name: "C1",
       from: ".J1",
       to: ".J2",
+      waypointAnchor: "start",
+      waypointAxisOrientation: "board_at_start",
       waypoints: [{ x: 1, y: 2 }],
     }).success,
   ).toBe(false)
@@ -120,6 +222,8 @@ test("assembly.cable rejects string waypoint coordinates", () => {
       name: "C1",
       from: ".J1",
       to: ".J2",
+      waypointAnchor: "start",
+      waypointAxisOrientation: "board_at_start",
       waypoints: [{ x: "1mm", y: 2, z: 3 }],
     }).success,
   ).toBe(false)
@@ -131,6 +235,8 @@ test("assembly.cable rejects NaN waypoint coordinates", () => {
       name: "C1",
       from: ".J1",
       to: ".J2",
+      waypointAnchor: "start",
+      waypointAxisOrientation: "board_at_start",
       waypoints: [{ x: Number.NaN, y: 2, z: 3 }],
     }).success,
   ).toBe(false)
@@ -142,6 +248,8 @@ test("assembly.cable rejects positive infinity waypoint coordinates", () => {
       name: "C1",
       from: ".J1",
       to: ".J2",
+      waypointAnchor: "start",
+      waypointAxisOrientation: "board_at_start",
       waypoints: [{ x: 1, y: Number.POSITIVE_INFINITY, z: 3 }],
     }).success,
   ).toBe(false)
@@ -153,6 +261,8 @@ test("assembly.cable rejects negative infinity waypoint coordinates", () => {
       name: "C1",
       from: ".J1",
       to: ".J2",
+      waypointAnchor: "start",
+      waypointAxisOrientation: "board_at_start",
       waypoints: [{ x: 1, y: 2, z: Number.NEGATIVE_INFINITY }],
     }).success,
   ).toBe(false)

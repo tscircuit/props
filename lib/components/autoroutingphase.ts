@@ -36,6 +36,10 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
    * conflicts are introduced, and existing phases require no migration.
    */
   algorithmFn?: AutorouterConfig["algorithmFn"]
+  /** Same as autorouter.algorithmFnCacheEnabled, for this phase's algorithmFn. */
+  algorithmFnCacheEnabled?: AutorouterConfig["algorithmFnCacheEnabled"]
+  /** Same as autorouter.algorithmFnCacheKey, for this phase's algorithmFn. */
+  algorithmFnCacheKey?: AutorouterConfig["algorithmFnCacheKey"]
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
   /**
@@ -82,6 +86,8 @@ export const autoroutingPhaseProps = z
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
     algorithmFn: autorouterConfig.shape.algorithmFn,
+    algorithmFnCacheEnabled: autorouterConfig.shape.algorithmFnCacheEnabled,
+    algorithmFnCacheKey: autorouterConfig.shape.algorithmFnCacheKey,
     preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
     phaseIndex: z.number().optional(),
     pcbTracePaths: z.array(fanoutTracePath).optional(),

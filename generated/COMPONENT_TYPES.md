@@ -2008,6 +2008,8 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
   name?: string
   autorouter?: AutorouterProp
   algorithmFn?: AutorouterConfig["algorithmFn"]
+  algorithmFnCacheEnabled?: AutorouterConfig["algorithmFnCacheEnabled"]
+  algorithmFnCacheKey?: AutorouterConfig["algorithmFnCacheKey"]
   preflightRoutingCheckPolicy?: PreflightRoutingCheckPolicy
   phaseIndex?: number
   pcbTracePaths?: FanoutTracePath[]
@@ -2037,6 +2039,8 @@ export const autoroutingPhaseProps = z
     name: z.string().optional(),
     autorouter: autorouterProp.optional(),
     algorithmFn: autorouterConfig.shape.algorithmFn,
+    algorithmFnCacheEnabled: autorouterConfig.shape.algorithmFnCacheEnabled,
+    algorithmFnCacheKey: autorouterConfig.shape.algorithmFnCacheKey,
     preflightRoutingCheckPolicy: preflightRoutingCheckPolicy.optional(),
     phaseIndex: z.number().optional(),
     pcbTracePaths: z.array(fanoutTracePath).optional(),
@@ -3663,6 +3667,8 @@ export interface AutorouterConfig {
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
+  algorithmFnCacheEnabled?: boolean
+  algorithmFnCacheKey?: string
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   preset?:
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
@@ -3725,6 +3731,8 @@ export const autorouterConfig = z.object({
       (v) => typeof v === "function" || v === undefined,
     )
     .optional(),
+  algorithmFnCacheEnabled: z.boolean().optional(),
+  algorithmFnCacheKey: z.string().optional(),
   implicitBreakoutPointSolverFn: z
     .custom<ImplicitBreakoutPointSolverFn>(
       (value) => typeof value === "function" || value === undefined,

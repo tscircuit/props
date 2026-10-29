@@ -357,6 +357,19 @@ export interface AutorouterConfig {
     | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
   local?: boolean
   algorithmFn?: (simpleRouteJson: any) => Promise<any>
+  /**
+   * Cache algorithmFn results in platformConfig.localCacheEngine. Defaults to
+   * true. Results are keyed by the routing input plus a fingerprint of the
+   * function source, so set false when the function is nondeterministic or its
+   * output depends on state the source text does not show.
+   */
+  algorithmFnCacheEnabled?: boolean
+  /**
+   * Stable identity for algorithmFn used in place of its source fingerprint.
+   * Change it whenever the algorithm's behavior changes, e.g. when it delegates
+   * to imported code or closes over configuration.
+   */
+  algorithmFnCacheKey?: string
   /** Override the solver used to place implicit breakout points. */
   implicitBreakoutPointSolverFn?: ImplicitBreakoutPointSolverFn
   /**
@@ -460,6 +473,8 @@ export const autorouterConfig = z.object({
       (v) => typeof v === "function" || v === undefined,
     )
     .optional(),
+  algorithmFnCacheEnabled: z.boolean().optional(),
+  algorithmFnCacheKey: z.string().optional(),
   implicitBreakoutPointSolverFn: z
     .custom<ImplicitBreakoutPointSolverFn>(
       (value) => typeof value === "function" || value === undefined,

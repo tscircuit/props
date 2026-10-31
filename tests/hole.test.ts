@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import { expectTypeOf } from "expect-type"
-import { holeProps, type HoleProps } from "../lib/components/hole"
 import type { z } from "zod"
+import { type HoleProps, holeProps } from "../lib/components/hole"
 
 test("circle holes compute missing diameter and accept pcbRotation", () => {
   const raw: HoleProps = {
@@ -71,4 +71,23 @@ test("pill holes without required dimensions throw", () => {
   }
 
   expect(() => holeProps.parse(raw)).toThrow()
+})
+
+test("circle holes accept holeDiameter alias and reject missing dimensions", () => {
+  const raw: HoleProps = {
+    holeDiameter: "1.2mm",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof holeProps>>()
+
+  const parsed = holeProps.parse(raw)
+
+  if (parsed.shape === undefined || parsed.shape === "circle") {
+    expect(parsed.diameter).toBeCloseTo(1.2, 5)
+    expect(parsed.radius).toBeCloseTo(0.6, 5)
+  } else {
+    throw new Error("Expected circle hole props")
+  }
+
+  expect(() => holeProps.parse({})).toThrow()
 })

@@ -1,12 +1,13 @@
-import { z } from "zod"
-import { distance, type Distance } from "lib/common/distance"
-import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
+import { type Distance, distance } from "lib/common/distance"
+import { type PcbLayoutProps, pcbLayoutProps } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
+import { z } from "zod"
 
 export interface CircleHoleProps extends PcbLayoutProps {
   name?: string
   shape?: "circle"
   diameter?: Distance
+  holeDiameter?: Distance
   radius?: Distance
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
@@ -50,15 +51,29 @@ const circleHoleProps = pcbLayoutProps
     name: z.string().optional(),
     shape: z.literal("circle").optional(),
     diameter: distance.optional(),
+    holeDiameter: distance.optional(),
     radius: distance.optional(),
     solderMaskMargin: distance.optional(),
     coveredWithSolderMask: z.boolean().optional(),
   })
-  .transform((d) => ({
-    ...d,
-    diameter: d.diameter ?? 2 * d.radius!,
-    radius: d.radius ?? d.diameter! / 2,
-  }))
+  .refine(
+    (d) =>
+      d.diameter !== undefined ||
+      d.holeDiameter !== undefined ||
+      d.radius !== undefined,
+    {
+      message: "Circle hole requires diameter, holeDiameter, or radius",
+    },
+  )
+  .transform((d) => {
+    const diameter = d.diameter ?? d.holeDiameter ?? 2 * d.radius!
+    const radius = d.radius ?? diameter / 2
+    return {
+      ...d,
+      diameter,
+      radius,
+    }
+  })
 
 const pillHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),

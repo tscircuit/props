@@ -7,9 +7,16 @@ import {
   assemblyPlacementProps,
   type AssemblyPlacementProps,
 } from "./placement"
+import {
+  assemblyFaceMountShape,
+  refineAssemblyFaceMount,
+  type AssemblyFaceMountProps,
+} from "./face-mounting"
 
 /** A generic component of an assembly, with optional CAD geometry. */
-export interface AssemblyPartProps extends AssemblyPlacementProps {
+export interface AssemblyPartProps
+  extends AssemblyPlacementProps,
+    AssemblyFaceMountProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -24,7 +31,9 @@ export interface AssemblyPartProps extends AssemblyPlacementProps {
   children?: ReactNode
 }
 
-export const assemblyPartProps = assemblyPlacementProps
+// Internal base for elements with their own mounting semantics, e.g. fasteners.
+// Keep model validation separate from ordinary face-mount pairing.
+export const assemblyPartBaseProps = assemblyPlacementProps
   .extend({
     name: z.string().trim().min(1),
     displayName: z.string().optional(),
@@ -46,6 +55,14 @@ export const assemblyPartProps = assemblyPlacementProps
     },
   )
 
-export type AssemblyPartPropsInput = z.input<typeof assemblyPartProps>
+export const assemblyPartProps = assemblyPartBaseProps
+  .and(z.object(assemblyFaceMountShape))
+  .superRefine(refineAssemblyFaceMount)
+
+export type AssemblyPartPropsInput = {
+  [K in keyof z.input<typeof assemblyPartProps>]: z.input<
+    typeof assemblyPartProps
+  >[K]
+}
 
 expectTypesMatch<AssemblyPartProps, AssemblyPartPropsInput>(true)

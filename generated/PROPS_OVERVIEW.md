@@ -354,6 +354,23 @@ export interface AssemblyExplosionStageProps {
 }
 
 
+export interface AssemblyFaceMountProps {
+  /** Qualified target face, e.g. "BRIDGE.rail"; paired with mountFace.
+   * References are resolved in the containing device, independently of order.
+   */
+  mountedTo?: string
+  /** This element's named mating face. Outward normals oppose and in-plane
+   * X directions align. A mount determines the complete local rigid pose.
+   */
+  mountFace?: string
+  /** Finite nonnegative clearance, in mm or a distance string.
+   * Requires mountedTo. Omission stays absent and means zero in core.
+   * Positive gaps separate the faces along the target's outward normal.
+   */
+  mountGap?: Distance
+}
+
+
 export interface AssemblyFastenerProps extends AssemblyPartProps {
   /** Qualified reference surface, e.g. "FRAME.boltHole". Implies fastening.
    * Without mountFace, use the fastener's authored local mounting origin.
@@ -374,7 +391,7 @@ export interface AssemblyFastenerProps extends AssemblyPartProps {
 }
 
 
-export interface AssemblyMotorProps {
+export interface AssemblyMotorProps extends AssemblyFaceMountProps {
   /** Stable assembly identity used by selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -387,29 +404,20 @@ export interface AssemblyMotorProps {
    * Direction from the motor body toward the shaft tip in the right-handed
    * circuit frame: +X right, +Y top, +Z above the board. This is a direction,
    * not a position; it does not specify translation or rotation about the
-   * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
+   * shaft. Defaults to "z+" only when unmounted. Omit it when mounted;
+   * the mating faces then determine the complete motor orientation.
    */
   shaftFacingDirection?: CadModelAxisDirection
   /** Cable connection string, e.g. "jst6_ph".
    * Omit to use the model's default termination.
    */
   wireConnection?: string
-  /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
-   * Face mating determines orientation, so shaftFacingDirection must be omitted.
-   */
-  mountedTo?: string
-  /** This motor's mating face, e.g. "frontface" or "backface".
-   * Outward normals oppose and in-plane X directions align with the target.
-   */
-  mountFace?: string
-  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
-   * Requires mountedTo. Positive values separate the mating faces.
-   */
-  mountGap?: Distance
 }
 
 
-export interface AssemblyPartProps extends AssemblyPlacementProps {
+export interface AssemblyPartProps
+  extends AssemblyPlacementProps,
+    AssemblyFaceMountProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -446,7 +454,9 @@ export interface AssemblyPosition {
 }
 
 
-export interface AssemblyPrintedPartProps extends AssemblyPlacementProps {
+export interface AssemblyPrintedPartProps
+  extends AssemblyPlacementProps,
+    AssemblyFaceMountProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -465,17 +475,6 @@ export interface AssemblyPrintedPartProps extends AssemblyPlacementProps {
   model?: string
   modelUrl?: string
   cadModel?: CadModelProp
-  /** Assembly mounting target. */
-  mountedTo?: string
-  /** Name of this part's reference rectangle to mate with mountedTo.
-   * Both props must be supplied together; outward normals oppose and local
-   * in-plane X directions align. Without them the part uses its local origin.
-   */
-  mountFace?: string
-  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
-   * Requires mountedTo. Positive values separate the mating faces.
-   */
-  mountGap?: Distance
 }
 
 
@@ -536,7 +535,9 @@ export interface AssemblyScreenProps {
 }
 
 
-export interface AssemblySubassemblyProps extends AssemblyPlacementProps {
+export interface AssemblySubassemblyProps
+  extends AssemblyPlacementProps,
+    AssemblyFaceMountProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */

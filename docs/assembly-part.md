@@ -36,3 +36,14 @@ This frame moves reference surfaces and assembly descendants with the part;
 [placement specification](proposals/assembly-local-placement.md) for transform
 order, validation, conflicts, migration and required core acceptance cases.
 The props contract alone does not implement runtime placement.
+
+## Face mounting proposal
+
+Ordinary parts can declare `mountedTo="BRIDGE.rail"`, `mountFace="base"`,
+and optional `mountGap="0.2mm"` using the existing printed-part/motor mounting
+contract. Both face names are required together. A mount fixes the full pose
+and conflicts with explicit `cadPosition` or `cadRotation`.
+See the [face-mounting specification](proposals/assembly-face-mounting.md) for
+units, named child surfaces, defaults, compatibility and core acceptance cases.
+This proposal validates the authoring contract; generic-part mounting needs
+matching core support.

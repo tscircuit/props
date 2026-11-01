@@ -7,8 +7,15 @@ import {
   assemblyPlacementProps,
   type AssemblyPlacementProps,
 } from "./placement"
+import {
+  assemblyFaceMountShape,
+  refineAssemblyFaceMount,
+  type AssemblyFaceMountProps,
+} from "./face-mounting"
 
-export interface AssemblySubassemblyProps extends AssemblyPlacementProps {
+export interface AssemblySubassemblyProps
+  extends AssemblyPlacementProps,
+    AssemblyFaceMountProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -25,6 +32,7 @@ export interface AssemblySubassemblyProps extends AssemblyPlacementProps {
 
 export const assemblySubassemblyProps = assemblyPlacementProps
   .extend({
+    ...assemblyFaceMountShape,
     name: z.string().refine((value) => value.trim().length > 0, {
       message: "name cannot be empty",
     }),
@@ -55,6 +63,7 @@ export const assemblySubassemblyProps = assemblyPlacementProps
       path: ["model"],
     },
   )
+  .superRefine(refineAssemblyFaceMount)
 
 export type AssemblySubassemblyPropsInput = z.input<
   typeof assemblySubassemblyProps

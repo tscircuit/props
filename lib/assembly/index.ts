@@ -19,8 +19,13 @@ export * from "./fastener"
 export * from "./cable"
 export * from "./device"
 export * from "./motor"
-export * from "./part"
+export {
+  assemblyPartProps,
+  type AssemblyPartProps,
+  type AssemblyPartPropsInput,
+} from "./part"
 export * from "./placement"
+export type { AssemblyFaceMountProps } from "./face-mounting"
 export * from "./referencesurface"
 export * from "./printedpart"
 export * from "./screen"

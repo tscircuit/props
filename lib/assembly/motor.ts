@@ -2,13 +2,17 @@ import {
   type CadModelAxisDirection,
   cadModelAxisDirection,
 } from "lib/common/cadModel"
-import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import {
+  assemblyFaceMountShape,
+  refineAssemblyFaceMount,
+  type AssemblyFaceMountProps,
+} from "./face-mounting"
 
 export type AssemblyMotorStandard = "nema8" | "nema17" | "nema23"
 
-export interface AssemblyMotorProps {
+export interface AssemblyMotorProps extends AssemblyFaceMountProps {
   /** Stable assembly identity used by selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -21,29 +25,19 @@ export interface AssemblyMotorProps {
    * Direction from the motor body toward the shaft tip in the right-handed
    * circuit frame: +X right, +Y top, +Z above the board. This is a direction,
    * not a position; it does not specify translation or rotation about the
-   * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
+   * shaft. Defaults to "z+" only when unmounted. Omit it when mounted;
+   * the mating faces then determine the complete motor orientation.
    */
   shaftFacingDirection?: CadModelAxisDirection
   /** Cable connection string, e.g. "jst6_ph".
    * Omit to use the model's default termination.
    */
   wireConnection?: string
-  /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
-   * Face mating determines orientation, so shaftFacingDirection must be omitted.
-   */
-  mountedTo?: string
-  /** This motor's mating face, e.g. "frontface" or "backface".
-   * Outward normals oppose and in-plane X directions align with the target.
-   */
-  mountFace?: string
-  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
-   * Requires mountedTo. Positive values separate the mating faces.
-   */
-  mountGap?: Distance
 }
 
 export const assemblyMotorProps = z
   .object({
+    ...assemblyFaceMountShape,
     name: z.string().refine((value) => value.trim().length > 0, {
       message: "name cannot be empty",
     }),
@@ -52,29 +46,9 @@ export const assemblyMotorProps = z
     model: z.string().trim().min(1).optional(),
     shaftFacingDirection: cadModelAxisDirection.optional(),
     wireConnection: z.string().optional(),
-    mountedTo: z
-      .string()
-      .trim()
-      .regex(/^.+\.[^.]+$/, "Expected part.face")
-      .optional(),
-    mountFace: z.string().trim().min(1).optional(),
-    mountGap: distance.pipe(z.number().nonnegative().finite()).optional(),
   })
   .superRefine((motor, context) => {
-    if ((motor.mountedTo === undefined) !== (motor.mountFace === undefined)) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Provide mountedTo and mountFace together",
-        path: ["mountFace"],
-      })
-    }
-    if (motor.mountGap !== undefined && motor.mountedTo === undefined) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "mountGap requires mountedTo",
-        path: ["mountGap"],
-      })
-    }
+    refineAssemblyFaceMount(motor, context)
     if (
       motor.mountedTo !== undefined &&
       motor.shaftFacingDirection !== undefined

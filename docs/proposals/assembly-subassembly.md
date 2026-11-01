@@ -32,3 +32,9 @@ The [local placement proposal](assembly-local-placement.md) adds optional
 container's local frame, including geometry-less containers, rather than an
 offset of its own CAD model. Omission preserves inherited placement. Applying
 these transforms to descendants requires the corresponding core implementation.
+
+The [face-mounting proposal](assembly-face-mounting.md) adds `mountedTo`,
+`mountFace` and `mountGap` to both namespaced aliases. A named container datum
+can mate the entire descendant assembly as a unit, without requiring a model
+on the container. Mounting and an explicit local pose are exclusive. This does
+not add `connectsTo`; runtime datum ownership and mounting require core support.

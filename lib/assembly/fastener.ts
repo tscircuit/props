@@ -1,7 +1,7 @@
 import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import { assemblyPartProps, type AssemblyPartProps } from "./part"
+import { assemblyPartBaseProps, type AssemblyPartProps } from "./part"
 
 /** An assembly part that fastens to its mounting target, even without geometry. */
 export interface AssemblyFastenerProps extends AssemblyPartProps {
@@ -31,7 +31,7 @@ const mountingTarget = z
     "Expected a qualified reference surface, e.g. part.face",
   )
 
-export const assemblyFastenerProps = assemblyPartProps
+export const assemblyFastenerProps = assemblyPartBaseProps
   .and(
     z.object({
       mountedTo: mountingTarget.optional(),
@@ -41,6 +41,16 @@ export const assemblyFastenerProps = assemblyPartProps
     }),
   )
   .superRefine((fastener, ctx) => {
+    if (
+      (fastener.mountedTo !== undefined || fastener.fastenedTo !== undefined) &&
+      (fastener.cadPosition !== undefined || fastener.cadRotation !== undefined)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["mountedTo"],
+        message: "Fastening and explicit assembly placement are exclusive",
+      })
+    }
     if (
       fastener.mountedTo !== undefined &&
       fastener.fastenedTo !== undefined &&

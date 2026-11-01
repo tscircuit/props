@@ -4,9 +4,13 @@ import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { isValidElement, type ReactElement, type ReactNode } from "react"
 import { z } from "zod"
+import {
+  assemblyPlacementProps,
+  type AssemblyPlacementProps,
+} from "./placement"
 
 /** Provide exactly one of jscad, model, modelUrl, or cadModel. */
-export interface AssemblyPrintedPartProps {
+export interface AssemblyPrintedPartProps extends AssemblyPlacementProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -38,8 +42,8 @@ export interface AssemblyPrintedPartProps {
   mountGap?: Distance
 }
 
-export const assemblyPrintedPartProps = z
-  .object({
+export const assemblyPrintedPartProps = assemblyPlacementProps
+  .extend({
     name: z.string().trim().min(1),
     displayName: z.string().optional(),
     color: z.string().trim().min(1).optional(),
@@ -62,6 +66,16 @@ export const assemblyPrintedPartProps = z
     mountGap: distance.pipe(z.number().nonnegative().finite()).optional(),
   })
   .superRefine((part, ctx) => {
+    if (
+      part.mountedTo !== undefined &&
+      (part.cadPosition !== undefined || part.cadRotation !== undefined)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["mountedTo"],
+        message: "Face mounting and explicit assembly placement are exclusive",
+      })
+    }
     if (
       [part.jscad, part.model, part.modelUrl, part.cadModel].filter(
         (value) => value !== undefined,

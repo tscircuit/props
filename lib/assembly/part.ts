@@ -3,9 +3,13 @@ import { url } from "lib/common/url"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import type { ReactNode } from "react"
+import {
+  assemblyPlacementProps,
+  type AssemblyPlacementProps,
+} from "./placement"
 
 /** A generic component of an assembly, with optional CAD geometry. */
-export interface AssemblyPartProps {
+export interface AssemblyPartProps extends AssemblyPlacementProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -20,8 +24,8 @@ export interface AssemblyPartProps {
   children?: ReactNode
 }
 
-export const assemblyPartProps = z
-  .object({
+export const assemblyPartProps = assemblyPlacementProps
+  .extend({
     name: z.string().trim().min(1),
     displayName: z.string().optional(),
     model: z.string().trim().min(1).optional(),

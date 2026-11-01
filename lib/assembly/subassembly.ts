@@ -3,8 +3,12 @@ import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
 import { z } from "zod"
+import {
+  assemblyPlacementProps,
+  type AssemblyPlacementProps,
+} from "./placement"
 
-export interface AssemblySubassemblyProps {
+export interface AssemblySubassemblyProps extends AssemblyPlacementProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -19,8 +23,8 @@ export interface AssemblySubassemblyProps {
   children?: ReactNode
 }
 
-export const assemblySubassemblyProps = z
-  .object({
+export const assemblySubassemblyProps = assemblyPlacementProps
+  .extend({
     name: z.string().refine((value) => value.trim().length > 0, {
       message: "name cannot be empty",
     }),

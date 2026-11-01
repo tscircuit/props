@@ -26,3 +26,9 @@ express containment through nesting.
 
 The unnamespaced `<cadassembly>` and its exports remain unchanged. Core provides
 the runtime behavior for the namespaced tags.
+
+The [local placement proposal](assembly-local-placement.md) adds optional
+`cadPosition` and `cadRotation` to both namespaced aliases. These describe the
+container's local frame, including geometry-less containers, rather than an
+offset of its own CAD model. Omission preserves inherited placement. Applying
+these transforms to descendants requires the corresponding core implementation.

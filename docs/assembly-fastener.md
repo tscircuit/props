@@ -28,7 +28,8 @@ render geometry, resolve assembly references, or implement disassembly sequencin
 - `model`, `modelUrl`, and `cadModel` reuse the assembly part formats and are
   mutually exclusive. Imported asset URL objects normalize to strings. Reference
   surface `children` are preserved. A generic fastener can omit geometry entirely.
-- `mountedTo` identifies a qualified reference surface such as `FRAME.boltHole`
+- `mountedTo` identifies a reference surface using a compact path such as
+  `FRAME.boltHole` or a CSS selector such as `.FRAME > .boltHole`
   or `DEVICE.FRAME.boltHole`. Each path segment begins with a letter or underscore
   and contains letters, digits, underscores, or hyphens.
 - `fastenedTo` is an input alias for `mountedTo`. Trimmed values must agree when

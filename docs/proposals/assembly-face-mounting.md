@@ -46,15 +46,17 @@ field validators and refinement, preserving their existing behavior.
 
 | Prop | Accepted input | Parsed output | Omission |
 | --- | --- | --- | --- |
-| `mountedTo` | Nonblank qualified `part.face` string; paired with `mountFace` | Surrounding whitespace trimmed | Absent; no mount |
+| `mountedTo` | Nonblank reference string, including CSS selectors or compact identity paths; paired with `mountFace` | Surrounding whitespace trimmed | Absent; no mount |
 | `mountFace` | Nonblank name of this element's reference surface; paired with `mountedTo` | Surrounding whitespace trimmed | Absent; no mount |
 | `mountGap` | Finite, nonnegative mm number or existing distance-unit string; requires `mountedTo` | Number in mm | Remains absent; means zero clearance in core |
 
 There are no aliases or new material/model defaults. Explicit zero gap is valid.
-The existing qualified-reference syntax remains unchanged; props parsing does
-not perform selector resolution or require the target to have been declared
-earlier. Invalid pairs, negative/nonfinite/unparseable gaps, blank names and
-unqualified target strings are rejected.
+References may use compact paths such as `BRIDGE.rail` or CSS selectors such as
+`.BRIDGE > .rail` and `[name='BRIDGE'] > [name='rail']`. Props only trim and
+reject blank reference strings; core validates selector syntax and resolves the
+target, independently of declaration order. Invalid pairs,
+negative/nonfinite/unparseable gaps, blank names and non-string references are
+rejected. The same late-binding rule applies to fastener target aliases.
 
 `AssemblyFaceMountProps` is an exported shared interface. Each element's
 existing public validator validates the complete element contract. The shared

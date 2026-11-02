@@ -355,7 +355,8 @@ export interface AssemblyExplosionStageProps {
 
 
 export interface AssemblyFaceMountProps {
-  /** Qualified target face, e.g. "BRIDGE.rail"; paired with mountFace.
+  /** Target face reference, e.g. "BRIDGE.rail" or ".BRIDGE > .rail".
+   * CSS selectors and compact identity paths are resolved by core.
    * References are resolved in the containing device, independently of order.
    */
   mountedTo?: string
@@ -372,7 +373,8 @@ export interface AssemblyFaceMountProps {
 
 
 export interface AssemblyFastenerProps extends AssemblyPartProps {
-  /** Qualified reference surface, e.g. "FRAME.boltHole". Implies fastening.
+  /** Reference surface, e.g. "FRAME.boltHole" or ".FRAME > .boltHole".
+   * CSS selectors and compact paths are resolved by core. Implies fastening.
    * Without mountFace, use the fastener's authored local mounting origin.
    */
   mountedTo?: string

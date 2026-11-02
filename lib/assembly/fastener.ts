@@ -5,7 +5,8 @@ import { assemblyPartBaseProps, type AssemblyPartProps } from "./part"
 
 /** An assembly part that fastens to its mounting target, even without geometry. */
 export interface AssemblyFastenerProps extends AssemblyPartProps {
-  /** Qualified reference surface, e.g. "FRAME.boltHole". Implies fastening.
+  /** Reference surface, e.g. "FRAME.boltHole" or ".FRAME > .boltHole".
+   * CSS selectors and compact paths are resolved by core. Implies fastening.
    * Without mountFace, use the fastener's authored local mounting origin.
    */
   mountedTo?: string
@@ -23,13 +24,7 @@ export interface AssemblyFastenerProps extends AssemblyPartProps {
   mountGap?: Distance
 }
 
-const mountingTarget = z
-  .string()
-  .trim()
-  .regex(
-    /^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z_][A-Za-z0-9_-]*)+$/,
-    "Expected a qualified reference surface, e.g. part.face",
-  )
+const mountingTarget = z.string().trim().min(1)
 
 export const assemblyFastenerProps = assemblyPartBaseProps
   .and(

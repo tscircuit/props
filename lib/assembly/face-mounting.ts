@@ -3,7 +3,8 @@ import { z } from "zod"
 import type { AssemblyPlacementProps } from "./placement"
 
 export interface AssemblyFaceMountProps {
-  /** Qualified target face, e.g. "BRIDGE.rail"; paired with mountFace.
+  /** Target face reference, e.g. "BRIDGE.rail" or ".BRIDGE > .rail".
+   * CSS selectors and compact identity paths are resolved by core.
    * References are resolved in the containing device, independently of order.
    */
   mountedTo?: string
@@ -21,11 +22,7 @@ export interface AssemblyFaceMountProps {
 // Shared fields/refinement are internal composition helpers. Consumers use
 // each element's complete validator rather than a partial mounting schema.
 export const assemblyFaceMountShape = {
-  mountedTo: z
-    .string()
-    .trim()
-    .regex(/^.+\.[^.]+$/, "Expected part.face")
-    .optional(),
+  mountedTo: z.string().trim().min(1).optional(),
   mountFace: z.string().trim().min(1).optional(),
   mountGap: distance.pipe(z.number().nonnegative().finite()).optional(),
 }

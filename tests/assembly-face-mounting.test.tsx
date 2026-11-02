@@ -23,6 +23,34 @@ const validators = [
 ]
 const base = { name: "RAIL", standard: "nema17", jscad }
 
+test("preserves CSS references and leaves selector resolution to core", () => {
+  for (const mountedTo of [
+    ".BRIDGE > .rail",
+    "[name='BRIDGE'] > [name='rail']",
+    ".BRIDGE .rail",
+    "BRIDGE.rail",
+  ]) {
+    for (const schema of validators) {
+      expect(
+        schema.parse({
+          ...base,
+          mountedTo: `  ${mountedTo}  `,
+          mountFace: "base",
+        }).mountedTo,
+      ).toBe(mountedTo)
+    }
+    for (const schema of [assemblyFastenerProps, assemblyBoltProps]) {
+      expect(
+        schema.parse({
+          name: "SCREW",
+          model: "screw_m3_10mm",
+          fastenedTo: `  ${mountedTo}  `,
+        }).mountedTo,
+      ).toBe(mountedTo)
+    }
+  }
+})
+
 test("parts, both subassembly aliases, printed parts and motors share face parsing", () => {
   const mount = {
     mountedTo: " BRIDGE.rail ",
@@ -42,8 +70,8 @@ test("every face-mounted element rejects unpaired faces and invalid gaps", () =>
     for (const mount of [
       { mountedTo: "BRIDGE.rail" },
       { mountFace: "base" },
-      { mountedTo: "BRIDGE", mountFace: "base" },
-      { mountedTo: "BRIDGE.", mountFace: "base" },
+      { mountedTo: "", mountFace: "base" },
+      { mountedTo: " ", mountFace: "base" },
       { mountedTo: "BRIDGE.rail", mountFace: " " },
       { mountGap: 0 },
       { mountedTo: "BRIDGE.rail", mountFace: "base", mountGap: -0.1 },

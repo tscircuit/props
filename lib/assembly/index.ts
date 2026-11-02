@@ -24,8 +24,10 @@ export {
   type AssemblyPartProps,
   type AssemblyPartPropsInput,
 } from "./part"
-export * from "./placement"
-export type { AssemblyFaceMountProps } from "./face-mounting"
+export type {
+  AssemblyFaceMountProps,
+  AssemblyMountOffset,
+} from "./face-mounting"
 export * from "./referencesurface"
 export * from "./printedpart"
 export * from "./screen"

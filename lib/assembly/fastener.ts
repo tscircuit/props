@@ -2,6 +2,7 @@ import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { assemblyPartBaseProps, type AssemblyPartProps } from "./part"
+import { assemblyMountOffset } from "./face-mounting"
 
 /** An assembly part that fastens to its mounting target, even without geometry. */
 export interface AssemblyFastenerProps extends AssemblyPartProps {
@@ -33,19 +34,10 @@ export const assemblyFastenerProps = assemblyPartBaseProps
       fastenedTo: mountingTarget.optional(),
       mountFace: z.string().trim().min(1).optional(),
       mountGap: distance.pipe(z.number().nonnegative().finite()).optional(),
+      mountOffset: assemblyMountOffset.optional(),
     }),
   )
   .superRefine((fastener, ctx) => {
-    if (
-      (fastener.mountedTo !== undefined || fastener.fastenedTo !== undefined) &&
-      (fastener.cadPosition !== undefined || fastener.cadRotation !== undefined)
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["mountedTo"],
-        message: "Fastening and explicit assembly placement are exclusive",
-      })
-    }
     if (
       fastener.mountedTo !== undefined &&
       fastener.fastenedTo !== undefined &&
@@ -58,7 +50,7 @@ export const assemblyFastenerProps = assemblyPartBaseProps
       })
     }
     if (fastener.mountedTo === undefined && fastener.fastenedTo === undefined) {
-      for (const prop of ["mountFace", "mountGap"] as const) {
+      for (const prop of ["mountFace", "mountGap", "mountOffset"] as const) {
         if (fastener[prop] !== undefined) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,

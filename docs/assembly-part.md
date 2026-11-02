@@ -23,26 +23,13 @@ is also registered as `assemblyProps.part`.
 This is an additive API with no aliases or migration required. Existing assembly
 elements keep their current behavior.
 
-## Local CAD placement proposal
-
-`cadPosition={{ x, y, z }}` places the part origin in its parent's assembly
-frame. `cadRotation={{ x, y, z }}` orients that frame with right-handed Euler
-angles; numbers are degrees and strings accept `deg` or `rad`. Positions use
-mm numbers or distance strings. Supply all three axes when supplying an object.
-Both props stay absent by default, preserving inherited placement.
-
-This frame moves reference surfaces and assembly descendants with the part;
-`cadModel.positionOffset` continues to align only its own model. See the
-[placement specification](proposals/assembly-local-placement.md) for transform
-order, validation, conflicts, migration and required core acceptance cases.
-The props contract alone does not implement runtime placement.
-
 ## Face mounting proposal
 
 Ordinary parts can declare `mountedTo="BRIDGE.rail"`, `mountFace="base"`,
 and optional `mountGap="0.2mm"` using the existing printed-part/motor mounting
-contract. Both face names are required together. A mount fixes the full pose
-and conflicts with explicit `cadPosition` or `cadRotation`.
+contract. Both face names are required together. A mount fixes the full pose.
+Use `mountOffset={{ x: "5mm" }}` to shift along the target face and `mountGap`
+for normal clearance.
 See the [face-mounting specification](proposals/assembly-face-mounting.md) for
 units, named child surfaces, defaults, compatibility and core acceptance cases.
 This proposal validates the authoring contract; generic-part mounting needs

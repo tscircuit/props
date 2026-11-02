@@ -1,9 +1,8 @@
 # Face mounting for ordinary parts and subassemblies
 
-This proposal builds on [local CAD placement](assembly-local-placement.md),
-proposed in [#966](https://github.com/tscircuit/props/pull/966). It defines and
-validates the authoring API; resolving generic-part and subassembly mounts
-requires a corresponding core implementation.
+This proposal defines face constraints and relative offsets for assembly parts
+and containers. Resolving references and applying mounts requires the matching
+core implementation. Absolute positioning props are outside this proposal.
 
 ## Problem
 
@@ -32,6 +31,7 @@ those elements mean or adding a second mounting vocabulary.
     mountedTo="BRIDGE.rail"
     mountFace="base"
     mountGap="0.2mm"
+    mountOffset={{ x: "5mm", y: "-2mm" }}
   >
     <assembly.referencesurface name="base" plane="xz" normalDirection="y+" />
   </assembly.part>
@@ -48,6 +48,7 @@ field validators and refinement, preserving their existing behavior.
 | --- | --- | --- | --- |
 | `mountedTo` | Nonblank reference string, including CSS selectors or compact identity paths; paired with `mountFace` | Surrounding whitespace trimmed | Absent; no mount |
 | `mountFace` | Nonblank name of this element's reference surface; paired with `mountedTo` | Surrounding whitespace trimmed | Absent; no mount |
+| `mountOffset` | Optional object with signed finite mm numbers or distance strings for `x`/`y`, in the target face plane; requires a target | Supplied object parses omitted axes to zero | Entire prop stays absent; means zero in-plane offset |
 | `mountGap` | Finite, nonnegative mm number or existing distance-unit string; requires `mountedTo` | Number in mm | Remains absent; means zero clearance in core |
 
 There are no aliases or new material/model defaults. Explicit zero gap is valid.
@@ -70,7 +71,8 @@ frame (+X right, +Y top, +Z above). Outward normals and in-plane X tangents are
 directions. A face mount fixes the element's complete rigid pose:
 
 - The owner's mating-face origin coincides with the target-face origin plus
-  `mountGap` along the target's outward normal.
+  `mountOffset.x` and `.y` along its local tangents and `mountGap` along its
+  outward normal.
 - The two outward normals oppose.
 - Their in-plane X directions align, determining roll as well as shaft/face
   direction.
@@ -78,7 +80,7 @@ directions. A face mount fixes the element's complete rigid pose:
 For reference frames with local +Z as the outward normal, this is equivalent to:
 
 ```text
-ownerWorld = targetFaceWorld * translate(0, 0, gap) * Rx(180deg)
+ownerWorld = targetFaceWorld * translate(offset.x, offset.y, gap) * Rx(180deg)
              * inverse(ownerFaceLocal)
 ```
 
@@ -105,11 +107,10 @@ back to the world origin for an unresolved mount.
 
 ## Conflicts and compatibility
 
-- A mount conflicts with `cadPosition` and `cadRotation`, including explicit
-  zero objects. Authors must choose a mount or an explicit local pose. A local
-  parent placement still applies to an unmounted container; a mounted element's
-  pose is determined by its target's resolved world frame, not an additional
-  parent transform applied afterward.
+- Positioning is expressed relative to target faces, using signed `mountOffset`
+  in the target plane and nonnegative `mountGap` along its normal. There is no
+  absolute world pose API in this proposal. A mounted element's target world
+  frame is applied once, not composed with a second parent pose afterward.
 - Motors still reject `shaftFacingDirection` when mounted, and still default to
   `z+` only when unmounted. Their standard/model-selection rules are unchanged.
 - `assembly.subassembly` still rejects `connectsTo` at the type boundary; this
@@ -118,10 +119,9 @@ back to the world origin for an unresolved mount.
   no `mountFace` addition here. Screens, cables, the root device and the
   unnamespaced `cadassembly` receive no new mounting props.
 - Fasteners and bolts retain their existing optional `mountFace`, authored
-  mounting-origin semantics, and `fastenedTo` alias. They share model/placement
-  validation with parts, not the ordinary part's paired-face refinement. Local
-  placement inherited from parts is valid only when unfastened; either mounting
-  target spelling conflicts with `cadPosition` or `cadRotation`.
+  mounting-origin semantics, and `fastenedTo` alias. They share model
+  validation with parts, not the ordinary part's paired-face refinement. The same signed in-plane `mountOffset` works with either target spelling,
+  without requiring a named source face.
 - Generic part/subassembly geometry stays optional. Props can preserve
   forward-declared or geometry-less datums; core validates that the selected
   named surfaces exist and can be resolved.
@@ -150,7 +150,7 @@ as printed to obtain mounting behavior or STEP output.
    remain unchanged; legacy printed-part and board mounting regressions pass.
 
 The props suite exercises the shared parsing contract across all five element
-schemas, explicit-placement conflicts, model-source compatibility, omission,
+schemas, signed target-frame offsets, model-source compatibility, omission,
 and motor defaults. The geometry cases above require core tests and are not
 implemented by this props-only proposal. Complete assembly STEP export and
 analytic curves remain separate exporter/kernel work.

@@ -4,18 +4,12 @@ import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
 import { z } from "zod"
 import {
-  assemblyPlacementProps,
-  type AssemblyPlacementProps,
-} from "./placement"
-import {
   assemblyFaceMountShape,
   refineAssemblyFaceMount,
   type AssemblyFaceMountProps,
 } from "./face-mounting"
 
-export interface AssemblySubassemblyProps
-  extends AssemblyPlacementProps,
-    AssemblyFaceMountProps {
+export interface AssemblySubassemblyProps extends AssemblyFaceMountProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -30,8 +24,8 @@ export interface AssemblySubassemblyProps
   children?: ReactNode
 }
 
-export const assemblySubassemblyProps = assemblyPlacementProps
-  .extend({
+export const assemblySubassemblyProps = z
+  .object({
     ...assemblyFaceMountShape,
     name: z.string().refine((value) => value.trim().length > 0, {
       message: "name cannot be empty",

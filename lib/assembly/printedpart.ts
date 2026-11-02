@@ -4,19 +4,13 @@ import { expectTypesMatch } from "lib/typecheck"
 import { isValidElement, type ReactElement, type ReactNode } from "react"
 import { z } from "zod"
 import {
-  assemblyPlacementProps,
-  type AssemblyPlacementProps,
-} from "./placement"
-import {
   assemblyFaceMountShape,
   refineAssemblyFaceMount,
   type AssemblyFaceMountProps,
 } from "./face-mounting"
 
 /** Provide exactly one of jscad, model, modelUrl, or cadModel. */
-export interface AssemblyPrintedPartProps
-  extends AssemblyPlacementProps,
-    AssemblyFaceMountProps {
+export interface AssemblyPrintedPartProps extends AssemblyFaceMountProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -37,8 +31,8 @@ export interface AssemblyPrintedPartProps
   cadModel?: CadModelProp
 }
 
-export const assemblyPrintedPartProps = assemblyPlacementProps
-  .extend({
+export const assemblyPrintedPartProps = z
+  .object({
     ...assemblyFaceMountShape,
     name: z.string().trim().min(1),
     displayName: z.string().optional(),

@@ -4,19 +4,13 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import type { ReactNode } from "react"
 import {
-  assemblyPlacementProps,
-  type AssemblyPlacementProps,
-} from "./placement"
-import {
   assemblyFaceMountShape,
   refineAssemblyFaceMount,
   type AssemblyFaceMountProps,
 } from "./face-mounting"
 
 /** A generic component of an assembly, with optional CAD geometry. */
-export interface AssemblyPartProps
-  extends AssemblyPlacementProps,
-    AssemblyFaceMountProps {
+export interface AssemblyPartProps extends AssemblyFaceMountProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -33,8 +27,8 @@ export interface AssemblyPartProps
 
 // Internal base for elements with their own mounting semantics, e.g. fasteners.
 // Keep model validation separate from ordinary face-mount pairing.
-export const assemblyPartBaseProps = assemblyPlacementProps
-  .extend({
+export const assemblyPartBaseProps = z
+  .object({
     name: z.string().trim().min(1),
     displayName: z.string().optional(),
     model: z.string().trim().min(1).optional(),

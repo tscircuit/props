@@ -369,6 +369,11 @@ export interface AssemblyFaceMountProps {
    * Positive gaps separate the faces along the target's outward normal.
    */
   mountGap?: Distance
+  /** Signed in-plane offset in the target face frame; requires mountedTo.
+   * Supplied axes accept mm numbers or distance strings; omitted axes are zero.
+   * Normal separation is expressed by mountGap, not a third offset axis.
+   */
+  mountOffset?: AssemblyMountOffset
 }
 
 
@@ -417,9 +422,13 @@ export interface AssemblyMotorProps extends AssemblyFaceMountProps {
 }
 
 
-export interface AssemblyPartProps
-  extends AssemblyPlacementProps,
-    AssemblyFaceMountProps {
+export interface AssemblyMountOffset {
+  x?: Distance
+  y?: Distance
+}
+
+
+export interface AssemblyPartProps extends AssemblyFaceMountProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -435,30 +444,7 @@ export interface AssemblyPartProps
 }
 
 
-export interface AssemblyPlacementProps {
-  /** Origin in the parent assembly frame: +X right, +Y top, +Z above.
-   * All axes are required when supplied. Omission preserves inherited placement.
-   * Moves this element, its reference surfaces, and its assembly descendants.
-   */
-  cadPosition?: AssemblyPosition
-  /** Local orientation, composed as Rz * Ry * Rx before cadPosition translation.
-   * All axes are required when supplied. Omission means identity rotation.
-   * Positive angles follow the right-hand rule. Parsed angles are degrees.
-   */
-  cadRotation?: AssemblyRotation
-}
-
-
-export interface AssemblyPosition {
-  x: Distance
-  y: Distance
-  z: Distance
-}
-
-
-export interface AssemblyPrintedPartProps
-  extends AssemblyPlacementProps,
-    AssemblyFaceMountProps {
+export interface AssemblyPrintedPartProps extends AssemblyFaceMountProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -503,13 +489,6 @@ export interface AssemblyReferenceSurfaceProps {
 }
 
 
-export interface AssemblyRotation {
-  x: number | string
-  y: number | string
-  z: number | string
-}
-
-
 export interface AssemblyScreenProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
@@ -537,9 +516,7 @@ export interface AssemblyScreenProps {
 }
 
 
-export interface AssemblySubassemblyProps
-  extends AssemblyPlacementProps,
-    AssemblyFaceMountProps {
+export interface AssemblySubassemblyProps extends AssemblyFaceMountProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */

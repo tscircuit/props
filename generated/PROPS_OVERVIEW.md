@@ -2382,8 +2382,10 @@ export interface PanelProps
    *
    * `outline_routing` creates continuous routed cutouts around each board
    * outline without tabs.
+   * `v_score` requests straight score annotations on rectangular boards with
+   * zero board gap. It does not imply routed slots or machine-specific files.
    */
-  panelizationMethod?: "tab-routing" | "outline_routing" | "none"
+  panelizationMethod?: "tab-routing" | "outline_routing" | "v_score" | "none"
   /** Gap between boards in a panel */
   boardGap?: Distance
   layoutMode?: "grid" | "pack" | "none"
@@ -2394,12 +2396,52 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  /** Rectangular-board tab count, explicit edge offsets and keepouts. Distances parse to mm; omission preserves legacy automatic placement. */
+  tabPlacement?: PanelTabPlacement
+  /** Optional manufacturing envelope; no default min/max, no aliases. Core checks the final panel dimensions. */
+  sizeConstraints?: PanelSizeConstraints
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
   edgePaddingTop?: Distance
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
+}
+
+
+export interface PanelSizeConstraints {
+  minWidth?: Distance
+  maxWidth?: Distance
+  minHeight?: Distance
+  maxHeight?: Distance
+}
+
+
+export interface PanelTabKeepout {
+  boardName?: string
+  edge: PanelEdge
+  /** Inclusive interval along the same edge coordinates as tab positions. */
+  from: Distance
+  to: Distance
+}
+
+
+export interface PanelTabPlacement {
+  /** Evenly spaced tabs per edge. Omitted preserves one centred tab; conflicts with positions. */
+  countPerEdge?: number
+  /** Explicit positions replace automatic tab placement. No aliases. */
+  positions?: PanelTabPosition[]
+  /** A complete tab span must avoid each keepout. */
+  keepouts?: PanelTabKeepout[]
+}
+
+
+export interface PanelTabPosition {
+  /** Stable board name; omitted applies to every rectangular board. */
+  boardName?: string
+  edge: PanelEdge
+  /** Distance from the left end of horizontal edges, or bottom end of vertical edges. Numbers are mm. */
+  offset: Distance
 }
 
 
@@ -3753,8 +3795,12 @@ export interface TestpointProps extends CommonComponentProps {
 }
 
 
-export interface ToolingrailProps {
-  children?: any
+export interface ToolingrailProps
+  extends Omit<BaseGroupProps, "width" | "height"> {
+  /** Panel edge carrying the rail. Required; rail children use its local centre as origin. */
+  side: PanelEdge
+  /** Rail width across the selected edge, in mm or a unit string. Must fit in the panel's edge padding. No default or aliases. */
+  width: Distance
 }
 
 

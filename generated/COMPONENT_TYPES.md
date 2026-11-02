@@ -4364,9 +4364,93 @@ export const opampProps = commonComponentProps.extend({
 })
 ```
 
+### panel-size-constraints
+
+```typescript
+export interface PanelSizeConstraints {
+  minWidth?: Distance
+  maxWidth?: Distance
+  minHeight?: Distance
+  maxHeight?: Distance
+}
+export const panelSizeConstraints = z
+  .object({
+    minWidth: positiveDistance.optional(),
+    maxWidth: positiveDistance.optional(),
+    minHeight: positiveDistance.optional(),
+    maxHeight: positiveDistance.optional(),
+  })
+  .strict()
+  .refine(
+    (constraints) =>
+      constraints.minWidth === undefined ||
+      constraints.maxWidth === undefined ||
+      constraints.minWidth <= constraints.maxWidth,
+    {
+      path: ["maxWidth"],
+      message: "Panel maxWidth must be greater than or equal to minWidth",
+    },
+  )
+  .refine(
+    (constraints) =>
+      constraints.minHeight === undefined ||
+      constraints.maxHeight === undefined ||
+      constraints.minHeight <= constraints.maxHeight,
+    {
+      path: ["maxHeight"],
+      message: "Panel maxHeight must be greater than or equal to minHeight",
+    },
+  )
+```
+
+### panel-tab-placement
+
+```typescript
+export interface PanelTabPosition {
+  boardName?: string
+  edge: PanelEdge
+  offset: Distance
+}
+/** Distance from the left end of horizontal edges, or bottom end of vertical edges. Numbers are mm. */
+export interface PanelTabKeepout {
+  boardName?: string
+  edge: PanelEdge
+  from: Distance
+  to: Distance
+}
+/** Inclusive interval along the same edge coordinates as tab positions. */
+export interface PanelTabPlacement {
+  countPerEdge?: number
+  positions?: PanelTabPosition[]
+  keepouts?: PanelTabKeepout[]
+}
+/** A complete tab span must avoid each keepout. */
+export const panelTabPlacement = z
+  .object({
+    countPerEdge: z.number().int().positive().optional(),
+    positions: z.array(tabPosition).optional(),
+    keepouts: z.array(tabKeepout).optional(),
+  })
+  .strict()
+  .refine(
+    (placement) =>
+      placement.countPerEdge === undefined || placement.positions === undefined,
+    {
+      path: ["positions"],
+      message: "Use either countPerEdge or explicit tab positions",
+    },
+  )
+```
+
 ### panel
 
 ```typescript
+export type {
+  PanelTabPlacement,
+  PanelTabPosition,
+  PanelTabKeepout,
+  PanelEdge,
+} from "./panel-tab-placement"
 export interface PanelProps
   extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
   width?: Distance
@@ -4374,7 +4458,7 @@ export interface PanelProps
   children?: BaseGroupProps["children"]
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   noSolderMask?: boolean
-  panelizationMethod?: "tab-routing" | "outline_routing" | "none"
+  panelizationMethod?: "tab-routing" | "outline_routing" | "v_score" | "none"
   boardGap?: Distance
   layoutMode?: "grid" | "pack" | "none"
   row?: number
@@ -4384,6 +4468,8 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  tabPlacement?: PanelTabPlacement
+  sizeConstraints?: PanelSizeConstraints
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -4391,7 +4477,7 @@ export interface PanelProps
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
 }
-/** Gap between boards in a panel */
+/** Optional manufacturing envelope; no default min/max, no aliases. Core checks the final panel dimensions. */
 export const panelProps = baseGroupProps
   .omit({
     width: true,
@@ -4406,7 +4492,7 @@ export const panelProps = baseGroupProps
     anchorAlignment: ninePointAnchor.optional(),
     noSolderMask: z.boolean().optional(),
     panelizationMethod: z
-      .enum(["tab-routing", "outline_routing", "none"])
+      .enum(["tab-routing", "outline_routing", "v_score", "none"])
       .optional(),
     boardGap: distance.optional(),
     layoutMode: z.enum(["grid", "pack", "none"]).optional(),
@@ -4417,6 +4503,8 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    tabPlacement: panelTabPlacement.optional(),
+    sizeConstraints: panelSizeConstraints.optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),
@@ -6236,12 +6324,21 @@ export interface TestpointProps extends CommonComponentProps {
 ### toolingrail
 
 ```typescript
-export interface ToolingrailProps {
-  children?: any
+export interface ToolingrailProps
+  extends Omit<BaseGroupProps, "width" | "height"> {
+  side: PanelEdge
+  width: Distance
 }
-export const toolingrailProps = z.object({
-  children: z.any().optional(),
-})
+/** Rail width across the selected edge, in mm or a unit string. Must fit in the panel's edge padding. No default or aliases. */
+export const toolingrailProps = baseGroupProps
+  .omit({ width: true, height: true })
+  .extend({
+    side: panelEdge,
+    width: distance.refine(
+      (millimetres) => Number.isFinite(millimetres) && millimetres > 0,
+      { message: "Tooling rail width must be a finite positive distance" },
+    ),
+  })
 ```
 
 ### trace-hint

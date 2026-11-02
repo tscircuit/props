@@ -81,6 +81,8 @@ Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partvi
 | `<netlabel />`                              | [`NetLabelProps`](#netlabelprops-netlabel)                                                                         |
 | `<opamp />`                                 | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                                 | [`PanelProps`](#panelprops-panel)                                                                                  |
+| `<panelsizeconstraints />`                  | [`PanelSizeConstraintsProps`](#panelsizeconstraintsprops-panelsizeconstraints)                                     |
+| `<paneltabplacement />`                     | [`PanelTabPlacementProps`](#paneltabplacementprops-paneltabplacement)                                              |
 | `<pcbbend />`                               | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
 | `<pcbkeepout />`                            | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
 | `<pcbnotedimension />`                      | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
@@ -1605,8 +1607,10 @@ export interface PanelProps extends Omit<
    *
    * `outline_routing` creates continuous routed cutouts around each board
    * outline without tabs.
+   * `v_score` requests straight score annotations on rectangular boards with
+   * zero board gap. It does not imply routed slots or machine-specific files.
    */
-  panelizationMethod?: "tab-routing" | "outline_routing" | "none";
+  panelizationMethod?: "tab-routing" | "outline_routing" | "v_score" | "none";
   /** Gap between boards in a panel */
   boardGap?: Distance;
   layoutMode?: "grid" | "pack" | "none";
@@ -1617,6 +1621,10 @@ export interface PanelProps extends Omit<
   tabWidth?: Distance;
   tabLength?: Distance;
   mouseBites?: boolean;
+  /** Rectangular-board tab count, explicit edge offsets and keepouts. Distances parse to mm; omission preserves legacy automatic placement. */
+  tabPlacement?: PanelTabPlacement;
+  /** Optional manufacturing envelope; no default min/max, no aliases. Core checks the final panel dimensions. */
+  sizeConstraints?: PanelSizeConstraints;
   edgePadding?: Distance;
   edgePaddingLeft?: Distance;
   edgePaddingRight?: Distance;
@@ -2614,8 +2622,14 @@ export interface TestpointProps extends CommonComponentProps {
 ### ToolingrailProps `<toolingrail />`
 
 ```ts
-export interface ToolingrailProps {
-  children?: any;
+export interface ToolingrailProps extends Omit<
+  BaseGroupProps,
+  "width" | "height"
+> {
+  /** Panel edge carrying the rail. Required; rail children use its local centre as origin. */
+  side: PanelEdge;
+  /** Rail width across the selected edge, in mm or a unit string. Must fit in the panel's edge padding. No default or aliases. */
+  width: Distance;
 }
 ```
 

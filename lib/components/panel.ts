@@ -3,6 +3,21 @@ import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { baseGroupProps, type BaseGroupProps } from "./group"
+import {
+  panelTabPlacement,
+  type PanelTabPlacement,
+} from "./panel-tab-placement"
+import {
+  panelSizeConstraints,
+  type PanelSizeConstraints,
+} from "./panel-size-constraints"
+export type {
+  PanelTabPlacement,
+  PanelTabPosition,
+  PanelTabKeepout,
+  PanelEdge,
+} from "./panel-tab-placement"
+export type { PanelSizeConstraints } from "./panel-size-constraints"
 
 export interface PanelProps
   extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
@@ -19,8 +34,10 @@ export interface PanelProps
    *
    * `outline_routing` creates continuous routed cutouts around each board
    * outline without tabs.
+   * `v_score` requests straight score annotations on rectangular boards with
+   * zero board gap. It does not imply routed slots or machine-specific files.
    */
-  panelizationMethod?: "tab-routing" | "outline_routing" | "none"
+  panelizationMethod?: "tab-routing" | "outline_routing" | "v_score" | "none"
   /** Gap between boards in a panel */
   boardGap?: Distance
   layoutMode?: "grid" | "pack" | "none"
@@ -31,6 +48,10 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  /** Rectangular-board tab count, explicit edge offsets and keepouts. Distances parse to mm; omission preserves legacy automatic placement. */
+  tabPlacement?: PanelTabPlacement
+  /** Optional manufacturing envelope; no default min/max, no aliases. Core checks the final panel dimensions. */
+  sizeConstraints?: PanelSizeConstraints
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -53,7 +74,7 @@ export const panelProps = baseGroupProps
     anchorAlignment: ninePointAnchor.optional(),
     noSolderMask: z.boolean().optional(),
     panelizationMethod: z
-      .enum(["tab-routing", "outline_routing", "none"])
+      .enum(["tab-routing", "outline_routing", "v_score", "none"])
       .optional(),
     boardGap: distance.optional(),
     layoutMode: z.enum(["grid", "pack", "none"]).optional(),
@@ -64,6 +85,8 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    tabPlacement: panelTabPlacement.optional(),
+    sizeConstraints: panelSizeConstraints.optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),

@@ -60,8 +60,10 @@ unmounted motors retain the existing `"z+"` default.
 Consumers of parsed props must allow an unset direction for mounted motors
 and derive it from the resolved face transform.
 
-Mounting references are trimmed strings. `mountedTo` requires `part.face`
-syntax, and `mountFace` must be nonblank. The schema accepts custom face names;
+Mounting references are trimmed, nonblank strings. `mountedTo` accepts compact
+paths such as `FRAME.motor` and CSS selectors such as `.FRAME > .motor`;
+core validates and resolves the reference. `mountFace` must be nonblank.
+The schema accepts custom face names;
 core resolves the selected model's faces and reports missing targets/faces,
 ambiguous targets, cycles, or incompatible placement constraints. Model
 selection rules are unchanged. `mountGap` accepts nonnegative finite mm values
@@ -121,7 +123,7 @@ existing board props. Mounting is board-specific and is not added to groups.
 | `standard` | `nema8`, `nema17`, `nema23`; required when `model` is omitted | Preserved; no default motor standard |
 | `model` | Nonblank modelprinter string; required when `standard` is omitted | Surrounding whitespace trimmed; no default model |
 | `shaftFacingDirection` | `x+`, `x-`, `y+`, `y-`, `z+`, `z-`; omit when mounted | Defaults to `z+` only when unmounted |
-| `mountedTo` | Optional `part.face` string; paired with `mountFace` | Trimmed; unset by default |
+| `mountedTo` | Optional compact path or CSS reference string; paired with `mountFace` | Trimmed; unset by default |
 | `mountFace` | Optional nonblank motor face name; paired with `mountedTo` | Trimmed; unset by default |
 | `mountGap` | Nonnegative finite mm number or distance string; requires `mountedTo` | Parsed to mm; unset means zero clearance |
 

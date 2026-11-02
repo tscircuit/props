@@ -1,11 +1,13 @@
 import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
-import { assemblyPartProps, type AssemblyPartProps } from "./part"
+import { assemblyPartBaseProps, type AssemblyPartProps } from "./part"
+import { assemblyMountOffset } from "./face-mounting"
 
 /** An assembly part that fastens to its mounting target, even without geometry. */
 export interface AssemblyFastenerProps extends AssemblyPartProps {
-  /** Qualified reference surface, e.g. "FRAME.boltHole". Implies fastening.
+  /** Reference surface, e.g. "FRAME.boltHole" or ".FRAME > .boltHole".
+   * CSS selectors and compact paths are resolved by core. Implies fastening.
    * Without mountFace, use the fastener's authored local mounting origin.
    */
   mountedTo?: string
@@ -23,21 +25,16 @@ export interface AssemblyFastenerProps extends AssemblyPartProps {
   mountGap?: Distance
 }
 
-const mountingTarget = z
-  .string()
-  .trim()
-  .regex(
-    /^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z_][A-Za-z0-9_-]*)+$/,
-    "Expected a qualified reference surface, e.g. part.face",
-  )
+const mountingTarget = z.string().trim().min(1)
 
-export const assemblyFastenerProps = assemblyPartProps
+export const assemblyFastenerProps = assemblyPartBaseProps
   .and(
     z.object({
       mountedTo: mountingTarget.optional(),
       fastenedTo: mountingTarget.optional(),
       mountFace: z.string().trim().min(1).optional(),
       mountGap: distance.pipe(z.number().nonnegative().finite()).optional(),
+      mountOffset: assemblyMountOffset.optional(),
     }),
   )
   .superRefine((fastener, ctx) => {
@@ -53,7 +50,7 @@ export const assemblyFastenerProps = assemblyPartProps
       })
     }
     if (fastener.mountedTo === undefined && fastener.fastenedTo === undefined) {
-      for (const prop of ["mountFace", "mountGap"] as const) {
+      for (const prop of ["mountFace", "mountGap", "mountOffset"] as const) {
         if (fastener[prop] !== undefined) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,

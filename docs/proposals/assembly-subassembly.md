@@ -26,3 +26,9 @@ express containment through nesting.
 
 The unnamespaced `<cadassembly>` and its exports remain unchanged. Core provides
 the runtime behavior for the namespaced tags.
+
+The [face-mounting proposal](assembly-face-mounting.md) adds `mountedTo`,
+`mountFace`, `mountOffset` and `mountGap` to both namespaced aliases. A named container datum
+can mate the entire descendant assembly as a unit, without requiring a model
+on the container. Offsets are relative to the selected target face. This does
+not add `connectsTo`; runtime datum ownership and mounting require core support.

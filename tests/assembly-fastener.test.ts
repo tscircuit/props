@@ -68,10 +68,8 @@ test("preserves existing CAD sources and reference children", () => {
 test("rejects invalid mounting, alias conflicts and invalid model sources", () => {
   for (const props of [
     { name: " " },
-    { mountedTo: "FRAME" },
+    { mountedTo: "" },
     { fastenedTo: " " },
-    { mountedTo: "FRAME..top" },
-    { mountedTo: ".top" },
     { mountedTo: "FRAME.top", fastenedTo: "FRAME.bottom" },
     { mountFace: "underside" },
     { mountGap: 0 },

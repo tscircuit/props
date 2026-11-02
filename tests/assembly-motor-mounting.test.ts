@@ -61,8 +61,6 @@ test("rejects incomplete mounting, malformed references, and invalid clearances"
     { mountFace: "frontface" },
     { mountGap: 0 },
     { ...mounting, mountedTo: " " },
-    { ...mounting, mountedTo: "FRAME" },
-    { ...mounting, mountedTo: "FRAME." },
     { ...mounting, mountedTo: null },
     { ...mounting, mountFace: " " },
     { ...mounting, mountFace: null },

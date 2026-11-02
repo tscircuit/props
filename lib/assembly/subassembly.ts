@@ -3,8 +3,13 @@ import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
 import { z } from "zod"
+import {
+  assemblyFaceMountShape,
+  refineAssemblyFaceMount,
+  type AssemblyFaceMountProps,
+} from "./face-mounting"
 
-export interface AssemblySubassemblyProps {
+export interface AssemblySubassemblyProps extends AssemblyFaceMountProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -21,6 +26,7 @@ export interface AssemblySubassemblyProps {
 
 export const assemblySubassemblyProps = z
   .object({
+    ...assemblyFaceMountShape,
     name: z.string().refine((value) => value.trim().length > 0, {
       message: "name cannot be empty",
     }),
@@ -51,6 +57,7 @@ export const assemblySubassemblyProps = z
       path: ["model"],
     },
   )
+  .superRefine(refineAssemblyFaceMount)
 
 export type AssemblySubassemblyPropsInput = z.input<
   typeof assemblySubassemblyProps

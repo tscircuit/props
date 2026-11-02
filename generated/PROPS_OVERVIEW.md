@@ -354,8 +354,32 @@ export interface AssemblyExplosionStageProps {
 }
 
 
+export interface AssemblyFaceMountProps {
+  /** Target face reference, e.g. "BRIDGE.rail" or ".BRIDGE > .rail".
+   * CSS selectors and compact identity paths are resolved by core.
+   * References are resolved in the containing device, independently of order.
+   */
+  mountedTo?: string
+  /** This element's named mating face. Outward normals oppose and in-plane
+   * X directions align. A mount determines the complete local rigid pose.
+   */
+  mountFace?: string
+  /** Finite nonnegative clearance, in mm or a distance string.
+   * Requires mountedTo. Omission stays absent and means zero in core.
+   * Positive gaps separate the faces along the target's outward normal.
+   */
+  mountGap?: Distance
+  /** Signed in-plane offset in the target face frame; requires mountedTo.
+   * Supplied axes accept mm numbers or distance strings; omitted axes are zero.
+   * Normal separation is expressed by mountGap, not a third offset axis.
+   */
+  mountOffset?: AssemblyMountOffset
+}
+
+
 export interface AssemblyFastenerProps extends AssemblyPartProps {
-  /** Qualified reference surface, e.g. "FRAME.boltHole". Implies fastening.
+  /** Reference surface, e.g. "FRAME.boltHole" or ".FRAME > .boltHole".
+   * CSS selectors and compact paths are resolved by core. Implies fastening.
    * Without mountFace, use the fastener's authored local mounting origin.
    */
   mountedTo?: string
@@ -374,7 +398,7 @@ export interface AssemblyFastenerProps extends AssemblyPartProps {
 }
 
 
-export interface AssemblyMotorProps {
+export interface AssemblyMotorProps extends AssemblyFaceMountProps {
   /** Stable assembly identity used by selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -387,29 +411,24 @@ export interface AssemblyMotorProps {
    * Direction from the motor body toward the shaft tip in the right-handed
    * circuit frame: +X right, +Y top, +Z above the board. This is a direction,
    * not a position; it does not specify translation or rotation about the
-   * shaft. Defaults to "z+", the native shaft axis of the NEMA models.
+   * shaft. Defaults to "z+" only when unmounted. Omit it when mounted;
+   * the mating faces then determine the complete motor orientation.
    */
   shaftFacingDirection?: CadModelAxisDirection
   /** Cable connection string, e.g. "jst6_ph".
    * Omit to use the model's default termination.
    */
   wireConnection?: string
-  /** Assembly mounting target, e.g. "FRAME.xMotor"; paired with mountFace.
-   * Face mating determines orientation, so shaftFacingDirection must be omitted.
-   */
-  mountedTo?: string
-  /** This motor's mating face, e.g. "frontface" or "backface".
-   * Outward normals oppose and in-plane X directions align with the target.
-   */
-  mountFace?: string
-  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
-   * Requires mountedTo. Positive values separate the mating faces.
-   */
-  mountGap?: Distance
 }
 
 
-export interface AssemblyPartProps {
+export interface AssemblyMountOffset {
+  x?: Distance
+  y?: Distance
+}
+
+
+export interface AssemblyPartProps extends AssemblyFaceMountProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -425,7 +444,7 @@ export interface AssemblyPartProps {
 }
 
 
-export interface AssemblyPrintedPartProps {
+export interface AssemblyPrintedPartProps extends AssemblyFaceMountProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -444,17 +463,6 @@ export interface AssemblyPrintedPartProps {
   model?: string
   modelUrl?: string
   cadModel?: CadModelProp
-  /** Assembly mounting target. */
-  mountedTo?: string
-  /** Name of this part's reference rectangle to mate with mountedTo.
-   * Both props must be supplied together; outward normals oppose and local
-   * in-plane X directions align. Without them the part uses its local origin.
-   */
-  mountFace?: string
-  /** Nonnegative surface clearance in mm or a unit string; defaults to zero.
-   * Requires mountedTo. Positive values separate the mating faces.
-   */
-  mountGap?: Distance
 }
 
 
@@ -508,7 +516,7 @@ export interface AssemblyScreenProps {
 }
 
 
-export interface AssemblySubassemblyProps {
+export interface AssemblySubassemblyProps extends AssemblyFaceMountProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */

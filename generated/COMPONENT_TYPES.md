@@ -177,6 +177,22 @@ export const createConnectionsProp = <T extends readonly [string, ...string[]]>(
 }
 ```
 
+### copper-pour-clearance-rule
+
+```typescript
+export interface CopperPourClearanceRuleProps {
+  clearance: Distance
+  netSelectors?: string[]
+  objectTypes?: CopperPourClearanceObjectType[]
+}
+/** Copper kinds affected by this rule. Omitted matches every kind. */
+export const copperPourClearanceRuleProps = z.object({
+  clearance: distance.pipe(z.number().finite().nonnegative()),
+  netSelectors: z.array(z.string()).optional(),
+  objectTypes: z.array(copper_pour_clearance_object_type).optional(),
+})
+```
+
 ### distance
 
 ```typescript
@@ -2783,16 +2799,15 @@ export interface CopperPourProps {
   padMargin?: Distance
   traceMargin?: Distance
   clearance?: Distance
+  clearanceRules?: CopperPourClearanceRuleProps[]
+  isStatic?: boolean
   boardEdgeMargin?: Distance
   cutoutMargin?: Distance
   useThermalReliefs?: boolean
   outline?: Point[]
   coveredWithSolderMask?: boolean
 }
-/**
-   * Reserves the pour region during autorouting so unrelated traces do not
-   * split it. Vias may still cross the region using antipads.
-   */
+/** Preserve this authored copper outline exactly and reserve it before generated pours. Defaults to false. */
 export const copperPourProps = z
   .object({
     name: z.string().optional(),
@@ -2810,6 +2825,8 @@ export const copperPourProps = z
     padMargin: distance.optional(),
     traceMargin: distance.optional(),
     clearance: distance.optional(),
+    clearanceRules: z.array(copperPourClearanceRuleProps).optional(),
+    isStatic: z.boolean().optional(),
     boardEdgeMargin: distance.optional(),
     cutoutMargin: distance.optional(),
     useThermalReliefs: z.boolean().optional(),
@@ -2817,6 +2834,13 @@ export const copperPourProps = z
     coveredWithSolderMask: z.boolean().optional().default(true),
   })
   .superRefine((props, ctx) => {
+    if (props.isStatic && (props.crosshatch || props.useThermalReliefs)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["isStatic"],
+        message: "Static copper cannot use crosshatching or thermal reliefs",
+      })
+    }
     if (
       props.crosshatch &&
       (props.crosshatchWidth ?? 0.25) >= (props.crosshatchPitch ?? 1)

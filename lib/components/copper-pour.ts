@@ -3,6 +3,15 @@ import { distance, type Distance } from "lib/common/distance"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { layer_ref, type LayerRefInput } from "circuit-json"
+import {
+  copperPourClearanceRuleProps,
+  type CopperPourClearanceRuleProps,
+} from "lib/common/copper-pour-clearance-rule"
+
+export {
+  copperPourClearanceRuleProps,
+  type CopperPourClearanceRuleProps,
+} from "lib/common/copper-pour-clearance-rule"
 
 export interface CopperPourProps {
   name?: string
@@ -25,6 +34,10 @@ export interface CopperPourProps {
   padMargin?: Distance
   traceMargin?: Distance
   clearance?: Distance
+  /** Ordered exceptions for foreign copper. The first matching rule wins; omitted keeps the normal margins. */
+  clearanceRules?: CopperPourClearanceRuleProps[]
+  /** Preserve this authored copper outline exactly and reserve it before generated pours. Defaults to false. */
+  isStatic?: boolean
   boardEdgeMargin?: Distance
   cutoutMargin?: Distance
   useThermalReliefs?: boolean
@@ -49,6 +62,8 @@ export const copperPourProps = z
     padMargin: distance.optional(),
     traceMargin: distance.optional(),
     clearance: distance.optional(),
+    clearanceRules: z.array(copperPourClearanceRuleProps).optional(),
+    isStatic: z.boolean().optional(),
     boardEdgeMargin: distance.optional(),
     cutoutMargin: distance.optional(),
     useThermalReliefs: z.boolean().optional(),
@@ -56,6 +71,13 @@ export const copperPourProps = z
     coveredWithSolderMask: z.boolean().optional().default(true),
   })
   .superRefine((props, ctx) => {
+    if (props.isStatic && (props.crosshatch || props.useThermalReliefs)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["isStatic"],
+        message: "Static copper cannot use crosshatching or thermal reliefs",
+      })
+    }
     if (
       props.crosshatch &&
       (props.crosshatchWidth ?? 0.25) >= (props.crosshatchPitch ?? 1)

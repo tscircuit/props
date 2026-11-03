@@ -1373,6 +1373,15 @@ export interface ConstrainedLayoutProps {
 }
 
 
+export interface CopperPourClearanceRuleProps {
+  clearance: Distance
+  /** Target net selectors, as in connectsTo. Omitted matches all nets; [] matches none. */
+  netSelectors?: string[]
+  /** Copper kinds affected by this rule. Omitted matches every kind. */
+  objectTypes?: CopperPourClearanceObjectType[]
+}
+
+
 export interface CopperPourProps {
   name?: string
   layer: LayerRefInput
@@ -1394,6 +1403,10 @@ export interface CopperPourProps {
   padMargin?: Distance
   traceMargin?: Distance
   clearance?: Distance
+  /** Ordered exceptions for foreign copper. The first matching rule wins; omitted keeps the normal margins. */
+  clearanceRules?: CopperPourClearanceRuleProps[]
+  /** Preserve this authored copper outline exactly and reserve it before generated pours. Defaults to false. */
+  isStatic?: boolean
   boardEdgeMargin?: Distance
   cutoutMargin?: Distance
   useThermalReliefs?: boolean

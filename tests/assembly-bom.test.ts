@@ -19,7 +19,6 @@ const examples = [
 
 test("assembly material schemas preserve BOM metadata independently of CAD inputs", () => {
   const metadata = {
-    bomQuantity: 4,
     purchaseUrls: [
       "https://amazon.com/dp/example",
       "https://store.example/screw",
@@ -29,7 +28,6 @@ test("assembly material schemas preserve BOM metadata independently of CAD input
   for (const [schema, identity] of examples) {
     const parsed = schema.parse({ ...identity, ...metadata })
     expect(parsed).toMatchObject(metadata)
-    expect(schema.parse(identity)).not.toHaveProperty("bomQuantity")
   }
   expect(assemblyBomProps.parse({})).toEqual({})
   expect(
@@ -37,18 +35,7 @@ test("assembly material schemas preserve BOM metadata independently of CAD input
   ).toEqual({ purchaseUrls: [], supplierPartNumbers: {} })
 })
 
-test("BOM counts and purchase URLs validate at the authoring boundary", () => {
-  for (const bomQuantity of [
-    0,
-    -1,
-    1.5,
-    Infinity,
-    NaN,
-    Number.MAX_SAFE_INTEGER + 1,
-    "4",
-  ]) {
-    expect(assemblyBomProps.safeParse({ bomQuantity }).success).toBe(false)
-  }
+test("Purchase URLs validate at the authoring boundary", () => {
   for (const purchaseUrls of [
     ["javascript:alert(1)"],
     ["file:///part"],
@@ -64,8 +51,7 @@ test("BOM counts and purchase URLs validate at the authoring boundary", () => {
   ).toBe(false)
   expect(
     assemblyBomProps.parse({
-      bomQuantity: Number.MAX_SAFE_INTEGER,
       purchaseUrls: ["http://store.example/part"],
-    }).bomQuantity,
-  ).toBe(Number.MAX_SAFE_INTEGER)
+    }).purchaseUrls,
+  ).toEqual(["http://store.example/part"])
 })

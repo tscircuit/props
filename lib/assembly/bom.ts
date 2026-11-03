@@ -4,10 +4,6 @@ import { z } from "zod"
 
 /** Purchasing metadata shared by physical assembly elements, not CAD primitives. */
 export interface AssemblyBomProps extends SupplierProps {
-  /** Positive safe integer count per parent assembly; defaults to 1 in core.
-   * Does not duplicate CAD geometry. Omitted values stay omitted on parse.
-   */
-  bomQuantity?: number
   /** Alternative HTTP(S) purchase links, independent of supplier part numbers.
    * Omitted and empty arrays are accepted. No SKU-to-URL mapping is inferred.
    */
@@ -15,7 +11,6 @@ export interface AssemblyBomProps extends SupplierProps {
 }
 
 export const assemblyBomProps = supplierProps.extend({
-  bomQuantity: z.number().int().positive().safe().optional(),
   purchaseUrls: z
     .array(
       z

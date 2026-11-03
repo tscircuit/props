@@ -206,10 +206,6 @@ export interface AssemblyBoltProps extends AssemblyFastenerProps {
 
 
 export interface AssemblyBomProps extends SupplierProps {
-  /** Positive safe integer count per parent assembly; defaults to 1 in core.
-   * Does not duplicate CAD geometry. Omitted values stay omitted on parse.
-   */
-  bomQuantity?: number
   /** Alternative HTTP(S) purchase links, independent of supplier part numbers.
    * Omitted and empty arrays are accepted. No SKU-to-URL mapping is inferred.
    */

@@ -1,7 +1,7 @@
 # Assembly bill of materials
 
-Assembly materials accept `bomQuantity`, `purchaseUrls`, and
-`supplierPartNumbers`. These props apply to `assembly.part`, `fastener`, `bolt`,
+Assembly materials accept `purchaseUrls` and `supplierPartNumbers`. These props
+apply to `assembly.part`, `fastener`, `bolt`,
 `printedpart`, `motor`, `screen`, `cable`, `subassembly` (including its
 `cadassembly` alias), and `device`. CAD primitives, reference surfaces, drawings,
 and explosion instructions are not material lines.
@@ -11,7 +11,6 @@ and explosion instructions are not material lines.
   <assembly.subassembly name="housing" purchaseUrls={["https://store.example/housing"]}>
     <assembly.part
       name="screws"
-      bomQuantity={4}
       purchaseUrls={["https://amazon.com/dp/example", "https://store.example/m3"]}
     />
     <assembly.part name="module" supplierPartNumbers={{ jlcpcb: ["C123"] }} />
@@ -19,9 +18,6 @@ and explosion instructions are not material lines.
 </assembly.device>
 ```
 
-- `bomQuantity` accepts positive safe integer numbers, not strings. Omission
-  remains omitted on parse and means one item per parent in core. Quantities
-  multiply through BOM ancestry without creating extra geometry.
 - `purchaseUrls` accepts arrays of absolute HTTP(S) strings. Omitted and empty
   arrays are valid; URLs are preserved. These are independent alternatives and
   do not correspond positionally to supplier SKUs.
@@ -34,5 +30,6 @@ props. Existing assembly inputs remain valid and unchanged when parsed without
 BOM props. The new props are assembly-specific; they are not added to all
 circuit components. Core emits `cad_assembly_bom_item` records and derives parent
 references from TSX nesting. Plain model-less devices stay transparent unless
-BOM metadata is supplied. Material/subassembly lines include their own quantity;
-parentage does not imply that child materials are included in a purchased parent.
+BOM metadata is supplied. Each material/subassembly element emits a quantity of
+one; parentage does not imply that child materials are included in a purchased
+parent.

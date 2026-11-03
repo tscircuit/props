@@ -18,6 +18,9 @@ resistorProps.parse({ resistance: "10k" } as ResistorPropsInput);
 
 Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partview>`](docs/assembly-drawings.md).
 
+See [System block diagrams](docs/system-blocks.md) for the proposed `systemblock`
+namespace, PCB references, and a complete overview example.
+
 <!-- COMPONENT_TABLE_START -->
 
 ## Available Components
@@ -131,6 +134,10 @@ Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partvi
 | `<subpanel />`                              | [`SubpanelProps`](#subpanelprops-subpanel)                                                                         |
 | `<switch />`                                | [`SwitchProps`](#switchprops-switch)                                                                               |
 | `<symbol />`                                | [`SymbolProps`](#symbolprops-symbol)                                                                               |
+| `<systemblock.component />`                 | [`SystemBlockComponentProps`](#systemblockcomponentprops-systemblockcomponent)                                     |
+| `<systemblock.connection />`                | [`SystemBlockConnectionProps`](#systemblockconnectionprops-systemblockconnection)                                  |
+| `<systemblock.group />`                     | [`SystemBlockGroupProps`](#systemblockgroupprops-systemblockgroup)                                                 |
+| `<systemblock.page />`                      | [`SystemBlockPageProps`](#systemblockpageprops-systemblockpage)                                                    |
 | `<testpoint />`                             | [`TestpointProps`](#testpointprops-testpoint)                                                                      |
 | `<toolingrail />`                           | [`ToolingrailProps`](#toolingrailprops-toolingrail)                                                                |
 | `<trace />`                                 | [`TraceProps`](#traceprops-trace)                                                                                  |
@@ -2576,6 +2583,86 @@ export interface SymbolProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/symbol.ts)
+
+<a id="systemblockcomponentprops-systemblockcomponent"></a>
+
+### SystemBlockComponentProps `<systemblock.component />`
+
+```ts
+export interface SystemBlockComponentProps extends SystemBlockPcbReferenceProps {
+  /** Stable block identity, unique across its page; trimmed and nonempty. */
+  name: string;
+  /** Human-facing title; consumers fall back to name when omitted. */
+  displayName?: string;
+  /** Plain-text explanation of what the block does. */
+  description?: string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/system-block-component.ts)
+
+<a id="systemblockconnectionprops-systemblockconnection"></a>
+
+### SystemBlockConnectionProps `<systemblock.connection />`
+
+```ts
+export interface SystemBlockConnectionProps {
+  /** Optional stable connection identity, unique within its page when supplied. */
+  name?: string;
+  /** Component name within the containing page, including inside nested groups. */
+  from: string;
+  /** Component name within the same page; group names and pin selectors are not endpoints. */
+  to: string;
+  /** Interface annotation such as I2C, SPI, or 3.3 V; not the connection's identity. */
+  label?: string;
+  /** Relationship category; defaults to signal. */
+  kind?: "signal" | "power";
+  /** Arrowheads: from → to, both ends, or neither. Defaults to forward. */
+  direction?: "forward" | "both" | "none";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/system-block-connection.ts)
+
+<a id="systemblockgroupprops-systemblockgroup"></a>
+
+### SystemBlockGroupProps `<systemblock.group />`
+
+```ts
+export interface SystemBlockGroupProps extends SystemBlockPcbReferenceProps {
+  /** Stable group identity, unique across its page; trimmed and nonempty. */
+  name: string;
+  /** Human-facing title; consumers fall back to name when omitted. */
+  displayName?: string;
+  /** Plain-text explanation of the subsystem's responsibility. */
+  description?: string;
+  /** Preserved unchanged; grouping does not create electrical connectivity. */
+  children?: ReactNode;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/system-block-group.ts)
+
+<a id="systemblockpageprops-systemblockpage"></a>
+
+### SystemBlockPageProps `<systemblock.page />`
+
+```ts
+export interface SystemBlockPageProps {
+  /** Stable page identity, unique within the circuit; trimmed and nonempty. */
+  name: string;
+  /** Human-facing title; consumers fall back to name when omitted. */
+  displayName?: string;
+  /** Plain-text explanation of the system's purpose. */
+  description?: string;
+  /** Preferred automatic layout direction; defaults to right. */
+  direction?: "right" | "left" | "down" | "up";
+  /** System blocks, nested groups, and connections; preserved unchanged. */
+  children?: ReactNode;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/system-block-page.ts)
 
 ### TestpointProps `<testpoint />`
 

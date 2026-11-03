@@ -3724,6 +3724,73 @@ export interface SymbolProps {
 }
 
 
+export interface SystemBlockComponentProps
+  extends SystemBlockPcbReferenceProps {
+  /** Stable block identity, unique across its page; trimmed and nonempty. */
+  name: string
+  /** Human-facing title; consumers fall back to name when omitted. */
+  displayName?: string
+  /** Plain-text explanation of what the block does. */
+  description?: string
+}
+
+
+export interface SystemBlockConnectionProps {
+  /** Optional stable connection identity, unique within its page when supplied. */
+  name?: string
+  /** Component name within the containing page, including inside nested groups. */
+  from: string
+  /** Component name within the same page; group names and pin selectors are not endpoints. */
+  to: string
+  /** Interface annotation such as I2C, SPI, or 3.3 V; not the connection's identity. */
+  label?: string
+  /** Relationship category; defaults to signal. */
+  kind?: "signal" | "power"
+  /** Arrowheads: from → to, both ends, or neither. Defaults to forward. */
+  direction?: "forward" | "both" | "none"
+}
+
+
+export interface SystemBlockGroupProps extends SystemBlockPcbReferenceProps {
+  /** Stable group identity, unique across its page; trimmed and nonempty. */
+  name: string
+  /** Human-facing title; consumers fall back to name when omitted. */
+  displayName?: string
+  /** Plain-text explanation of the subsystem's responsibility. */
+  description?: string
+  /** Preserved unchanged; grouping does not create electrical connectivity. */
+  children?: ReactNode
+}
+
+
+export interface SystemBlockPageProps {
+  /** Stable page identity, unique within the circuit; trimmed and nonempty. */
+  name: string
+  /** Human-facing title; consumers fall back to name when omitted. */
+  displayName?: string
+  /** Plain-text explanation of the system's purpose. */
+  description?: string
+  /** Preferred automatic layout direction; defaults to right. */
+  direction?: "right" | "left" | "down" | "up"
+  /** System blocks, nested groups, and connections; preserved unchanged. */
+  children?: ReactNode
+}
+
+
+export interface SystemBlockPcbReferenceProps {
+  /** One PCB component name; mutually exclusive with pcbComponentNames. */
+  pcbComponentName?: string
+  /** Nonempty list of PCB component names; mutually exclusive with pcbComponentName. */
+  pcbComponentNames?: string[]
+  /**
+   * Named PCB subcircuit in which component names are resolved. Without component
+   * names, associates the entire subcircuit. Omitted uses the owning circuit scope.
+   * References are names, not selectors; resolution is performed by the consumer.
+   */
+  pcbSubcircuitName?: string
+}
+
+
 export interface TestpointProps extends CommonComponentProps {
   /**
    * The footprint variant of the testpoint either a surface pad or through-hole

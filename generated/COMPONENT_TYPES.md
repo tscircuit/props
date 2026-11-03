@@ -6204,6 +6204,93 @@ export const symbolProps = z.object({
 })
 ```
 
+### system-block-component
+
+```typescript
+/** A functional block, optionally associated with one or more PCB components. */
+export interface SystemBlockComponentProps
+  extends SystemBlockPcbReferenceProps {
+  name: string
+  displayName?: string
+  description?: string
+}
+/** Plain-text explanation of what the block does. */
+export const systemBlockComponentProps = z
+  .object({
+    ...systemBlockPcbReferenceShape,
+    name: z.string().trim().min(1),
+    displayName: z.string().trim().min(1).optional(),
+    description: z.string().optional(),
+  })
+  .superRefine(refineSystemBlockPcbReference)
+```
+
+### system-block-connection
+
+```typescript
+/** A logical relationship between two blocks; does not create electrical traces. */
+export interface SystemBlockConnectionProps {
+  name?: string
+  from: string
+  to: string
+  label?: string
+  kind?: "signal" | "power"
+  direction?: "forward" | "both" | "none"
+}
+/** Arrowheads: from → to, both ends, or neither. Defaults to forward. */
+export const systemBlockConnectionProps = z.object({
+  name: z.string().trim().min(1).optional(),
+  from: z.string().trim().min(1),
+  to: z.string().trim().min(1),
+  label: z.string().optional(),
+  kind: z.enum(["signal", "power"]).default("signal"),
+  direction: z.enum(["forward", "both", "none"]).default("forward"),
+})
+```
+
+### system-block-group
+
+```typescript
+/** A subsystem boundary containing blocks, nested groups, and connections. */
+export interface SystemBlockGroupProps extends SystemBlockPcbReferenceProps {
+  name: string
+  displayName?: string
+  description?: string
+  children?: ReactNode
+}
+/** Preserved unchanged; grouping does not create electrical connectivity. */
+export const systemBlockGroupProps = z
+  .object({
+    ...systemBlockPcbReferenceShape,
+    name: z.string().trim().min(1),
+    displayName: z.string().trim().min(1).optional(),
+    description: z.string().optional(),
+    children: z.custom<ReactNode>().optional(),
+  })
+  .superRefine(refineSystemBlockPcbReference)
+```
+
+### system-block-page
+
+```typescript
+/** One high-level system overview, independent of schematic or PCB geometry. */
+export interface SystemBlockPageProps {
+  name: string
+  displayName?: string
+  description?: string
+  direction?: "right" | "left" | "down" | "up"
+  children?: ReactNode
+}
+/** System blocks, nested groups, and connections; preserved unchanged. */
+export const systemBlockPageProps = z.object({
+  name: z.string().trim().min(1),
+  displayName: z.string().trim().min(1).optional(),
+  description: z.string().optional(),
+  direction: z.enum(["right", "left", "down", "up"]).default("right"),
+  children: z.custom<ReactNode>().optional(),
+})
+```
+
 ### testpoint
 
 ```typescript

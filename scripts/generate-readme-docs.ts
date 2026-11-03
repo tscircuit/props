@@ -20,8 +20,18 @@ const namespacedSimulationComponentNames = new Set([
   "pcbreturncurrentsimulation",
 ])
 
+const namespacedSystemBlockComponentNames = new Set([
+  "systemblockpage",
+  "systemblockgroup",
+  "systemblockcomponent",
+  "systemblockconnection",
+])
+
 function getComponentTagName(componentName: string): string {
   const lowercaseComponentName = componentName.toLowerCase()
+  if (namespacedSystemBlockComponentNames.has(lowercaseComponentName)) {
+    return lowercaseComponentName.replace("systemblock", "systemblock.")
+  }
   if (namespacedSimulationComponentNames.has(lowercaseComponentName)) {
     return `simulation.${lowercaseComponentName}`
   }
@@ -271,11 +281,11 @@ function generateInterfaceDefinitions(
       comp.name !== "Common" && comp.name !== "Group"
         ? ` \`<${getComponentTagName(comp.name)} />\``
         : ""
-    const sectionAnchor = namespacedSimulationComponentNames.has(
-      comp.name.toLowerCase(),
-    )
-      ? `<a id="${comp.props.toLowerCase()}-${getComponentTagName(comp.name).replaceAll(".", "")}"></a>\n\n`
-      : ""
+    const sectionAnchor =
+      namespacedSimulationComponentNames.has(comp.name.toLowerCase()) ||
+      namespacedSystemBlockComponentNames.has(comp.name.toLowerCase())
+        ? `<a id="${comp.props.toLowerCase()}-${getComponentTagName(comp.name).replaceAll(".", "")}"></a>\n\n`
+        : ""
 
     return `
 ${sectionAnchor}### ${comp.props}${componentHeader}

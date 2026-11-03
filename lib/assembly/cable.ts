@@ -1,9 +1,10 @@
+import { assemblyBomProps, type AssemblyBomProps } from "./bom"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 export type AssemblyCableStandard = "usb_c"
 
-export interface AssemblyCableProps {
+export interface AssemblyCableProps extends AssemblyBomProps {
   /** Stable assembly identity for the cable. */
   name: string
   /** Start connector selector or named assembly reference, e.g. MOTOR.wireside. */
@@ -23,6 +24,7 @@ export interface AssemblyCableProps {
 
 export const assemblyCableProps = z
   .object({
+    ...assemblyBomProps.shape,
     name: z.string().trim().min(1),
     from: z.string().trim().min(1),
     to: z.string().trim().min(1),

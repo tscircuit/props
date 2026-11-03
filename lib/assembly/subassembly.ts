@@ -1,3 +1,4 @@
+import { assemblyBomProps, type AssemblyBomProps } from "./bom"
 import { url } from "lib/common/url"
 import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { expectTypesMatch } from "lib/typecheck"
@@ -9,7 +10,9 @@ import {
   type AssemblyFaceMountProps,
 } from "./face-mounting"
 
-export interface AssemblySubassemblyProps extends AssemblyFaceMountProps {
+export interface AssemblySubassemblyProps
+  extends AssemblyFaceMountProps,
+    AssemblyBomProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -26,6 +29,7 @@ export interface AssemblySubassemblyProps extends AssemblyFaceMountProps {
 
 export const assemblySubassemblyProps = z
   .object({
+    ...assemblyBomProps.shape,
     ...assemblyFaceMountShape,
     name: z.string().refine((value) => value.trim().length > 0, {
       message: "name cannot be empty",

@@ -1,9 +1,10 @@
+import { assemblyBomProps, type AssemblyBomProps } from "./bom"
 import { url } from "lib/common/url"
 import { type Distance, distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface AssemblyScreenProps {
+export interface AssemblyScreenProps extends AssemblyBomProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -41,6 +42,7 @@ const positiveDistance = (fieldName: "width" | "height") =>
 
 export const assemblyScreenProps = z
   .object({
+    ...assemblyBomProps.shape,
     name: nonemptyString("name"),
     model: z.string().trim().min(1).optional(),
     modelUrl: url

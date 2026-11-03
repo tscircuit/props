@@ -205,7 +205,15 @@ export interface AssemblyBoltProps extends AssemblyFastenerProps {
 }
 
 
-export interface AssemblyCableProps {
+export interface AssemblyBomProps extends SupplierProps {
+  /** Alternative HTTP(S) purchase links, independent of supplier part numbers.
+   * Omitted and empty arrays are accepted. No SKU-to-URL mapping is inferred.
+   */
+  purchaseUrls?: string[]
+}
+
+
+export interface AssemblyCableProps extends AssemblyBomProps {
   /** Stable assembly identity for the cable. */
   name: string
   /** Start connector selector or named assembly reference, e.g. MOTOR.wireside. */
@@ -224,7 +232,7 @@ export interface AssemblyCableProps {
 }
 
 
-export interface AssemblyDeviceProps {
+export interface AssemblyDeviceProps extends AssemblyBomProps {
   /** Product-level assembly identity. */
   name?: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -398,7 +406,9 @@ export interface AssemblyFastenerProps extends AssemblyPartProps {
 }
 
 
-export interface AssemblyMotorProps extends AssemblyFaceMountProps {
+export interface AssemblyMotorProps
+  extends AssemblyFaceMountProps,
+    AssemblyBomProps {
   /** Stable assembly identity used by selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -428,7 +438,9 @@ export interface AssemblyMountOffset {
 }
 
 
-export interface AssemblyPartProps extends AssemblyFaceMountProps {
+export interface AssemblyPartProps
+  extends AssemblyFaceMountProps,
+    AssemblyBomProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -444,7 +456,9 @@ export interface AssemblyPartProps extends AssemblyFaceMountProps {
 }
 
 
-export interface AssemblyPrintedPartProps extends AssemblyFaceMountProps {
+export interface AssemblyPrintedPartProps
+  extends AssemblyFaceMountProps,
+    AssemblyBomProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -489,7 +503,7 @@ export interface AssemblyReferenceSurfaceProps {
 }
 
 
-export interface AssemblyScreenProps {
+export interface AssemblyScreenProps extends AssemblyBomProps {
   /** Stable product-level identity for the screen assembly. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -516,7 +530,9 @@ export interface AssemblyScreenProps {
 }
 
 
-export interface AssemblySubassemblyProps extends AssemblyFaceMountProps {
+export interface AssemblySubassemblyProps
+  extends AssemblyFaceMountProps,
+    AssemblyBomProps {
   /** Stable identity used by selectors from other assembly elements. */
   name: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */

@@ -1,3 +1,4 @@
+import { assemblyBomProps, type AssemblyBomProps } from "./bom"
 import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { url } from "lib/common/url"
 import { expectTypesMatch } from "lib/typecheck"
@@ -10,7 +11,9 @@ import {
 } from "./face-mounting"
 
 /** Provide exactly one of jscad, model, modelUrl, or cadModel. */
-export interface AssemblyPrintedPartProps extends AssemblyFaceMountProps {
+export interface AssemblyPrintedPartProps
+  extends AssemblyFaceMountProps,
+    AssemblyBomProps {
   /** Stable identity used by assembly mounting selectors. */
   name: string
   displayName?: string
@@ -33,6 +36,7 @@ export interface AssemblyPrintedPartProps extends AssemblyFaceMountProps {
 
 export const assemblyPrintedPartProps = z
   .object({
+    ...assemblyBomProps.shape,
     ...assemblyFaceMountShape,
     name: z.string().trim().min(1),
     displayName: z.string().optional(),

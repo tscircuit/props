@@ -12,6 +12,7 @@ import { assemblyScreenProps } from "./screen"
 import { assemblySubassemblyProps } from "./subassembly"
 import { assemblyExplosionProps } from "./explosion"
 
+export * from "./bom"
 export * from "./drawing"
 export * from "./board-mounting"
 export * from "./bolt"

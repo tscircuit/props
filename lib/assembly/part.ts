@@ -1,3 +1,4 @@
+import { assemblyBomProps, type AssemblyBomProps } from "./bom"
 import { type CadModelProp, cadModelProp } from "lib/common/cadModel"
 import { url } from "lib/common/url"
 import { expectTypesMatch } from "lib/typecheck"
@@ -10,7 +11,9 @@ import {
 } from "./face-mounting"
 
 /** A generic component of an assembly, with optional CAD geometry. */
-export interface AssemblyPartProps extends AssemblyFaceMountProps {
+export interface AssemblyPartProps
+  extends AssemblyFaceMountProps,
+    AssemblyBomProps {
   /** Stable identity used by assembly selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -29,6 +32,7 @@ export interface AssemblyPartProps extends AssemblyFaceMountProps {
 // Keep model validation separate from ordinary face-mount pairing.
 export const assemblyPartBaseProps = z
   .object({
+    ...assemblyBomProps.shape,
     name: z.string().trim().min(1),
     displayName: z.string().optional(),
     model: z.string().trim().min(1).optional(),

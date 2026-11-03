@@ -1,3 +1,4 @@
+import { assemblyBomProps, type AssemblyBomProps } from "./bom"
 import {
   type CadModelAxisDirection,
   cadModelAxisDirection,
@@ -12,7 +13,9 @@ import {
 
 export type AssemblyMotorStandard = "nema8" | "nema17" | "nema23"
 
-export interface AssemblyMotorProps extends AssemblyFaceMountProps {
+export interface AssemblyMotorProps
+  extends AssemblyFaceMountProps,
+    AssemblyBomProps {
   /** Stable assembly identity used by selectors. */
   name: string
   /** Human-facing alternate to the stable name. */
@@ -37,6 +40,7 @@ export interface AssemblyMotorProps extends AssemblyFaceMountProps {
 
 export const assemblyMotorProps = z
   .object({
+    ...assemblyBomProps.shape,
     ...assemblyFaceMountShape,
     name: z.string().refine((value) => value.trim().length > 0, {
       message: "name cannot be empty",

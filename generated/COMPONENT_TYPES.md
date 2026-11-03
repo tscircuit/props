@@ -4411,7 +4411,7 @@ export interface PanelTabPosition {
   edge: PanelEdge
   offset: Distance
 }
-/** Distance from the left end of horizontal edges, or bottom end of vertical edges. Numbers are mm. */
+/** Tab centre distance from the left end of horizontal edges, or bottom end of vertical edges. Numbers are mm. */
 export interface PanelTabKeepout {
   boardName?: string
   edge: PanelEdge

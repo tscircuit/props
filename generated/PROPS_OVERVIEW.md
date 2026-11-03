@@ -2440,7 +2440,7 @@ export interface PanelTabPosition {
   /** Stable board name; omitted applies to every rectangular board. */
   boardName?: string
   edge: PanelEdge
-  /** Distance from the left end of horizontal edges, or bottom end of vertical edges. Numbers are mm. */
+  /** Tab centre distance from the left end of horizontal edges, or bottom end of vertical edges. Numbers are mm. */
   offset: Distance
 }
 

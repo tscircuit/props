@@ -1,8 +1,9 @@
+import { assemblyBomProps, type AssemblyBomProps } from "./bom"
 import { url } from "lib/common/url"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
-export interface AssemblyDeviceProps {
+export interface AssemblyDeviceProps extends AssemblyBomProps {
   /** Product-level assembly identity. */
   name?: string
   /** Imported CAD model URL. Mutually exclusive with cadModel where supported. */
@@ -13,6 +14,7 @@ export interface AssemblyDeviceProps {
 
 export const assemblyDeviceProps = z
   .object({
+    ...assemblyBomProps.shape,
     name: z.string().optional(),
     model: z.string().trim().min(1).optional(),
     modelUrl: url

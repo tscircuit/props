@@ -8,6 +8,8 @@ An assembly line can have both a minimum panel size, needed for conveyor rails o
 
 `minWidth`, `maxWidth`, `minHeight` and `maxHeight` are optional checks on the **finished outer panel dimensions, including edge padding**. They are separate from `width` and `height`, which set dimensions, and from `cellWidth` and `cellHeight`, which affect grid cells. A limit reports an unsuitable result; it does not resize, pad, repack or scale the panel.
 
+These limits belong on the root `<panel>`; Core rejects them on `<subpanel>` rather than silently ignoring them.
+
 There are no default manufacturing limits. Use limits supplied by the actual assembly line or fabricator; the numbers below are examples, not universal manufacturing requirements. Core's `Panel.doInitialPanelLayout()` compares the final `pcb_panel` dimensions with each supplied bound and emits the existing `pcb_panelization_placement_error` diagnostic if a bound is exceeded.
 
 ```tsx

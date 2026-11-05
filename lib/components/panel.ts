@@ -3,21 +3,53 @@ import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { baseGroupProps, type BaseGroupProps } from "./group"
-import {
-  panelTabPlacement,
-  type PanelTabPlacement,
-} from "./panel-tab-placement"
-import {
-  panelSizeConstraints,
-  type PanelSizeConstraints,
-} from "./panel-size-constraints"
-export type {
-  PanelTabPlacement,
-  PanelTabPosition,
-  PanelTabKeepout,
-  PanelEdge,
-} from "./panel-tab-placement"
-export type { PanelSizeConstraints } from "./panel-size-constraints"
+export const panelEdge = z.enum(["top", "right", "bottom", "left"])
+export type PanelEdge = z.infer<typeof panelEdge>
+
+export interface PanelTab {
+  /** Stable board name; omitted applies to every rectangular board. */
+  boardName?: string
+  edge: PanelEdge
+  /** Tab centre distance from the left end of horizontal edges, or bottom end of vertical edges. Numbers are mm. */
+  offset: Distance
+}
+
+export interface PanelTabKeepout {
+  boardName?: string
+  edge: PanelEdge
+  /** Inclusive interval along the same edge coordinates as tabs. */
+  from: Distance
+  to: Distance
+}
+
+const nonnegativeEdgeDistance = distance.refine(
+  (millimetres) => Number.isFinite(millimetres) && millimetres >= 0,
+  { message: "Panel edge distances must be finite and nonnegative" },
+)
+export const panelTab = z
+  .object({
+    boardName: z.string().min(1).optional(),
+    edge: panelEdge,
+    offset: nonnegativeEdgeDistance,
+  })
+  .strict()
+export const panelTabKeepout = z
+  .object({
+    boardName: z.string().min(1).optional(),
+    edge: panelEdge,
+    from: nonnegativeEdgeDistance,
+    to: nonnegativeEdgeDistance,
+  })
+  .strict()
+  .refine((keepout) => keepout.to >= keepout.from, {
+    path: ["to"],
+    message: "Tab keepout to must be greater than or equal to from",
+  })
+
+const positivePanelDistance = distance.refine(
+  (millimetres) => Number.isFinite(millimetres) && millimetres > 0,
+  { message: "Panel size limits must be finite positive distances" },
+)
 
 export interface PanelProps
   extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
@@ -48,10 +80,20 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
-  /** Rectangular-board tab count, explicit edge offsets and keepouts. Distances parse to mm; omission preserves legacy automatic placement. */
-  tabPlacement?: PanelTabPlacement
-  /** Optional manufacturing envelope; no default min/max, no aliases. Core checks the final panel dimensions. */
-  sizeConstraints?: PanelSizeConstraints
+  /** Evenly spaced tabs on each rectangular board edge; a positive integer. Conflicts with tabs. Omission preserves current automatic placement. */
+  tabCountPerEdge?: number
+  /** Explicit tabs on rectangular boards, using edge-local offsets. Replaces automatic tabs; [] requests no tabs. */
+  tabs?: PanelTab[]
+  /** Edge intervals that the full tab span must avoid. Automatic tabs are omitted on conflict; explicit tabs produce an error. */
+  tabKeepouts?: PanelTabKeepout[]
+  /** Minimum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  minWidth?: Distance
+  /** Maximum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  maxWidth?: Distance
+  /** Minimum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  minHeight?: Distance
+  /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  maxHeight?: Distance
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -85,8 +127,13 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
-    tabPlacement: panelTabPlacement.optional(),
-    sizeConstraints: panelSizeConstraints.optional(),
+    tabCountPerEdge: z.number().int().positive().optional(),
+    tabs: z.array(panelTab).optional(),
+    tabKeepouts: z.array(panelTabKeepout).optional(),
+    minWidth: positivePanelDistance.optional(),
+    maxWidth: positivePanelDistance.optional(),
+    minHeight: positivePanelDistance.optional(),
+    maxHeight: positivePanelDistance.optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),
@@ -94,6 +141,30 @@ export const panelProps = baseGroupProps
     edgePaddingBottom: distance.optional(),
     _subcircuitCachingEnabled: z.boolean().optional(),
   })
+  .refine(
+    (panel) => panel.tabCountPerEdge === undefined || panel.tabs === undefined,
+    { path: ["tabs"], message: "Use either tabCountPerEdge or explicit tabs" },
+  )
+  .refine(
+    (panel) =>
+      panel.minWidth === undefined ||
+      panel.maxWidth === undefined ||
+      panel.minWidth <= panel.maxWidth,
+    {
+      path: ["maxWidth"],
+      message: "Panel maxWidth must be greater than or equal to minWidth",
+    },
+  )
+  .refine(
+    (panel) =>
+      panel.minHeight === undefined ||
+      panel.maxHeight === undefined ||
+      panel.minHeight <= panel.maxHeight,
+    {
+      path: ["maxHeight"],
+      message: "Panel maxHeight must be greater than or equal to minHeight",
+    },
+  )
 
 type InferredPanelProps = z.input<typeof panelProps>
 expectTypesMatch<PanelProps, InferredPanelProps>(true)

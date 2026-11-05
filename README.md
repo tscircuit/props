@@ -81,8 +81,6 @@ Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partvi
 | `<netlabel />`                              | [`NetLabelProps`](#netlabelprops-netlabel)                                                                         |
 | `<opamp />`                                 | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                                 | [`PanelProps`](#panelprops-panel)                                                                                  |
-| `<panelsizeconstraints />`                  | [`PanelSizeConstraintsProps`](#panelsizeconstraintsprops-panelsizeconstraints)                                     |
-| `<paneltabplacement />`                     | [`PanelTabPlacementProps`](#paneltabplacementprops-paneltabplacement)                                              |
 | `<pcbbend />`                               | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
 | `<pcbkeepout />`                            | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
 | `<pcbnotedimension />`                      | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
@@ -1621,10 +1619,20 @@ export interface PanelProps extends Omit<
   tabWidth?: Distance;
   tabLength?: Distance;
   mouseBites?: boolean;
-  /** Rectangular-board tab count, explicit edge offsets and keepouts. Distances parse to mm; omission preserves legacy automatic placement. */
-  tabPlacement?: PanelTabPlacement;
-  /** Optional manufacturing envelope; no default min/max, no aliases. Core checks the final panel dimensions. */
-  sizeConstraints?: PanelSizeConstraints;
+  /** Evenly spaced tabs on each rectangular board edge; a positive integer. Conflicts with tabs. Omission preserves current automatic placement. */
+  tabCountPerEdge?: number;
+  /** Explicit tabs on rectangular boards, using edge-local offsets. Replaces automatic tabs; [] requests no tabs. */
+  tabs?: PanelTab[];
+  /** Edge intervals that the full tab span must avoid. Automatic tabs are omitted on conflict; explicit tabs produce an error. */
+  tabKeepouts?: PanelTabKeepout[];
+  /** Minimum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  minWidth?: Distance;
+  /** Maximum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  maxWidth?: Distance;
+  /** Minimum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  minHeight?: Distance;
+  /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  maxHeight?: Distance;
   edgePadding?: Distance;
   edgePaddingLeft?: Distance;
   edgePaddingRight?: Distance;

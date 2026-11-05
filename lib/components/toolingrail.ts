@@ -2,7 +2,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { distance, type Distance } from "lib/common/distance"
 import { baseGroupProps, type BaseGroupProps } from "./group"
-import { panelEdge, type PanelEdge } from "./panel-tab-placement"
+import { panelEdge, type PanelEdge } from "./panel"
 
 export interface ToolingrailProps
   extends Omit<BaseGroupProps, "width" | "height"> {

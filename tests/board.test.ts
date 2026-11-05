@@ -234,6 +234,19 @@ test("should parse schematicDisabled prop", () => {
   expect(parsed.schematicDisabled).toBe(true)
 })
 
+test("should parse routingLayers and planeLayers props", () => {
+  const raw: BoardProps = {
+    name: "board",
+    layers: 4,
+    routingLayers: ["top", "inner2", "bottom"],
+    planeLayers: { inner1: "GND" },
+  }
+  const parsed = boardProps.parse(raw)
+  expect(parsed.routingLayers).toEqual(["top", "inner2", "bottom"])
+  expect(parsed.planeLayers).toEqual({ inner1: "GND" })
+  expect(() => boardProps.parse({ name: "board", routingLayers: [] })).toThrow()
+})
+
 test("should parse isViaInPadAllowed prop", () => {
   const enabled: BoardProps = {
     name: "board",

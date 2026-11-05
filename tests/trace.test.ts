@@ -116,3 +116,15 @@ test("accepts start/end aliases for trace endpoints", () => {
     end: "B",
   })
 })
+
+test("supports pcbAllowedLayers on trace", () => {
+  const raw: TraceProps = {
+    from: ".U1 > .SDA",
+    to: ".U2 > .SDA",
+    pcbAllowedLayers: ["top", "bottom"],
+  }
+
+  const parsed = traceProps.parse(raw)
+  expect(parsed.pcbAllowedLayers).toEqual(["top", "bottom"])
+  expect(() => traceProps.parse({ ...raw, pcbAllowedLayers: [] })).toThrow()
+})

@@ -1,3 +1,4 @@
+import { layer_ref, type LayerRef, type LayerRefInput } from "circuit-json"
 import type { AutocompleteString } from "lib/common/autocomplete"
 import { distance, type Distance } from "lib/common/distance"
 import { ninePointAnchor } from "lib/common/ninePointAnchor"
@@ -163,6 +164,10 @@ export interface BoardProps
   enableViaStitching?: boolean
   /** Positive center-to-center stitching via spacing in millimeters or a unit string. Omitted uses the solver default. Does not enable stitching by itself. */
   viaStitchPitch?: Distance
+  /** Copper layers on which the autorouter may route signal traces. */
+  routingLayers?: LayerRefInput[]
+  /** Maps copper layers reserved as reference planes to the net or nets poured on them. */
+  planeLayers?: Partial<Record<Extract<LayerRef, string>, string | string[]>>
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
 }
@@ -282,6 +287,10 @@ export const boardProps = subcircuitGroupProps
       .describe(
         "Positive center-to-center stitching via spacing in millimeters or a unit string, parsed to millimeters. Omitted uses the solver default. Does not enable stitching by itself.",
       ),
+    routingLayers: z.array(layer_ref).min(1).optional(),
+    planeLayers: z
+      .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+      .optional(),
     schematicDisabled: z.boolean().optional(),
   })
 

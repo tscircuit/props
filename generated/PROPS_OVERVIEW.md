@@ -904,6 +904,10 @@ export interface BoardProps
   enableViaStitching?: boolean
   /** Positive center-to-center stitching via spacing in millimeters or a unit string. Omitted uses the solver default. Does not enable stitching by itself. */
   viaStitchPitch?: Distance
+  /** Copper layers on which the autorouter may route signal traces. */
+  routingLayers?: LayerRefInput[]
+  /** Maps copper layers reserved as reference planes to the net or nets poured on them. */
+  planeLayers?: Partial<Record<Extract<LayerRef, string>, string | string[]>>
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
 }
@@ -2340,6 +2344,8 @@ export interface NetProps {
   isPowerNet?: boolean
   isGroundNet?: boolean
   nominalTraceWidth?: Distance
+  /** PCB layers on which traces belonging to this net may be routed. */
+  pcbAllowedLayers?: LayerRefInput[]
 }
 
 

@@ -1191,6 +1191,7 @@ export interface CircleHoleProps extends PcbLayoutProps {
   name?: string
   shape?: "circle"
   diameter?: Distance
+  holeDiameter?: Distance
   radius?: Distance
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean

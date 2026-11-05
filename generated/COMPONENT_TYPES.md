@@ -598,18 +598,16 @@ export const kicadProperty = z.object({
   hide: z.boolean().optional(),
   effects: kicadEffects.optional(),
 })
+/** Built-in and custom property names share the same validated property shape. */
 export interface KicadFootprintProperties {
+  [propertyName: string]: KicadProperty | undefined
   Reference?: KicadProperty
   Value?: KicadProperty
   Datasheet?: KicadProperty
   Description?: KicadProperty
 }
-export const kicadFootprintProperties = z.object({
-  Reference: kicadProperty.optional(),
-  Value: kicadProperty.optional(),
-  Datasheet: kicadProperty.optional(),
-  Description: kicadProperty.optional(),
-})
+export const kicadFootprintProperties: KicadFootprintPropertiesSchema =
+  kicadFootprintPropertiesSchema
 export interface KicadFootprintAttributes {
   through_hole?: boolean
   smd?: boolean
@@ -740,7 +738,9 @@ export const kicadSymbolProperty = z.object({
   at: kicadAt.optional(),
   effects: kicadSymbolEffects.optional(),
 })
+/** Built-in and custom property names share the same validated property shape. */
 export interface KicadSymbolProperties {
+  [propertyName: string]: KicadSymbolProperty | undefined
   Reference?: KicadSymbolProperty
   Value?: KicadSymbolProperty
   Footprint?: KicadSymbolProperty
@@ -749,15 +749,8 @@ export interface KicadSymbolProperties {
   ki_keywords?: KicadSymbolProperty
   ki_fp_filters?: KicadSymbolProperty
 }
-export const kicadSymbolProperties = z.object({
-  Reference: kicadSymbolProperty.optional(),
-  Value: kicadSymbolProperty.optional(),
-  Footprint: kicadSymbolProperty.optional(),
-  Datasheet: kicadSymbolProperty.optional(),
-  Description: kicadSymbolProperty.optional(),
-  ki_keywords: kicadSymbolProperty.optional(),
-  ki_fp_filters: kicadSymbolProperty.optional(),
-})
+export const kicadSymbolProperties: KicadSymbolPropertiesSchema =
+  kicadSymbolPropertiesSchema
 export interface KicadSymbolMetadata {
   symbolName?: string
   extends?: string
@@ -3760,6 +3753,11 @@ export const autorouterConfig = z.object({
     .optional(),
   local: z.boolean().optional(),
 })
+export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
+  autorouterConfig,
+  autorouterPreset,
+  autorouterString,
+])
 export type AutorouterVersion =
   | "beta_pipeline1"
   | "beta_pipeline3"

@@ -2121,6 +2121,7 @@ export interface KicadFootprintPad {
 
 
 export interface KicadFootprintProperties {
+  [propertyName: string]: KicadProperty | undefined
   Reference?: KicadProperty
   Value?: KicadProperty
   Datasheet?: KicadProperty
@@ -2179,6 +2180,7 @@ export interface KicadSymbolPinNumbers {
 
 
 export interface KicadSymbolProperties {
+  [propertyName: string]: KicadSymbolProperty | undefined
   Reference?: KicadSymbolProperty
   Value?: KicadSymbolProperty
   Footprint?: KicadSymbolProperty

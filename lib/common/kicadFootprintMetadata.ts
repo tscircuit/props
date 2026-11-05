@@ -62,19 +62,39 @@ export const kicadProperty = z.object({
 type InferredKicadProperty = z.input<typeof kicadProperty>
 expectTypesMatch<KicadProperty, InferredKicadProperty>(true)
 
+/** Built-in and custom property names share the same validated property shape. */
 export interface KicadFootprintProperties {
+  [propertyName: string]: KicadProperty | undefined
   Reference?: KicadProperty
   Value?: KicadProperty
   Datasheet?: KicadProperty
   Description?: KicadProperty
 }
 
-export const kicadFootprintProperties = z.object({
-  Reference: kicadProperty.optional(),
-  Value: kicadProperty.optional(),
-  Datasheet: kicadProperty.optional(),
-  Description: kicadProperty.optional(),
-})
+const kicadFootprintPropertiesSchema = z
+  .object({
+    Reference: kicadProperty.optional(),
+    Value: kicadProperty.optional(),
+    Datasheet: kicadProperty.optional(),
+    Description: kicadProperty.optional(),
+  })
+  .catchall(kicadProperty.optional())
+
+// Name the schema type so consumers retain the named properties without
+// expanding the catchall throughout generated package declarations.
+interface KicadFootprintPropertiesSchema
+  extends z.ZodObject<
+    typeof kicadFootprintPropertiesSchema.shape,
+    "strip",
+    z.ZodOptional<typeof kicadProperty>,
+    z.output<typeof kicadFootprintPropertiesSchema>,
+    KicadFootprintProperties
+  > {}
+
+export { type KicadFootprintPropertiesSchema }
+
+export const kicadFootprintProperties: KicadFootprintPropertiesSchema =
+  kicadFootprintPropertiesSchema
 
 type InferredKicadFootprintProperties = z.input<typeof kicadFootprintProperties>
 expectTypesMatch<KicadFootprintProperties, InferredKicadFootprintProperties>(

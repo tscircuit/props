@@ -7,13 +7,37 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export function extractInterfaces(content: string): string[] {
   const interfaces: string[] = []
+  const source = ts.createSourceFile(
+    "props.ts",
+    content,
+    ts.ScriptTarget.Latest,
+  )
+  const declarations = source.statements.filter(ts.isVariableStatement)
   const lines = content.split("\n")
   let currentInterface = ""
   let isCapturing = false
   let captureComments = ""
   let bracketCount = 0
 
-  for (const line of lines) {
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+    const line = lines[lineIndex]!
+    const typedExport = /export\s+(?:const|let|var)\s+(\w+)\s*:/.exec(line)
+    if (typedExport && !line.includes("Input") && !line.includes("Inferred")) {
+      const statement = declarations.find((statement) =>
+        statement.declarationList.declarations.some(
+          (declaration) => declaration.name.getText(source) === typedExport[1],
+        ),
+      )
+      if (statement) {
+        interfaces.push(`${captureComments}${statement.getText(source)}\n`)
+        captureComments = ""
+        currentInterface = ""
+        isCapturing = false
+        bracketCount = 0
+        lineIndex = source.getLineAndCharacterOfPosition(statement.end).line
+        continue
+      }
+    }
     // Capture JSDoc comments
     if (line.trim().startsWith("/**")) {
       captureComments = `${line}\n`
@@ -63,12 +87,6 @@ export function extractInterfaces(content: string): string[] {
 
   // Preserve the legacy selection of documented declarations, but use the
   // parser's statement boundaries to complete truncated validator expressions.
-  const source = ts.createSourceFile(
-    "props.ts",
-    content,
-    ts.ScriptTarget.Latest,
-  )
-  const declarations = source.statements.filter(ts.isVariableStatement)
   return interfaces.map((definition, index) => {
     const match = /^export (?:const|let|var) (\w+)\s*=/m.exec(definition)
     if (!match) return definition

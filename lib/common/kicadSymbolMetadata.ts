@@ -94,7 +94,7 @@ interface KicadSymbolPropertiesSchema
   extends z.ZodObject<
     typeof kicadSymbolPropertiesSchema.shape,
     "strip",
-    typeof kicadSymbolPropertiesSchema._def.catchall,
+    z.ZodOptional<typeof kicadSymbolProperty>,
     z.output<typeof kicadSymbolPropertiesSchema>,
     KicadSymbolProperties
   > {}

@@ -56,3 +56,22 @@ export type PropsInput = z.input<typeof props>
     ".extend({\n    name: z.string(),\n  })\n",
   ])
 })
+
+test("documents typed validator exports without truncating their expressions", () => {
+  const typedValidator = `export const properties: PropertiesSchema = z
+  .object({ Reference: property.optional() })
+  .catchall(property.optional())`
+  expect(extractInterfaces(`${typedValidator}\n`)).toEqual([
+    `${typedValidator}\n`,
+  ])
+  for (const kind of ["Footprint", "Symbol"]) {
+    const source = readFileSync(`lib/common/kicad${kind}Metadata.ts`, "utf8")
+    const declaration = source
+      .slice(
+        source.indexOf(`export const kicad${kind}Properties:`),
+        source.indexOf(`type InferredKicad${kind}Properties`),
+      )
+      .trim()
+    expect(extractInterfaces(source).join("")).toContain(declaration)
+  }
+})

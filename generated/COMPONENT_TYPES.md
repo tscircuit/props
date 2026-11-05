@@ -606,6 +606,8 @@ export interface KicadFootprintProperties {
   Datasheet?: KicadProperty
   Description?: KicadProperty
 }
+export const kicadFootprintProperties: KicadFootprintPropertiesSchema =
+  kicadFootprintPropertiesSchema
 export interface KicadFootprintAttributes {
   through_hole?: boolean
   smd?: boolean
@@ -747,6 +749,8 @@ export interface KicadSymbolProperties {
   ki_keywords?: KicadSymbolProperty
   ki_fp_filters?: KicadSymbolProperty
 }
+export const kicadSymbolProperties: KicadSymbolPropertiesSchema =
+  kicadSymbolPropertiesSchema
 export interface KicadSymbolMetadata {
   symbolName?: string
   extends?: string
@@ -3749,6 +3753,11 @@ export const autorouterConfig = z.object({
     .optional(),
   local: z.boolean().optional(),
 })
+export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
+  autorouterConfig,
+  autorouterPreset,
+  autorouterString,
+])
 export type AutorouterVersion =
   | "beta_pipeline1"
   | "beta_pipeline3"

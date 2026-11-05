@@ -62,19 +62,10 @@ export const kicadProperty = z.object({
 type InferredKicadProperty = z.input<typeof kicadProperty>
 expectTypesMatch<KicadProperty, InferredKicadProperty>(true)
 
-export interface KicadFootprintProperties {
-  Reference?: KicadProperty
-  Value?: KicadProperty
-  Datasheet?: KicadProperty
-  Description?: KicadProperty
-}
+/** Custom property names use the same validated shape as built-in properties. */
+export type KicadFootprintProperties = Record<string, KicadProperty | undefined>
 
-export const kicadFootprintProperties = z.object({
-  Reference: kicadProperty.optional(),
-  Value: kicadProperty.optional(),
-  Datasheet: kicadProperty.optional(),
-  Description: kicadProperty.optional(),
-})
+export const kicadFootprintProperties = z.record(kicadProperty.optional())
 
 type InferredKicadFootprintProperties = z.input<typeof kicadFootprintProperties>
 expectTypesMatch<KicadFootprintProperties, InferredKicadFootprintProperties>(

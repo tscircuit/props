@@ -598,18 +598,6 @@ export const kicadProperty = z.object({
   hide: z.boolean().optional(),
   effects: kicadEffects.optional(),
 })
-export interface KicadFootprintProperties {
-  Reference?: KicadProperty
-  Value?: KicadProperty
-  Datasheet?: KicadProperty
-  Description?: KicadProperty
-}
-export const kicadFootprintProperties = z.object({
-  Reference: kicadProperty.optional(),
-  Value: kicadProperty.optional(),
-  Datasheet: kicadProperty.optional(),
-  Description: kicadProperty.optional(),
-})
 export interface KicadFootprintAttributes {
   through_hole?: boolean
   smd?: boolean
@@ -739,24 +727,6 @@ export const kicadSymbolProperty = z.object({
   id: z.union([z.number(), z.string()]).optional(),
   at: kicadAt.optional(),
   effects: kicadSymbolEffects.optional(),
-})
-export interface KicadSymbolProperties {
-  Reference?: KicadSymbolProperty
-  Value?: KicadSymbolProperty
-  Footprint?: KicadSymbolProperty
-  Datasheet?: KicadSymbolProperty
-  Description?: KicadSymbolProperty
-  ki_keywords?: KicadSymbolProperty
-  ki_fp_filters?: KicadSymbolProperty
-}
-export const kicadSymbolProperties = z.object({
-  Reference: kicadSymbolProperty.optional(),
-  Value: kicadSymbolProperty.optional(),
-  Footprint: kicadSymbolProperty.optional(),
-  Datasheet: kicadSymbolProperty.optional(),
-  Description: kicadSymbolProperty.optional(),
-  ki_keywords: kicadSymbolProperty.optional(),
-  ki_fp_filters: kicadSymbolProperty.optional(),
 })
 export interface KicadSymbolMetadata {
   symbolName?: string

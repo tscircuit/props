@@ -598,6 +598,14 @@ export const kicadProperty = z.object({
   hide: z.boolean().optional(),
   effects: kicadEffects.optional(),
 })
+/** Built-in and custom property names share the same validated property shape. */
+export interface KicadFootprintProperties {
+  [propertyName: string]: KicadProperty | undefined
+  Reference?: KicadProperty
+  Value?: KicadProperty
+  Datasheet?: KicadProperty
+  Description?: KicadProperty
+}
 export interface KicadFootprintAttributes {
   through_hole?: boolean
   smd?: boolean
@@ -728,6 +736,17 @@ export const kicadSymbolProperty = z.object({
   at: kicadAt.optional(),
   effects: kicadSymbolEffects.optional(),
 })
+/** Built-in and custom property names share the same validated property shape. */
+export interface KicadSymbolProperties {
+  [propertyName: string]: KicadSymbolProperty | undefined
+  Reference?: KicadSymbolProperty
+  Value?: KicadSymbolProperty
+  Footprint?: KicadSymbolProperty
+  Datasheet?: KicadSymbolProperty
+  Description?: KicadSymbolProperty
+  ki_keywords?: KicadSymbolProperty
+  ki_fp_filters?: KicadSymbolProperty
+}
 export interface KicadSymbolMetadata {
   symbolName?: string
   extends?: string

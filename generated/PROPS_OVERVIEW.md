@@ -2120,6 +2120,15 @@ export interface KicadFootprintPad {
 }
 
 
+export interface KicadFootprintProperties {
+  [propertyName: string]: KicadProperty | undefined
+  Reference?: KicadProperty
+  Value?: KicadProperty
+  Datasheet?: KicadProperty
+  Description?: KicadProperty
+}
+
+
 export interface KicadPinMetadata {
   electricalType?: KicadPinElectricalType
   graphicStyle?: KicadPinGraphicStyle
@@ -2167,6 +2176,18 @@ export interface KicadSymbolPinNames {
 
 export interface KicadSymbolPinNumbers {
   hide?: boolean
+}
+
+
+export interface KicadSymbolProperties {
+  [propertyName: string]: KicadSymbolProperty | undefined
+  Reference?: KicadSymbolProperty
+  Value?: KicadSymbolProperty
+  Footprint?: KicadSymbolProperty
+  Datasheet?: KicadSymbolProperty
+  Description?: KicadSymbolProperty
+  ki_keywords?: KicadSymbolProperty
+  ki_fp_filters?: KicadSymbolProperty
 }
 
 

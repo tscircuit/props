@@ -4382,6 +4382,10 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  minWidth?: Distance
+  maxWidth?: Distance
+  minHeight?: Distance
+  maxHeight?: Distance
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -4389,7 +4393,7 @@ export interface PanelProps
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
 }
-/** Gap between boards in a panel */
+/** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
 export const panelProps = baseGroupProps
   .omit({
     width: true,
@@ -4415,6 +4419,10 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    minWidth: positivePanelDistance.optional(),
+    maxWidth: positivePanelDistance.optional(),
+    minHeight: positivePanelDistance.optional(),
+    maxHeight: positivePanelDistance.optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),

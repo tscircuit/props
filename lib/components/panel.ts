@@ -31,6 +31,8 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
+  tabCountPerEdge?: number
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -64,6 +66,7 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    tabCountPerEdge: z.number().int().positive().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),

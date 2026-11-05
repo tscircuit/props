@@ -2412,12 +2412,34 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
+  tabCountPerEdge?: number
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
   edgePaddingTop?: Distance
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
+}
+
+
+export interface PanelTabKeepoutProps {
+  /** Stable board name. Omit to reserve the interval on every board in the containing panel. */
+  boardName?: string
+  edge: PanelTabEdge
+  /** Inclusive start in edge-local mm: left to right on horizontal edges, bottom to top on vertical edges. */
+  from: Distance
+  /** Inclusive end in the same edge coordinates. Must be at least from. */
+  to: Distance
+}
+
+
+export interface PanelTabProps {
+  /** Stable board name. Omit to apply this tab to every board in the containing panel. */
+  boardName?: string
+  edge: PanelTabEdge
+  /** Tab centre measured along a board edge in mm (or a unit string): left to right on horizontal edges, bottom to top on vertical edges. */
+  offset: Distance
 }
 
 

@@ -15,6 +15,7 @@ export interface ProjectConfig
     | "defaultSpiceEngine"
     | "pcbDisabled"
     | "schematicDisabled"
+    | "schematicTraceRoutingDisabled"
     | "analogSimulationDisabled"
   > {}
 
@@ -31,6 +32,7 @@ export const projectConfig = platformConfigObject.pick({
   defaultSpiceEngine: true,
   pcbDisabled: true,
   schematicDisabled: true,
+  schematicTraceRoutingDisabled: true,
   analogSimulationDisabled: true,
 }) as z.ZodType<ProjectConfig>
 

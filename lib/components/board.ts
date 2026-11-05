@@ -165,6 +165,8 @@ export interface BoardProps
   viaStitchPitch?: Distance
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
+  /** Whether automatic schematic trace routing should be skipped while keeping schematic elements */
+  schematicTraceRoutingDisabled?: boolean
 }
 
 export const boardProps = subcircuitGroupProps
@@ -283,6 +285,7 @@ export const boardProps = subcircuitGroupProps
         "Positive center-to-center stitching via spacing in millimeters or a unit string, parsed to millimeters. Omitted uses the solver default. Does not enable stitching by itself.",
       ),
     schematicDisabled: z.boolean().optional(),
+    schematicTraceRoutingDisabled: z.boolean().optional(),
   })
 
 type InferredBoardProps = z.input<typeof boardProps>

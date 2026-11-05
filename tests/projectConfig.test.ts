@@ -1,4 +1,5 @@
 import { expect, test } from "bun:test"
+import { platformConfig } from "lib/platformConfig"
 import { projectConfig } from "lib/projectConfig"
 
 test("projectConfig only includes project-specific fields", () => {
@@ -13,6 +14,7 @@ test("projectConfig only includes project-specific fields", () => {
     defaultSpiceEngine: "spicey",
     pcbDisabled: true,
     schematicDisabled: true,
+    schematicTraceRoutingDisabled: true,
     analogSimulationDisabled: true,
     partsEngineDisabled: true,
     footprintLibraryMap: {},
@@ -29,6 +31,7 @@ test("projectConfig only includes project-specific fields", () => {
     defaultSpiceEngine: "spicey",
     pcbDisabled: true,
     schematicDisabled: true,
+    schematicTraceRoutingDisabled: true,
     analogSimulationDisabled: true,
   })
 })
@@ -37,14 +40,28 @@ test("projectConfig includes disabled rendering flags when provided", () => {
   const config = projectConfig.parse({
     pcbDisabled: true,
     schematicDisabled: false,
+    schematicTraceRoutingDisabled: true,
     analogSimulationDisabled: true,
   })
 
   expect(config).toEqual({
     pcbDisabled: true,
     schematicDisabled: false,
+    schematicTraceRoutingDisabled: true,
     analogSimulationDisabled: true,
   })
+})
+
+test("platformConfig accepts schematicTraceRoutingDisabled", () => {
+  expect(
+    platformConfig.parse({ schematicTraceRoutingDisabled: true })
+      .schematicTraceRoutingDisabled,
+  ).toBe(true)
+  expect(
+    platformConfig.parse({ schematicTraceRoutingDisabled: false })
+      .schematicTraceRoutingDisabled,
+  ).toBe(false)
+  expect(platformConfig.parse({}).schematicTraceRoutingDisabled).toBeUndefined()
 })
 
 test("projectConfig includes snapshotsDir when provided", () => {

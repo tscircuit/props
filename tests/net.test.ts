@@ -29,3 +29,16 @@ test("should parse NetProps with nullable routingPhaseIndex", () => {
   const parsed = netProps.parse(raw)
   expect(parsed.routingPhaseIndex).toBeNull()
 })
+
+test("should parse NetProps with pcbAllowedLayers", () => {
+  const raw: NetProps = {
+    name: "RF_OUT",
+    pcbAllowedLayers: ["top", "inner2"],
+  }
+
+  const parsed = netProps.parse(raw)
+  expect(parsed.pcbAllowedLayers).toEqual(["top", "inner2"])
+  expect(() =>
+    netProps.parse({ name: "RF_OUT", pcbAllowedLayers: [] }),
+  ).toThrow()
+})

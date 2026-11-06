@@ -1,4 +1,4 @@
-import { distance, route_hint_point } from "circuit-json"
+import { distance, layer_ref, route_hint_point } from "circuit-json"
 import { z } from "zod"
 import { point } from "../common/point"
 import { pcbPath } from "../common/pcbPath"
@@ -49,6 +49,11 @@ const baseTraceProps = z.object({
     .nonnegative()
     .optional()
     .describe("Maximum number of vias allowed in the PCB trace route"),
+  pcbAllowedLayers: z
+    .array(layer_ref)
+    .min(1)
+    .optional()
+    .describe("PCB layers on which the trace may be routed"),
   connectsTo: z.string().or(z.array(z.string())).optional(),
 })
 

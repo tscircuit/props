@@ -2233,6 +2233,8 @@ export interface BoardProps
   automaticPoursEnabled?: boolean
   enableViaStitching?: boolean
   viaStitchPitch?: Distance
+  routingLayers?: LayerRefInput[]
+  planeLayers?: Partial<Record<Extract<LayerRef, string>, string | string[]>>
   schematicDisabled?: boolean
 }
 /** Whether this board should be omitted from the schematic view */
@@ -2351,6 +2353,10 @@ export const boardProps = subcircuitGroupProps
       .describe(
         "Positive center-to-center stitching via spacing in millimeters or a unit string, parsed to millimeters. Omitted uses the solver default. Does not enable stitching by itself.",
       ),
+    routingLayers: z.array(layer_ref).min(1).optional(),
+    planeLayers: z
+      .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+      .optional(),
     schematicDisabled: z.boolean().optional(),
   })
 ```
@@ -4273,7 +4279,9 @@ export interface NetProps {
   isPowerNet?: boolean
   isGroundNet?: boolean
   nominalTraceWidth?: Distance
+  pcbAllowedLayers?: LayerRefInput[]
 }
+/** PCB layers on which traces belonging to this net may be routed. */
 export const netProps = z.object({
   name: z.string(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
@@ -4282,6 +4290,7 @@ export const netProps = z.object({
   isPowerNet: z.boolean().optional(),
   isGroundNet: z.boolean().optional(),
   nominalTraceWidth: distance.optional(),
+  pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
 })
 ```
 

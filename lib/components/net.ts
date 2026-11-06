@@ -1,4 +1,4 @@
-import { distance } from "circuit-json"
+import { distance, layer_ref, type LayerRefInput } from "circuit-json"
 import { z } from "zod"
 import type { Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
@@ -11,6 +11,8 @@ export interface NetProps {
   isPowerNet?: boolean
   isGroundNet?: boolean
   nominalTraceWidth?: Distance
+  /** PCB layers on which traces belonging to this net may be routed. */
+  pcbAllowedLayers?: LayerRefInput[]
 }
 
 export const netProps = z.object({
@@ -21,6 +23,7 @@ export const netProps = z.object({
   isPowerNet: z.boolean().optional(),
   isGroundNet: z.boolean().optional(),
   nominalTraceWidth: distance.optional(),
+  pcbAllowedLayers: z.array(layer_ref).min(1).optional(),
 })
 
 type InferredNetProps = z.input<typeof netProps>

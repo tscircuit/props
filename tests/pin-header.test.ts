@@ -136,3 +136,14 @@ test("should snapshot schematic props for pin header", () => {
     }
   `)
 })
+
+test("should require pinCount to be a positive integer", () => {
+  for (const invalidPinCount of [0, -1, 2.5, Number.POSITIVE_INFINITY]) {
+    expect(() =>
+      pinHeaderProps.parse({
+        name: "H1",
+        pinCount: invalidPinCount,
+      }),
+    ).toThrow()
+  }
+})

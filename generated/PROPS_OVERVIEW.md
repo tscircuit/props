@@ -1891,7 +1891,7 @@ export interface FuseProps<PinLabel extends string = string>
   /**
    * Connections to other components
    */
-  connections?: Connections<PinLabel>
+  connections?: Connections<FusePinLabels>
 }
 
 

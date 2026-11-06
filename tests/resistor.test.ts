@@ -21,6 +21,13 @@ test("should parse tolerance percentage for resistor", () => {
 
   const parsed = resistorProps.parse(raw)
   expect(parsed.tolerance).toBeCloseTo(0.05)
+
+  const parsedWithWhitespace = resistorProps.parse({
+    name: "R2_whitespace",
+    resistance: 2200,
+    tolerance: " 0.5% ",
+  })
+  expect(parsedWithWhitespace.tolerance).toBeCloseTo(0.005)
 })
 
 test("should parse resistance strings to numbers", () => {

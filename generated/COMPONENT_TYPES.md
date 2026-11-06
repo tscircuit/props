@@ -6238,6 +6238,8 @@ export interface SystemBlockConnectionProps {
   to: string
   label?: string
   kind?: "signal" | "power"
+  color?: string
+  lineStyle?: "solid" | "dashed" | "dotted"
   direction?: "forward" | "both" | "none"
 }
 /** Arrowheads: from → to, both ends, or neither. Defaults to forward. */
@@ -6246,6 +6248,12 @@ export const systemBlockConnectionProps = z.object({
   from: z.string().trim().min(1),
   to: z.string().trim().min(1),
   label: z.string().optional(),
+  color: z
+    .string()
+    .trim()
+    .regex(/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i)
+    .optional(),
+  lineStyle: z.enum(["solid", "dashed", "dotted"]).optional(),
   kind: z.enum(["signal", "power"]).default("signal"),
   direction: z.enum(["forward", "both", "none"]).default("forward"),
 })

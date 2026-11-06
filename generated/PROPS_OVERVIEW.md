@@ -3764,6 +3764,10 @@ export interface SystemBlockConnectionProps {
   label?: string
   /** Relationship category; defaults to signal. */
   kind?: "signal" | "power"
+  /** Optional #RGB or #RRGGBB stroke/arrow color. Overrides the kind's color; omitted uses the renderer theme. */
+  color?: string
+  /** Optional stroke pattern. Omitted preserves the kind's default; independent of color and direction. */
+  lineStyle?: "solid" | "dashed" | "dotted"
   /** Arrowheads: from → to, both ends, or neither. Defaults to forward. */
   direction?: "forward" | "both" | "none"
 }

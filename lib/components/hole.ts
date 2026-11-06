@@ -7,6 +7,7 @@ export interface CircleHoleProps extends PcbLayoutProps {
   name?: string
   shape?: "circle"
   diameter?: Distance
+  holeDiameter?: Distance
   radius?: Distance
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
@@ -50,15 +51,42 @@ const circleHoleProps = pcbLayoutProps
     name: z.string().optional(),
     shape: z.literal("circle").optional(),
     diameter: distance.optional(),
+    holeDiameter: distance.optional(),
     radius: distance.optional(),
     solderMaskMargin: distance.optional(),
     coveredWithSolderMask: z.boolean().optional(),
   })
-  .transform((d) => ({
-    ...d,
-    diameter: d.diameter ?? 2 * d.radius!,
-    radius: d.radius ?? d.diameter! / 2,
-  }))
+  .superRefine((d, ctx) => {
+    if (
+      d.diameter !== undefined &&
+      d.holeDiameter !== undefined &&
+      d.diameter !== d.holeDiameter
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "diameter and holeDiameter cannot have different values",
+      })
+    }
+    if (
+      d.diameter === undefined &&
+      d.holeDiameter === undefined &&
+      d.radius === undefined
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Circle hole requires diameter, holeDiameter, or radius",
+      })
+    }
+  })
+  .transform((d) => {
+    const diameter = d.diameter ?? d.holeDiameter ?? 2 * d.radius!
+    const radius = d.radius ?? diameter / 2
+    return {
+      ...d,
+      diameter,
+      radius,
+    }
+  })
 
 const pillHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),

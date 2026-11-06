@@ -72,3 +72,29 @@ test("pill holes without required dimensions throw", () => {
 
   expect(() => holeProps.parse(raw)).toThrow()
 })
+
+test("circle holes accept holeDiameter alias and reject missing or conflicting dimensions", () => {
+  const raw: HoleProps = {
+    holeDiameter: "3.2mm",
+  }
+
+  expectTypeOf(raw).toMatchTypeOf<z.input<typeof holeProps>>()
+
+  const parsed = holeProps.parse(raw)
+
+  if (parsed.shape === undefined || parsed.shape === "circle") {
+    expect(parsed.diameter).toBeCloseTo(3.2, 5)
+    expect(parsed.radius).toBeCloseTo(1.6, 5)
+  } else {
+    throw new Error("Expected circle hole props")
+  }
+
+  expect(() =>
+    holeProps.parse({
+      diameter: "3.2mm",
+      holeDiameter: "2mm",
+    }),
+  ).toThrow()
+
+  expect(() => holeProps.parse({})).toThrow()
+})

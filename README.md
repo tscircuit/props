@@ -253,7 +253,7 @@ export interface AmmeterProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/ammeter.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\ammeter.ts)
 
 ### AnalogAcSweepSimulationProps `<analog.acsweepsimulation />`
 
@@ -272,7 +272,7 @@ export interface AnalogAcSweepSimulationProps extends AnalogAnalysisSimulationBa
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogacsweepsimulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\analogacsweepsimulation.ts)
 
 ### AnalogDcOperatingPointSimulationProps `<analog.dcoperatingpointsimulation />`
 
@@ -281,7 +281,7 @@ export type AnalogDcOperatingPointSimulationProps =
   AnalogAnalysisSimulationBaseProps;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogdcoperatingpointsimulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\analogdcoperatingpointsimulation.ts)
 
 ### AnalogDcSweepSimulationProps `<analog.dcsweepsimulation />`
 
@@ -298,7 +298,7 @@ export interface AnalogDcSweepSimulationProps extends AnalogAnalysisSimulationBa
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogdcsweepsimulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\analogdcsweepsimulation.ts)
 
 ### AnalogDigitalStimulusProps `<analog.digitalstimulus />`
 
@@ -322,7 +322,7 @@ export interface AnalogDigitalStimulusProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogdigitalstimulus.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\analogdigitalstimulus.ts)
 
 ### AnalogEyeDiagramProps `<analog.eyediagram />`
 
@@ -339,7 +339,7 @@ export interface AnalogEyeDiagramProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogeyediagram.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\analogeyediagram.ts)
 
 ### AnalogSimulationProps `<analogsimulation />`
 
@@ -356,7 +356,7 @@ export interface AnalogSimulationProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogsimulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\analogsimulation.ts)
 
 ### AnalogResistanceSweepParameterProps `<analog.sweepparameter />`
 
@@ -368,7 +368,7 @@ export interface AnalogResistanceSweepParameterProps extends AnalogSweepCoordina
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogsweepparameter.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\analogsweepparameter.ts)
 
 ### AnalogTransientSimulationProps `<analog.transientsimulation />`
 
@@ -386,7 +386,7 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogtransientsimulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\analogtransientsimulation.ts)
 
 ### AntennaProps `<antenna />`
 
@@ -412,7 +412,7 @@ export interface AntennaProps extends CommonComponentProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/antenna.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\antenna.ts)
 
 ### AutoroutingPhaseProps `<autoroutingphase />`
 
@@ -469,7 +469,7 @@ export interface AutoroutingPhaseProps extends RoutingTolerances, FanoutProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/autoroutingphase.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\autoroutingphase.ts)
 
 ### BatteryProps `<battery />`
 
@@ -485,7 +485,7 @@ export interface BatteryProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/battery.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\battery.ts)
 
 ### BoardProps `<board />`
 
@@ -578,7 +578,7 @@ export interface BoardProps extends Omit<
 }
 ````
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/board.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\board.ts)
 
 ### BreakoutProps `<breakout />`
 
@@ -620,7 +620,7 @@ export interface BreakoutProps
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/breakout.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\breakout.ts)
 
 ### BreakoutPointProps `<breakoutpoint />`
 
@@ -633,7 +633,7 @@ export interface BreakoutPointProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/breakoutpoint.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\breakoutpoint.ts)
 
 ### BusProps `<bus />`
 
@@ -679,7 +679,7 @@ export interface BusProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/bus.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\bus.ts)
 
 ### CadAssemblyProps `<cadassembly />`
 
@@ -701,7 +701,7 @@ export interface CadAssemblyProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/cadassembly.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\cadassembly.ts)
 
 ### CadModelProps `<cadmodel />`
 
@@ -722,7 +722,7 @@ export interface CadModelProps extends CadModelBase {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/cadmodel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\cadmodel.ts)
 
 ### CapacitorProps `<capacitor />`
 
@@ -746,7 +746,7 @@ export interface CapacitorProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/capacitor.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\capacitor.ts)
 
 ### ChipProps `<chip />`
 
@@ -797,7 +797,7 @@ export interface ChipPropsSU<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/chip.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\chip.ts)
 
 ### ConnectorProps `<connector />`
 
@@ -815,7 +815,7 @@ export interface ConnectorProps extends ChipPropsSU {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/connector.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\connector.ts)
 
 ### ConstrainedLayoutProps `<constrainedlayout />`
 
@@ -827,7 +827,7 @@ export interface ConstrainedLayoutProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/constrainedlayout.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\constrainedlayout.ts)
 
 ### ConstraintProps `<constraint />`
 
@@ -843,7 +843,7 @@ export type ConstraintProps =
 // -----------------------------------------------------------------------------
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/constraint.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\constraint.ts)
 
 ### CopperPourProps `<copperpour />`
 
@@ -877,7 +877,7 @@ export interface CopperPourProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/copper-pour.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\copper-pour.ts)
 
 ### CopperTextProps `<coppertext />`
 
@@ -885,7 +885,7 @@ export interface CopperPourProps {
 export type CopperTextProps = z.input<typeof copperTextProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/copper-text.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\copper-text.ts)
 
 ### CourtyardCircleProps `<courtyardcircle />`
 
@@ -893,7 +893,7 @@ export type CopperTextProps = z.input<typeof copperTextProps>;
 export type CourtyardCircleProps = z.input<typeof courtyardCircleProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-circle.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\courtyard-circle.ts)
 
 ### CourtyardOutlineProps `<courtyardoutline />`
 
@@ -901,7 +901,7 @@ export type CourtyardCircleProps = z.input<typeof courtyardCircleProps>;
 export type CourtyardOutlineProps = z.input<typeof courtyardOutlineProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-outline.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\courtyard-outline.ts)
 
 ### CourtyardPillProps `<courtyardpill />`
 
@@ -909,7 +909,7 @@ export type CourtyardOutlineProps = z.input<typeof courtyardOutlineProps>;
 export type CourtyardPillProps = z.input<typeof courtyardPillProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-pill.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\courtyard-pill.ts)
 
 ### CourtyardRectProps `<courtyardrect />`
 
@@ -917,7 +917,7 @@ export type CourtyardPillProps = z.input<typeof courtyardPillProps>;
 export type CourtyardRectProps = z.input<typeof courtyardRectProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/courtyard-rect.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\courtyard-rect.ts)
 
 ### CrystalProps `<crystal />`
 
@@ -936,7 +936,7 @@ export interface CrystalProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/crystal.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\crystal.ts)
 
 ### CurrentSourceProps `<currentsource />`
 
@@ -958,7 +958,7 @@ export interface CurrentSourceProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/currentsource.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\currentsource.ts)
 
 ### RectCutoutProps `<cutout />`
 
@@ -974,7 +974,7 @@ export interface RectCutoutProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/cutout.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\cutout.ts)
 
 ### DifferentialPairProps `<differentialpair />`
 
@@ -1013,7 +1013,7 @@ export interface DifferentialPairProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/differentialpair.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\differentialpair.ts)
 
 ### DiodeProps `<diode />`
 
@@ -1043,7 +1043,7 @@ export interface DiodeProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/diode.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\diode.ts)
 
 ### DrcCheckProps `<drccheck />`
 
@@ -1054,7 +1054,7 @@ export interface DrcCheckProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/drc-check.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\drc-check.ts)
 
 ### FabricationNoteDimensionProps `<fabricationnotedimension />`
 
@@ -1093,7 +1093,7 @@ export interface FabricationNoteDimensionProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-dimension.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\fabrication-note-dimension.ts)
 
 ### FabricationNotePathProps `<fabricationnotepath />`
 
@@ -1101,7 +1101,7 @@ export interface FabricationNoteDimensionProps extends Omit<
 export type FabricationNotePathProps = z.input<typeof fabricationNotePathProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-path.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\fabrication-note-path.ts)
 
 ### FabricationNoteRectProps `<fabricationnoterect />`
 
@@ -1109,7 +1109,7 @@ export type FabricationNotePathProps = z.input<typeof fabricationNotePathProps>;
 export type FabricationNoteRectProps = z.input<typeof fabricationNoteRectProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-rect.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\fabrication-note-rect.ts)
 
 ### FabricationNoteTextProps `<fabricationnotetext />`
 
@@ -1124,7 +1124,7 @@ export interface FabricationNoteTextProps extends PcbLayoutProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/fabrication-note-text.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\fabrication-note-text.ts)
 
 ### FiducialProps `<fiducial />`
 
@@ -1135,7 +1135,7 @@ export interface FiducialProps extends CommonComponentProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/fiducial.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\fiducial.ts)
 
 ### FootprintProps `<footprint />`
 
@@ -1203,7 +1203,7 @@ export interface FootprintProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/footprint.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\footprint.ts)
 
 ### FuseProps `<fuse />`
 
@@ -1235,7 +1235,7 @@ export interface FuseProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/fuse.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\fuse.ts)
 
 ### BaseGroupProps
 
@@ -1373,7 +1373,7 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/group.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\group.ts)
 
 ### CircleHoleProps `<hole />`
 
@@ -1382,13 +1382,14 @@ export interface CircleHoleProps extends PcbLayoutProps {
   name?: string;
   shape?: "circle";
   diameter?: Distance;
+  holeDiameter?: Distance;
   radius?: Distance;
   solderMaskMargin?: Distance;
   coveredWithSolderMask?: boolean;
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\hole.ts)
 
 ### IbisModelProps `<ibismodel />`
 
@@ -1399,7 +1400,7 @@ export interface IbisModelProps extends IbisModelDefinition {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/ibismodel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\ibismodel.ts)
 
 ### InductorProps `<inductor />`
 
@@ -1414,7 +1415,7 @@ export interface InductorProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/inductor.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\inductor.ts)
 
 ### InterconnectProps `<interconnect />`
 
@@ -1433,7 +1434,7 @@ export interface InterconnectProps extends CommonComponentProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/interconnect.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\interconnect.ts)
 
 ### InternalCircuitProps `<internalcircuit />`
 
@@ -1443,7 +1444,7 @@ export interface InternalCircuitProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/internal-circuit.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\internal-circuit.ts)
 
 ### JumperProps `<jumper />`
 
@@ -1485,7 +1486,7 @@ export interface JumperProps extends CommonComponentProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/jumper.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\jumper.ts)
 
 ### LedProps `<led />`
 
@@ -1493,7 +1494,7 @@ export interface JumperProps extends CommonComponentProps {
 export type LedProps = z.input<typeof ledProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/led.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\led.ts)
 
 ### MosfetProps `<mosfet />`
 
@@ -1513,7 +1514,7 @@ export interface MosfetProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/mosfet.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\mosfet.ts)
 
 ### MountedBoardProps `<mountedboard />`
 
@@ -1525,7 +1526,7 @@ export interface MountedBoardProps
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/mountedboard.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\mountedboard.ts)
 
 ### NetProps `<net />`
 
@@ -1541,7 +1542,7 @@ export interface NetProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/net.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\net.ts)
 
 ### NetAliasProps `<netalias />`
 
@@ -1556,7 +1557,7 @@ export interface NetAliasProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/netalias.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\netalias.ts)
 
 ### NetLabelProps `<netlabel />`
 
@@ -1578,7 +1579,7 @@ export interface NetLabelProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/netlabel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\netlabel.ts)
 
 ### OpAmpProps `<opamp />`
 
@@ -1590,7 +1591,7 @@ export interface OpAmpProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/opamp.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\opamp.ts)
 
 ### PanelProps `<panel />`
 
@@ -1633,7 +1634,7 @@ export interface PanelProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/panel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\panel.ts)
 
 ### PcbBendProps `<pcbbend />`
 
@@ -1662,7 +1663,7 @@ export interface PcbBendProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-bend.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-bend.ts)
 
 ### PcbKeepoutProps `<pcbkeepout />`
 
@@ -1670,7 +1671,7 @@ export interface PcbBendProps {
 export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-keepout.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-keepout.ts)
 
 ### PcbNoteDimensionProps `<pcbnotedimension />`
 
@@ -1709,7 +1710,7 @@ export interface PcbNoteDimensionProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-dimension.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-note-dimension.ts)
 
 ### PcbNoteLineProps `<pcbnoteline />`
 
@@ -1736,7 +1737,7 @@ export interface PcbNoteLineProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-line.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-note-line.ts)
 
 ### PcbNotePathProps `<pcbnotepath />`
 
@@ -1759,7 +1760,7 @@ export interface PcbNotePathProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-path.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-note-path.ts)
 
 ### PcbNoteRectProps `<pcbnoterect />`
 
@@ -1776,7 +1777,7 @@ export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-rect.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-note-rect.ts)
 
 ### PcbNoteTextProps `<pcbnotetext />`
 
@@ -1791,7 +1792,7 @@ export interface PcbNoteTextProps extends PcbLayoutProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-note-text.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-note-text.ts)
 
 <a id="pcbreturncurrentexcitationprops-simulationpcbreturncurrentexcitation"></a>
 
@@ -1826,7 +1827,7 @@ export interface PcbReturnCurrentExcitationProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-return-current-excitation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-return-current-excitation.ts)
 
 <a id="pcbreturncurrentsimulationprops-simulationpcbreturncurrentsimulation"></a>
 
@@ -1841,7 +1842,7 @@ export interface PcbReturnCurrentSimulationProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-return-current-simulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-return-current-simulation.ts)
 
 ### PcbSoldermaskOpeningProps `<pcbsoldermaskopening />`
 
@@ -1851,7 +1852,7 @@ export type PcbSoldermaskOpeningProps = z.input<
 >;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-soldermask-opening.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-soldermask-opening.ts)
 
 ### PcbStiffenerProps `<pcbstiffener />`
 
@@ -1859,7 +1860,7 @@ export type PcbSoldermaskOpeningProps = z.input<
 export type PcbStiffenerProps = z.input<typeof pcbStiffenerProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-stiffener.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-stiffener.ts)
 
 ### PcbTraceProps `<pcbtrace />`
 
@@ -1867,7 +1868,7 @@ export type PcbStiffenerProps = z.input<typeof pcbStiffenerProps>;
 export type PcbTraceProps = z.input<typeof pcbTraceProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-trace.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pcb-trace.ts)
 
 ### PinHeaderProps `<pinheader />`
 
@@ -1992,7 +1993,7 @@ export interface PinHeaderProps extends CommonComponentProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pin-header.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\pin-header.ts)
 
 ### CirclePlatedHoleProps `<platedhole />`
 
@@ -2013,7 +2014,7 @@ export interface CirclePlatedHoleProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/platedhole.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\platedhole.ts)
 
 ### PortProps `<port />`
 
@@ -2021,7 +2022,7 @@ export interface CirclePlatedHoleProps extends Omit<
 export type PortProps = z.input<typeof portProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/port.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\port.ts)
 
 ### PotentiometerProps `<potentiometer />`
 
@@ -2035,7 +2036,7 @@ export interface PotentiometerProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/potentiometer.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\potentiometer.ts)
 
 ### PowerSourceProps `<powersource />`
 
@@ -2043,7 +2044,7 @@ export interface PotentiometerProps<
 export type PowerSourceProps = z.input<typeof powerSourceProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/power-source.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\power-source.ts)
 
 ### PushButtonProps `<pushbutton />`
 
@@ -2052,7 +2053,7 @@ export type PushButtonProps<T extends PinLabelsProp | string = string> =
   ChipProps<T>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/push-button.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\push-button.ts)
 
 ### ResistorProps `<resistor />`
 
@@ -2072,7 +2073,7 @@ export interface ResistorProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/resistor.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\resistor.ts)
 
 ### ResonatorProps `<resonator />`
 
@@ -2084,7 +2085,7 @@ export interface ResonatorProps extends CommonComponentProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/resonator.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\resonator.ts)
 
 ### SchematicArcProps `<schematicarc />`
 
@@ -2101,7 +2102,7 @@ export interface SchematicArcProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-arc.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-arc.ts)
 
 ### SchematicBoxProps `<schematicbox />`
 
@@ -2134,7 +2135,7 @@ export interface SchematicBoxProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-box.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-box.ts)
 
 ### SchematicCellProps `<schematiccell />`
 
@@ -2151,7 +2152,7 @@ export interface SchematicCellProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-cell.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-cell.ts)
 
 ### SchematicCircleProps `<schematiccircle />`
 
@@ -2167,7 +2168,7 @@ export interface SchematicCircleProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-circle.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-circle.ts)
 
 ### SchematicGraphicProps `<schematicgraphic />`
 
@@ -2187,7 +2188,7 @@ export interface SchematicGraphicProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-graphic.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-graphic.ts)
 
 ### SchematicLineProps `<schematicline />`
 
@@ -2205,7 +2206,7 @@ export interface SchematicLineProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-line.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-line.ts)
 
 ### SchematicPathProps `<schematicpath />`
 
@@ -2222,7 +2223,7 @@ export interface SchematicPathProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-path.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-path.ts)
 
 ### SchematicRectProps `<schematicrect />`
 
@@ -2241,7 +2242,7 @@ export interface SchematicRectProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-rect.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-rect.ts)
 
 ### SchematicRowProps `<schematicrow />`
 
@@ -2252,7 +2253,7 @@ export interface SchematicRowProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-row.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-row.ts)
 
 ### SchematicSectionProps `<schematicsection />`
 
@@ -2264,7 +2265,7 @@ export interface SchematicSectionProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-section.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-section.ts)
 
 ### SchematicSheetProps `<schematicsheet />`
 
@@ -2283,7 +2284,7 @@ export interface SchematicSheetProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-sheet.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-sheet.ts)
 
 ### SchematicSymbolProps `<schematicsymbol />`
 
@@ -2307,7 +2308,7 @@ export interface SchematicSymbolProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-symbol.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-symbol.ts)
 
 ### SchematicTableProps `<schematictable />`
 
@@ -2323,7 +2324,7 @@ export interface SchematicTableProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-table.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-table.ts)
 
 ### SchematicTextProps `<schematictext />`
 
@@ -2339,7 +2340,7 @@ export interface SchematicTextProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\schematic-text.ts)
 
 ### SilkscreenCircleProps `<silkscreencircle />`
 
@@ -2347,7 +2348,7 @@ export interface SchematicTextProps {
 export type SilkscreenCircleProps = z.input<typeof silkscreenCircleProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-circle.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\silkscreen-circle.ts)
 
 ### SilkscreenGraphicProps `<silkscreengraphic />`
 
@@ -2391,7 +2392,7 @@ export interface SilkscreenGraphicProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-graphic.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\silkscreen-graphic.ts)
 
 ### SilkscreenLineProps `<silkscreenline />`
 
@@ -2399,7 +2400,7 @@ export interface SilkscreenGraphicProps {
 export type SilkscreenLineProps = z.input<typeof silkscreenLineProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-line.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\silkscreen-line.ts)
 
 ### SilkscreenPathProps `<silkscreenpath />`
 
@@ -2407,7 +2408,7 @@ export type SilkscreenLineProps = z.input<typeof silkscreenLineProps>;
 export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-path.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\silkscreen-path.ts)
 
 ### SilkscreenRectProps `<silkscreenrect />`
 
@@ -2415,7 +2416,7 @@ export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>;
 export type SilkscreenRectProps = z.input<typeof silkscreenRectProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-rect.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\silkscreen-rect.ts)
 
 ### SilkscreenTextProps `<silkscreentext />`
 
@@ -2423,7 +2424,7 @@ export type SilkscreenRectProps = z.input<typeof silkscreenRectProps>;
 export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-text.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\silkscreen-text.ts)
 
 ### RectSmtPadProps `<smtpad />`
 
@@ -2449,7 +2450,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/smtpad.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\smtpad.ts)
 
 ### SolderJumperProps `<solderjumper />`
 
@@ -2466,7 +2467,7 @@ export interface SolderJumperProps extends JumperProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/solderjumper.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\solderjumper.ts)
 
 ### RectSolderPasteProps `<solderpaste />`
 
@@ -2481,7 +2482,7 @@ export interface RectSolderPasteProps extends Omit<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/solderpaste.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\solderpaste.ts)
 
 ### SpiceModelProps `<spicemodel />`
 
@@ -2492,7 +2493,7 @@ export interface SpiceModelProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/spicemodel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\spicemodel.ts)
 
 ### StampboardProps `<stampboard />`
 
@@ -2511,7 +2512,7 @@ export interface StampboardProps extends BoardProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/stampboard.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\stampboard.ts)
 
 ### SubcircuitProps `<subcircuit />`
 
@@ -2519,7 +2520,7 @@ export interface StampboardProps extends BoardProps {
 export type SubcircuitProps = SubcircuitGroupProps;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/subcircuit.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\subcircuit.ts)
 
 ### SwitchProps `<switch />`
 
@@ -2548,7 +2549,7 @@ export interface SwitchProps extends CommonComponentProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/switch.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\switch.ts)
 
 ### SymbolProps `<symbol />`
 
@@ -2582,7 +2583,7 @@ export interface SymbolProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/symbol.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\symbol.ts)
 
 <a id="systemblockcomponentprops-systemblockcomponent"></a>
 
@@ -2599,7 +2600,7 @@ export interface SystemBlockComponentProps extends SystemBlockPcbReferenceProps 
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/system-block-component.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\system-block-component.ts)
 
 <a id="systemblockconnectionprops-systemblockconnection"></a>
 
@@ -2622,7 +2623,7 @@ export interface SystemBlockConnectionProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/system-block-connection.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\system-block-connection.ts)
 
 <a id="systemblockgroupprops-systemblockgroup"></a>
 
@@ -2641,7 +2642,7 @@ export interface SystemBlockGroupProps extends SystemBlockPcbReferenceProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/system-block-group.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\system-block-group.ts)
 
 <a id="systemblockpageprops-systemblockpage"></a>
 
@@ -2662,7 +2663,7 @@ export interface SystemBlockPageProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/system-block-page.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\system-block-page.ts)
 
 ### TestpointProps `<testpoint />`
 
@@ -2696,7 +2697,7 @@ export interface TestpointProps extends CommonComponentProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/testpoint.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\testpoint.ts)
 
 ### ToolingrailProps `<toolingrail />`
 
@@ -2706,7 +2707,7 @@ export interface ToolingrailProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/toolingrail.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\toolingrail.ts)
 
 ### TraceProps `<trace />`
 
@@ -2714,7 +2715,7 @@ export interface ToolingrailProps {
 export type TraceProps = z.input<typeof traceProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/trace.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\trace.ts)
 
 ### TraceHintProps `<tracehint />`
 
@@ -2722,7 +2723,7 @@ export type TraceProps = z.input<typeof traceProps>;
 export type TraceHintProps = z.input<typeof traceHintProps>;
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/trace-hint.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\trace-hint.ts)
 
 ### TransistorProps `<transistor />`
 
@@ -2742,7 +2743,7 @@ export interface TransistorProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/transistor.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\transistor.ts)
 
 ### ViaProps `<via />`
 
@@ -2766,7 +2767,7 @@ export interface ViaProps extends CommonLayoutProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/via.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\via.ts)
 
 ### VoltageProbeProps `<voltageprobe />`
 
@@ -2783,7 +2784,7 @@ export interface VoltageProbeProps extends Omit<CommonComponentProps, "name"> {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/voltageprobe.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\voltageprobe.ts)
 
 ### VoltageSourceProps `<voltagesource />`
 
@@ -2810,7 +2811,7 @@ export interface VoltageSourceProps<
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/voltagesource.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib\components\voltagesource.ts)
 
 <!-- INTERFACE_DEFINITIONS_END -->
 

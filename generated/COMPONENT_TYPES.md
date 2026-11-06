@@ -4387,6 +4387,7 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  tabCountPerEdge?: number
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -4394,7 +4395,7 @@ export interface PanelProps
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
 }
-/** Gap between boards in a panel */
+/** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
 export const panelProps = baseGroupProps
   .omit({
     width: true,
@@ -4420,12 +4421,55 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    tabCountPerEdge: z.number().int().positive().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),
     edgePaddingTop: distance.optional(),
     edgePaddingBottom: distance.optional(),
     _subcircuitCachingEnabled: z.boolean().optional(),
+  })
+```
+
+### paneltab
+
+```typescript
+export interface PanelTabProps {
+  boardName?: string
+  edge: PanelTabEdge
+  offset: Distance
+}
+/** Tab centre measured along a board edge in mm (or a unit string): left to right on horizontal edges, bottom to top on vertical edges. */
+export const panelTabProps = z.object({
+  boardName: z.string().min(1).optional(),
+  edge: panelTabEdge,
+  offset: distance.refine(
+    (millimetres) => Number.isFinite(millimetres) && millimetres >= 0,
+    { message: "Panel tab offset must be finite and nonnegative" },
+  ),
+})
+```
+
+### paneltabkeepout
+
+```typescript
+export interface PanelTabKeepoutProps {
+  boardName?: string
+  edge: PanelTabEdge
+  from: Distance
+  to: Distance
+}
+/** Inclusive end in the same edge coordinates. Must be at least from. */
+export const panelTabKeepoutProps = z
+  .object({
+    boardName: z.string().min(1).optional(),
+    edge: panelTabEdge,
+    from: nonnegativeEdgeDistance,
+    to: nonnegativeEdgeDistance,
+  })
+  .refine((keepout) => keepout.to >= keepout.from, {
+    path: ["to"],
+    message: "Panel tab keepout to must be greater than or equal to from",
   })
 ```
 

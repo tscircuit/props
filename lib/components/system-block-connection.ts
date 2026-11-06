@@ -13,6 +13,10 @@ export interface SystemBlockConnectionProps {
   label?: string
   /** Relationship category; defaults to signal. */
   kind?: "signal" | "power"
+  /** Optional #RGB or #RRGGBB stroke/arrow color. Overrides the kind's color; omitted uses the renderer theme. */
+  color?: string
+  /** Optional stroke pattern. Omitted preserves the kind's default; independent of color and direction. */
+  lineStyle?: "solid" | "dashed" | "dotted"
   /** Arrowheads: from → to, both ends, or neither. Defaults to forward. */
   direction?: "forward" | "both" | "none"
 }
@@ -22,6 +26,12 @@ export const systemBlockConnectionProps = z.object({
   from: z.string().trim().min(1),
   to: z.string().trim().min(1),
   label: z.string().optional(),
+  color: z
+    .string()
+    .trim()
+    .regex(/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i)
+    .optional(),
+  lineStyle: z.enum(["solid", "dashed", "dotted"]).optional(),
   kind: z.enum(["signal", "power"]).default("signal"),
   direction: z.enum(["forward", "both", "none"]).default("forward"),
 })

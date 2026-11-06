@@ -3793,6 +3793,10 @@ const autorouterVersion = z
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
+  busFanoutDirections?: Record<BusName, BusFanoutDirection>
+  fanoutBoundaryPadding?: FanoutBoundaryPadding
+  fanoutRoutingLayers?: LayerRefInput[]
+  fanoutPourNetMap?: FanoutPourNetMap
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   placementDrcChecksDisabled?: boolean
@@ -3948,6 +3952,12 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
+  busFanoutDirections: z.record(busFanoutDirection).optional(),
+  fanoutBoundaryPadding: fanoutBoundaryPadding.optional(),
+  fanoutRoutingLayers: z.array(layer_ref).min(1).optional(),
+  fanoutPourNetMap: z
+    .record(layer_ref, z.union([z.string(), z.array(z.string()).min(1)]))
+    .optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

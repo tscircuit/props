@@ -143,6 +143,7 @@ export interface PlatformConfig {
   pcbDisabled?: boolean
   routingDisabled?: boolean
   schematicDisabled?: boolean
+  schematicTraceRoutingDisabled?: boolean
   partsEngineDisabled?: boolean
   /**
    * Disables analog simulation model processing and simulator execution.
@@ -341,6 +342,7 @@ export const platformConfig = z.object({
   pcbDisabled: z.boolean().optional(),
   routingDisabled: z.boolean().optional(),
   schematicDisabled: z.boolean().optional(),
+  schematicTraceRoutingDisabled: z.boolean().optional(),
   partsEngineDisabled: z.boolean().optional(),
   analogSimulationDisabled: z.boolean().optional(),
   drcChecksDisabled: z.boolean().optional(),

@@ -234,6 +234,22 @@ test("should parse schematicDisabled prop", () => {
   expect(parsed.schematicDisabled).toBe(true)
 })
 
+test("should parse schematicTraceRoutingDisabled prop", () => {
+  const enabled: BoardProps = {
+    name: "board",
+    schematicTraceRoutingDisabled: true,
+  }
+  const disabled: BoardProps = {
+    name: "board",
+    schematicTraceRoutingDisabled: false,
+  }
+  expect(boardProps.parse(enabled).schematicTraceRoutingDisabled).toBe(true)
+  expect(boardProps.parse(disabled).schematicTraceRoutingDisabled).toBe(false)
+  expect(
+    boardProps.parse({ name: "board" }).schematicTraceRoutingDisabled,
+  ).toBeUndefined()
+})
+
 test("should parse isViaInPadAllowed prop", () => {
   const enabled: BoardProps = {
     name: "board",

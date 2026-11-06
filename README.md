@@ -575,6 +575,8 @@ export interface BoardProps extends Omit<
   viaStitchPitch?: Distance;
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean;
+  /** Whether automatic schematic trace routing should be skipped while keeping schematic elements */
+  schematicTraceRoutingDisabled?: boolean;
 }
 ````
 
@@ -2898,6 +2900,7 @@ export interface PlatformConfig {
   pcbDisabled?: boolean;
   routingDisabled?: boolean;
   schematicDisabled?: boolean;
+  schematicTraceRoutingDisabled?: boolean;
   partsEngineDisabled?: boolean;
   /**
    * Disables analog simulation model processing and simulator execution.
@@ -2963,6 +2966,7 @@ export interface ProjectConfig extends Pick<
   | "defaultSpiceEngine"
   | "pcbDisabled"
   | "schematicDisabled"
+  | "schematicTraceRoutingDisabled"
   | "analogSimulationDisabled"
 > {}
 ```

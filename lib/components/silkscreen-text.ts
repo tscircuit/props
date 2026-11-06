@@ -9,6 +9,10 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
   /**
+   * Explicit text mirroring, independent of layer. Omitted preserves the renderer default.
+   */
+  mirrored: z.boolean().optional(),
+  /**
    * If true, text will knock out underlying silkscreen
    */
   isKnockout: z.boolean().optional(),

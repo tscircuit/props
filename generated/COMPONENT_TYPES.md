@@ -5804,16 +5804,14 @@ export const silkscreenPathProps = pcbLayoutProps
 ### silkscreen-rect
 
 ```typescript
-export const silkscreenRectProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    filled: z.boolean().default(true).optional(),
-    stroke: z.enum(["dashed", "solid", "none"]).optional(),
-    strokeWidth: distance.optional(),
-    width: distance,
-    height: distance,
-    cornerRadius: distance.optional(),
-  })
+export const silkscreenRectProps = pcbLayoutProps.extend({
+  filled: z.boolean().default(true).optional(),
+  stroke: z.enum(["dashed", "solid", "none"]).optional(),
+  strokeWidth: distance.optional(),
+  width: distance,
+  height: distance,
+  cornerRadius: distance.optional(),
+})
 ```
 
 ### silkscreen-text
@@ -5824,6 +5822,7 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
   anchorAlignment: ninePointAnchor.default("center"),
   font: z.enum(["tscircuit2024"]).optional(),
   fontSize: length.optional(),
+  mirrored: z.boolean().optional(),
   isKnockout: z.boolean().optional(),
   knockoutPadding: length.optional(),
   knockoutPaddingLeft: length.optional(),

@@ -21,7 +21,8 @@ V, mV and uV/µV/μV. Units must match their quantity.
 strings such as `0.25UI` until core resolves the signal's own or inherited rate.
 
 Block defaults are corner `typ`, unlisted nets `passive`, unrouted `error`,
-PDN `extracted` and supply `board`. Duration stays omitted for core to derive
+PDN `ideal` and supply `board`. PDN `extracted` is accepted
+by the schema but not implemented yet. Duration stays omitted for core to derive
 from the longest pattern plus 16 UI. Signal defaults are pattern `prbs7`, offset
 `0UI`, probe `local` and mask `ibis`. An omitted bit rate inherits the block rate;
 an omitted seed stays omitted for core to derive from the signal name.

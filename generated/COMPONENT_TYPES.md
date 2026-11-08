@@ -5705,7 +5705,7 @@ export interface SignalIntegrityProps {
   supply?: "board" | "ibis"
   children?: ReactNode
 }
-/** Time or UI at the block bit rate; parsed to seconds. Omitted duration is derived from the longest pattern plus 16 UI in core. */
+/** "ideal" (default): chip power/ground pins see perfect rails. "extracted" is not implemented yet. */
 export const signalIntegrityProps = z
   .object({
     name: z.string().min(1).optional(),
@@ -5720,7 +5720,7 @@ export const signalIntegrityProps = z
     corner: z.enum(["typ", "min", "max"]).default("typ"),
     unlistedNets: z.literal("passive").default("passive"),
     unrouted: z.enum(["error", "ideal"]).default("error"),
-    pdn: z.enum(["extracted", "ideal"]).default("extracted"),
+    pdn: z.enum(["extracted", "ideal"]).default("ideal"),
     supply: z.enum(["board", "ibis"]).default("board"),
     children: z.custom<ReactNode>().optional(),
   })

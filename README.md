@@ -2384,6 +2384,7 @@ export interface SignalIntegrityProps {
   corner?: "typ" | "min" | "max";
   unlistedNets?: "passive";
   unrouted?: "error" | "ideal";
+  /** "ideal" (default): chip power/ground pins see perfect rails. "extracted" is not implemented yet. */
   pdn?: "extracted" | "ideal";
   supply?: "board" | "ibis";
   children?: ReactNode;

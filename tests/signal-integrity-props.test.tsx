@@ -43,7 +43,7 @@ test("Level 1 single-ended TSX supplies the RFC defaults", () => {
     corner: "typ",
     unlistedNets: "passive",
     unrouted: "error",
-    pdn: "extracted",
+    pdn: "ideal",
     supply: "board",
   })
   expect(block.duration).toBeUndefined()

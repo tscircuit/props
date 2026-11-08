@@ -14,6 +14,7 @@ export interface SignalIntegrityProps {
   corner?: "typ" | "min" | "max"
   unlistedNets?: "passive"
   unrouted?: "error" | "ideal"
+  /** "ideal" (default): chip power/ground pins see perfect rails. "extracted" is not implemented yet. */
   pdn?: "extracted" | "ideal"
   supply?: "board" | "ibis"
   children?: ReactNode
@@ -33,7 +34,7 @@ export const signalIntegrityProps = z
     corner: z.enum(["typ", "min", "max"]).default("typ"),
     unlistedNets: z.literal("passive").default("passive"),
     unrouted: z.enum(["error", "ideal"]).default("error"),
-    pdn: z.enum(["extracted", "ideal"]).default("extracted"),
+    pdn: z.enum(["extracted", "ideal"]).default("ideal"),
     supply: z.enum(["board", "ibis"]).default("board"),
     children: z.custom<ReactNode>().optional(),
   })

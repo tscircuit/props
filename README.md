@@ -21,6 +21,9 @@ Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partvi
 See [System block diagrams](docs/system-blocks.md) for the proposed `systemblock`
 namespace, PCB references, and a complete overview example.
 
+See [Signal integrity props](docs/signal-integrity.md) for `<signalintegrity>`,
+`<signal>`, parsed units, defaults, and migration from the old SI API.
+
 <!-- COMPONENT_TABLE_START -->
 
 ## Available Components
@@ -119,6 +122,8 @@ namespace, PCB references, and a complete overview example.
 | `<schematicsymbol />`                       | [`SchematicSymbolProps`](#schematicsymbolprops-schematicsymbol)                                                    |
 | `<schematictable />`                        | [`SchematicTableProps`](#schematictableprops-schematictable)                                                       |
 | `<schematictext />`                         | [`SchematicTextProps`](#schematictextprops-schematictext)                                                          |
+| `<signal />`                                | [`SignalProps`](#signalprops-signal)                                                                               |
+| `<signalintegrity />`                       | [`SignalIntegrityProps`](#signalintegrityprops-signalintegrity)                                                    |
 | `<silkscreencircle />`                      | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                                                 |
 | `<silkscreengraphic />`                     | [`SilkscreenGraphicProps`](#silkscreengraphicprops-silkscreengraphic)                                              |
 | `<silkscreenline />`                        | [`SilkscreenLineProps`](#silkscreenlineprops-silkscreenline)                                                       |
@@ -350,7 +355,7 @@ export interface AnalogSimulationProps {
   duration?: number | string;
   startTime?: number | string;
   timePerStep?: number | string;
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">;
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">;
   spiceOptions?: SpiceOptions;
   graphIndependentAxes?: boolean;
 }
@@ -380,9 +385,6 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
   startTime?: number | string;
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string;
-  /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
-  ibisPinStates?: Record<string, IbisPinRunState>;
-  pcbSpiceChannel?: PcbSpiceChannelProps;
 }
 ```
 
@@ -2341,6 +2343,55 @@ export interface SchematicTextProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)
 
+### SignalProps `<signal />`
+
+```ts
+export interface SignalProps {
+  /** Unique within the enclosing SI block. */
+  name: string;
+  driver: SignalEndpoint;
+  /** Arrays always mean multiple receivers; only { p, n } means a differential pair. */
+  receiver: SignalEndpoint | SignalEndpoint[];
+  /** Overrides the block bit rate. Raw and parsed numbers are bit/s. */
+  bitRate?: string | number;
+  /** prbs7 (default), prbs15, prbs31, clock, or a nonempty literal bit string. */
+  pattern?: string;
+  /** Omitted seeds are derived from the signal name by core. */
+  seed?: number;
+  /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
+  offset?: string | number;
+  quiet?: "low" | "high" | "off";
+  probe?: "local" | "global";
+  /** Defaults to ibis. setup/hold overrides need strobe. */
+  mask?: "ibis" | SignalMask;
+  /** Name of the sampling signal in the same block; resolved by core. */
+  strobe?: string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/signal.ts)
+
+### SignalIntegrityProps `<signalintegrity />`
+
+```ts
+export interface SignalIntegrityProps {
+  /** Required when the board contains more than one SI block. */
+  name?: string;
+  /** Default signal bit rate. Raw and parsed numbers are bit/s. */
+  bitRate: string | number;
+  /** Time or UI at the block bit rate; parsed to seconds. Omitted duration is derived from the longest pattern plus 16 UI in core. */
+  duration?: string | number;
+  corner?: "typ" | "min" | "max";
+  unlistedNets?: "passive";
+  unrouted?: "error" | "ideal";
+  pdn?: "extracted" | "ideal";
+  supply?: "board" | "ibis";
+  children?: ReactNode;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/signalintegrity.ts)
+
 ### SilkscreenCircleProps `<silkscreencircle />`
 
 ```ts
@@ -2895,7 +2946,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[];
   snapshotsDir?: string;
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">;
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">;
 
   unitPreference?: "mm" | "in" | "mil";
 

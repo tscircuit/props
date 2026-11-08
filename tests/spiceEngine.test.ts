@@ -33,30 +33,30 @@ test("spiceEngineMap simulate returns simulation result", async () => {
   expect(Array.isArray(result?.simulationResultCircuitJson)).toBe(true)
 })
 
-test("pcb_spice is a suggested engine in prop and schema types", () => {
+test("built-in engine suggestions omit the removed PCB SPICE SI flow", () => {
   type SuggestedPcbSpice<T> = Extract<T, "pcb_spice">
   expectTypeOf<
     SuggestedPcbSpice<AnalogSimulationProps["spiceEngine"]>
-  >().toEqualTypeOf<"pcb_spice">()
+  >().toEqualTypeOf<never>()
   expectTypeOf<
     SuggestedPcbSpice<AnalogAnalysisSimulationBaseProps["spiceEngine"]>
-  >().toEqualTypeOf<"pcb_spice">()
+  >().toEqualTypeOf<never>()
   expectTypeOf<
     SuggestedPcbSpice<z.input<typeof analogSimulationProps>["spiceEngine"]>
-  >().toEqualTypeOf<"pcb_spice">()
+  >().toEqualTypeOf<never>()
   expectTypeOf<
     SuggestedPcbSpice<
       z.input<typeof analogAnalysisSimulationBaseProps.spiceEngine>
     >
-  >().toEqualTypeOf<"pcb_spice">()
+  >().toEqualTypeOf<never>()
   expectTypeOf<
     SuggestedPcbSpice<PlatformConfig["defaultSpiceEngine"]>
-  >().toEqualTypeOf<"pcb_spice">()
+  >().toEqualTypeOf<never>()
   expectTypeOf<
     SuggestedPcbSpice<z.input<typeof platformConfig>["defaultSpiceEngine"]>
-  >().toEqualTypeOf<"pcb_spice">()
+  >().toEqualTypeOf<never>()
 
   expect(
-    analogSimulationProps.parse({ spiceEngine: "pcb_spice" }).spiceEngine,
-  ).toBe("pcb_spice")
+    analogSimulationProps.parse({ spiceEngine: "custom_engine" }).spiceEngine,
+  ).toBe("custom_engine")
 })

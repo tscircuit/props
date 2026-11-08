@@ -48,7 +48,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   /** Stable identity for the simulation experiment. */
   name?: string
   /** SPICE implementation used to run this analysis. */
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   /** Numerical solver settings forwarded to the selected SPICE engine. */
   spiceOptions?: SpiceOptions
   /** Render each probe with an independent vertical graph scale. */
@@ -140,7 +140,7 @@ export interface AnalogSimulationProps {
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
@@ -154,9 +154,6 @@ export interface AnalogTransientSimulationProps
   startTime?: number | string
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string
-  /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
-  ibisPinStates?: Record<string, IbisPinRunState>
-  pcbSpiceChannel?: PcbSpiceChannelProps
 }
 
 
@@ -2646,48 +2643,6 @@ export interface PcbRouteCache {
 }
 
 
-export interface PcbSpiceChannelProps {
-  reduction: "routed-copper" | "straightened-stages"
-  sections: number
-  lanes: Array<{ name: string; from: string; to: string }>
-  referencePinRef: string
-  passiveComponentRefs?: string[]
-  extraction: {
-    minimumFrequency: number | string
-    maximumFrequency: number | string
-    modelFrequency: number | string
-    filaments: number
-    refinementFilaments: number
-    convergenceTolerance: number
-    capacitanceTolerance: number
-    reciprocityTolerance: number
-    dcResistanceTolerance: number
-    maxPanelLength: number | string
-    groundMeshSize?: number | string
-  }
-  relativePermittivity?: number
-  via?: {
-    platingThickness?: number | string
-    equivalentWidth?: number | string
-    omitThroughViaStubs?: boolean
-  }
-  straightenedStageProfiles?: Record<
-    string,
-    {
-      spacing: number | string
-      relativePermittivity: number
-      return: {
-        width: number | string
-        thickness: number | string
-        lengthFactor: number
-        centerY: number | string
-        centerZ: number | string
-      }
-    }
-  >
-}
-
-
 export interface PcbStyle {
   silkscreenFontSize?: string | number
   viaPadDiameter?: string | number
@@ -3049,7 +3004,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[]
   snapshotsDir?: string
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
 
   unitPreference?: "mm" | "in" | "mil"
 
@@ -3504,6 +3459,55 @@ export interface SelectionResultNet {
 export interface SelectionResultPort {
   getPcbPort: () => PcbPort | null
   getSourcePort: () => SourcePort | null
+}
+
+
+export interface SignalIntegrityProps {
+  /** Required when the board contains more than one SI block. */
+  name?: string
+  /** Default signal bit rate. Raw and parsed numbers are bit/s. */
+  bitRate: string | number
+  /** Time or UI at the block bit rate; parsed to seconds. Omitted duration is derived from the longest pattern plus 16 UI in core. */
+  duration?: string | number
+  corner?: "typ" | "min" | "max"
+  unlistedNets?: "passive"
+  unrouted?: "error" | "ideal"
+  pdn?: "extracted" | "ideal"
+  supply?: "board" | "ibis"
+  children?: ReactNode
+}
+
+
+export interface SignalMask {
+  /** Raw and parsed voltages are volts. Overrides the IBIS receiver threshold. */
+  vih?: string | number
+  vil?: string | number
+  /** Raw and parsed times are seconds. setup/hold need a strobe; core checks this diagnostic. */
+  setup?: string | number
+  hold?: string | number
+}
+
+
+export interface SignalProps {
+  /** Unique within the enclosing SI block. */
+  name: string
+  driver: SignalEndpoint
+  /** Arrays always mean multiple receivers; only { p, n } means a differential pair. */
+  receiver: SignalEndpoint | SignalEndpoint[]
+  /** Overrides the block bit rate. Raw and parsed numbers are bit/s. */
+  bitRate?: string | number
+  /** prbs7 (default), prbs15, prbs31, clock, or a nonempty literal bit string. */
+  pattern?: string
+  /** Omitted seeds are derived from the signal name by core. */
+  seed?: number
+  /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
+  offset?: string | number
+  quiet?: "low" | "high" | "off"
+  probe?: "local" | "global"
+  /** Defaults to ibis. setup/hold overrides need strobe. */
+  mask?: "ibis" | SignalMask
+  /** Name of the sampling signal in the same block; resolved by core. */
+  strobe?: string
 }
 
 

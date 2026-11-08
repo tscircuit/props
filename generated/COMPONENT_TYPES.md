@@ -364,13 +364,6 @@ export type FootprintSoupElements = {
 ### ibis
 
 ```typescript
-/** Direction is explicit per experiment. Only outputs accept an enable state. */
-export const ibisPinRunState = z.discriminatedUnion("isOutput", [
-  z.object({ isOutput: z.literal(false) }).strict(),
-  z
-    .object({ isOutput: z.literal(true), isOutputEnabled: z.boolean() })
-    .strict(),
-])
 /** Reference values are labels on the same chip, never inferred supply rails. */
 export const ibisPinReferences = z
   .object({
@@ -402,12 +395,6 @@ export const ibisModelDefinition = z.object({
   ibisPinNameToReferencePortLabels: z
     .record(z.string().min(1), ibisPinReferences)
     .optional(),
-  modelValueCorner: z.union([
-    z.literal("typical"),
-    z.literal("minimum"),
-    z.literal("maximum"),
-  ]),
-  includePackageParasitics: z.boolean(),
 })
 ```
 
@@ -1416,6 +1403,47 @@ export const schematicPinStyle = z.record(
 )
 ```
 
+### signalIntegrity
+
+```typescript
+/** Parsed rates are bit/s; bytes/s and frequency units are not bit rates. */
+export const signalBitRate = quantity(
+  {
+    "": 1,
+    bps: 1,
+    "bit/s": 1,
+    kbps: 1e3,
+    "kbit/s": 1e3,
+    Mbps: 1e6,
+    "Mbit/s": 1e6,
+    Gbps: 1e9,
+    "Gbit/s": 1e9,
+    Tbps: 1e12,
+    "Tbit/s": 1e12,
+  },
+  "Expected a bit rate in bit/s, e.g. 20Mbps or 250kbps",
+).pipe(z.number().positive())
+/** Raw and parsed numeric times are seconds, unlike legacy transient props. */
+export const signalTime = quantity(
+  {
+    "": 1,
+    s: 1,
+    ms: 1e-3,
+    us: 1e-6,
+    µs: 1e-6,
+    μs: 1e-6,
+    ns: 1e-9,
+    ps: 1e-12,
+    fs: 1e-15,
+  },
+  "Expected a time in seconds, e.g. 2ns",
+)
+export const signalVoltage = quantity(
+  { "": 1, V: 1, mV: 1e-3, uV: 1e-6, µV: 1e-6, μV: 1e-6 },
+  "Expected a voltage in volts, e.g. 800mV",
+)
+```
+
 ### traceSpacing
 
 ```typescript
@@ -1691,7 +1719,7 @@ export interface AnalogSimulationProps {
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
@@ -1703,7 +1731,7 @@ export interface SpiceOptions {
 }
 export interface AnalogAnalysisSimulationBaseProps {
   name?: string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
   children?: ReactNode
@@ -1809,134 +1837,16 @@ export interface AnalogTransientSimulationProps
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  ibisPinStates?: Record<string, IbisPinRunState>
-  pcbSpiceChannel?: PcbSpiceChannelProps
 }
-/** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
-export interface PcbSpiceChannelProps {
-  reduction: "routed-copper" | "straightened-stages"
-  sections: number
-  lanes: Array<{ name: string; from: string; to: string }>
-  referencePinRef: string
-  passiveComponentRefs?: string[]
-  extraction: {
-    minimumFrequency: number | string
-    maximumFrequency: number | string
-    modelFrequency: number | string
-    filaments: number
-    refinementFilaments: number
-    convergenceTolerance: number
-    capacitanceTolerance: number
-    reciprocityTolerance: number
-    dcResistanceTolerance: number
-    maxPanelLength: number | string
-    groundMeshSize?: number | string
-  }
-  relativePermittivity?: number
-  via?: {
-    platingThickness?: number | string
-    equivalentWidth?: number | string
-    omitThroughViaStubs?: boolean
-  }
-  straightenedStageProfiles?: Record<
-    string,
-    {
-      spacing: number | string
-      relativePermittivity: number
-      return: {
-        width: number | string
-        thickness: number | string
-        lengthFactor: number
-        centerY: number | string
-        centerZ: number | string
-      }
-    }
-  >
-}
-export const pcbSpiceChannelProps = z.object({
-  reduction: z.enum(["routed-copper", "straightened-stages"]),
-  sections: z.number().int().min(1).max(128),
-  lanes: z
-    .array(
-      z.object({
-        name: z.string().min(1),
-        from: z.string().min(1),
-        to: z.string().min(1),
-      }),
-    )
-    .min(1)
-    .max(3),
-  referencePinRef: z.string().min(1),
-  passiveComponentRefs: z.array(z.string().min(1)).optional(),
-  extraction: z
-    .object({
-      minimumFrequency: positiveFrequency,
-      maximumFrequency: positiveFrequency,
-      modelFrequency: positiveFrequency,
-      filaments: z.number().int().positive(),
-      refinementFilaments: z.number().int().positive(),
-      convergenceTolerance: z.number().finite().positive(),
-      capacitanceTolerance: z.number().finite().positive(),
-      reciprocityTolerance: z.number().finite().positive(),
-      dcResistanceTolerance: z.number().finite().positive(),
-      maxPanelLength: positiveLength,
-      groundMeshSize: positiveLength.optional(),
-    })
-    .refine(
-      (extraction) => extraction.refinementFilaments > extraction.filaments,
-      {
-        path: ["refinementFilaments"],
-        message: "refinementFilaments must be greater than filaments",
-      },
-    ),
-  relativePermittivity: z.number().finite().positive().optional(),
-  via: z
-    .object({
-      platingThickness: positiveLength.optional(),
-      equivalentWidth: positiveLength.optional(),
-      omitThroughViaStubs: z.boolean().optional(),
-    })
-    .optional(),
-  straightenedStageProfiles: z
-    .record(
-      z.object({
-        spacing: positiveLength,
-        relativePermittivity: z.number().finite().positive(),
-        return: z.object({
-          width: positiveLength,
-          thickness: positiveLength,
-          lengthFactor: z.number().finite().positive(),
-          centerY: signedLength,
-          centerZ: signedLength,
-        }),
-      }),
-    )
-    .optional(),
-})
+/** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
 export const analogTransientSimulationProps = z
   .object({
     ...analogAnalysisSimulationBaseProps,
     duration: positiveMilliseconds.default("10ms"),
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
-    pcbSpiceChannel: pcbSpiceChannelProps.optional(),
-    ibisPinStates: z.record(z.string().min(1), ibisPinRunState).optional(),
   })
   .superRefine((simulation, context) => {
-    if (simulation.pcbSpiceChannel && simulation.spiceEngine !== "pcb_spice") {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["pcbSpiceChannel"],
-        message: "PCB SPICE channel settings require spiceEngine=pcb_spice",
-      })
-    }
-    if (simulation.ibisPinStates && simulation.spiceEngine !== "pcb_spice") {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["ibisPinStates"],
-        message: "IBIS pin states require spiceEngine=pcb_spice",
-      })
-    }
     if (
       simulation.startTime < 0 ||
       simulation.startTime > simulation.duration
@@ -5706,6 +5616,126 @@ export interface SchematicTextProps {
   color?: string
   schRotation?: number | string
 }
+```
+
+### signal
+
+```typescript
+export type SignalEndpoint =
+  | SignalPin
+  | SignalPair
+  | { pin: SignalPin | SignalPair; model?: string }
+export const signalEndpoint = z.union([
+  pin,
+  pair,
+  z
+    .object({ pin: z.union([pin, pair]), model: z.string().min(1).optional() })
+    .strict(),
+])
+export interface SignalMask {
+  vih?: string | number
+  vil?: string | number
+  setup?: string | number
+  hold?: string | number
+}
+/** Raw and parsed times are seconds. setup/hold need a strobe; core checks this diagnostic. */
+export const signalMask = z
+  .object({
+    vih: signalVoltage.optional(),
+    vil: signalVoltage.optional(),
+    setup: signalTime.optional(),
+    hold: signalTime.optional(),
+  })
+  .strict()
+export interface SignalProps {
+  name: string
+  driver: SignalEndpoint
+  receiver: SignalEndpoint | SignalEndpoint[]
+  bitRate?: string | number
+  pattern?: string
+  seed?: number
+  offset?: string | number
+  quiet?: "low" | "high" | "off"
+  probe?: "local" | "global"
+  mask?: "ibis" | SignalMask
+  strobe?: string
+}
+/** Name of the sampling signal in the same block; resolved by core. */
+export const signalProps = z
+  .object({
+    name: z.string().min(1),
+    driver: signalEndpoint,
+    receiver: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
+    bitRate: signalBitRate.optional(),
+    pattern: z
+      .string()
+      .regex(
+        /^(?:prbs7|prbs15|prbs31|clock|[01]+)$/,
+        "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
+      )
+      .default("prbs7"),
+    seed: z.number().finite().optional(),
+    offset: signalTimeOrUi.default("0UI"),
+    quiet: z
+      .enum(["low", "high", "off"], {
+        errorMap: () => ({
+          message: 'quiet needs a level: "low", "high" or "off".',
+        }),
+      })
+      .optional(),
+    probe: z.enum(["local", "global"]).default("local"),
+    mask: z.union([z.literal("ibis"), signalMask]).default("ibis"),
+    strobe: z.string().min(1).optional(),
+  })
+  .strict()
+```
+
+### signalintegrity
+
+```typescript
+/** One coupled SI test. Rendering and board-dependent diagnostics belong to core. */
+export interface SignalIntegrityProps {
+  name?: string
+  bitRate: string | number
+  duration?: string | number
+  corner?: "typ" | "min" | "max"
+  unlistedNets?: "passive"
+  unrouted?: "error" | "ideal"
+  pdn?: "extracted" | "ideal"
+  supply?: "board" | "ibis"
+  children?: ReactNode
+}
+/** Time or UI at the block bit rate; parsed to seconds. Omitted duration is derived from the longest pattern plus 16 UI in core. */
+export const signalIntegrityProps = z
+  .object({
+    name: z.string().min(1).optional(),
+    bitRate: signalBitRate,
+    duration: signalTimeOrUi
+      .refine(
+        (value) =>
+          typeof value === "string" ? Number.parseFloat(value) > 0 : value > 0,
+        "Duration must be positive",
+      )
+      .optional(),
+    corner: z.enum(["typ", "min", "max"]).default("typ"),
+    unlistedNets: z.literal("passive").default("passive"),
+    unrouted: z.enum(["error", "ideal"]).default("error"),
+    pdn: z.enum(["extracted", "ideal"]).default("extracted"),
+    supply: z.enum(["board", "ibis"]).default("board"),
+    children: z.custom<ReactNode>().optional(),
+  })
+  .strict()
+  .transform(({ duration, ...props }) => ({
+    ...props,
+    ...(duration === undefined
+      ? {}
+      : {
+          duration:
+            typeof duration === "string"
+              ? Number.parseFloat(duration) / props.bitRate
+              : duration,
+        }),
+  }))
 ```
 
 ### silkscreen-circle

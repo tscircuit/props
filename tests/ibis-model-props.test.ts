@@ -10,14 +10,18 @@ test("IBIS models use a shared asset and explicit vendor pin bindings", () => {
     },
     ibisComponentName: "DRIVER",
     ibisPinNameToPortLabel: { "1": "pin1" },
-    modelValueCorner: "typical",
-    includePackageParasitics: true,
   } satisfies IbisModelProps
   expect(ibisModelProps.parse(model)).toEqual(model)
+  for (const removed of [
+    { modelValueCorner: "typical" },
+    { includePackageParasitics: true },
+  ]) {
+    expect(ibisModelProps.safeParse({ ...model, ...removed }).success).toBe(
+      false,
+    )
+  }
   for (const change of [
-    { modelValueCorner: undefined },
     { ibisModelAsset: { url: model.ibisModelAsset.url } },
-    { includePackageParasitics: undefined },
     { ibisPinNameToPortLabel: {} },
   ]) {
     expect(ibisModelProps.safeParse({ ...model, ...change }).success).toBe(
@@ -31,8 +35,6 @@ test("IBIS model asset locations match circuit-json rules", () => {
     componentRef: ".U1",
     ibisComponentName: "DRIVER",
     ibisPinNameToPortLabel: { "1": "pin1" },
-    modelValueCorner: "typical",
-    includePackageParasitics: true,
   } as const
   const withAsset = (url: string, project_relative_path = "models/chip.ibs") =>
     ibisModelProps.safeParse({

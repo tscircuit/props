@@ -5624,13 +5624,13 @@ export interface SchematicTextProps {
 export type SignalEndpoint =
   | SignalPin
   | SignalPair
-  | { pin: SignalPin | SignalPair; model?: string }
+  | { pin: SignalPin; model?: string }
+  | { pin: SignalPair; model?: string | { p: string; n: string } }
 export const signalEndpoint = z.union([
   pin,
   pair,
-  z
-    .object({ pin: z.union([pin, pair]), model: z.string().min(1).optional() })
-    .strict(),
+  z.object({ pin, model: pin.optional() }).strict(),
+  z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
 ])
 export interface SignalMask {
   vih?: string | number
@@ -5638,13 +5638,13 @@ export interface SignalMask {
   setup?: string | number
   hold?: string | number
 }
-/** Raw and parsed times are seconds. setup/hold need a strobe; core checks this diagnostic. */
+/** Nonnegative seconds, including zero. setup/hold need a strobe; core checks this diagnostic. */
 export const signalMask = z
   .object({
     vih: signalVoltage.optional(),
     vil: signalVoltage.optional(),
-    setup: signalTime.optional(),
-    hold: signalTime.optional(),
+    setup: signalTime.pipe(z.number().nonnegative()).optional(),
+    hold: signalTime.pipe(z.number().nonnegative()).optional(),
   })
   .strict()
 export interface SignalProps {
@@ -5660,7 +5660,7 @@ export interface SignalProps {
   mask?: "ibis" | SignalMask
   strobe?: string
 }
-/** Name of the sampling signal in the same block; resolved by core. */
+/** Name of a different switching signal in the same block, with a receiver on the same chip; resolved by core. */
 export const signalProps = z
   .object({
     name: z.string().min(1),
@@ -5674,7 +5674,7 @@ export const signalProps = z
         "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
       )
       .default("prbs7"),
-    seed: z.number().finite().optional(),
+    seed: z.number().finite().int().positive().optional(),
     offset: signalTimeOrUi.default("0UI"),
     quiet: z
       .enum(["low", "high", "off"], {
@@ -5688,6 +5688,17 @@ export const signalProps = z
     strobe: z.string().min(1).optional(),
   })
   .strict()
+  .superRefine(({ name, pattern, seed }, ctx) => {
+    if (seed === undefined || !pattern.startsWith("prbs")) return
+    const max = 2 ** Number(pattern.slice(4)) - 1
+    if (seed > max) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["seed"],
+        message: `Signal "${name}": ${pattern} seed must be an integer in 1..${max}.`,
+      })
+    }
+  })
 ```
 
 ### signalintegrity
@@ -5702,40 +5713,36 @@ export interface SignalIntegrityProps {
   unlistedNets?: "passive"
   unrouted?: "error" | "ideal"
   pdn?: "extracted" | "ideal"
-  supply?: "board" | "ibis"
   children?: ReactNode
 }
-/** "ideal" (default): chip power/ground pins see perfect rails. "extracted" is not implemented yet. */
+/** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
 export const signalIntegrityProps = z
   .object({
     name: z.string().min(1).optional(),
     bitRate: signalBitRate,
-    duration: signalTimeOrUi
-      .refine(
-        (value) =>
-          typeof value === "string" ? Number.parseFloat(value) > 0 : value > 0,
-        "Duration must be positive",
-      )
-      .optional(),
+    duration: signalTimeOrUi.optional(),
     corner: z.enum(["typ", "min", "max"]).default("typ"),
     unlistedNets: z.literal("passive").default("passive"),
     unrouted: z.enum(["error", "ideal"]).default("error"),
     pdn: z.enum(["extracted", "ideal"]).default("ideal"),
-    supply: z.enum(["board", "ibis"]).default("board"),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()
-  .transform(({ duration, ...props }) => ({
-    ...props,
-    ...(duration === undefined
-      ? {}
-      : {
-          duration:
-            typeof duration === "string"
-              ? Number.parseFloat(duration) / props.bitRate
-              : duration,
-        }),
-  }))
+  .transform(({ duration, ...props }, ctx) => {
+    const seconds =
+      typeof duration === "string"
+        ? Number.parseFloat(duration) / props.bitRate
+        : duration
+    if (seconds !== undefined && (!Number.isFinite(seconds) || seconds <= 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["duration"],
+        message: "Duration must be finite and positive in seconds",
+      })
+      return z.NEVER
+    }
+    return { ...props, ...(seconds === undefined ? {} : { duration: seconds }) }
+  })
 ```
 
 ### silkscreen-circle

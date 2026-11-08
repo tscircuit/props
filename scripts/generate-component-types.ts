@@ -86,15 +86,21 @@ export function extractInterfaces(content: string): string[] {
   }
 
   // Preserve the legacy selection of documented declarations, but use the
-  // parser's statement boundaries to complete truncated validator expressions.
+  // parser's statement boundaries to complete truncated validators and unions.
   return interfaces.map((definition, index) => {
-    const match = /^export (?:const|let|var) (\w+)\s*=/m.exec(definition)
+    const match = /^export (?:const|let|var|type) (\w+)\s*=/m.exec(definition)
     if (!match) return definition
-    const statement = declarations.find((statement) =>
-      statement.declarationList.declarations.some(
-        (declaration) => declaration.name.getText(source) === match[1],
-      ),
-    )
+    const statement =
+      declarations.find((statement) =>
+        statement.declarationList.declarations.some(
+          (declaration) => declaration.name.getText(source) === match[1],
+        ),
+      ) ??
+      source.statements.find(
+        (statement) =>
+          ts.isTypeAliasDeclaration(statement) &&
+          statement.name.text === match[1],
+      )
     const declaration = definition.slice(match.index).trimEnd()
     // Extended props are already emitted as a separate legacy block.
     if (interfaces[index + 1]?.trimStart().startsWith(".extend(")) {

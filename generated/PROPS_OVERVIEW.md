@@ -3467,22 +3467,22 @@ export interface SignalIntegrityProps {
   name?: string
   /** Default signal bit rate. Raw and parsed numbers are bit/s. */
   bitRate: string | number
-  /** Time or UI at the block bit rate; parsed to seconds. Omitted duration is derived from the longest pattern plus 16 UI in core. */
+  /** Positive, finite time or UI at the block bit rate; parsed to seconds. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
   duration?: string | number
   corner?: "typ" | "min" | "max"
   unlistedNets?: "passive"
   unrouted?: "error" | "ideal"
+  /** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
   pdn?: "extracted" | "ideal"
-  supply?: "board" | "ibis"
   children?: ReactNode
 }
 
 
 export interface SignalMask {
-  /** Raw and parsed voltages are volts. Overrides the IBIS receiver threshold. */
+  /** Finite, signed volts; overrides the IBIS receiver threshold at the test corner. */
   vih?: string | number
   vil?: string | number
-  /** Raw and parsed times are seconds. setup/hold need a strobe; core checks this diagnostic. */
+  /** Nonnegative seconds, including zero. setup/hold need a strobe; core checks this diagnostic. */
   setup?: string | number
   hold?: string | number
 }
@@ -3498,7 +3498,7 @@ export interface SignalProps {
   bitRate?: string | number
   /** prbs7 (default), prbs15, prbs31, clock, or a nonempty literal bit string. */
   pattern?: string
-  /** Omitted seeds are derived from the signal name by core. */
+  /** Explicit PRBS seed: integer 1..2^n-1 for prbsN (including quiet PRBS). Omitted seeds use phases spaced by sorted signal name across board blocks; core resolves them. Unused for clock/literal drives. */
   seed?: number
   /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
   offset?: string | number
@@ -3506,7 +3506,7 @@ export interface SignalProps {
   probe?: "local" | "global"
   /** Defaults to ibis. setup/hold overrides need strobe. */
   mask?: "ibis" | SignalMask
-  /** Name of the sampling signal in the same block; resolved by core. */
+  /** Name of a different switching signal in the same block, with a receiver on the same chip; resolved by core. */
   strobe?: string
 }
 

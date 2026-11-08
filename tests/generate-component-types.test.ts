@@ -2,6 +2,17 @@ import { expect, test } from "bun:test"
 import { readFileSync } from "node:fs"
 import { extractInterfaces } from "../scripts/generate-component-types"
 
+test("documents every endpoint union member, including per-leg models", () => {
+  const source = readFileSync("lib/components/signal.ts", "utf8")
+  const endpoint = source
+    .slice(
+      source.indexOf("export type SignalEndpoint"),
+      source.indexOf("const pin"),
+    )
+    .trim()
+  expect(extractInterfaces(source).join("")).toContain(endpoint)
+})
+
 test("completes nested union expressions and trailing validator chains", () => {
   const definition = `export const schema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("input") }).strict(),

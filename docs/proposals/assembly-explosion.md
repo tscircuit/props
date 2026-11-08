@@ -177,3 +177,9 @@ parts, and position along the segment so the viewer can replay the failing pose.
 A verified reversible rigid-motion sequence establishes a geometric assembly
 path within the modeled constraints. Fastening, cable behavior, tool access,
 deformation, and manufacturing tolerances need additional modeling and checks.
+
+## Proposed follow-up work
+
+The draft [mechanical motion and contact RFC](assembly-explosion-motion-and-contacts.md)
+explores rotation, synchronized motion, geometry states, scoped contact diagnostics,
+and stage instructions. It does not change the supported props documented above.

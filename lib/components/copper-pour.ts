@@ -22,6 +22,8 @@ export interface CopperPourProps {
    * split it. Vias may still cross the region using antipads.
    */
   unbroken?: boolean
+  /** Remove copper islands without a physical connection to this net on the pour layer. Defaults to false. */
+  removeFloatingIslands?: boolean
   padMargin?: Distance
   traceMargin?: Distance
   clearance?: Distance
@@ -47,6 +49,12 @@ export const copperPourProps = z
         "Reserves the pour region during autorouting so unrelated traces do not split it. Vias may still cross the region using antipads.",
       ),
     padMargin: distance.optional(),
+    removeFloatingIslands: z
+      .boolean()
+      .optional()
+      .describe(
+        "Remove copper islands without a physical connection to this net on the pour layer. Defaults to false; existing pours are unchanged when omitted.",
+      ),
     traceMargin: distance.optional(),
     clearance: distance.optional(),
     boardEdgeMargin: distance.optional(),

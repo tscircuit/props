@@ -2412,6 +2412,12 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  /**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Omitted `mouseBites` then parses as false; explicitly setting
+   * both `vScore` and `mouseBites` to true is an error.
+   */
+  vScore?: boolean
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance

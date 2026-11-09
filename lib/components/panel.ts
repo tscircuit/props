@@ -31,6 +31,12 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  /**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Omitted `mouseBites` then parses as false; explicitly setting
+   * both `vScore` and `mouseBites` to true is an error.
+   */
+  vScore?: boolean
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -64,6 +70,7 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    vScore: z.boolean().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),
@@ -71,6 +78,15 @@ export const panelProps = baseGroupProps
     edgePaddingBottom: distance.optional(),
     _subcircuitCachingEnabled: z.boolean().optional(),
   })
+  .refine((panel) => !(panel.mouseBites === true && panel.vScore === true), {
+    path: ["vScore"],
+    message: "Panel vScore cannot be combined with mouseBites",
+  })
+  .transform((panel) =>
+    panel.vScore === true && panel.mouseBites === undefined
+      ? { ...panel, mouseBites: false }
+      : panel,
+  )
 
 type InferredPanelProps = z.input<typeof panelProps>
 expectTypesMatch<PanelProps, InferredPanelProps>(true)

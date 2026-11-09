@@ -4387,6 +4387,7 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  vScore?: boolean
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -4394,7 +4395,11 @@ export interface PanelProps
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
 }
-/** Gap between boards in a panel */
+/**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Omitted `mouseBites` then parses as false; explicitly setting
+   * both `vScore` and `mouseBites` to true is an error.
+   */
 export const panelProps = baseGroupProps
   .omit({
     width: true,
@@ -4420,6 +4425,7 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    vScore: z.boolean().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),

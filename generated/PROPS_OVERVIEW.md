@@ -2418,6 +2418,14 @@ export interface PanelProps
    * both `vScore` and `mouseBites` to true is an error.
    */
   vScore?: boolean
+  /** Minimum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  minWidth?: Distance
+  /** Maximum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  maxWidth?: Distance
+  /** Minimum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  minHeight?: Distance
+  /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  maxHeight?: Distance
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance

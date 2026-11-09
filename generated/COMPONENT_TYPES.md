@@ -4388,6 +4388,10 @@ export interface PanelProps
   tabLength?: Distance
   mouseBites?: boolean
   vScore?: boolean
+  minWidth?: Distance
+  maxWidth?: Distance
+  minHeight?: Distance
+  maxHeight?: Distance
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -4395,11 +4399,7 @@ export interface PanelProps
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
 }
-/**
-   * If true, the board-to-panel tabs are V-scored instead of perforated with
-   * mouse bites. Omitted `mouseBites` then parses as false; explicitly setting
-   * both `vScore` and `mouseBites` to true is an error.
-   */
+/** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
 export const panelProps = baseGroupProps
   .omit({
     width: true,
@@ -4426,6 +4426,10 @@ export const panelProps = baseGroupProps
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
     vScore: z.boolean().optional(),
+    minWidth: positivePanelDistance.optional(),
+    maxWidth: positivePanelDistance.optional(),
+    minHeight: positivePanelDistance.optional(),
+    maxHeight: positivePanelDistance.optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),

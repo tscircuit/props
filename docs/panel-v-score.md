@@ -1,5 +1,17 @@
-# Panel V-score intent
+# Panel V-score
 
-`panelizationMethod="v_score"` is the canonical opt-in enum value; there is no hyphenated alias and omission retains the existing default. Core defaults the V-score board gap to zero and rejects a nonzero gap, nonrectangular boards, or use on a nested subpanel.
+`vScore` is a boolean on `<panel>` and `<subpanel>`, next to `mouseBites`. Both describe how the tabs that hold boards in the panel are made breakable:
 
-Core's `generatePanelVScoreAnnotations` emits labelled panel-owned fabrication paths across straight board boundaries. It does not route slots, prescribe scoring depth, or generate machine-specific instructions. The separate circuit-json panel-owner schema and Core implementation must publish before this prop produces output.
+- `mouseBites` perforates each tab with a row of small holes.
+- `vScore` V-scores the tabs instead.
+
+They are alternatives, so setting both `vScore` and `mouseBites` to `true` is a validation error. Omitting `vScore` keeps the existing behaviour.
+
+```tsx
+<panel panelizationMethod="tab-routing" vScore mouseBites={false}>
+  <board width="20mm" height="20mm" />
+  <board width="20mm" height="20mm" />
+</panel>
+```
+
+`vScore` does not change `panelizationMethod`, and does not prescribe scoring depth or machine-specific settings.

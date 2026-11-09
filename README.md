@@ -1612,10 +1612,8 @@ export interface PanelProps extends Omit<
    *
    * `outline_routing` creates continuous routed cutouts around each board
    * outline without tabs.
-   * `v_score` requests fabrication score lines for rectangular, zero-gap root panels.
-   * It does not imply routed slots or machine-specific scoring settings.
    */
-  panelizationMethod?: "tab-routing" | "outline_routing" | "v_score" | "none";
+  panelizationMethod?: "tab-routing" | "outline_routing" | "none";
   /** Gap between boards in a panel */
   boardGap?: Distance;
   layoutMode?: "grid" | "pack" | "none";
@@ -1626,6 +1624,11 @@ export interface PanelProps extends Omit<
   tabWidth?: Distance;
   tabLength?: Distance;
   mouseBites?: boolean;
+  /**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Cannot be combined with `mouseBites`.
+   */
+  vScore?: boolean;
   edgePadding?: Distance;
   edgePaddingLeft?: Distance;
   edgePaddingRight?: Distance;

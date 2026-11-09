@@ -4372,7 +4372,7 @@ export interface PanelProps
   children?: BaseGroupProps["children"]
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   noSolderMask?: boolean
-  panelizationMethod?: "tab-routing" | "outline_routing" | "v_score" | "none"
+  panelizationMethod?: "tab-routing" | "outline_routing" | "none"
   boardGap?: Distance
   layoutMode?: "grid" | "pack" | "none"
   row?: number
@@ -4382,6 +4382,7 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  vScore?: boolean
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -4389,7 +4390,10 @@ export interface PanelProps
   edgePaddingBottom?: Distance
   _subcircuitCachingEnabled?: boolean
 }
-/** Gap between boards in a panel */
+/**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Cannot be combined with `mouseBites`.
+   */
 export const panelProps = baseGroupProps
   .omit({
     width: true,
@@ -4404,7 +4408,7 @@ export const panelProps = baseGroupProps
     anchorAlignment: ninePointAnchor.optional(),
     noSolderMask: z.boolean().optional(),
     panelizationMethod: z
-      .enum(["tab-routing", "outline_routing", "v_score", "none"])
+      .enum(["tab-routing", "outline_routing", "none"])
       .optional(),
     boardGap: distance.optional(),
     layoutMode: z.enum(["grid", "pack", "none"]).optional(),
@@ -4415,6 +4419,7 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    vScore: z.boolean().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),

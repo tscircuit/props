@@ -3841,7 +3841,7 @@ export interface TestpointProps extends CommonComponentProps {
 export interface ToolingrailProps
   extends Omit<BaseGroupProps, "width" | "height"> {
   /** Panel edge carrying the rail. Required; rail children use its local centre as origin. */
-  side: "top" | "right" | "bottom" | "left"
+  panelSide: "top" | "right" | "bottom" | "left"
   /** Rail width across the selected edge, in mm or a unit string. Must fit in the panel's edge padding. No default or aliases. */
   width: Distance
 }

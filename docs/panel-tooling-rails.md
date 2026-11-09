@@ -1,5 +1,5 @@
 # Panel tooling rails
 
-`<toolingrail side="left" width="5mm">` identifies usable material within existing panel edge padding. `side` is required (`top`, `right`, `bottom`, `left`); `width` is a finite positive distance, with numeric values in mm. There are no aliases or manufacturing defaults.
+`<toolingrail panelSide="left" width="5mm">` identifies usable material within existing panel edge padding. `panelSide` is required (`top`, `right`, `bottom`, `left`); `width` is a finite positive distance, with numeric values in mm. There are no aliases or manufacturing defaults.
 
-Core's `Toolingrail` resolves the strip dimensions, rejects widths exceeding the selected padding, and supplies a local centre transform (+X right, +Y up, mm). It must be a direct `<panel>` child. Existing `<hole>`, `<fiducial>`, and `<silkscreentext>` children can then use ordinary scalar placement attributes when their separate panel-support features are merged. The rail itself does not enlarge the panel or add padding. No nested JSON configuration is introduced.
+A tooling rail must be a direct `<panel>` child, and its width must fit in the panel's edge padding on the selected side. Children use the rail's local centre as their origin (+X right, +Y up, mm), so existing `<hole>`, `<fiducial>`, and `<silkscreentext>` elements can use ordinary scalar placement attributes. The rail itself does not enlarge the panel or add padding. No nested JSON configuration is introduced.

@@ -6323,14 +6323,14 @@ export interface TestpointProps extends CommonComponentProps {
 ```typescript
 export interface ToolingrailProps
   extends Omit<BaseGroupProps, "width" | "height"> {
-  side: "top" | "right" | "bottom" | "left"
+  panelSide: "top" | "right" | "bottom" | "left"
   width: Distance
 }
 /** Rail width across the selected edge, in mm or a unit string. Must fit in the panel's edge padding. No default or aliases. */
 export const toolingrailProps = baseGroupProps
   .omit({ width: true, height: true })
   .extend({
-    side: z.enum(["top", "right", "bottom", "left"]),
+    panelSide: z.enum(["top", "right", "bottom", "left"]),
     width: distance.refine(
       (millimetres) => Number.isFinite(millimetres) && millimetres > 0,
       { message: "Tooling rail width must be a finite positive distance" },

@@ -4388,6 +4388,10 @@ export interface PanelProps
   tabLength?: Distance
   mouseBites?: boolean
   vScore?: boolean
+  minWidth?: Distance
+  maxWidth?: Distance
+  minHeight?: Distance
+  maxHeight?: Distance
   tabCountPerEdge?: number
   edgePadding?: Distance
   edgePaddingLeft?: Distance
@@ -4423,6 +4427,10 @@ export const panelProps = baseGroupProps
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
     vScore: z.boolean().optional(),
+    minWidth: positivePanelDistance.optional(),
+    maxWidth: positivePanelDistance.optional(),
+    minHeight: positivePanelDistance.optional(),
+    maxHeight: positivePanelDistance.optional(),
     tabCountPerEdge: z.number().int().positive().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),

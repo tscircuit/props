@@ -1632,6 +1632,14 @@ export interface PanelProps extends Omit<
    * both `vScore` and `mouseBites` to true is an error.
    */
   vScore?: boolean;
+  /** Minimum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  minWidth?: Distance;
+  /** Maximum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  maxWidth?: Distance;
+  /** Minimum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  minHeight?: Distance;
+  /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  maxHeight?: Distance;
   /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
   tabCountPerEdge?: number;
   edgePadding?: Distance;

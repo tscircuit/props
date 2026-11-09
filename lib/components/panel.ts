@@ -4,6 +4,11 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { baseGroupProps, type BaseGroupProps } from "./group"
 
+const positivePanelDistance = distance.refine(
+  (millimetres) => Number.isFinite(millimetres) && millimetres > 0,
+  { message: "Panel size limits must be finite positive distances" },
+)
+
 export interface PanelProps
   extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
   width?: Distance
@@ -37,6 +42,14 @@ export interface PanelProps
    * both `vScore` and `mouseBites` to true is an error.
    */
   vScore?: boolean
+  /** Minimum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  minWidth?: Distance
+  /** Maximum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  maxWidth?: Distance
+  /** Minimum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  minHeight?: Distance
+  /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  maxHeight?: Distance
   /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
   tabCountPerEdge?: number
   edgePadding?: Distance
@@ -73,6 +86,10 @@ export const panelProps = baseGroupProps
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
     vScore: z.boolean().optional(),
+    minWidth: positivePanelDistance.optional(),
+    maxWidth: positivePanelDistance.optional(),
+    minHeight: positivePanelDistance.optional(),
+    maxHeight: positivePanelDistance.optional(),
     tabCountPerEdge: z.number().int().positive().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
@@ -81,6 +98,26 @@ export const panelProps = baseGroupProps
     edgePaddingBottom: distance.optional(),
     _subcircuitCachingEnabled: z.boolean().optional(),
   })
+  .refine(
+    (panel) =>
+      panel.minWidth === undefined ||
+      panel.maxWidth === undefined ||
+      panel.minWidth <= panel.maxWidth,
+    {
+      path: ["maxWidth"],
+      message: "Panel maxWidth must be greater than or equal to minWidth",
+    },
+  )
+  .refine(
+    (panel) =>
+      panel.minHeight === undefined ||
+      panel.maxHeight === undefined ||
+      panel.minHeight <= panel.maxHeight,
+    {
+      path: ["maxHeight"],
+      message: "Panel maxHeight must be greater than or equal to minHeight",
+    },
+  )
   .refine((panel) => !(panel.mouseBites === true && panel.vScore === true), {
     path: ["vScore"],
     message: "Panel vScore cannot be combined with mouseBites",

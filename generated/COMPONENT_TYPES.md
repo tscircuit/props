@@ -4431,13 +4431,13 @@ export const panelProps = baseGroupProps
 ```typescript
 export interface PanelTabProps {
   boardName?: string
-  edge: PanelTabEdge
+  boardEdge: PanelTabEdge
   offset: Distance
 }
 /** Tab centre measured along a board edge in mm (or a unit string): left to right on horizontal edges, bottom to top on vertical edges. */
 export const panelTabProps = z.object({
   boardName: z.string().min(1).optional(),
-  edge: panelTabEdge,
+  boardEdge: panelTabEdge,
   offset: distance.refine(
     (millimetres) => Number.isFinite(millimetres) && millimetres >= 0,
     { message: "Panel tab offset must be finite and nonnegative" },
@@ -4450,7 +4450,7 @@ export const panelTabProps = z.object({
 ```typescript
 export interface PanelTabKeepoutProps {
   boardName?: string
-  edge: PanelTabEdge
+  boardEdge: PanelTabEdge
   from: Distance
   to: Distance
 }
@@ -4458,7 +4458,7 @@ export interface PanelTabKeepoutProps {
 export const panelTabKeepoutProps = z
   .object({
     boardName: z.string().min(1).optional(),
-    edge: panelTabEdge,
+    boardEdge: panelTabEdge,
     from: nonnegativeEdgeDistance,
     to: nonnegativeEdgeDistance,
   })

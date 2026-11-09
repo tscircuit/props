@@ -6,7 +6,7 @@ import { panelTabEdge, type PanelTabEdge } from "./paneltab"
 export interface PanelTabKeepoutProps {
   /** Stable board name. Omit to reserve the interval on every board in the containing panel. */
   boardName?: string
-  edge: PanelTabEdge
+  boardEdge: PanelTabEdge
   /** Inclusive start in edge-local mm: left to right on horizontal edges, bottom to top on vertical edges. */
   from: Distance
   /** Inclusive end in the same edge coordinates. Must be at least from. */
@@ -20,7 +20,7 @@ const nonnegativeEdgeDistance = distance.refine(
 export const panelTabKeepoutProps = z
   .object({
     boardName: z.string().min(1).optional(),
-    edge: panelTabEdge,
+    boardEdge: panelTabEdge,
     from: nonnegativeEdgeDistance,
     to: nonnegativeEdgeDistance,
   })

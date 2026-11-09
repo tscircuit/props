@@ -1645,7 +1645,7 @@ export interface PanelProps extends Omit<
 export interface PanelTabProps {
   /** Stable board name. Omit to apply this tab to every board in the containing panel. */
   boardName?: string;
-  edge: PanelTabEdge;
+  boardEdge: PanelTabEdge;
   /** Tab centre measured along a board edge in mm (or a unit string): left to right on horizontal edges, bottom to top on vertical edges. */
   offset: Distance;
 }
@@ -1659,7 +1659,7 @@ export interface PanelTabProps {
 export interface PanelTabKeepoutProps {
   /** Stable board name. Omit to reserve the interval on every board in the containing panel. */
   boardName?: string;
-  edge: PanelTabEdge;
+  boardEdge: PanelTabEdge;
   /** Inclusive start in edge-local mm: left to right on horizontal edges, bottom to top on vertical edges. */
   from: Distance;
   /** Inclusive end in the same edge coordinates. Must be at least from. */

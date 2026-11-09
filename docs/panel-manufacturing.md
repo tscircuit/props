@@ -1,13 +1,13 @@
 # Panel manufacturing features
 
-Panel manufacturing controls cover tooling rails, holes and fiducials, V-score, tab placement, silkscreen, and finished-size validation. Props describe author intent; Core implements the rendering and manufacturing checks.
+Panel manufacturing controls cover tooling rails, holes and fiducials, tab placement, silkscreen, and finished-size validation. Props describe author intent.
 
 ## Tab controls use child elements
 
 ```tsx
 <panel panelizationMethod="tab-routing" tabCountPerEdge={2}>
   <board name="B1" width="20mm" height="20mm" />
-  <paneltabkeepout boardName="B1" edge="top" from="0mm" to="7mm" />
+  <paneltabkeepout boardName="B1" boardEdge="top" from="0mm" to="7mm" />
 </panel>
 ```
 
@@ -18,21 +18,18 @@ For explicit tabs, omit `tabCountPerEdge` and author children instead:
 ```tsx
 <panel panelizationMethod="tab-routing">
   <board name="B1" width="20mm" height="20mm" />
-  <paneltab boardName="B1" edge="right" offset="6mm" />
-  <paneltab boardName="B1" edge="left" offset="12mm" />
+  <paneltab boardName="B1" boardEdge="right" offset="6mm" />
+  <paneltab boardName="B1" boardEdge="left" offset="12mm" />
 </panel>
 ```
 
 `<paneltab>` replaces automatic tabs within its containing panel/subpanel; do not combine it with `tabCountPerEdge`. Omit all controls to retain existing automatic placement.
 
-Core's `Subpanel._generatePanelizationFeatures` reads the child elements and passes their parsed attributes to `generateControlledPanelTabs`. Both elements must be direct panel/subpanel children using `panelizationMethod="tab-routing"`. An omitted `boardName` applies to every contained board; a specified name must match. Count is a positive integer; offsets and intervals are finite nonnegative distances; `to >= from`. Numbers mean mm. Offsets run left-to-right on horizontal edges and bottom-to-top on vertical edges in board/circuit space (+X right, +Y up). Current controls support axis-aligned rectangular boards. Existing `tabLength`, `tabWidth`, and `mouseBites` describe the generated geometry. Invalid/out-of-bounds/overlapping tabs and insufficient router clearance produce readable errors.
+Both elements must be direct panel/subpanel children using `panelizationMethod="tab-routing"`. An omitted `boardName` applies to every contained board; a specified name must match. Count is a positive integer; offsets and intervals are finite nonnegative distances; `to >= from`. Numbers mean mm. Offsets run left-to-right on horizontal edges and bottom-to-top on vertical edges in board/circuit space (+X right, +Y up). Current controls support axis-aligned rectangular boards. Existing `tabLength`, `tabWidth`, and `mouseBites` describe the generated geometry. Invalid/out-of-bounds/overlapping tabs and insufficient router clearance produce readable errors.
 
 ## Other panel manufacturing features
 
-- **Rails:** `<toolingrail side="left" width="5mm">` identifies a region in existing panel edge padding; children use its local centre. Core's `Toolingrail` supplies its transform and group. It does not silently grow the panel.
-- **Holes and fiducials:** reuse existing `<hole>` and `<fiducial>` elements directly inside a panel or supported rail. Core must accept and transform them without fabricating component owners. No new object props are needed.
-- **Silkscreen:** reuse `<silkscreentext>` for a panel ID, revision, date, or board names. Core supplies panel ownership and placement; these are not new label configuration objects.
-- **V-score:** `panelizationMethod="v_score"` requests labelled fabrication lines from Core's `generatePanelVScoreAnnotations`, on rectangular zero-gap root panels. It does not promise machine-specific tooling or scoring depth.
-- **Size validation:** scalar `minWidth`, `maxWidth`, `minHeight`, `maxHeight` let assembly lines reject finished panels outside their conveyor/fixture limits. Core checks finished root-panel dimensions including edge padding. It does not resize or repack. No equipment limits are imposed by default. Bounds must be finite positive distances with ordered min/max pairs.
-
-The elements and checks described here require the corresponding Core implementation.
+- **Rails:** `<toolingrail panelSide="left" width="5mm">` identifies a region in existing panel edge padding; children use its local centre. It does not silently grow the panel.
+- **Holes and fiducials:** reuse existing `<hole>` and `<fiducial>` elements directly inside a panel or supported rail. No new object props are needed.
+- **Silkscreen:** reuse `<silkscreentext>` for a panel ID, revision, date, or board names. These are not new label configuration objects.
+- **Size validation:** scalar `minWidth`, `maxWidth`, `minHeight`, `maxHeight` let assembly lines reject finished panels outside their conveyor/fixture limits. Finished root-panel dimensions include edge padding. Panels are not resized or repacked. No equipment limits are imposed by default. Bounds must be finite positive distances with ordered min/max pairs.

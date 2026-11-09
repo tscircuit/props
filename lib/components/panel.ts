@@ -50,6 +50,8 @@ export interface PanelProps
   minHeight?: Distance
   /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
   maxHeight?: Distance
+  /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
+  tabCountPerEdge?: number
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -88,6 +90,7 @@ export const panelProps = baseGroupProps
     maxWidth: positivePanelDistance.optional(),
     minHeight: positivePanelDistance.optional(),
     maxHeight: positivePanelDistance.optional(),
+    tabCountPerEdge: z.number().int().positive().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),

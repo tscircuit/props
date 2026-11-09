@@ -84,6 +84,8 @@ namespace, PCB references, and a complete overview example.
 | `<netlabel />`                              | [`NetLabelProps`](#netlabelprops-netlabel)                                                                         |
 | `<opamp />`                                 | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
 | `<panel />`                                 | [`PanelProps`](#panelprops-panel)                                                                                  |
+| `<paneltab />`                              | [`PanelTabProps`](#paneltabprops-paneltab)                                                                         |
+| `<paneltabkeepout />`                       | [`PanelTabKeepoutProps`](#paneltabkeepoutprops-paneltabkeepout)                                                    |
 | `<pcbbend />`                               | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
 | `<pcbkeepout />`                            | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
 | `<pcbnotedimension />`                      | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
@@ -1638,6 +1640,8 @@ export interface PanelProps extends Omit<
   minHeight?: Distance;
   /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
   maxHeight?: Distance;
+  /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
+  tabCountPerEdge?: number;
   edgePadding?: Distance;
   edgePaddingLeft?: Distance;
   edgePaddingRight?: Distance;
@@ -1648,6 +1652,36 @@ export interface PanelProps extends Omit<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/panel.ts)
+
+### PanelTabProps `<paneltab />`
+
+```ts
+export interface PanelTabProps {
+  /** Stable board name. Omit to apply this tab to every board in the containing panel. */
+  boardName?: string;
+  boardEdge: PanelTabEdge;
+  /** Tab centre measured along a board edge in mm (or a unit string): left to right on horizontal edges, bottom to top on vertical edges. */
+  offset: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/paneltab.ts)
+
+### PanelTabKeepoutProps `<paneltabkeepout />`
+
+```ts
+export interface PanelTabKeepoutProps {
+  /** Stable board name. Omit to reserve the interval on every board in the containing panel. */
+  boardName?: string;
+  boardEdge: PanelTabEdge;
+  /** Inclusive start in edge-local mm: left to right on horizontal edges, bottom to top on vertical edges. */
+  from: Distance;
+  /** Inclusive end in the same edge coordinates. Must be at least from. */
+  to: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/paneltabkeepout.ts)
 
 ### PcbBendProps `<pcbbend />`
 

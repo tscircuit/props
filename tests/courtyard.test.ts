@@ -99,3 +99,37 @@ test("courtyard pill parses dimensions", () => {
   expect(parsed.height).toBe(2)
   expect(parsed.radius).toBe(1)
 })
+
+test.each([0, 1, 2])("courtyard outline rejects %i points", (pointCount) => {
+  const parsed = courtyardOutlineProps.safeParse({
+    outline: [
+      { x: 0, y: 0 },
+      { x: 5, y: 0 },
+      { x: 0, y: 5 },
+    ].slice(0, pointCount),
+  })
+
+  expect(parsed.error?.issues).toEqual([
+    expect.objectContaining({
+      code: "too_small",
+      path: ["outline"],
+      minimum: 3,
+    }),
+  ])
+})
+
+test("courtyard outline accepts three unit-aware polygon points", () => {
+  expect(
+    courtyardOutlineProps.parse({
+      outline: [
+        { x: 0, y: 0 },
+        { x: "1cm", y: 0 },
+        { x: 0, y: "5mm" },
+      ],
+    }).outline,
+  ).toEqual([
+    { x: 0, y: 0 },
+    { x: 10, y: 0 },
+    { x: 0, y: 5 },
+  ])
+})

@@ -1626,6 +1626,12 @@ export interface PanelProps extends Omit<
   tabWidth?: Distance;
   tabLength?: Distance;
   mouseBites?: boolean;
+  /**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Omitted `mouseBites` then parses as false; explicitly setting
+   * both `vScore` and `mouseBites` to true is an error.
+   */
+  vScore?: boolean;
   /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
   tabCountPerEdge?: number;
   edgePadding?: Distance;
@@ -2651,6 +2657,10 @@ export interface SystemBlockConnectionProps {
   label?: string;
   /** Relationship category; defaults to signal. */
   kind?: "signal" | "power";
+  /** Optional #RGB or #RRGGBB stroke/arrow color. Overrides the kind's color; omitted uses the renderer theme. */
+  color?: string;
+  /** Optional stroke pattern. Omitted preserves the kind's default; independent of color and direction. */
+  lineStyle?: "solid" | "dashed" | "dotted";
   /** Arrowheads: from → to, both ends, or neither. Defaults to forward. */
   direction?: "forward" | "both" | "none";
 }
@@ -2735,8 +2745,14 @@ export interface TestpointProps extends CommonComponentProps {
 ### ToolingrailProps `<toolingrail />`
 
 ```ts
-export interface ToolingrailProps {
-  children?: any;
+export interface ToolingrailProps extends Omit<
+  BaseGroupProps,
+  "width" | "height"
+> {
+  /** Panel edge carrying the rail. Required; rail children use its local centre as origin. */
+  panelSide: "top" | "right" | "bottom" | "left";
+  /** Rail width across the selected edge, in mm or a unit string. Must fit in the panel's edge padding. No default or aliases. */
+  width: Distance;
 }
 ```
 

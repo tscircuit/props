@@ -2863,7 +2863,12 @@ export const courtyardOutlineProps = pcbLayoutProps
     pcbRotation: true,
   })
   .extend({
-    outline: z.array(point),
+    outline: z
+      .array(point)
+      .min(3)
+      .describe(
+        "Complete courtyard polygon with at least three points. Supply the full outline instead of separate two-point segments.",
+      ),
     strokeWidth: length.optional(),
     isClosed: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),
@@ -4382,6 +4387,7 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  vScore?: boolean
   tabCountPerEdge?: number
   edgePadding?: Distance
   edgePaddingLeft?: Distance
@@ -4416,6 +4422,7 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    vScore: z.boolean().optional(),
     tabCountPerEdge: z.number().int().positive().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
@@ -6277,6 +6284,8 @@ export interface SystemBlockConnectionProps {
   to: string
   label?: string
   kind?: "signal" | "power"
+  color?: string
+  lineStyle?: "solid" | "dashed" | "dotted"
   direction?: "forward" | "both" | "none"
 }
 /** Arrowheads: from → to, both ends, or neither. Defaults to forward. */
@@ -6285,6 +6294,12 @@ export const systemBlockConnectionProps = z.object({
   from: z.string().trim().min(1),
   to: z.string().trim().min(1),
   label: z.string().optional(),
+  color: z
+    .string()
+    .trim()
+    .regex(/^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i)
+    .optional(),
+  lineStyle: z.enum(["solid", "dashed", "dotted"]).optional(),
   kind: z.enum(["signal", "power"]).default("signal"),
   direction: z.enum(["forward", "both", "none"]).default("forward"),
 })
@@ -6365,12 +6380,21 @@ export interface TestpointProps extends CommonComponentProps {
 ### toolingrail
 
 ```typescript
-export interface ToolingrailProps {
-  children?: any
+export interface ToolingrailProps
+  extends Omit<BaseGroupProps, "width" | "height"> {
+  panelSide: "top" | "right" | "bottom" | "left"
+  width: Distance
 }
-export const toolingrailProps = z.object({
-  children: z.any().optional(),
-})
+/** Rail width across the selected edge, in mm or a unit string. Must fit in the panel's edge padding. No default or aliases. */
+export const toolingrailProps = baseGroupProps
+  .omit({ width: true, height: true })
+  .extend({
+    panelSide: z.enum(["top", "right", "bottom", "left"]),
+    width: distance.refine(
+      (millimetres) => Number.isFinite(millimetres) && millimetres > 0,
+      { message: "Tooling rail width must be a finite positive distance" },
+    ),
+  })
 ```
 
 ### trace-hint

@@ -225,3 +225,41 @@ test("typed TSX preserves nested groups, children, and PCB associations", () => 
     systemBlockProps.group.parse({ name: "empty", children: null }).children,
   ).toBeNull()
 })
+
+test("connection styling is optional, canonical, and independent of electrical kind", () => {
+  const styled = systemBlockConnectionProps.parse({
+    from: "cpu",
+    to: "display",
+    color: " #08a ",
+    lineStyle: "dotted",
+    kind: "power",
+  })
+  expect(styled).toMatchObject({
+    color: "#08a",
+    lineStyle: "dotted",
+    kind: "power",
+    direction: "forward",
+  })
+  for (const color of [
+    "red",
+    "",
+    "#12",
+    "#12345",
+    "url(https://example.com/color)",
+  ]) {
+    expect(
+      systemBlockConnectionProps.safeParse({ from: "a", to: "b", color })
+        .success,
+    ).toBe(false)
+  }
+  expect(
+    systemBlockConnectionProps.safeParse({
+      from: "a",
+      to: "b",
+      lineStyle: "dash",
+    }).success,
+  ).toBe(false)
+  const defaults = systemBlockConnectionProps.parse({ from: "a", to: "b" })
+  expect(defaults.color).toBeUndefined()
+  expect(defaults.lineStyle).toBeUndefined()
+})

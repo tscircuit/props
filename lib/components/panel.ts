@@ -36,6 +36,12 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  /**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Omitted `mouseBites` then parses as false; explicitly setting
+   * both `vScore` and `mouseBites` to true is an error.
+   */
+  vScore?: boolean
   /** Minimum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
   minWidth?: Distance
   /** Maximum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
@@ -77,6 +83,7 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    vScore: z.boolean().optional(),
     minWidth: positivePanelDistance.optional(),
     maxWidth: positivePanelDistance.optional(),
     minHeight: positivePanelDistance.optional(),
@@ -107,6 +114,15 @@ export const panelProps = baseGroupProps
       path: ["maxHeight"],
       message: "Panel maxHeight must be greater than or equal to minHeight",
     },
+  )
+  .refine((panel) => !(panel.mouseBites === true && panel.vScore === true), {
+    path: ["vScore"],
+    message: "Panel vScore cannot be combined with mouseBites",
+  })
+  .transform((panel) =>
+    panel.vScore === true && panel.mouseBites === undefined
+      ? { ...panel, mouseBites: false }
+      : panel,
   )
 
 type InferredPanelProps = z.input<typeof panelProps>

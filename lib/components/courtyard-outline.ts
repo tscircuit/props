@@ -16,7 +16,12 @@ export const courtyardOutlineProps = pcbLayoutProps
     pcbRotation: true,
   })
   .extend({
-    outline: z.array(point),
+    outline: z
+      .array(point)
+      .min(3)
+      .describe(
+        "Complete courtyard polygon with at least three points. Supply the full outline instead of separate two-point segments.",
+      ),
     strokeWidth: length.optional(),
     isClosed: z.boolean().optional(),
     isStrokeDashed: z.boolean().optional(),

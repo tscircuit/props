@@ -1,5 +1,9 @@
 import { expect, test } from "bun:test"
-import { ibisModelProps, type IbisModelProps } from "../lib"
+import {
+  ibisModelProps,
+  signalIntegrityIbisModelProps,
+  type SignalIntegrityIbisModelProps,
+} from "../lib"
 test("IBIS models use a shared asset and explicit vendor pin bindings", () => {
   const model = {
     componentRef: ".U1",
@@ -10,8 +14,9 @@ test("IBIS models use a shared asset and explicit vendor pin bindings", () => {
     },
     ibisComponentName: "DRIVER",
     ibisPinNameToPortLabel: { "1": "pin1" },
-  } satisfies IbisModelProps
-  expect(ibisModelProps.parse(model)).toEqual(model)
+  } satisfies SignalIntegrityIbisModelProps
+  expect(ibisModelProps).toBe(signalIntegrityIbisModelProps)
+  expect(signalIntegrityIbisModelProps.parse(model)).toEqual(model)
   for (const removed of [
     { modelValueCorner: "typical" },
     { includePackageParasitics: true },

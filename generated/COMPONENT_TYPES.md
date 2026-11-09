@@ -3970,9 +3970,18 @@ const rectHoleProps = pcbLayoutProps.extend({
 
 ```typescript
 /** Declares a model for an existing chip. Rendering never fetches or converts the source. */
-export interface IbisModelProps extends IbisModelDefinition {
+export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
   componentRef: string
 }
+.extend({ componentRef: z.string().min(1) })
+  .strict()
+expectTypesMatch<
+  SignalIntegrityIbisModelProps,
+  z.input<typeof signalIntegrityIbisModelProps>
+>(true)
+
+// The shipped <ibismodel> element remains an alias.
+export { signalIntegrityIbisModelProps as ibisModelProps }
 ```
 
 ### inductor
@@ -5618,7 +5627,7 @@ export interface SchematicTextProps {
 }
 ```
 
-### signal
+### signalintegrity-signal
 
 ```typescript
 export type SignalEndpoint =
@@ -5638,7 +5647,7 @@ export interface SignalMask {
   setup?: string | number
   hold?: string | number
 }
-/** Nonnegative seconds, including zero. setup/hold need a strobe; core checks this diagnostic. */
+/** Nonnegative seconds, including zero. setup/hold need a strobeRef; core checks this diagnostic. */
 export const signalMask = z
   .object({
     vih: signalVoltage.optional(),
@@ -5647,10 +5656,10 @@ export const signalMask = z
     hold: signalTime.pipe(z.number().nonnegative()).optional(),
   })
   .strict()
-export interface SignalProps {
+export interface SignalIntegritySignalProps {
   name: string
-  driver: SignalEndpoint
-  receiver: SignalEndpoint | SignalEndpoint[]
+  driverRef: SignalEndpoint
+  receiverRef: SignalEndpoint | SignalEndpoint[]
   bitRate?: string | number
   pattern?: string
   seed?: number
@@ -5658,14 +5667,14 @@ export interface SignalProps {
   quiet?: "low" | "high" | "off"
   probe?: "local" | "global"
   mask?: "ibis" | SignalMask
-  strobe?: string
+  strobeRef?: string
 }
-/** Name of a different switching signal in the same block, with a receiver on the same chip; resolved by core. */
-export const signalProps = z
+/** Name of a different switching signal in the same block, with a receiverRef on the same chip; resolved by core. */
+export const signalIntegritySignalProps = z
   .object({
     name: z.string().min(1),
-    driver: signalEndpoint,
-    receiver: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
+    driverRef: signalEndpoint,
+    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
     bitRate: signalBitRate.optional(),
     pattern: z
       .string()
@@ -5685,7 +5694,7 @@ export const signalProps = z
       .optional(),
     probe: z.enum(["local", "global"]).default("local"),
     mask: z.union([z.literal("ibis"), signalMask]).default("ibis"),
-    strobe: z.string().min(1).optional(),
+    strobeRef: z.string().min(1).optional(),
   })
   .strict()
   .superRefine(({ name, pattern, seed }, ctx) => {
@@ -5701,27 +5710,27 @@ export const signalProps = z
   })
 ```
 
-### signalintegrity
+### signalintegrity-simulation
 
 ```typescript
 /** One coupled SI test. Rendering and board-dependent diagnostics belong to core. */
-export interface SignalIntegrityProps {
+export interface SignalIntegritySimulationProps {
   name?: string
   bitRate: string | number
   duration?: string | number
-  corner?: "typ" | "min" | "max"
+  corner?: "typical" | "minimum" | "maximum"
   unlistedNets?: "passive"
   unrouted?: "error" | "ideal"
   pdn?: "extracted" | "ideal"
   children?: ReactNode
 }
 /** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
-export const signalIntegrityProps = z
+export const signalIntegritySimulationProps = z
   .object({
     name: z.string().min(1).optional(),
     bitRate: signalBitRate,
     duration: signalTimeOrUi.optional(),
-    corner: z.enum(["typ", "min", "max"]).default("typ"),
+    corner: z.enum(["typical", "minimum", "maximum"]).default("typical"),
     unlistedNets: z.literal("passive").default("passive"),
     unrouted: z.enum(["error", "ideal"]).default("error"),
     pdn: z.enum(["extracted", "ideal"]).default("ideal"),

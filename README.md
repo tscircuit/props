@@ -74,7 +74,7 @@ See [Signal integrity props](docs/signal-integrity.md) for `<signalintegrity>`,
 | `<fuse />`                                  | [`FuseProps`](#fuseprops-fuse)                                                                                     |
 | `<group />`                                 | [`BaseGroupProps`](#basegroupprops-group)                                                                          |
 | `<hole />`                                  | [`CircleHoleProps`](#circleholeprops-hole)                                                                         |
-| `<ibismodel />`                             | [`IbisModelProps`](#ibismodelprops-ibismodel)                                                                      |
+| `<signalintegrity.ibismodel />`             | [`SignalIntegrityIbisModelProps`](#signalintegrityibismodelprops-signalintegrityibismodel)                         |
 | `<inductor />`                              | [`InductorProps`](#inductorprops-inductor)                                                                         |
 | `<interconnect />`                          | [`InterconnectProps`](#interconnectprops-interconnect)                                                             |
 | `<internalcircuit />`                       | [`InternalCircuitProps`](#internalcircuitprops-internalcircuit)                                                    |
@@ -122,8 +122,8 @@ See [Signal integrity props](docs/signal-integrity.md) for `<signalintegrity>`,
 | `<schematicsymbol />`                       | [`SchematicSymbolProps`](#schematicsymbolprops-schematicsymbol)                                                    |
 | `<schematictable />`                        | [`SchematicTableProps`](#schematictableprops-schematictable)                                                       |
 | `<schematictext />`                         | [`SchematicTextProps`](#schematictextprops-schematictext)                                                          |
-| `<signal />`                                | [`SignalProps`](#signalprops-signal)                                                                               |
-| `<signalintegrity />`                       | [`SignalIntegrityProps`](#signalintegrityprops-signalintegrity)                                                    |
+| `<signalintegrity.signal />`                | [`SignalIntegritySignalProps`](#signalintegritysignalprops-signalintegritysignal)                                  |
+| `<signalintegrity.simulation />`            | [`SignalIntegritySimulationProps`](#signalintegritysimulationprops-signalintegritysimulation)                      |
 | `<silkscreencircle />`                      | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                                                 |
 | `<silkscreengraphic />`                     | [`SilkscreenGraphicProps`](#silkscreengraphicprops-silkscreengraphic)                                              |
 | `<silkscreenline />`                        | [`SilkscreenLineProps`](#silkscreenlineprops-silkscreenline)                                                       |
@@ -1392,10 +1392,10 @@ export interface CircleHoleProps extends PcbLayoutProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
 
-### IbisModelProps `<ibismodel />`
+### SignalIntegrityIbisModelProps `<signalintegrity.ibismodel />`
 
 ```ts
-export interface IbisModelProps extends IbisModelDefinition {
+export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
   /** Selector for exactly one source component in this subcircuit. */
   componentRef: string;
 }
@@ -2343,15 +2343,15 @@ export interface SchematicTextProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)
 
-### SignalProps `<signal />`
+### SignalIntegritySignalProps `<signalintegrity.signal />`
 
 ```ts
-export interface SignalProps {
+export interface SignalIntegritySignalProps {
   /** Unique within the enclosing SI block. */
   name: string;
-  driver: SignalEndpoint;
+  driverRef: SignalEndpoint;
   /** Arrays always mean multiple receivers; only { p, n } means a differential pair. */
-  receiver: SignalEndpoint | SignalEndpoint[];
+  receiverRef: SignalEndpoint | SignalEndpoint[];
   /** Overrides the block bit rate. Raw and parsed numbers are bit/s. */
   bitRate?: string | number;
   /** prbs7 (default), prbs15, prbs31, clock, or a nonempty literal bit string. */
@@ -2362,26 +2362,26 @@ export interface SignalProps {
   offset?: string | number;
   quiet?: "low" | "high" | "off";
   probe?: "local" | "global";
-  /** Defaults to ibis. setup/hold overrides need strobe. */
+  /** Defaults to ibis. setup/hold overrides need strobeRef. */
   mask?: "ibis" | SignalMask;
-  /** Name of a different switching signal in the same block, with a receiver on the same chip; resolved by core. */
-  strobe?: string;
+  /** Name of a different switching signal in the same block, with a receiverRef on the same chip; resolved by core. */
+  strobeRef?: string;
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/signal.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/signalintegrity-signal.ts)
 
-### SignalIntegrityProps `<signalintegrity />`
+### SignalIntegritySimulationProps `<signalintegrity.simulation />`
 
 ```ts
-export interface SignalIntegrityProps {
+export interface SignalIntegritySimulationProps {
   /** Required when the board contains more than one SI block. */
   name?: string;
   /** Default signal bit rate. Raw and parsed numbers are bit/s. */
   bitRate: string | number;
   /** Positive, finite time or UI at the block bit rate; parsed to seconds. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
   duration?: string | number;
-  corner?: "typ" | "min" | "max";
+  corner?: "typical" | "minimum" | "maximum";
   unlistedNets?: "passive";
   unrouted?: "error" | "ideal";
   /** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
@@ -2390,7 +2390,7 @@ export interface SignalIntegrityProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/signalintegrity.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/signalintegrity-simulation.ts)
 
 ### SilkscreenCircleProps `<silkscreencircle />`
 

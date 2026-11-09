@@ -28,7 +28,7 @@ export interface SignalMask {
   /** Finite, signed volts; overrides the IBIS receiver threshold at the test corner. */
   vih?: string | number
   vil?: string | number
-  /** Nonnegative seconds, including zero. setup/hold need a strobe; core checks this diagnostic. */
+  /** Nonnegative seconds, including zero. setup/hold need a strobeRef; core checks this diagnostic. */
   setup?: string | number
   hold?: string | number
 }
@@ -42,12 +42,12 @@ export const signalMask = z
   })
   .strict()
 
-export interface SignalProps {
+export interface SignalIntegritySignalProps {
   /** Unique within the enclosing SI block. */
   name: string
-  driver: SignalEndpoint
+  driverRef: SignalEndpoint
   /** Arrays always mean multiple receivers; only { p, n } means a differential pair. */
-  receiver: SignalEndpoint | SignalEndpoint[]
+  receiverRef: SignalEndpoint | SignalEndpoint[]
   /** Overrides the block bit rate. Raw and parsed numbers are bit/s. */
   bitRate?: string | number
   /** prbs7 (default), prbs15, prbs31, clock, or a nonempty literal bit string. */
@@ -58,17 +58,17 @@ export interface SignalProps {
   offset?: string | number
   quiet?: "low" | "high" | "off"
   probe?: "local" | "global"
-  /** Defaults to ibis. setup/hold overrides need strobe. */
+  /** Defaults to ibis. setup/hold overrides need strobeRef. */
   mask?: "ibis" | SignalMask
-  /** Name of a different switching signal in the same block, with a receiver on the same chip; resolved by core. */
-  strobe?: string
+  /** Name of a different switching signal in the same block, with a receiverRef on the same chip; resolved by core. */
+  strobeRef?: string
 }
 
-export const signalProps = z
+export const signalIntegritySignalProps = z
   .object({
     name: z.string().min(1),
-    driver: signalEndpoint,
-    receiver: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
+    driverRef: signalEndpoint,
+    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
     bitRate: signalBitRate.optional(),
     pattern: z
       .string()
@@ -88,7 +88,7 @@ export const signalProps = z
       .optional(),
     probe: z.enum(["local", "global"]).default("local"),
     mask: z.union([z.literal("ibis"), signalMask]).default("ibis"),
-    strobe: z.string().min(1).optional(),
+    strobeRef: z.string().min(1).optional(),
   })
   .strict()
   .superRefine(({ name, pattern, seed }, ctx) => {
@@ -105,4 +105,7 @@ export const signalProps = z
 
 expectTypesMatch<SignalEndpoint, z.input<typeof signalEndpoint>>(true)
 expectTypesMatch<SignalMask, z.input<typeof signalMask>>(true)
-expectTypesMatch<SignalProps, z.input<typeof signalProps>>(true)
+expectTypesMatch<
+  SignalIntegritySignalProps,
+  z.input<typeof signalIntegritySignalProps>
+>(true)

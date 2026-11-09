@@ -3,11 +3,18 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
 /** Declares a model for an existing chip. Rendering never fetches or converts the source. */
-export interface IbisModelProps extends IbisModelDefinition {
+export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
   /** Selector for exactly one source component in this subcircuit. */
   componentRef: string
 }
-export const ibisModelProps = ibisModelDefinition
+export const signalIntegrityIbisModelProps = ibisModelDefinition
   .extend({ componentRef: z.string().min(1) })
   .strict()
-expectTypesMatch<IbisModelProps, z.input<typeof ibisModelProps>>(true)
+expectTypesMatch<
+  SignalIntegrityIbisModelProps,
+  z.input<typeof signalIntegrityIbisModelProps>
+>(true)
+
+// The shipped <ibismodel> element remains an alias.
+export { signalIntegrityIbisModelProps as ibisModelProps }
+export type IbisModelProps = SignalIntegrityIbisModelProps

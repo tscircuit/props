@@ -3,7 +3,10 @@ import { readFileSync } from "node:fs"
 import { extractInterfaces } from "../scripts/generate-component-types"
 
 test("documents every endpoint union member, including per-leg models", () => {
-  const source = readFileSync("lib/components/signal.ts", "utf8")
+  const source = readFileSync(
+    "lib/components/signalintegrity-signal.ts",
+    "utf8",
+  )
   const endpoint = source
     .slice(
       source.indexOf("export type SignalEndpoint"),

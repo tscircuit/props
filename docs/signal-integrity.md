@@ -1,13 +1,13 @@
 # Signal integrity props
 
-`signalIntegrityProps` / `SignalIntegrityProps` and `signalProps` / `SignalProps`
+`signalIntegritySimulationProps` / `SignalIntegritySimulationProps` and `signalIntegritySignalProps` / `SignalIntegritySignalProps`
 validate the authoring API in [RFC #28](https://github.com/tscircuit/rfc/pull/28)
-(contract at `ae2c01a336534386886bfe6d3bb916c18c0c445b`):
+(contract at `956cd7e2bd2c3c498b81dc9816a4c01a29f0b821`):
 
 ```tsx
-<signalintegrity bitRate="20Mbps">
-  <signal name="DATA" driver=".TX > .Y" receiver=".RX > .A" />
-</signalintegrity>
+<signalintegrity.simulation bitRate="20Mbps">
+  <signalintegrity.signal name="DATA" driverRef=".TX > .Y" receiverRef=".RX > .A" />
+</signalintegrity.simulation>
 ```
 
 Props exports and generated component lists live in this package. Core owns
@@ -21,7 +21,7 @@ V, mV and uV/µV/μV. Units must match their quantity.
 `duration="32UI"` resolves at the block bit rate. UI offsets remain normalized
 strings such as `0.25UI` until core resolves the signal's own or inherited rate.
 
-Block defaults are corner `typ`, unlisted nets `passive`, unrouted `error` and
+Block defaults are corner `typical`, unlisted nets `passive`, unrouted `error` and
 PDN `ideal`, with rails from the selected IBIS models at the test corner.
 PDN `extracted` is accepted by the schema but not implemented yet. Duration stays
 absent, including when explicitly `undefined`; the pipeline chooses automatic
@@ -50,13 +50,13 @@ Mask objects accept finite signed `vih`/`vil` voltages and finite nonnegative
 `setup`/`hold` times (zero is valid). Omitted values use the RFC's corner-adjusted
 IBIS DC thresholds; differential thresholds use P−N. The props schema allows
 setup/hold without a strobe so core can report the RFC diagnostic:
-`mask.setup and mask.hold need a strobe.` Core also validates signal names,
+`mask.setup and mask.hold need a strobeRef.` Core also validates signal names,
 strobe references, IBIS models, connectivity and board requirements. A strobe
 names a different switching signal in the same block and must have exactly one
 receiver on each data receiver's chip; self-reference and dependency cycles fail.
 
 Migrate SI tests from transient `pcbSpiceChannel` and `ibisPinStates` to
-`signalintegrity` with `signal` children. `PcbSpiceChannelProps`,
+`signalintegrity.simulation` with `signalintegrity.signal` children. `PcbSpiceChannelProps`,
 `pcbSpiceChannelProps`, `IbisPinRunState` and `ibisPinRunState` are removed exports.
 IBIS models no longer accept `modelValueCorner` or `includePackageParasitics`:
 choose `corner` per SI block; package parasitics are always simulated. These
@@ -64,3 +64,11 @@ removed props have no aliases. The `supply` prop is also removed; selected IBIS
 model rails replace it. General SPICE transient timing, stimuli, explicit
 eye measurements and voltage probes remain available. Built-in SPICE engine
 suggestions are `spicey` and `ngspice`; custom engine strings remain supported.
+
+Use `signalintegrity.ibismodel` with `signalIntegrityIbisModelProps` /
+`SignalIntegrityIbisModelProps` for model declarations. The shipped `ibismodel`
+element and `ibisModelProps` / `IbisModelProps` exports remain aliases.
+The unreleased top-level `signalintegrity` / `signal` elements and `driver` /
+`receiver` / `strobe` props are removed; use `driverRef`, `receiverRef` and
+`strobeRef`. Corners are `typical` (default), `minimum` and `maximum`; the old
+`typ` / `min` / `max` values are rejected.

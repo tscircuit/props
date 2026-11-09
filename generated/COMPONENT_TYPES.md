@@ -1438,10 +1438,6 @@ export const signalTime = quantity(
   },
   "Expected a time in seconds, e.g. 2ns",
 )
-export const signalVoltage = quantity(
-  { "": 1, V: 1, mV: 1e-3, uV: 1e-6, µV: 1e-6, μV: 1e-6 },
-  "Expected a voltage in volts, e.g. 800mV",
-)
 ```
 
 ### traceSpacing
@@ -4748,6 +4744,116 @@ export const pcbTraceProps = z.object({
 })
 ```
 
+### pcbchannel
+
+```typescript
+export type SignalEndpoint =
+  | SignalPin
+  | SignalPair
+  | { pin: SignalPin; model?: string }
+  | { pin: SignalPair; model?: string | { p: string; n: string } }
+export const signalEndpoint = z.union([
+  pin,
+  pair,
+  z.object({ pin, model: pin.optional() }).strict(),
+  z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
+])
+export interface PcbChannelProps {
+  name: string
+  driverRef: SignalEndpoint
+  receiverRef: SignalEndpoint | SignalEndpoint[]
+  bitRate?: string | number
+  pattern?: string
+  seed?: number
+  offset?: string | number
+  quiet?: "low" | "high" | "off"
+  probe?: "local" | "global"
+
+}
+/** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
+export const pcbChannelProps = z
+  .object({
+    name: z.string().min(1),
+    driverRef: signalEndpoint,
+    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
+    bitRate: signalBitRate.optional(),
+    pattern: z
+      .string()
+      .regex(
+        /^(?:prbs7|prbs15|prbs31|clock|[01]+)$/,
+        "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
+      )
+      .default("prbs7"),
+    seed: z.number().finite().int().positive().optional(),
+    offset: signalTimeOrUi.default("0UI"),
+    quiet: z
+      .enum(["low", "high", "off"], {
+        errorMap: () => ({
+          message: 'quiet needs a level: "low", "high" or "off".',
+        }),
+      })
+      .optional(),
+    probe: z.enum(["local", "global"]).default("local"),
+
+  })
+  .strict()
+  .superRefine(({ name, pattern, seed }, ctx) => {
+    if (seed === undefined || !pattern.startsWith("prbs")) return
+    const max = 2 ** Number(pattern.slice(4)) - 1
+    if (seed > max) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["seed"],
+        message: `Signal "${name}": ${pattern} seed must be an integer in 1..${max}.`,
+      })
+    }
+  })
+```
+
+### pcbtransientchannelsimulation
+
+```typescript
+/** One coupled SI test. Rendering and board-dependent diagnostics belong to core. */
+export interface PcbTransientChannelSimulationProps {
+  name?: string
+  bitRate: string | number
+  duration?: string | number
+  corner?: "typical" | "minimum" | "maximum"
+  unlistedNets?: "passive"
+  unrouted?: "error" | "ideal"
+  pdn?: "extracted" | "ideal"
+  children?: ReactNode
+}
+/** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
+export const pcbTransientChannelSimulationProps = z
+  .object({
+    name: z.string().min(1).optional(),
+    bitRate: signalBitRate,
+    duration: signalTimeOrUi.optional(),
+    corner: z.enum(["typical", "minimum", "maximum"]).default("typical"),
+    unlistedNets: z.literal("passive").default("passive"),
+    unrouted: z.enum(["error", "ideal"]).default("error"),
+    pdn: z.enum(["extracted", "ideal"]).default("ideal"),
+    children: z.custom<ReactNode>().optional(),
+  })
+  .strict()
+  .transform(({ duration, ...props }, ctx) => {
+    const seconds =
+      typeof duration === "string"
+        ? Number.parseFloat(duration) / props.bitRate
+        : duration
+    if (seconds !== undefined && (!Number.isFinite(seconds) || seconds <= 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["duration"],
+        message: "Duration must be finite and positive in seconds",
+      })
+      return z.NEVER
+    }
+    return { ...props, ...(seconds === undefined ? {} : { duration: seconds }) }
+  })
+```
+
 ### pin-header
 
 ```typescript
@@ -5609,142 +5715,6 @@ export interface SchematicTextProps {
 }
 ```
 
-### signalintegrity-ibismodel
-
-```typescript
-/** Declares a model for an existing chip. Rendering never fetches or converts the source. */
-export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
-  componentRef: string
-}
-```
-
-### signalintegrity-signal
-
-```typescript
-export type SignalEndpoint =
-  | SignalPin
-  | SignalPair
-  | { pin: SignalPin; model?: string }
-  | { pin: SignalPair; model?: string | { p: string; n: string } }
-export const signalEndpoint = z.union([
-  pin,
-  pair,
-  z.object({ pin, model: pin.optional() }).strict(),
-  z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
-])
-export interface SignalMask {
-  vih?: string | number
-  vil?: string | number
-  setup?: string | number
-  hold?: string | number
-}
-/** Nonnegative seconds, including zero. setup/hold need a strobeRef; core checks this diagnostic. */
-export const signalMask = z
-  .object({
-    vih: signalVoltage.optional(),
-    vil: signalVoltage.optional(),
-    setup: signalTime.pipe(z.number().nonnegative()).optional(),
-    hold: signalTime.pipe(z.number().nonnegative()).optional(),
-  })
-  .strict()
-export interface SignalIntegritySignalProps {
-  name: string
-  driverRef: SignalEndpoint
-  receiverRef: SignalEndpoint | SignalEndpoint[]
-  bitRate?: string | number
-  pattern?: string
-  seed?: number
-  offset?: string | number
-  quiet?: "low" | "high" | "off"
-  probe?: "local" | "global"
-  mask?: "ibis" | SignalMask
-  strobeRef?: string
-}
-/** Name of a different switching signal in the same block, with a receiverRef on the same chip; resolved by core. */
-export const signalIntegritySignalProps = z
-  .object({
-    name: z.string().min(1),
-    driverRef: signalEndpoint,
-    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
-    bitRate: signalBitRate.optional(),
-    pattern: z
-      .string()
-      .regex(
-        /^(?:prbs7|prbs15|prbs31|clock|[01]+)$/,
-        "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
-      )
-      .default("prbs7"),
-    seed: z.number().finite().int().positive().optional(),
-    offset: signalTimeOrUi.default("0UI"),
-    quiet: z
-      .enum(["low", "high", "off"], {
-        errorMap: () => ({
-          message: 'quiet needs a level: "low", "high" or "off".',
-        }),
-      })
-      .optional(),
-    probe: z.enum(["local", "global"]).default("local"),
-    mask: z.union([z.literal("ibis"), signalMask]).default("ibis"),
-    strobeRef: z.string().min(1).optional(),
-  })
-  .strict()
-  .superRefine(({ name, pattern, seed }, ctx) => {
-    if (seed === undefined || !pattern.startsWith("prbs")) return
-    const max = 2 ** Number(pattern.slice(4)) - 1
-    if (seed > max) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["seed"],
-        message: `Signal "${name}": ${pattern} seed must be an integer in 1..${max}.`,
-      })
-    }
-  })
-```
-
-### signalintegrity-simulation
-
-```typescript
-/** One coupled SI test. Rendering and board-dependent diagnostics belong to core. */
-export interface SignalIntegritySimulationProps {
-  name?: string
-  bitRate: string | number
-  duration?: string | number
-  corner?: "typical" | "minimum" | "maximum"
-  unlistedNets?: "passive"
-  unrouted?: "error" | "ideal"
-  pdn?: "extracted" | "ideal"
-  children?: ReactNode
-}
-/** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
-export const signalIntegritySimulationProps = z
-  .object({
-    name: z.string().min(1).optional(),
-    bitRate: signalBitRate,
-    duration: signalTimeOrUi.optional(),
-    corner: z.enum(["typical", "minimum", "maximum"]).default("typical"),
-    unlistedNets: z.literal("passive").default("passive"),
-    unrouted: z.enum(["error", "ideal"]).default("error"),
-    pdn: z.enum(["extracted", "ideal"]).default("ideal"),
-    children: z.custom<ReactNode>().optional(),
-  })
-  .strict()
-  .transform(({ duration, ...props }, ctx) => {
-    const seconds =
-      typeof duration === "string"
-        ? Number.parseFloat(duration) / props.bitRate
-        : duration
-    if (seconds !== undefined && (!Number.isFinite(seconds) || seconds <= 0)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["duration"],
-        message: "Duration must be finite and positive in seconds",
-      })
-      return z.NEVER
-    }
-    return { ...props, ...(seconds === undefined ? {} : { duration: seconds }) }
-  })
-```
-
 ### silkscreen-circle
 
 ```typescript
@@ -5874,6 +5844,15 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
   knockoutPaddingBottom: length.optional(),
   layers: z.array(layer_ref).optional(),
 })
+```
+
+### simulationibismodel
+
+```typescript
+/** Declares a model for an existing chip. Rendering never fetches or converts the source. */
+export interface SimulationIbisModelProps extends IbisModelDefinition {
+  componentRef: string
+}
 ```
 
 ### smtpad

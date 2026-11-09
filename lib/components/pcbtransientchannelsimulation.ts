@@ -4,7 +4,7 @@ import type { ReactNode } from "react"
 import { z } from "zod"
 
 /** One coupled SI test. Rendering and board-dependent diagnostics belong to core. */
-export interface SignalIntegritySimulationProps {
+export interface PcbTransientChannelSimulationProps {
   /** Required when the board contains more than one SI block. */
   name?: string
   /** Default signal bit rate. Raw and parsed numbers are bit/s. */
@@ -19,7 +19,7 @@ export interface SignalIntegritySimulationProps {
   children?: ReactNode
 }
 
-export const signalIntegritySimulationProps = z
+export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().min(1).optional(),
     bitRate: signalBitRate,
@@ -48,6 +48,6 @@ export const signalIntegritySimulationProps = z
   })
 
 expectTypesMatch<
-  SignalIntegritySimulationProps,
-  z.input<typeof signalIntegritySimulationProps>
+  PcbTransientChannelSimulationProps,
+  z.input<typeof pcbTransientChannelSimulationProps>
 >(true)

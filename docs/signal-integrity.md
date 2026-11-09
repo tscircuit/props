@@ -1,74 +1,40 @@
-# Signal integrity props
+# PCB transient channel simulation props
 
-`signalIntegritySimulationProps` / `SignalIntegritySimulationProps` and `signalIntegritySignalProps` / `SignalIntegritySignalProps`
-validate the authoring API in [RFC #28](https://github.com/tscircuit/rfc/pull/28)
-(contract at `d79a8d14d40765b2dda7db557e45e101f2aa62ba`):
+The schemas `pcbTransientChannelSimulationProps`, `pcbChannelProps` and
+`simulationIbisModelProps` implement [RFC #28](https://github.com/tscircuit/rfc/pull/28)
+at `89a263537ebc143315849f005024f84c1efa5635`.
 
 ```tsx
-<signalintegrity.simulation bitRate="20Mbps">
-  <signalintegrity.signal name="DATA" driverRef=".TX > .Y" receiverRef=".RX > .A" />
-</signalintegrity.simulation>
+import { simulation } from "@tscircuit/core"
+
+<simulation.pcbtransientchannelsimulation bitRate="20Mbps">
+  <simulation.pcbchannel name="DATA" driverRef=".TX > .Y" receiverRef=".RX > .A" />
+</simulation.pcbtransientchannelsimulation>
 ```
 
-Props exports and generated component lists live in this package. Core owns
-intrinsic element registration, selector resolution, topology diagnostics and
-Circuit JSON emission. These schemas alone do not render or simulate a board.
+Core owns element registration, selectors, topology diagnostics, normalized
+quiet states and source emission. Rates parse to bit/s. Numeric times are
+seconds; strings accept s, ms, us/µs/μs, ns, ps and fs. UI offsets remain strings
+until resolved at the channel's own or inherited bit rate. For example, `0.5`
+is half a second; `"0.5UI"` at 20 Mbps is 25 ns. UI durations resolve at the block
+rate. Explicit duration is finite and positive; absence stays absent in core.
+The pipeline records `S + 128 * max(UI_i)`, where
+`S = max(offset_i + 16 * UI_i)` for switching channels; quiet-only blocks record
+`32 * max(UI_i)`. Explicit durations are never extended.
 
-Bit rates normalize to numeric bit/s (`20Mbps` = 20,000,000; `250kbps` = 250,000).
-Raw numeric times and parsed time strings are seconds, and mask voltages are
-volts. Time strings accept s, ms, us/µs/μs, ns, ps and fs. Voltage strings accept
-V, mV and uV/µV/μV. Units must match their quantity.
-`duration="32UI"` resolves at the block bit rate. UI offsets remain normalized
-strings such as `0.25UI` until core resolves the signal's own or inherited rate.
+Block defaults are corner `typical`, unlisted nets `passive`, unrouted `error`
+and PDN `ideal`. Corners also accept `minimum` and `maximum`. Extracted PDN is
+schema-valid but execution is not implemented. Channel defaults are `prbs7`,
+`0UI` and local probe. Endpoints accept a selector, `{ p, n }`, or `{ pin, model }`
+with a shared or per-leg pair model. Arrays mean multiple receivers. There is
+no channel cap. Explicit PRBS seeds must be integers in `1..2^n-1`; omitted
+seeds use the board-wide sorted-name phase plan in core. Clock and literals
+omit source seeds. Quiet requires `low`, `high` or `off`; constant literals
+normalize to quiet low/high, with explicit quiet taking precedence.
 
-Block defaults are corner `typical`, unlisted nets `passive`, unrouted `error` and
-PDN `ideal`, with rails from the selected IBIS models at the test corner.
-PDN `extracted` is accepted by the schema but not implemented yet. Duration stays
-absent, including when explicitly `undefined`; the pipeline chooses automatic
-recording time from the joint pattern period, settling, offsets and complete eye
-windows. A supplied duration is a finite, positive explicit bound in seconds,
-including after UI conversion; it cannot be extended by the pipeline.
-Signal defaults are pattern `prbs7`, offset `0UI`, probe `local` and mask `ibis`.
-An omitted bit rate inherits the block rate. Omitted seeds stay absent for core
-to resolve using evenly spaced PRBS phases by sorted signal name across all
-board blocks, including quiet PRBS signals. Explicit PRBS seeds must be integers
-in `1..2^n-1`: `1..127`, `1..32767` or `1..2147483647` for `prbs7`, `prbs15` or
-`prbs31`. The schema checks the selected pattern, including default `prbs7`,
-without coercion. Clock and literal patterns do not use seeds; core omits them
-from their source records.
-
-Endpoints are pin selectors, `{ p, n }` differential pairs, or
-`{ pin: selector, model?: string }` and
-`{ pin: { p, n }, model?: string | { p: string, n: string } }` model overrides.
-A pair's string override selects both legs; its object override selects each
-leg independently. Arrays always mean multiple receivers and cannot be drivers
-or the `pin` of a model override. There is no lane count limit. Quiet signals
-require an explicit `low`, `high` or `off` level. Core normalizes constant literal
-patterns to quiet low/high; an explicit quiet level takes precedence.
-
-Mask objects accept finite signed `vih`/`vil` voltages and finite nonnegative
-`setup`/`hold` times (zero is valid). Omitted values use the RFC's corner-adjusted
-IBIS DC thresholds; differential thresholds use P−N. The props schema allows
-setup/hold without a strobe so core can report the RFC diagnostic:
-`mask.setup and mask.hold need a strobeRef.` Core also validates signal names,
-strobe references, IBIS models, connectivity and board requirements. A strobe
-names a different switching signal in the same block and must have exactly one
-receiver on each data receiver's chip; self-reference and dependency cycles fail.
-
-Migrate SI tests from transient `pcbSpiceChannel` and `ibisPinStates` to
-`signalintegrity.simulation` with `signalintegrity.signal` children. `PcbSpiceChannelProps`,
-`pcbSpiceChannelProps`, `IbisPinRunState` and `ibisPinRunState` are removed exports.
-IBIS models no longer accept `modelValueCorner` or `includePackageParasitics`:
-choose `corner` per SI block; package parasitics are always simulated. These
-removed props have no aliases. The `supply` prop is also removed; selected IBIS
-model rails replace it. General SPICE transient timing, stimuli, explicit
-eye measurements and voltage probes remain available. Built-in SPICE engine
-suggestions are `spicey` and `ngspice`; custom engine strings remain supported.
-
-Use `signalintegrity.ibismodel` with `signalIntegrityIbisModelProps` /
-`SignalIntegrityIbisModelProps` for model declarations. All SI elements live in
-the namespace; there are no top-level element or props aliases.
-The unreleased top-level `signalintegrity` / `signal` elements and `driver` /
-`receiver` / `strobe` props are removed; use `driverRef`, `receiverRef` and
-`strobeRef`. Corners are `typical` (default), `minimum` and `maximum`; the old
-`typ` / `min` / `max` values are rejected.
+Models use `<simulation.ibismodel>` and `SimulationIbisModelProps`. Corner is
+chosen per block; package parasitics are always included. The old namespace,
+flat element names, driver/receiver aliases, mask, strobe, setup/hold, thresholds,
+supply, modelValueCorner and includePackageParasitics are removed without
+aliases. Results contain waveforms and RLGC only; measurements are derived
+outside this API. General transient simulation and voltage probes are unchanged.

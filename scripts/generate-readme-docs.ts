@@ -29,8 +29,14 @@ const namespacedSystemBlockComponentNames = new Set([
 
 function getComponentTagName(componentName: string): string {
   const lowercaseComponentName = componentName.toLowerCase()
-  if (lowercaseComponentName.startsWith("signalintegrity")) {
-    return lowercaseComponentName.replace("signalintegrity", "signalintegrity.")
+  if (
+    [
+      "pcbtransientchannelsimulation",
+      "pcbchannel",
+      "simulationibismodel",
+    ].includes(lowercaseComponentName)
+  ) {
+    return `simulation.${lowercaseComponentName.replace(/^simulation/, "")}`
   }
   if (namespacedSystemBlockComponentNames.has(lowercaseComponentName)) {
     return lowercaseComponentName.replace("systemblock", "systemblock.")

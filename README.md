@@ -21,136 +21,136 @@ Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partvi
 See [System block diagrams](docs/system-blocks.md) for the proposed `systemblock`
 namespace, PCB references, and a complete overview example.
 
-See [Signal integrity props](docs/signal-integrity.md) for `<signalintegrity.simulation>`,
-`<signalintegrity.signal>`, parsed units, defaults, and migration from the old SI API.
+See [Signal integrity props](docs/signal-integrity.md) for `<simulation.pcbtransientchannelsimulation>`,
+`<simulation.pcbchannel>`, parsed units, defaults, and migration from the old SI API.
 
 <!-- COMPONENT_TABLE_START -->
 
 ## Available Components
 
-| Component                                   | Props Interface                                                                                                    |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `<ammeter />`                               | [`AmmeterProps`](#ammeterprops-ammeter)                                                                            |
-| `<analog.acsweepsimulation />`              | [`AnalogAcSweepSimulationProps`](#analogacsweepsimulationprops-analogacsweepsimulation)                            |
-| `<analog.dcoperatingpointsimulation />`     | [`AnalogDcOperatingPointSimulationProps`](#analogdcoperatingpointsimulationprops-analogdcoperatingpointsimulation) |
-| `<analog.dcsweepsimulation />`              | [`AnalogDcSweepSimulationProps`](#analogdcsweepsimulationprops-analogdcsweepsimulation)                            |
-| `<analog.digitalstimulus />`                | [`AnalogDigitalStimulusProps`](#analogdigitalstimulusprops-analogdigitalstimulus)                                  |
-| `<analog.eyediagram />`                     | [`AnalogEyeDiagramProps`](#analogeyediagramprops-analogeyediagram)                                                 |
-| `<analogsimulation />`                      | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                                                 |
-| `<analog.sweepparameter />`                 | [`AnalogResistanceSweepParameterProps`](#analogresistancesweepparameterprops-analogsweepparameter)                 |
-| `<analog.transientsimulation />`            | [`AnalogTransientSimulationProps`](#analogtransientsimulationprops-analogtransientsimulation)                      |
-| `<antenna />`                               | [`AntennaProps`](#antennaprops-antenna)                                                                            |
-| `<autoroutingphase />`                      | [`AutoroutingPhaseProps`](#autoroutingphaseprops-autoroutingphase)                                                 |
-| `<battery />`                               | [`BatteryProps`](#batteryprops-battery)                                                                            |
-| `<board />`                                 | [`BoardProps`](#boardprops-board)                                                                                  |
-| `<breakout />`                              | [`BreakoutProps`](#breakoutprops-breakout)                                                                         |
-| `<breakoutpoint />`                         | [`BreakoutPointProps`](#breakoutpointprops-breakoutpoint)                                                          |
-| `<bus />`                                   | [`BusProps`](#busprops-bus)                                                                                        |
-| `<cadassembly />`                           | [`CadAssemblyProps`](#cadassemblyprops-cadassembly)                                                                |
-| `<cadmodel />`                              | [`CadModelProps`](#cadmodelprops-cadmodel)                                                                         |
-| `<capacitor />`                             | [`CapacitorProps`](#capacitorprops-capacitor)                                                                      |
-| `<chip />`                                  | [`ChipProps`](#chipprops-chip)                                                                                     |
-| `<connector />`                             | [`ConnectorProps`](#connectorprops-connector)                                                                      |
-| `<constrainedlayout />`                     | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout)                                              |
-| `<constraint />`                            | [`ConstraintProps`](#constraintprops-constraint)                                                                   |
-| `<copperpour />`                            | [`CopperPourProps`](#copperpourprops-copperpour)                                                                   |
-| `<coppertext />`                            | [`CopperTextProps`](#coppertextprops-coppertext)                                                                   |
-| `<courtyardcircle />`                       | [`CourtyardCircleProps`](#courtyardcircleprops-courtyardcircle)                                                    |
-| `<courtyardoutline />`                      | [`CourtyardOutlineProps`](#courtyardoutlineprops-courtyardoutline)                                                 |
-| `<courtyardpill />`                         | [`CourtyardPillProps`](#courtyardpillprops-courtyardpill)                                                          |
-| `<courtyardrect />`                         | [`CourtyardRectProps`](#courtyardrectprops-courtyardrect)                                                          |
-| `<crystal />`                               | [`CrystalProps`](#crystalprops-crystal)                                                                            |
-| `<currentsource />`                         | [`CurrentSourceProps`](#currentsourceprops-currentsource)                                                          |
-| `<cutout />`                                | [`RectCutoutProps`](#rectcutoutprops-cutout)                                                                       |
-| `<differentialpair />`                      | [`DifferentialPairProps`](#differentialpairprops-differentialpair)                                                 |
-| `<diode />`                                 | [`DiodeProps`](#diodeprops-diode)                                                                                  |
-| `<drccheck />`                              | [`DrcCheckProps`](#drccheckprops-drccheck)                                                                         |
-| `<fabricationnotedimension />`              | [`FabricationNoteDimensionProps`](#fabricationnotedimensionprops-fabricationnotedimension)                         |
-| `<fabricationnotepath />`                   | [`FabricationNotePathProps`](#fabricationnotepathprops-fabricationnotepath)                                        |
-| `<fabricationnoterect />`                   | [`FabricationNoteRectProps`](#fabricationnoterectprops-fabricationnoterect)                                        |
-| `<fabricationnotetext />`                   | [`FabricationNoteTextProps`](#fabricationnotetextprops-fabricationnotetext)                                        |
-| `<fiducial />`                              | [`FiducialProps`](#fiducialprops-fiducial)                                                                         |
-| `<footprint />`                             | [`FootprintProps`](#footprintprops-footprint)                                                                      |
-| `<fuse />`                                  | [`FuseProps`](#fuseprops-fuse)                                                                                     |
-| `<group />`                                 | [`BaseGroupProps`](#basegroupprops-group)                                                                          |
-| `<hole />`                                  | [`CircleHoleProps`](#circleholeprops-hole)                                                                         |
-| `<inductor />`                              | [`InductorProps`](#inductorprops-inductor)                                                                         |
-| `<interconnect />`                          | [`InterconnectProps`](#interconnectprops-interconnect)                                                             |
-| `<internalcircuit />`                       | [`InternalCircuitProps`](#internalcircuitprops-internalcircuit)                                                    |
-| `<jumper />`                                | [`JumperProps`](#jumperprops-jumper)                                                                               |
-| `<led />`                                   | [`LedProps`](#ledprops-led)                                                                                        |
-| `<mosfet />`                                | [`MosfetProps`](#mosfetprops-mosfet)                                                                               |
-| `<mountedboard />`                          | [`MountedBoardProps`](#mountedboardprops-mountedboard)                                                             |
-| `<net />`                                   | [`NetProps`](#netprops-net)                                                                                        |
-| `<netalias />`                              | [`NetAliasProps`](#netaliasprops-netalias)                                                                         |
-| `<netlabel />`                              | [`NetLabelProps`](#netlabelprops-netlabel)                                                                         |
-| `<opamp />`                                 | [`OpAmpProps`](#opampprops-opamp)                                                                                  |
-| `<panel />`                                 | [`PanelProps`](#panelprops-panel)                                                                                  |
-| `<pcbbend />`                               | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                            |
-| `<pcbkeepout />`                            | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                   |
-| `<pcbnotedimension />`                      | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                 |
-| `<pcbnoteline />`                           | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                |
-| `<pcbnotepath />`                           | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                |
-| `<pcbnoterect />`                           | [`PcbNoteRectProps`](#pcbnoterectprops-pcbnoterect)                                                                |
-| `<pcbnotetext />`                           | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                |
-| `<simulation.pcbreturncurrentexcitation />` | [`PcbReturnCurrentExcitationProps`](#pcbreturncurrentexcitationprops-simulationpcbreturncurrentexcitation)         |
-| `<simulation.pcbreturncurrentsimulation />` | [`PcbReturnCurrentSimulationProps`](#pcbreturncurrentsimulationprops-simulationpcbreturncurrentsimulation)         |
-| `<pcbsoldermaskopening />`                  | [`PcbSoldermaskOpeningProps`](#pcbsoldermaskopeningprops-pcbsoldermaskopening)                                     |
-| `<pcbstiffener />`                          | [`PcbStiffenerProps`](#pcbstiffenerprops-pcbstiffener)                                                             |
-| `<pcbtrace />`                              | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                                                         |
-| `<pinheader />`                             | [`PinHeaderProps`](#pinheaderprops-pinheader)                                                                      |
-| `<pinout />`                                | [`PinoutProps`](#pinoutprops-pinout)                                                                               |
-| `<platedhole />`                            | [`CirclePlatedHoleProps`](#circleplatedholeprops-platedhole)                                                       |
-| `<port />`                                  | [`PortProps`](#portprops-port)                                                                                     |
-| `<potentiometer />`                         | [`PotentiometerProps`](#potentiometerprops-potentiometer)                                                          |
-| `<powersource />`                           | [`PowerSourceProps`](#powersourceprops-powersource)                                                                |
-| `<pushbutton />`                            | [`PushButtonProps`](#pushbuttonprops-pushbutton)                                                                   |
-| `<resistor />`                              | [`ResistorProps`](#resistorprops-resistor)                                                                         |
-| `<resonator />`                             | [`ResonatorProps`](#resonatorprops-resonator)                                                                      |
-| `<schematicarc />`                          | [`SchematicArcProps`](#schematicarcprops-schematicarc)                                                             |
-| `<schematicbox />`                          | [`SchematicBoxProps`](#schematicboxprops-schematicbox)                                                             |
-| `<schematiccell />`                         | [`SchematicCellProps`](#schematiccellprops-schematiccell)                                                          |
-| `<schematiccircle />`                       | [`SchematicCircleProps`](#schematiccircleprops-schematiccircle)                                                    |
-| `<schematicgraphic />`                      | [`SchematicGraphicProps`](#schematicgraphicprops-schematicgraphic)                                                 |
-| `<schematicline />`                         | [`SchematicLineProps`](#schematiclineprops-schematicline)                                                          |
-| `<schematicpath />`                         | [`SchematicPathProps`](#schematicpathprops-schematicpath)                                                          |
-| `<schematicrect />`                         | [`SchematicRectProps`](#schematicrectprops-schematicrect)                                                          |
-| `<schematicrow />`                          | [`SchematicRowProps`](#schematicrowprops-schematicrow)                                                             |
-| `<schematicsection />`                      | [`SchematicSectionProps`](#schematicsectionprops-schematicsection)                                                 |
-| `<schematicsheet />`                        | [`SchematicSheetProps`](#schematicsheetprops-schematicsheet)                                                       |
-| `<schematicsymbol />`                       | [`SchematicSymbolProps`](#schematicsymbolprops-schematicsymbol)                                                    |
-| `<schematictable />`                        | [`SchematicTableProps`](#schematictableprops-schematictable)                                                       |
-| `<schematictext />`                         | [`SchematicTextProps`](#schematictextprops-schematictext)                                                          |
-| `<signalintegrity.ibismodel />`             | [`SignalIntegrityIbisModelProps`](#signalintegrityibismodelprops-signalintegrityibismodel)                         |
-| `<signalintegrity.signal />`                | [`SignalIntegritySignalProps`](#signalintegritysignalprops-signalintegritysignal)                                  |
-| `<signalintegrity.simulation />`            | [`SignalIntegritySimulationProps`](#signalintegritysimulationprops-signalintegritysimulation)                      |
-| `<silkscreencircle />`                      | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                                                 |
-| `<silkscreengraphic />`                     | [`SilkscreenGraphicProps`](#silkscreengraphicprops-silkscreengraphic)                                              |
-| `<silkscreenline />`                        | [`SilkscreenLineProps`](#silkscreenlineprops-silkscreenline)                                                       |
-| `<silkscreenpath />`                        | [`SilkscreenPathProps`](#silkscreenpathprops-silkscreenpath)                                                       |
-| `<silkscreenrect />`                        | [`SilkscreenRectProps`](#silkscreenrectprops-silkscreenrect)                                                       |
-| `<silkscreentext />`                        | [`SilkscreenTextProps`](#silkscreentextprops-silkscreentext)                                                       |
-| `<smtpad />`                                | [`RectSmtPadProps`](#rectsmtpadprops-smtpad)                                                                       |
-| `<solderjumper />`                          | [`SolderJumperProps`](#solderjumperprops-solderjumper)                                                             |
-| `<solderpaste />`                           | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste)                                                        |
-| `<spicemodel />`                            | [`SpiceModelProps`](#spicemodelprops-spicemodel)                                                                   |
-| `<stampboard />`                            | [`StampboardProps`](#stampboardprops-stampboard)                                                                   |
-| `<subcircuit />`                            | [`SubcircuitProps`](#subcircuitprops-subcircuit)                                                                   |
-| `<subpanel />`                              | [`SubpanelProps`](#subpanelprops-subpanel)                                                                         |
-| `<switch />`                                | [`SwitchProps`](#switchprops-switch)                                                                               |
-| `<symbol />`                                | [`SymbolProps`](#symbolprops-symbol)                                                                               |
-| `<systemblock.component />`                 | [`SystemBlockComponentProps`](#systemblockcomponentprops-systemblockcomponent)                                     |
-| `<systemblock.connection />`                | [`SystemBlockConnectionProps`](#systemblockconnectionprops-systemblockconnection)                                  |
-| `<systemblock.group />`                     | [`SystemBlockGroupProps`](#systemblockgroupprops-systemblockgroup)                                                 |
-| `<systemblock.page />`                      | [`SystemBlockPageProps`](#systemblockpageprops-systemblockpage)                                                    |
-| `<testpoint />`                             | [`TestpointProps`](#testpointprops-testpoint)                                                                      |
-| `<toolingrail />`                           | [`ToolingrailProps`](#toolingrailprops-toolingrail)                                                                |
-| `<trace />`                                 | [`TraceProps`](#traceprops-trace)                                                                                  |
-| `<tracehint />`                             | [`TraceHintProps`](#tracehintprops-tracehint)                                                                      |
-| `<transistor />`                            | [`TransistorProps`](#transistorprops-transistor)                                                                   |
-| `<via />`                                   | [`ViaProps`](#viaprops-via)                                                                                        |
-| `<voltageprobe />`                          | [`VoltageProbeProps`](#voltageprobeprops-voltageprobe)                                                             |
-| `<voltagesource />`                         | [`VoltageSourceProps`](#voltagesourceprops-voltagesource)                                                          |
+| Component                                      | Props Interface                                                                                                     |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `<ammeter />`                                  | [`AmmeterProps`](#ammeterprops-ammeter)                                                                             |
+| `<analog.acsweepsimulation />`                 | [`AnalogAcSweepSimulationProps`](#analogacsweepsimulationprops-analogacsweepsimulation)                             |
+| `<analog.dcoperatingpointsimulation />`        | [`AnalogDcOperatingPointSimulationProps`](#analogdcoperatingpointsimulationprops-analogdcoperatingpointsimulation)  |
+| `<analog.dcsweepsimulation />`                 | [`AnalogDcSweepSimulationProps`](#analogdcsweepsimulationprops-analogdcsweepsimulation)                             |
+| `<analog.digitalstimulus />`                   | [`AnalogDigitalStimulusProps`](#analogdigitalstimulusprops-analogdigitalstimulus)                                   |
+| `<analog.eyediagram />`                        | [`AnalogEyeDiagramProps`](#analogeyediagramprops-analogeyediagram)                                                  |
+| `<analogsimulation />`                         | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                                                  |
+| `<analog.sweepparameter />`                    | [`AnalogResistanceSweepParameterProps`](#analogresistancesweepparameterprops-analogsweepparameter)                  |
+| `<analog.transientsimulation />`               | [`AnalogTransientSimulationProps`](#analogtransientsimulationprops-analogtransientsimulation)                       |
+| `<antenna />`                                  | [`AntennaProps`](#antennaprops-antenna)                                                                             |
+| `<autoroutingphase />`                         | [`AutoroutingPhaseProps`](#autoroutingphaseprops-autoroutingphase)                                                  |
+| `<battery />`                                  | [`BatteryProps`](#batteryprops-battery)                                                                             |
+| `<board />`                                    | [`BoardProps`](#boardprops-board)                                                                                   |
+| `<breakout />`                                 | [`BreakoutProps`](#breakoutprops-breakout)                                                                          |
+| `<breakoutpoint />`                            | [`BreakoutPointProps`](#breakoutpointprops-breakoutpoint)                                                           |
+| `<bus />`                                      | [`BusProps`](#busprops-bus)                                                                                         |
+| `<cadassembly />`                              | [`CadAssemblyProps`](#cadassemblyprops-cadassembly)                                                                 |
+| `<cadmodel />`                                 | [`CadModelProps`](#cadmodelprops-cadmodel)                                                                          |
+| `<capacitor />`                                | [`CapacitorProps`](#capacitorprops-capacitor)                                                                       |
+| `<chip />`                                     | [`ChipProps`](#chipprops-chip)                                                                                      |
+| `<connector />`                                | [`ConnectorProps`](#connectorprops-connector)                                                                       |
+| `<constrainedlayout />`                        | [`ConstrainedLayoutProps`](#constrainedlayoutprops-constrainedlayout)                                               |
+| `<constraint />`                               | [`ConstraintProps`](#constraintprops-constraint)                                                                    |
+| `<copperpour />`                               | [`CopperPourProps`](#copperpourprops-copperpour)                                                                    |
+| `<coppertext />`                               | [`CopperTextProps`](#coppertextprops-coppertext)                                                                    |
+| `<courtyardcircle />`                          | [`CourtyardCircleProps`](#courtyardcircleprops-courtyardcircle)                                                     |
+| `<courtyardoutline />`                         | [`CourtyardOutlineProps`](#courtyardoutlineprops-courtyardoutline)                                                  |
+| `<courtyardpill />`                            | [`CourtyardPillProps`](#courtyardpillprops-courtyardpill)                                                           |
+| `<courtyardrect />`                            | [`CourtyardRectProps`](#courtyardrectprops-courtyardrect)                                                           |
+| `<crystal />`                                  | [`CrystalProps`](#crystalprops-crystal)                                                                             |
+| `<currentsource />`                            | [`CurrentSourceProps`](#currentsourceprops-currentsource)                                                           |
+| `<cutout />`                                   | [`RectCutoutProps`](#rectcutoutprops-cutout)                                                                        |
+| `<differentialpair />`                         | [`DifferentialPairProps`](#differentialpairprops-differentialpair)                                                  |
+| `<diode />`                                    | [`DiodeProps`](#diodeprops-diode)                                                                                   |
+| `<drccheck />`                                 | [`DrcCheckProps`](#drccheckprops-drccheck)                                                                          |
+| `<fabricationnotedimension />`                 | [`FabricationNoteDimensionProps`](#fabricationnotedimensionprops-fabricationnotedimension)                          |
+| `<fabricationnotepath />`                      | [`FabricationNotePathProps`](#fabricationnotepathprops-fabricationnotepath)                                         |
+| `<fabricationnoterect />`                      | [`FabricationNoteRectProps`](#fabricationnoterectprops-fabricationnoterect)                                         |
+| `<fabricationnotetext />`                      | [`FabricationNoteTextProps`](#fabricationnotetextprops-fabricationnotetext)                                         |
+| `<fiducial />`                                 | [`FiducialProps`](#fiducialprops-fiducial)                                                                          |
+| `<footprint />`                                | [`FootprintProps`](#footprintprops-footprint)                                                                       |
+| `<fuse />`                                     | [`FuseProps`](#fuseprops-fuse)                                                                                      |
+| `<group />`                                    | [`BaseGroupProps`](#basegroupprops-group)                                                                           |
+| `<hole />`                                     | [`CircleHoleProps`](#circleholeprops-hole)                                                                          |
+| `<inductor />`                                 | [`InductorProps`](#inductorprops-inductor)                                                                          |
+| `<interconnect />`                             | [`InterconnectProps`](#interconnectprops-interconnect)                                                              |
+| `<internalcircuit />`                          | [`InternalCircuitProps`](#internalcircuitprops-internalcircuit)                                                     |
+| `<jumper />`                                   | [`JumperProps`](#jumperprops-jumper)                                                                                |
+| `<led />`                                      | [`LedProps`](#ledprops-led)                                                                                         |
+| `<mosfet />`                                   | [`MosfetProps`](#mosfetprops-mosfet)                                                                                |
+| `<mountedboard />`                             | [`MountedBoardProps`](#mountedboardprops-mountedboard)                                                              |
+| `<net />`                                      | [`NetProps`](#netprops-net)                                                                                         |
+| `<netalias />`                                 | [`NetAliasProps`](#netaliasprops-netalias)                                                                          |
+| `<netlabel />`                                 | [`NetLabelProps`](#netlabelprops-netlabel)                                                                          |
+| `<opamp />`                                    | [`OpAmpProps`](#opampprops-opamp)                                                                                   |
+| `<panel />`                                    | [`PanelProps`](#panelprops-panel)                                                                                   |
+| `<pcbbend />`                                  | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                             |
+| `<simulation.pcbchannel />`                    | [`PcbChannelProps`](#pcbchannelprops-simulationpcbchannel)                                                          |
+| `<pcbkeepout />`                               | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                    |
+| `<pcbnotedimension />`                         | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                  |
+| `<pcbnoteline />`                              | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                 |
+| `<pcbnotepath />`                              | [`PcbNotePathProps`](#pcbnotepathprops-pcbnotepath)                                                                 |
+| `<pcbnoterect />`                              | [`PcbNoteRectProps`](#pcbnoterectprops-pcbnoterect)                                                                 |
+| `<pcbnotetext />`                              | [`PcbNoteTextProps`](#pcbnotetextprops-pcbnotetext)                                                                 |
+| `<simulation.pcbreturncurrentexcitation />`    | [`PcbReturnCurrentExcitationProps`](#pcbreturncurrentexcitationprops-simulationpcbreturncurrentexcitation)          |
+| `<simulation.pcbreturncurrentsimulation />`    | [`PcbReturnCurrentSimulationProps`](#pcbreturncurrentsimulationprops-simulationpcbreturncurrentsimulation)          |
+| `<pcbsoldermaskopening />`                     | [`PcbSoldermaskOpeningProps`](#pcbsoldermaskopeningprops-pcbsoldermaskopening)                                      |
+| `<pcbstiffener />`                             | [`PcbStiffenerProps`](#pcbstiffenerprops-pcbstiffener)                                                              |
+| `<pcbtrace />`                                 | [`PcbTraceProps`](#pcbtraceprops-pcbtrace)                                                                          |
+| `<simulation.pcbtransientchannelsimulation />` | [`PcbTransientChannelSimulationProps`](#pcbtransientchannelsimulationprops-simulationpcbtransientchannelsimulation) |
+| `<pinheader />`                                | [`PinHeaderProps`](#pinheaderprops-pinheader)                                                                       |
+| `<pinout />`                                   | [`PinoutProps`](#pinoutprops-pinout)                                                                                |
+| `<platedhole />`                               | [`CirclePlatedHoleProps`](#circleplatedholeprops-platedhole)                                                        |
+| `<port />`                                     | [`PortProps`](#portprops-port)                                                                                      |
+| `<potentiometer />`                            | [`PotentiometerProps`](#potentiometerprops-potentiometer)                                                           |
+| `<powersource />`                              | [`PowerSourceProps`](#powersourceprops-powersource)                                                                 |
+| `<pushbutton />`                               | [`PushButtonProps`](#pushbuttonprops-pushbutton)                                                                    |
+| `<resistor />`                                 | [`ResistorProps`](#resistorprops-resistor)                                                                          |
+| `<resonator />`                                | [`ResonatorProps`](#resonatorprops-resonator)                                                                       |
+| `<schematicarc />`                             | [`SchematicArcProps`](#schematicarcprops-schematicarc)                                                              |
+| `<schematicbox />`                             | [`SchematicBoxProps`](#schematicboxprops-schematicbox)                                                              |
+| `<schematiccell />`                            | [`SchematicCellProps`](#schematiccellprops-schematiccell)                                                           |
+| `<schematiccircle />`                          | [`SchematicCircleProps`](#schematiccircleprops-schematiccircle)                                                     |
+| `<schematicgraphic />`                         | [`SchematicGraphicProps`](#schematicgraphicprops-schematicgraphic)                                                  |
+| `<schematicline />`                            | [`SchematicLineProps`](#schematiclineprops-schematicline)                                                           |
+| `<schematicpath />`                            | [`SchematicPathProps`](#schematicpathprops-schematicpath)                                                           |
+| `<schematicrect />`                            | [`SchematicRectProps`](#schematicrectprops-schematicrect)                                                           |
+| `<schematicrow />`                             | [`SchematicRowProps`](#schematicrowprops-schematicrow)                                                              |
+| `<schematicsection />`                         | [`SchematicSectionProps`](#schematicsectionprops-schematicsection)                                                  |
+| `<schematicsheet />`                           | [`SchematicSheetProps`](#schematicsheetprops-schematicsheet)                                                        |
+| `<schematicsymbol />`                          | [`SchematicSymbolProps`](#schematicsymbolprops-schematicsymbol)                                                     |
+| `<schematictable />`                           | [`SchematicTableProps`](#schematictableprops-schematictable)                                                        |
+| `<schematictext />`                            | [`SchematicTextProps`](#schematictextprops-schematictext)                                                           |
+| `<silkscreencircle />`                         | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                                                  |
+| `<silkscreengraphic />`                        | [`SilkscreenGraphicProps`](#silkscreengraphicprops-silkscreengraphic)                                               |
+| `<silkscreenline />`                           | [`SilkscreenLineProps`](#silkscreenlineprops-silkscreenline)                                                        |
+| `<silkscreenpath />`                           | [`SilkscreenPathProps`](#silkscreenpathprops-silkscreenpath)                                                        |
+| `<silkscreenrect />`                           | [`SilkscreenRectProps`](#silkscreenrectprops-silkscreenrect)                                                        |
+| `<silkscreentext />`                           | [`SilkscreenTextProps`](#silkscreentextprops-silkscreentext)                                                        |
+| `<simulation.ibismodel />`                     | [`SimulationIbisModelProps`](#simulationibismodelprops-simulationibismodel)                                         |
+| `<smtpad />`                                   | [`RectSmtPadProps`](#rectsmtpadprops-smtpad)                                                                        |
+| `<solderjumper />`                             | [`SolderJumperProps`](#solderjumperprops-solderjumper)                                                              |
+| `<solderpaste />`                              | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste)                                                         |
+| `<spicemodel />`                               | [`SpiceModelProps`](#spicemodelprops-spicemodel)                                                                    |
+| `<stampboard />`                               | [`StampboardProps`](#stampboardprops-stampboard)                                                                    |
+| `<subcircuit />`                               | [`SubcircuitProps`](#subcircuitprops-subcircuit)                                                                    |
+| `<subpanel />`                                 | [`SubpanelProps`](#subpanelprops-subpanel)                                                                          |
+| `<switch />`                                   | [`SwitchProps`](#switchprops-switch)                                                                                |
+| `<symbol />`                                   | [`SymbolProps`](#symbolprops-symbol)                                                                                |
+| `<systemblock.component />`                    | [`SystemBlockComponentProps`](#systemblockcomponentprops-systemblockcomponent)                                      |
+| `<systemblock.connection />`                   | [`SystemBlockConnectionProps`](#systemblockconnectionprops-systemblockconnection)                                   |
+| `<systemblock.group />`                        | [`SystemBlockGroupProps`](#systemblockgroupprops-systemblockgroup)                                                  |
+| `<systemblock.page />`                         | [`SystemBlockPageProps`](#systemblockpageprops-systemblockpage)                                                     |
+| `<testpoint />`                                | [`TestpointProps`](#testpointprops-testpoint)                                                                       |
+| `<toolingrail />`                              | [`ToolingrailProps`](#toolingrailprops-toolingrail)                                                                 |
+| `<trace />`                                    | [`TraceProps`](#traceprops-trace)                                                                                   |
+| `<tracehint />`                                | [`TraceHintProps`](#tracehintprops-tracehint)                                                                       |
+| `<transistor />`                               | [`TransistorProps`](#transistorprops-transistor)                                                                    |
+| `<via />`                                      | [`ViaProps`](#viaprops-via)                                                                                         |
+| `<voltageprobe />`                             | [`VoltageProbeProps`](#voltageprobeprops-voltageprobe)                                                              |
+| `<voltagesource />`                            | [`VoltageSourceProps`](#voltagesourceprops-voltagesource)                                                           |
 
 <!-- COMPONENT_TABLE_END -->
 
@@ -1655,6 +1655,30 @@ export interface PcbBendProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-bend.ts)
 
+### PcbChannelProps `<simulation.pcbchannel />`
+
+```ts
+export interface PcbChannelProps {
+  /** Unique within the enclosing SI block. */
+  name: string;
+  driverRef: SignalEndpoint;
+  /** Arrays always mean multiple receivers; only { p, n } means a differential pair. */
+  receiverRef: SignalEndpoint | SignalEndpoint[];
+  /** Overrides the block bit rate. Raw and parsed numbers are bit/s. */
+  bitRate?: string | number;
+  /** prbs7 (default), prbs15, prbs31, clock, or a nonempty literal bit string. */
+  pattern?: string;
+  /** Explicit PRBS seed: integer 1..2^n-1 for prbsN (including quiet PRBS). Omitted seeds use phases spaced by sorted signal name across board blocks; core resolves them. Unused for clock/literal drives. */
+  seed?: number;
+  /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
+  offset?: string | number;
+  quiet?: "low" | "high" | "off";
+  probe?: "local" | "global";
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcbchannel.ts)
+
 ### PcbKeepoutProps `<pcbkeepout />`
 
 ```ts
@@ -1859,6 +1883,27 @@ export type PcbTraceProps = z.input<typeof pcbTraceProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-trace.ts)
+
+### PcbTransientChannelSimulationProps `<simulation.pcbtransientchannelsimulation />`
+
+```ts
+export interface PcbTransientChannelSimulationProps {
+  /** Required when the board contains more than one SI block. */
+  name?: string;
+  /** Default signal bit rate. Raw and parsed numbers are bit/s. */
+  bitRate: string | number;
+  /** Positive, finite time or UI at the block bit rate; parsed to seconds. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
+  duration?: string | number;
+  corner?: "typical" | "minimum" | "maximum";
+  unlistedNets?: "passive";
+  unrouted?: "error" | "ideal";
+  /** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
+  pdn?: "extracted" | "ideal";
+  children?: ReactNode;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcbtransientchannelsimulation.ts)
 
 ### PinHeaderProps `<pinheader />`
 
@@ -2332,66 +2377,6 @@ export interface SchematicTextProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)
 
-### SignalIntegrityIbisModelProps `<signalintegrity.ibismodel />`
-
-```ts
-export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
-  /** Selector for exactly one source component in this subcircuit. */
-  componentRef: string;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/signalintegrity-ibismodel.ts)
-
-### SignalIntegritySignalProps `<signalintegrity.signal />`
-
-```ts
-export interface SignalIntegritySignalProps {
-  /** Unique within the enclosing SI block. */
-  name: string;
-  driverRef: SignalEndpoint;
-  /** Arrays always mean multiple receivers; only { p, n } means a differential pair. */
-  receiverRef: SignalEndpoint | SignalEndpoint[];
-  /** Overrides the block bit rate. Raw and parsed numbers are bit/s. */
-  bitRate?: string | number;
-  /** prbs7 (default), prbs15, prbs31, clock, or a nonempty literal bit string. */
-  pattern?: string;
-  /** Explicit PRBS seed: integer 1..2^n-1 for prbsN (including quiet PRBS). Omitted seeds use phases spaced by sorted signal name across board blocks; core resolves them. Unused for clock/literal drives. */
-  seed?: number;
-  /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
-  offset?: string | number;
-  quiet?: "low" | "high" | "off";
-  probe?: "local" | "global";
-  /** Defaults to ibis. setup/hold overrides need strobeRef. */
-  mask?: "ibis" | SignalMask;
-  /** Name of a different switching signal in the same block, with a receiverRef on the same chip; resolved by core. */
-  strobeRef?: string;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/signalintegrity-signal.ts)
-
-### SignalIntegritySimulationProps `<signalintegrity.simulation />`
-
-```ts
-export interface SignalIntegritySimulationProps {
-  /** Required when the board contains more than one SI block. */
-  name?: string;
-  /** Default signal bit rate. Raw and parsed numbers are bit/s. */
-  bitRate: string | number;
-  /** Positive, finite time or UI at the block bit rate; parsed to seconds. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
-  duration?: string | number;
-  corner?: "typical" | "minimum" | "maximum";
-  unlistedNets?: "passive";
-  unrouted?: "error" | "ideal";
-  /** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
-  pdn?: "extracted" | "ideal";
-  children?: ReactNode;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/signalintegrity-simulation.ts)
-
 ### SilkscreenCircleProps `<silkscreencircle />`
 
 ```ts
@@ -2475,6 +2460,17 @@ export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-text.ts)
+
+### SimulationIbisModelProps `<simulation.ibismodel />`
+
+```ts
+export interface SimulationIbisModelProps extends IbisModelDefinition {
+  /** Selector for exactly one source component in this subcircuit. */
+  componentRef: string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/simulationibismodel.ts)
 
 ### RectSmtPadProps `<smtpad />`
 

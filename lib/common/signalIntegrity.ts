@@ -64,8 +64,3 @@ export const signalTimeOrUi = z.union([
   unitIntervals,
   signalTime.pipe(z.number().nonnegative()),
 ])
-
-export const signalVoltage = quantity(
-  { "": 1, V: 1, mV: 1e-3, uV: 1e-6, µV: 1e-6, μV: 1e-6 },
-  "Expected a voltage in volts, e.g. 800mV",
-)

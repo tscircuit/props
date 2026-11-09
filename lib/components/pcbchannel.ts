@@ -1,9 +1,4 @@
-import {
-  signalBitRate,
-  signalTime,
-  signalTimeOrUi,
-  signalVoltage,
-} from "lib/common/signalIntegrity"
+import { signalBitRate, signalTimeOrUi } from "lib/common/signalIntegrity"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 
@@ -24,25 +19,7 @@ export const signalEndpoint = z.union([
   z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
 ])
 
-export interface SignalMask {
-  /** Finite, signed volts; overrides the IBIS receiver threshold at the test corner. */
-  vih?: string | number
-  vil?: string | number
-  /** Nonnegative seconds, including zero. setup/hold need a strobeRef; core checks this diagnostic. */
-  setup?: string | number
-  hold?: string | number
-}
-
-export const signalMask = z
-  .object({
-    vih: signalVoltage.optional(),
-    vil: signalVoltage.optional(),
-    setup: signalTime.pipe(z.number().nonnegative()).optional(),
-    hold: signalTime.pipe(z.number().nonnegative()).optional(),
-  })
-  .strict()
-
-export interface SignalIntegritySignalProps {
+export interface PcbChannelProps {
   /** Unique within the enclosing SI block. */
   name: string
   driverRef: SignalEndpoint
@@ -58,13 +35,9 @@ export interface SignalIntegritySignalProps {
   offset?: string | number
   quiet?: "low" | "high" | "off"
   probe?: "local" | "global"
-  /** Defaults to ibis. setup/hold overrides need strobeRef. */
-  mask?: "ibis" | SignalMask
-  /** Name of a different switching signal in the same block, with a receiverRef on the same chip; resolved by core. */
-  strobeRef?: string
 }
 
-export const signalIntegritySignalProps = z
+export const pcbChannelProps = z
   .object({
     name: z.string().min(1),
     driverRef: signalEndpoint,
@@ -87,8 +60,6 @@ export const signalIntegritySignalProps = z
       })
       .optional(),
     probe: z.enum(["local", "global"]).default("local"),
-    mask: z.union([z.literal("ibis"), signalMask]).default("ibis"),
-    strobeRef: z.string().min(1).optional(),
   })
   .strict()
   .superRefine(({ name, pattern, seed }, ctx) => {
@@ -104,8 +75,4 @@ export const signalIntegritySignalProps = z
   })
 
 expectTypesMatch<SignalEndpoint, z.input<typeof signalEndpoint>>(true)
-expectTypesMatch<SignalMask, z.input<typeof signalMask>>(true)
-expectTypesMatch<
-  SignalIntegritySignalProps,
-  z.input<typeof signalIntegritySignalProps>
->(true)
+expectTypesMatch<PcbChannelProps, z.input<typeof pcbChannelProps>>(true)

@@ -1,6 +1,5 @@
 import { expect, test } from "bun:test"
 import {
-  ibisModelProps,
   signalIntegrityIbisModelProps,
   type SignalIntegrityIbisModelProps,
 } from "../lib"
@@ -15,23 +14,22 @@ test("IBIS models use a shared asset and explicit vendor pin bindings", () => {
     ibisComponentName: "DRIVER",
     ibisPinNameToPortLabel: { "1": "pin1" },
   } satisfies SignalIntegrityIbisModelProps
-  expect(ibisModelProps).toBe(signalIntegrityIbisModelProps)
   expect(signalIntegrityIbisModelProps.parse(model)).toEqual(model)
   for (const removed of [
     { modelValueCorner: "typical" },
     { includePackageParasitics: true },
   ]) {
-    expect(ibisModelProps.safeParse({ ...model, ...removed }).success).toBe(
-      false,
-    )
+    expect(
+      signalIntegrityIbisModelProps.safeParse({ ...model, ...removed }).success,
+    ).toBe(false)
   }
   for (const change of [
     { ibisModelAsset: { url: model.ibisModelAsset.url } },
     { ibisPinNameToPortLabel: {} },
   ]) {
-    expect(ibisModelProps.safeParse({ ...model, ...change }).success).toBe(
-      false,
-    )
+    expect(
+      signalIntegrityIbisModelProps.safeParse({ ...model, ...change }).success,
+    ).toBe(false)
   }
 })
 
@@ -42,7 +40,7 @@ test("IBIS model asset locations match circuit-json rules", () => {
     ibisPinNameToPortLabel: { "1": "pin1" },
   } as const
   const withAsset = (url: string, project_relative_path = "models/chip.ibs") =>
-    ibisModelProps.safeParse({
+    signalIntegrityIbisModelProps.safeParse({
       ...base,
       ibisModelAsset: { project_relative_path, url, mimetype: "text/plain" },
     }).success

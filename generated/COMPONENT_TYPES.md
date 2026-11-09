@@ -3966,24 +3966,6 @@ const rectHoleProps = pcbLayoutProps.extend({
 })
 ```
 
-### ibismodel
-
-```typescript
-/** Declares a model for an existing chip. Rendering never fetches or converts the source. */
-export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
-  componentRef: string
-}
-.extend({ componentRef: z.string().min(1) })
-  .strict()
-expectTypesMatch<
-  SignalIntegrityIbisModelProps,
-  z.input<typeof signalIntegrityIbisModelProps>
->(true)
-
-// The shipped <ibismodel> element remains an alias.
-export { signalIntegrityIbisModelProps as ibisModelProps }
-```
-
 ### inductor
 
 ```typescript
@@ -5624,6 +5606,15 @@ export interface SchematicTextProps {
   anchor?: z.infer<typeof fivePointAnchor> | z.infer<typeof ninePointAnchor>
   color?: string
   schRotation?: number | string
+}
+```
+
+### signalintegrity-ibismodel
+
+```typescript
+/** Declares a model for an existing chip. Rendering never fetches or converts the source. */
+export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
+  componentRef: string
 }
 ```
 

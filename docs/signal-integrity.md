@@ -2,7 +2,7 @@
 
 `signalIntegritySimulationProps` / `SignalIntegritySimulationProps` and `signalIntegritySignalProps` / `SignalIntegritySignalProps`
 validate the authoring API in [RFC #28](https://github.com/tscircuit/rfc/pull/28)
-(contract at `956cd7e2bd2c3c498b81dc9816a4c01a29f0b821`):
+(contract at `d79a8d14d40765b2dda7db557e45e101f2aa62ba`):
 
 ```tsx
 <signalintegrity.simulation bitRate="20Mbps">
@@ -66,8 +66,8 @@ eye measurements and voltage probes remain available. Built-in SPICE engine
 suggestions are `spicey` and `ngspice`; custom engine strings remain supported.
 
 Use `signalintegrity.ibismodel` with `signalIntegrityIbisModelProps` /
-`SignalIntegrityIbisModelProps` for model declarations. The shipped `ibismodel`
-element and `ibisModelProps` / `IbisModelProps` exports remain aliases.
+`SignalIntegrityIbisModelProps` for model declarations. All SI elements live in
+the namespace; there are no top-level element or props aliases.
 The unreleased top-level `signalintegrity` / `signal` elements and `driver` /
 `receiver` / `strobe` props are removed; use `driverRef`, `receiverRef` and
 `strobeRef`. Corners are `typical` (default), `minimum` and `maximum`; the old

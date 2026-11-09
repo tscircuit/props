@@ -21,8 +21,8 @@ Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partvi
 See [System block diagrams](docs/system-blocks.md) for the proposed `systemblock`
 namespace, PCB references, and a complete overview example.
 
-See [Signal integrity props](docs/signal-integrity.md) for `<signalintegrity>`,
-`<signal>`, parsed units, defaults, and migration from the old SI API.
+See [Signal integrity props](docs/signal-integrity.md) for `<signalintegrity.simulation>`,
+`<signalintegrity.signal>`, parsed units, defaults, and migration from the old SI API.
 
 <!-- COMPONENT_TABLE_START -->
 
@@ -74,7 +74,6 @@ See [Signal integrity props](docs/signal-integrity.md) for `<signalintegrity>`,
 | `<fuse />`                                  | [`FuseProps`](#fuseprops-fuse)                                                                                     |
 | `<group />`                                 | [`BaseGroupProps`](#basegroupprops-group)                                                                          |
 | `<hole />`                                  | [`CircleHoleProps`](#circleholeprops-hole)                                                                         |
-| `<signalintegrity.ibismodel />`             | [`SignalIntegrityIbisModelProps`](#signalintegrityibismodelprops-signalintegrityibismodel)                         |
 | `<inductor />`                              | [`InductorProps`](#inductorprops-inductor)                                                                         |
 | `<interconnect />`                          | [`InterconnectProps`](#interconnectprops-interconnect)                                                             |
 | `<internalcircuit />`                       | [`InternalCircuitProps`](#internalcircuitprops-internalcircuit)                                                    |
@@ -122,6 +121,7 @@ See [Signal integrity props](docs/signal-integrity.md) for `<signalintegrity>`,
 | `<schematicsymbol />`                       | [`SchematicSymbolProps`](#schematicsymbolprops-schematicsymbol)                                                    |
 | `<schematictable />`                        | [`SchematicTableProps`](#schematictableprops-schematictable)                                                       |
 | `<schematictext />`                         | [`SchematicTextProps`](#schematictextprops-schematictext)                                                          |
+| `<signalintegrity.ibismodel />`             | [`SignalIntegrityIbisModelProps`](#signalintegrityibismodelprops-signalintegrityibismodel)                         |
 | `<signalintegrity.signal />`                | [`SignalIntegritySignalProps`](#signalintegritysignalprops-signalintegritysignal)                                  |
 | `<signalintegrity.simulation />`            | [`SignalIntegritySimulationProps`](#signalintegritysimulationprops-signalintegritysimulation)                      |
 | `<silkscreencircle />`                      | [`SilkscreenCircleProps`](#silkscreencircleprops-silkscreencircle)                                                 |
@@ -1392,17 +1392,6 @@ export interface CircleHoleProps extends PcbLayoutProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
 
-### SignalIntegrityIbisModelProps `<signalintegrity.ibismodel />`
-
-```ts
-export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
-  /** Selector for exactly one source component in this subcircuit. */
-  componentRef: string;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/ibismodel.ts)
-
 ### InductorProps `<inductor />`
 
 ```ts
@@ -2342,6 +2331,17 @@ export interface SchematicTextProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/schematic-text.ts)
+
+### SignalIntegrityIbisModelProps `<signalintegrity.ibismodel />`
+
+```ts
+export interface SignalIntegrityIbisModelProps extends IbisModelDefinition {
+  /** Selector for exactly one source component in this subcircuit. */
+  componentRef: string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/signalintegrity-ibismodel.ts)
 
 ### SignalIntegritySignalProps `<signalintegrity.signal />`
 

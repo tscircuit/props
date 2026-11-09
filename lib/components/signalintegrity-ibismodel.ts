@@ -14,7 +14,3 @@ expectTypesMatch<
   SignalIntegrityIbisModelProps,
   z.input<typeof signalIntegrityIbisModelProps>
 >(true)
-
-// The shipped <ibismodel> element remains an alias.
-export { signalIntegrityIbisModelProps as ibisModelProps }
-export type IbisModelProps = SignalIntegrityIbisModelProps

@@ -4768,7 +4768,6 @@ export interface PcbChannelProps {
   offset?: string | number
   quiet?: "low" | "high" | "off"
   probe?: "local" | "global"
-
 }
 /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
 export const pcbChannelProps = z
@@ -4794,7 +4793,6 @@ export const pcbChannelProps = z
       })
       .optional(),
     probe: z.enum(["local", "global"]).default("local"),
-
   })
   .strict()
   .superRefine(({ name, pattern, seed }, ctx) => {
@@ -4829,7 +4827,12 @@ export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().min(1).optional(),
     bitRate: signalBitRate,
-    duration: signalTimeOrUi.optional(),
+    duration: z
+      .custom<string | number>(
+        (value) => typeof value === "string" || typeof value === "number",
+        { message: "duration must be finite and greater than zero." },
+      )
+      .optional(),
     corner: z.enum(["typical", "minimum", "maximum"]).default("typical"),
     unlistedNets: z.literal("passive").default("passive"),
     unrouted: z.enum(["error", "ideal"]).default("error"),
@@ -4838,15 +4841,19 @@ export const pcbTransientChannelSimulationProps = z
   })
   .strict()
   .transform(({ duration, ...props }, ctx) => {
+    const parsed =
+      duration === undefined ? undefined : signalTimeOrUi.safeParse(duration)
+    const time = parsed?.success ? parsed.data : undefined
     const seconds =
-      typeof duration === "string"
-        ? Number.parseFloat(duration) / props.bitRate
-        : duration
-    if (seconds !== undefined && (!Number.isFinite(seconds) || seconds <= 0)) {
+      typeof time === "string" ? Number.parseFloat(time) / props.bitRate : time
+    if (
+      duration !== undefined &&
+      (seconds === undefined || !Number.isFinite(seconds) || seconds <= 0)
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["duration"],
-        message: "Duration must be finite and positive in seconds",
+        message: "duration must be finite and greater than zero.",
       })
       return z.NEVER
     }

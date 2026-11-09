@@ -2464,7 +2464,6 @@ export interface PcbChannelProps {
   offset?: string | number
   quiet?: "low" | "high" | "off"
   probe?: "local" | "global"
-
 }
 
 

@@ -477,3 +477,20 @@ test("block rate is required and numerical extraction settings are not props", (
     pcbChannelProps.safeParse({ ...data, termination: "120ohm" }).success,
   ).toBe(false)
 })
+
+test("invalid explicit durations report the RFC diagnostic", () => {
+  for (const duration of [0, -1, Infinity, NaN, "-1ns", "0UI", "1e400s"]) {
+    const block = (
+      <simulation.pcbtransientchannelsimulation
+        bitRate="20Mbps"
+        duration={duration}
+      />
+    )
+    const parsed = pcbTransientChannelSimulationProps.safeParse(block.props)
+    expect(parsed.success).toBe(false)
+    if (!parsed.success)
+      expect(parsed.error.issues[0]?.message).toBe(
+        "duration must be finite and greater than zero.",
+      )
+  }
+})

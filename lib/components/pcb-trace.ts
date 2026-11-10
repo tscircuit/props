@@ -6,12 +6,7 @@ import {
 } from "circuit-json"
 import { z } from "zod"
 
-/**
- * Fixed copper path: coordinate-only wire shorthand or complete Circuit JSON
- * points. Positions are footprint-local points in mm (+X right, +Y board top,
- * +Z above, right-handed); core applies parent placement. Unit strings parse
- * to mm. Use complete Circuit JSON points for vias and other explicit routes.
- */
+/** Accepts wire coordinates or complete Circuit JSON route points. */
 export const pcbTraceProps = z.object({
   layer: layer_ref.optional(),
   thickness: distance.optional(),

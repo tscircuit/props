@@ -1700,6 +1700,8 @@ export interface PcbBendProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-bend.ts)
 
+<a id="pcbchannelprops-simulationpcbchannel"></a>
+
 ### PcbChannelProps `<simulation.pcbchannel />`
 
 ```ts
@@ -1928,6 +1930,8 @@ export type PcbTraceProps = z.input<typeof pcbTraceProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-trace.ts)
+
+<a id="pcbtransientchannelsimulationprops-simulationpcbtransientchannelsimulation"></a>
 
 ### PcbTransientChannelSimulationProps `<simulation.pcbtransientchannelsimulation />`
 
@@ -2505,6 +2509,8 @@ export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-text.ts)
+
+<a id="simulationibismodelprops-simulationibismodel"></a>
 
 ### SimulationIbisModelProps `<simulation.ibismodel />`
 

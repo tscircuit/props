@@ -30,18 +30,13 @@ test("analog transient simulation parses defaults and timing units", () => {
   ).toThrow("startTime must be between zero and duration")
 })
 
-test("removed SI wiring is absent from parsed transient props", () => {
-  const parsed = analogTransientSimulationProps.parse({
-    spiceEngine: "ngspice",
-    pcbSpiceChannel: { lanes: [] },
-    ibisPinStates: { ".U1 > .pin1": { isOutput: true } },
-  })
-  expect(parsed).toEqual({
-    spiceEngine: "ngspice",
-    duration: 10,
-    startTime: 0,
-    timePerStep: 0.01,
-  })
+test.each([
+  { pcbSpiceChannel: { lanes: [] } },
+  { ibisPinStates: { ".U1 > .pin1": { isOutput: true } } },
+])("removed SI wiring %j reports its replacement", (props) => {
+  expect(() =>
+    analogTransientSimulationProps.parse({ spiceEngine: "ngspice", ...props }),
+  ).toThrow("use <simulation.pcbtransientchannelsimulation>")
 })
 
 test("analog DC analyses parse operating-point and sweep props", () => {

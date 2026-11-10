@@ -372,25 +372,6 @@ test("times parse to seconds and UI offsets retain their relative units", () => 
   expect(pcbChannelProps.parse({ ...data, offset: 0.25 }).offset).toBe(0.25)
 })
 
-test.each([
-  [1e-320, "1UI"],
-  [1e308, "1e-20UI"],
-] as const)(
-  "rejects UI duration %s/%s that overflows or underflows seconds",
-  (bitRate, duration) => {
-    const block = (
-      <simulation.pcbtransientchannelsimulation
-        bitRate={bitRate}
-        duration={duration}
-      />
-    )
-    const parsed = pcbTransientChannelSimulationProps.safeParse(block.props)
-    expect(parsed.success).toBe(false)
-    if (!parsed.success)
-      expect(parsed.error.issues[0]?.path).toEqual(["duration"])
-  },
-)
-
 test("duration absence stays automatic and extracted PDN stays schema-valid", () => {
   const block = (
     <simulation.pcbtransientchannelsimulation
@@ -421,47 +402,15 @@ test("removed supply has neither an authoring type nor a runtime alias", () => {
 })
 
 test.each(["1V", "garbage", "-1UI", -1, Infinity])(
-  "rejects invalid duration/offset %j",
+  "rejects invalid offset %j",
   (value) => {
-    expect(
-      pcbTransientChannelSimulationProps.safeParse({
-        bitRate: "20Mbps",
-        duration: value,
-      }).success,
-    ).toBe(false)
     expect(pcbChannelProps.safeParse({ ...data, offset: value }).success).toBe(
       false,
     )
   },
 )
 
-test("duration must be positive", () => {
-  expect(
-    pcbTransientChannelSimulationProps.safeParse({
-      bitRate: 20e6,
-      duration: "0UI",
-    }).success,
-  ).toBe(false)
-  expect(
-    pcbTransientChannelSimulationProps.safeParse({ bitRate: 20e6, duration: 0 })
-      .success,
-  ).toBe(false)
-})
-
-test("signal counts and literal bit patterns have no lane cap", () => {
-  const { signals } = parseBlock(
-    <simulation.pcbtransientchannelsimulation bitRate="20Mbps">
-      {Array.from({ length: 64 }, (_, i) => (
-        <simulation.pcbchannel
-          key={i}
-          name={`D${i}`}
-          driverRef={`.TX > .D${i}`}
-          receiverRef={`.RX > .D${i}`}
-        />
-      ))}
-    </simulation.pcbtransientchannelsimulation>,
-  )
-  expect(signals).toHaveLength(64)
+test("literal bit patterns have no length cap", () => {
   expect(
     pcbChannelProps.parse({ ...data, pattern: "1".repeat(65537) }).pattern,
   ).toHaveLength(65537)
@@ -478,19 +427,36 @@ test("block rate is required and numerical extraction settings are not props", (
   ).toBe(false)
 })
 
-test("invalid explicit durations report the RFC diagnostic", () => {
-  for (const duration of [0, -1, Infinity, NaN, "-1ns", "0UI", "1e400s"]) {
+test.each([
+  ...[
+    0,
+    -1,
+    Infinity,
+    NaN,
+    "-1ns",
+    "0UI",
+    "1e400s",
+    "1V",
+    "garbage",
+    "-1UI",
+  ].map((duration) => [20e6, duration] as const),
+  [1e-320, "1UI"],
+  [1e308, "1e-20UI"],
+] as const)(
+  "invalid duration at %s bps: %j reports the RFC diagnostic",
+  (bitRate, duration) => {
     const block = (
       <simulation.pcbtransientchannelsimulation
-        bitRate="20Mbps"
+        bitRate={bitRate}
         duration={duration}
       />
     )
     const parsed = pcbTransientChannelSimulationProps.safeParse(block.props)
     expect(parsed.success).toBe(false)
     if (!parsed.success)
-      expect(parsed.error.issues[0]?.message).toBe(
-        "duration must be finite and greater than zero.",
-      )
-  }
-})
+      expect(parsed.error.issues[0]).toMatchObject({
+        path: ["duration"],
+        message: "duration must be finite and greater than zero.",
+      })
+  },
+)

@@ -2,7 +2,7 @@ import { expect, test } from "bun:test"
 import { readFileSync } from "node:fs"
 import { extractInterfaces } from "../scripts/generate-component-types"
 
-test("documents every endpoint union member, including per-leg models", () => {
+test("documents endpoint aliases and every union member, including per-leg models", () => {
   const source = readFileSync("lib/components/pcbchannel.ts", "utf8")
   const endpoint = source
     .slice(
@@ -10,7 +10,12 @@ test("documents every endpoint union member, including per-leg models", () => {
       source.indexOf("const pin"),
     )
     .trim()
-  expect(extractInterfaces(source).join("")).toContain(endpoint)
+  const definitions = extractInterfaces(source)
+  expect(definitions).toContain("export type SignalPin = string\n")
+  expect(definitions).toContain(
+    "export type SignalPair = { p: string; n: string }\n",
+  )
+  expect(definitions.join("")).toContain(endpoint)
 })
 
 test("completes nested union expressions and trailing validator chains", () => {

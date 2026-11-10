@@ -21,9 +21,6 @@ Assembly drawing props: [`<assembly.drawing.page>` and `<assembly.drawing.partvi
 See [System block diagrams](docs/system-blocks.md) for the proposed `systemblock`
 namespace, PCB references, and a complete overview example.
 
-See [Signal integrity props](docs/signal-integrity.md) for `<simulation.pcbtransientchannelsimulation>`,
-`<simulation.pcbchannel>`, parsed units, defaults, and migration from the old SI API.
-
 <!-- COMPONENT_TABLE_START -->
 
 ## Available Components
@@ -86,6 +83,8 @@ See [Signal integrity props](docs/signal-integrity.md) for `<simulation.pcbtrans
 | `<netlabel />`                                 | [`NetLabelProps`](#netlabelprops-netlabel)                                                                          |
 | `<opamp />`                                    | [`OpAmpProps`](#opampprops-opamp)                                                                                   |
 | `<panel />`                                    | [`PanelProps`](#panelprops-panel)                                                                                   |
+| `<paneltab />`                                 | [`PanelTabProps`](#paneltabprops-paneltab)                                                                          |
+| `<paneltabkeepout />`                          | [`PanelTabKeepoutProps`](#paneltabkeepoutprops-paneltabkeepout)                                                     |
 | `<pcbbend />`                                  | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                             |
 | `<simulation.pcbchannel />`                    | [`PcbChannelProps`](#pcbchannelprops-simulationpcbchannel)                                                          |
 | `<pcbkeepout />`                               | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                    |
@@ -1615,6 +1614,22 @@ export interface PanelProps extends Omit<
   tabWidth?: Distance;
   tabLength?: Distance;
   mouseBites?: boolean;
+  /**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Omitted `mouseBites` then parses as false; explicitly setting
+   * both `vScore` and `mouseBites` to true is an error.
+   */
+  vScore?: boolean;
+  /** Minimum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  minWidth?: Distance;
+  /** Maximum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  maxWidth?: Distance;
+  /** Minimum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  minHeight?: Distance;
+  /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  maxHeight?: Distance;
+  /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
+  tabCountPerEdge?: number;
   edgePadding?: Distance;
   edgePaddingLeft?: Distance;
   edgePaddingRight?: Distance;
@@ -1625,6 +1640,36 @@ export interface PanelProps extends Omit<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/panel.ts)
+
+### PanelTabProps `<paneltab />`
+
+```ts
+export interface PanelTabProps {
+  /** Stable board name. Omit to apply this tab to every board in the containing panel. */
+  boardName?: string;
+  boardEdge: PanelTabEdge;
+  /** Tab centre measured along a board edge in mm (or a unit string): left to right on horizontal edges, bottom to top on vertical edges. */
+  offset: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/paneltab.ts)
+
+### PanelTabKeepoutProps `<paneltabkeepout />`
+
+```ts
+export interface PanelTabKeepoutProps {
+  /** Stable board name. Omit to reserve the interval on every board in the containing panel. */
+  boardName?: string;
+  boardEdge: PanelTabEdge;
+  /** Inclusive start in edge-local mm: left to right on horizontal edges, bottom to top on vertical edges. */
+  from: Distance;
+  /** Inclusive end in the same edge coordinates. Must be at least from. */
+  to: Distance;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/paneltabkeepout.ts)
 
 ### PcbBendProps `<pcbbend />`
 
@@ -2752,8 +2797,14 @@ export interface TestpointProps extends CommonComponentProps {
 ### ToolingrailProps `<toolingrail />`
 
 ```ts
-export interface ToolingrailProps {
-  children?: any;
+export interface ToolingrailProps extends Omit<
+  BaseGroupProps,
+  "width" | "height"
+> {
+  /** Panel edge carrying the rail. Required; rail children use its local centre as origin. */
+  panelSide: "top" | "right" | "bottom" | "left";
+  /** Rail width across the selected edge, in mm or a unit string. Must fit in the panel's edge padding. No default or aliases. */
+  width: Distance;
 }
 ```
 

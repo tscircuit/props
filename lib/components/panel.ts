@@ -4,6 +4,11 @@ import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { baseGroupProps, type BaseGroupProps } from "./group"
 
+const positivePanelDistance = distance.refine(
+  (millimetres) => Number.isFinite(millimetres) && millimetres > 0,
+  { message: "Panel size limits must be finite positive distances" },
+)
+
 export interface PanelProps
   extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
   width?: Distance
@@ -31,6 +36,22 @@ export interface PanelProps
   tabWidth?: Distance
   tabLength?: Distance
   mouseBites?: boolean
+  /**
+   * If true, the board-to-panel tabs are V-scored instead of perforated with
+   * mouse bites. Omitted `mouseBites` then parses as false; explicitly setting
+   * both `vScore` and `mouseBites` to true is an error.
+   */
+  vScore?: boolean
+  /** Minimum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  minWidth?: Distance
+  /** Maximum finished panel width, including edge padding. Validation only; does not resize the panel. No default. */
+  maxWidth?: Distance
+  /** Minimum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  minHeight?: Distance
+  /** Maximum finished panel height, including edge padding. Validation only; does not resize the panel. No default. */
+  maxHeight?: Distance
+  /** Positive number of evenly spaced tabs per rectangular board edge. Conflicts with <paneltab> children. Omit to preserve automatic tabs. */
+  tabCountPerEdge?: number
   edgePadding?: Distance
   edgePaddingLeft?: Distance
   edgePaddingRight?: Distance
@@ -64,6 +85,12 @@ export const panelProps = baseGroupProps
     tabWidth: distance.optional(),
     tabLength: distance.optional(),
     mouseBites: z.boolean().optional(),
+    vScore: z.boolean().optional(),
+    minWidth: positivePanelDistance.optional(),
+    maxWidth: positivePanelDistance.optional(),
+    minHeight: positivePanelDistance.optional(),
+    maxHeight: positivePanelDistance.optional(),
+    tabCountPerEdge: z.number().int().positive().optional(),
     edgePadding: distance.optional(),
     edgePaddingLeft: distance.optional(),
     edgePaddingRight: distance.optional(),
@@ -71,6 +98,35 @@ export const panelProps = baseGroupProps
     edgePaddingBottom: distance.optional(),
     _subcircuitCachingEnabled: z.boolean().optional(),
   })
+  .refine(
+    (panel) =>
+      panel.minWidth === undefined ||
+      panel.maxWidth === undefined ||
+      panel.minWidth <= panel.maxWidth,
+    {
+      path: ["maxWidth"],
+      message: "Panel maxWidth must be greater than or equal to minWidth",
+    },
+  )
+  .refine(
+    (panel) =>
+      panel.minHeight === undefined ||
+      panel.maxHeight === undefined ||
+      panel.minHeight <= panel.maxHeight,
+    {
+      path: ["maxHeight"],
+      message: "Panel maxHeight must be greater than or equal to minHeight",
+    },
+  )
+  .refine((panel) => !(panel.mouseBites === true && panel.vScore === true), {
+    path: ["vScore"],
+    message: "Panel vScore cannot be combined with mouseBites",
+  })
+  .transform((panel) =>
+    panel.vScore === true && panel.mouseBites === undefined
+      ? { ...panel, mouseBites: false }
+      : panel,
+  )
 
 type InferredPanelProps = z.input<typeof panelProps>
 expectTypesMatch<PanelProps, InferredPanelProps>(true)

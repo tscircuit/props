@@ -1706,7 +1706,7 @@ export interface PcbChannelProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcbchannel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-channel.ts)
 
 ### PcbKeepoutProps `<pcbkeepout />`
 
@@ -1934,7 +1934,7 @@ export interface PcbTransientChannelSimulationProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcbtransientchannelsimulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-transient-channel-simulation.ts)
 
 ### PinHeaderProps `<pinheader />`
 
@@ -2503,7 +2503,7 @@ export interface SimulationIbisModelProps extends IbisModelDefinition {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/simulationibismodel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/simulation-ibis-model.ts)
 
 ### RectSmtPadProps `<smtpad />`
 

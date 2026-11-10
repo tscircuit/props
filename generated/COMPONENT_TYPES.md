@@ -1403,7 +1403,7 @@ export const schematicPinStyle = z.record(
 )
 ```
 
-### signalIntegrity
+### signal-integrity
 
 ```typescript
 /** Parsed rates are bit/s; bytes/s and frequency units are not bit rates. */
@@ -4370,6 +4370,72 @@ export const pcbBendProps = z
   })
 ```
 
+### pcb-channel
+
+```typescript
+export type SignalPin = string
+export type SignalPair = { p: string; n: string }
+export type SignalEndpoint =
+  | SignalPin
+  | SignalPair
+  | { pin: SignalPin; model?: string }
+  | { pin: SignalPair; model?: string | { p: string; n: string } }
+export const signalEndpoint = z.union([
+  pin,
+  pair,
+  z.object({ pin, model: pin.optional() }).strict(),
+  z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
+])
+export interface PcbChannelProps {
+  name: string
+  driverRef: SignalEndpoint
+  receiverRef: SignalEndpoint | SignalEndpoint[]
+  bitRate?: string | number
+  pattern?: string
+  seed?: number
+  offset?: string | number
+  quiet?: "low" | "high" | "off"
+  probe?: "local" | "global"
+}
+/** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
+export const pcbChannelProps = z
+  .object({
+    name: z.string().trim().min(1),
+    driverRef: signalEndpoint,
+    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
+    bitRate: signalBitRate.optional(),
+    pattern: z
+      .string()
+      .regex(
+        /^(?:prbs7|prbs15|prbs31|clock|[01]+)$/,
+        "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
+      )
+      .default("prbs7"),
+    seed: z.custom<number>((value) => typeof value === "number").optional(),
+    offset: signalTimeOrUi.default("0UI"),
+    quiet: z
+      .enum(["low", "high", "off"], {
+        errorMap: () => ({
+          message: 'quiet needs a level: "low", "high" or "off".',
+        }),
+      })
+      .optional(),
+    probe: z.enum(["local", "global"]).default("local"),
+  })
+  .strict()
+  .superRefine(({ name, pattern, seed }, ctx) => {
+    if (seed === undefined || !pattern.startsWith("prbs")) return
+    const max = 2 ** Number(pattern.slice(4)) - 1
+    if (!Number.isInteger(seed) || seed < 1 || seed > max) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["seed"],
+        message: `Signal "${name}": ${pattern} seed must be an integer in 1..${max}.`,
+      })
+    }
+  })
+```
+
 ### pcb-keepout
 
 ```typescript
@@ -4754,73 +4820,7 @@ export const pcbTraceProps = z.object({
 })
 ```
 
-### pcbchannel
-
-```typescript
-export type SignalPin = string
-export type SignalPair = { p: string; n: string }
-export type SignalEndpoint =
-  | SignalPin
-  | SignalPair
-  | { pin: SignalPin; model?: string }
-  | { pin: SignalPair; model?: string | { p: string; n: string } }
-export const signalEndpoint = z.union([
-  pin,
-  pair,
-  z.object({ pin, model: pin.optional() }).strict(),
-  z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
-])
-export interface PcbChannelProps {
-  name: string
-  driverRef: SignalEndpoint
-  receiverRef: SignalEndpoint | SignalEndpoint[]
-  bitRate?: string | number
-  pattern?: string
-  seed?: number
-  offset?: string | number
-  quiet?: "low" | "high" | "off"
-  probe?: "local" | "global"
-}
-/** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
-export const pcbChannelProps = z
-  .object({
-    name: z.string().trim().min(1),
-    driverRef: signalEndpoint,
-    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
-    bitRate: signalBitRate.optional(),
-    pattern: z
-      .string()
-      .regex(
-        /^(?:prbs7|prbs15|prbs31|clock|[01]+)$/,
-        "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
-      )
-      .default("prbs7"),
-    seed: z.custom<number>((value) => typeof value === "number").optional(),
-    offset: signalTimeOrUi.default("0UI"),
-    quiet: z
-      .enum(["low", "high", "off"], {
-        errorMap: () => ({
-          message: 'quiet needs a level: "low", "high" or "off".',
-        }),
-      })
-      .optional(),
-    probe: z.enum(["local", "global"]).default("local"),
-  })
-  .strict()
-  .superRefine(({ name, pattern, seed }, ctx) => {
-    if (seed === undefined || !pattern.startsWith("prbs")) return
-    const max = 2 ** Number(pattern.slice(4)) - 1
-    if (!Number.isInteger(seed) || seed < 1 || seed > max) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["seed"],
-        message: `Signal "${name}": ${pattern} seed must be an integer in 1..${max}.`,
-      })
-    }
-  })
-```
-
-### pcbtransientchannelsimulation
+### pcb-transient-channel-simulation
 
 ```typescript
 /** One coupled SI test. Rendering and board-dependent diagnostics belong to core. */
@@ -5865,7 +5865,7 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
 })
 ```
 
-### simulationibismodel
+### simulation-ibis-model
 
 ```typescript
 /** Declares a model for an existing chip. Rendering never fetches or converts the source. */

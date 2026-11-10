@@ -1,4 +1,4 @@
-import { signalBitRate, signalTimeOrUi } from "lib/common/signalIntegrity"
+import { signalBitRate, signalTimeOrUi } from "lib/common/signal-integrity"
 import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
 import { z } from "zod"

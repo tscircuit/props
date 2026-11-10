@@ -4894,10 +4894,19 @@ stiffenerBaseProps.extend({
 ### pcb-trace
 
 ```typescript
+/** Accepts wire coordinates or complete Circuit JSON route points. */
 export const pcbTraceProps = z.object({
-  layer: z.string().optional(),
+  layer: layer_ref.optional(),
   thickness: distance.optional(),
-  route: z.array(route_hint_point),
+  route: z.array(
+    z.union([
+      pcb_trace_route_point,
+      // Keep malformed tagged points from falling back to coordinate shorthand.
+      route_hint_point
+        .pick({ x: true, y: true, trace_width: true })
+        .strict(),
+    ]),
+  ),
 })
 ```
 

@@ -18,14 +18,14 @@ For explicit tabs, omit `tabCountPerEdge` and author children instead:
 ```tsx
 <panel panelizationMethod="tab-routing">
   <board name="B1" width="20mm" height="20mm" />
-  <paneltab boardName="B1" boardEdge="right" offset="6mm" />
-  <paneltab boardName="B1" boardEdge="left" offset="12mm" />
+  <paneltab boardName="B1" boardEdge="right" offsetFromTopEdge="6mm" />
+  <paneltab boardName="B1" boardEdge="top" offsetFromLeftEdge="12mm" tabWidth="3mm" />
 </panel>
 ```
 
 `<paneltab>` replaces automatic tabs within its containing panel/subpanel; do not combine it with `tabCountPerEdge`. Omit all controls to retain existing automatic placement.
 
-Both elements must be direct panel/subpanel children using `panelizationMethod="tab-routing"`. An omitted `boardName` applies to every contained board; a specified name must match. Count is a positive integer; offsets and intervals are finite nonnegative distances; `to >= from`. Numbers mean mm. Offsets run left-to-right on horizontal edges and bottom-to-top on vertical edges in board/circuit space (+X right, +Y up). Current controls support axis-aligned rectangular boards. Existing `tabLength`, `tabWidth`, and `mouseBites` describe the generated geometry. Invalid/out-of-bounds/overlapping tabs and insufficient router clearance produce readable errors.
+Both elements must be direct panel/subpanel children using `panelizationMethod="tab-routing"`. An omitted `boardName` applies to every contained board; a specified name must match. A `<paneltab>` gives exactly one offset to its centre, measured from the board edge it names: `offsetFromTopEdge` or `offsetFromBottomEdge` for a tab on the left or right edge, and `offsetFromLeftEdge` or `offsetFromRightEdge` for a tab on the top or bottom edge. Its optional `tabWidth` is that tab's width along the board edge and defaults to the panel's `tabLength`. Count is a positive integer; offsets and keepout intervals are finite nonnegative distances; `tabWidth` is positive; `to >= from`. Numbers mean mm. Keepout intervals run left-to-right on horizontal edges and bottom-to-top on vertical edges in board/circuit space (+X right, +Y up). Current controls support axis-aligned rectangular boards. Existing `tabLength`, `tabWidth`, and `mouseBites` describe the generated geometry. Invalid/out-of-bounds/overlapping tabs and insufficient router clearance produce readable errors.
 
 ## Other panel manufacturing features
 

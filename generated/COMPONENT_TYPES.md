@@ -2,12 +2,6 @@
 
 ## Common Types
 
-### autocomplete
-
-```typescript
-export type AutocompleteString<T extends string> = T | (string & {})
-```
-
 ### cadModel
 
 ```typescript
@@ -24,7 +18,6 @@ export const cadModelAxisDirections = [
   "z+",
   "z-",
 ] as const
-export type CadModelAxisDirection = (typeof cadModelAxisDirections)[number]
 export interface CadModelBase {
   rotationOffset?:
     | number
@@ -125,24 +118,6 @@ export interface CadModelJscad extends CadModelBase {
 export const cadModelJscad = cadModelBase.extend({
   jscad: z.record(z.any()),
 })
-/**
- * A Footprinter string used to procedurally generate the component's CAD model,
- * independently of the component's PCB footprint.
- *
- * @example "soic8"
- */
-export type CadModelFootprinterString = string
-export type CadModelProp =
-  | null
-  | ReactElement
-  | CadModelFootprinterString
-  | CadModelStl
-  | CadModelObj
-  | CadModelGltf
-  | CadModelGlb
-  | CadModelStep
-  | CadModelWrl
-  | CadModelJscad
 export const cadModelProp = z.union([
   z.null(),
   z.string().min(1),
@@ -176,10 +151,6 @@ export interface CircleShapeProps {
   shape: "circle"
   radius: Distance
 }
-export type CommonShapeProps =
-  | PillShapeProps
-  | RectShapeProps
-  | CircleShapeProps
 export const pillShapeProps = z.object({
   shape: z.literal("pill"),
   width: distance,
@@ -206,21 +177,9 @@ export const createConnectionsProp = <T extends readonly [string, ...string[]]>(
 }
 ```
 
-### direction
-
-```typescript
-export type Direction = "up" | "down" | "left" | "right"
-export type DirectionAlongEdge =
-  | "top-to-bottom"
-  | "left-to-right"
-  | "bottom-to-top"
-  | "right-to-left"
-```
-
 ### distance
 
 ```typescript
-export type Distance = number | string
 export const pcbCoordinate = calcString.or(baseDistance)
 
 export { length }
@@ -241,6 +200,10 @@ export interface DirectionalFanoutBoundaryPadding {
  * zero.
  */
 export type FanoutBoundaryPadding = Distance | DirectionalFanoutBoundaryPadding
+
+const nonnegativeDistance = distance.refine((value) => value >= 0, {
+  message: "Fanout boundary padding cannot be negative",
+})
 export const fanoutBoundaryPadding = z.union([
   nonnegativeDistance,
   z.object({
@@ -283,27 +246,11 @@ export const canonicalBusFanoutDirectionValues = [
   "leftside_top",
   "center",
 ] as const
-export type CanonicalBusFanoutDirection =
-  (typeof canonicalBusFanoutDirectionValues)[number]
-/**
- * Legacy NinePointAnchor fanout names. `top_left`, `top_center`, `top_right`,
- * `center_left`, `center`, `center_right`, `bottom_left`, `bottom_center`, and
- * `bottom_right` remain accepted unchanged and retain their destination-guided
- * behavior. Prefer `CanonicalBusFanoutDirection` when the physical exit edge
- * matters.
- */
-export type LegacyBusFanoutDirection = NinePointAnchor
-export type BusFanoutDirectionLiteral =
-  | NinePointAnchor
-  | CanonicalBusFanoutDirection
 export type BusFanoutDirection =
   | BusFanoutDirectionLiteral
   | {
       direction: BusFanoutDirectionLiteral
     }
-export type FanoutPourNetMap = Partial<
-  Record<Extract<LayerRef, string>, string | string[]>
->
 /**
  * Routing controls shared by fanout autorouting phases and breakout groups.
  */
@@ -391,7 +338,6 @@ export const fanoutTracePath = z.object({
       }
     }),
 })
-export type FanoutTracePath = z.input<typeof fanoutTracePath>
 ```
 
 ### footprintProp
@@ -413,35 +359,6 @@ export type FootprintSoupElements = {
   height?: string | number
   portHints?: string[]
 }
-export type BasicFootprint =
-  | "0402"
-  | "0603"
-  | "0805"
-  | "1206"
-  | "1210"
-  | "dip"
-  | "axial"
-  | "soic"
-  | "bga"
-  | "tssop"
-  | "stampboard"
-  | "stampreceiver"
-  | "hc49"
-  | "to92"
-  | "to220"
-  | "ssop"
-  | "qfp"
-  | "qfn"
-  | "sot23"
-  | "sot23_5"
-  | "sot223"
-  | "pinrow"
-export type FootprintProp =
-  | AutocompleteString<FootprinterStringAutocomplete>
-  | KicadAutocompleteStringPath
-  | JlcpcbAutocompleteStringPath
-  | ReactElement
-  | FootprintSoupElements[]
 ```
 
 ### ibis
@@ -457,7 +374,6 @@ export const ibisPinReferences = z
     external: z.string().min(1).optional(),
   })
   .strict()
-export type IbisPinReferences = z.input<typeof ibisPinReferences>
 /** Same location rules as circuit-json's simulation_ibis_model asset. */
 export const ibisModelAsset = asset.extend({
   project_relative_path: ibisAssetPath,
@@ -480,17 +396,11 @@ export const ibisModelDefinition = z.object({
     .record(z.string().min(1), ibisPinReferences)
     .optional(),
 })
-/** Vendor [Component] and [Pin] names are bound explicitly to this chip's ports. The SI block chooses the corner; package parasitics are always simulated. */
-export type IbisModelDefinition = z.input<typeof ibisModelDefinition>
 ```
 
 ### impedanceTarget
 
 ```typescript
-/** Scalar ohm target or a tolerance string, e.g. "50±25ohm".
- * Input remains XML-compatible. Component parsing expands tolerance strings
- * to the scalar target and its Min/Max sibling props, all in ohms. */
-export type ImpedanceTarget = number | string
 export const positiveImpedance = z
   .union([
     z.number(),
@@ -593,7 +503,6 @@ export interface ImplicitBreakoutBounds {
   readonly minY: number
   readonly maxY: number
 }
-export type ImplicitBreakoutEdge = "left" | "right" | "bottom" | "top"
 export interface ImplicitBreakoutRegion {
   readonly regionId: string
   readonly bounds: ImplicitBreakoutBounds
@@ -619,9 +528,6 @@ export interface ImplicitBreakoutDifferentialPair {
     ImplicitBreakoutConnection,
   ]
 }
-export type ImplicitBreakoutConnectionOrDifferentialPair =
-  | ImplicitBreakoutConnection
-  | ImplicitBreakoutDifferentialPair
 export interface ImplicitBreakoutBus {
   readonly busId: string
   readonly connectionIds: readonly string[]
@@ -636,11 +542,6 @@ export interface ImplicitBreakoutSolverPoint extends ImplicitBreakoutPoint {
 export interface ImplicitBreakoutPointSolverOutput {
   readonly breakoutPoints: readonly ImplicitBreakoutSolverPoint[]
 }
-export type ImplicitBreakoutPointSolverFn = (
-  input: ImplicitBreakoutPointSolverInput,
-) =>
-  | ImplicitBreakoutPointSolverOutput
-  | Promise<ImplicitBreakoutPointSolverOutput>
 ```
 
 ### kicadFootprintMetadata
@@ -769,8 +670,6 @@ export const kicadFootprintMetadata = z.object({
 ### kicadPinMetadata
 
 ```typescript
-export type KicadPinElectricalType = z.infer<typeof kicadPinElectricalType>
-export type KicadPinGraphicStyle = z.infer<typeof kicadPinGraphicStyle>
 export interface KicadPinMetadata {
   electricalType?: KicadPinElectricalType
   graphicStyle?: KicadPinGraphicStyle
@@ -866,13 +765,6 @@ export const kicadSymbolMetadata = z.object({
 ### layout
 
 ```typescript
-export type PcbPositionMode =
-  | "relative_to_group_anchor"
-  | "auto"
-  | "relative_to_board_anchor"
-  | "relative_to_component_anchor"
-/** @deprecated Use {@link PcbPositionMode} instead. */
-export type PositionMode = PcbPositionMode
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
@@ -1026,14 +918,6 @@ export const commonLayoutProps = z.object({
   schRelative: z.boolean().optional(),
   pcbRelative: z.boolean().optional(),
 })
-export type SupplierName =
-  | "jlcpcb"
-  | "macrofab"
-  | "pcbway"
-  | "digikey"
-  | "mouser"
-  | "lcsc"
-export type SupplierPartNumbers = { [k in SupplierName]?: string[] }
 export interface SupplierProps {
   supplierPartNumbers?: SupplierPartNumbers
 }
@@ -1116,7 +1000,6 @@ export interface CommonComponentProps<PinLabel extends string = string>
     mfn: z.string().describe("Manufacturer Part Number").optional(),
     manufacturerPartNumber: z.string().optional(),
   })
-export type ComponentProps = z.input<typeof componentProps>
 export const lrPolarPins = [
   "pin1",
   "left",
@@ -1129,19 +1012,9 @@ export const lrPolarPins = [
 ] as const
 ```
 
-### ninePointAnchor
-
-```typescript
-export type NinePointAnchor = z.infer<typeof ninePointAnchor>
-```
-
 ### part-availability
 
 ```typescript
-export type PartAvailabilityPlatformFetch = (
-  input: Parameters<typeof fetch>[0],
-  init?: Parameters<typeof fetch>[1],
-) => ReturnType<typeof fetch>
 export interface FetchPartAvailabilityParams {
   supplierName: SupplierName
   supplierPartNumber: string
@@ -1154,12 +1027,6 @@ export interface PartAvailability {
   currency: string | null
   checkedAt?: string
 }
-```
-
-### pcbOrientation
-
-```typescript
-export type PcbOrientation = "vertical" | "horizontal"
 ```
 
 ### pcbPath
@@ -1192,7 +1059,6 @@ export const pcbPathPoint = basePcbPathPoint.superRefine((value, ctx) => {
     })
   }
 })
-export type PcbPath = Array<PcbPathPoint | string>
 ```
 
 ### pcbStyle
@@ -1232,11 +1098,6 @@ export const pcbStyle = z.object({
 ### pcbSx
 
 ```typescript
-export type PcbSxSelector =
-  | "& footprint[src^='kicad:'] silkscreentext"
-  | "& footprint[src^='jlcpcb:'] silkscreentext"
-  | "& silkscreentext"
-  | "& fabricationnotetext"
 export interface PcbSxValue {
   fontSize?: string | number
   pcbX?: string | number
@@ -1257,7 +1118,6 @@ export const pcbSxValue = z.object({
 ### pinAttributeMap
 
 ```typescript
-export type PinCapability = z.input<typeof pinCapability>
 export interface PinAttributeMap {
   isInput?: boolean
   isOutput?: boolean
@@ -1368,7 +1228,6 @@ export const point = z.object({
   x: distance,
   y: distance,
 })
-export type Point = { x: number | string; y: number | string }
 ```
 
 ### point3
@@ -1379,12 +1238,6 @@ export const point3 = z.object({
   y: distance,
   z: distance,
 })
-```
-
-### portHints
-
-```typescript
-export type PortHints = (string | number)[]
 ```
 
 ### resolveManufacturerPartNumber
@@ -1424,8 +1277,6 @@ export interface RelativeRouteLength {
   of?: string[]
   offset?: number | string
 }
-  /** Offset added to the reference distance. Raw numbers are mm; may be negative. */
-export type RouteLength = number | string | RelativeRouteLength
 export const routeLength = z.union([
   nonnegativeRouteDistance,
   z
@@ -1451,22 +1302,6 @@ export const schStyle = z.object({
     .optional(),
   defaultCapacitorOrientation: z.enum(["vertical", "none"]).optional(),
 })
-```
-
-### schematicOrientation
-
-```typescript
-export type SchematicOrientation =
-  | "vertical"
-  | "horizontal"
-  | "pos_top"
-  | "pos_bottom"
-  | "pos_left"
-  | "pos_right"
-  | "neg_top"
-  | "neg_bottom"
-  | "neg_left"
-  | "neg_right"
 ```
 
 ### schematicPinDefinitions
@@ -1508,11 +1343,6 @@ export interface SchematicPortArrangement
   extends SchematicPortArrangementWithSizes,
     SchematicPortArrangementWithSides,
     SchematicPortArrangementWithPinCounts {}
-export type SchematicPinArrangement = SchematicPortArrangement
-export type SchematicPinArrangementWithSizes = SchematicPortArrangementWithSizes
-export type SchematicPinArrangementWithSides = SchematicPortArrangementWithSides
-export type SchematicPinArrangementWithPinCounts =
-  SchematicPortArrangementWithPinCounts
 export const explicitPinSideDefinition = z.object({
   pins: z.array(z.union([z.number(), z.string()])),
   direction: z.union([
@@ -1541,12 +1371,6 @@ export const schematicPortArrangement = z.object({
 })
 ```
 
-### schematicPinLabel
-
-```typescript
-export type SchematicPinLabel = z.infer<typeof schematicPinLabel>
-```
-
 ### schematicPinStyle
 
 ```typescript
@@ -1558,16 +1382,12 @@ export type SchematicPinStyle = Record<
     marginBottom?: number | string
     marginLeft?: number | string
 
-    /** @deprecated use marginLeft */
     leftMargin?: number | string
-    /** @deprecated use marginRight */
     rightMargin?: number | string
-    /** @deprecated use marginTop */
     topMargin?: number | string
-    /** @deprecated use marginBottom */
     bottomMargin?: number | string
   }
->
+/** @deprecated use marginBottom */
 export const schematicPinStyle = z.record(
   z.object({
     marginLeft: distance.optional(),
@@ -1581,12 +1401,6 @@ export const schematicPinStyle = z.record(
     bottomMargin: distance.optional(),
   }),
 )
-```
-
-### schematicSize
-
-```typescript
-export type SchematicSymbolSize = z.input<typeof schematicSymbolSize>
 ```
 
 ### signalIntegrity
@@ -1626,12 +1440,6 @@ export const signalTime = quantity(
 )
 ```
 
-### symbolProp
-
-```typescript
-export type SymbolProp = string | ReactElement | AnyCircuitElement[]
-```
-
 ### traceSpacing
 
 ```typescript
@@ -1639,6 +1447,12 @@ export type SymbolProp = string | ReactElement | AnyCircuitElement[]
  * written as e.g. "3w". Parsed multiples remain {widthMultiplier: 3} so the
  * checker can evaluate varying widths without choosing a width in props. */
 export type TraceSpacing = number | string
+const widthSpacing = z
+  .string()
+  .regex(/^\s*(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*w\s*$/i)
+  .transform((value) => ({
+    widthMultiplier: Number(value.trim().replace(/w$/i, "")),
+  }))
 ```
 
 ### url
@@ -1658,7 +1472,6 @@ export const url = z.preprocess((value) => {
 ### ammeter
 
 ```typescript
-export type AmmeterPinLabels = (typeof ammeterPinLabels)[number]
 export interface AmmeterProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections: Connections<AmmeterPinLabels>
@@ -1756,8 +1569,6 @@ export const analogAcSweepSimulationProps = z
 ### analogdcoperatingpointsimulation
 
 ```typescript
-export type AnalogDcOperatingPointSimulationProps =
-  AnalogAnalysisSimulationBaseProps
 export const analogDcOperatingPointSimulationProps = z.object({
   ...analogAnalysisSimulationBaseProps,
 })
@@ -1849,50 +1660,6 @@ export const analogDigitalStimulusProps = z
       .strict(),
   })
   .strict()
-```
-
-### analogeyediagram
-
-```typescript
-/** Fixed-origin eye measurement. Numeric times are milliseconds; no compliance threshold is implied. */
-export interface AnalogEyeDiagramProps {
-  name: string
-  simulationRef: string
-  probeRef: string
-  unitInterval: number | string
-  timeOrigin: number | string
-  startTime?: number | string
-  endTime?: number | string
-}
-/** Omitted gate endpoints use the experiment's recorded start/end times. */
-export const analogEyeDiagramProps = z
-  .object({
-    name: z.string().min(1),
-    simulationRef: z.string().min(1),
-    probeRef: z.string().min(1),
-    unitInterval: finiteMilliseconds.refine((milliseconds) => milliseconds > 0),
-    timeOrigin: finiteMilliseconds,
-    startTime: finiteMilliseconds
-      .refine((milliseconds) => milliseconds >= 0)
-      .optional(),
-    endTime: finiteMilliseconds
-      .refine((milliseconds) => milliseconds > 0)
-      .optional(),
-  })
-  .strict()
-  .superRefine((eye, context) => {
-    if (
-      eye.startTime !== undefined &&
-      eye.endTime !== undefined &&
-      eye.startTime >= eye.endTime
-    ) {
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["endTime"],
-        message: "Eye gate end must follow its start",
-      })
-    }
-  })
 ```
 
 ### analogsimulation
@@ -2012,12 +1779,6 @@ export const analogCurrentSweepParameterProps = z
     currentSourceRef: z.string().min(1),
   })
   .strict()
-export type AnalogSweepParameterProps =
-  | AnalogResistanceSweepParameterProps
-  | AnalogCapacitanceSweepParameterProps
-  | AnalogInductanceSweepParameterProps
-  | AnalogVoltageSweepParameterProps
-  | AnalogCurrentSweepParameterProps
 ```
 
 ### analogtransientsimulation
@@ -2062,7 +1823,6 @@ export const antennaShapes = [
   "2.4ghz_meandered_inverted_f",
   "2.4ghz_folded_dipole",
 ] as const
-export type AntennaShape = (typeof antennaShapes)[number]
 /** Nominal Wi-Fi and Bluetooth operating-band configurations. */
 export const antennaFrequencyBands = [
   "2.4ghz",
@@ -2071,7 +1831,6 @@ export const antennaFrequencyBands = [
   "dual_band_2.4ghz_5ghz",
   "tri_band_2.4ghz_5ghz_6ghz",
 ] as const
-export type AntennaFrequencyBand = (typeof antennaFrequencyBands)[number]
 /** Props for an antenna component with optional generated or explicit geometry. */
 export interface AntennaProps extends CommonComponentProps {
   antennaShape?: AntennaShape
@@ -2228,7 +1987,6 @@ export const autoroutingPhaseProps = z
 ### battery
 
 ```typescript
-export type BatteryPinLabels = (typeof batteryPins)[number]
 export interface BatteryProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   capacity?: number | string
@@ -2249,8 +2007,6 @@ export const batteryProps = commonComponentProps.extend({
 ### board
 
 ```typescript
-export type BoardColorPreset = (typeof boardColorPresets)[number]
-export type BoardColor = AutocompleteString<BoardColorPreset>
 export interface BoardOutlinePoint extends Point {
   isCastellatedHole?: boolean
   holeDiameter?: Distance
@@ -2510,7 +2266,6 @@ export const breakoutPointProps = pcbLayoutProps
 ### bus
 
 ```typescript
-export type BusName = string
 /**
  * Declares one or more connections that an autorouter should route as a group.
  * Each connection may be a trace name or a port selector.
@@ -2650,7 +2405,6 @@ export const capacitorPinLabels = [
   "anode",
   "cathode",
 ] as const
-export type CapacitorPinLabels = (typeof capacitorPinLabels)[number]
 export interface CapacitorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   capacitance: number | string
@@ -2686,23 +2440,10 @@ export const capacitorProps = commonComponentProps.extend({
 ### chip
 
 ```typescript
-export type PinLabelsProp<
-  PinNumber extends string = string,
-  PinLabel extends string = string,
-> = Record<PinNumber, PinLabel | readonly PinLabel[] | PinLabel[]>
-export type PinLabelFromPinLabelMap<PinLabelMap extends PinLabelsProp> =
-  PinLabelMap extends PinLabelsProp<infer PinNumber, infer PinLabel>
-    ? PinLabel
-    : never
 export interface PinCompatibleVariant {
   manufacturerPartNumber?: string
   supplierPartNumber?: SupplierPartNumbers
 }
-export type SpiceModelElement = ReactElement<SpiceModelProps>
-export type InternalCircuitElement = ReactElement<
-  InternalCircuitProps,
-  "internalcircuit"
->
 export interface ChipPropsSU<
   PinLabel extends SchematicPinLabel = SchematicPinLabel,
 > extends CommonComponentProps<PinLabel> {
@@ -2726,37 +2467,6 @@ export interface ChipPropsSU<
   spiceModel?: SpiceModelElement
   internalCircuit?: InternalCircuitElement
 }
-  /**
-   * Functional components contained inside this physical chip package,
-   * wrapped in an `<internalcircuit />` element.
-   */
-export type ChipProps<PinLabelMap extends PinLabelsProp | string = string> =
-  ChipPropsSU<
-    PinLabelMap extends PinLabelsProp
-      ? PinLabelFromPinLabelMap<PinLabelMap> | keyof PinLabelMap
-      : PinLabelMap
-  >
-/**
- * Get the pin labels for a component
- *
- *   const pinLabels = { pin1: "VCC", pin2: "GND", pin3: "DATA" } as const
- *   export const MyChip = (props: ChipProps<typeof pinLabels>) => {
- *     // ...
- *   }
- *   type MyChipPinLabels = ChipPinLabels<typeof MyChip>
- *   // MyChipPinLabels is "VCC" | "GND" | "DATA"
- *
- */
-export type ChipPinLabels<T extends (props: ChipProps<any>) => any> =
-  T extends (props: infer Props) => any
-    ? Props extends ChipProps<infer PinLabelMap>
-      ? PinLabelMap extends PinLabelsProp
-        ? PinLabelFromPinLabelMap<PinLabelMap>
-        : PinLabelMap extends string
-          ? PinLabelMap
-          : never
-      : never
-    : never
 /**
  * Get the connection prop type for a component
  *
@@ -2806,7 +2516,6 @@ export const chipProps = commonComponentProps.extend({
 ### connector
 
 ```typescript
-export type ConnectorStandard = z.infer<typeof connectorStandard>
 export interface ConnectorProps extends ChipPropsSU {
   standard?: ConnectorStandard
 
@@ -2843,73 +2552,48 @@ export type PcbXDistConstraint = {
   pcb?: true
   xDist: Distance
 
-  /**
-   * Selector for left component, e.g. ".U1" or ".R1", you can also specify the
-   * edge or center of the component e.g. ".R1 leftedge", ".R1 center"
-   */
   left: string
 
-  /**
-   * Selector for right component, e.g. ".U1" or ".R1", you can also specify the
-   * edge or center of the component e.g. ".R1 leftedge", ".R1 center"
-   */
   right: string
 
-  /**
-   * If true, the provided distance is the distance between the closest edges of
-   * the left and right components
-   */
   edgeToEdge?: true
 
-  /**
+  centerToCenter?: true
+}
+/**
    * If true, the provided distance is the distance between the centers of the
    * left and right components
    */
-  centerToCenter?: true
-}
 export type PcbYDistConstraint = {
   pcb?: true
   yDist: Distance
 
-  /**
-   * Selector for top component, e.g. ".U1" or ".R1", you can also specify the
-   * edge or center of the component e.g. ".R1 topedge", ".R1 center"
-   */
   top: string
 
-  /**
-   * Selector for bottom component, e.g. ".U1" or ".R1", you can also specify the
-   * edge or center of the component e.g. ".R1 bottomedge", ".R1 center"
-   */
   bottom: string
 
   edgeToEdge?: true
   centerToCenter?: true
 }
+/**
+   * Selector for bottom component, e.g. ".U1" or ".R1", you can also specify the
+   * edge or center of the component e.g. ".R1 bottomedge", ".R1 center"
+   */
 export type PcbSameYConstraint = {
   pcb?: true
   sameY?: true
 
-  /**
+  for: string[]
+}
+/**
    * Selector for components, e.g. [".U1", ".R1"], you can also specify the
    * edge or center of the component e.g. [".R1 leftedge", ".U1 center"]
    */
-  for: string[]
-}
 export type PcbSameXConstraint = {
   pcb?: true
   sameX?: true
-  /**
-   * Selector for components, e.g. [".U1", ".R1"], you can also specify the
-   * edge or center of the component e.g. [".R1 leftedge", ".U1 center"]
-   */
   for: string[]
 }
-export type ConstraintProps =
-  | PcbXDistConstraint
-  | PcbYDistConstraint
-  | PcbSameYConstraint
-  | PcbSameXConstraint
 export const pcbXDistConstraintProps = z.object({
   pcb: z.literal(true).optional(),
   xDist: distance,
@@ -3013,7 +2697,6 @@ export const copperTextProps = pcbLayoutProps.extend({
   knockout: z.boolean().optional(),
   mirrored: z.boolean().optional(),
 })
-export type CopperTextProps = z.input<typeof copperTextProps>
 ```
 
 ### courtyard-circle
@@ -3024,7 +2707,6 @@ export const courtyardCircleProps = pcbLayoutProps
   .extend({
     radius: distance,
   })
-export type CourtyardCircleProps = z.input<typeof courtyardCircleProps>
 ```
 
 ### courtyard-outline
@@ -3054,7 +2736,6 @@ export const courtyardOutlineProps = pcbLayoutProps
     isStrokeDashed: z.boolean().optional(),
     color: z.string().optional(),
   })
-export type CourtyardOutlineProps = z.input<typeof courtyardOutlineProps>
 ```
 
 ### courtyard-pill
@@ -3067,7 +2748,6 @@ export const courtyardPillProps = pcbLayoutProps
     height: distance,
     radius: distance,
   })
-export type CourtyardPillProps = z.input<typeof courtyardPillProps>
 ```
 
 ### courtyard-rect
@@ -3082,13 +2762,11 @@ export const courtyardRectProps = pcbLayoutProps.extend({
   isStrokeDashed: z.boolean().optional(),
   color: z.string().optional(),
 })
-export type CourtyardRectProps = z.input<typeof courtyardRectProps>
 ```
 
 ### crystal
 
 ```typescript
-export type PinVariant = "two_pin" | "four_pin"
 export const crystalPins = [
   "pin1",
   "left",
@@ -3097,7 +2775,6 @@ export const crystalPins = [
   "pin3",
   "pin4",
 ] as const
-export type CrystalPinLabels = (typeof crystalPins)[number]
 export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
@@ -3123,7 +2800,6 @@ export const crystalProps = commonComponentProps.extend({
 ### currentsource
 
 ```typescript
-export type CurrentSourcePinLabels = (typeof currentSourcePinLabels)[number]
 export interface CurrentSourceProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   current?: number | string
@@ -3203,10 +2879,6 @@ export const polygonCutoutProps = pcbLayoutProps
     shape: z.literal("polygon"),
     points: z.array(point),
   })
-export type CutoutProps =
-  | RectCutoutProps
-  | CircleCutoutProps
-  | PolygonCutoutProps
 ```
 
 ### differentialpair
@@ -3285,10 +2957,6 @@ export const differentialPairProps = z
 ### diode
 
 ```typescript
-export type DiodePinLabels = (typeof diodePins)[number]
-export type DiodePinLabelsProp<PinLabel extends string = string> = Partial<
-  Record<DiodePinLabels, PinLabel | PinLabel[] | readonly PinLabel[]>
->
 .extend({
     connections: connectionsProp.optional(),
     variant: diodeVariant.optional().default("standard"),
@@ -3426,8 +3094,6 @@ export const fabricationNotePathProps = pcbLayoutProps
     isFilled: z.boolean().optional(),
     hasStroke: z.boolean().optional(),
   })
-    /** Draw the route's outline. Omitted means true; false disables it. */
-export type FabricationNotePathProps = z.input<typeof fabricationNotePathProps>
 ```
 
 ### fabrication-note-rect
@@ -3445,7 +3111,6 @@ export const fabricationNoteRectProps = pcbLayoutProps
     color: z.string().optional(),
     cornerRadius: distance.optional(),
   })
-export type FabricationNoteRectProps = z.input<typeof fabricationNoteRectProps>
 ```
 
 ### fabrication-note-text
@@ -3540,7 +3205,6 @@ export const footprintProps = z.object({
 ### fuse
 
 ```typescript
-export type FusePinLabels = (typeof fusePinLabels)[number]
 export interface FuseProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   currentRating: number | string
@@ -3804,9 +3468,8 @@ export interface BaseGroupProps extends CommonLayoutProps, LayoutConfig {
   schPack?: boolean
   schMatchAdapt?: boolean
 }
-  /** @deprecated Use `pcbFlex` */
+/** @deprecated Use `pcbFlex` */
 export type PartsEngine = {
-  /** Optional stock and price lookup. Return undefined for unsupported suppliers. */
   fetchPartAvailability?: (
     params: FetchPartAvailabilityParams,
   ) => Promise<PartAvailability | undefined> | PartAvailability | undefined
@@ -3823,6 +3486,7 @@ export type PartsEngine = {
     | AnyCircuitElement[]
     | undefined
 }
+/** Optional stock and price lookup. Return undefined for unsupported suppliers. */
 export interface PcbRouteCache {
   pcbTraces: PcbTrace[]
   cacheKey: string
@@ -3883,38 +3547,6 @@ export interface AutorouterConfig {
     | /** @deprecated Use "auto_local" */ "auto-local"
     | /** @deprecated Use "auto_cloud" */ "auto-cloud"
 }
-  /**
-   * single_layer_routing is an alias that parses as bus_lanes.
-   * Replaces single_layer_bus and single_layer_buses. Omitted leaves the preset
-   * unset; other presets remain unchanged and no conflicting fields are introduced.
-   */
-export type AutorouterPreset =
-  | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential_trace"
-  | "subcircuit"
-  | "default"
-  | "auto"
-  | "auto_local"
-  | "auto_cloud"
-  | "auto_jumper"
-  | "tscircuit_beta"
-  | "krt"
-  | "freerouting"
-  | "simplify"
-  | "laser_prefab"
-  | "single_layer_fanout"
-  | "fanout"
-  /** Local pad-to-via fanout without routing to a breakout boundary. */
-  | "dogbone"
-  | "bus_lanes"
-  /** Alias for bus_lanes; parsing normalizes to bus_lanes. */
-  | "single_layer_routing"
-  | "auto-jumper"
-  | /** @deprecated Disabled by default in core. Use the default autorouter with <autoroutingphase /> or <fanout /> as needed. Legacy support requires platformConfig.allowLegacyAutorouters: true. */ "sequential-trace"
-  | "auto-local"
-  | "auto-cloud"
-export type AutorouterProp =
-  | AutorouterConfig
-  | AutocompleteString<AutorouterPreset>
 export const routingTolerances = z.object({
   minTraceWidth: length.optional(),
   minViaHoleEdgeToViaHoleEdgeClearance: length.optional(),
@@ -3993,9 +3625,6 @@ export const autorouterProp: z.ZodType<AutorouterProp> = z.union([
   autorouterPreset,
   autorouterString,
 ])
-export type PreflightRoutingCheckPolicy = z.infer<
-  typeof preflightRoutingCheckPolicy
->
 export type AutorouterVersion =
   | "beta_pipeline1"
   | "beta_pipeline3"
@@ -4004,6 +3633,30 @@ export type AutorouterVersion =
   | "beta_pipeline7"
   | "beta_pipeline9"
   | "latest"
+
+const knownAutorouterVersion = z.enum([
+  "beta_pipeline1",
+  "beta_pipeline3",
+  "beta_pipeline4",
+  "beta_pipeline5",
+  "beta_pipeline7",
+  "beta_pipeline9",
+  "latest",
+])
+
+const autorouterVersion = z
+  .custom<AutocompleteString<AutorouterVersion>>(
+    (value) => typeof value === "string",
+  )
+  .transform((value): AutorouterVersion => {
+    const parsedAutorouterVersion = knownAutorouterVersion.safeParse(value)
+    if (parsedAutorouterVersion.success) return parsedAutorouterVersion.data
+
+    console.warn(
+      `Unknown autorouterVersion "${value}", falling back to "latest".`,
+    )
+    return "latest"
+  })
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
@@ -4061,7 +3714,6 @@ export interface SubcircuitGroupPropsWithBool extends SubcircuitGroupProps {
 export interface NonSubcircuitGroupProps extends BaseGroupProps {
   subcircuit?: false | undefined
 }
-export type GroupProps = SubcircuitGroupPropsWithBool | NonSubcircuitGroupProps
 export const baseGroupProps = commonLayoutProps.extend({
   name: z.string().optional(),
   children: z.any().optional(),
@@ -4232,11 +3884,6 @@ export interface RectHoleProps extends PcbLayoutProps {
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
 }
-export type HoleProps =
-  | CircleHoleProps
-  | PillHoleProps
-  | OvalHoleProps
-  | RectHoleProps
 .extend({
     name: z.string().optional(),
     shape: z.literal("circle").optional(),
@@ -4274,7 +3921,6 @@ const rectHoleProps = pcbLayoutProps.extend({
 ### inductor
 
 ```typescript
-export type InductorPinLabels = (typeof inductorPins)[number]
 export interface InductorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   inductance: number | string
@@ -4391,6 +4037,18 @@ export const jumperProps = commonComponentProps.extend({
 
 ```typescript
 export type LedPinLabels = (typeof lrPolarPins)[number]
+
+const legacyNumericLedPinLabelsProp = z
+  .record(
+    z.enum(["1", "2"]),
+    schematicPinLabel
+      .or(z.array(schematicPinLabel).readonly())
+      .or(z.array(schematicPinLabel)),
+  )
+  .transform((pinLabels) => ({
+    ...(pinLabels["1"] === undefined ? {} : { pin1: pinLabels["1"] }),
+    ...(pinLabels["2"] === undefined ? {} : { pin2: pinLabels["2"] }),
+  }))
 export const ledProps = commonComponentProps.extend({
   color: z.string().optional(),
   wavelength: z.string().optional(),
@@ -4403,7 +4061,6 @@ export const ledProps = commonComponentProps.extend({
   connections: createConnectionsProp(lrPolarPins).optional(),
   laser: z.boolean().optional(),
 })
-export type LedProps = z.input<typeof ledProps>
 ```
 
 ### mosfet
@@ -4417,7 +4074,6 @@ export const mosfetPins = [
   "pin3",
   "gate",
 ] as const
-export type MosfetPinLabels = (typeof mosfetPins)[number]
 export interface MosfetProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   channelType: "n" | "p"
@@ -4552,10 +4208,6 @@ export const opampPinLabels = [
   "positive_supply",
   "negative_supply",
 ] as const
-/**
- * Pin labels for an op-amp component. This includes common aliases.
- */
-export type OpAmpPinLabels = (typeof opampPinLabels)[number]
 export interface OpAmpProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   connections?: Connections<OpAmpPinLabels>
@@ -4645,7 +4297,6 @@ export const panelProps = baseGroupProps
 ### paneltab
 
 ```typescript
-export type PanelTabEdge = z.infer<typeof panelTabEdge>
 export interface PanelTabProps {
   boardName?: string
   boardEdge: PanelTabEdge
@@ -4752,8 +4403,6 @@ pcbLayoutProps.omit({ pcbRotation: true }).extend({
         'Component selectors excluded from the keepout, such as ".ANT1"',
       ),
   }),
-    /** Allow components and their pads/plated holes without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded. */
-export type PcbKeepoutProps = z.input<typeof pcbKeepoutProps>
 ```
 
 ### pcb-note-dimension
@@ -5058,14 +4707,6 @@ openingBaseProps.extend({
     height: z.never().optional(),
     radius: z.never().optional(),
   }),
-/**
- * A solder-mask or flex-coverlay aperture independent of pads and holes.
- * Exposes underlying copper or substrate without adding copper, paste, or connectivity.
- * Geometry is local to its parent, in mm (+X right, +Y top); use pcbRotation for rectangles.
- */
-export type PcbSoldermaskOpeningProps = z.input<
-  typeof pcbSoldermaskOpeningProps
->
 ```
 
 ### pcb-stiffener
@@ -5101,8 +4742,6 @@ stiffenerBaseProps.extend({
     width: z.never().optional(),
     height: z.never().optional(),
   }),
-/** Bonded mechanical reinforcement; does not add copper layers or a rigid stackup. */
-export type PcbStiffenerProps = z.input<typeof pcbStiffenerProps>
 ```
 
 ### pcb-trace
@@ -5113,7 +4752,6 @@ export const pcbTraceProps = z.object({
   thickness: distance.optional(),
   route: z.array(route_hint_point),
 })
-export type PcbTraceProps = z.input<typeof pcbTraceProps>
 ```
 
 ### pcbchannel
@@ -5146,7 +4784,7 @@ export interface PcbChannelProps {
 /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
 export const pcbChannelProps = z
   .object({
-    name: z.string().min(1),
+    name: z.string().trim().min(1),
     driverRef: signalEndpoint,
     receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
     bitRate: signalBitRate.optional(),
@@ -5157,7 +4795,7 @@ export const pcbChannelProps = z
         "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
       )
       .default("prbs7"),
-    seed: z.number().finite().int().positive().optional(),
+    seed: z.custom<number>((value) => typeof value === "number").optional(),
     offset: signalTimeOrUi.default("0UI"),
     quiet: z
       .enum(["low", "high", "off"], {
@@ -5172,7 +4810,7 @@ export const pcbChannelProps = z
   .superRefine(({ name, pattern, seed }, ctx) => {
     if (seed === undefined || !pattern.startsWith("prbs")) return
     const max = 2 ** Number(pattern.slice(4)) - 1
-    if (seed > max) {
+    if (!Number.isInteger(seed) || seed < 1 || seed > max) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["seed"],
@@ -5199,7 +4837,7 @@ export interface PcbTransientChannelSimulationProps {
 /** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
 export const pcbTransientChannelSimulationProps = z
   .object({
-    name: z.string().min(1).optional(),
+    name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
     duration: z
       .custom<string | number>(
@@ -5429,6 +5067,51 @@ export type PlatedHoleProps =
   | CircularHoleWithRectPlatedProps
   | PillWithRectPadPlatedHoleProps
   | HoleWithPolygonPadPlatedHoleProps
+
+const DEFAULT_PIN_HEADER_HOLE_DIAMETER = "0.04in"
+const DEFAULT_PIN_HEADER_OUTER_DIAMETER = "0.1in"
+
+const inferPlatedHoleShapeAndDefaults = (rawProps: unknown): unknown => {
+  if (!rawProps || typeof rawProps !== "object") return rawProps
+
+  const props = { ...(rawProps as Record<string, unknown>) }
+
+  if (props.shape !== undefined) return props
+
+  if (props.padOutline !== undefined) {
+    props.shape = "hole_with_polygon_pad"
+    return props
+  }
+
+  if (props.rectPadWidth !== undefined || props.rectPadHeight !== undefined) {
+    if (props.holeDiameter !== undefined) {
+      props.shape = "circular_hole_with_rect_pad"
+      return props
+    }
+
+    props.shape = "pill_hole_with_rect_pad"
+    return props
+  }
+
+  if (
+    props.outerDiameter !== undefined ||
+    props.holeDiameter !== undefined ||
+    props.padDiameter !== undefined
+  ) {
+    props.shape = "circle"
+    return props
+  }
+
+  if (props.outerWidth !== undefined || props.outerHeight !== undefined) {
+    props.shape = props.rectPad === true ? "pill" : "oval"
+    return props
+  }
+
+  props.shape = "circle"
+  props.holeDiameter = DEFAULT_PIN_HEADER_HOLE_DIAMETER
+  props.outerDiameter = DEFAULT_PIN_HEADER_OUTER_DIAMETER
+  return props
+}
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       name: z.string().optional(),
       connectsTo: z.string().or(z.array(z.string())).optional(),
@@ -5546,14 +5229,11 @@ export const portProps = commonLayoutProps.extend({
   kicadPinMetadata: kicadPinMetadata.optional(),
   hasInversionCircle: z.boolean().optional(),
 })
-export type PortProps = z.input<typeof portProps>
 ```
 
 ### potentiometer
 
 ```typescript
-export type PotentiometerPinVariant = "two_pin" | "three_pin"
-export type PotentiometerPinLabels = (typeof potentiometerPinLabels)[number]
 export interface PotentiometerProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   maxResistance: number | string
@@ -5573,20 +5253,11 @@ export const potentiometerProps = commonComponentProps.extend({
 export const powerSourceProps = commonComponentProps.extend({
   voltage,
 })
-export type PowerSourceProps = z.input<typeof powerSourceProps>
-```
-
-### push-button
-
-```typescript
-export type PushButtonProps<T extends PinLabelsProp | string = string> =
-  ChipProps<T>
 ```
 
 ### resistor
 
 ```typescript
-export type ResistorPinLabels = (typeof resistorPinLabels)[number]
 export interface ResistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   resistance: number | string
@@ -5637,7 +5308,6 @@ export const resistorProps = commonComponentProps.extend({
 ### resonator
 
 ```typescript
-export type ResonatorPinVariant = "no_ground" | "ground_pin" | "two_ground_pins"
 export interface ResonatorProps extends CommonComponentProps {
   frequency: number | string
   loadCapacitance: number | string
@@ -5956,7 +5626,6 @@ export const schematicSectionProps = z.object({
 ### schematic-sheet
 
 ```typescript
-export type SchematicSheetSize = "A4" | "ANSI_B"
 export interface SchematicSheetProps {
   name?: string
   displayName?: string
@@ -6076,7 +5745,6 @@ export const silkscreenCircleProps = pcbLayoutProps
     strokeWidth: distance.optional(),
     radius: distance,
   })
-export type SilkscreenCircleProps = z.input<typeof silkscreenCircleProps>
 ```
 
 ### silkscreen-graphic
@@ -6141,7 +5809,6 @@ export const silkscreenLineProps = pcbLayoutProps
     x2: distance,
     y2: distance,
   })
-export type SilkscreenLineProps = z.input<typeof silkscreenLineProps>
 ```
 
 ### silkscreen-path
@@ -6163,7 +5830,6 @@ export const silkscreenPathProps = pcbLayoutProps
     route: z.array(route_hint_point),
     strokeWidth: length.optional(),
   })
-export type SilkscreenPathProps = z.input<typeof silkscreenPathProps>
 ```
 
 ### silkscreen-rect
@@ -6179,7 +5845,6 @@ export const silkscreenRectProps = pcbLayoutProps
     height: distance,
     cornerRadius: distance.optional(),
   })
-export type SilkscreenRectProps = z.input<typeof silkscreenRectProps>
 ```
 
 ### silkscreen-text
@@ -6198,10 +5863,6 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
   knockoutPaddingBottom: length.optional(),
   layers: z.array(layer_ref).optional(),
 })
-  /**
-   * If true, text will knock out underlying silkscreen
-   */
-export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>
 ```
 
 ### simulationibismodel
@@ -6310,13 +5971,6 @@ export interface PolygonSmtPadProps
   noSolderPaste?: boolean
   solderPasteMargin?: Distance
 }
-export type SmtPadProps =
-  | RectSmtPadProps
-  | CircleSmtPadProps
-  | RotatedRectSmtPadProps
-  | PillSmtPadProps
-  | RotatedPillSmtPadProps
-  | PolygonSmtPadProps
 export const rectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
@@ -6440,7 +6094,6 @@ export interface CircleSolderPasteProps
   shape: "circle"
   radius: Distance
 }
-export type SolderPasteProps = RectSolderPasteProps | CircleSolderPasteProps
 export const rectSolderPasteProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
@@ -6496,12 +6149,6 @@ export const stampboardProps = boardProps.extend({
   pinPitch: distance.optional(),
   innerHoles: z.boolean().optional(),
 })
-```
-
-### subcircuit
-
-```typescript
-export type SubcircuitProps = SubcircuitGroupProps
 ```
 
 ### switch
@@ -6694,7 +6341,11 @@ export const systemBlockPageProps = z.object({
 
 ```typescript
 export type TestpointPinLabels = (typeof testpointPins)[number]
-export type TestpointConnections = z.infer<typeof testpointConnectionsProp>
+
+const testpointConnectionsProp = z
+  .object({
+    pin1: connectionTarget,
+  })
 export interface TestpointProps extends CommonComponentProps {
   footprintVariant?: "pad" | "through_hole"
   padShape?: "rect" | "circle"
@@ -6759,7 +6410,6 @@ export const traceHintProps = z.object({
     .optional(),
   traceWidth: z.number().optional(),
 })
-export type TraceHintProps = z.input<typeof traceHintProps>
 ```
 
 ### trace
@@ -6786,7 +6436,6 @@ baseTraceProps.extend({
     start: portRef,
     end: portRef,
   }),
-export type TraceProps = z.input<typeof traceProps>
 ```
 
 ### transistor
@@ -6803,7 +6452,6 @@ export const transistorPinsLabels = [
   "source",
   "drain",
 ] as const
-export type transistorPinsLabels = (typeof transistorPinsLabels)[number]
 export interface TransistorProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   type: "npn" | "pnp" | "bjt" | "jfet" | "mosfet" | "igbt"
@@ -6829,7 +6477,6 @@ export const transistorPins = [
   "pin3",
   "emitter",
 ] as const
-export type TransistorPinLabels = (typeof transistorPins)[number]
 ```
 
 ### via
@@ -6913,8 +6560,6 @@ export const voltageProbeProps = commonComponentProps
 ### voltagesource
 
 ```typescript
-export type WaveShape = "sinewave" | "square" | "triangle" | "sawtooth"
-export type VoltageSourcePinLabels = (typeof voltageSourcePinLabels)[number]
 export interface VoltageSourceProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   voltage?: number | string

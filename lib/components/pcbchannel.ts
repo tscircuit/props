@@ -10,7 +10,7 @@ export type SignalEndpoint =
   | { pin: SignalPin; model?: string }
   | { pin: SignalPair; model?: string | { p: string; n: string } }
 
-const pin = z.string().min(1)
+const pin = z.string().trim().min(1)
 const pair = z.object({ p: pin, n: pin }).strict()
 export const signalEndpoint = z.union([
   pin,
@@ -39,7 +39,7 @@ export interface PcbChannelProps {
 
 export const pcbChannelProps = z
   .object({
-    name: z.string().min(1),
+    name: z.string().trim().min(1),
     driverRef: signalEndpoint,
     receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
     bitRate: signalBitRate.optional(),
@@ -50,7 +50,7 @@ export const pcbChannelProps = z
         "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
       )
       .default("prbs7"),
-    seed: z.number().finite().int().positive().optional(),
+    seed: z.custom<number>((value) => typeof value === "number").optional(),
     offset: signalTimeOrUi.default("0UI"),
     quiet: z
       .enum(["low", "high", "off"], {
@@ -65,7 +65,7 @@ export const pcbChannelProps = z
   .superRefine(({ name, pattern, seed }, ctx) => {
     if (seed === undefined || !pattern.startsWith("prbs")) return
     const max = 2 ** Number(pattern.slice(4)) - 1
-    if (seed > max) {
+    if (!Number.isInteger(seed) || seed < 1 || seed > max) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["seed"],

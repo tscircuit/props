@@ -106,18 +106,6 @@ export interface AnalogDigitalStimulusProps {
 }
 
 
-export interface AnalogEyeDiagramProps {
-  name: string
-  simulationRef: string
-  probeRef: string
-  unitInterval: number | string
-  timeOrigin: number | string
-  /** Omitted gate endpoints use the experiment's recorded start/end times. */
-  startTime?: number | string
-  endTime?: number | string
-}
-
-
 export interface AnalogInductanceSweepParameterProps
   extends AnalogSweepCoordinatesProps {
   parameterType: "inductance"

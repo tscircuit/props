@@ -18,6 +18,18 @@ test("documents endpoint aliases and every union member, including per-leg model
   expect(definitions.join("")).toContain(endpoint)
 })
 
+test("does not add unrelated aliases to the legacy documentation", () => {
+  for (const [file, alias] of [
+    ["autocomplete", "AutocompleteString"],
+    ["cadModel", "CadModelAxisDirection"],
+  ]) {
+    const source = readFileSync(`lib/common/${file}.ts`, "utf8")
+    expect(extractInterfaces(source).join("")).not.toContain(
+      `export type ${alias}`,
+    )
+  }
+})
+
 test("completes nested union expressions and trailing validator chains", () => {
   const definition = `export const schema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("input") }).strict(),

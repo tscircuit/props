@@ -21,7 +21,7 @@ export interface PcbTransientChannelSimulationProps {
 
 export const pcbTransientChannelSimulationProps = z
   .object({
-    name: z.string().min(1).optional(),
+    name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
     duration: z
       .custom<string | number>(

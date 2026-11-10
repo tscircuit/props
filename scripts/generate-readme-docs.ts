@@ -10,7 +10,6 @@ const namespacedAnalogComponentNames = new Set([
   "analogdcoperatingpointsimulation",
   "analogdcsweepsimulation",
   "analogdigitalstimulus",
-  "analogeyediagram",
   "analogsweepparameter",
   "analogtransientsimulation",
 ])

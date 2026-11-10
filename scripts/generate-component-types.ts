@@ -24,8 +24,11 @@ export function extractInterfaces(content: string): string[] {
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
     const line = lines[lineIndex]!
+    // Only add the SI endpoint aliases to the legacy documented exports.
     const typedExport =
-      /export\s+(?:(?:const|let|var)\s+(\w+)\s*:|type\s+(\w+))/.exec(line)
+      /export\s+(?:(?:const|let|var)\s+(\w+)\s*:|type\s+(Signal(?:Endpoint|Pin|Pair))\b)/.exec(
+        line,
+      )
     if (typedExport && !line.includes("Input") && !line.includes("Inferred")) {
       const statement = declarations.find((statement) =>
         ts.isTypeAliasDeclaration(statement)
@@ -93,16 +96,16 @@ export function extractInterfaces(content: string): string[] {
   }
 
   // Preserve the legacy selection of documented declarations, but use the
-  // parser's statement boundaries to complete truncated validators and unions.
+  // parser's statement boundaries to complete truncated validator expressions.
   return interfaces.map((definition, index) => {
-    const match = /^export (?:const|let|var|type) (\w+)\s*=/m.exec(definition)
+    const match = /^export (?:const|let|var) (\w+)\s*=/m.exec(definition)
     if (!match) return definition
-    const statement = declarations.find((statement) =>
-      ts.isTypeAliasDeclaration(statement)
-        ? statement.name.text === match[1]
-        : statement.declarationList.declarations.some(
-            (declaration) => declaration.name.getText(source) === match[1],
-          ),
+    const statement = declarations.find(
+      (statement) =>
+        ts.isVariableStatement(statement) &&
+        statement.declarationList.declarations.some(
+          (declaration) => declaration.name.getText(source) === match[1],
+        ),
     )
     const declaration = definition.slice(match.index).trimEnd()
     // Extended props are already emitted as a separate legacy block.

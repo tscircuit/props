@@ -32,7 +32,6 @@ namespace, PCB references, and a complete overview example.
 | `<analog.dcoperatingpointsimulation />`        | [`AnalogDcOperatingPointSimulationProps`](#analogdcoperatingpointsimulationprops-analogdcoperatingpointsimulation)  |
 | `<analog.dcsweepsimulation />`                 | [`AnalogDcSweepSimulationProps`](#analogdcsweepsimulationprops-analogdcsweepsimulation)                             |
 | `<analog.digitalstimulus />`                   | [`AnalogDigitalStimulusProps`](#analogdigitalstimulusprops-analogdigitalstimulus)                                   |
-| `<analog.eyediagram />`                        | [`AnalogEyeDiagramProps`](#analogeyediagramprops-analogeyediagram)                                                  |
 | `<analogsimulation />`                         | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                                                  |
 | `<analog.sweepparameter />`                    | [`AnalogResistanceSweepParameterProps`](#analogresistancesweepparameterprops-analogsweepparameter)                  |
 | `<analog.transientsimulation />`               | [`AnalogTransientSimulationProps`](#analogtransientsimulationprops-analogtransientsimulation)                       |
@@ -327,23 +326,6 @@ export interface AnalogDigitalStimulusProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/analogdigitalstimulus.ts)
-
-### AnalogEyeDiagramProps `<analog.eyediagram />`
-
-```ts
-export interface AnalogEyeDiagramProps {
-  name: string;
-  simulationRef: string;
-  probeRef: string;
-  unitInterval: number | string;
-  timeOrigin: number | string;
-  /** Omitted gate endpoints use the experiment's recorded start/end times. */
-  startTime?: number | string;
-  endTime?: number | string;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogeyediagram.ts)
 
 ### AnalogSimulationProps `<analogsimulation />`
 

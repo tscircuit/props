@@ -160,6 +160,67 @@ test("RFC DDR3 write TSX supplies per-leg models and a half-UI offset", () => {
 
 const data = { name: "DATA", driverRef: ".TX > .Y", receiverRef: ".RX > .A" }
 
+test.each([
+  ["single pin", (value: string) => value],
+  ["pair p", (value: string) => ({ p: value, n: ".U > .N" })],
+  ["pair n", (value: string) => ({ p: ".U > .P", n: value })],
+  ["wrapped pin", (value: string) => ({ pin: value })],
+  ["wrapped pair p", (value: string) => ({ pin: { p: value, n: ".U > .N" } })],
+  ["wrapped pair n", (value: string) => ({ pin: { p: ".U > .P", n: value } })],
+  ["single model", (value: string) => ({ pin: ".U > .Y", model: value })],
+  [
+    "pair model",
+    (value: string) => ({ pin: { p: ".U > .P", n: ".U > .N" }, model: value }),
+  ],
+  [
+    "model p",
+    (value: string) => ({
+      pin: { p: ".U > .P", n: ".U > .N" },
+      model: { p: value, n: "N" },
+    }),
+  ],
+  [
+    "model n",
+    (value: string) => ({
+      pin: { p: ".U > .P", n: ".U > .N" },
+      model: { p: "P", n: value },
+    }),
+  ],
+] as const)("%s trims whitespace and rejects blank text", (_, endpoint) => {
+  for (const value of ["", " \t\n ", " \tVALUE\n "]) {
+    const ref = endpoint(value)
+    const trimmed = endpoint(value.trim())
+    for (const [field, input, expected] of [
+      ["driverRef", ref, trimmed],
+      ["receiverRef", ref, trimmed],
+      ["receiverRef", [ref], [trimmed]],
+    ] as const) {
+      const signal = <simulation.pcbchannel {...data} {...{ [field]: input }} />
+      const parsed = pcbChannelProps.safeParse(signal.props)
+      expect(parsed.success).toBe(value.trim().length > 0)
+      if (parsed.success)
+        expect(parsed.data).toMatchObject({ [field]: expected })
+    }
+  }
+})
+
+test.each(["", " \t\n ", " \tDATA\n "])(
+  "channel and block names trim whitespace and reject blank text: %j",
+  (name) => {
+    const signal = <simulation.pcbchannel {...data} name={name} />
+    const block = (
+      <simulation.pcbtransientchannelsimulation bitRate="20Mbps" name={name} />
+    )
+    for (const parsed of [
+      pcbChannelProps.safeParse(signal.props),
+      pcbTransientChannelSimulationProps.safeParse(block.props),
+    ]) {
+      expect(parsed.success).toBe(name.trim().length > 0)
+      if (parsed.success) expect(parsed.data.name).toBe(name.trim())
+    }
+  },
+)
+
 test.each(["typical", "minimum", "maximum"] as const)(
   "accepts the spelled-out corner %s",
   (corner) => {
@@ -303,7 +364,12 @@ test.each([
         const parsed = pcbChannelProps.safeParse(signal.props)
         expect(parsed.success).toBe(false)
         if (!parsed.success)
-          expect(parsed.error.issues[0]?.path).toEqual(["seed"])
+          expect(parsed.error.issues).toEqual([
+            expect.objectContaining({
+              path: ["seed"],
+              message: `Signal "DATA": ${pattern ?? "prbs7"} seed must be an integer in 1..${max}.`,
+            }),
+          ])
       }
     }
     const signal = <simulation.pcbchannel {...data} pattern={pattern} />

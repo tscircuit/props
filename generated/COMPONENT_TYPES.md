@@ -2037,9 +2037,6 @@ export const analogTransientSimulationProps = z
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
   })
-  .strict(
-    "Unknown transient simulation props. For SI configuration, use <simulation.pcbtransientchannelsimulation>.",
-  )
   .superRefine((simulation, context) => {
     if (
       simulation.startTime < 0 ||

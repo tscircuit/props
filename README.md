@@ -997,9 +997,9 @@ export interface DifferentialPairProps {
   /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
   pcbSpacingToOtherSignals?: TraceSpacing;
 
-  /** Name of the trace or pin carrying the positive signal. */
+  /** Trace name, pin selector, or net (e.g. `net.USB_DP`) carrying the positive signal. A net includes every pad on it. */
   positiveConnection: string;
-  /** Name of the trace or pin carrying the negative signal. */
+  /** Trace name, pin selector, or net (e.g. `net.USB_DM`) carrying the negative signal. A net includes every pad on it. */
   negativeConnection: string;
   /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
   maxLengthSkew?: number | string;

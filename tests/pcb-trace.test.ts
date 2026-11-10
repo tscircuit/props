@@ -1,15 +1,21 @@
 import { expect, test } from "bun:test"
 import { pcbTraceProps, type PcbTraceProps } from "../lib/components/pcb-trace"
 
-test("pcbtrace parses shorthand units and explicit via destinations", () => {
+test("pcbtrace parses wire shorthand units and complete route points", () => {
   const props: PcbTraceProps = {
     layer: "top",
     thickness: "0.2mm",
     route: [
       { x: "-4mm", y: "0mm" },
       { x: 0, y: "2mm", trace_width: "0.4mm" },
-      { x: 2, y: 2, via: true, to_layer: "bottom" },
-      { x: 4, y: 0, via: false },
+      {
+        route_type: "via",
+        x: 2,
+        y: 2,
+        from_layer: "top",
+        to_layer: "bottom",
+      },
+      { x: 4, y: 0 },
     ],
   }
   expect(pcbTraceProps.parse(props)).toEqual({
@@ -18,8 +24,14 @@ test("pcbtrace parses shorthand units and explicit via destinations", () => {
     route: [
       { x: -4, y: 0 },
       { x: 0, y: 2, trace_width: 0.4 },
-      { x: 2, y: 2, via: true, to_layer: "bottom" },
-      { x: 4, y: 0, via: false },
+      {
+        route_type: "via",
+        x: 2,
+        y: 2,
+        from_layer: "top",
+        to_layer: "bottom",
+      },
+      { x: 4, y: 0 },
     ],
   })
   expect(pcbTraceProps.parse({ route: [] })).toEqual({ route: [] })
@@ -102,10 +114,11 @@ test("pcbtrace rejects malformed explicit points instead of stripping their fiel
   )
 })
 
-test("pcbtrace via hints require an explicit destination and wire hints cannot change layers", () => {
+test("pcbtrace coordinate shorthand is limited to wires", () => {
   for (const point of [
     { x: 0, y: 0, via: true },
     { x: 0, y: 0, via: "yes" },
+    { x: 0, y: 0, via: true, to_layer: "bottom" },
     { x: 0, y: 0, via: true, to_layer: "middle" },
     { x: 0, y: 0, to_layer: "bottom" },
     { x: 0, y: 0, via: false, to_layer: "bottom" },

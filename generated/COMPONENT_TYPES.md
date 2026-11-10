@@ -4894,40 +4894,24 @@ stiffenerBaseProps.extend({
 ### pcb-trace
 
 ```typescript
-/** Coordinate shorthand for pcbtrace; a via must name its destination layer. */
-export const pcbTraceRouteHint = z.discriminatedUnion("via", [
-  route_hint_point
-    .merge(
-      z.object({
-        via: z.literal(false).optional(),
-        to_layer: z.never().optional(),
-      }),
-    )
-    .strict(),
-  route_hint_point
-    .merge(z.object({ via: z.literal(true), to_layer: layer_ref }))
-    .strict(),
-])
 /**
- * A fixed copper path. Route positions are points in a footprint-local,
- * right-handed frame in mm: +X right, +Y toward the board top, +Z above.
- * Core applies parent placement, including translation, when rendering.
- *
- * Coordinate shorthand and complete Circuit JSON points can be mixed. Parsing
- * converts unit strings to mm and preserves explicit route metadata; it does
- * not inject rendered wire fields or change the supplied props. Core defaults
- * an omitted layer to top and width to thickness, then 0.1mm. A shorthand
- * trace_width overrides thickness for that point.
- *
- * Shorthand vias require to_layer; wire hints cannot set it. Complete tagged
- * points must satisfy their Circuit JSON schema and cannot fall back to
- * shorthand. No aliases are introduced. Existing coordinate and complete routes
- * remain valid; ambiguous via hints must supply their destination layer.
+ * Fixed copper path: coordinate-only wire shorthand or complete Circuit JSON
+ * points. Positions are footprint-local points in mm (+X right, +Y board top,
+ * +Z above, right-handed); core applies parent placement. Unit strings parse
+ * to mm. Use complete Circuit JSON points for vias and other explicit routes.
  */
 export const pcbTraceProps = z.object({
   layer: layer_ref.optional(),
   thickness: distance.optional(),
-  route: z.array(z.union([pcb_trace_route_point, pcbTraceRouteHint])),
+  route: z.array(
+    z.union([
+      pcb_trace_route_point,
+      // Keep malformed tagged points from falling back to coordinate shorthand.
+      route_hint_point
+        .pick({ x: true, y: true, trace_width: true })
+        .strict(),
+    ]),
+  ),
 })
 ```
 

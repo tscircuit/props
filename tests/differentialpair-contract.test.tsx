@@ -1,6 +1,11 @@
 import { expect, test } from "bun:test"
 import { createElement } from "react"
-import { differentialPairProps } from "lib"
+import {
+  differentialPairProps,
+  type DifferentialPairProps,
+  type DifferentialPairConnection,
+  type ParsedDifferentialPairProps,
+} from "lib"
 
 // Untyped spreads model JavaScript authors; validate the actual TSX props.
 const Pair = (props: Record<string, unknown>) =>
@@ -48,4 +53,120 @@ test.each([
   expect(() => differentialPairProps.parse(pair.props)).toThrow(
     "differentialpair only supports maxLengthSkew for now",
   )
+})
+
+test("single strings select one hop while arrays accept trace names only", () => {
+  for (const selector of ["DP", "net.P", ".J1 > .DP"]) {
+    expect(
+      differentialPairProps.parse({
+        ...connections,
+        positiveConnection: selector,
+        maxLengthSkew: 0,
+      }).positiveConnection,
+    ).toBe(selector)
+  }
+  for (const selector of [
+    "net.P",
+    ".DP",
+    ".J1 > .DP",
+    "trace[name=DP]",
+    "DP,DM",
+    "#DP",
+    "DP DM",
+  ]) {
+    for (const lane of ["positiveConnection", "negativeConnection"]) {
+      expect(() =>
+        differentialPairProps.parse({
+          ...connections,
+          [lane]: [selector],
+          maxLengthSkew: 0,
+        }),
+      ).toThrow("trace names only")
+    }
+  }
+})
+
+test("both lanes require nonempty strings or nonempty trace-name arrays", () => {
+  for (const lane of ["positiveConnection", "negativeConnection"]) {
+    for (const value of [
+      undefined,
+      null,
+      "",
+      " ",
+      [],
+      [""],
+      [" "],
+      ["DP", ""],
+      [1],
+      1,
+    ]) {
+      expect(
+        differentialPairProps.safeParse({
+          ...connections,
+          [lane]: value,
+          maxLengthSkew: 0,
+        }).success,
+      ).toBe(false)
+    }
+  }
+})
+
+test("skew is required, finite and nonnegative after unit parsing", () => {
+  for (const maxLengthSkew of [
+    undefined,
+    null,
+    -1,
+    Infinity,
+    -Infinity,
+    NaN,
+    "-1mm",
+    "Infinitymm",
+    "1e309mm",
+    "bad",
+    "",
+  ]) {
+    expect(
+      differentialPairProps.safeParse({ ...connections, maxLengthSkew })
+        .success,
+    ).toBe(false)
+  }
+  for (const maxLengthSkew of [0, "0mm", "0mil"]) {
+    expect(
+      differentialPairProps.parse({ ...connections, maxLengthSkew })
+        .maxLengthSkew,
+    ).toBe(0)
+  }
+})
+
+test("typed TSX and parsed props expose the decided public contract", () => {
+  const TypedPair = (props: DifferentialPairProps) =>
+    createElement("differentialpair", props)
+  const positiveConnection: DifferentialPairConnection = ["DP1", "DP2"]
+  const pair = (
+    <TypedPair
+      name="USB"
+      positiveConnection={positiveConnection}
+      negativeConnection={["DM1"]}
+      maxLengthSkew="2mil"
+    />
+  )
+  const parsed: ParsedDifferentialPairProps = differentialPairProps.parse(
+    pair.props,
+  )
+  const skew: number = parsed.maxLengthSkew
+  expect(skew).toBe(0.0508)
+  expect(parsed.positiveConnection).toEqual(positiveConnection)
+  // @ts-expect-error A skew is required at the TSX type boundary.
+  const missing: DifferentialPairProps = connections
+  // @ts-expect-error A lane tuple must have at least one trace name.
+  const empty: DifferentialPairConnection = []
+  const unsupported: DifferentialPairProps = {
+    ...connections,
+    maxLengthSkew: 0,
+    // @ts-expect-error Unsupported gap intent has been removed from the public type.
+    pcbTraceGap: 0.1,
+  }
+  expect(missing).toBeDefined()
+  expect(empty).toHaveLength(0)
+  expect(unsupported).toBeDefined()
 })

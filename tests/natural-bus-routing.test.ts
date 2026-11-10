@@ -1,10 +1,6 @@
 import { expect, test } from "bun:test"
 import type { RelativeRouteLength } from "lib/common/routeLength"
 import { busProps, type BusProps } from "lib/components/bus"
-import {
-  differentialPairProps,
-  type DifferentialPairProps,
-} from "lib/components/differentialpair"
 
 test("bus directly expresses matching, width-relative spacing and impedance range", () => {
   const raw = {
@@ -26,18 +22,9 @@ test("bus directly expresses matching, width-relative spacing and impedance rang
     pcbTraceSpacing: { widthMultiplier: 3 },
     pcbSpacingToOtherSignals: { widthMultiplier: 4 },
   })
-  expect(
-    differentialPairProps.parse({
-      positiveConnection: "P",
-      negativeConnection: "N",
-      pcbSpacingToOtherSignals: "4w",
-    }),
-  ).toMatchObject({
-    pcbSpacingToOtherSignals: { widthMultiplier: 4 },
-  })
 })
 
-test("command bus and clock pair share one length expression without a third element", () => {
+test("command bus uses an explicit relative length expression", () => {
   const targetLength = {
     reference: "longest_manhattan",
     of: [".COMMANDS", ".CLOCK"],
@@ -50,28 +37,9 @@ test("command bus and clock pair share one length expression without a third ele
     targetLength: target,
     lengthTolerance: "50mil",
   } satisfies BusProps
-  const pair = {
-    name: "CLOCK",
-    positiveConnection: "CK_P",
-    negativeConnection: "CK_N",
-    targetLength: target,
-    lengthTolerance: "50mil",
-    maxLengthSkew: "5mil",
-    targetDifferentialImpedance: "125±25ohm",
-    pcbTraceGap: "0.12mm",
-  } satisfies DifferentialPairProps
-  const parsedBus = busProps.parse(bus),
-    parsedPair = differentialPairProps.parse(pair)
+  const parsedBus = busProps.parse(bus)
   expect(parsedBus.targetLength).toEqual({ ...target, offset: 7.62 })
-  expect(parsedPair.targetLength).toEqual(parsedBus.targetLength)
-  expect(parsedPair.lengthTolerance).toBe(1.27)
-  expect(parsedPair.maxLengthSkew).toBe(0.127)
-  expect(parsedPair).toMatchObject({
-    targetDifferentialImpedance: 125,
-    targetDifferentialImpedanceMin: 100,
-    targetDifferentialImpedanceMax: 150,
-  })
-  expect(parsedPair.pcbTraceGap).toBe(0.12)
+  expect(parsedBus.lengthTolerance).toBe(1.27)
 })
 
 test("existing scalar impedance and absolute lengths stay scalar after unit normalization", () => {
@@ -90,13 +58,6 @@ test("existing scalar impedance and absolute lengths stay scalar after unit norm
     maxLength: 20,
     pcbTraceSpacing: 0.3,
   })
-  expect(
-    differentialPairProps.parse({
-      positiveConnection: "P",
-      negativeConnection: "N",
-      targetDifferentialImpedance: 120,
-    }).targetDifferentialImpedance,
-  ).toBe(120)
   expect(busProps.parse({ connections: ["A"] })).toEqual({ connections: ["A"] })
 })
 
@@ -146,13 +107,6 @@ test("rejects incomplete relationships, impossible bounds and malformed width mu
     expect(busProps.safeParse({ connections: ["A"], ...props }).success).toBe(
       false,
     )
-  expect(
-    differentialPairProps.safeParse({
-      positiveConnection: "P",
-      negativeConnection: "N",
-      targetDifferentialImpedance: { min: 150, max: 100 },
-    }).success,
-  ).toBe(false)
 })
 
 test("spacing props keep XML-friendly author input and leave width evaluation to geometry", () => {

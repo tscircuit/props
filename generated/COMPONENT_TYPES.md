@@ -3022,74 +3022,23 @@ export const polygonCutoutProps = pcbLayoutProps
 ### differentialpair
 
 ```typescript
-/**
- * Defines matched routing constraints for two named traces that form a
- * differential pair. Both connections must refer to trace `name` values.
- */
+/** Length matching for two ordered lanes. Unsupported routing intent is an error. */
 export interface DifferentialPairProps {
   name?: string
-  lengthMatchTo?: string | string[]
-  minLength?: RouteLength
-  maxLength?: RouteLength
-  targetLength?: RouteLength
-  lengthTolerance?: number | string
-  pcbSpacingToOtherSignals?: TraceSpacing
-
-  positiveConnection: string
-  negativeConnection: string
-  maxLengthSkew?: number | string
-  targetDifferentialImpedance?: ImpedanceTarget
-  targetDifferentialImpedanceMin?: number | string
-  targetDifferentialImpedanceMax?: number | string
-  pcbTraceGap?: number | string
-  maxUncoupledLength?: number | string
+  positiveConnection: DifferentialPairConnection
+  negativeConnection: DifferentialPairConnection
+  maxLengthSkew: number | string
 }
-/** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
+/** Maximum absolute difference of the lane sums of planar copper, in mm.
+   * Required, finite and nonnegative; zero is allowed. No default or aliases. */
 export const differentialPairProps = z
   .object({
     name: z.string().optional(),
-    lengthMatchTo: lengthMatchTo.optional(),
-    minLength: routeLength.optional(),
-    maxLength: routeLength.optional(),
-    targetLength: routeLength.optional(),
-    lengthTolerance: nonnegativeRouteDistance.optional(),
-    pcbSpacingToOtherSignals: traceSpacing.optional(),
-
-    positiveConnection: z.string(),
-    negativeConnection: z.string(),
-    maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
-    targetDifferentialImpedance: impedanceTarget.optional(),
-    targetDifferentialImpedanceMin: positiveImpedance.optional(),
-    targetDifferentialImpedanceMax: positiveImpedance.optional(),
-    pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
-    maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
+    positiveConnection: connection,
+    negativeConnection: connection,
+    maxLengthSkew: skewDistance,
   })
-  .superRefine((props, ctx) => {
-    validateRouteLengths(props, ctx)
-    validateImpedanceTarget(
-      props.targetDifferentialImpedance,
-      props.targetDifferentialImpedanceMin,
-      props.targetDifferentialImpedanceMax,
-      ctx,
-      "targetDifferentialImpedance",
-    )
-  })
-  .transform(
-    ({
-      targetDifferentialImpedance,
-      ...props
-    }): typeof props & { targetDifferentialImpedance?: number } => {
-      if (targetDifferentialImpedance === undefined) return props
-      if (typeof targetDifferentialImpedance === "number")
-        return { ...props, targetDifferentialImpedance }
-      return {
-        ...props,
-        targetDifferentialImpedance: targetDifferentialImpedance.nominal,
-        targetDifferentialImpedanceMin: targetDifferentialImpedance.min,
-        targetDifferentialImpedanceMax: targetDifferentialImpedance.max,
-      }
-    },
-  )
+  .strict("differentialpair only supports maxLengthSkew for now")
 ```
 
 ### diode

@@ -1,103 +1,58 @@
-import {
-  routeLength,
-  lengthMatchTo,
-  nonnegativeRouteDistance,
-  validateRouteLengths,
-  type RouteLength,
-} from "../common/routeLength"
-import { traceSpacing, type TraceSpacing } from "../common/traceSpacing"
-import {
-  impedanceTarget,
-  positiveImpedance,
-  validateImpedanceTarget,
-  type ImpedanceTarget,
-} from "../common/impedanceTarget"
 import { expectTypesMatch } from "lib/typecheck"
 import { distance } from "circuit-json"
 import { z } from "zod"
 
-/**
- * Defines matched routing constraints for two named traces that form a
- * differential pair. Both connections must refer to trace `name` values.
- */
+/** A string selects one trace, unambiguous port, or two-pad net.
+ * An array contains only trace names, in signal order; selectors are not allowed. */
+export type DifferentialPairConnection = string | [string, ...string[]]
+
+/** Length matching for two ordered lanes. Unsupported routing intent is an error. */
 export interface DifferentialPairProps {
   name?: string
-  /** Match these trace/port/bus/pair selectors as well as this element's members.
-   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
-  lengthMatchTo?: string | string[]
-  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
-  minLength?: RouteLength
-  maxLength?: RouteLength
-  /** Nominal member length, absolute or relative to selected endpoints.
-   * Requires an explicit lengthTolerance, including zero for exact matching. */
-  targetLength?: RouteLength
-  /** Allowed deviation above/below targetLength, in mm. */
-  lengthTolerance?: number | string
-  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
-  pcbSpacingToOtherSignals?: TraceSpacing
-
-  /** Trace name, pin selector, or net (e.g. `net.USB_DP`) carrying the positive signal. A net includes every pad on it. */
-  positiveConnection: string
-  /** Trace name, pin selector, or net (e.g. `net.USB_DM`) carrying the negative signal. A net includes every pad on it. */
-  negativeConnection: string
-  /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
-  maxLengthSkew?: number | string
-  /** Intended differential impedance, e.g. "100±10ohm". Raw numbers are ohms. */
-  targetDifferentialImpedance?: ImpedanceTarget
-  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
-  targetDifferentialImpedanceMin?: number | string
-  targetDifferentialImpedanceMax?: number | string
-  /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
-  pcbTraceGap?: number | string
-  /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
-  maxUncoupledLength?: number | string
+  /** One positive hop selector, or ordered positive trace names. */
+  positiveConnection: DifferentialPairConnection
+  /** One negative hop selector, or ordered negative trace names. */
+  negativeConnection: DifferentialPairConnection
+  /** Maximum absolute difference of the lane sums of planar copper, in mm.
+   * Required, finite and nonnegative; zero is allowed. No default or aliases. */
+  maxLengthSkew: number | string
 }
+
+const nonemptyConnection = z
+  .string()
+  .regex(/\S/, "Connection must not be empty")
+const traceName = nonemptyConnection.refine(
+  (name) => !/[\s.>#:[\],*+~='"|]/.test(name),
+  "Differential pair arrays must contain trace names only, not selectors",
+)
+const connection = z.union([nonemptyConnection, z.array(traceName).nonempty()])
+
+const skewDistance = z
+  .union([z.string(), z.number()])
+  .transform((value, ctx) => {
+    try {
+      return distance.parse(value)
+    } catch {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "maxLengthSkew must be a distance in mm or a distance unit string",
+      })
+      return z.NEVER
+    }
+  })
+  .pipe(z.number().finite().nonnegative())
 
 export const differentialPairProps = z
   .object({
     name: z.string().optional(),
-    lengthMatchTo: lengthMatchTo.optional(),
-    minLength: routeLength.optional(),
-    maxLength: routeLength.optional(),
-    targetLength: routeLength.optional(),
-    lengthTolerance: nonnegativeRouteDistance.optional(),
-    pcbSpacingToOtherSignals: traceSpacing.optional(),
+    positiveConnection: connection,
+    negativeConnection: connection,
+    maxLengthSkew: skewDistance,
+  })
+  .strict("differentialpair only supports maxLengthSkew for now")
 
-    positiveConnection: z.string(),
-    negativeConnection: z.string(),
-    maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
-    targetDifferentialImpedance: impedanceTarget.optional(),
-    targetDifferentialImpedanceMin: positiveImpedance.optional(),
-    targetDifferentialImpedanceMax: positiveImpedance.optional(),
-    pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
-    maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
-  })
-  .superRefine((props, ctx) => {
-    validateRouteLengths(props, ctx)
-    validateImpedanceTarget(
-      props.targetDifferentialImpedance,
-      props.targetDifferentialImpedanceMin,
-      props.targetDifferentialImpedanceMax,
-      ctx,
-      "targetDifferentialImpedance",
-    )
-  })
-  .transform(
-    ({
-      targetDifferentialImpedance,
-      ...props
-    }): typeof props & { targetDifferentialImpedance?: number } => {
-      if (targetDifferentialImpedance === undefined) return props
-      if (typeof targetDifferentialImpedance === "number")
-        return { ...props, targetDifferentialImpedance }
-      return {
-        ...props,
-        targetDifferentialImpedance: targetDifferentialImpedance.nominal,
-        targetDifferentialImpedanceMin: targetDifferentialImpedance.min,
-        targetDifferentialImpedanceMax: targetDifferentialImpedance.max,
-      }
-    },
-  )
+export type ParsedDifferentialPairProps = z.output<typeof differentialPairProps>
 
 type InferredDifferentialPairProps = z.input<typeof differentialPairProps>
 expectTypesMatch<DifferentialPairProps, InferredDifferentialPairProps>(true)

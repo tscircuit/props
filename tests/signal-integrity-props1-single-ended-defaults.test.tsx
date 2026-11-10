@@ -13,10 +13,7 @@ test("Level 1 single-ended TSX supplies the RFC defaults", () => {
   )
   expect(block).toMatchObject({
     bitRate: 20e6,
-    corner: "typical",
-    unlistedNets: "passive",
-    unrouted: "error",
-    pdn: "ideal",
+    allowUnroutedTraces: false,
   })
   expect(block).not.toHaveProperty("duration")
   expect(block).not.toHaveProperty("supply")
@@ -27,7 +24,7 @@ test("Level 1 single-ended TSX supplies the RFC defaults", () => {
       receiverRef: ".RX > .A",
       pattern: "prbs7",
       offset: "0UI",
-      probe: "local",
+      driverDisabled: false,
     },
   ])
 })

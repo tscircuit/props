@@ -4394,37 +4394,23 @@ export interface PcbChannelProps {
   pattern?: string
   seed?: number
   offset?: string | number
-  quiet?: "low" | "high" | "off"
-  probe?: "local" | "global"
+  driverDisabled?: boolean
 }
-/** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
+/** Hold the driver disabled (high impedance), making this a quiet signal. Requires a disable state on every driver leg and overrides pattern. Default: false. */
 export const pcbChannelProps = z
   .object({
     name: z.string().trim().min(1),
     driverRef: signalEndpoint,
     receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
     bitRate: signalBitRate.optional(),
-    pattern: z
-      .string()
-      .regex(
-        /^(?:prbs7|prbs15|prbs31|clock|[01]+)$/,
-        "Expected prbs7, prbs15, prbs31, clock, or a literal bit string",
-      )
-      .default("prbs7"),
+    pattern: z.string().trim().min(1).default("prbs7"),
     seed: z.custom<number>((value) => typeof value === "number").optional(),
     offset: signalTimeOrUi.default("0UI"),
-    quiet: z
-      .enum(["low", "high", "off"], {
-        errorMap: () => ({
-          message: 'quiet needs a level: "low", "high" or "off".',
-        }),
-      })
-      .optional(),
-    probe: z.enum(["local", "global"]).default("local"),
+    driverDisabled: z.boolean().default(false),
   })
   .strict()
   .superRefine(({ name, pattern, seed }, ctx) => {
-    if (seed === undefined || !pattern.startsWith("prbs")) return
+    if (seed === undefined || !/^prbs(?:7|15|31)$/.test(pattern)) return
     const max = 2 ** Number(pattern.slice(4)) - 1
     if (!Number.isInteger(seed) || seed < 1 || seed > max) {
       ctx.addIssue({
@@ -4823,18 +4809,15 @@ export const pcbTraceProps = z.object({
 ### pcb-transient-channel-simulation
 
 ```typescript
-/** One coupled SI test. Rendering and board-dependent diagnostics belong to core. */
+/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and passive unlisted nets. Rendering and board-dependent diagnostics belong to core. */
 export interface PcbTransientChannelSimulationProps {
   name?: string
   bitRate: string | number
   duration?: string | number
-  corner?: "typical" | "minimum" | "maximum"
-  unlistedNets?: "passive"
-  unrouted?: "error" | "ideal"
-  pdn?: "extracted" | "ideal"
+  allowUnroutedTraces?: boolean
   children?: ReactNode
 }
-/** "ideal" (default): perfect rails from the selected IBIS models at the test corner. "extracted" is not implemented yet. */
+/** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
 export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
@@ -4845,10 +4828,7 @@ export const pcbTransientChannelSimulationProps = z
         { message: "duration must be finite and greater than zero." },
       )
       .optional(),
-    corner: z.enum(["typical", "minimum", "maximum"]).default("typical"),
-    unlistedNets: z.literal("passive").default("passive"),
-    unrouted: z.enum(["error", "ideal"]).default("error"),
-    pdn: z.enum(["extracted", "ideal"]).default("ideal"),
+    allowUnroutedTraces: z.boolean().default(false),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()

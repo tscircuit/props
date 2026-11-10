@@ -2,13 +2,11 @@ import { expect, test } from "bun:test"
 import { simulation, parseBlock } from "./signal-integrity-fixtures"
 
 test("RFC DDR3 write TSX supplies per-leg models and a half-UI offset", () => {
-  const { signals } = parseBlock(
+  const { block, signals } = parseBlock(
     <simulation.pcbtransientchannelsimulation
       name="WRITE"
       bitRate="800Mbps"
-      corner="typical"
-      pdn="ideal"
-      unrouted="ideal"
+      allowUnroutedTraces
     >
       <simulation.pcbchannel
         name="DQS"
@@ -30,6 +28,7 @@ test("RFC DDR3 write TSX supplies per-leg models and a half-UI offset", () => {
       />
     </simulation.pcbtransientchannelsimulation>,
   )
+  expect(block.allowUnroutedTraces).toBe(true)
   expect(signals[0]).toMatchObject({
     pattern: "clock",
     offset: "0.5UI",

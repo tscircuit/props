@@ -9,14 +9,14 @@ test("PRBS patterns validate the full nonzero seed range", () => {
     ["prbs15", 32767],
     ["prbs31", 2147483647],
   ] as const) {
-    for (const quiet of [undefined, "low", "high", "off"] as const) {
+    for (const driverDisabled of [undefined, false, true]) {
       for (const seed of [1, max]) {
         const signal = (
           <simulation.pcbchannel
             {...data}
             pattern={pattern}
             seed={seed}
-            quiet={quiet}
+            driverDisabled={driverDisabled}
           />
         )
         expect(pcbChannelProps.parse(signal.props).seed).toBe(seed)
@@ -27,7 +27,7 @@ test("PRBS patterns validate the full nonzero seed range", () => {
             {...data}
             pattern={pattern}
             seed={seed}
-            quiet={quiet}
+            driverDisabled={driverDisabled}
           />
         )
         const parsed = pcbChannelProps.safeParse(signal.props)

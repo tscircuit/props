@@ -41,5 +41,5 @@ export const ibisModelDefinition = z.object({
     .record(z.string().min(1), ibisPinReferences)
     .optional(),
 })
-/** Vendor [Component] and [Pin] names are bound explicitly to this chip's ports. The SI block chooses the corner; package parasitics are always simulated. */
+/** Vendor [Component] and [Pin] names are bound explicitly to this chip's ports. SI uses the typical corner and always simulates package parasitics. */
 export type IbisModelDefinition = z.input<typeof ibisModelDefinition>

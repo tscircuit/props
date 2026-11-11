@@ -2451,9 +2451,22 @@ export interface PanelTabKeepoutProps {
 export interface PanelTabProps {
   /** Stable board name. Omit to apply this tab to every board in the containing panel. */
   boardName?: string
+  /** Board edge the tab bridges to the panel. */
   boardEdge: PanelTabEdge
-  /** Tab centre measured along a board edge in mm (or a unit string): left to right on horizontal edges, bottom to top on vertical edges. */
-  offset: Distance
+  /** Left or right edge tab: distance from the board's top edge to the tab centre. */
+  centerOffsetFromBoardTopEdge?: Distance
+  /** Left or right edge tab: distance from the board's bottom edge to the tab centre. */
+  centerOffsetFromBoardBottomEdge?: Distance
+  /** Top or bottom edge tab: distance from the board's left edge to the tab centre. */
+  centerOffsetFromBoardLeftEdge?: Distance
+  /** Top or bottom edge tab: distance from the board's right edge to the tab centre. */
+  centerOffsetFromBoardRightEdge?: Distance
+  /**
+   * Width of this tab along the board edge. Defaults to the panel's
+   * `tabLength`, the tab span along the edge; the panel's `tabWidth` is the
+   * routed slot width.
+   */
+  tabWidth?: Distance
 }
 
 

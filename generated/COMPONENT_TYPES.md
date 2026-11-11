@@ -4447,17 +4447,58 @@ export const panelProps = baseGroupProps
 export interface PanelTabProps {
   boardName?: string
   boardEdge: PanelTabEdge
-  offset: Distance
+  centerOffsetFromBoardTopEdge?: Distance
+  centerOffsetFromBoardBottomEdge?: Distance
+  centerOffsetFromBoardLeftEdge?: Distance
+  centerOffsetFromBoardRightEdge?: Distance
+  tabWidth?: Distance
 }
-/** Tab centre measured along a board edge in mm (or a unit string): left to right on horizontal edges, bottom to top on vertical edges. */
-export const panelTabProps = z.object({
-  boardName: z.string().min(1).optional(),
-  boardEdge: panelTabEdge,
-  offset: distance.refine(
-    (millimetres) => Number.isFinite(millimetres) && millimetres >= 0,
-    { message: "Panel tab offset must be finite and nonnegative" },
-  ),
-})
+/**
+   * Width of this tab along the board edge. Defaults to the panel's
+   * `tabLength`, the tab span along the edge; the panel's `tabWidth` is the
+   * routed slot width.
+   */
+export const panelTabProps = z
+  .object({
+    boardName: z.string().min(1).optional(),
+    boardEdge: panelTabEdge,
+    centerOffsetFromBoardTopEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardBottomEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardLeftEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardRightEdge: nonnegativeTabOffset.optional(),
+    tabWidth: distance
+      .refine(
+        (millimetres) => Number.isFinite(millimetres) && millimetres > 0,
+        { message: "Panel tab width must be a finite positive distance" },
+      )
+      .optional(),
+  })
+  .superRefine((tab, context) => {
+    const allowedOffsets =
+      tab.boardEdge === "left" || tab.boardEdge === "right"
+        ? offsetsByEdgeAxis.vertical
+        : offsetsByEdgeAxis.horizontal
+    const givenOffsets = [
+      ...offsetsByEdgeAxis.vertical,
+      ...offsetsByEdgeAxis.horizontal,
+    ].filter((offsetName) => tab[offsetName] !== undefined)
+    if (givenOffsets.length !== 1) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["boardEdge"],
+        message: `A ${tab.boardEdge} edge panel tab needs exactly one of ${allowedOffsets.join(" or ")}`,
+      })
+      return
+    }
+    const offsetName = givenOffsets[0]!
+    if (!(allowedOffsets as readonly string[]).includes(offsetName)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [offsetName],
+        message: `${offsetName} cannot place a tab on the ${tab.boardEdge} edge; use ${allowedOffsets.join(" or ")}`,
+      })
+    }
+  })
 ```
 
 ### paneltabkeepout

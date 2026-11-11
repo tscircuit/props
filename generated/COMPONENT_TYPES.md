@@ -3022,21 +3022,28 @@ export const polygonCutoutProps = pcbLayoutProps
 ### differentialpair
 
 ```typescript
-/** Length matching for two ordered lanes. Unsupported routing intent is an error. */
+/**
+ * Two signals routed as a differential pair, with their routed lengths matched.
+ *
+ * @example
+ * // A trace name, port selector, or a net with exactly 2 pads
+ * <differentialpair positiveConnection="net.USB_DP" negativeConnection="net.USB_DM" maxLengthSkew="0.1mm" />
+ * // A signal that passes through several traces: list the trace names in signal order
+ * <differentialpair positiveConnection={["DP1", "DP2"]} negativeConnection={["DM1", "DM2"]} maxLengthSkew={0} />
+ */
 export interface DifferentialPairProps {
   name?: string
-  positiveConnection: DifferentialPairConnection
-  negativeConnection: DifferentialPairConnection
+  positiveConnection: string | string[]
+  negativeConnection: string | string[]
   maxLengthSkew: number | string
 }
-/** Maximum absolute difference of the lane sums of planar copper, in mm.
-   * Required, finite and nonnegative; zero is allowed. No default or aliases. */
+/** Maximum allowed difference between the positive and negative routed lengths. Raw numbers are millimeters. */
 export const differentialPairProps = z
   .object({
     name: z.string().optional(),
     positiveConnection: connection,
     negativeConnection: connection,
-    maxLengthSkew: skewDistance,
+    maxLengthSkew: distance.pipe(z.number().min(0).finite()),
   })
   .strict("differentialpair only supports maxLengthSkew for now")
 ```

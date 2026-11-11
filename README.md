@@ -983,12 +983,11 @@ export interface RectCutoutProps extends Omit<
 ```ts
 export interface DifferentialPairProps {
   name?: string;
-  /** One positive hop selector, or ordered positive trace names. */
-  positiveConnection: DifferentialPairConnection;
-  /** One negative hop selector, or ordered negative trace names. */
-  negativeConnection: DifferentialPairConnection;
-  /** Maximum absolute difference of the lane sums of planar copper, in mm.
-   * Required, finite and nonnegative; zero is allowed. No default or aliases. */
+  /** A trace name, port selector, or 2-pad `net.X`; or a list of trace names in signal order. */
+  positiveConnection: string | string[];
+  /** Same forms as positiveConnection. */
+  negativeConnection: string | string[];
+  /** Maximum allowed difference between the positive and negative routed lengths. Raw numbers are millimeters. */
   maxLengthSkew: number | string;
 }
 ```

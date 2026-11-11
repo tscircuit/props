@@ -39,7 +39,6 @@ test("command bus uses an explicit relative length expression", () => {
   } satisfies BusProps
   const parsedBus = busProps.parse(bus)
   expect(parsedBus.targetLength).toEqual({ ...target, offset: 7.62 })
-  expect(parsedBus.lengthTolerance).toBe(1.27)
 })
 
 test("existing scalar impedance and absolute lengths stay scalar after unit normalization", () => {

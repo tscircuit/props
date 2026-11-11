@@ -4447,10 +4447,10 @@ export const panelProps = baseGroupProps
 export interface PanelTabProps {
   boardName?: string
   boardEdge: PanelTabEdge
-  offsetFromTopEdge?: Distance
-  offsetFromBottomEdge?: Distance
-  offsetFromLeftEdge?: Distance
-  offsetFromRightEdge?: Distance
+  centerOffsetFromBoardTopEdge?: Distance
+  centerOffsetFromBoardBottomEdge?: Distance
+  centerOffsetFromBoardLeftEdge?: Distance
+  centerOffsetFromBoardRightEdge?: Distance
   tabWidth?: Distance
 }
 /**
@@ -4462,10 +4462,10 @@ export const panelTabProps = z
   .object({
     boardName: z.string().min(1).optional(),
     boardEdge: panelTabEdge,
-    offsetFromTopEdge: nonnegativeTabOffset.optional(),
-    offsetFromBottomEdge: nonnegativeTabOffset.optional(),
-    offsetFromLeftEdge: nonnegativeTabOffset.optional(),
-    offsetFromRightEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardTopEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardBottomEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardLeftEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardRightEdge: nonnegativeTabOffset.optional(),
     tabWidth: distance
       .refine(
         (millimetres) => Number.isFinite(millimetres) && millimetres > 0,

@@ -11,13 +11,13 @@ export interface PanelTabProps {
   /** Board edge the tab bridges to the panel. */
   boardEdge: PanelTabEdge
   /** Left or right edge tab: distance from the board's top edge to the tab centre. */
-  offsetFromTopEdge?: Distance
+  centerOffsetFromBoardTopEdge?: Distance
   /** Left or right edge tab: distance from the board's bottom edge to the tab centre. */
-  offsetFromBottomEdge?: Distance
+  centerOffsetFromBoardBottomEdge?: Distance
   /** Top or bottom edge tab: distance from the board's left edge to the tab centre. */
-  offsetFromLeftEdge?: Distance
+  centerOffsetFromBoardLeftEdge?: Distance
   /** Top or bottom edge tab: distance from the board's right edge to the tab centre. */
-  offsetFromRightEdge?: Distance
+  centerOffsetFromBoardRightEdge?: Distance
   /**
    * Width of this tab along the board edge. Defaults to the panel's
    * `tabLength`, the tab span along the edge; the panel's `tabWidth` is the
@@ -28,22 +28,25 @@ export interface PanelTabProps {
 
 const nonnegativeTabOffset = distance.refine(
   (millimetres) => Number.isFinite(millimetres) && millimetres >= 0,
-  { message: "Panel tab offsets must be finite and nonnegative" },
+  { message: "Panel tab center offsets must be finite and nonnegative" },
 )
 
 const offsetsByEdgeAxis = {
-  vertical: ["offsetFromTopEdge", "offsetFromBottomEdge"],
-  horizontal: ["offsetFromLeftEdge", "offsetFromRightEdge"],
+  vertical: ["centerOffsetFromBoardTopEdge", "centerOffsetFromBoardBottomEdge"],
+  horizontal: [
+    "centerOffsetFromBoardLeftEdge",
+    "centerOffsetFromBoardRightEdge",
+  ],
 } as const
 
 export const panelTabProps = z
   .object({
     boardName: z.string().min(1).optional(),
     boardEdge: panelTabEdge,
-    offsetFromTopEdge: nonnegativeTabOffset.optional(),
-    offsetFromBottomEdge: nonnegativeTabOffset.optional(),
-    offsetFromLeftEdge: nonnegativeTabOffset.optional(),
-    offsetFromRightEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardTopEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardBottomEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardLeftEdge: nonnegativeTabOffset.optional(),
+    centerOffsetFromBoardRightEdge: nonnegativeTabOffset.optional(),
     tabWidth: distance
       .refine(
         (millimetres) => Number.isFinite(millimetres) && millimetres > 0,

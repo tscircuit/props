@@ -6,57 +6,66 @@ test("panel tab elements use edge-named offsets and validate their domains", () 
     panelTabProps.parse({
       boardName: "B1",
       boardEdge: "right",
-      offsetFromTopEdge: "6mm",
+      centerOffsetFromBoardTopEdge: "6mm",
       tabWidth: "3mm",
     }),
   ).toEqual({
     boardName: "B1",
     boardEdge: "right",
-    offsetFromTopEdge: 6,
+    centerOffsetFromBoardTopEdge: 6,
     tabWidth: 3,
   })
   expect(
-    panelTabProps.parse({ boardEdge: "top", offsetFromRightEdge: 4 }),
-  ).toEqual({ boardEdge: "top", offsetFromRightEdge: 4 })
+    panelTabProps.parse({
+      boardEdge: "top",
+      centerOffsetFromBoardRightEdge: 4,
+    }),
+  ).toEqual({ boardEdge: "top", centerOffsetFromBoardRightEdge: 4 })
   expect(
     panelTabKeepoutProps.parse({ boardEdge: "top", from: "2mm", to: "4mm" }),
   ).toEqual({ boardEdge: "top", from: 2, to: 4 })
 
   for (const offset of [-1, Infinity, "-1mm"])
     expect(
-      panelTabProps.safeParse({ boardEdge: "top", offsetFromLeftEdge: offset })
-        .success,
+      panelTabProps.safeParse({
+        boardEdge: "top",
+        centerOffsetFromBoardLeftEdge: offset,
+      }).success,
     ).toBe(false)
   for (const tabWidth of [0, -1, Infinity])
     expect(
       panelTabProps.safeParse({
         boardEdge: "top",
-        offsetFromLeftEdge: 1,
+        centerOffsetFromBoardLeftEdge: 1,
         tabWidth,
       }).success,
     ).toBe(false)
   expect(
-    panelTabProps.safeParse({ boardEdge: "front", offsetFromTopEdge: 1 })
-      .success,
+    panelTabProps.safeParse({
+      boardEdge: "front",
+      centerOffsetFromBoardTopEdge: 1,
+    }).success,
   ).toBe(false)
 
   expect(
     panelTabProps.safeParse({ boardEdge: "left" }).error?.issues[0]?.message,
   ).toBe(
-    "A left edge panel tab needs exactly one of offsetFromTopEdge or offsetFromBottomEdge",
+    "A left edge panel tab needs exactly one of centerOffsetFromBoardTopEdge or centerOffsetFromBoardBottomEdge",
   )
   expect(
     panelTabProps.safeParse({
       boardEdge: "left",
-      offsetFromTopEdge: 1,
-      offsetFromBottomEdge: 1,
+      centerOffsetFromBoardTopEdge: 1,
+      centerOffsetFromBoardBottomEdge: 1,
     }).success,
   ).toBe(false)
   expect(
-    panelTabProps.safeParse({ boardEdge: "top", offsetFromTopEdge: 1 }).error
-      ?.issues[0]?.message,
+    panelTabProps.safeParse({
+      boardEdge: "top",
+      centerOffsetFromBoardTopEdge: 1,
+    }).error?.issues[0]?.message,
   ).toBe(
-    "offsetFromTopEdge cannot place a tab on the top edge; use offsetFromLeftEdge or offsetFromRightEdge",
+    "centerOffsetFromBoardTopEdge cannot place a tab on the top edge; use centerOffsetFromBoardLeftEdge or centerOffsetFromBoardRightEdge",
   )
 
   expect(

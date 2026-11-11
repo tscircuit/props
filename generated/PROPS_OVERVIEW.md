@@ -2454,13 +2454,13 @@ export interface PanelTabProps {
   /** Board edge the tab bridges to the panel. */
   boardEdge: PanelTabEdge
   /** Left or right edge tab: distance from the board's top edge to the tab centre. */
-  offsetFromTopEdge?: Distance
+  centerOffsetFromBoardTopEdge?: Distance
   /** Left or right edge tab: distance from the board's bottom edge to the tab centre. */
-  offsetFromBottomEdge?: Distance
+  centerOffsetFromBoardBottomEdge?: Distance
   /** Top or bottom edge tab: distance from the board's left edge to the tab centre. */
-  offsetFromLeftEdge?: Distance
+  centerOffsetFromBoardLeftEdge?: Distance
   /** Top or bottom edge tab: distance from the board's right edge to the tab centre. */
-  offsetFromRightEdge?: Distance
+  centerOffsetFromBoardRightEdge?: Distance
   /**
    * Width of this tab along the board edge. Defaults to the panel's
    * `tabLength`, the tab span along the edge; the panel's `tabWidth` is the

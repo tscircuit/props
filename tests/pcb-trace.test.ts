@@ -37,6 +37,19 @@ test("pcbtrace parses wire shorthand units and complete route points", () => {
   expect(pcbTraceProps.parse({ route: [] })).toEqual({ route: [] })
 })
 
+test("pcbtrace preserves an optional source trace association", () => {
+  const props = {
+    source_trace_id: "source_trace_1",
+    route: [],
+  } satisfies PcbTraceProps
+  expect(pcbTraceProps.parse(props)).toEqual(props)
+  for (const source_trace_id of [123, null]) {
+    expect(pcbTraceProps.safeParse({ ...props, source_trace_id }).success).toBe(
+      false,
+    )
+  }
+})
+
 test("pcbtrace preserves complete Circuit JSON points and their metadata", () => {
   const wire = {
     route_type: "wire",

@@ -4898,6 +4898,8 @@ stiffenerBaseProps.extend({
 export const pcbTraceProps = z.object({
   layer: layer_ref.optional(),
   thickness: distance.optional(),
+  // Associate this PCB trace with an existing Circuit JSON source trace.
+  source_trace_id: z.string().optional(),
   route: z.array(
     z.union([
       pcb_trace_route_point,

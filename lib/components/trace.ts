@@ -54,7 +54,12 @@ const baseTraceProps = z.object({
 
 export const traceProps = z.union([
   baseTraceProps.extend({
-    path: z.array(portRef),
+    /** Ports to connect, in order. The trace is routed as a chain from the first port to the last. */
+    path: z
+      .array(portRef)
+      .describe(
+        "Ports to connect, in order. The trace is routed as a chain from the first port to the last.",
+      ),
   }),
   baseTraceProps.extend({
     from: portRef,

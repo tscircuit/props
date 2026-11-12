@@ -6495,9 +6495,14 @@ export const portRef = z.union([
   ),
 ])
 baseTraceProps.extend({
-    path: z.array(portRef),
+    path: z
+      .array(portRef)
+      .describe(
+        "Ports to connect, in order. The trace is routed as a chain from the first port to the last.",
+      ),
   }),
-baseTraceProps.extend({
+/** Ports to connect, in order. The trace is routed as a chain from the first port to the last. */
+  baseTraceProps.extend({
     from: portRef,
     to: portRef,
   }),

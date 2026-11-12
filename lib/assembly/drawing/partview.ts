@@ -42,7 +42,7 @@ export interface AssemblyDrawingPartViewProps {
   /** Exploded drawings use assembly.drawing.explosionview instead. */
   explosionRef?: never
   direction: AssemblyDrawingPartViewDirection
-  /** Viewport center relative to the drawing page origin, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
+  /** Viewport center relative to the drawing page anchor, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance
   centerY?: Distance
   /** Sibling part-view selector; infer centerX with this viewport left of the reference. Conflicts with rightOfRef and centerX. */

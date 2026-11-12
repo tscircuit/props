@@ -5,23 +5,40 @@ import {
   assemblyDrawingNoteProps,
 } from "../lib"
 
-test("drawing origins and annotation positions normalize units and reject conflicting axes", () => {
+test("page anchor alignments and annotation positions normalize units and reject conflicting axes", () => {
+  for (const anchorAlignment of [
+    "top_left",
+    "top_center",
+    "top_right",
+    "center_left",
+    "center",
+    "center_right",
+    "bottom_left",
+    "bottom_center",
+    "bottom_right",
+  ]) {
+    expect(
+      assemblyDrawingPageProps.parse({ size: "iso_a4", anchorAlignment }),
+    ).toMatchObject({ anchorAlignment })
+  }
+  expect(
+    assemblyDrawingPageProps.parse({ width: 200, height: 140 }).anchorAlignment,
+  ).toBeUndefined()
+  for (const anchorAlignment of ["bottom-left", "", { x: 0, y: 0 }])
+    expect(
+      assemblyDrawingPageProps.safeParse({
+        width: 200,
+        height: 140,
+        anchorAlignment,
+      }).success,
+    ).toBe(false)
   expect(
     assemblyDrawingPageProps.parse({
-      size: "iso_a4",
-      origin: { x: "1cm", y: "2cm" },
-    }),
-  ).toMatchObject({ origin: { x: 10, y: 20 } })
-  expect(
-    assemblyDrawingPageProps.parse({ width: 200, height: 140 }).origin,
-  ).toBeUndefined()
-  expect(
-    assemblyDrawingPageProps.safeParse({
       width: 200,
       height: 140,
-      origin: { x: Infinity, y: 0 },
-    }).success,
-  ).toBe(false)
+      origin: { x: 0, y: 0 },
+    }),
+  ).not.toHaveProperty("origin")
   const label = {
     text: "Rotor",
     partRefs: [".rotor"],

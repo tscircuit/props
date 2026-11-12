@@ -316,8 +316,8 @@ export interface AssemblyDrawingPageProps {
   /** Custom paper dimensions in mm when numeric; unit strings are accepted. */
   width?: Distance
   height?: Distance
-  /** Paper origin measured from the sheet's lower-left corner (+X right, +Y up). Numeric mm or distance strings; omitted means the sheet center. */
-  origin?: { x: Distance; y: Distance }
+  /** Sheet anchor used as (0, 0) for drawing coordinates. Same nine positions as board anchorAlignment; omitted means center. Axes remain +X right and +Y up. */
+  anchorAlignment?: NinePointAnchor
   children?: any
 }
 
@@ -350,7 +350,7 @@ export interface AssemblyDrawingPartViewProps {
   /** Exploded drawings use assembly.drawing.explosionview instead. */
   explosionRef?: never
   direction: AssemblyDrawingPartViewDirection
-  /** Viewport center relative to the drawing page origin, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
+  /** Viewport center relative to the drawing page anchor, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance
   centerY?: Distance
   /** Sibling part-view selector; infer centerX with this viewport left of the reference. Conflicts with rightOfRef and centerX. */

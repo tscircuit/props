@@ -1,3 +1,7 @@
+import {
+  ninePointAnchor,
+  type NinePointAnchor,
+} from "lib/common/ninePointAnchor"
 import { z } from "zod"
 import {
   assemblyDrawingPageSize,
@@ -18,8 +22,8 @@ export interface AssemblyDrawingPageProps {
   /** Custom paper dimensions in mm when numeric; unit strings are accepted. */
   width?: Distance
   height?: Distance
-  /** Paper origin measured from the sheet's lower-left corner (+X right, +Y up). Numeric mm or distance strings; omitted means the sheet center. */
-  origin?: { x: Distance; y: Distance }
+  /** Sheet anchor used as (0, 0) for drawing coordinates. Same nine positions as board anchorAlignment; omitted means center. Axes remain +X right and +Y up. */
+  anchorAlignment?: NinePointAnchor
   children?: any
 }
 
@@ -31,12 +35,7 @@ export const assemblyDrawingPageProps = z
     orientation: z.enum(["landscape", "portrait"]).optional(),
     width: distance.pipe(z.number().finite().positive()).optional(),
     height: distance.pipe(z.number().finite().positive()).optional(),
-    origin: z
-      .object({
-        x: distance.pipe(z.number().finite()),
-        y: distance.pipe(z.number().finite()),
-      })
-      .optional(),
+    anchorAlignment: ninePointAnchor.optional(),
     children: z.any().optional(),
   })
   .superRefine((page, ctx) => {

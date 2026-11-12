@@ -73,8 +73,18 @@ export const signalTimeOrUi = z.union([
   signalTime.pipe(z.number().nonnegative()),
 ])
 
-/** Strictly positive time or UI; UI is resolved by core at the block bit rate. */
-export const signalDurationOrUi = z.union([
+const durationMessage = "duration must be finite and greater than zero."
+const positiveTimeOrUi = z.union([
   unitIntervals.refine((value) => value !== "0UI"),
   signalTime.pipe(z.number().positive()),
 ])
+
+/** Strictly positive time or UI, with the RFC diagnostic for every rejected value. UI is resolved by core at the block bit rate. */
+export const signalDurationOrUi = z
+  .union([z.string(), z.number(), z.nan()])
+  .transform((value, ctx) => {
+    const parsed = positiveTimeOrUi.safeParse(value)
+    if (parsed.success) return parsed.data
+    ctx.addIssue({ code: z.ZodIssueCode.custom, message: durationMessage })
+    return z.NEVER
+  })

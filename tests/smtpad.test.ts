@@ -7,6 +7,7 @@ import {
   type RotatedPillSmtPadProps,
   type SmtPadProps,
 } from "lib/components/smtpad"
+import { boardProps } from "lib/components/board"
 import { expectTypeOf } from "expect-type"
 import { z } from "zod"
 
@@ -218,6 +219,10 @@ for (const pad of smtPadShapes) {
 }
 
 test("parses dimensionless paste margins and keeps local X/Y on rectangular pads", () => {
+  expect(
+    boardProps.parse({ defaultSolderPasteMarginRatio: 0 })
+      .defaultSolderPasteMarginRatio,
+  ).toBe(0)
   const pad = { shape: "rect", width: 4, height: 2 }
   for (const ratio of [0, -0.1, { x: -0.1, y: -0.25 }]) {
     expect(

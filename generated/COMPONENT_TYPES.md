@@ -2222,6 +2222,7 @@ export interface BoardProps
   anchorAlignment?: z.infer<typeof ninePointAnchor>
   boardAnchorAlignment?: z.infer<typeof ninePointAnchor>
   outline?: BoardOutlinePoint[]
+  defaultSolderPasteMarginRatio?: number
   solderMaskColor?: BoardColor
   topSolderMaskColor?: BoardColor
   bottomSolderMaskColor?: BoardColor
@@ -2320,6 +2321,7 @@ export const boardProps = subcircuitGroupProps
       .describe("Prefer using anchorAlignment when possible"),
     outline: z.array(boardOutlinePoint).optional(),
     title: z.string().optional(),
+    defaultSolderPasteMarginRatio: z.number().finite().optional(),
     solderMaskColor: boardColor.optional(),
     topSolderMaskColor: boardColor.optional(),
     bottomSolderMaskColor: boardColor.optional(),

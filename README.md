@@ -983,35 +983,12 @@ export interface RectCutoutProps extends Omit<
 ```ts
 export interface DifferentialPairProps {
   name?: string;
-  /** Match these trace/port/bus/pair selectors as well as this element's members.
-   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
-  lengthMatchTo?: string | string[];
-  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
-  minLength?: RouteLength;
-  maxLength?: RouteLength;
-  /** Nominal member length, absolute or relative to selected endpoints.
-   * Requires an explicit lengthTolerance, including zero for exact matching. */
-  targetLength?: RouteLength;
-  /** Allowed deviation above/below targetLength, in mm. */
-  lengthTolerance?: number | string;
-  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
-  pcbSpacingToOtherSignals?: TraceSpacing;
-
-  /** Trace name, pin selector, or net (e.g. `net.USB_DP`) carrying the positive signal. A net includes every pad on it. */
-  positiveConnection: string;
-  /** Trace name, pin selector, or net (e.g. `net.USB_DM`) carrying the negative signal. A net includes every pad on it. */
-  negativeConnection: string;
-  /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
-  maxLengthSkew?: number | string;
-  /** Intended differential impedance, e.g. "100±10ohm". Raw numbers are ohms. */
-  targetDifferentialImpedance?: ImpedanceTarget;
-  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
-  targetDifferentialImpedanceMin?: number | string;
-  targetDifferentialImpedanceMax?: number | string;
-  /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
-  pcbTraceGap?: number | string;
-  /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
-  maxUncoupledLength?: number | string;
+  /** A trace name, port selector, or 2-pad `net.X`; or a list of trace names in signal order. */
+  positiveConnection: string | string[];
+  /** Same forms as positiveConnection. */
+  negativeConnection: string | string[];
+  /** Maximum allowed difference between the positive and negative routed lengths. Raw numbers are millimeters. */
+  maxLengthSkew: number | string;
 }
 ```
 

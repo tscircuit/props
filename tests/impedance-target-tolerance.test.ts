@@ -1,6 +1,5 @@
 import { expect, test } from "bun:test"
 import { busProps } from "lib/components/bus"
-import { differentialPairProps } from "lib/components/differentialpair"
 
 test("XML-friendly impedance tolerance expands into flat ohm props", () => {
   for (const targetImpedance of ["50±25ohm", "50ohm ± 25ohm", "50 +/- 25ohm"]) {
@@ -71,33 +70,6 @@ test("explicit bounds work without inventing a nominal target", () => {
   })
 })
 
-test("differential impedance uses the same scalar syntax and flat bounds", () => {
-  expect(
-    differentialPairProps.parse({
-      positiveConnection: "P",
-      negativeConnection: "N",
-      targetDifferentialImpedance: "100±10ohm",
-    }),
-  ).toEqual({
-    positiveConnection: "P",
-    negativeConnection: "N",
-    targetDifferentialImpedance: 100,
-    targetDifferentialImpedanceMin: 90,
-    targetDifferentialImpedanceMax: 110,
-  })
-  expect(
-    differentialPairProps.parse({
-      positiveConnection: "P",
-      negativeConnection: "N",
-      targetDifferentialImpedanceMin: "90ohm",
-      targetDifferentialImpedanceMax: "110ohm",
-    }),
-  ).toMatchObject({
-    targetDifferentialImpedanceMin: 90,
-    targetDifferentialImpedanceMax: 110,
-  })
-})
-
 test("reject malformed tolerances, nonpositive bounds, objects and contradictory notations", () => {
   for (const props of [
     { targetImpedance: "50±-25ohm" },
@@ -119,12 +91,4 @@ test("reject malformed tolerances, nonpositive bounds, objects and contradictory
     expect(busProps.safeParse({ connections: ["A"], ...props }).success).toBe(
       false,
     )
-  expect(
-    differentialPairProps.safeParse({
-      positiveConnection: "P",
-      negativeConnection: "N",
-      targetDifferentialImpedance: "100±10ohm",
-      targetDifferentialImpedanceMin: 95,
-    }).success,
-  ).toBe(false)
 })

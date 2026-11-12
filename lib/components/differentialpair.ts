@@ -1,103 +1,39 @@
-import {
-  routeLength,
-  lengthMatchTo,
-  nonnegativeRouteDistance,
-  validateRouteLengths,
-  type RouteLength,
-} from "../common/routeLength"
-import { traceSpacing, type TraceSpacing } from "../common/traceSpacing"
-import {
-  impedanceTarget,
-  positiveImpedance,
-  validateImpedanceTarget,
-  type ImpedanceTarget,
-} from "../common/impedanceTarget"
 import { expectTypesMatch } from "lib/typecheck"
 import { distance } from "circuit-json"
 import { z } from "zod"
 
 /**
- * Defines matched routing constraints for two named traces that form a
- * differential pair. Both connections must refer to trace `name` values.
+ * Two signals routed as a differential pair, with their routed lengths matched.
+ *
+ * @example
+ * // A trace name, port selector, or a net with exactly 2 pads
+ * <differentialpair positiveConnection="net.USB_DP" negativeConnection="net.USB_DM" maxLengthSkew="0.1mm" />
+ * // A signal that passes through several traces: list the trace names in signal order
+ * <differentialpair positiveConnection={["DP1", "DP2"]} negativeConnection={["DM1", "DM2"]} maxLengthSkew={0} />
  */
 export interface DifferentialPairProps {
   name?: string
-  /** Match these trace/port/bus/pair selectors as well as this element's members.
-   * maxLengthSkew applies to the combined members; no tolerance is inferred. */
-  lengthMatchTo?: string | string[]
-  /** Minimum/maximum pad-to-pad planar length for each member. Raw numbers are mm. */
-  minLength?: RouteLength
-  maxLength?: RouteLength
-  /** Nominal member length, absolute or relative to selected endpoints.
-   * Requires an explicit lengthTolerance, including zero for exact matching. */
-  targetLength?: RouteLength
-  /** Allowed deviation above/below targetLength, in mm. */
-  lengthTolerance?: number | string
-  /** Minimum centreline spacing to traces outside this bus/pair (mm or e.g. "4w"). */
-  pcbSpacingToOtherSignals?: TraceSpacing
-
-  /** Trace name, pin selector, or net (e.g. `net.USB_DP`) carrying the positive signal. A net includes every pad on it. */
-  positiveConnection: string
-  /** Trace name, pin selector, or net (e.g. `net.USB_DM`) carrying the negative signal. A net includes every pad on it. */
-  negativeConnection: string
-  /** Maximum permitted routed-length skew. Raw numbers are millimeters. */
-  maxLengthSkew?: number | string
-  /** Intended differential impedance, e.g. "100±10ohm". Raw numbers are ohms. */
-  targetDifferentialImpedance?: ImpedanceTarget
-  /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
-  targetDifferentialImpedanceMin?: number | string
-  targetDifferentialImpedanceMax?: number | string
-  /** Edge-to-edge PCB copper gap between the pair. Raw numbers are millimeters. */
-  pcbTraceGap?: number | string
-  /** Maximum length over which the pair may be routed without coupling. Raw numbers are millimeters. */
-  maxUncoupledLength?: number | string
+  /** A trace name, port selector, or 2-pad `net.X`; or a list of trace names in signal order. */
+  positiveConnection: string | string[]
+  /** Same forms as positiveConnection. */
+  negativeConnection: string | string[]
+  /** Maximum allowed difference between the positive and negative routed lengths. Raw numbers are millimeters. */
+  maxLengthSkew: number | string
 }
+
+const connection = z.union([
+  z.string().min(1),
+  z.array(z.string().min(1)).min(1),
+])
 
 export const differentialPairProps = z
   .object({
     name: z.string().optional(),
-    lengthMatchTo: lengthMatchTo.optional(),
-    minLength: routeLength.optional(),
-    maxLength: routeLength.optional(),
-    targetLength: routeLength.optional(),
-    lengthTolerance: nonnegativeRouteDistance.optional(),
-    pcbSpacingToOtherSignals: traceSpacing.optional(),
-
-    positiveConnection: z.string(),
-    negativeConnection: z.string(),
-    maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
-    targetDifferentialImpedance: impedanceTarget.optional(),
-    targetDifferentialImpedanceMin: positiveImpedance.optional(),
-    targetDifferentialImpedanceMax: positiveImpedance.optional(),
-    pcbTraceGap: distance.pipe(z.number().positive().finite()).optional(),
-    maxUncoupledLength: distance.pipe(z.number().min(0).finite()).optional(),
+    positiveConnection: connection,
+    negativeConnection: connection,
+    maxLengthSkew: distance.pipe(z.number().min(0).finite()),
   })
-  .superRefine((props, ctx) => {
-    validateRouteLengths(props, ctx)
-    validateImpedanceTarget(
-      props.targetDifferentialImpedance,
-      props.targetDifferentialImpedanceMin,
-      props.targetDifferentialImpedanceMax,
-      ctx,
-      "targetDifferentialImpedance",
-    )
-  })
-  .transform(
-    ({
-      targetDifferentialImpedance,
-      ...props
-    }): typeof props & { targetDifferentialImpedance?: number } => {
-      if (targetDifferentialImpedance === undefined) return props
-      if (typeof targetDifferentialImpedance === "number")
-        return { ...props, targetDifferentialImpedance }
-      return {
-        ...props,
-        targetDifferentialImpedance: targetDifferentialImpedance.nominal,
-        targetDifferentialImpedanceMin: targetDifferentialImpedance.min,
-        targetDifferentialImpedanceMax: targetDifferentialImpedance.max,
-      }
-    },
-  )
+  .strict("differentialpair only supports maxLengthSkew for now")
 
 type InferredDifferentialPairProps = z.input<typeof differentialPairProps>
 expectTypesMatch<DifferentialPairProps, InferredDifferentialPairProps>(true)

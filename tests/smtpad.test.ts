@@ -216,3 +216,17 @@ for (const pad of smtPadShapes) {
     }
   })
 }
+
+test("parses dimensionless paste margins and keeps local X/Y on rectangular pads", () => {
+  const pad = { shape: "rect", width: 4, height: 2 }
+  for (const ratio of [0, -0.1, { x: -0.1, y: -0.25 }]) {
+    expect(
+      smtPadProps.parse({ ...pad, solderPasteMarginRatio: ratio }),
+    ).toMatchObject({
+      solderPasteMarginRatio: ratio,
+    })
+  }
+  expect(
+    smtPadProps.safeParse({ ...pad, solderPasteMarginRatio: Infinity }).success,
+  ).toBe(false)
+})

@@ -1,3 +1,4 @@
+import { assemblyDrawingExplosionViewProps } from "./explosionview"
 import { assemblyDrawingNoteProps } from "./note"
 import { assemblyDrawingPartLabelProps } from "./partlabel"
 import { assemblyDrawingExplosionProps } from "./explosion"
@@ -18,6 +19,7 @@ export const assemblyDrawingProps = {
   note: assemblyDrawingNoteProps,
   partlabel: assemblyDrawingPartLabelProps,
   explosion: assemblyDrawingExplosionProps,
+  explosionview: assemblyDrawingExplosionViewProps,
   stage: assemblyDrawingStageProps,
   page: assemblyDrawingPageProps,
   titleblock: assemblyDrawingTitleBlockProps,
@@ -28,3 +30,5 @@ export * from "./stage"
 export * from "./explosion"
 export * from "./partlabel"
 export * from "./note"
+
+export * from "./explosionview"

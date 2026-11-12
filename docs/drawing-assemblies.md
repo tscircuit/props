@@ -10,11 +10,11 @@
   { includeStageRefs: [".rotor"], offZ: "40mm" },
 ]} />
 <assembly.drawing.page width="297mm" height="210mm">
-  <assembly.drawing.partview name="joinView" stageRef=".complete" explosionRef=".join"
+  <assembly.drawing.explosionview name="joinView" stageRef=".complete" explosionRef=".join"
     direction="isometric" width="130mm" height="140mm">
     <assembly.drawing.partlabel partRefs={[".cap"]} text="Rotor"
       anchor={{ x: 0, y: 0, z: "5mm" }} paperX="60mm" paperY="40mm" />
-  </assembly.drawing.partview>
+  </assembly.drawing.explosionview>
   <assembly.drawing.note text="Lower the completed rotor" paperX="-120mm" paperY="90mm" />
 </assembly.drawing.page>
 ```
@@ -26,8 +26,10 @@ Accepted inputs and canonical output:
 - Selections use nonempty arrays `partRefs`, `boardRefs`, `includeStageRefs`; references are trimmed nonblank strings. Supply at least one selection field. There are no aliases or implicit descendants. Core resolves these to `source_component_ids`, `pcb_board_ids`, `includes_stage_ids`.
 - A stage requires a stable `name` and optionally `displayName`. Nested includes form a set and must be acyclic. There is no implicit order or previous-stage accumulation.
 - An explosion requires a stable `name` and a nonempty `moves` array. `factor` defaults to 1 and is finite in 0..1. `showTrails` defaults false. Each move requires a selection and at least one of `offX/offY/offZ`; numeric values are CAD-world mm (+Z up), unit strings normalize to mm, omitted axes parse to zero. Core emits a `translation` point. Expanded move targets must not overlap; graph validation is downstream.
-- A partview accepts exactly one of existing `partRef` or new `stageRef`. `explosionRef` requires `stageRef`; no explosion is selected implicitly. Existing partRef-only usage, direction names and relative page layout are unchanged.
-- Part labels require a selection, nonblank `text`, an explicit assembled-world `anchor`, and paper-space `paperX/paperY`. They emit `drawing_part_label` under the parent view; core resolves selection IDs. Anchor coordinates normalize to mm and follow the target's translation; paper text coordinates stay fixed. Selected parts must be visible and share a translation.
+- A `partview` accepts exactly one of existing `partRef` or new `stageRef`, and shows assembled geometry. It rejects `explosionRef`.
+- An `explosionview` requires both `stageRef` and `explosionRef` (trimmed nonblank selectors), and rejects `partRef`. Core emits `drawing_explosion_view` with its own `drawing_explosion_view_id`, plus `drawing_assembly_stage_id` and `drawing_explosion_id`. No stage or explosion is selected implicitly.
+- Both views share direction, positive unit-aware width/height, center defaults, relative sibling placement, hidden edges, section controls, and nested dimension/partlabel annotations. Relative references may target either kind of sibling view. Unit strings normalize to mm; opposing references and explicit coordinates on the same axis conflict.
+- Part labels require a selection, nonblank `text`, an explicit assembled-world `anchor`, and paper-space `paperX/paperY`. They emit `drawing_part_label` with exactly one parent reference (`drawing_part_view_id` or `drawing_explosion_view_id`); core resolves selection IDs. Anchor coordinates normalize to mm and follow the target's translation; paper text coordinates stay fixed. Selected parts must be visible and share a translation.
 - Notes require nonblank `text` and `paperX/paperY`. `fontSize` is positive paper mm (unit strings accepted), default 2.7mm. They emit `drawing_page_note` under the parent page. Text is plain text, not markup.
 
-There are no deprecated fields or migration steps. The additions are opt-in; default behavior for existing drawing props is preserved. Separation guides illustrate relationships, not certified insertion paths.
+This is an unreleased proposal. Migrate the earlier `<assembly.drawing.partview explosionRef="…">` spelling to `<assembly.drawing.explosionview>`; there is no alias. Existing assembled partview usage is unchanged. Separation guides illustrate relationships, not certified insertion paths.

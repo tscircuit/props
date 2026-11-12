@@ -89,7 +89,7 @@ Part views can infer placement from sibling views on the same page:
 
 `leftOfRef`/`rightOfRef` infer the horizontal center; `aboveRef`/`belowRef`
 infer the vertical center. Each accepts a nonempty selector string (outer whitespace
-is trimmed) identifying exactly one sibling part view. References describe viewport
+is trimmed) identifying exactly one sibling part or explosion view. References describe viewport
 placement, not model geometry. Inferred centers place the corresponding viewport
 edges adjacent: horizontal center separation is half the sum of viewport widths;
 vertical separation is half the sum of heights. There is no implicit gap.
@@ -289,3 +289,7 @@ are stripped by the runtime schema; they never enter canonical parsed dimension
 props. Measurement values, formatted text, endpoint coordinates and witness
 points are also outside the authoring props. Circular, radial, angular,
 toleranced and GD&T annotations remain outside this initial proposal.
+
+## Exploded views
+
+Use `<assembly.drawing.explosionview stageRef=".complete" explosionRef=".join" direction="isometric" width="130mm" height="140mm" />` for a separated drawing pose. It shares viewport and annotation controls with `partview`; ordinary part views show assembled geometry. See [stages and explosions](./drawing-assemblies.md) for reusable definitions, defaults, conflicts, and Circuit JSON mapping.

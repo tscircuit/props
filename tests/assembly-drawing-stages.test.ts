@@ -4,6 +4,7 @@ import {
   assemblyDrawingStageProps,
   assemblyDrawingExplosionProps,
   assemblyDrawingPartViewProps,
+  assemblyDrawingExplosionViewProps,
   assemblyDrawingPartLabelProps,
   assemblyDrawingNoteProps,
 } from "../lib"
@@ -41,7 +42,7 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
     width: 90,
     height: 80,
   }
-  expect(assemblyDrawingPartViewProps.parse(view)).toMatchObject({
+  expect(assemblyDrawingExplosionViewProps.parse(view)).toMatchObject({
     stageRef: ".complete",
     explosionRef: ".join",
     centerX: 0,
@@ -49,12 +50,45 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
   })
   for (const patch of [
     { partRef: ".base" },
+    { explosionRef: undefined },
+    { explosionRef: " " },
+    { centerX: 0, rightOfRef: ".other" },
+    { aboveRef: ".other", belowRef: ".another" },
     { stageRef: undefined },
     { stageRef: undefined, partRef: ".base" },
   ])
     expect(
-      assemblyDrawingPartViewProps.safeParse({ ...view, ...patch }).success,
+      assemblyDrawingExplosionViewProps.safeParse({ ...view, ...patch })
+        .success,
     ).toBe(false)
+  expect(assemblyProps.drawing.explosionview).toBe(
+    assemblyDrawingExplosionViewProps,
+  )
+  expect(assemblyDrawingPartViewProps.safeParse(view).success).toBe(false)
+  expect(
+    assemblyDrawingPartViewProps.parse({ ...view, explosionRef: undefined }),
+  ).toMatchObject({ stageRef: ".complete" })
+  expect(
+    assemblyDrawingExplosionViewProps.parse({
+      ...view,
+      stageRef: " .complete ",
+      explosionRef: " .join ",
+      width: "9cm",
+      rightOfRef: ".assembled",
+    }),
+  ).toMatchObject({
+    stageRef: ".complete",
+    explosionRef: ".join",
+    width: 90,
+    rightOfRef: ".assembled",
+    centerY: 0,
+  })
+  expect(
+    assemblyDrawingExplosionViewProps.parse({
+      ...view,
+      rightOfRef: ".assembled",
+    }).centerX,
+  ).toBeUndefined()
   for (const input of [
     { name: "empty" },
     { name: "empty", partRefs: [] },

@@ -282,6 +282,20 @@ export interface AssemblyDrawingExplosionProps {
 }
 
 
+export interface AssemblyDrawingExplosionViewProps
+  extends Omit<
+    AssemblyDrawingPartViewProps,
+    "partRef" | "stageRef" | "explosionRef"
+  > {
+  /** Membership to display; required, no implicit stage. */
+  stageRef: string
+  /** Reusable assembly.drawing.explosion selector; required. */
+  explosionRef: string
+  /** Geometry membership comes from stageRef. */
+  partRef?: never
+}
+
+
 export interface AssemblyDrawingNoteProps {
   name?: string
   text: string
@@ -325,8 +339,8 @@ export interface AssemblyDrawingPartViewProps {
   partRef?: string
   /** Drawing stage selector, mutually exclusive with partRef. Select exactly one. */
   stageRef?: string
-  /** Drawing explosion selector; requires stageRef. No default explosion. */
-  explosionRef?: string
+  /** Exploded drawings use assembly.drawing.explosionview instead. */
+  explosionRef?: never
   direction: AssemblyDrawingPartViewDirection
   /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance

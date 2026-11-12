@@ -72,3 +72,9 @@ export const signalTimeOrUi = z.union([
   unitIntervals,
   signalTime.pipe(z.number().nonnegative()),
 ])
+
+/** Strictly positive time or UI; UI is resolved by core at the block bit rate. */
+export const signalDurationOrUi = z.union([
+  unitIntervals.refine((value) => value !== "0UI"),
+  signalTime.pipe(z.number().positive()),
+])

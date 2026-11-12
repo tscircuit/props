@@ -1,4 +1,4 @@
-import { signalBitRate, signalTimeOrUi } from "lib/common/signal-integrity"
+import { signalBitRate, signalDurationOrUi } from "lib/common/signal-integrity"
 import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
 import { z } from "zod"
@@ -9,7 +9,7 @@ export interface PcbTransientChannelSimulationProps {
   name?: string
   /** Default signal bit rate. Raw and parsed numbers are bit/s. */
   bitRate: string | number
-  /** Positive, finite time or UI at the block bit rate; parsed to seconds. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
+  /** Positive, finite time or UI. Parsed times are seconds; UI stays a normalized string like offset, for core to resolve at the block bit rate. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
   duration?: string | number
   /** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
   allowUnroutedTraces?: boolean
@@ -20,31 +20,11 @@ export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
-    // NaN is accepted here so it gets the same RFC diagnostic as other bad durations.
-    duration: z.union([z.string(), z.number(), z.nan()]).optional(),
+    duration: signalDurationOrUi.optional(),
     allowUnroutedTraces: z.boolean().default(false),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()
-  .transform(({ duration, ...props }, ctx) => {
-    if (duration === undefined)
-      return props as typeof props & { duration?: number }
-    // UI durations become seconds at the block bit rate; time strings are already seconds.
-    const parsed = signalTimeOrUi.safeParse(duration)
-    const value = parsed.success ? String(parsed.data) : ""
-    const seconds = value.endsWith("UI")
-      ? Number.parseFloat(value) / props.bitRate
-      : Number(value)
-    if (!(seconds > 0 && Number.isFinite(seconds))) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["duration"],
-        message: "duration must be finite and greater than zero.",
-      })
-      return z.NEVER
-    }
-    return { ...props, duration: seconds }
-  })
 
 expectTypesMatch<
   PcbTransientChannelSimulationProps,

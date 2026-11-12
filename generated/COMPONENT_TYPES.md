@@ -4626,15 +4626,16 @@ export const pcbChannelProps = z
     receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
     bitRate: signalBitRate.optional(),
     pattern: z.string().trim().min(1).default("prbs7"),
-    seed: z.custom<number>((value) => typeof value === "number").optional(),
+    seed: z.number().int().min(1).optional(),
     offset: signalTimeOrUi.default("0UI"),
     driverDisabled: z.boolean().default(false),
   })
   .strict()
   .superRefine(({ name, pattern, seed }, ctx) => {
-    if (seed === undefined || !/^prbs(?:7|15|31)$/.test(pattern)) return
+    if (seed === undefined || !["prbs7", "prbs15", "prbs31"].includes(pattern))
+      return
     const max = 2 ** Number(pattern.slice(4)) - 1
-    if (!Number.isInteger(seed) || seed < 1 || seed > max) {
+    if (seed > max) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["seed"],
@@ -5053,31 +5054,11 @@ export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
-    // NaN is accepted here so it gets the same RFC diagnostic as other bad durations.
-    duration: z.union([z.string(), z.number(), z.nan()]).optional(),
+    duration: signalDurationOrUi.optional(),
     allowUnroutedTraces: z.boolean().default(false),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()
-  .transform(({ duration, ...props }, ctx) => {
-    if (duration === undefined)
-      return props as typeof props & { duration?: number }
-    // UI durations become seconds at the block bit rate; time strings are already seconds.
-    const parsed = signalTimeOrUi.safeParse(duration)
-    const value = parsed.success ? String(parsed.data) : ""
-    const seconds = value.endsWith("UI")
-      ? Number.parseFloat(value) / props.bitRate
-      : Number(value)
-    if (!(seconds > 0 && Number.isFinite(seconds))) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["duration"],
-        message: "duration must be finite and greater than zero.",
-      })
-      return z.NEVER
-    }
-    return { ...props, duration: seconds }
-  })
 ```
 
 ### pin-header

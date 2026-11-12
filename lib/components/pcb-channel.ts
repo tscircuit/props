@@ -45,15 +45,16 @@ export const pcbChannelProps = z
     receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
     bitRate: signalBitRate.optional(),
     pattern: z.string().trim().min(1).default("prbs7"),
-    seed: z.custom<number>((value) => typeof value === "number").optional(),
+    seed: z.number().int().min(1).optional(),
     offset: signalTimeOrUi.default("0UI"),
     driverDisabled: z.boolean().default(false),
   })
   .strict()
   .superRefine(({ name, pattern, seed }, ctx) => {
-    if (seed === undefined || !/^prbs(?:7|15|31)$/.test(pattern)) return
+    if (seed === undefined || !["prbs7", "prbs15", "prbs31"].includes(pattern))
+      return
     const max = 2 ** Number(pattern.slice(4)) - 1
-    if (!Number.isInteger(seed) || seed < 1 || seed > max) {
+    if (seed > max) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["seed"],

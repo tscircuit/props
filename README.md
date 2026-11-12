@@ -1965,7 +1965,7 @@ export interface PcbTransientChannelSimulationProps {
   name?: string;
   /** Default signal bit rate. Raw and parsed numbers are bit/s. */
   bitRate: string | number;
-  /** Positive, finite time or UI at the block bit rate; parsed to seconds. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
+  /** Positive, finite time or UI. Parsed times are seconds; UI stays a normalized string like offset, for core to resolve at the block bit rate. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
   duration?: string | number;
   /** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
   allowUnroutedTraces?: boolean;

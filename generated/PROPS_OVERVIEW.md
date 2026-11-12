@@ -296,12 +296,12 @@ export interface AssemblyDrawingExplosionViewProps
 }
 
 
-export interface AssemblyDrawingNoteProps {
+export interface AssemblyDrawingNoteProps
+  extends AssemblyDrawingPaperPositionProps {
   name?: string
   text: string
-  /** Left text baseline in page-centered paper mm (+X right, +Y up). Distance strings are accepted. */
-  paperX: Distance
-  paperY: Distance
+  /** View selector for offsets when authored on a page. Omit inside a view to use that parent. Core must reject missing/ambiguous/cross-page views. */
+  viewRef?: string
   /** Paper-space text size; defaults to 2.7mm. Must be positive. */
   fontSize?: Distance
 }
@@ -316,19 +316,27 @@ export interface AssemblyDrawingPageProps {
   /** Custom paper dimensions in mm when numeric; unit strings are accepted. */
   width?: Distance
   height?: Distance
+  /** Paper origin measured from the sheet's lower-left corner (+X right, +Y up). Numeric mm or distance strings; omitted means the sheet center. */
+  origin?: { x: Distance; y: Distance }
   children?: any
 }
 
 
+export interface AssemblyDrawingPaperPositionProps {
+  paperX?: Distance
+  paperY?: Distance
+  xOffsetFromViewCenter?: Distance
+  yOffsetFromViewCenter?: Distance
+}
+
+
 export interface AssemblyDrawingPartLabelProps
-  extends AssemblyDrawingSelection {
+  extends AssemblyDrawingSelection,
+    AssemblyDrawingPaperPositionProps {
   name?: string
   text: string
   /** Assembled CAD-world mm (+Z up), or distance strings; follows the selected parts' drawing translation. */
   anchor: { x: Distance; y: Distance; z: Distance }
-  /** Fixed text baseline in page-centered paper mm (+X right, +Y up). */
-  paperX: Distance
-  paperY: Distance
 }
 
 
@@ -342,7 +350,7 @@ export interface AssemblyDrawingPartViewProps {
   /** Exploded drawings use assembly.drawing.explosionview instead. */
   explosionRef?: never
   direction: AssemblyDrawingPartViewDirection
-  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
+  /** Viewport center relative to the drawing page origin, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance
   centerY?: Distance
   /** Sibling part-view selector; infer centerX with this viewport left of the reference. Conflicts with rightOfRef and centerX. */
@@ -360,7 +368,7 @@ export interface AssemblyDrawingPartViewProps {
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
   section?: AssemblyDrawingSectionPlane
-  /** Nested assembly.drawing.dimension or assembly.drawing.partlabel annotations; these do not change the selected geometry. */
+  /** Nested assembly.drawing.dimension, assembly.drawing.partlabel or assembly.drawing.note annotations; these do not change the selected geometry. */
   children?: any
 }
 

@@ -32,3 +32,5 @@ export * from "./partlabel"
 export * from "./note"
 
 export * from "./explosionview"
+
+export type { AssemblyDrawingPaperPositionProps } from "./paper-position"

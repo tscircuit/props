@@ -18,6 +18,8 @@ export interface AssemblyDrawingPageProps {
   /** Custom paper dimensions in mm when numeric; unit strings are accepted. */
   width?: Distance
   height?: Distance
+  /** Paper origin measured from the sheet's lower-left corner (+X right, +Y up). Numeric mm or distance strings; omitted means the sheet center. */
+  origin?: { x: Distance; y: Distance }
   children?: any
 }
 
@@ -29,6 +31,12 @@ export const assemblyDrawingPageProps = z
     orientation: z.enum(["landscape", "portrait"]).optional(),
     width: distance.pipe(z.number().finite().positive()).optional(),
     height: distance.pipe(z.number().finite().positive()).optional(),
+    origin: z
+      .object({
+        x: distance.pipe(z.number().finite()),
+        y: distance.pipe(z.number().finite()),
+      })
+      .optional(),
     children: z.any().optional(),
   })
   .superRefine((page, ctx) => {

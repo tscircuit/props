@@ -54,7 +54,7 @@ Renderers must convert these coordinates into their model coordinate system
 
 Drawing width/height and viewport width/height are required positive distances.
 Numeric distances mean mm; unit strings parse to numeric mm. View centerX/centerY default to
-zero on axes without a relative reference, measured from the paper center, +X right and +Y up. All views are
+zero on axes without a relative reference, measured from the drawing page origin, +X right and +Y up. All views are
 orthographic and automatically fit the selected geometry to the viewport.
 
 Part views can infer placement from sibling views on the same page:
@@ -273,7 +273,7 @@ default.
 
 The proposed resolved Circuit JSON output is `drawing_dimension_line`.
 Core will produce its required `start` and `end` line endpoints in
-page-centered paper mm (+X right, +Y up), plus required `text` containing the
+drawing-origin-relative paper mm (+X right, +Y up), plus required `text` containing the
 preformatted measurement. Optional `edge_ref_start` and `edge_ref_end` are
 paper-space witness points, and optional `edge_ref_name` is the exact source
 feature name, such as `inner_top`. These are resolved drawing fields, not TSX

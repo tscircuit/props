@@ -1,21 +1,29 @@
 import { z } from "zod"
 
-const quantity = (units: Record<string, number>, message: string) =>
-  z
-    .union([z.number(), z.string()])
-    .transform((value, ctx) => {
-      if (typeof value === "number") return value
-      const match = value
-        .trim()
-        .match(/^([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)\s*(\S*)$/)
-      const scale = match ? units[match[2]!] : undefined
-      if (scale === undefined || !match) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message })
-        return z.NEVER
-      }
-      return Number(match[1]) * scale
-    })
+/** A plain decimal number, so `Number`'s hex, blank and `Infinity` quirks are rejected. */
+const decimal = (text: string) =>
+  Number.parseFloat(text) === Number(text) ? Number(text) : Number.NaN
+
+/** Parses a number, or a string with one of `units` as its suffix, scaled by that unit. */
+const quantity = (units: Record<string, number>, message: string) => {
+  const suffixes = Object.keys(units).sort((a, b) => b.length - a.length)
+  return z
+    .union([
+      z.number(),
+      z.string().transform((text, ctx) => {
+        const value = text.trim()
+        const unit = suffixes.find((suffix) => value.endsWith(suffix))!
+        const scaled =
+          decimal(value.slice(0, value.length - unit.length)) * units[unit]!
+        if (Number.isNaN(scaled)) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message })
+          return z.NEVER
+        }
+        return scaled
+      }),
+    ])
     .pipe(z.number().finite())
+}
 
 /** Parsed rates are bit/s; bytes/s and frequency units are not bit rates. */
 export const signalBitRate = quantity(
@@ -55,8 +63,8 @@ export const signalTime = quantity(
 const unitIntervals = z
   .string()
   .trim()
-  .regex(/^\+?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*UI$/i)
-  .transform((value) => Number(value.replace(/UI$/i, "")))
+  .refine((value) => value.toUpperCase().endsWith("UI"))
+  .transform((value) => decimal(value.slice(0, -2).trim()))
   .pipe(z.number().finite().nonnegative())
   .transform((value) => `${value}UI` as const)
 

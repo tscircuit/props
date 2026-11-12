@@ -20,26 +20,22 @@ export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
-    duration: z
-      .custom<string | number>(
-        (value) => typeof value === "string" || typeof value === "number",
-        { message: "duration must be finite and greater than zero." },
-      )
-      .optional(),
+    // NaN is accepted here so it gets the same RFC diagnostic as other bad durations.
+    duration: z.union([z.string(), z.number(), z.nan()]).optional(),
     allowUnroutedTraces: z.boolean().default(false),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()
   .transform(({ duration, ...props }, ctx) => {
-    const parsed =
-      duration === undefined ? undefined : signalTimeOrUi.safeParse(duration)
-    const time = parsed?.success ? parsed.data : undefined
-    const seconds =
-      typeof time === "string" ? Number.parseFloat(time) / props.bitRate : time
-    if (
-      duration !== undefined &&
-      (seconds === undefined || !Number.isFinite(seconds) || seconds <= 0)
-    ) {
+    if (duration === undefined)
+      return props as typeof props & { duration?: number }
+    // UI durations become seconds at the block bit rate; time strings are already seconds.
+    const parsed = signalTimeOrUi.safeParse(duration)
+    const value = parsed.success ? String(parsed.data) : ""
+    const seconds = value.endsWith("UI")
+      ? Number.parseFloat(value) / props.bitRate
+      : Number(value)
+    if (!(seconds > 0 && Number.isFinite(seconds))) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["duration"],
@@ -47,7 +43,7 @@ export const pcbTransientChannelSimulationProps = z
       })
       return z.NEVER
     }
-    return { ...props, ...(seconds === undefined ? {} : { duration: seconds }) }
+    return { ...props, duration: seconds }
   })
 
 expectTypesMatch<

@@ -22,6 +22,7 @@ export const signalEndpoint = z.union([
 export interface PcbChannelProps {
   /** Unique within the enclosing SI block. */
   name: string
+  /** Driving pin: ".U1 > .A4", a pair { p, n }, or either as { pin, model } to choose the IBIS model (per leg for a pair). */
   driverRef: SignalEndpoint
   /** Arrays always mean multiple receivers; only { p, n } means a differential pair. Single-ended probes reference each driving/receiving chip's own ground pin. */
   receiverRef: SignalEndpoint | SignalEndpoint[]
@@ -33,7 +34,7 @@ export interface PcbChannelProps {
   seed?: number
   /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
   offset?: string | number
-  /** Hold the driver disabled (high impedance), making this a quiet signal. Requires a disable state on every driver leg and overrides pattern. Default: false. */
+  /** Tri-state the driver (high impedance) so this line stays quiet and only picks up crosstalk; pattern is ignored. Unlike pattern "0", which actively drives low and absorbs coupled noise. Every driver leg's IBIS model must support a disable state. Default: false. */
   driverDisabled?: boolean
 }
 

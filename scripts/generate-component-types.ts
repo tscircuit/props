@@ -12,10 +12,7 @@ export function extractInterfaces(content: string): string[] {
     content,
     ts.ScriptTarget.Latest,
   )
-  const declarations = source.statements.filter(
-    (statement) =>
-      ts.isVariableStatement(statement) || ts.isTypeAliasDeclaration(statement),
-  )
+  const declarations = source.statements.filter(ts.isVariableStatement)
   const lines = content.split("\n")
   let currentInterface = ""
   let isCapturing = false
@@ -24,19 +21,12 @@ export function extractInterfaces(content: string): string[] {
 
   for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
     const line = lines[lineIndex]!
-    // Only add the SI endpoint aliases to the legacy documented exports.
-    const typedExport =
-      /export\s+(?:(?:const|let|var)\s+(\w+)\s*:|type\s+(Signal(?:Endpoint|Pin|Pair))\b)/.exec(
-        line,
-      )
+    const typedExport = /export\s+(?:const|let|var)\s+(\w+)\s*:/.exec(line)
     if (typedExport && !line.includes("Input") && !line.includes("Inferred")) {
       const statement = declarations.find((statement) =>
-        ts.isTypeAliasDeclaration(statement)
-          ? statement.name.text === typedExport[2]
-          : statement.declarationList.declarations.some(
-              (declaration) =>
-                declaration.name.getText(source) === typedExport[1],
-            ),
+        statement.declarationList.declarations.some(
+          (declaration) => declaration.name.getText(source) === typedExport[1],
+        ),
       )
       if (statement) {
         interfaces.push(`${captureComments}${statement.getText(source)}\n`)
@@ -100,12 +90,10 @@ export function extractInterfaces(content: string): string[] {
   return interfaces.map((definition, index) => {
     const match = /^export (?:const|let|var) (\w+)\s*=/m.exec(definition)
     if (!match) return definition
-    const statement = declarations.find(
-      (statement) =>
-        ts.isVariableStatement(statement) &&
-        statement.declarationList.declarations.some(
-          (declaration) => declaration.name.getText(source) === match[1],
-        ),
+    const statement = declarations.find((statement) =>
+      statement.declarationList.declarations.some(
+        (declaration) => declaration.name.getText(source) === match[1],
+      ),
     )
     const declaration = definition.slice(match.index).trimEnd()
     // Extended props are already emitted as a separate legacy block.

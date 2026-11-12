@@ -4598,13 +4598,10 @@ export const pcbBendProps = z
 ### pcb-channel
 
 ```typescript
-export type SignalPin = string
-export type SignalPair = { p: string; n: string }
 export type SignalEndpoint =
   | SignalPin
   | SignalPair
   | { pin: SignalPin; model?: string }
-  | { pin: SignalPair; model?: string | { p: string; n: string } }
 export const signalEndpoint = z.union([
   pin,
   pair,
@@ -4621,7 +4618,7 @@ export interface PcbChannelProps {
   offset?: string | number
   driverDisabled?: boolean
 }
-/** Hold the driver disabled (high impedance), making this a quiet signal. Requires a disable state on every driver leg and overrides pattern. Default: false. */
+/** Tri-state the driver (high impedance) so this line stays quiet and only picks up crosstalk; pattern is ignored. Unlike pattern "0", which actively drives low and absorbs coupled noise. Every driver leg's IBIS model must support a disable state. Default: false. */
 export const pcbChannelProps = z
   .object({
     name: z.string().trim().min(1),
@@ -5056,26 +5053,22 @@ export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
-    duration: z
-      .custom<string | number>(
-        (value) => typeof value === "string" || typeof value === "number",
-        { message: "duration must be finite and greater than zero." },
-      )
-      .optional(),
+    // NaN is accepted here so it gets the same RFC diagnostic as other bad durations.
+    duration: z.union([z.string(), z.number(), z.nan()]).optional(),
     allowUnroutedTraces: z.boolean().default(false),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()
   .transform(({ duration, ...props }, ctx) => {
-    const parsed =
-      duration === undefined ? undefined : signalTimeOrUi.safeParse(duration)
-    const time = parsed?.success ? parsed.data : undefined
-    const seconds =
-      typeof time === "string" ? Number.parseFloat(time) / props.bitRate : time
-    if (
-      duration !== undefined &&
-      (seconds === undefined || !Number.isFinite(seconds) || seconds <= 0)
-    ) {
+    if (duration === undefined)
+      return props as typeof props & { duration?: number }
+    // UI durations become seconds at the block bit rate; time strings are already seconds.
+    const parsed = signalTimeOrUi.safeParse(duration)
+    const value = parsed.success ? String(parsed.data) : ""
+    const seconds = value.endsWith("UI")
+      ? Number.parseFloat(value) / props.bitRate
+      : Number(value)
+    if (!(seconds > 0 && Number.isFinite(seconds))) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["duration"],
@@ -5083,7 +5076,7 @@ export const pcbTransientChannelSimulationProps = z
       })
       return z.NEVER
     }
-    return { ...props, ...(seconds === undefined ? {} : { duration: seconds }) }
+    return { ...props, duration: seconds }
   })
 ```
 

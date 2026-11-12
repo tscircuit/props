@@ -36,7 +36,11 @@ export interface AssemblyDrawingPartViewProps {
   name?: string
   displayName?: string
   /** Selector for the board, group or assembly geometry shown in this view. */
-  partRef: string
+  partRef?: string
+  /** Drawing stage selector, mutually exclusive with partRef. Select exactly one. */
+  stageRef?: string
+  /** Drawing explosion selector; requires stageRef. No default explosion. */
+  explosionRef?: string
   direction: AssemblyDrawingPartViewDirection
   /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance
@@ -56,7 +60,7 @@ export interface AssemblyDrawingPartViewProps {
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
   section?: AssemblyDrawingSectionPlane
-  /** Nested assembly.drawing.dimension annotations; these do not change the selected geometry. */
+  /** Nested assembly.drawing.dimension or assembly.drawing.partlabel annotations; these do not change the selected geometry. */
   children?: any
 }
 
@@ -64,7 +68,9 @@ export const assemblyDrawingPartViewProps = z
   .object({
     name: z.string().optional(),
     displayName: z.string().optional(),
-    partRef: z.string().min(1),
+    partRef: z.string().trim().min(1).optional(),
+    stageRef: z.string().trim().min(1).optional(),
+    explosionRef: z.string().trim().min(1).optional(),
     direction: z.enum(["x+", "x-", "y+", "y-", "z+", "z-", "isometric"]),
     centerX: distance.pipe(z.number().finite()).optional(),
     centerY: distance.pipe(z.number().finite()).optional(),
@@ -79,6 +85,18 @@ export const assemblyDrawingPartViewProps = z
     children: z.any().optional(),
   })
   .superRefine((view, ctx) => {
+    if ((view.partRef !== undefined) === (view.stageRef !== undefined))
+      ctx.addIssue({
+        code: "custom",
+        message: "Provide exactly one of partRef or stageRef",
+        path: ["stageRef"],
+      })
+    if (view.explosionRef && !view.stageRef)
+      ctx.addIssue({
+        code: "custom",
+        message: "explosionRef requires stageRef",
+        path: ["explosionRef"],
+      })
     for (const [center, negative, positive] of [
       ["centerX", "leftOfRef", "rightOfRef"],
       ["centerY", "belowRef", "aboveRef"],

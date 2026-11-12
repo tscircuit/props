@@ -1416,6 +1416,43 @@ export const schematicPinStyle = z.record(
 )
 ```
 
+### signal-integrity
+
+```typescript
+/** Parsed rates are bit/s; bytes/s and frequency units are not bit rates. */
+export const signalBitRate = quantity(
+  {
+    "": 1,
+    bps: 1,
+    "bit/s": 1,
+    kbps: 1e3,
+    "kbit/s": 1e3,
+    Mbps: 1e6,
+    "Mbit/s": 1e6,
+    Gbps: 1e9,
+    "Gbit/s": 1e9,
+    Tbps: 1e12,
+    "Tbit/s": 1e12,
+  },
+  "Expected a bit rate in bit/s, e.g. 20Mbps or 250kbps",
+).pipe(z.number().positive())
+/** Raw and parsed numeric times are seconds, unlike legacy transient props. */
+export const signalTime = quantity(
+  {
+    "": 1,
+    s: 1,
+    ms: 1e-3,
+    us: 1e-6,
+    µs: 1e-6,
+    μs: 1e-6,
+    ns: 1e-9,
+    ps: 1e-12,
+    fs: 1e-15,
+  },
+  "Expected a time in seconds, e.g. 2ns",
+)
+```
+
 ### traceSpacing
 
 ```typescript
@@ -4558,6 +4595,58 @@ export const pcbBendProps = z
   })
 ```
 
+### pcb-channel
+
+```typescript
+export type SignalPin = string
+export type SignalPair = { p: string; n: string }
+export type SignalEndpoint =
+  | SignalPin
+  | SignalPair
+  | { pin: SignalPin; model?: string }
+  | { pin: SignalPair; model?: string | { p: string; n: string } }
+export const signalEndpoint = z.union([
+  pin,
+  pair,
+  z.object({ pin, model: pin.optional() }).strict(),
+  z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
+])
+export interface PcbChannelProps {
+  name: string
+  driverRef: SignalEndpoint
+  receiverRef: SignalEndpoint | SignalEndpoint[]
+  bitRate?: string | number
+  pattern?: string
+  seed?: number
+  offset?: string | number
+  driverDisabled?: boolean
+}
+/** Hold the driver disabled (high impedance), making this a quiet signal. Requires a disable state on every driver leg and overrides pattern. Default: false. */
+export const pcbChannelProps = z
+  .object({
+    name: z.string().trim().min(1),
+    driverRef: signalEndpoint,
+    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
+    bitRate: signalBitRate.optional(),
+    pattern: z.string().trim().min(1).default("prbs7"),
+    seed: z.custom<number>((value) => typeof value === "number").optional(),
+    offset: signalTimeOrUi.default("0UI"),
+    driverDisabled: z.boolean().default(false),
+  })
+  .strict()
+  .superRefine(({ name, pattern, seed }, ctx) => {
+    if (seed === undefined || !/^prbs(?:7|15|31)$/.test(pattern)) return
+    const max = 2 ** Number(pattern.slice(4)) - 1
+    if (!Number.isInteger(seed) || seed < 1 || seed > max) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["seed"],
+        message: `Signal "${name}": ${pattern} seed must be an integer in 1..${max}.`,
+      })
+    }
+  })
+```
+
 ### pcb-keepout
 
 ```typescript
@@ -4949,6 +5038,53 @@ export const pcbTraceProps = z.object({
     ]),
   ),
 })
+```
+
+### pcb-transient-channel-simulation
+
+```typescript
+/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and passive unlisted nets. Rendering and board-dependent diagnostics belong to core. */
+export interface PcbTransientChannelSimulationProps {
+  name?: string
+  bitRate: string | number
+  duration?: string | number
+  allowUnroutedTraces?: boolean
+  children?: ReactNode
+}
+/** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
+export const pcbTransientChannelSimulationProps = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    bitRate: signalBitRate,
+    duration: z
+      .custom<string | number>(
+        (value) => typeof value === "string" || typeof value === "number",
+        { message: "duration must be finite and greater than zero." },
+      )
+      .optional(),
+    allowUnroutedTraces: z.boolean().default(false),
+    children: z.custom<ReactNode>().optional(),
+  })
+  .strict()
+  .transform(({ duration, ...props }, ctx) => {
+    const parsed =
+      duration === undefined ? undefined : signalTimeOrUi.safeParse(duration)
+    const time = parsed?.success ? parsed.data : undefined
+    const seconds =
+      typeof time === "string" ? Number.parseFloat(time) / props.bitRate : time
+    if (
+      duration !== undefined &&
+      (seconds === undefined || !Number.isFinite(seconds) || seconds <= 0)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["duration"],
+        message: "duration must be finite and greater than zero.",
+      })
+      return z.NEVER
+    }
+    return { ...props, ...(seconds === undefined ? {} : { duration: seconds }) }
+  })
 ```
 
 ### pin-header

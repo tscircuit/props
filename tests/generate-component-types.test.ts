@@ -22,8 +22,8 @@ test("completes nested union expressions and trailing validator chains", () => {
 test("completes IBIS and digital stimulus validators from their source", () => {
   const ibis = readFileSync("lib/common/ibis.ts", "utf8")
   const ibisDeclaration = ibis.slice(
-    ibis.indexOf("export const ibisPinRunState"),
-    ibis.indexOf("export type IbisPinRunState"),
+    ibis.indexOf("export const ibisPinReferences"),
+    ibis.indexOf("export type IbisPinReferences"),
   )
   expect(extractInterfaces(ibis).join("")).toContain(ibisDeclaration)
 

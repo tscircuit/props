@@ -10,7 +10,6 @@ const namespacedAnalogComponentNames = new Set([
   "analogdcoperatingpointsimulation",
   "analogdcsweepsimulation",
   "analogdigitalstimulus",
-  "analogeyediagram",
   "analogsweepparameter",
   "analogtransientsimulation",
 ])
@@ -18,6 +17,7 @@ const namespacedAnalogComponentNames = new Set([
 const namespacedSimulationComponentNames = new Set([
   "pcbtransientchannelsimulation",
   "pcbdriverreceiverchannel",
+  "simulationibismodel",
   "pcbreturncurrentexcitation",
   "pcbreturncurrentsimulation",
 ])
@@ -35,7 +35,7 @@ function getComponentTagName(componentName: string): string {
     return lowercaseComponentName.replace("systemblock", "systemblock.")
   }
   if (namespacedSimulationComponentNames.has(lowercaseComponentName)) {
-    return `simulation.${lowercaseComponentName}`
+    return `simulation.${lowercaseComponentName.replace(/^simulation/, "")}`
   }
   if (!namespacedAnalogComponentNames.has(lowercaseComponentName)) {
     return lowercaseComponentName

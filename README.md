@@ -32,7 +32,6 @@ namespace, PCB references, and a complete overview example.
 | `<analog.dcoperatingpointsimulation />`        | [`AnalogDcOperatingPointSimulationProps`](#analogdcoperatingpointsimulationprops-analogdcoperatingpointsimulation)  |
 | `<analog.dcsweepsimulation />`                 | [`AnalogDcSweepSimulationProps`](#analogdcsweepsimulationprops-analogdcsweepsimulation)                             |
 | `<analog.digitalstimulus />`                   | [`AnalogDigitalStimulusProps`](#analogdigitalstimulusprops-analogdigitalstimulus)                                   |
-| `<analog.eyediagram />`                        | [`AnalogEyeDiagramProps`](#analogeyediagramprops-analogeyediagram)                                                  |
 | `<analogsimulation />`                         | [`AnalogSimulationProps`](#analogsimulationprops-analogsimulation)                                                  |
 | `<analog.sweepparameter />`                    | [`AnalogResistanceSweepParameterProps`](#analogresistancesweepparameterprops-analogsweepparameter)                  |
 | `<analog.transientsimulation />`               | [`AnalogTransientSimulationProps`](#analogtransientsimulationprops-analogtransientsimulation)                       |
@@ -71,7 +70,6 @@ namespace, PCB references, and a complete overview example.
 | `<fuse />`                                     | [`FuseProps`](#fuseprops-fuse)                                                                                      |
 | `<group />`                                    | [`BaseGroupProps`](#basegroupprops-group)                                                                           |
 | `<hole />`                                     | [`CircleHoleProps`](#circleholeprops-hole)                                                                          |
-| `<ibismodel />`                                | [`IbisModelProps`](#ibismodelprops-ibismodel)                                                                       |
 | `<inductor />`                                 | [`InductorProps`](#inductorprops-inductor)                                                                          |
 | `<interconnect />`                             | [`InterconnectProps`](#interconnectprops-interconnect)                                                              |
 | `<internalcircuit />`                          | [`InternalCircuitProps`](#internalcircuitprops-internalcircuit)                                                     |
@@ -129,6 +127,7 @@ namespace, PCB references, and a complete overview example.
 | `<silkscreenpath />`                           | [`SilkscreenPathProps`](#silkscreenpathprops-silkscreenpath)                                                        |
 | `<silkscreenrect />`                           | [`SilkscreenRectProps`](#silkscreenrectprops-silkscreenrect)                                                        |
 | `<silkscreentext />`                           | [`SilkscreenTextProps`](#silkscreentextprops-silkscreentext)                                                        |
+| `<simulation.ibismodel />`                     | [`SimulationIbisModelProps`](#simulationibismodelprops-simulationibismodel)                                         |
 | `<smtpad />`                                   | [`RectSmtPadProps`](#rectsmtpadprops-smtpad)                                                                        |
 | `<solderjumper />`                             | [`SolderJumperProps`](#solderjumperprops-solderjumper)                                                              |
 | `<solderpaste />`                              | [`RectSolderPasteProps`](#rectsolderpasteprops-solderpaste)                                                         |
@@ -328,23 +327,6 @@ export interface AnalogDigitalStimulusProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/analogdigitalstimulus.ts)
 
-### AnalogEyeDiagramProps `<analog.eyediagram />`
-
-```ts
-export interface AnalogEyeDiagramProps {
-  name: string;
-  simulationRef: string;
-  probeRef: string;
-  unitInterval: number | string;
-  timeOrigin: number | string;
-  /** Omitted gate endpoints use the experiment's recorded start/end times. */
-  startTime?: number | string;
-  endTime?: number | string;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/analogeyediagram.ts)
-
 ### AnalogSimulationProps `<analogsimulation />`
 
 ```ts
@@ -354,7 +336,7 @@ export interface AnalogSimulationProps {
   duration?: number | string;
   startTime?: number | string;
   timePerStep?: number | string;
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">;
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">;
   spiceOptions?: SpiceOptions;
   graphIndependentAxes?: boolean;
 }
@@ -384,9 +366,6 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
   startTime?: number | string;
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string;
-  /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
-  ibisPinStates?: Record<string, IbisPinRunState>;
-  pcbSpiceChannel?: PcbSpiceChannelProps;
 }
 ```
 
@@ -1393,17 +1372,6 @@ export interface CircleHoleProps extends PcbLayoutProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/hole.ts)
-
-### IbisModelProps `<ibismodel />`
-
-```ts
-export interface IbisModelProps extends IbisModelDefinition {
-  /** Selector for exactly one source component in this subcircuit. */
-  componentRef: string;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/ibismodel.ts)
 
 ### InductorProps `<inductor />`
 
@@ -2535,6 +2503,19 @@ export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>;
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-text.ts)
 
+<a id="simulationibismodelprops-simulationibismodel"></a>
+
+### SimulationIbisModelProps `<simulation.ibismodel />`
+
+```ts
+export interface SimulationIbisModelProps extends IbisModelDefinition {
+  /** Selector for exactly one source component in this subcircuit. */
+  componentRef: string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/simulation-ibis-model.ts)
+
 ### RectSmtPadProps `<smtpad />`
 
 ```ts
@@ -3011,7 +2992,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[];
   snapshotsDir?: string;
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">;
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">;
 
   unitPreference?: "mm" | "in" | "mil";
 

@@ -48,7 +48,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   /** Stable identity for the simulation experiment. */
   name?: string
   /** SPICE implementation used to run this analysis. */
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   /** Numerical solver settings forwarded to the selected SPICE engine. */
   spiceOptions?: SpiceOptions
   /** Render each probe with an independent vertical graph scale. */
@@ -106,18 +106,6 @@ export interface AnalogDigitalStimulusProps {
 }
 
 
-export interface AnalogEyeDiagramProps {
-  name: string
-  simulationRef: string
-  probeRef: string
-  unitInterval: number | string
-  timeOrigin: number | string
-  /** Omitted gate endpoints use the experiment's recorded start/end times. */
-  startTime?: number | string
-  endTime?: number | string
-}
-
-
 export interface AnalogInductanceSweepParameterProps
   extends AnalogSweepCoordinatesProps {
   parameterType: "inductance"
@@ -140,7 +128,7 @@ export interface AnalogSimulationProps {
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
@@ -154,9 +142,6 @@ export interface AnalogTransientSimulationProps
   startTime?: number | string
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string
-  /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
-  ibisPinStates?: Record<string, IbisPinRunState>
-  pcbSpiceChannel?: PcbSpiceChannelProps
 }
 
 
@@ -1913,12 +1898,6 @@ export interface HoleWithPolygonPadPlatedHoleProps
 }
 
 
-export interface IbisModelProps extends IbisModelDefinition {
-  /** Selector for exactly one source component in this subcircuit. */
-  componentRef: string
-}
-
-
 export interface ImplicitBreakoutBounds {
   readonly minX: number
   readonly maxX: number
@@ -2715,48 +2694,6 @@ export interface PcbRouteCache {
 }
 
 
-export interface PcbSpiceChannelProps {
-  reduction: "routed-copper" | "straightened-stages"
-  sections: number
-  lanes: Array<{ name: string; from: string; to: string }>
-  referencePinRef: string
-  passiveComponentRefs?: string[]
-  extraction: {
-    minimumFrequency: number | string
-    maximumFrequency: number | string
-    modelFrequency: number | string
-    filaments: number
-    refinementFilaments: number
-    convergenceTolerance: number
-    capacitanceTolerance: number
-    reciprocityTolerance: number
-    dcResistanceTolerance: number
-    maxPanelLength: number | string
-    groundMeshSize?: number | string
-  }
-  relativePermittivity?: number
-  via?: {
-    platingThickness?: number | string
-    equivalentWidth?: number | string
-    omitThroughViaStubs?: boolean
-  }
-  straightenedStageProfiles?: Record<
-    string,
-    {
-      spacing: number | string
-      relativePermittivity: number
-      return: {
-        width: number | string
-        thickness: number | string
-        lengthFactor: number
-        centerY: number | string
-        centerZ: number | string
-      }
-    }
-  >
-}
-
-
 export interface PcbStyle {
   silkscreenFontSize?: string | number
   viaPadDiameter?: string | number
@@ -3131,7 +3068,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[]
   snapshotsDir?: string
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
 
   unitPreference?: "mm" | "in" | "mil"
 
@@ -3625,6 +3562,12 @@ export interface SilkscreenGraphicProps {
   pcbMarginY?: string | number
   pcbRelative?: boolean
   relative?: boolean
+}
+
+
+export interface SimulationIbisModelProps extends IbisModelDefinition {
+  /** Selector for exactly one source component in this subcircuit. */
+  componentRef: string
 }
 
 

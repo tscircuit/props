@@ -2506,6 +2506,26 @@ export interface PcbBendProps {
 }
 
 
+export interface PcbChannelProps {
+  /** Unique within the enclosing SI block. */
+  name: string
+  /** Driving pin: ".U1 > .A4", a pair { p, n }, or either as { pin, model } to choose the IBIS model (per leg for a pair). */
+  driverRef: SignalEndpoint
+  /** Arrays always mean multiple receivers; only { p, n } means a differential pair. Single-ended probes reference each driving/receiving chip's own ground pin. */
+  receiverRef: SignalEndpoint | SignalEndpoint[]
+  /** Overrides the block bit rate. Raw and parsed numbers are bit/s. */
+  bitRate?: string | number
+  /** Open pattern string. Default: prbs7. Examples: prbs15, prbs31, clock, or literal bits. Constant patterns "0" and "1" declare quiet signals. */
+  pattern?: string
+  /** Explicit PRBS seed: integer 1..2^n-1 for prbsN (including disabled drivers). Omitted seeds use phases spaced by sorted signal name across board blocks; core resolves them. Unused for other patterns. */
+  seed?: number
+  /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
+  offset?: string | number
+  /** Tri-state the driver (high impedance) so this line stays quiet and only picks up crosstalk; pattern is ignored. Unlike pattern "0", which actively drives low and absorbs coupled noise. Every driver leg's IBIS model must support a disable state. Default: false. */
+  driverDisabled?: boolean
+}
+
+
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
@@ -2758,6 +2778,19 @@ export interface PcbSxValue {
   pcbX?: string | number
   pcbY?: string | number
   visibility?: "hidden" | "visible" | "inherit"
+}
+
+
+export interface PcbTransientChannelSimulationProps {
+  /** Required when the board contains more than one SI block. */
+  name?: string
+  /** Default signal bit rate. Raw and parsed numbers are bit/s. */
+  bitRate: string | number
+  /** Positive, finite time or UI. Parsed times are seconds; UI stays a normalized string like offset, for core to resolve at the block bit rate. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
+  duration?: string | number
+  /** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
+  allowUnroutedTraces?: boolean
+  children?: ReactNode
 }
 
 

@@ -550,6 +550,9 @@ export interface BoardProps extends Omit<
    * ```
    */
   outline?: BoardOutlinePoint[];
+  /** Default SMT paste margin per side as a fraction of each pad dimension.
+   * Zero gives full-size paste. A pad-specific ratio takes precedence. */
+  defaultSolderPasteMarginRatio?: number;
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor;
   /** Color of the top solder mask */
@@ -2507,6 +2510,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean;
   solderPasteMargin?: Distance;
+  solderPasteMarginRatio?: SolderPasteMarginRatio;
 }
 ```
 
@@ -2532,10 +2536,7 @@ export interface SolderJumperProps extends JumperProps {
 ### RectSolderPasteProps `<solderpaste />`
 
 ```ts
-export interface RectSolderPasteProps extends Omit<
-  PcbLayoutProps,
-  "pcbRotation"
-> {
+export interface RectSolderPasteProps extends PcbLayoutProps {
   shape: "rect";
   width: Distance;
   height: Distance;

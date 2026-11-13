@@ -965,6 +965,9 @@ export interface BoardProps
    * ```
    */
   outline?: BoardOutlinePoint[]
+  /** Default SMT paste margin per side as a fraction of each pad dimension.
+   * Zero gives full-size paste. A pad-specific ratio takes precedence. */
+  defaultSolderPasteMarginRatio?: number
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor
   /** Color of the top solder mask */
@@ -1314,6 +1317,7 @@ export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
   solderPasteMargin?: Distance
+  solderPasteMarginRatio?: number
 }
 
 
@@ -2471,6 +2475,13 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
 }
 
 
+export interface OvalSolderPasteProps extends PcbLayoutProps {
+  shape: "oval"
+  width: Distance
+  height: Distance
+}
+
+
 export interface PanelProps
   extends Omit<BaseGroupProps, "height" | "layoutMode" | "width"> {
   width?: Distance
@@ -2900,6 +2911,7 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
   solderPasteMargin?: Distance
+  solderPasteMarginRatio?: number
 }
 
 
@@ -3254,6 +3266,14 @@ export interface PolygonSmtPadProps
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
   solderPasteMargin?: Distance
+  solderPasteMarginRatio?: SolderPasteMarginRatio
+}
+
+
+export interface PolygonSolderPasteProps extends PcbLayoutProps {
+  shape: "polygon"
+  points: Point[]
+  holes?: Point[][]
 }
 
 
@@ -3309,11 +3329,11 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
   solderPasteMargin?: Distance
+  solderPasteMarginRatio?: SolderPasteMarginRatio
 }
 
 
-export interface RectSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface RectSolderPasteProps extends PcbLayoutProps {
   shape: "rect"
   width: Distance
   height: Distance
@@ -3364,6 +3384,7 @@ export interface RotatedPillSmtPadProps
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
   solderPasteMargin?: Distance
+  solderPasteMarginRatio?: number
 }
 
 
@@ -3386,6 +3407,7 @@ export interface RotatedRectSmtPadProps
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
   solderPasteMargin?: Distance
+  solderPasteMarginRatio?: SolderPasteMarginRatio
 }
 
 

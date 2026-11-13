@@ -138,6 +138,9 @@ export interface BoardProps
    * ```
    */
   outline?: BoardOutlinePoint[]
+  /** Default SMT paste margin per side as a fraction of each pad dimension.
+   * Zero gives full-size paste. A pad-specific ratio takes precedence. */
+  defaultSolderPasteMarginRatio?: number
   /** Color applied to both top and bottom solder masks */
   solderMaskColor?: BoardColor
   /** Color of the top solder mask */
@@ -251,6 +254,7 @@ export const boardProps = subcircuitGroupProps
       .describe("Prefer using anchorAlignment when possible"),
     outline: z.array(boardOutlinePoint).optional(),
     title: z.string().optional(),
+    defaultSolderPasteMarginRatio: z.number().finite().optional(),
     solderMaskColor: boardColor.optional(),
     topSolderMaskColor: boardColor.optional(),
     bottomSolderMaskColor: boardColor.optional(),

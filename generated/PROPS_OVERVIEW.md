@@ -262,6 +262,51 @@ export interface AssemblyDrawingDimensionProps {
 }
 
 
+export interface AssemblyDrawingExplosionMove extends AssemblyDrawingSelection {
+  /** Signed millimetres or a distance string. Omitted axes parse as zero. At least one axis must be authored. */
+  offX?: Distance
+  offY?: Distance
+  offZ?: Distance
+}
+
+
+export interface AssemblyDrawingExplosionProps {
+  name: string
+  displayName?: string
+  /** Fraction of authored separation, 0..1; defaults to 1. */
+  factor?: number
+  /** Depth-tested separation guides; defaults to false. */
+  showTrails?: boolean
+  /** Simultaneous, noncumulative offsets. Expanded targets must not overlap across moves. */
+  moves: AssemblyDrawingExplosionMove[]
+}
+
+
+export interface AssemblyDrawingExplosionViewProps
+  extends Omit<
+    AssemblyDrawingPartViewProps,
+    "partRef" | "stageRef" | "explosionRef"
+  > {
+  /** Membership to display; required, no implicit stage. */
+  stageRef: string
+  /** Reusable assembly.drawing.explosion selector; required. */
+  explosionRef: string
+  /** Geometry membership comes from stageRef. */
+  partRef?: never
+}
+
+
+export interface AssemblyDrawingNoteProps
+  extends AssemblyDrawingPaperPositionProps {
+  name?: string
+  text: string
+  /** View selector for offsets when authored on a page. Omit inside a view to use that parent. Core must reject missing/ambiguous/cross-page views. */
+  viewRef?: string
+  /** Paper-space text size; defaults to 2.7mm. Must be positive. */
+  fontSize?: Distance
+}
+
+
 export interface AssemblyDrawingPageProps {
   name?: string
   displayName?: string
@@ -271,7 +316,27 @@ export interface AssemblyDrawingPageProps {
   /** Custom paper dimensions in mm when numeric; unit strings are accepted. */
   width?: Distance
   height?: Distance
+  /** Sheet anchor used as (0, 0) for drawing coordinates. Same nine positions as board anchorAlignment; omitted means center. Axes remain +X right and +Y up. */
+  anchorAlignment?: NinePointAnchor
   children?: any
+}
+
+
+export interface AssemblyDrawingPaperPositionProps {
+  paperX?: Distance
+  paperY?: Distance
+  xOffsetFromViewCenter?: Distance
+  yOffsetFromViewCenter?: Distance
+}
+
+
+export interface AssemblyDrawingPartLabelProps
+  extends AssemblyDrawingSelection,
+    AssemblyDrawingPaperPositionProps {
+  name?: string
+  text: string
+  /** Assembled CAD-world mm (+Z up), or distance strings; follows the selected parts' drawing translation. */
+  anchor: { x: Distance; y: Distance; z: Distance }
 }
 
 
@@ -279,9 +344,13 @@ export interface AssemblyDrawingPartViewProps {
   name?: string
   displayName?: string
   /** Selector for the board, group or assembly geometry shown in this view. */
-  partRef: string
+  partRef?: string
+  /** Drawing stage selector, mutually exclusive with partRef. Select exactly one. */
+  stageRef?: string
+  /** Exploded drawings use assembly.drawing.explosionview instead. */
+  explosionRef?: never
   direction: AssemblyDrawingPartViewDirection
-  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
+  /** Viewport center relative to the drawing page anchor, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance
   centerY?: Distance
   /** Sibling part-view selector; infer centerX with this viewport left of the reference. Conflicts with rightOfRef and centerX. */
@@ -299,7 +368,7 @@ export interface AssemblyDrawingPartViewProps {
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
   section?: AssemblyDrawingSectionPlane
-  /** Nested assembly.drawing.dimension annotations; these do not change the selected geometry. */
+  /** Nested assembly.drawing.dimension, assembly.drawing.partlabel or assembly.drawing.note annotations; these do not change the selected geometry. */
   children?: any
 }
 
@@ -312,6 +381,23 @@ export interface AssemblyDrawingSectionPlane {
   keepSide: "less" | "greater"
   /** Physical distance between 45-degree strokes on the model. Defaults to 1mm. */
   hatchSpacing?: Distance
+}
+
+
+export interface AssemblyDrawingSelection {
+  /** Component selectors; a populated board can be composed with its fitted parts. */
+  partRefs?: string[]
+  /** Board substrate selectors, not just the board's fitted components. */
+  boardRefs?: string[]
+  /** Named drawing stage selectors to include as a set; references must be acyclic. */
+  includeStageRefs?: string[]
+}
+
+
+export interface AssemblyDrawingStageProps extends AssemblyDrawingSelection {
+  /** Stable identity for stageRef/includeStageRefs. No implicit playback order. */
+  name: string
+  displayName?: string
 }
 
 

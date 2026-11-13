@@ -36,9 +36,13 @@ export interface AssemblyDrawingPartViewProps {
   name?: string
   displayName?: string
   /** Selector for the board, group or assembly geometry shown in this view. */
-  partRef: string
+  partRef?: string
+  /** Drawing stage selector, mutually exclusive with partRef. Select exactly one. */
+  stageRef?: string
+  /** Exploded drawings use assembly.drawing.explosionview instead. */
+  explosionRef?: never
   direction: AssemblyDrawingPartViewDirection
-  /** Viewport center relative to the paper center, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
+  /** Viewport center relative to the drawing page anchor, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance
   centerY?: Distance
   /** Sibling part-view selector; infer centerX with this viewport left of the reference. Conflicts with rightOfRef and centerX. */
@@ -56,57 +60,91 @@ export interface AssemblyDrawingPartViewProps {
   showHiddenEdges?: boolean
   /** A planar cut with diagonal hatching on closed cut surfaces. */
   section?: AssemblyDrawingSectionPlane
-  /** Nested assembly.drawing.dimension annotations; these do not change the selected geometry. */
+  /** Nested assembly.drawing.dimension, assembly.drawing.partlabel or assembly.drawing.note annotations; these do not change the selected geometry. */
   children?: any
 }
 
-export const assemblyDrawingPartViewProps = z
-  .object({
-    name: z.string().optional(),
-    displayName: z.string().optional(),
-    partRef: z.string().min(1),
-    direction: z.enum(["x+", "x-", "y+", "y-", "z+", "z-", "isometric"]),
-    centerX: distance.pipe(z.number().finite()).optional(),
-    centerY: distance.pipe(z.number().finite()).optional(),
-    leftOfRef: z.string().trim().min(1).optional(),
-    rightOfRef: z.string().trim().min(1).optional(),
-    aboveRef: z.string().trim().min(1).optional(),
-    belowRef: z.string().trim().min(1).optional(),
-    width: distance.pipe(z.number().finite().positive()),
-    height: distance.pipe(z.number().finite().positive()),
-    showHiddenEdges: z.boolean().default(false),
-    section: assemblyDrawingSectionPlane.optional(),
-    children: z.any().optional(),
-  })
+export const assemblyDrawingPartViewBase = z.object({
+  name: z.string().optional(),
+  displayName: z.string().optional(),
+  partRef: z.string().trim().min(1).optional(),
+  stageRef: z.string().trim().min(1).optional(),
+  explosionRef: z.never().optional(),
+  direction: z.enum(["x+", "x-", "y+", "y-", "z+", "z-", "isometric"]),
+  centerX: distance.pipe(z.number().finite()).optional(),
+  centerY: distance.pipe(z.number().finite()).optional(),
+  leftOfRef: z.string().trim().min(1).optional(),
+  rightOfRef: z.string().trim().min(1).optional(),
+  aboveRef: z.string().trim().min(1).optional(),
+  belowRef: z.string().trim().min(1).optional(),
+  width: distance.pipe(z.number().finite().positive()),
+  height: distance.pipe(z.number().finite().positive()),
+  showHiddenEdges: z.boolean().default(false),
+  section: assemblyDrawingSectionPlane.optional(),
+  children: z.any().optional(),
+})
+
+export function validateDrawingViewLayout(
+  view: {
+    centerX?: number
+    centerY?: number
+    leftOfRef?: string
+    rightOfRef?: string
+    aboveRef?: string
+    belowRef?: string
+  },
+  ctx: z.RefinementCtx,
+) {
+  for (const [center, negative, positive] of [
+    ["centerX", "leftOfRef", "rightOfRef"],
+    ["centerY", "belowRef", "aboveRef"],
+  ] as const) {
+    if (view[negative] !== undefined && view[positive] !== undefined)
+      ctx.addIssue({
+        code: "custom",
+        path: [positive],
+        message: `${negative} and ${positive} are mutually exclusive`,
+      })
+    if (
+      view[center] !== undefined &&
+      (view[negative] !== undefined || view[positive] !== undefined)
+    )
+      ctx.addIssue({
+        code: "custom",
+        path: [center],
+        message: `${center} cannot be combined with ${negative} or ${positive}`,
+      })
+  }
+}
+
+export const defaultDrawingViewCenter = <
+  T extends {
+    centerX?: number
+    centerY?: number
+    leftOfRef?: string
+    rightOfRef?: string
+    aboveRef?: string
+    belowRef?: string
+  },
+>(
+  view: T,
+) => ({
+  ...view,
+  ...(view.leftOfRef || view.rightOfRef ? {} : { centerX: view.centerX ?? 0 }),
+  ...(view.aboveRef || view.belowRef ? {} : { centerY: view.centerY ?? 0 }),
+})
+
+export const assemblyDrawingPartViewProps = assemblyDrawingPartViewBase
   .superRefine((view, ctx) => {
-    for (const [center, negative, positive] of [
-      ["centerX", "leftOfRef", "rightOfRef"],
-      ["centerY", "belowRef", "aboveRef"],
-    ] as const) {
-      if (view[negative] !== undefined && view[positive] !== undefined)
-        ctx.addIssue({
-          code: "custom",
-          path: [positive],
-          message: `${negative} and ${positive} are mutually exclusive`,
-        })
-      if (
-        view[center] !== undefined &&
-        (view[negative] !== undefined || view[positive] !== undefined)
-      )
-        ctx.addIssue({
-          code: "custom",
-          path: [center],
-          message: `${center} cannot be combined with ${negative} or ${positive}`,
-        })
-    }
+    if ((view.partRef !== undefined) === (view.stageRef !== undefined))
+      ctx.addIssue({
+        code: "custom",
+        message: "Provide exactly one of partRef or stageRef",
+        path: ["stageRef"],
+      })
+    validateDrawingViewLayout(view, ctx)
   })
-  .transform((view) => ({
-    ...view,
-    ...(view.leftOfRef || view.rightOfRef
-      ? {}
-      : { centerX: view.centerX ?? 0 }),
-    ...(view.aboveRef || view.belowRef ? {} : { centerY: view.centerY ?? 0 }),
-  }))
+  .transform(defaultDrawingViewCenter)
 
 export type InferredAssemblyDrawingPartViewProps = z.input<
   typeof assemblyDrawingPartViewProps

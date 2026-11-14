@@ -577,6 +577,12 @@ export interface BoardProps extends Omit<
   viaStitchPitch?: Distance;
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean;
+  /**
+   * Solder paste margin per side, in mm or a unit string, for every pad on the
+   * board that does not set its own solderPasteMargin. Negative values shrink
+   * the paste aperture. Omitted keeps each pad's default paste size.
+   */
+  defaultSolderPasteMargin?: Distance;
 }
 ````
 

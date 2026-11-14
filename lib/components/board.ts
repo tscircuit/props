@@ -165,6 +165,12 @@ export interface BoardProps
   viaStitchPitch?: Distance
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
+  /**
+   * Solder paste margin per side, in mm or a unit string, for every pad on the
+   * board that does not set its own solderPasteMargin. Negative values shrink
+   * the paste aperture. Omitted keeps each pad's default paste size.
+   */
+  defaultSolderPasteMargin?: Distance
 }
 
 export const boardProps = subcircuitGroupProps
@@ -283,6 +289,11 @@ export const boardProps = subcircuitGroupProps
         "Positive center-to-center stitching via spacing in millimeters or a unit string, parsed to millimeters. Omitted uses the solver default. Does not enable stitching by itself.",
       ),
     schematicDisabled: z.boolean().optional(),
+    defaultSolderPasteMargin: distance
+      .optional()
+      .describe(
+        "Solder paste margin per side, in mm or a unit string parsed to mm, for every pad on the board that does not set its own solderPasteMargin. Negative values shrink the paste aperture. Omitted keeps each pad's default paste size.",
+      ),
   })
 
 type InferredBoardProps = z.input<typeof boardProps>

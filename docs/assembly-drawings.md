@@ -292,4 +292,4 @@ toleranced and GD&T annotations remain outside this initial proposal.
 
 ## Exploded views
 
-Use `<assembly.drawing.explosionview stageRef=".complete" explosionRef=".join" direction="isometric" width="130mm" height="140mm" />` for a separated drawing pose. It shares viewport and annotation controls with `partview`; ordinary part views show assembled geometry. See [stages and explosions](./drawing-assemblies.md) for reusable definitions, defaults, conflicts, and Circuit JSON mapping.
+Use `<assembly.drawing.explosionview stageRef="lift-rotor" direction="isometric" width="130mm" height="140mm" />` for a separated drawing pose. It shares viewport and annotation controls with `partview`; ordinary part views show assembled geometry. See [stages and explosions](./drawing-assemblies.md) for inherited assembly explosion moves, defaults, conflicts, and Circuit JSON mapping.

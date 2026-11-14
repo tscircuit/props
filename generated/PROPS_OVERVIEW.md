@@ -270,27 +270,19 @@ export interface AssemblyDrawingExplosionMove extends AssemblyDrawingSelection {
 }
 
 
-export interface AssemblyDrawingExplosionProps {
-  name: string
-  displayName?: string
-  /** Fraction of authored separation, 0..1; defaults to 1. */
-  factor?: number
-  /** Depth-tested separation guides; defaults to false. */
-  showTrails?: boolean
-  /** Simultaneous, noncumulative offsets. Expanded targets must not overlap across moves. */
-  moves: AssemblyDrawingExplosionMove[]
-}
-
-
 export interface AssemblyDrawingExplosionViewProps
   extends Omit<
     AssemblyDrawingPartViewProps,
-    "partRef" | "stageRef" | "explosionRef"
+    "partRef" | "stageRef" | "moves" | "factor" | "showTrails"
   > {
   /** Membership to display; required, no implicit stage. */
   stageRef: string
-  /** Reusable assembly.drawing.explosion selector; required. */
-  explosionRef: string
+  /** Simultaneous, noncumulative offsets from assembled placement. Expanded targets must not overlap across moves. */
+  moves: AssemblyDrawingExplosionMove[]
+  /** Fraction of authored separation, finite 0..1; defaults to 1. */
+  factor?: number
+  /** Depth-tested separation guides; defaults to false. */
+  showTrails?: boolean
   /** Geometry membership comes from stageRef. */
   partRef?: never
 }
@@ -349,6 +341,10 @@ export interface AssemblyDrawingPartViewProps {
   stageRef?: string
   /** Exploded drawings use assembly.drawing.explosionview instead. */
   explosionRef?: never
+  /** Explosion settings belong to explosionview. */
+  moves?: never
+  factor?: never
+  showTrails?: never
   direction: AssemblyDrawingPartViewDirection
   /** Viewport center relative to the drawing page anchor, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance

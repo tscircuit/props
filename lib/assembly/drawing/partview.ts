@@ -41,6 +41,10 @@ export interface AssemblyDrawingPartViewProps {
   stageRef?: string
   /** Exploded drawings use assembly.drawing.explosionview instead. */
   explosionRef?: never
+  /** Explosion settings belong to explosionview. */
+  moves?: never
+  factor?: never
+  showTrails?: never
   direction: AssemblyDrawingPartViewDirection
   /** Viewport center relative to the drawing page anchor, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
   centerX?: Distance
@@ -70,6 +74,9 @@ export const assemblyDrawingPartViewBase = z.object({
   partRef: z.string().trim().min(1).optional(),
   stageRef: z.string().trim().min(1).optional(),
   explosionRef: z.never().optional(),
+  moves: z.never().optional(),
+  factor: z.never().optional(),
+  showTrails: z.never().optional(),
   direction: z.enum(["x+", "x-", "y+", "y-", "z+", "z-", "isometric"]),
   centerX: distance.pipe(z.number().finite()).optional(),
   centerY: distance.pipe(z.number().finite()).optional(),

@@ -2,7 +2,6 @@ import { expect, test } from "bun:test"
 import {
   assemblyProps,
   assemblyDrawingStageProps,
-  assemblyDrawingExplosionProps,
   assemblyDrawingPartViewProps,
   assemblyDrawingExplosionViewProps,
   assemblyDrawingPartLabelProps,
@@ -10,7 +9,7 @@ import {
 } from "../lib"
 test("drawing stage authoring parses unit distances and rejects ambiguous selection", () => {
   expect(assemblyProps.drawing.stage).toBe(assemblyDrawingStageProps)
-  expect(assemblyProps.drawing.explosion).toBe(assemblyDrawingExplosionProps)
+  expect(assemblyProps.drawing).not.toHaveProperty("explosion")
   expect(assemblyProps.drawing.partlabel).toBe(assemblyDrawingPartLabelProps)
   expect(assemblyProps.drawing.note).toBe(assemblyDrawingNoteProps)
   expect(
@@ -24,34 +23,23 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
     partRefs: [".cap"],
     includeStageRefs: [".magnet"],
   })
-  expect(
-    assemblyDrawingExplosionProps.parse({
-      name: "join",
-      moves: [{ includeStageRefs: [".rotor"], offZ: "4cm" }],
-    }),
-  ).toEqual({
-    name: "join",
-    factor: 1,
-    showTrails: false,
-    moves: [{ includeStageRefs: [".rotor"], offX: 0, offY: 0, offZ: 40 }],
-  })
   const view = {
-    stageRef: ".complete",
-    explosionRef: ".join",
+    stageRef: "lift-rotor",
     direction: "isometric",
     width: 90,
     height: 80,
   }
   expect(assemblyDrawingExplosionViewProps.parse(view)).toMatchObject({
-    stageRef: ".complete",
-    explosionRef: ".join",
+    stageRef: "lift-rotor",
+    factor: 1,
+    showTrails: false,
     centerX: 0,
     centerY: 0,
   })
   for (const patch of [
     { partRef: ".base" },
-    { explosionRef: undefined },
-    { explosionRef: " " },
+    { moves: [{ targetRefs: "rotor", offZ: "4cm" }] },
+    { explosionRef: ".old-pose" },
     { centerX: 0, rightOfRef: ".other" },
     { aboveRef: ".other", belowRef: ".another" },
     { stageRef: undefined },
@@ -64,21 +52,21 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
   expect(assemblyProps.drawing.explosionview).toBe(
     assemblyDrawingExplosionViewProps,
   )
-  expect(assemblyDrawingPartViewProps.safeParse(view).success).toBe(false)
   expect(
-    assemblyDrawingPartViewProps.parse({ ...view, explosionRef: undefined }),
+    assemblyDrawingPartViewProps.safeParse({ ...view, factor: 1 }).success,
+  ).toBe(false)
+  expect(
+    assemblyDrawingPartViewProps.parse({ ...view, stageRef: ".complete" }),
   ).toMatchObject({ stageRef: ".complete" })
   expect(
     assemblyDrawingExplosionViewProps.parse({
       ...view,
-      stageRef: " .complete ",
-      explosionRef: " .join ",
+      stageRef: " rotor.lift-cap ",
       width: "9cm",
       rightOfRef: ".assembled",
     }),
   ).toMatchObject({
-    stageRef: ".complete",
-    explosionRef: ".join",
+    stageRef: "rotor.lift-cap",
     width: 90,
     rightOfRef: ".assembled",
     centerY: 0,
@@ -95,21 +83,32 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
     { name: "bad", boardRefs: [" "] },
   ])
     expect(assemblyDrawingStageProps.safeParse(input).success).toBe(false)
+  expect(assemblyDrawingExplosionViewProps.parse(view)).not.toHaveProperty(
+    "moves",
+  )
+  expect(
+    assemblyDrawingExplosionViewProps.parse({ ...view, factor: 0 }).factor,
+  ).toBe(0)
+  for (const stageRef of ["", " ", null, 42])
+    expect(
+      assemblyDrawingExplosionViewProps.safeParse({ ...view, stageRef })
+        .success,
+    ).toBe(false)
   for (const moves of [
     [],
+    [{ targetRefs: "rotor", offZ: "40mm" }],
     [{ offZ: 1 }],
     [{ partRefs: [".cap"] }],
     [{ partRefs: [".cap"], offZ: Infinity }],
   ])
     expect(
-      assemblyDrawingExplosionProps.safeParse({ name: "e", moves }).success,
+      assemblyDrawingExplosionViewProps.safeParse({ ...view, moves }).success,
     ).toBe(false)
   for (const factor of [-1, 2, NaN])
     expect(
-      assemblyDrawingExplosionProps.safeParse({
-        name: "e",
+      assemblyDrawingExplosionViewProps.safeParse({
+        ...view,
         factor,
-        moves: [{ partRefs: [".cap"], offZ: 0 }],
       }).success,
     ).toBe(false)
   expect(

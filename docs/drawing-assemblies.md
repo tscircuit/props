@@ -1,38 +1,47 @@
 # Assembly drawing stages and explosions
 
-`assembly.drawing.stage` names a reusable set of parts. `assembly.drawing.explosion` declares a drawing pose relative to assembled geometry. These are separate from ordered `assembly.explosion.stage` playback: their offsets are simultaneous, world-space, and do not accumulate or execute existing CAD stages.
+`assembly.drawing.stage` names a reusable set of parts for assembled part views. An `assembly.drawing.explosionview` references an existing `assembly.explosion.stage` and inherits its `assembly.explosion.move` children. Authors define the motion once in the assembly; drawing views only select the stage and control its presentation with `factor` and `showTrails`.
 
 ```tsx
-<assembly.drawing.stage name="pcba" boardRefs={[".board"]} partRefs={[".board > .U1", ".board > .BT1"]} />
-<assembly.drawing.stage name="rotor" partRefs={[".cap", ".encoder", ".bearing"]} />
-<assembly.drawing.stage name="complete" includeStageRefs={[".stationary", ".rotor"]} />
-<assembly.drawing.explosion name="join" showTrails moves={[
-  { includeStageRefs: [".rotor"], offZ: "40mm" },
-]} />
-<assembly.drawing.page width="297mm" height="210mm" anchorAlignment="bottom_left">
-  <assembly.drawing.explosionview name="joinView" stageRef=".complete" explosionRef=".join"
-    direction="isometric" width="130mm" height="140mm" centerX="148.5mm" centerY="105mm">
-    <assembly.drawing.partlabel partRefs={[".cap"]} text="Rotor"
-      anchor={{ x: 0, y: 0, z: "5mm" }} xOffsetFromViewCenter="60mm" yOffsetFromViewCenter="40mm" />
-  </assembly.drawing.explosionview>
-  <assembly.drawing.note text="Lower the completed rotor" paperX="28.5mm" paperY="195mm" />
-</assembly.drawing.page>
+<assembly.device name="counter">
+  {/* The circuit supplies the base and the populated rotor subassembly. */}
+  <assembly.explosion.stage name="lift-rotor">
+    <assembly.explosion.move targetRefs="rotor" offZ="40mm" />
+  </assembly.explosion.stage>
+  <assembly.drawing.page width="297mm" height="210mm" anchorAlignment="bottom_left">
+    <assembly.drawing.explosionview name="joinView" stageRef="lift-rotor" showTrails
+      direction="isometric" width="130mm" height="140mm" centerX="148.5mm" centerY="105mm">
+      <assembly.drawing.partlabel partRefs={[".rotor"]} text="Rotor"
+        anchor={{ x: 0, y: 0, z: "5mm" }} xOffsetFromViewCenter="60mm" yOffsetFromViewCenter="40mm" />
+    </assembly.drawing.explosionview>
+    <assembly.drawing.note text="Lower the completed rotor" paperX="28.5mm" paperY="195mm" />
+  </assembly.drawing.page>
+</assembly.device>
 ```
 
-The surrounding circuit supplies all referenced parts and the stationary stage. Include every fitted component in the PCBA stage; the abbreviated example lists only two. This PR defines and validates the props contract. Resolving selectors and emitting Circuit JSON in `@tscircuit/core` remain follow-up work; the renderer PR contains an executable fixture producer for evaluation.
+This PR defines and validates the props contract. Resolving stage references and emitting Circuit JSON in `@tscircuit/core` remain follow-up work; the renderer PR contains an executable fixture producer for evaluation.
 
 Accepted inputs and canonical output:
 
 - Selections use nonempty arrays `partRefs`, `boardRefs`, `includeStageRefs`; references are trimmed nonblank strings. Supply at least one selection field. There are no aliases or implicit descendants. Core resolves these to `source_component_ids`, `pcb_board_ids`, `includes_stage_ids`.
-- A stage requires a stable `name` and optionally `displayName`. Nested includes form a set and must be acyclic. There is no implicit order or previous-stage accumulation.
-- An explosion requires a stable `name` and a nonempty `moves` array. `factor` defaults to 1 and is finite in 0..1. `showTrails` defaults false. Each move requires a selection and at least one of `offX/offY/offZ`; numeric values are CAD-world mm (+Z up), unit strings normalize to mm, omitted axes parse to zero. Core emits a `translation` point. Expanded move targets must not overlap; graph validation is downstream.
-- A `partview` accepts exactly one of existing `partRef` or new `stageRef`, and shows assembled geometry. It rejects `explosionRef`.
-- An `explosionview` requires both `stageRef` and `explosionRef` (trimmed nonblank selectors), and rejects `partRef`. Core emits `drawing_explosion_view` with its own `drawing_explosion_view_id`, plus `drawing_assembly_stage_id` and `drawing_explosion_id`. No stage or explosion is selected implicitly.
+- A drawing membership stage requires a stable `name` and optionally `displayName`. Nested includes form a set and must be acyclic. There is no implicit order or previous-stage accumulation.
+- An explosion view requires a trimmed nonblank `stageRef` identifying an `assembly.explosion.stage`. It inherits that stage's move children rather than accepting a `moves` prop. Short names resolve within the owning assembly; qualified names such as `rotor.lift-cap` address stages inside subassemblies, following the existing [assembly explosion reference rules](./proposals/assembly-explosion.md). There is no default stage or reference alias.
+- `factor` defaults to 1 and is finite in 0..1; 0 shows assembled placement and 1 the resolved stage pose. `showTrails` defaults false. Several views can reference one stage with different presentation settings without copying or changing its moves.
+- An `explosionview` rejects `moves`, `partRef` and the removed `explosionRef`. It shows geometry from the referenced explosion stage's owning assembly, including stationary parts for context. A drawing membership stage is not an explosion stage and cannot supply its motion; core must reject references to the wrong element kind, missing/ambiguous stages and stages without moves.
+- A `partview` accepts exactly one of `partRef` or `stageRef`, and shows assembled geometry. Its `stageRef` still selects an `assembly.drawing.stage` membership set. It rejects explosion settings.
 - Both views share direction, positive unit-aware width/height, center defaults, relative sibling placement, hidden edges, section controls, and nested dimension/partlabel annotations. Relative references may target either kind of sibling view. Unit strings normalize to mm; opposing references and explicit coordinates on the same axis conflict.
 - Part labels require a selection, nonblank `text`, an explicit assembled-world `anchor`, and a text position for each axis. Use page-anchor-relative `paperX/paperY` or `xOffsetFromViewCenter/yOffsetFromViewCenter` relative to the parent view. They emit `drawing_part_label` with exactly one parent reference (`drawing_part_view_id` or `drawing_explosion_view_id`); core resolves selection IDs. Anchor coordinates normalize to mm and follow the target's translation; paper text coordinates stay fixed. Selected parts must be visible and share a translation.
 - Notes require nonblank `text` and a position per axis using the same absolute/offset fields. A note inside a view uses that view by default; a page-level note with offsets requires `viewRef`. An explicit `viewRef` takes precedence over the enclosing view. Core must resolve exactly one view on the same page and emit its typed ID. `fontSize` is positive paper mm (unit strings accepted), default 2.7mm. They emit `drawing_page_note` under the parent page. Text is plain text, not markup.
 
-This is an unreleased proposal. Migrate the earlier `<assembly.drawing.partview explosionRef="…">` spelling to `<assembly.drawing.explosionview>`; there is no alias. Existing assembled partview usage is unchanged. Separation guides illustrate relationships, not certified insertion paths.
+## Circuit JSON emission
+
+The authoring API and renderer records serve different purposes. Core must resolve the referenced assembly explosion stage using the existing ordered, incremental move semantics and assembly-owner coordinate frames. Evaluate the sequence through that stage from assembled placement, including preceding stages, then flatten the resulting per-part displacements into CAD-world translations. Repeated targets and parent/child moves must resolve to one final translation per part; do not forward overlapping incremental moves directly to the renderer.
+
+Core emits a `drawing_assembly_stage` for the stage owner's visible geometry and a `drawing_explosion_view` with that membership ID, resolved `moves`, `factor` and `show_trails`. Apply the drawing factor once to the resolved translations. The merged Circuit JSON schema retains its nonempty `moves` array as compiled data; it is not a TSX prop. The renderer consumes these resolved simultaneous translations rather than scheduling assembly stages itself. Props validation preserves `stageRef` and checks scalar settings; it cannot resolve an assembly tree or synthesize move data.
+
+## Migration
+
+From props #1009, remove `<assembly.drawing.explosion>` and `explosionRef`. From the earlier inline proposal, remove the view's `moves` prop. Author the movements as `<assembly.explosion.move>` children of `<assembly.explosion.stage>` and point the view's `stageRef` at that explosion stage. Convert drawing-only selections to the corresponding assembly part/subassembly `targetRefs`; do not point the view at the old drawing membership stage. Keep `factor` and `showTrails` on each view. The standalone drawing explosion schema/type and the drawing move helper are removed; there is no compatibility alias. Existing assembled partview usage is unchanged. Separation guides illustrate relationships, not certified insertion paths.
 
 ## Page anchor alignment and view-relative annotation positions
 

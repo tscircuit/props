@@ -8,6 +8,8 @@ import {
   assemblyExplosionProps,
   assemblyExplosionStageProps,
   assemblyProps,
+  assemblyDrawingExplosionViewProps,
+  type AssemblyDrawingExplosionViewProps,
   assemblySubassemblyProps,
 } from "lib"
 import { createElement, type ReactNode } from "react"
@@ -220,4 +222,69 @@ test("TSX preserves move targets and ordered children inside subassemblies", () 
       children: emptyChildren,
     }).children,
   ).toBeNull()
+})
+
+test("drawing explosion views reference existing stages without copying their moves", () => {
+  const assembly = {
+    explosion: {
+      stage: (props: AssemblyExplosionStagePropsInput) =>
+        createElement("assembly.explosion.stage", props),
+      move: (props: AssemblyExplosionMovePropsInput) =>
+        createElement("assembly.explosion.move", props),
+    },
+    drawing: {
+      explosionview: (props: AssemblyDrawingExplosionViewProps) =>
+        createElement("assembly.drawing.explosionview", props),
+    },
+  }
+  const stage = (
+    <assembly.explosion.stage name="lift-rotor">
+      <assembly.explosion.move targetRefs="rotor" offZ="40mm" />
+    </assembly.explosion.stage>
+  )
+  const full = (
+    <assembly.drawing.explosionview
+      stageRef="lift-rotor"
+      direction="isometric"
+      width="90mm"
+      height="80mm"
+      showTrails
+    />
+  )
+  const partial = (
+    <assembly.drawing.explosionview
+      stageRef="lift-rotor"
+      direction="z+"
+      width="90mm"
+      height="80mm"
+      factor={0.5}
+    />
+  )
+  expect(assemblyExplosionStageProps.parse(stage.props).children).toBe(
+    stage.props.children,
+  )
+  expect(assemblyDrawingExplosionViewProps.parse(full.props)).toMatchObject({
+    stageRef: "lift-rotor",
+    factor: 1,
+    showTrails: true,
+  })
+  expect(assemblyDrawingExplosionViewProps.parse(partial.props)).toMatchObject({
+    stageRef: "lift-rotor",
+    factor: 0.5,
+    showTrails: false,
+  })
+  expect(
+    assemblyDrawingExplosionViewProps.parse(full.props),
+  ).not.toHaveProperty("moves")
+  const invalid: AssemblyDrawingExplosionViewProps = {
+    stageRef: "lift-rotor",
+    direction: "isometric",
+    width: 90,
+    height: 80,
+    // @ts-expect-error Drawing views inherit existing assembly moves.
+    moves: [{ targetRefs: "rotor", offZ: "40mm" }],
+  }
+  expect(assemblyDrawingExplosionViewProps.safeParse(invalid).success).toBe(
+    false,
+  )
 })

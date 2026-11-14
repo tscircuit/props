@@ -24,15 +24,13 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
     includeStageRefs: [".magnet"],
   })
   const view = {
-    stageRef: ".complete",
-    moves: [{ includeStageRefs: [".rotor"], offZ: "4cm" }],
+    stageRef: "lift-rotor",
     direction: "isometric",
     width: 90,
     height: 80,
   }
   expect(assemblyDrawingExplosionViewProps.parse(view)).toMatchObject({
-    stageRef: ".complete",
-    moves: [{ includeStageRefs: [".rotor"], offX: 0, offY: 0, offZ: 40 }],
+    stageRef: "lift-rotor",
     factor: 1,
     showTrails: false,
     centerX: 0,
@@ -40,7 +38,7 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
   })
   for (const patch of [
     { partRef: ".base" },
-    { moves: undefined },
+    { moves: [{ targetRefs: "rotor", offZ: "4cm" }] },
     { explosionRef: ".old-pose" },
     { centerX: 0, rightOfRef: ".other" },
     { aboveRef: ".other", belowRef: ".another" },
@@ -54,19 +52,21 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
   expect(assemblyProps.drawing.explosionview).toBe(
     assemblyDrawingExplosionViewProps,
   )
-  expect(assemblyDrawingPartViewProps.safeParse(view).success).toBe(false)
   expect(
-    assemblyDrawingPartViewProps.parse({ ...view, moves: undefined }),
+    assemblyDrawingPartViewProps.safeParse({ ...view, factor: 1 }).success,
+  ).toBe(false)
+  expect(
+    assemblyDrawingPartViewProps.parse({ ...view, stageRef: ".complete" }),
   ).toMatchObject({ stageRef: ".complete" })
   expect(
     assemblyDrawingExplosionViewProps.parse({
       ...view,
-      stageRef: " .complete ",
+      stageRef: " rotor.lift-cap ",
       width: "9cm",
       rightOfRef: ".assembled",
     }),
   ).toMatchObject({
-    stageRef: ".complete",
+    stageRef: "rotor.lift-cap",
     width: 90,
     rightOfRef: ".assembled",
     centerY: 0,
@@ -83,8 +83,20 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
     { name: "bad", boardRefs: [" "] },
   ])
     expect(assemblyDrawingStageProps.safeParse(input).success).toBe(false)
+  expect(assemblyDrawingExplosionViewProps.parse(view)).not.toHaveProperty(
+    "moves",
+  )
+  expect(
+    assemblyDrawingExplosionViewProps.parse({ ...view, factor: 0 }).factor,
+  ).toBe(0)
+  for (const stageRef of ["", " ", null, 42])
+    expect(
+      assemblyDrawingExplosionViewProps.safeParse({ ...view, stageRef })
+        .success,
+    ).toBe(false)
   for (const moves of [
     [],
+    [{ targetRefs: "rotor", offZ: "40mm" }],
     [{ offZ: 1 }],
     [{ partRefs: [".cap"] }],
     [{ partRefs: [".cap"], offZ: Infinity }],
@@ -97,7 +109,6 @@ test("drawing stage authoring parses unit distances and rejects ambiguous select
       assemblyDrawingExplosionViewProps.safeParse({
         ...view,
         factor,
-        moves: [{ partRefs: [".cap"], offZ: 0 }],
       }).success,
     ).toBe(false)
   expect(

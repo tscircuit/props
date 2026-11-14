@@ -41,7 +41,7 @@ export interface AssemblyDrawingPartViewProps {
   stageRef?: string
   /** Exploded drawings use assembly.drawing.explosionview instead. */
   explosionRef?: never
-  /** Explosion settings belong to explosionview. */
+  /** Author moves as assembly.explosion.move children of an explosion stage, never as a drawing prop. */
   moves?: never
   factor?: never
   showTrails?: never

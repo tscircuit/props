@@ -262,28 +262,18 @@ export interface AssemblyDrawingDimensionProps {
 }
 
 
-export interface AssemblyDrawingExplosionMove extends AssemblyDrawingSelection {
-  /** Signed millimetres or a distance string. Omitted axes parse as zero. At least one axis must be authored. */
-  offX?: Distance
-  offY?: Distance
-  offZ?: Distance
-}
-
-
 export interface AssemblyDrawingExplosionViewProps
   extends Omit<
     AssemblyDrawingPartViewProps,
-    "partRef" | "stageRef" | "moves" | "factor" | "showTrails"
+    "partRef" | "stageRef" | "factor" | "showTrails"
   > {
-  /** Membership to display; required, no implicit stage. */
+  /** Required assembly.explosion.stage reference. Inherit its assembly.explosion.move children; resolve names in the owning assembly, including qualified subassembly names. */
   stageRef: string
-  /** Simultaneous, noncumulative offsets from assembled placement. Expanded targets must not overlap across moves. */
-  moves: AssemblyDrawingExplosionMove[]
   /** Fraction of authored separation, finite 0..1; defaults to 1. */
   factor?: number
   /** Depth-tested separation guides; defaults to false. */
   showTrails?: boolean
-  /** Geometry membership comes from stageRef. */
+  /** Geometry comes from the referenced explosion stage's owning assembly. */
   partRef?: never
 }
 
@@ -341,7 +331,7 @@ export interface AssemblyDrawingPartViewProps {
   stageRef?: string
   /** Exploded drawings use assembly.drawing.explosionview instead. */
   explosionRef?: never
-  /** Explosion settings belong to explosionview. */
+  /** Author moves as assembly.explosion.move children of an explosion stage, never as a drawing prop. */
   moves?: never
   factor?: never
   showTrails?: never

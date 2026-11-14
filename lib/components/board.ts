@@ -166,12 +166,20 @@ export interface BoardProps
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
   /**
-   * Solder paste margin per side, in mm or a unit string, for every pad on the
-   * board that does not set its own solderPasteMargin. Negative values shrink
-   * the paste aperture. Omitted keeps each pad's default paste size.
+   * Solder paste margin for every pad on the board that does not set its own
+   * solderPasteMargin: a per-side distance in mm or a unit string, or a
+   * percentage of the pad size such as "-10%" (paste 90% of the pad width and
+   * height). Negative values shrink the paste aperture. Omitted keeps each
+   * pad's default paste size.
    */
-  defaultSolderPasteMargin?: Distance
+  defaultSolderPasteMargin?: Distance | `${number}%`
 }
+
+/** A percentage string such as "-10%", kept in its canonical "<number>%" form. */
+const solderPasteMarginPercentage = z
+  .string()
+  .regex(/^\s*-?\d+(\.\d+)?\s*%\s*$/)
+  .transform((value) => `${parseFloat(value)}%` as `${number}%`)
 
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
@@ -289,10 +297,11 @@ export const boardProps = subcircuitGroupProps
         "Positive center-to-center stitching via spacing in millimeters or a unit string, parsed to millimeters. Omitted uses the solver default. Does not enable stitching by itself.",
       ),
     schematicDisabled: z.boolean().optional(),
-    defaultSolderPasteMargin: distance
+    defaultSolderPasteMargin: z
+      .union([solderPasteMarginPercentage, distance])
       .optional()
       .describe(
-        "Solder paste margin per side, in mm or a unit string parsed to mm, for every pad on the board that does not set its own solderPasteMargin. Negative values shrink the paste aperture. Omitted keeps each pad's default paste size.",
+        'Solder paste margin for every pad on the board that does not set its own solderPasteMargin: a per-side distance in mm or a unit string, parsed to mm, or a percentage of the pad size such as "-10%" (paste 90% of the pad width and height), kept as "<number>%". Negative values shrink the paste aperture. Omitted keeps each pad\'s default paste size.',
       ),
   })
 

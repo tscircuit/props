@@ -979,11 +979,13 @@ export interface BoardProps
   /** Whether this board should be omitted from the schematic view */
   schematicDisabled?: boolean
   /**
-   * Solder paste margin per side, in mm or a unit string, for every pad on the
-   * board that does not set its own solderPasteMargin. Negative values shrink
-   * the paste aperture. Omitted keeps each pad's default paste size.
+   * Solder paste margin for every pad on the board that does not set its own
+   * solderPasteMargin: a per-side distance in mm or a unit string, or a
+   * percentage of the pad size such as "-10%" (paste 90% of the pad width and
+   * height). Negative values shrink the paste aperture. Omitted keeps each
+   * pad's default paste size.
    */
-  defaultSolderPasteMargin?: Distance
+  defaultSolderPasteMargin?: Distance | `${number}%`
 }
 
 

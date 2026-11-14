@@ -2234,13 +2234,9 @@ export interface BoardProps
   enableViaStitching?: boolean
   viaStitchPitch?: Distance
   schematicDisabled?: boolean
-  defaultSolderPasteMargin?: Distance
+  defaultSolderPasteMargin?: Distance | `${number}%`
 }
-/**
-   * Solder paste margin per side, in mm or a unit string, for every pad on the
-   * board that does not set its own solderPasteMargin. Negative values shrink
-   * the paste aperture. Omitted keeps each pad's default paste size.
-   */
+/** A percentage string such as "-10%", kept in its canonical "<number>%" form. */
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
@@ -2357,10 +2353,11 @@ export const boardProps = subcircuitGroupProps
         "Positive center-to-center stitching via spacing in millimeters or a unit string, parsed to millimeters. Omitted uses the solver default. Does not enable stitching by itself.",
       ),
     schematicDisabled: z.boolean().optional(),
-    defaultSolderPasteMargin: distance
+    defaultSolderPasteMargin: z
+      .union([solderPasteMarginPercentage, distance])
       .optional()
       .describe(
-        "Solder paste margin per side, in mm or a unit string parsed to mm, for every pad on the board that does not set its own solderPasteMargin. Negative values shrink the paste aperture. Omitted keeps each pad's default paste size.",
+        'Solder paste margin for every pad on the board that does not set its own solderPasteMargin: a per-side distance in mm or a unit string, parsed to mm, or a percentage of the pad size such as "-10%" (paste 90% of the pad width and height), kept as "<number>%". Negative values shrink the paste aperture. Omitted keeps each pad\'s default paste size.',
       ),
   })
 ```

@@ -69,10 +69,11 @@ export const resistorProps = commonComponentProps.extend({
     .union([z.string(), z.number()])
     .transform((val) => {
       if (typeof val === "string") {
-        if (val.endsWith("%")) {
-          return parseFloat(val.slice(0, -1)) / 100
+        const trimmedTolerance = val.trim()
+        if (trimmedTolerance.endsWith("%")) {
+          return parseFloat(trimmedTolerance.slice(0, -1)) / 100
         }
-        return parseFloat(val)
+        return parseFloat(trimmedTolerance)
       }
       return val
     })

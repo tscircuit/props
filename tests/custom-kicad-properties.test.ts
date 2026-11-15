@@ -73,7 +73,7 @@ for (const schema of [kicadFootprintMetadata, kicadSymbolMetadata]) {
       null,
       "6.4",
       {},
-      { value: 6.4 },
+      { value: false },
       { value: "6.4", effects: { font: { size: { x: false, y: 1 } } } },
     ]) {
       const parsed = schema.safeParse({
@@ -136,9 +136,13 @@ test("built-in properties stay named and validated alongside custom properties",
     ])
     for (const propertyName of propertyNames) {
       expect(
-        schema.safeParse({ properties: { [propertyName]: { value: 6.4 } } })
+        schema.safeParse({ properties: { [propertyName]: { value: false } } })
           .success,
       ).toBe(false)
+      expect(
+        schema.parse({ properties: { [propertyName]: { value: 6.4 } } })
+          .properties?.[propertyName]?.value,
+      ).toBe("6.4")
     }
   }
 })

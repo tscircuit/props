@@ -48,14 +48,14 @@ type InferredKicadSymbolEffects = z.input<typeof kicadSymbolEffects>
 expectTypesMatch<KicadSymbolEffects, InferredKicadSymbolEffects>(true)
 
 export interface KicadSymbolProperty {
-  value: string
+  value: string | number
   id?: number | string
   at?: KicadAt
   effects?: KicadSymbolEffects
 }
 
 export const kicadSymbolProperty = z.object({
-  value: z.string(),
+  value: z.union([z.string(), z.number()]).transform(String),
   id: z.union([z.number(), z.string()]).optional(),
   at: kicadAt.optional(),
   effects: kicadSymbolEffects.optional(),

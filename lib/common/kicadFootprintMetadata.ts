@@ -42,7 +42,7 @@ type InferredKicadEffects = z.input<typeof kicadEffects>
 expectTypesMatch<KicadEffects, InferredKicadEffects>(true)
 
 export interface KicadProperty {
-  value: string
+  value: string | number
   at?: KicadAt
   layer?: string
   uuid?: string
@@ -51,7 +51,7 @@ export interface KicadProperty {
 }
 
 export const kicadProperty = z.object({
-  value: z.string(),
+  value: z.union([z.string(), z.number()]).transform(String),
   at: kicadAt.optional(),
   layer: z.string().optional(),
   uuid: z.string().optional(),

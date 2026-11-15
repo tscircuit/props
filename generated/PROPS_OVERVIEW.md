@@ -2373,6 +2373,13 @@ export interface MosfetProps<PinLabel extends string = string>
   symbolSourceSide?: "left" | "right" | "top" | "bottom"
   /** The side of the schematic symbol where the gate port is placed. */
   symbolGateSide?: "left" | "right" | "top" | "bottom"
+  /**
+   * Physical package pins mapped to semantic terminal names (and optional aliases).
+   * For AO3400A/BSS138 SOT-23: { pin1: "gate", pin2: "source", pin3: "drain" }.
+   * Use full terminal names to retain schematic and simulation semantics.
+   * Omit to retain the symbol's default pin order; no package pinout is inferred.
+   */
+  pinLabels?: PinLabelsProp<string, PinLabel>
   connections?: Connections<MosfetPinLabels>
 }
 

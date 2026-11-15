@@ -4238,15 +4238,22 @@ export interface MosfetProps<PinLabel extends string = string>
   symbolDrainSide?: "left" | "right" | "top" | "bottom"
   symbolSourceSide?: "left" | "right" | "top" | "bottom"
   symbolGateSide?: "left" | "right" | "top" | "bottom"
+  pinLabels?: PinLabelsProp<string, PinLabel>
   connections?: Connections<MosfetPinLabels>
 }
-/** The side of the schematic symbol where the gate port is placed. */
+/**
+   * Physical package pins mapped to semantic terminal names (and optional aliases).
+   * For AO3400A/BSS138 SOT-23: { pin1: "gate", pin2: "source", pin3: "drain" }.
+   * Use full terminal names to retain schematic and simulation semantics.
+   * Omit to retain the symbol's default pin order; no package pinout is inferred.
+   */
 export const mosfetProps = commonComponentProps.extend({
   channelType: z.enum(["n", "p"]),
   mosfetMode: z.enum(["enhancement", "depletion"]),
   symbolDrainSide: z.enum(["left", "right", "top", "bottom"]).optional(),
   symbolSourceSide: z.enum(["left", "right", "top", "bottom"]).optional(),
   symbolGateSide: z.enum(["left", "right", "top", "bottom"]).optional(),
+  pinLabels: pinLabelsProp.optional(),
   connections: createConnectionsProp(mosfetPins).optional(),
 })
 ```

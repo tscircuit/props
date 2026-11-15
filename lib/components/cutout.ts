@@ -4,24 +4,24 @@ import { point, type Point } from "lib/common/point"
 import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
 import { expectTypesMatch } from "lib/typecheck"
 
-export interface RectCutoutProps
-  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
+export interface RectCutoutProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   shape: "rect"
   width: Distance
   height: Distance
+  cornerRadius?: Distance
 }
 
 export const rectCutoutProps = pcbLayoutProps
   .omit({
     layer: true,
-    pcbRotation: true,
   })
   .extend({
     name: z.string().optional(),
     shape: z.literal("rect"),
     width: distance,
     height: distance,
+    cornerRadius: distance.optional(),
   })
 expectTypesMatch<RectCutoutProps, z.input<typeof rectCutoutProps>>(true)
 
@@ -63,15 +63,44 @@ export const polygonCutoutProps = pcbLayoutProps
   })
 expectTypesMatch<PolygonCutoutProps, z.input<typeof polygonCutoutProps>>(true)
 
+export interface PathCutoutProps
+  extends Omit<PcbLayoutProps, "layer" | "pcbRotation"> {
+  name?: string
+  shape: "path"
+  route: Point[]
+  slotWidth: Distance
+  slotLength?: Distance
+  spaceBetweenSlots?: Distance
+  slotCornerRadius?: Distance
+}
+
+export const pathCutoutProps = pcbLayoutProps
+  .omit({
+    layer: true,
+    pcbRotation: true,
+  })
+  .extend({
+    name: z.string().optional(),
+    shape: z.literal("path"),
+    route: z.array(point),
+    slotWidth: distance,
+    slotLength: distance.optional(),
+    spaceBetweenSlots: distance.optional(),
+    slotCornerRadius: distance.optional(),
+  })
+expectTypesMatch<PathCutoutProps, z.input<typeof pathCutoutProps>>(true)
+
 export type CutoutProps =
   | RectCutoutProps
   | CircleCutoutProps
   | PolygonCutoutProps
+  | PathCutoutProps
 
 export const cutoutProps = z.discriminatedUnion("shape", [
   rectCutoutProps,
   circleCutoutProps,
   polygonCutoutProps,
+  pathCutoutProps,
 ])
 
 export type CutoutPropsInput = z.input<typeof cutoutProps>

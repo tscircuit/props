@@ -5,9 +5,11 @@ import {
   type RectCutoutProps,
   type CircleCutoutProps,
   type PolygonCutoutProps,
+  type PathCutoutProps,
   rectCutoutProps,
   circleCutoutProps,
   polygonCutoutProps,
+  pathCutoutProps,
 } from "lib/components/cutout"
 import { expectTypeOf } from "expect-type"
 import { z } from "zod"
@@ -140,4 +142,71 @@ test("type inference for CutoutProps", () => {
     points: [{ x: 0, y: 0 }],
   }
   expectTypeOf(polygon).toMatchTypeOf<PolygonCutoutProps>()
+
+  const path: CutoutProps = {
+    shape: "path",
+    route: [
+      { x: 0, y: 0 },
+      { x: 5, y: 5 },
+    ],
+    slotWidth: "1mm",
+  }
+  expectTypeOf(path).toMatchTypeOf<PathCutoutProps>()
+})
+
+test("should parse RectCutoutProps with pcbRotation and cornerRadius", () => {
+  const rawProps: RectCutoutProps = {
+    shape: "rect",
+    width: "12mm",
+    height: "6mm",
+    cornerRadius: "1.5mm",
+    pcbRotation: "45deg",
+    pcbX: 2,
+    pcbY: 3,
+  }
+  const parsed = rectCutoutProps.parse(rawProps)
+  expect(parsed.cornerRadius).toBe(1.5)
+  expect(parsed.pcbRotation).toBe(45)
+
+  const parsedUnion = cutoutProps.parse(rawProps)
+  expect(parsedUnion.shape).toBe("rect")
+  if (parsedUnion.shape === "rect") {
+    expect(parsedUnion.cornerRadius).toBe(1.5)
+    expect(parsedUnion.pcbRotation).toBe(45)
+  }
+})
+
+test("should parse PathCutoutProps", () => {
+  const rawProps: PathCutoutProps = {
+    name: "path_cutout_1",
+    shape: "path",
+    route: [
+      { x: 0, y: 0 },
+      { x: "10mm", y: "5mm" },
+    ],
+    slotWidth: "2mm",
+    slotLength: "4mm",
+    spaceBetweenSlots: "1mm",
+    slotCornerRadius: "0.5mm",
+    pcbX: 0,
+    pcbY: 0,
+  }
+  const parsed = pathCutoutProps.parse(rawProps)
+  expect(parsed.name).toBe("path_cutout_1")
+  expect(parsed.shape).toBe("path")
+  expect(parsed.route).toEqual([
+    { x: 0, y: 0 },
+    { x: 10, y: 5 },
+  ])
+  expect(parsed.slotWidth).toBe(2)
+  expect(parsed.slotLength).toBe(4)
+  expect(parsed.spaceBetweenSlots).toBe(1)
+  expect(parsed.slotCornerRadius).toBe(0.5)
+
+  const parsedUnion = cutoutProps.parse(rawProps)
+  expect(parsedUnion.shape).toBe("path")
+  if (parsedUnion.shape === "path") {
+    expect(parsedUnion.slotWidth).toBe(2)
+    expect(parsedUnion.slotCornerRadius).toBe(0.5)
+  }
 })

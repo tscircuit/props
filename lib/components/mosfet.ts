@@ -6,6 +6,7 @@ import { createConnectionsProp } from "../common/connectionsProp"
 import { expectTypesMatch } from "../typecheck"
 import type { Connections } from "../utility-types/connections-and-selectors"
 import { z } from "zod"
+import { pinLabelsProp, type PinLabelsProp } from "./chip"
 
 export const mosfetPins = [
   "pin1",
@@ -27,6 +28,12 @@ export interface MosfetProps<PinLabel extends string = string>
   symbolSourceSide?: "left" | "right" | "top" | "bottom"
   /** The side of the schematic symbol where the gate port is placed. */
   symbolGateSide?: "left" | "right" | "top" | "bottom"
+  /**
+   * Physical package pins mapped to terminal names.
+   * For AO3400A SOT-23: { pin1: "gate", pin2: "source", pin3: "drain" }.
+   * Omit to retain the default order (pin1=drain, pin2=source, pin3=gate).
+   */
+  pinLabels?: PinLabelsProp<string, PinLabel>
   connections?: Connections<MosfetPinLabels>
 }
 
@@ -36,6 +43,7 @@ export const mosfetProps = commonComponentProps.extend({
   symbolDrainSide: z.enum(["left", "right", "top", "bottom"]).optional(),
   symbolSourceSide: z.enum(["left", "right", "top", "bottom"]).optional(),
   symbolGateSide: z.enum(["left", "right", "top", "bottom"]).optional(),
+  pinLabels: pinLabelsProp.optional(),
   connections: createConnectionsProp(mosfetPins).optional(),
 })
 

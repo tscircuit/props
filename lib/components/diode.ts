@@ -103,6 +103,7 @@ export const diodeProps = commonComponentProps
     if (data.standard) result.standard = true
     else if (data.schottky) result.schottky = true
     else if (data.zener) result.zener = true
+    else if (data.avalanche) result.avalanche = true
     else if (data.photo) result.photo = true
     else if (data.tvs) result.tvs = true
     else {

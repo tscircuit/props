@@ -339,3 +339,62 @@ test("should parse schOrientation for diode", () => {
   const parsed = diodeProps.parse(raw)
   expect(parsed.schOrientation).toBe("horizontal")
 })
+
+const variantFlags = [
+  "standard",
+  "schottky",
+  "zener",
+  "avalanche",
+  "photo",
+  "tvs",
+] as const
+
+for (const flag of variantFlags) {
+  test(`should enable only the ${flag} boolean flag`, () => {
+    const parsed = diodeProps.parse({ name: "D1", [flag]: true })
+    expect(variantFlags.filter((key) => parsed[key])).toEqual([flag])
+  })
+
+  test(`should prefer the ${flag} boolean flag over variant`, () => {
+    const variant = flag === "photo" ? "zener" : "photo"
+    const parsed = diodeProps.parse({ name: "D1", variant, [flag]: true })
+    expect(variantFlags.filter((key) => parsed[key])).toEqual([flag])
+  })
+}
+
+test("should enable only avalanche when selected by variant", () => {
+  const parsed = diodeProps.parse({ name: "D1", variant: "avalanche" })
+  expect(variantFlags.filter((key) => parsed[key])).toEqual(["avalanche"])
+})
+
+test("should default to standard when avalanche is false or omitted", () => {
+  for (const avalanche of [false, undefined]) {
+    const parsed = diodeProps.parse({ name: "D1", avalanche })
+    expect(variantFlags.filter((key) => parsed[key])).toEqual(["standard"])
+  }
+})
+
+test("should use variant when the avalanche boolean flag is false", () => {
+  const parsed = diodeProps.parse({
+    name: "D1",
+    avalanche: false,
+    variant: "photo",
+  })
+  expect(variantFlags.filter((key) => parsed[key])).toEqual(["photo"])
+})
+
+for (const flag of variantFlags.filter((key) => key !== "avalanche")) {
+  test(`should reject avalanche together with the ${flag} flag`, () => {
+    expect(() =>
+      diodeProps.parse({ name: "D1", avalanche: true, [flag]: true }),
+    ).toThrow("Exactly one diode variant must be enabled")
+  })
+}
+
+test("should not mutate the input when normalizing avalanche", () => {
+  const raw: DiodeProps = Object.freeze({ name: "D1", avalanche: true })
+  const parsed = diodeProps.parse(raw)
+  expect(raw).toEqual({ name: "D1", avalanche: true })
+  expect(parsed).not.toBe(raw)
+  expect(variantFlags.filter((key) => parsed[key])).toEqual(["avalanche"])
+})

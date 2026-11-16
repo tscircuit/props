@@ -1451,6 +1451,15 @@ export const signalTime = quantity(
   },
   "Expected a time in seconds, e.g. 2ns",
 )
+/** Strictly positive time or UI, with the RFC diagnostic for every rejected value. UI is resolved by core at the block bit rate. */
+export const signalDurationOrUi = z
+  .union([z.string(), z.number(), z.nan()])
+  .transform((value, ctx) => {
+    const parsed = positiveTimeOrUi.safeParse(value)
+    if (parsed.success) return parsed.data
+    ctx.addIssue({ code: z.ZodIssueCode.custom, message: durationMessage })
+    return z.NEVER
+  })
 ```
 
 ### traceSpacing

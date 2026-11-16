@@ -11,13 +11,13 @@ const namespacedAnalogComponentNames = new Set([
   "analogdcsweepsimulation",
   "analogdigitalstimulus",
   "analogeyediagram",
-  "pcbtransientchannelsimulation",
-  "pcbchannel",
   "analogsweepparameter",
   "analogtransientsimulation",
 ])
 
 const namespacedSimulationComponentNames = new Set([
+  "pcbtransientchannelsimulation",
+  "pcbchannel",
   "pcbreturncurrentexcitation",
   "pcbreturncurrentsimulation",
 ])

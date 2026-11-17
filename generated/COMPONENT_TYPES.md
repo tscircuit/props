@@ -4191,7 +4191,7 @@ export interface NetProps {
   // Minimum edge-to-edge clearance from a trace to a different net's trace,
   // pad, or via copper on a shared layer. Numbers are mm. Use the largest
   // applicable existing minimum or requirement from either net.
-  pcbMinTraceClearance?: Distance
+  minTraceClearance?: Distance
 }
 export const netProps = z.object({
   name: z.string(),
@@ -4201,7 +4201,7 @@ export const netProps = z.object({
   isPowerNet: z.boolean().optional(),
   isGroundNet: z.boolean().optional(),
   nominalTraceWidth: distance.optional(),
-  pcbMinTraceClearance: distance
+  minTraceClearance: distance
     .pipe(z.number().finite().nonnegative())
     .optional(),
 })

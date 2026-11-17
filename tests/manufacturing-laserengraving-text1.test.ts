@@ -18,7 +18,7 @@ test("laserengraving.text parses distances, rotation and placement defaults", ()
     anchorAlignment: "top_left",
     rotationOnSurface: "90deg",
     engravingDepth: "0.1mm",
-    engravedColor: "#222222",
+    resultingColor: "#222222",
   } satisfies ManufacturingLaserEngravingTextProps
 
   expect(manufacturingProps.laserengraving.text).toBe(
@@ -36,7 +36,7 @@ test("laserengraving.text parses distances, rotation and placement defaults", ()
     anchorAlignment: "top_left",
     rotationOnSurface: 90,
     engravingDepth: 0.1,
-    engravedColor: "#222222",
+    resultingColor: "#222222",
   })
 
   // A named reference surface, centered, with nothing else assumed.

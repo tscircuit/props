@@ -124,7 +124,7 @@ Shared by both elements:
 | `rotationOnSurface` | Finite degrees number, or `"<n>deg"`/`"<n>rad"` string with optional `ccw` or `cw` | Number in degrees counterclockwise; `"90deg cw"` parses to `-90` | Absent; no rotation |
 | `name` | Nonblank string | Trimmed | Absent |
 | `engravingDepth` | Finite positive mm number or distance string | Number in mm | Absent; no depth is assumed |
-| `engravedColor` | Nonblank string | Trimmed | Absent; the renderer derives it |
+| `resultingColor` | Nonblank string | Trimmed | Absent; the renderer derives it |
 
 `manufacturing.laserengraving.text`:
 

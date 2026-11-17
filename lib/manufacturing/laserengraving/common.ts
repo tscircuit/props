@@ -14,10 +14,11 @@ export interface ManufacturingLaserEngravingProps
    * mark with no specified depth; no depth is assumed.
    */
   engravingDepth?: Distance
-  /** Color the engraved area is drawn in. It does not change how the part is
-   * made. Omit to let the renderer derive it from the part.
+  /** Color the engraved area ends up, e.g. the pale mark a laser leaves on a
+   * dark part. Renderers draw the mark in it. Omit to let the renderer derive
+   * it from the part.
    */
-  engravedColor?: string
+  resultingColor?: string
 }
 
 // Internal composition helper; consumers use each element's full validator.
@@ -25,5 +26,5 @@ export const manufacturingLaserEngravingShape = {
   ...manufacturingSurfacePlacementShape,
   name: z.string().trim().min(1).optional(),
   engravingDepth: distance.pipe(z.number().positive().finite()).optional(),
-  engravedColor: z.string().trim().min(1).optional(),
+  resultingColor: z.string().trim().min(1).optional(),
 }

@@ -19,7 +19,7 @@ test("laserengraving.text rejects missing, blank and out-of-range values", () =>
     { ...valid, name: " " },
     { ...valid, engravingDepth: 0 },
     { ...valid, engravingDepth: Infinity },
-    { ...valid, engravedColor: " " },
+    { ...valid, resultingColor: " " },
     { ...valid, anchorAlignment: "middle" },
     { ...valid, rotationOnSurface: Infinity },
   ]) {

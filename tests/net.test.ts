@@ -29,3 +29,19 @@ test("should parse NetProps with nullable routingPhaseIndex", () => {
   const parsed = netProps.parse(raw)
   expect(parsed.routingPhaseIndex).toBeNull()
 })
+
+test("parses optional minTraceClearance in millimeters", () => {
+  expect(netProps.parse({ name: "USB_DP" }).minTraceClearance).toBeUndefined()
+  expect(
+    netProps.parse({ name: "USB_DP", minTraceClearance: "10mil" })
+      .minTraceClearance,
+  ).toBeCloseTo(0.254)
+
+  const clearance = netProps.shape.minTraceClearance
+  expect(clearance.parse("0.15mm")).toBe(0.15)
+  expect(clearance.parse(0.15)).toBe(0.15)
+  expect(clearance.parse(0)).toBe(0)
+  for (const invalid of [-0.1, "-0.1mm", Infinity, NaN, "invalid", null]) {
+    expect(clearance.safeParse(invalid).success).toBe(false)
+  }
+})

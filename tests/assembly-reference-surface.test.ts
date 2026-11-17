@@ -29,6 +29,7 @@ test("reference surfaces normalize unit-aware offsets and optional rectangular e
     name: "anchor",
     shape: "rect",
     plane: "xy",
+    outwardNormal: "z+",
     normalDirection: "z+",
     centerXOffset: 0,
     centerYOffset: 0,

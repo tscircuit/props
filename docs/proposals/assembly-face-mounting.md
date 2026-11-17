@@ -21,7 +21,7 @@ those elements mean or adding a second mounting vocabulary.
     <assembly.referencesurface
       name="rail"
       plane="xz"
-      normalDirection="y-"
+      outwardNormal="y-"
       centerYOffset="-20mm"
     />
   </assembly.part>
@@ -33,7 +33,7 @@ those elements mean or adding a second mounting vocabulary.
     mountGap="0.2mm"
     mountOffset={{ x: "5mm", y: "-2mm" }}
   >
-    <assembly.referencesurface name="base" plane="xz" normalDirection="y+" />
+    <assembly.referencesurface name="base" plane="xz" outwardNormal="y+" />
   </assembly.part>
 </assembly.device>
 ```

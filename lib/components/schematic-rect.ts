@@ -1,4 +1,5 @@
-import { distance, rotation } from "circuit-json"
+import { distance } from "circuit-json"
+import { rotation } from "lib/common/rotation"
 import { z } from "zod"
 import { expectTypesMatch } from "lib/typecheck"
 import type { Distance } from "lib/common/distance"

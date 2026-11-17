@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { expectTypesMatch } from "lib/typecheck"
 import { distance } from "lib/common/distance"
-import { rotation } from "circuit-json"
+import { rotation } from "lib/common/rotation"
 
 /**
  * @deprecated Use NetLabelProps instead.

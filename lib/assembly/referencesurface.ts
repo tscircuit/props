@@ -12,8 +12,13 @@ export interface AssemblyReferenceSurfaceProps {
   shape?: "rect"
   /** Defaults to xy. Positive normals: xy +Z, xz +Y, yz +X. */
   plane?: "xy" | "xz" | "yz"
-  /** Outward normal, perpendicular to plane. Defaults: xy z+, xz y+, yz x+.
-   * Reversing the normal retains the local X tangent. Replaces positive/negative.
+  /** The direction the surface faces, away from the part's material. Must be
+   * perpendicular to plane. Defaults: xy z+, xz y+, yz x+. Reversing the
+   * normal retains the local X tangent.
+   */
+  outwardNormal?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
+  /** Alias of outwardNormal, with the same meaning. It must match
+   * outwardNormal when both are given.
    */
   normalDirection?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
   /** Surface center offsets from the part origin, in mm or unit strings; each defaults to zero. */
@@ -28,6 +33,7 @@ export interface AssemblyReferenceSurfaceProps {
 }
 
 const offset = distance.pipe(z.number().finite())
+const normal = z.enum(["x+", "x-", "y+", "y-", "z+", "z-"])
 const extent = distance.pipe(z.number().positive().finite())
 
 export const assemblyReferenceSurfaceProps = z
@@ -35,7 +41,8 @@ export const assemblyReferenceSurfaceProps = z
     name: z.string().trim().min(1).default("anchor"),
     shape: z.literal("rect").default("rect"),
     plane: z.enum(["xy", "xz", "yz"]).default("xy"),
-    normalDirection: z.enum(["x+", "x-", "y+", "y-", "z+", "z-"]).optional(),
+    outwardNormal: normal.optional(),
+    normalDirection: normal.optional(),
     centerXOffset: offset.default(0),
     centerYOffset: offset.default(0),
     centerZOffset: offset.default(0),
@@ -51,25 +58,45 @@ export const assemblyReferenceSurfaceProps = z
     },
   )
   .superRefine((surface, ctx) => {
-    const normalAxis =
-      surface.plane === "xy" ? "z" : surface.plane === "xz" ? "y" : "x"
-    if (surface.normalDirection && surface.normalDirection[0] !== normalAxis)
+    if (
+      surface.outwardNormal !== undefined &&
+      surface.normalDirection !== undefined &&
+      surface.outwardNormal !== surface.normalDirection
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["normalDirection"],
-        message: `normalDirection must be ${normalAxis}+ or ${normalAxis}- for plane ${surface.plane}`,
+        message:
+          "normalDirection is an alias of outwardNormal; they must match",
+      })
+      return
+    }
+    const authored = surface.outwardNormal ?? surface.normalDirection
+    const normalAxis =
+      surface.plane === "xy" ? "z" : surface.plane === "xz" ? "y" : "x"
+    if (authored && authored[0] !== normalAxis)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [
+          surface.outwardNormal !== undefined
+            ? "outwardNormal"
+            : "normalDirection",
+        ],
+        message: `outwardNormal must be ${normalAxis}+ or ${normalAxis}- for plane ${surface.plane}`,
       })
   })
-  .transform((surface) => ({
-    ...surface,
-    normalDirection:
+  .transform((surface) => {
+    const outwardNormal =
+      surface.outwardNormal ??
       surface.normalDirection ??
       (surface.plane === "xy"
         ? ("z+" as const)
         : surface.plane === "xz"
           ? ("y+" as const)
-          : ("x+" as const)),
-  }))
+          : ("x+" as const))
+    // Both names are always set, so consumers can read either.
+    return { ...surface, outwardNormal, normalDirection: outwardNormal }
+  })
 
 export type AssemblyReferenceSurfacePropsInput = z.input<
   typeof assemblyReferenceSurfaceProps

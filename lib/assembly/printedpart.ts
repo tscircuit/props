@@ -21,8 +21,8 @@ export interface AssemblyPrintedPartProps
   color?: string
   /** Printable material classification; omitted when unspecified. */
   material?: "pla" | "petg" | "nylon"
-  /** Reference surfaces defining named mounting frames, and manufacturing
-   * marks such as laser engravings, alongside CAD children.
+  /** Reference surfaces defining named mounting frames, manufacturing marks
+   * such as laser engravings, and stickers, alongside CAD children.
    */
   children?: ReactNode
   /** Pure jscad-fiber JSX in right-handed local XYZ, dimensions in millimeters.

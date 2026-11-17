@@ -90,10 +90,11 @@ centered on the surface.
 `anchorAlignment` picks the point of the mark that center offsets locate. It
 has no effect on an axis positioned from an edge.
 
-`rotationOnSurface` turns the mark, seen from outside the part. A number is
-degrees counterclockwise. A string is `"90deg"` or `"1.57rad"`, optionally
-followed by a direction: `"90deg ccw"` or `"90deg cw"`. Without a direction it
-is counterclockwise. Edge distances measure the rotated mark's bounds.
+`rotationOnSurface` turns the mark, seen from outside the part. It uses the
+shared rotation parser: a number is degrees counterclockwise, and a string is
+`"90deg"` or `"1.57rad"`, optionally followed by a direction, as in
+`"90deg ccw"` or `"90deg cw"`. Without a direction it is counterclockwise.
+Edge distances measure the rotated mark's bounds.
 
 Edge distances need a surface with extents. Built-in surfaces take them from
 the model bounds. A reference surface must declare `width` and `height`.
@@ -138,7 +139,11 @@ There are no aliases. The only parsed default is `anchorAlignment`.
 - Two position props on one axis are rejected, with the issue on the second.
 - A rotation string that is not a number with an optional `deg`/`rad` unit and
   an optional `ccw`/`cw` direction is rejected, so a misspelled direction
-  cannot silently rotate the wrong way.
+  cannot silently rotate the wrong way. This parser is shared with
+  `pcbRotation`, `schRotation`, `schematicrect`'s `rotation` and the KiCad
+  footprint `rotation`, which previously ignored a direction and accepted any
+  string. Bend angles, arc angles and source phases are angles, not rotations,
+  and keep the previous parser.
 - Negative edge distances are rejected. A mark that should overhang an edge is
   positioned from the center.
 - The API is additive. Existing parts parse as before. `assembly.part` and

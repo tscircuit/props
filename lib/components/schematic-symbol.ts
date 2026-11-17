@@ -1,4 +1,4 @@
-import { rotation } from "circuit-json"
+import { rotation } from "lib/common/rotation"
 import { connectionTarget } from "lib/common/connectionsProp"
 import { distance, type Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"

@@ -2,13 +2,13 @@ import {
   type LayerRefInput,
   distance,
   layer_ref,
-  rotation,
   supplier_name,
 } from "circuit-json"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
 import { type CadModelProp, cadModelProp } from "./cadModel"
 import { pcbCoordinate } from "./distance"
+import { rotation } from "./rotation"
 import { type FootprintProp, footprintProp } from "./footprintProp"
 import {
   type KicadFootprintMetadata,

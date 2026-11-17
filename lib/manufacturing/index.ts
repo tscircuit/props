@@ -4,7 +4,6 @@ import { manufacturingLaserEngravingTextProps } from "./laserengraving/text"
 export * from "./laserengraving"
 export {
   manufacturingBuiltInSurfaces,
-  manufacturingSurfaceRotation,
   type ManufacturingBuiltInSurface,
   type ManufacturingSurfacePlacementProps,
   type ManufacturingSurfaceRef,

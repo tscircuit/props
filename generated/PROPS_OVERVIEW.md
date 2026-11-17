@@ -2415,13 +2415,11 @@ export interface ManufacturingSurfacePlacementProps {
    * It has no effect on an axis positioned from a surface edge.
    */
   anchorAlignment?: NinePointAnchor
-  /** Rotation of the mark seen from outside the part. A number is degrees
-   * counterclockwise. A string is `"90deg"` or `"1.57rad"`, optionally followed
-   * by `ccw` or `cw`, e.g. `"90deg ccw"` or `"90deg cw"`; without a direction
-   * it is counterclockwise. Parsed to degrees counterclockwise, so
-   * `"90deg cw"` is -90. Edge distances measure the rotated mark's bounds.
+  /** Rotation of the mark seen from outside the part: degrees counterclockwise,
+   * or a string such as `"90deg ccw"` or `"90deg cw"`. Parsed to degrees
+   * counterclockwise. Edge distances measure the rotated mark's bounds.
    */
-  rotationOnSurface?: number | string
+  rotationOnSurface?: Rotation
 }
 
 

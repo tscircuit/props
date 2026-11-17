@@ -2514,7 +2514,7 @@ export interface SimulationIbisModelProps extends IbisModelDefinition {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/simulation-ibis-model.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/simulation/simulation-ibis-model.ts)
 
 ### RectSmtPadProps `<smtpad />`
 

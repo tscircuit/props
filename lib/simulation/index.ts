@@ -7,6 +7,7 @@ export * from "./pcb-driver-receiver-channel"
 export * from "./pcb-return-current-excitation"
 export * from "./pcb-return-current-simulation"
 export * from "./pcb-transient-channel-simulation"
+export * from "./simulation-ibis-model"
 
 export const simulationProps = {
   pcbdriverreceiverchannel: pcbDriverReceiverChannelProps,

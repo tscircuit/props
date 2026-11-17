@@ -5745,15 +5745,6 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
 })
 ```
 
-### simulation-ibis-model
-
-```typescript
-/** Declares a model for an existing chip. Rendering never fetches or converts the source. */
-export interface SimulationIbisModelProps extends IbisModelDefinition {
-  componentRef: string
-}
-```
-
 ### smtpad
 
 ```typescript
@@ -6607,5 +6598,14 @@ export const pcbTransientChannelSimulationProps = z
     children: z.custom<ReactNode>().optional(),
   })
   .strict()
+```
+
+### simulation-ibis-model
+
+```typescript
+/** Declares a model for an existing chip. Rendering never fetches or converts the source. */
+export interface SimulationIbisModelProps extends IbisModelDefinition {
+  componentRef: string
+}
 ```
 

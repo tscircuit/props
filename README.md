@@ -340,6 +340,8 @@ export interface AnalogSimulationProps {
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">;
   spiceOptions?: SpiceOptions;
   graphIndependentAxes?: boolean;
+  /** Calculate a DC operating point before the transient run. Omitted or false preserves zero-state startup. */
+  calculateInitialOperatingPoint?: boolean;
 }
 ```
 
@@ -367,6 +369,8 @@ export interface AnalogTransientSimulationProps extends AnalogAnalysisSimulation
   startTime?: number | string;
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string;
+  /** Calculate a DC operating point before the transient run. Omitted or false preserves zero-state startup. */
+  calculateInitialOperatingPoint?: boolean;
 }
 ```
 

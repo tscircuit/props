@@ -508,7 +508,9 @@ export interface AssemblyPartProps
   modelUrl?: string
   /** Existing component CAD model formats; mutually exclusive with model and modelUrl. */
   cadModel?: CadModelProp
-  /** Reference surfaces defining named mounting frames for this part. */
+  /** Reference surfaces defining named mounting frames for this part, and
+   * manufacturing marks such as laser engravings.
+   */
   children?: ReactNode
 }
 
@@ -523,7 +525,9 @@ export interface AssemblyPrintedPartProps
   color?: string
   /** Printable material classification; omitted when unspecified. */
   material?: "pla" | "petg" | "nylon"
-  /** Reference surfaces defining named mounting frames, alongside CAD children. */
+  /** Reference surfaces defining named mounting frames, and manufacturing
+   * marks such as laser engravings, alongside CAD children.
+   */
   children?: ReactNode
   /** Pure jscad-fiber JSX in right-handed local XYZ, dimensions in millimeters.
    * Named reference rectangles define attachment faces; they add no material.
@@ -2342,6 +2346,82 @@ export interface ManualTraceHint {
 }
 
 
+export interface ManufacturingLaserEngravingImageProps
+  extends ManufacturingLaserEngravingProps {
+  /** URL or static-file import of an SVG or raster image. */
+  imageUrl: string
+  /** Engraved size along the surface's X and Y, in mm or distance strings.
+   * Provide at least one; a missing one follows the image's aspect ratio.
+   */
+  width?: Distance
+  height?: Distance
+  /** How a raster image becomes laser output: `threshold` cuts each pixel on
+   * or off, `dither` approximates tones with dots, `grayscale` varies power.
+   * Omitted when unspecified; it does not apply to vector images.
+   */
+  rasterMode?: "threshold" | "dither" | "grayscale"
+  /** Engrave the light areas of the image instead of the dark ones. */
+  invertImage?: boolean
+}
+
+
+export interface ManufacturingLaserEngravingProps
+  extends ManufacturingSurfacePlacementProps {
+  /** Stable identity of this mark within its part. */
+  name?: string
+  /** Depth of material removed, in mm or a distance string. Omit for a surface
+   * mark with no specified depth; no depth is assumed.
+   */
+  engravingDepth?: Distance
+  /** Color the engraved area is drawn in. It does not change how the part is
+   * made. Omit to let the renderer derive it from the part.
+   */
+  engravedColor?: string
+}
+
+
+export interface ManufacturingLaserEngravingTextProps
+  extends ManufacturingLaserEngravingProps {
+  text: string
+  /** Text height, in mm or a distance string. Required; no size is assumed. */
+  fontSize: Distance
+  font?: "tscircuit2024"
+  /** `filled` engraves the letter bodies; `outline` traces their edges.
+   * Omitted when unspecified.
+   */
+  textStyle?: "filled" | "outline"
+}
+
+
+export interface ManufacturingSurfacePlacementProps {
+  /** The surface to mark: `topSurface`, `bottomSurface`, `leftSurface`,
+   * `rightSurface`, `frontSurface`, `backSurface`, or a reference surface named
+   * on the parent part. Resolved by core.
+   */
+  surface: ManufacturingSurfaceRef
+  /** Signed distance from the surface center to the mark's anchor point. */
+  xOffsetFromSurfaceCenter?: Distance
+  /** Gap between the surface's left edge and the mark's left edge. */
+  distanceFromSurfaceLeftEdge?: Distance
+  /** Gap between the surface's right edge and the mark's right edge. */
+  distanceFromSurfaceRightEdge?: Distance
+  /** Signed distance from the surface center to the mark's anchor point. */
+  yOffsetFromSurfaceCenter?: Distance
+  /** Gap between the surface's top edge and the mark's top edge. */
+  distanceFromSurfaceTopEdge?: Distance
+  /** Gap between the surface's bottom edge and the mark's bottom edge. */
+  distanceFromSurfaceBottomEdge?: Distance
+  /** The point of the mark that center offsets locate; defaults to center.
+   * It has no effect on an axis positioned from a surface edge.
+   */
+  anchorAlignment?: NinePointAnchor
+  /** Counterclockwise rotation seen from outside the part, in degrees or an
+   * angle string. Edge distances measure the rotated mark's bounds.
+   */
+  rotationOnSurface?: number | string
+}
+
+
 export interface MosfetProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   channelType: "n" | "p"
@@ -2569,7 +2649,7 @@ export interface PcbBendProps {
 }
 
 
-export interface PcbChannelProps {
+export interface PcbDriverReceiverChannelProps {
   /** Unique within the enclosing SI block. */
   name: string
   /** Driving pin: ".U1 > .A4", a pair { p, n }, or either as { pin, model } to choose the IBIS model (per leg for a pair). */
@@ -3646,6 +3726,19 @@ export interface SilkscreenGraphicProps {
   pcbMarginY?: string | number
   pcbRelative?: boolean
   relative?: boolean
+}
+
+
+export interface SimulationEyeDiagramProps {
+  name: string
+  /** Name of the simulation.pcbtransientchannelsimulation to read. */
+  simulationRef: string
+  /** Names of simulation.pcbdriverreceiverchannel elements to include. Omitted: every driven channel. */
+  channelRef?: string[]
+  /** Eye window start in seconds or UI. Parsed times are seconds; UI stays a normalized string for core to resolve at each channel's bit rate. Omitted: core skips the startup settling. */
+  startTime?: string | number
+  /** Eye window end in seconds or UI. Omitted: the end of the simulation. */
+  endTime?: string | number
 }
 
 

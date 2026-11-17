@@ -5,11 +5,10 @@ import {
   simulationProps,
 } from "../lib"
 
-test("eye diagrams link a transient channel simulation and one of its channels", () => {
+test("eye diagrams link a transient channel simulation", () => {
   const eye = {
-    name: "A0 eye",
+    name: "DDR3 eye",
     simulationRef: "ddr3",
-    channelRef: "A0",
   } satisfies SimulationEyeDiagramProps
   expect(simulationProps.eyediagram.parse(eye)).toEqual(eye)
   expect(
@@ -21,8 +20,8 @@ test("eye diagrams link a transient channel simulation and one of its channels",
   ).toEqual({ ...eye, startTime: "2UI", endTime: 8e-9 })
   for (const invalid of [
     { simulationRef: "" },
-    { channelRef: " " },
     { startTime: "-1ns" },
+    { channelRef: "A0" },
     { unitInterval: "2.5ns" },
     { probeRef: "A0" },
   ]) {

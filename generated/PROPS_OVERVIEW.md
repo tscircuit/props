@@ -508,8 +508,8 @@ export interface AssemblyPartProps
   modelUrl?: string
   /** Existing component CAD model formats; mutually exclusive with model and modelUrl. */
   cadModel?: CadModelProp
-  /** Reference surfaces defining named mounting frames for this part, and
-   * manufacturing marks such as laser engravings.
+  /** Reference surfaces defining named mounting frames for this part,
+   * manufacturing marks such as laser engravings, and stickers.
    */
   children?: ReactNode
 }
@@ -525,8 +525,8 @@ export interface AssemblyPrintedPartProps
   color?: string
   /** Printable material classification; omitted when unspecified. */
   material?: "pla" | "petg" | "nylon"
-  /** Reference surfaces defining named mounting frames, and manufacturing
-   * marks such as laser engravings, alongside CAD children.
+  /** Reference surfaces defining named mounting frames, manufacturing marks
+   * such as laser engravings, and stickers, alongside CAD children.
    */
   children?: ReactNode
   /** Pure jscad-fiber JSX in right-handed local XYZ, dimensions in millimeters.
@@ -593,6 +593,35 @@ export interface AssemblyScreenProps extends AssemblyBomProps {
    * when `width`, `height`, `model`, and `modelUrl` are omitted.
    */
   cadModel?: string
+}
+
+
+export interface AssemblyStickerProps
+  extends ManufacturingSurfacePlacementProps,
+    AssemblyBomProps {
+  /** Stable identity used by assembly selectors. */
+  name: string
+  /** Human-facing alternate to the stable name. */
+  displayName?: string
+  /** URL or static-file import of the printed artwork, an SVG or raster image.
+   * It is stretched to the sticker's width and height. Omit for an unprinted
+   * sticker.
+   */
+  imageUrl?: string
+  /** Sticker size along the surface's X and Y, in mm or distance strings.
+   * With imageUrl, provide at least one; a missing one follows the image's
+   * aspect ratio. Without imageUrl, provide both.
+   */
+  width?: Distance
+  height?: Distance
+  /** Sticker thickness including its adhesive, in mm or a distance string.
+   * Omitted when unspecified; no thickness is assumed.
+   */
+  thickness?: Distance
+  /** Color of the sticker material, seen wherever the artwork is transparent
+   * or absent. Omitted when unspecified.
+   */
+  backgroundColor?: string
 }
 
 

@@ -15,6 +15,10 @@ const examples = [
     { name: "screen", connectsTo: ".J1", width: 20, height: 10 },
   ],
   [assemblyProps.cable, { name: "cable", from: ".J1", to: ".J2" }],
+  [
+    assemblyProps.sticker,
+    { name: "label", surfaceRef: "topSurface", width: 20, height: 10 },
+  ],
 ] as const
 
 test("assembly material schemas preserve BOM metadata independently of CAD inputs", () => {

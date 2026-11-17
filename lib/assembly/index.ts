@@ -9,6 +9,7 @@ import { assemblyReferenceSurfaceProps } from "./referencesurface"
 import { assemblyPrintedPartProps } from "./printedpart"
 import { assemblyMotorProps } from "./motor"
 import { assemblyScreenProps } from "./screen"
+import { assemblyStickerProps } from "./sticker"
 import { assemblySubassemblyProps } from "./subassembly"
 import { assemblyExplosionProps } from "./explosion"
 
@@ -32,6 +33,7 @@ export type {
 export * from "./referencesurface"
 export * from "./printedpart"
 export * from "./screen"
+export * from "./sticker"
 export * from "./subassembly"
 export * from "./cadassembly"
 export * from "./explosion"
@@ -48,6 +50,7 @@ export const assemblyProps = {
   referencesurface: assemblyReferenceSurfaceProps,
   printedpart: assemblyPrintedPartProps,
   screen: assemblyScreenProps,
+  sticker: assemblyStickerProps,
   subassembly: assemblySubassemblyProps,
   cadassembly: assemblyCadAssemblyProps,
 } as const

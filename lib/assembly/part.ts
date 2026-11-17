@@ -24,8 +24,8 @@ export interface AssemblyPartProps
   modelUrl?: string
   /** Existing component CAD model formats; mutually exclusive with model and modelUrl. */
   cadModel?: CadModelProp
-  /** Reference surfaces defining named mounting frames for this part, and
-   * manufacturing marks such as laser engravings.
+  /** Reference surfaces defining named mounting frames for this part,
+   * manufacturing marks such as laser engravings, and stickers.
    */
   children?: ReactNode
 }

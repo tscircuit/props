@@ -17,7 +17,7 @@ const namespacedAnalogComponentNames = new Set([
 
 const namespacedSimulationComponentNames = new Set([
   "pcbtransientchannelsimulation",
-  "pcbchannel",
+  "pcbdriverreceiverchannel",
   "pcbreturncurrentexcitation",
   "pcbreturncurrentsimulation",
 ])

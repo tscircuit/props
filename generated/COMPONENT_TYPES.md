@@ -4604,7 +4604,7 @@ export const pcbBendProps = z
   })
 ```
 
-### pcb-channel
+### pcb-driver-receiver-channel
 
 ```typescript
 export type SignalEndpoint =
@@ -4617,7 +4617,7 @@ export const signalEndpoint = z.union([
   z.object({ pin, model: pin.optional() }).strict(),
   z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
 ])
-export interface PcbChannelProps {
+export interface PcbDriverReceiverChannelProps {
   name: string
   driverRef: SignalEndpoint
   receiverRef: SignalEndpoint | SignalEndpoint[]
@@ -4628,7 +4628,7 @@ export interface PcbChannelProps {
   driverDisabled?: boolean
 }
 /** Tri-state the driver (high impedance) so this line stays quiet and only picks up crosstalk; pattern is ignored. Unlike pattern "0", which actively drives low and absorbs coupled noise. Every driver leg's IBIS model must support a disable state. Default: false. */
-export const pcbChannelProps = z
+export const pcbDriverReceiverChannelProps = z
   .object({
     name: z.string().trim().min(1),
     driverRef: signalEndpoint,

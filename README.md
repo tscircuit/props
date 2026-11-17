@@ -87,7 +87,7 @@ namespace, PCB references, and a complete overview example.
 | `<paneltab />`                                 | [`PanelTabProps`](#paneltabprops-paneltab)                                                                          |
 | `<paneltabkeepout />`                          | [`PanelTabKeepoutProps`](#paneltabkeepoutprops-paneltabkeepout)                                                     |
 | `<pcbbend />`                                  | [`PcbBendProps`](#pcbbendprops-pcbbend)                                                                             |
-| `<simulation.pcbchannel />`                    | [`PcbChannelProps`](#pcbchannelprops-simulationpcbchannel)                                                          |
+| `<simulation.pcbdriverreceiverchannel />`      | [`PcbDriverReceiverChannelProps`](#pcbdriverreceiverchannelprops-simulationpcbdriverreceiverchannel)                |
 | `<pcbkeepout />`                               | [`PcbKeepoutProps`](#pcbkeepoutprops-pcbkeepout)                                                                    |
 | `<pcbnotedimension />`                         | [`PcbNoteDimensionProps`](#pcbnotedimensionprops-pcbnotedimension)                                                  |
 | `<pcbnoteline />`                              | [`PcbNoteLineProps`](#pcbnotelineprops-pcbnoteline)                                                                 |
@@ -1727,12 +1727,12 @@ export interface PcbBendProps {
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-bend.ts)
 
-<a id="pcbchannelprops-simulationpcbchannel"></a>
+<a id="pcbdriverreceiverchannelprops-simulationpcbdriverreceiverchannel"></a>
 
-### PcbChannelProps `<simulation.pcbchannel />`
+### PcbDriverReceiverChannelProps `<simulation.pcbdriverreceiverchannel />`
 
 ```ts
-export interface PcbChannelProps {
+export interface PcbDriverReceiverChannelProps {
   /** Unique within the enclosing SI block. */
   name: string;
   /** Driving pin: ".U1 > .A4", a pair { p, n }, or either as { pin, model } to choose the IBIS model (per leg for a pair). */
@@ -1752,7 +1752,7 @@ export interface PcbChannelProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-channel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-driver-receiver-channel.ts)
 
 ### PcbKeepoutProps `<pcbkeepout />`
 

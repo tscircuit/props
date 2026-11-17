@@ -19,7 +19,7 @@ export const signalEndpoint = z.union([
   z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
 ])
 
-export interface PcbChannelProps {
+export interface PcbDriverReceiverChannelProps {
   /** Unique within the enclosing SI block. */
   name: string
   /** Driving pin: ".U1 > .A4", a pair { p, n }, or either as { pin, model } to choose the IBIS model (per leg for a pair). */
@@ -38,7 +38,7 @@ export interface PcbChannelProps {
   driverDisabled?: boolean
 }
 
-export const pcbChannelProps = z
+export const pcbDriverReceiverChannelProps = z
   .object({
     name: z.string().trim().min(1),
     driverRef: signalEndpoint,
@@ -64,4 +64,7 @@ export const pcbChannelProps = z
   })
 
 expectTypesMatch<SignalEndpoint, z.input<typeof signalEndpoint>>(true)
-expectTypesMatch<PcbChannelProps, z.input<typeof pcbChannelProps>>(true)
+expectTypesMatch<
+  PcbDriverReceiverChannelProps,
+  z.input<typeof pcbDriverReceiverChannelProps>
+>(true)

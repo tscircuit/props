@@ -127,6 +127,7 @@ namespace, PCB references, and a complete overview example.
 | `<silkscreenpath />`                           | [`SilkscreenPathProps`](#silkscreenpathprops-silkscreenpath)                                                        |
 | `<silkscreenrect />`                           | [`SilkscreenRectProps`](#silkscreenrectprops-silkscreenrect)                                                        |
 | `<silkscreentext />`                           | [`SilkscreenTextProps`](#silkscreentextprops-silkscreentext)                                                        |
+| `<simulation.eyediagram />`                    | [`SimulationEyeDiagramProps`](#simulationeyediagramprops-simulationeyediagram)                                      |
 | `<simulation.ibismodel />`                     | [`SimulationIbisModelProps`](#simulationibismodelprops-simulationibismodel)                                         |
 | `<smtpad />`                                   | [`RectSmtPadProps`](#rectsmtpadprops-smtpad)                                                                        |
 | `<solderjumper />`                             | [`SolderJumperProps`](#solderjumperprops-solderjumper)                                                              |
@@ -2514,6 +2515,26 @@ export type SilkscreenTextProps = z.input<typeof silkscreenTextProps>;
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/silkscreen-text.ts)
+
+<a id="simulationeyediagramprops-simulationeyediagram"></a>
+
+### SimulationEyeDiagramProps `<simulation.eyediagram />`
+
+```ts
+export interface SimulationEyeDiagramProps {
+  name: string;
+  /** Name of the simulation.pcbtransientchannelsimulation to read. */
+  simulationRef: string;
+  /** Name of the simulation.pcbdriverreceiverchannel inside that simulation. */
+  channelRef: string;
+  /** Eye window start in seconds or UI. Parsed times are seconds; UI stays a normalized string for core to resolve at the channel bit rate. Omitted: core skips the startup settling. */
+  startTime?: string | number;
+  /** Eye window end in seconds or UI. Omitted: the end of the simulation. */
+  endTime?: string | number;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/simulation/simulation-eye-diagram.ts)
 
 <a id="simulationibismodelprops-simulationibismodel"></a>
 

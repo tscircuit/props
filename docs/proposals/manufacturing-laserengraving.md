@@ -38,7 +38,7 @@ job or a manufacturing drawing. Elements are therefore named for the process.
     surface="topSurface"
     width="18mm"
     yOffsetFromSurfaceCenter="-6mm"
-    rotationOnSurface="90deg"
+    rotationOnSurface="90deg cw"
   />
 
   <manufacturing.laserengraving.text
@@ -88,9 +88,12 @@ centered on the surface.
 | Y | `distanceFromSurfaceBottomEdge` | Gap between the surface's bottom edge and the mark's bottom edge |
 
 `anchorAlignment` picks the point of the mark that center offsets locate. It
-has no effect on an axis positioned from an edge. `rotationOnSurface` is
-counterclockwise seen from outside the part; edge distances measure the
-rotated mark's bounds.
+has no effect on an axis positioned from an edge.
+
+`rotationOnSurface` turns the mark, seen from outside the part. A number is
+degrees counterclockwise. A string is `"90deg"` or `"1.57rad"`, optionally
+followed by a direction: `"90deg ccw"` or `"90deg cw"`. Without a direction it
+is counterclockwise. Edge distances measure the rotated mark's bounds.
 
 Edge distances need a surface with extents. Built-in surfaces take them from
 the model bounds. A reference surface must declare `width` and `height`.
@@ -105,7 +108,7 @@ Shared by both elements:
 | `xOffsetFromSurfaceCenter`, `yOffsetFromSurfaceCenter` | Signed finite mm number or distance string | Number in mm | Absent |
 | `distanceFromSurface{Left,Right,Top,Bottom}Edge` | Finite nonnegative mm number or distance string | Number in mm | Absent |
 | `anchorAlignment` | Nine-point anchor | Unchanged | `"center"` |
-| `rotationOnSurface` | Finite degrees number or angle string | Number in degrees | Absent; no rotation |
+| `rotationOnSurface` | Finite degrees number, or `"<n>deg"`/`"<n>rad"` string with optional `ccw` or `cw` | Number in degrees counterclockwise; `"90deg cw"` parses to `-90` | Absent; no rotation |
 | `name` | Nonblank string | Trimmed | Absent |
 | `engravingDepth` | Finite positive mm number or distance string | Number in mm | Absent; no depth is assumed |
 | `engravedColor` | Nonblank string | Trimmed | Absent; the renderer derives it |
@@ -133,6 +136,9 @@ There are no aliases. The only parsed default is `anchorAlignment`.
 ## Conflicts and compatibility
 
 - Two position props on one axis are rejected, with the issue on the second.
+- A rotation string that is not a number with an optional `deg`/`rad` unit and
+  an optional `ccw`/`cw` direction is rejected, so a misspelled direction
+  cannot silently rotate the wrong way.
 - Negative edge distances are rejected. A mark that should overhang an edge is
   positioned from the center.
 - The API is additive. Existing parts parse as before. `assembly.part` and

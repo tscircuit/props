@@ -4,7 +4,6 @@ import {
   type NinePointAnchor,
   ninePointAnchor,
 } from "lib/common/ninePointAnchor"
-import { rotation } from "circuit-json"
 import { z } from "zod"
 
 /** Bounding surfaces every part has, taken from its model bounds in the part's
@@ -59,11 +58,41 @@ export interface ManufacturingSurfacePlacementProps {
    * It has no effect on an axis positioned from a surface edge.
    */
   anchorAlignment?: NinePointAnchor
-  /** Counterclockwise rotation seen from outside the part, in degrees or an
-   * angle string. Edge distances measure the rotated mark's bounds.
+  /** Rotation of the mark seen from outside the part. A number is degrees
+   * counterclockwise. A string is `"90deg"` or `"1.57rad"`, optionally followed
+   * by `ccw` or `cw`, e.g. `"90deg ccw"` or `"90deg cw"`; without a direction
+   * it is counterclockwise. Parsed to degrees counterclockwise, so
+   * `"90deg cw"` is -90. Edge distances measure the rotated mark's bounds.
    */
   rotationOnSurface?: number | string
 }
+
+const surfaceRotationPattern =
+  /^\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+))\s*(deg|rad)?\s*(ccw|cw)?\s*$/
+
+/** Parses to degrees counterclockwise. Unlike the PCB rotation parser this
+ * honors a `cw`/`ccw` suffix and rejects strings it does not understand.
+ */
+export const manufacturingSurfaceRotation = z
+  .union([z.number(), z.string()])
+  .transform((value, ctx) => {
+    if (typeof value === "number") return value
+    const match = surfaceRotationPattern.exec(value)
+    if (!match) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'Expected degrees as a number, or a string such as "90deg", "90deg ccw", "90deg cw" or "1.57rad"',
+      })
+      return z.NEVER
+    }
+    const [, magnitude, unit, direction] = match
+    const degrees =
+      unit === "rad" ? (Number(magnitude) * 180) / Math.PI : Number(magnitude)
+    // Adding zero turns the -0 of "0deg cw" into 0.
+    return (direction === "cw" ? -degrees : degrees) + 0
+  })
+  .pipe(z.number().finite())
 
 const offsetFromCenter = distance.pipe(z.number().finite())
 const distanceFromEdge = distance.pipe(z.number().nonnegative().finite())
@@ -86,7 +115,7 @@ export const manufacturingSurfacePlacementShape = {
   distanceFromSurfaceTopEdge: distanceFromEdge.optional(),
   distanceFromSurfaceBottomEdge: distanceFromEdge.optional(),
   anchorAlignment: ninePointAnchor.default("center"),
-  rotationOnSurface: rotation.pipe(z.number().finite()).optional(),
+  rotationOnSurface: manufacturingSurfaceRotation.optional(),
 }
 
 const placementAxes = [

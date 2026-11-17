@@ -2525,6 +2525,8 @@ export interface SimulationEyeDiagramProps {
   name: string;
   /** Name of the simulation.pcbtransientchannelsimulation to read. */
   simulationRef: string;
+  /** Names of simulation.pcbdriverreceiverchannel elements to include. Omitted: every driven channel. */
+  channelRef?: string[];
   /** Eye window start in seconds or UI. Parsed times are seconds; UI stays a normalized string for core to resolve at each channel's bit rate. Omitted: core skips the startup settling. */
   startTime?: string | number;
   /** Eye window end in seconds or UI. Omitted: the end of the simulation. */

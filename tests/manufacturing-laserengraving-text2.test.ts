@@ -2,15 +2,15 @@ import { expect, test } from "bun:test"
 import { manufacturingLaserEngravingTextProps } from "../lib"
 
 test("laserengraving.text rejects missing, blank and out-of-range values", () => {
-  const valid = { text: "REV B", surface: "topSurface", fontSize: "3mm" }
+  const valid = { text: "REV B", surfaceRef: "topSurface", fontSize: "3mm" }
   expect(manufacturingLaserEngravingTextProps.safeParse(valid).success).toBe(
     true,
   )
   for (const invalid of [
     { ...valid, text: " " },
-    { ...valid, surface: " " },
-    { ...valid, surface: undefined },
-    { ...valid, surface: 3 },
+    { ...valid, surfaceRef: " " },
+    { ...valid, surfaceRef: undefined },
+    { ...valid, surfaceRef: 3 },
     { ...valid, fontSize: undefined },
     { ...valid, fontSize: 0 },
     { ...valid, fontSize: "-1mm" },

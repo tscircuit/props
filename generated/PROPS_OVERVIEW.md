@@ -548,8 +548,13 @@ export interface AssemblyReferenceSurfaceProps {
   shape?: "rect"
   /** Defaults to xy. Positive normals: xy +Z, xz +Y, yz +X. */
   plane?: "xy" | "xz" | "yz"
-  /** Outward normal, perpendicular to plane. Defaults: xy z+, xz y+, yz x+.
-   * Reversing the normal retains the local X tangent. Replaces positive/negative.
+  /** The direction the surface faces, away from the part's material. Must be
+   * perpendicular to plane. Defaults: xy z+, xz y+, yz x+. Reversing the
+   * normal retains the local X tangent.
+   */
+  outwardNormal?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
+  /** @deprecated Use outwardNormal. Still accepted with the same meaning; it
+   * must match outwardNormal when both are given.
    */
   normalDirection?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
   /** Surface center offsets from the part origin, in mm or unit strings; each defaults to zero. */
@@ -2396,9 +2401,10 @@ export interface ManufacturingLaserEngravingTextProps
 export interface ManufacturingSurfacePlacementProps {
   /** The surface to mark: `topSurface`, `bottomSurface`, `leftSurface`,
    * `rightSurface`, `frontSurface`, `backSurface`, or a reference surface named
-   * on the parent part. Resolved by core.
+   * on the parent part, whose outwardNormal is the side the mark is seen from.
+   * Resolved by core.
    */
-  surface: ManufacturingSurfaceRef
+  surfaceRef: ManufacturingSurfaceRef
   /** Signed distance from the surface center to the mark's anchor point. */
   xOffsetFromSurfaceCenter?: Distance
   /** Gap between the surface's left edge and the mark's left edge. */

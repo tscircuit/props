@@ -9,7 +9,10 @@ test("surface placement allows one position per axis on any surface", () => {
   const text = { text: "A", fontSize: 2 }
   for (const surface of [...manufacturingBuiltInSurfaces, "badge"]) {
     expect(
-      manufacturingLaserEngravingTextProps.parse({ ...text, surface }).surface,
+      manufacturingLaserEngravingTextProps.parse({
+        ...text,
+        surfaceRef: surface,
+      }).surfaceRef,
     ).toBe(surface)
   }
 
@@ -23,12 +26,12 @@ test("surface placement allows one position per axis on any surface", () => {
     "distanceFromSurfaceTopEdge",
     "distanceFromSurfaceBottomEdge",
   ]
-  const image = { imageUrl: "./a.svg", width: 5, surface: "topSurface" }
+  const image = { imageUrl: "./a.svg", width: 5, surfaceRef: "topSurface" }
   for (const schema of [
     (extra: object) =>
       manufacturingLaserEngravingTextProps.safeParse({
         ...text,
-        surface: "topSurface",
+        surfaceRef: "topSurface",
         ...extra,
       }),
     (extra: object) =>

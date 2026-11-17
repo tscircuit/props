@@ -8,7 +8,7 @@ import {
 test("laserengraving.image parses a sized image on a named surface", () => {
   const input = {
     imageUrl: "./logo.svg",
-    surface: "badge",
+    surfaceRef: "badge",
     width: "18mm",
     xOffsetFromSurfaceCenter: 2,
     distanceFromSurfaceBottomEdge: "1mm",
@@ -21,7 +21,7 @@ test("laserengraving.image parses a sized image on a named surface", () => {
   )
   expect(manufacturingLaserEngravingImageProps.parse(input)).toEqual({
     imageUrl: "./logo.svg",
-    surface: "badge",
+    surfaceRef: "badge",
     width: 18,
     xOffsetFromSurfaceCenter: 2,
     distanceFromSurfaceBottomEdge: 1,
@@ -33,7 +33,7 @@ test("laserengraving.image parses a sized image on a named surface", () => {
   // Static-file imports resolve through their default export.
   const parsed = manufacturingLaserEngravingImageProps.parse({
     imageUrl: { default: "/assets/logo.png" },
-    surface: "bottomSurface",
+    surfaceRef: "bottomSurface",
     width: 10,
     height: "0.5in",
   })

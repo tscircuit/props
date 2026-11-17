@@ -9,7 +9,7 @@ test("laserengraving.text parses distances, rotation and placement defaults", ()
   const input = {
     name: " REV ",
     text: "REV B",
-    surface: " topSurface ",
+    surfaceRef: " topSurface ",
     fontSize: "3mm",
     font: "tscircuit2024",
     textStyle: "outline",
@@ -27,7 +27,7 @@ test("laserengraving.text parses distances, rotation and placement defaults", ()
   expect(manufacturingLaserEngravingTextProps.parse(input)).toEqual({
     name: "REV",
     text: "REV B",
-    surface: "topSurface",
+    surfaceRef: "topSurface",
     fontSize: 3,
     font: "tscircuit2024",
     textStyle: "outline",
@@ -43,12 +43,12 @@ test("laserengraving.text parses distances, rotation and placement defaults", ()
   expect(
     manufacturingLaserEngravingTextProps.parse({
       text: "SN 0001",
-      surface: "badge",
+      surfaceRef: "badge",
       fontSize: 2.5,
     }),
   ).toEqual({
     text: "SN 0001",
-    surface: "badge",
+    surfaceRef: "badge",
     fontSize: 2.5,
     anchorAlignment: "center",
   })

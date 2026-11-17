@@ -2,7 +2,7 @@ import { expect, test } from "bun:test"
 import { manufacturingLaserEngravingImageProps } from "../lib"
 
 test("laserengraving.image requires a source and at least one dimension", () => {
-  const valid = { imageUrl: "./logo.svg", surface: "topSurface", height: 8 }
+  const valid = { imageUrl: "./logo.svg", surfaceRef: "topSurface", height: 8 }
   expect(manufacturingLaserEngravingImageProps.safeParse(valid).success).toBe(
     true,
   )
@@ -14,7 +14,7 @@ test("laserengraving.image requires a source and at least one dimension", () => 
     { ...valid, height: "-2mm" },
     { ...valid, rasterMode: "halftone" },
     { ...valid, invertImage: "yes" },
-    { ...valid, surface: "" },
+    { ...valid, surfaceRef: "" },
   ]) {
     expect(
       manufacturingLaserEngravingImageProps.safeParse(invalid).success,

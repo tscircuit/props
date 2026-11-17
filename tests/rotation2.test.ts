@@ -9,8 +9,8 @@ import {
 } from "../lib"
 
 test("rotation props share the direction-aware parser", () => {
-  const text = { text: "A", fontSize: 2, surface: "topSurface" }
-  const image = { imageUrl: "./a.svg", width: 5, surface: "topSurface" }
+  const text = { text: "A", fontSize: 2, surfaceRef: "topSurface" }
+  const image = { imageUrl: "./a.svg", width: 5, surfaceRef: "topSurface" }
   const resistor = { name: "R1", resistance: "1k" }
 
   for (const [input, degrees] of [

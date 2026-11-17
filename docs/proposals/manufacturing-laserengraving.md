@@ -18,7 +18,7 @@ job or a manufacturing drawing. Elements are therefore named for the process.
   <assembly.referencesurface
     name="badge"
     plane="xz"
-    normalDirection="y-"
+    outwardNormal="y-"
     centerYOffset="-25mm"
     centerZOffset="6mm"
     width="30mm"
@@ -27,7 +27,7 @@ job or a manufacturing drawing. Elements are therefore named for the process.
 
   <manufacturing.laserengraving.text
     text="REV B"
-    surface="topSurface"
+    surfaceRef="topSurface"
     fontSize="3mm"
     distanceFromSurfaceLeftEdge="4mm"
     distanceFromSurfaceTopEdge="4mm"
@@ -35,7 +35,7 @@ job or a manufacturing drawing. Elements are therefore named for the process.
 
   <manufacturing.laserengraving.image
     imageUrl="./logo.svg"
-    surface="topSurface"
+    surfaceRef="topSurface"
     width="18mm"
     yOffsetFromSurfaceCenter="-6mm"
     rotationOnSurface="90deg cw"
@@ -43,7 +43,7 @@ job or a manufacturing drawing. Elements are therefore named for the process.
 
   <manufacturing.laserengraving.text
     text="SN 0001"
-    surface="badge"
+    surfaceRef="badge"
     fontSize="2.5mm"
   />
 </assembly.printedpart>
@@ -51,14 +51,14 @@ job or a manufacturing drawing. Elements are therefore named for the process.
 
 ## Choosing the surface
 
-`surface` is required. It is either a built-in bounding surface or the name of
+`surfaceRef` is required. It is either a built-in bounding surface or the name of
 a reference surface on the parent part: an `assembly.referencesurface` child or
 a named JSCAD reference rectangle.
 
 Built-in surfaces come from the part's model bounds, in its local right-handed
 XYZ. The four sides are upright, so text on a wall reads the right way up.
 
-| `surface` | Outward normal | Surface +X | Surface +Y |
+| `surfaceRef` | Outward normal | Surface +X | Surface +Y |
 | --- | --- | --- | --- |
 | `topSurface` | `z+` | `x+` | `y+` |
 | `bottomSurface` | `z-` | `x+` | `y-` |
@@ -67,10 +67,23 @@ XYZ. The four sides are upright, so text on a wall reads the right way up.
 | `rightSurface` | `x+` | `y+` | `z+` |
 | `leftSurface` | `x-` | `y-` | `z+` |
 
-A named reference surface keeps the frame it was authored with: +X is its
+A named reference surface keeps the frame it was authored with. Its
+`outwardNormal` is the side the mark is engraved on and seen from, +X is its
 in-plane X direction and +Y its second tangent. That second tangent can point
-along part -Z (an `xz` surface with normal `y+`), in which case the author
-turns the mark with `rotationOnSurface="180deg"`.
+along part -Z (an `xz` surface with `outwardNormal="y+"`), in which case the
+author turns the mark with `rotationOnSurface="180deg"`.
+
+## Reference surface `outwardNormal`
+
+`assembly.referencesurface` gains `outwardNormal`, replacing `normalDirection`
+as the canonical name for the direction a surface faces. It accepts the same
+`x+`, `x-`, `y+`, `y-`, `z+`, `z-` values, must be perpendicular to `plane`,
+and keeps the same per-plane default when omitted.
+
+`normalDirection` is deprecated and still parses with the same meaning. Giving
+both with different values is rejected. Parsed output always carries
+`outwardNormal`, and mirrors it in `normalDirection` so existing consumers keep
+working until they read the new name. No migration is required.
 
 ## Positioning on the surface
 
@@ -105,7 +118,7 @@ Shared by both elements:
 
 | Prop | Accepted input | Parsed output | Omission |
 | --- | --- | --- | --- |
-| `surface` | Nonblank string | Trimmed | Rejected |
+| `surfaceRef` | Nonblank string | Trimmed | Rejected |
 | `xOffsetFromSurfaceCenter`, `yOffsetFromSurfaceCenter` | Signed finite mm number or distance string | Number in mm | Absent |
 | `distanceFromSurface{Left,Right,Top,Bottom}Edge` | Finite nonnegative mm number or distance string | Number in mm | Absent |
 | `anchorAlignment` | Nine-point anchor | Unchanged | `"center"` |
@@ -146,7 +159,8 @@ There are no aliases. The only parsed default is `anchorAlignment`.
   and keep the previous parser.
 - Negative edge distances are rejected. A mark that should overhang an edge is
   positioned from the center.
-- The API is additive. Existing parts parse as before. `assembly.part` and
+- Apart from the rotation parser above, the API is additive. Existing parts
+  and reference surfaces parse as before. `assembly.part` and
   `assembly.printedpart` already accept children; old core versions ignore the
   new elements.
 - These elements describe one manufacturing step on a part. They add no BOM

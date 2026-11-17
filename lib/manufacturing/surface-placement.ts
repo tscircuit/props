@@ -40,9 +40,10 @@ export type ManufacturingSurfaceRef =
 export interface ManufacturingSurfacePlacementProps {
   /** The surface to mark: `topSurface`, `bottomSurface`, `leftSurface`,
    * `rightSurface`, `frontSurface`, `backSurface`, or a reference surface named
-   * on the parent part. Resolved by core.
+   * on the parent part, whose outwardNormal is the side the mark is seen from.
+   * Resolved by core.
    */
-  surface: ManufacturingSurfaceRef
+  surfaceRef: ManufacturingSurfaceRef
   /** Signed distance from the surface center to the mark's anchor point. */
   xOffsetFromSurfaceCenter?: Distance
   /** Gap between the surface's left edge and the mark's left edge. */
@@ -72,13 +73,13 @@ const distanceFromEdge = distance.pipe(z.number().nonnegative().finite())
 // Shared fields/refinement are internal composition helpers. Consumers use
 // each element's complete validator rather than a partial placement schema.
 export const manufacturingSurfacePlacementShape = {
-  surface: z
+  surfaceRef: z
     .custom<ManufacturingSurfaceRef>((value) => typeof value === "string", {
       message: "Expected a surface name",
     })
     .transform((value) => value.trim())
     .refine((value) => value.length > 0, {
-      message: "surface cannot be blank",
+      message: "surfaceRef cannot be blank",
     }),
   xOffsetFromSurfaceCenter: offsetFromCenter.optional(),
   distanceFromSurfaceLeftEdge: distanceFromEdge.optional(),

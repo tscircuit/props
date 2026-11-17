@@ -48,7 +48,7 @@ export interface AnalogAnalysisSimulationBaseProps {
   /** Stable identity for the simulation experiment. */
   name?: string
   /** SPICE implementation used to run this analysis. */
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   /** Numerical solver settings forwarded to the selected SPICE engine. */
   spiceOptions?: SpiceOptions
   /** Render each probe with an independent vertical graph scale. */
@@ -106,18 +106,6 @@ export interface AnalogDigitalStimulusProps {
 }
 
 
-export interface AnalogEyeDiagramProps {
-  name: string
-  simulationRef: string
-  probeRef: string
-  unitInterval: number | string
-  timeOrigin: number | string
-  /** Omitted gate endpoints use the experiment's recorded start/end times. */
-  startTime?: number | string
-  endTime?: number | string
-}
-
-
 export interface AnalogInductanceSweepParameterProps
   extends AnalogSweepCoordinatesProps {
   parameterType: "inductance"
@@ -140,7 +128,7 @@ export interface AnalogSimulationProps {
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
-  spiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
@@ -154,9 +142,6 @@ export interface AnalogTransientSimulationProps
   startTime?: number | string
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string
-  /** Physical pin selectors and per-experiment direction/enable states. Requires spiceEngine="pcb_spice"; rendering only declares the experiment. */
-  ibisPinStates?: Record<string, IbisPinRunState>
-  pcbSpiceChannel?: PcbSpiceChannelProps
 }
 
 
@@ -1991,12 +1976,6 @@ export interface HoleWithPolygonPadPlatedHoleProps
 }
 
 
-export interface IbisModelProps extends IbisModelDefinition {
-  /** Selector for exactly one source component in this subcircuit. */
-  componentRef: string
-}
-
-
 export interface ImplicitBreakoutBounds {
   readonly minX: number
   readonly maxX: number
@@ -2590,6 +2569,26 @@ export interface PcbBendProps {
 }
 
 
+export interface PcbChannelProps {
+  /** Unique within the enclosing SI block. */
+  name: string
+  /** Driving pin: ".U1 > .A4", a pair { p, n }, or either as { pin, model } to choose the IBIS model (per leg for a pair). */
+  driverRef: SignalEndpoint
+  /** Arrays always mean multiple receivers; only { p, n } means a differential pair. Single-ended probes reference each driving/receiving chip's own ground pin. */
+  receiverRef: SignalEndpoint | SignalEndpoint[]
+  /** Overrides the block bit rate. Raw and parsed numbers are bit/s. */
+  bitRate?: string | number
+  /** Open pattern string. Default: prbs7. Examples: prbs15, prbs31, clock, or literal bits. Constant patterns "0" and "1" declare quiet signals. */
+  pattern?: string
+  /** Explicit PRBS seed: integer 1..2^n-1 for prbsN (including disabled drivers). Omitted seeds use phases spaced by sorted signal name across board blocks; core resolves them. Unused for other patterns. */
+  seed?: number
+  /** Delay in seconds or UI. Parsed times are seconds; UI remains a normalized string for core to resolve at the signal bit rate. Default: 0UI. */
+  offset?: string | number
+  /** Tri-state the driver (high impedance) so this line stays quiet and only picks up crosstalk; pattern is ignored. Unlike pattern "0", which actively drives low and absorbs coupled noise. Every driver leg's IBIS model must support a disable state. Default: false. */
+  driverDisabled?: boolean
+}
+
+
 export interface PcbLayoutProps {
   pcbX?: string | number
   pcbY?: string | number
@@ -2779,48 +2778,6 @@ export interface PcbRouteCache {
 }
 
 
-export interface PcbSpiceChannelProps {
-  reduction: "routed-copper" | "straightened-stages"
-  sections: number
-  lanes: Array<{ name: string; from: string; to: string }>
-  referencePinRef: string
-  passiveComponentRefs?: string[]
-  extraction: {
-    minimumFrequency: number | string
-    maximumFrequency: number | string
-    modelFrequency: number | string
-    filaments: number
-    refinementFilaments: number
-    convergenceTolerance: number
-    capacitanceTolerance: number
-    reciprocityTolerance: number
-    dcResistanceTolerance: number
-    maxPanelLength: number | string
-    groundMeshSize?: number | string
-  }
-  relativePermittivity?: number
-  via?: {
-    platingThickness?: number | string
-    equivalentWidth?: number | string
-    omitThroughViaStubs?: boolean
-  }
-  straightenedStageProfiles?: Record<
-    string,
-    {
-      spacing: number | string
-      relativePermittivity: number
-      return: {
-        width: number | string
-        thickness: number | string
-        lengthFactor: number
-        centerY: number | string
-        centerZ: number | string
-      }
-    }
-  >
-}
-
-
 export interface PcbStyle {
   silkscreenFontSize?: string | number
   viaPadDiameter?: string | number
@@ -2842,6 +2799,19 @@ export interface PcbSxValue {
   pcbX?: string | number
   pcbY?: string | number
   visibility?: "hidden" | "visible" | "inherit"
+}
+
+
+export interface PcbTransientChannelSimulationProps {
+  /** Required when the board contains more than one SI block. */
+  name?: string
+  /** Default signal bit rate. Raw and parsed numbers are bit/s. */
+  bitRate: string | number
+  /** Positive, finite time or UI. Parsed times are seconds; UI stays a normalized string like offset, for core to resolve at the block bit rate. Absent stays absent for the pipeline to choose automatically; present is an explicit recording bound. */
+  duration?: string | number
+  /** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
+  allowUnroutedTraces?: boolean
+  children?: ReactNode
 }
 
 
@@ -3182,7 +3152,7 @@ export interface PlatformConfig {
   includeBoardFiles?: string[]
   snapshotsDir?: string
 
-  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice" | "pcb_spice">
+  defaultSpiceEngine?: AutocompleteString<"spicey" | "ngspice">
 
   unitPreference?: "mm" | "in" | "mil"
 
@@ -3676,6 +3646,12 @@ export interface SilkscreenGraphicProps {
   pcbMarginY?: string | number
   pcbRelative?: boolean
   relative?: boolean
+}
+
+
+export interface SimulationIbisModelProps extends IbisModelDefinition {
+  /** Selector for exactly one source component in this subcircuit. */
+  componentRef: string
 }
 
 

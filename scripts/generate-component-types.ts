@@ -109,7 +109,9 @@ export function extractInterfaces(content: string): string[] {
 function generateComponentTypesDoc() {
   const libDir = path.join(__dirname, "../lib")
   const commonDir = path.join(libDir, "common")
-  const componentsDir = path.join(libDir, "components")
+  const componentDirs = ["components", "simulation"].map((dir) =>
+    path.join(libDir, dir),
+  )
 
   // Get common types first
   const commonFiles = fs
@@ -119,11 +121,13 @@ function generateComponentTypesDoc() {
     .map((file) => path.join(commonDir, file))
 
   // Then get component types
-  const componentFiles = fs
-    .readdirSync(componentsDir)
-    .sort()
-    .filter((file) => file.endsWith(".ts"))
-    .map((file) => path.join(componentsDir, file))
+  const componentFiles = componentDirs.flatMap((dir) =>
+    fs
+      .readdirSync(dir)
+      .sort()
+      .filter((file) => file.endsWith(".ts") && file !== "index.ts")
+      .map((file) => path.join(dir, file)),
+  )
 
   let markdown = `# TSCircuit Component Types
 

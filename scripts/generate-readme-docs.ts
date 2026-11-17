@@ -18,6 +18,7 @@ const namespacedSimulationComponentNames = new Set([
   "pcbtransientchannelsimulation",
   "pcbdriverreceiverchannel",
   "simulationibismodel",
+  "simulationeyediagram",
   "pcbreturncurrentexcitation",
   "pcbreturncurrentsimulation",
 ])

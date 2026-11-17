@@ -6621,6 +6621,29 @@ export const pcbTransientChannelSimulationProps = z
   .strict()
 ```
 
+### simulation-eye-diagram
+
+```typescript
+/** Eye diagram of the driven channels in a simulation.pcbtransientchannelsimulation: all of them by default, or the ones in channelRef. Quiet channels (driverDisabled or a constant pattern) have no eye and are skipped. Each eye uses its channel's bit rate as the unit interval; rendering belongs to core. */
+export interface SimulationEyeDiagramProps {
+  name: string
+  simulationRef: string
+  channelRef?: string[]
+  startTime?: string | number
+  endTime?: string | number
+}
+/** Eye window end in seconds or UI. Omitted: the end of the simulation. */
+export const simulationEyeDiagramProps = z
+  .object({
+    name: z.string().trim().min(1),
+    simulationRef: z.string().trim().min(1),
+    channelRef: z.array(z.string().trim().min(1)).min(1).optional(),
+    startTime: signalTimeOrUi.optional(),
+    endTime: signalTimeOrUi.optional(),
+  })
+  .strict()
+```
+
 ### simulation-ibis-model
 
 ```typescript

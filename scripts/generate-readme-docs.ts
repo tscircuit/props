@@ -356,8 +356,9 @@ ${interfaceDefinition}
 }
 
 // Main execution
-const componentsDir = path.join(__dirname, "../lib/components")
-const files = getComponentFiles(componentsDir)
+const files = ["../lib/components", "../lib/simulation"].flatMap((dir) =>
+  getComponentFiles(path.join(__dirname, dir)),
+)
 const components = extractComponentInfo(files)
 
 // Sort components alphabetically

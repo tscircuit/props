@@ -1752,7 +1752,7 @@ export interface PcbDriverReceiverChannelProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-driver-receiver-channel.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/simulation/pcb-driver-receiver-channel.ts)
 
 ### PcbKeepoutProps `<pcbkeepout />`
 
@@ -1916,7 +1916,7 @@ export interface PcbReturnCurrentExcitationProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-return-current-excitation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/simulation/pcb-return-current-excitation.ts)
 
 <a id="pcbreturncurrentsimulationprops-simulationpcbreturncurrentsimulation"></a>
 
@@ -1931,7 +1931,7 @@ export interface PcbReturnCurrentSimulationProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-return-current-simulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/simulation/pcb-return-current-simulation.ts)
 
 ### PcbSoldermaskOpeningProps `<pcbsoldermaskopening />`
 
@@ -1977,7 +1977,7 @@ export interface PcbTransientChannelSimulationProps {
 }
 ```
 
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/pcb-transient-channel-simulation.ts)
+[Source](https://github.com/tscircuit/props/blob/main/lib/simulation/pcb-transient-channel-simulation.ts)
 
 ### PinHeaderProps `<pinheader />`
 

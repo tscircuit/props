@@ -4604,56 +4604,6 @@ export const pcbBendProps = z
   })
 ```
 
-### pcb-driver-receiver-channel
-
-```typescript
-export type SignalEndpoint =
-  | SignalPin
-  | SignalPair
-  | { pin: SignalPin; model?: string }
-export const signalEndpoint = z.union([
-  pin,
-  pair,
-  z.object({ pin, model: pin.optional() }).strict(),
-  z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
-])
-export interface PcbDriverReceiverChannelProps {
-  name: string
-  driverRef: SignalEndpoint
-  receiverRef: SignalEndpoint | SignalEndpoint[]
-  bitRate?: string | number
-  pattern?: string
-  seed?: number
-  offset?: string | number
-  driverDisabled?: boolean
-}
-/** Tri-state the driver (high impedance) so this line stays quiet and only picks up crosstalk; pattern is ignored. Unlike pattern "0", which actively drives low and absorbs coupled noise. Every driver leg's IBIS model must support a disable state. Default: false. */
-export const pcbDriverReceiverChannelProps = z
-  .object({
-    name: z.string().trim().min(1),
-    driverRef: signalEndpoint,
-    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
-    bitRate: signalBitRate.optional(),
-    pattern: z.string().trim().min(1).default("prbs7"),
-    seed: z.number().int().min(1).optional(),
-    offset: signalTimeOrUi.default("0UI"),
-    driverDisabled: z.boolean().default(false),
-  })
-  .strict()
-  .superRefine(({ name, pattern, seed }, ctx) => {
-    if (seed === undefined || !["prbs7", "prbs15", "prbs31"].includes(pattern))
-      return
-    const max = 2 ** Number(pattern.slice(4)) - 1
-    if (seed > max) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["seed"],
-        message: `Signal "${name}": ${pattern} seed must be an integer in 1..${max}.`,
-      })
-    }
-  })
-```
-
 ### pcb-keepout
 
 ```typescript
@@ -4894,66 +4844,6 @@ export const pcbNoteTextProps = pcbLayoutProps.extend({
 })
 ```
 
-### pcb-return-current-excitation
-
-```typescript
-/** A signal driver/load pair and its explicit ground return terminals.
- * Selectors resolve inside the containing board/subcircuit. The initial core
- * implementation accepts physical PCB ports/pads, not standalone via contacts.
- * This definition neither connects the selected pins nor runs a simulation.
- */
-export interface PcbReturnCurrentExcitationProps {
-  name?: string
-  source: string
-  load: string
-  ground: string
-  current: number | string
-  returnSource: string
-  returnSink: string
-  sourceImpedance: number | string
-  loadImpedance: number | string
-  trace?: string
-  returnSourceLayer?: LayerRefInput
-  returnSinkLayer?: LayerRefInput
-}
-/** Contact layer for a driver-side PCB port spanning multiple copper layers. */
-export const pcbReturnCurrentExcitationProps = z
-  .object({
-    name: z.string().trim().min(1).optional(),
-    source: selector,
-    load: selector,
-    ground: selector,
-    current: positiveCurrent,
-    returnSource: selector,
-    returnSink: selector,
-    sourceImpedance: positiveResistance,
-    loadImpedance: positiveResistance,
-    trace: selector.optional(),
-    returnSourceLayer: layer_ref.optional(),
-    returnSinkLayer: layer_ref.optional(),
-  })
-  .strict()
-```
-
-### pcb-return-current-simulation
-
-```typescript
-/** Defines a pending PCB return-current experiment; rendering does not run it.
- * Frequency, mesh and sampling settings are supplied to the simulation CLI.
- */
-export interface PcbReturnCurrentSimulationProps {
-  name?: string
-  children?: ReactNode
-}
-/** One or more nested simulation.pcbreturncurrentexcitation elements. */
-export const pcbReturnCurrentSimulationProps = z
-  .object({
-    name: z.string().trim().min(1).optional(),
-    children: z.custom<ReactNode>().optional(),
-  })
-  .strict()
-```
-
 ### pcb-soldermask-opening
 
 ```typescript
@@ -5045,29 +4935,6 @@ export const pcbTraceProps = z.object({
     ]),
   ),
 })
-```
-
-### pcb-transient-channel-simulation
-
-```typescript
-/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and passive unlisted nets. Rendering and board-dependent diagnostics belong to core. */
-export interface PcbTransientChannelSimulationProps {
-  name?: string
-  bitRate: string | number
-  duration?: string | number
-  allowUnroutedTraces?: boolean
-  children?: ReactNode
-}
-/** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
-export const pcbTransientChannelSimulationProps = z
-  .object({
-    name: z.string().trim().min(1).optional(),
-    bitRate: signalBitRate,
-    duration: signalDurationOrUi.optional(),
-    allowUnroutedTraces: z.boolean().default(false),
-    children: z.custom<ReactNode>().optional(),
-  })
-  .strict()
 ```
 
 ### pin-header
@@ -6782,5 +6649,138 @@ export const voltageSourceProps = commonComponentProps.extend({
   acPhase: rotation.optional(),
   connections: createConnectionsProp(voltageSourcePinLabels).optional(),
 })
+```
+
+### pcb-driver-receiver-channel
+
+```typescript
+export type SignalEndpoint =
+  | SignalPin
+  | SignalPair
+  | { pin: SignalPin; model?: string }
+export const signalEndpoint = z.union([
+  pin,
+  pair,
+  z.object({ pin, model: pin.optional() }).strict(),
+  z.object({ pin: pair, model: z.union([pin, pair]).optional() }).strict(),
+])
+export interface PcbDriverReceiverChannelProps {
+  name: string
+  driverRef: SignalEndpoint
+  receiverRef: SignalEndpoint | SignalEndpoint[]
+  bitRate?: string | number
+  pattern?: string
+  seed?: number
+  offset?: string | number
+  driverDisabled?: boolean
+}
+/** Tri-state the driver (high impedance) so this line stays quiet and only picks up crosstalk; pattern is ignored. Unlike pattern "0", which actively drives low and absorbs coupled noise. Every driver leg's IBIS model must support a disable state. Default: false. */
+export const pcbDriverReceiverChannelProps = z
+  .object({
+    name: z.string().trim().min(1),
+    driverRef: signalEndpoint,
+    receiverRef: z.union([signalEndpoint, z.array(signalEndpoint).min(1)]),
+    bitRate: signalBitRate.optional(),
+    pattern: z.string().trim().min(1).default("prbs7"),
+    seed: z.number().int().min(1).optional(),
+    offset: signalTimeOrUi.default("0UI"),
+    driverDisabled: z.boolean().default(false),
+  })
+  .strict()
+  .superRefine(({ name, pattern, seed }, ctx) => {
+    if (seed === undefined || !["prbs7", "prbs15", "prbs31"].includes(pattern))
+      return
+    const max = 2 ** Number(pattern.slice(4)) - 1
+    if (seed > max) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["seed"],
+        message: `Signal "${name}": ${pattern} seed must be an integer in 1..${max}.`,
+      })
+    }
+  })
+```
+
+### pcb-return-current-excitation
+
+```typescript
+/** A signal driver/load pair and its explicit ground return terminals.
+ * Selectors resolve inside the containing board/subcircuit. The initial core
+ * implementation accepts physical PCB ports/pads, not standalone via contacts.
+ * This definition neither connects the selected pins nor runs a simulation.
+ */
+export interface PcbReturnCurrentExcitationProps {
+  name?: string
+  source: string
+  load: string
+  ground: string
+  current: number | string
+  returnSource: string
+  returnSink: string
+  sourceImpedance: number | string
+  loadImpedance: number | string
+  trace?: string
+  returnSourceLayer?: LayerRefInput
+  returnSinkLayer?: LayerRefInput
+}
+/** Contact layer for a driver-side PCB port spanning multiple copper layers. */
+export const pcbReturnCurrentExcitationProps = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    source: selector,
+    load: selector,
+    ground: selector,
+    current: positiveCurrent,
+    returnSource: selector,
+    returnSink: selector,
+    sourceImpedance: positiveResistance,
+    loadImpedance: positiveResistance,
+    trace: selector.optional(),
+    returnSourceLayer: layer_ref.optional(),
+    returnSinkLayer: layer_ref.optional(),
+  })
+  .strict()
+```
+
+### pcb-return-current-simulation
+
+```typescript
+/** Defines a pending PCB return-current experiment; rendering does not run it.
+ * Frequency, mesh and sampling settings are supplied to the simulation CLI.
+ */
+export interface PcbReturnCurrentSimulationProps {
+  name?: string
+  children?: ReactNode
+}
+/** One or more nested simulation.pcbreturncurrentexcitation elements. */
+export const pcbReturnCurrentSimulationProps = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    children: z.custom<ReactNode>().optional(),
+  })
+  .strict()
+```
+
+### pcb-transient-channel-simulation
+
+```typescript
+/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and passive unlisted nets. Rendering and board-dependent diagnostics belong to core. */
+export interface PcbTransientChannelSimulationProps {
+  name?: string
+  bitRate: string | number
+  duration?: string | number
+  allowUnroutedTraces?: boolean
+  children?: ReactNode
+}
+/** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
+export const pcbTransientChannelSimulationProps = z
+  .object({
+    name: z.string().trim().min(1).optional(),
+    bitRate: signalBitRate,
+    duration: signalDurationOrUi.optional(),
+    allowUnroutedTraces: z.boolean().default(false),
+    children: z.custom<ReactNode>().optional(),
+  })
+  .strict()
 ```
 

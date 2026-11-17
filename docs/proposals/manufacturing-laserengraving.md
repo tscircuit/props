@@ -75,15 +75,14 @@ author turns the mark with `rotationOnSurface="180deg"`.
 
 ## Reference surface `outwardNormal`
 
-`assembly.referencesurface` gains `outwardNormal`, replacing `normalDirection`
-as the canonical name for the direction a surface faces. It accepts the same
-`x+`, `x-`, `y+`, `y-`, `z+`, `z-` values, must be perpendicular to `plane`,
-and keeps the same per-plane default when omitted.
+`assembly.referencesurface` gains `outwardNormal`, the direction a surface
+faces. It accepts `x+`, `x-`, `y+`, `y-`, `z+` or `z-`, must be perpendicular
+to `plane`, and uses the existing per-plane default when omitted.
 
-`normalDirection` is deprecated and still parses with the same meaning. Giving
-both with different values is rejected. Parsed output always carries
-`outwardNormal`, and mirrors it in `normalDirection` so existing consumers keep
-working until they read the new name. No migration is required.
+`normalDirection` remains as an alias with the same meaning. Either name may
+be used; giving both with different values is rejected. Parsed output always
+carries both names with the same value, so consumers can read either. No
+migration is required.
 
 ## Positioning on the surface
 

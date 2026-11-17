@@ -17,8 +17,8 @@ export interface AssemblyReferenceSurfaceProps {
    * normal retains the local X tangent.
    */
   outwardNormal?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
-  /** @deprecated Use outwardNormal. Still accepted with the same meaning; it
-   * must match outwardNormal when both are given.
+  /** Alias of outwardNormal, with the same meaning. It must match
+   * outwardNormal when both are given.
    */
   normalDirection?: "x+" | "x-" | "y+" | "y-" | "z+" | "z-"
   /** Surface center offsets from the part origin, in mm or unit strings; each defaults to zero. */
@@ -67,7 +67,7 @@ export const assemblyReferenceSurfaceProps = z
         code: z.ZodIssueCode.custom,
         path: ["normalDirection"],
         message:
-          "normalDirection is a deprecated alias of outwardNormal; they must match",
+          "normalDirection is an alias of outwardNormal; they must match",
       })
       return
     }
@@ -94,7 +94,7 @@ export const assemblyReferenceSurfaceProps = z
         : surface.plane === "xz"
           ? ("y+" as const)
           : ("x+" as const))
-    // normalDirection mirrors outwardNormal until consumers read the new name.
+    // Both names are always set, so consumers can read either.
     return { ...surface, outwardNormal, normalDirection: outwardNormal }
   })
 

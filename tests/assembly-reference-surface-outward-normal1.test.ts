@@ -14,7 +14,7 @@ test("reference surfaces take outwardNormal and keep normalDirection as an alias
   expect(parsed.outwardNormal).toBe("y-")
   expect(parsed.normalDirection).toBe("y-")
 
-  // The deprecated name parses to the same canonical output.
+  // The alias parses to the same output.
   expect(
     assemblyReferenceSurfaceProps.parse({ plane: "xz", normalDirection: "y-" }),
   ).toEqual(

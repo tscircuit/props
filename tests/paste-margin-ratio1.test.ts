@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import { smtPadProps } from "lib/components/smtpad"
 
-test.failing("rectangular pads retain separate local-axis paste ratios", () => {
+test("rectangular pads retain separate local-axis paste ratios", () => {
   expect(
     smtPadProps.parse({
       shape: "rect",

@@ -54,8 +54,6 @@ export interface AssemblyCableWireProps {
   color?: string
   /** Conductor gauge: 22 or "22awg". Omitted inherits the cable's wireAwg. */
   awg?: number | string
-  /** Wire type designation, e.g. "UL1007". Omitted inherits the cable's wireStyle. */
-  wireStyle?: string
 }
 
 export const assemblyCableWireProps = z.object({
@@ -64,7 +62,6 @@ export const assemblyCableWireProps = z.object({
   toPin: cablePin,
   color: z.string().trim().min(1).optional(),
   awg: wireAwg.optional(),
-  wireStyle: z.string().trim().min(1).optional(),
 })
 
 export type AssemblyCableWirePropsInput = z.input<typeof assemblyCableWireProps>

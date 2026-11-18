@@ -15,7 +15,6 @@ length, a wiring list and a numbered parts list. The cable is described once on
   fromConnectorName="H1"
   toConnectorName="H2"
   wireAwg="22awg"
-  wireStyle="UL1007"
 >
   <assembly.cablewire fromPin={1} toPin={1} color="black" />
   <assembly.cablewire fromPin={3} toPin={3} color="black" />
@@ -62,7 +61,6 @@ length, a wiring list and a numbered parts list. The cable is described once on
 | `lengthTolerance` | Nonnegative mm number or distance string; requires `length` | Number in mm | Length is dimensioned without a tolerance |
 | `fromConnectorName`, `toConnectorName` | Nonblank string | Trimmed | Drawings label the ends `A` and `B` |
 | `wireAwg` | Number, or string with an optional `awg` suffix | Number | Wires state their own gauge or none |
-| `wireStyle` | Nonblank string, e.g. `"UL1007"` | Trimmed | Wires state their own style or none |
 | `children` | `assembly.cablewire` elements | Preserved | Wiring is unstated |
 
 `length` is the manufactured length between the two connector wire exits. It is
@@ -79,7 +77,6 @@ One insulated conductor of its parent cable.
 | `fromPin`, `toPin` | Required. Positive integer, numeric string, or `pinN` label | Positive integer |
 | `color` | Nonblank string, e.g. `"black"`, `"red/white"` | Trimmed |
 | `awg` | Same as `wireAwg` | Number; omitted inherits the cable's `wireAwg` |
-| `wireStyle` | Nonblank string | Trimmed; omitted inherits the cable's `wireStyle` |
 | `name` | Nonblank signal or conductor name, e.g. `"A+"` | Trimmed |
 
 Pins are 1-based contact positions on the cable's own connectors, as defined by
@@ -119,7 +116,7 @@ heading row.
 | TSX | Circuit JSON |
 | --- | --- |
 | `assembly.cable` additions | `cad_cable.nominal_length`, `length_tolerance`, `from_connector_name`, `to_connector_name` |
-| `assembly.cablewire` | `cad_cable_wire`, with inherited gauge and style resolved |
+| `assembly.cablewire` | `cad_cable_wire`, with inherited gauge resolved |
 | `assembly.drawing.harnessview` | `drawing_wiring_harness_view`; `showBalloons` becomes `drawing_balloon` records with resolved text and position |
 | `assembly.drawing.wiringtable`, `assembly.drawing.bomtable` | `drawing_table` plus one `drawing_table_cell` per cell, with resolved text, column widths and row heights |
 
@@ -128,7 +125,7 @@ authoring elements only: core resolves their rows into cells, so a renderer
 draws text and never looks up wires or BOM items.
 
 For a cable with wires, core derives the BOM children: one housing per end, one
-contact per wire end, and one line per distinct wire type and color, counted in
+contact per wire end, and one line per distinct wire gauge and color, counted in
 cut pieces.
 
 ## Follow-ups

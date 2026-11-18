@@ -33,8 +33,6 @@ export interface AssemblyCableProps extends AssemblyBomProps {
   toConnectorName?: string
   /** Conductor gauge inherited by assembly.cablewire children: 22 or "22awg". */
   wireAwg?: number | string
-  /** Wire type designation inherited by assembly.cablewire children, e.g. "UL1007". */
-  wireStyle?: string
   /** assembly.cablewire children stating the pin-to-pin wiring. Omit to leave wiring unstated. */
   children?: any
 }
@@ -67,7 +65,6 @@ export const assemblyCableProps = z
     fromConnectorName: z.string().trim().min(1).optional(),
     toConnectorName: z.string().trim().min(1).optional(),
     wireAwg: wireAwg.optional(),
-    wireStyle: z.string().trim().min(1).optional(),
     children: z.any().optional(),
   })
   .superRefine((cable, context) => {

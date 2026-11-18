@@ -12,7 +12,6 @@ test("assembly.cable carries a build length, connector designators and wire defa
     fromConnectorName: " H1 ",
     toConnectorName: "H2",
     wireAwg: "22awg",
-    wireStyle: "UL1007",
   }
   expect(assemblyCableProps.parse(input)).toEqual({
     name: "MOTOR_CABLE",
@@ -24,7 +23,6 @@ test("assembly.cable carries a build length, connector designators and wire defa
     fromConnectorName: "H1",
     toConnectorName: "H2",
     wireAwg: 22,
-    wireStyle: "UL1007",
   })
   const cable = { name: "C1", from: ".J1", to: ".J2" }
   for (const invalid of [
@@ -33,7 +31,6 @@ test("assembly.cable carries a build length, connector designators and wire defa
     { length: "50mm", lengthTolerance: -1 },
     { fromConnectorName: " " },
     { wireAwg: "thick" },
-    { wireStyle: "" },
   ])
     expect(assemblyCableProps.safeParse({ ...cable, ...invalid }).success).toBe(
       false,

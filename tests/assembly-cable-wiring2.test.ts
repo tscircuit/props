@@ -13,7 +13,6 @@ test("assembly.cablewire normalizes pins and gauge and leaves unstated attribute
     toPin: 2,
     color: "black",
     awg: "22 AWG",
-    wireStyle: "UL1007",
   }
   expect(assemblyCableWireProps.parse(wire)).toEqual({
     name: "B+",
@@ -21,7 +20,6 @@ test("assembly.cablewire normalizes pins and gauge and leaves unstated attribute
     toPin: 2,
     color: "black",
     awg: 22,
-    wireStyle: "UL1007",
   })
   expect(assemblyCableWireProps.parse({ fromPin: "6", toPin: "PIN4" })).toEqual(
     { fromPin: 6, toPin: 4 },

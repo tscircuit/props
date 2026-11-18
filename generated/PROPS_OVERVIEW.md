@@ -224,8 +224,6 @@ export interface AssemblyCableProps extends AssemblyBomProps {
   toConnectorName?: string
   /** Conductor gauge inherited by assembly.cablewire children: 22 or "22awg". */
   wireAwg?: number | string
-  /** Wire type designation inherited by assembly.cablewire children, e.g. "UL1007". */
-  wireStyle?: string
   /** assembly.cablewire children stating the pin-to-pin wiring. Omit to leave wiring unstated. */
   children?: any
 }
@@ -242,8 +240,6 @@ export interface AssemblyCableWireProps {
   color?: string
   /** Conductor gauge: 22 or "22awg". Omitted inherits the cable's wireAwg. */
   awg?: number | string
-  /** Wire type designation, e.g. "UL1007". Omitted inherits the cable's wireStyle. */
-  wireStyle?: string
 }
 
 

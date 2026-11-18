@@ -3397,7 +3397,6 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
-  solderPasteMarginRatio?: SolderPasteMarginRatio
   solderPasteMargin?: Distance
 }
 
@@ -3474,7 +3473,6 @@ export interface RotatedRectSmtPadProps
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
-  solderPasteMarginRatio?: SolderPasteMarginRatio
   solderPasteMargin?: Distance
 }
 
@@ -3799,12 +3797,6 @@ export interface SolderJumperProps extends JumperProps {
    * If true, all pins are connected with cuttable traces
    */
   bridged?: boolean
-}
-
-
-export interface SolderPasteMarginRatio {
-  x: number
-  y: number
 }
 
 

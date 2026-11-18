@@ -13,6 +13,8 @@ export interface AnalogSimulationProps {
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
+  // Calculate a DC operating point before the transient run; false or omission preserves zero-state startup.
+  calculateInitialOperatingPoint?: boolean
 }
 
 const spiceEngine = z.custom<AutocompleteString<"spicey" | "ngspice">>(
@@ -65,6 +67,12 @@ export const analogSimulationProps = z.object({
   spiceEngine: spiceEngine.optional(),
   spiceOptions: spiceOptions.optional(),
   graphIndependentAxes: z.boolean().optional(),
+  calculateInitialOperatingPoint: z
+    .boolean()
+    .optional()
+    .describe(
+      "Calculate a DC operating point before the transient run; false or omission preserves zero-state startup",
+    ),
 })
 
 expectTypesMatch<AnalogSimulationProps, z.input<typeof analogSimulationProps>>(

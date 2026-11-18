@@ -5803,6 +5803,7 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
 ### smtpad
 
 ```typescript
+/** Per-side fractions of local width/height, added to solderPasteMargin. */
 export interface SolderPasteMarginRatio {
   x: number
   y: number
@@ -5827,10 +5828,6 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   solderPasteMarginRatio?: SolderPasteMarginRatio
   solderPasteMargin?: Distance
 }
-/** Signed margin on each side as a fraction of the local pad width/height.
-   * Added to solderPasteMargin. Omitted ratios add no relative margin.
-   * For a 4 x 2 mm pad, { x: -0.1, y: -0.25 } gives 3.2 x 1 mm at zero absolute margin.
-   */
 export interface RotatedRectSmtPadProps
   extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -5852,10 +5849,6 @@ export interface RotatedRectSmtPadProps
   solderPasteMarginRatio?: SolderPasteMarginRatio
   solderPasteMargin?: Distance
 }
-/** Signed margin on each side as a fraction of the local pad width/height.
-   * Added to solderPasteMargin. Omitted ratios add no relative margin.
-   * For a 4 x 2 mm pad, { x: -0.1, y: -0.25 } gives 3.2 x 1 mm at zero absolute margin.
-   */
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
   shape: "circle"

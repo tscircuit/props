@@ -8,11 +8,11 @@ import {
 
 test("assembly.cable accepts motor references and scoped connector selectors", () => {
   expect(assemblyProps.cable).toBe(assemblyCableProps)
-  const input: AssemblyCableProps = {
+  const input = {
     name: "MOTOR_CABLE",
     from: "MOTOR.wireside",
     to: ".CONTROLLER > .J_MOTOR",
-  }
+  } satisfies AssemblyCableProps
   const props: AssemblyCablePropsInput = input
   expect(assemblyProps.cable.parse(props)).toEqual(input)
   expect(assemblyCableProps.parse(props).standard).toBeUndefined()
@@ -69,7 +69,7 @@ test("assembly.cable accepts an explicit model without changing standard behavio
 })
 
 test("assembly.cable preserves ordered numeric waypoints anchored at the start", () => {
-  const input: AssemblyCableProps = {
+  const input = {
     name: "PITCH_CABLE",
     from: ".CONTROLLER > .J_PITCH",
     to: "PITCH_MOTOR.wireside",
@@ -80,20 +80,20 @@ test("assembly.cable preserves ordered numeric waypoints anchored at the start",
       { x: -35, y: 45.5, z: 8 },
       { x: -25, y: 45.5, z: 60 },
     ],
-  }
+  } satisfies AssemblyCableProps
   const props: AssemblyCablePropsInput = input
   expect(assemblyCableProps.parse(props)).toEqual(input)
 })
 
 test("assembly.cable accepts waypoints anchored and oriented at the end", () => {
-  const input: AssemblyCableProps = {
+  const input = {
     name: "C1",
     from: ".J1",
     to: ".J2",
     waypointAnchor: "end",
     waypointAxisOrientation: "board_at_end",
     waypoints: [{ x: 1, y: 2, z: 3 }],
-  }
+  } satisfies AssemblyCableProps
   expect(assemblyProps.cable.parse(input)).toEqual(input)
 })
 

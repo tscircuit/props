@@ -1,6 +1,7 @@
 import { assemblyDrawingProps } from "./drawing"
 import { assemblyCadAssemblyProps } from "./cadassembly"
 import { assemblyCableProps } from "./cable"
+import { assemblyCableWireProps } from "./cablewire"
 import { assemblyBoltProps } from "./bolt"
 import { assemblyFastenerProps } from "./fastener"
 import { assemblyDeviceProps } from "./device"
@@ -19,6 +20,7 @@ export * from "./board-mounting"
 export * from "./bolt"
 export * from "./fastener"
 export * from "./cable"
+export * from "./cablewire"
 export * from "./device"
 export * from "./motor"
 export {
@@ -44,6 +46,7 @@ export const assemblyProps = {
   bolt: assemblyBoltProps,
   fastener: assemblyFastenerProps,
   cable: assemblyCableProps,
+  cablewire: assemblyCableWireProps,
   device: assemblyDeviceProps,
   motor: assemblyMotorProps,
   part: assemblyPartProps,

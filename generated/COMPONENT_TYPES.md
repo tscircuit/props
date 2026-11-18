@@ -1715,9 +1715,9 @@ export interface AnalogSimulationProps {
   spiceEngine?: AutocompleteString<"spicey" | "ngspice">
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
+  // Calculate a DC operating point before the transient run; false or omission preserves zero-state startup.
   calculateInitialOperatingPoint?: boolean
 }
-/** Calculate a DC operating point before the transient run. Omitted or false preserves zero-state startup. */
 export interface SpiceOptions {
   method?: "trap" | "gear"
   reltol?: number | string
@@ -1750,7 +1750,12 @@ export const analogSimulationProps = z.object({
   spiceEngine: spiceEngine.optional(),
   spiceOptions: spiceOptions.optional(),
   graphIndependentAxes: z.boolean().optional(),
-  calculateInitialOperatingPoint: z.boolean().optional(),
+  calculateInitialOperatingPoint: z
+    .boolean()
+    .optional()
+    .describe(
+      "Calculate a DC operating point before the transient run; false or omission preserves zero-state startup",
+    ),
 })
 ```
 
@@ -1833,16 +1838,22 @@ export interface AnalogTransientSimulationProps
   duration?: number | string
   startTime?: number | string
   timePerStep?: number | string
+  // Calculate a DC operating point before the transient run; false or omission preserves zero-state startup.
   calculateInitialOperatingPoint?: boolean
 }
-/** Calculate a DC operating point before the transient run. Omitted or false preserves zero-state startup. */
+/** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
 export const analogTransientSimulationProps = z
   .object({
     ...analogAnalysisSimulationBaseProps,
     duration: positiveMilliseconds.default("10ms"),
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
-    calculateInitialOperatingPoint: z.boolean().optional(),
+    calculateInitialOperatingPoint: z
+      .boolean()
+      .optional()
+      .describe(
+        "Calculate a DC operating point before the transient run; false or omission preserves zero-state startup",
+      ),
   })
   .superRefine((simulation, context) => {
     if (

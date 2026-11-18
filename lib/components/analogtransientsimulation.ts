@@ -14,7 +14,7 @@ export interface AnalogTransientSimulationProps
   startTime?: number | string
   /** Maximum simulation timestep. Raw numbers are milliseconds. Defaults to 0.01ms. */
   timePerStep?: number | string
-  /** Calculate a DC operating point before the transient run. Omitted or false preserves zero-state startup. */
+  // Calculate a DC operating point before the transient run; false or omission preserves zero-state startup.
   calculateInitialOperatingPoint?: boolean
 }
 
@@ -29,7 +29,12 @@ export const analogTransientSimulationProps = z
     duration: positiveMilliseconds.default("10ms"),
     startTime: ms.default("0ms"),
     timePerStep: positiveMilliseconds.default("0.01ms"),
-    calculateInitialOperatingPoint: z.boolean().optional(),
+    calculateInitialOperatingPoint: z
+      .boolean()
+      .optional()
+      .describe(
+        "Calculate a DC operating point before the transient run; false or omission preserves zero-state startup",
+      ),
   })
   .superRefine((simulation, context) => {
     if (

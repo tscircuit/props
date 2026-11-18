@@ -13,9 +13,11 @@ test("both transient APIs serialize an initial operating-point request", () => {
   }).toMatchInlineSnapshot(`
     {
       "analogSimulation": {
+        "calculateInitialOperatingPoint": true,
         "simulationType": "spice_transient_analysis",
       },
       "analogTransientSimulation": {
+        "calculateInitialOperatingPoint": true,
         "duration": 10,
         "startTime": 0,
         "timePerStep": 0.01,

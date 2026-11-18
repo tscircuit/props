@@ -2,6 +2,6 @@
 
 exports[`snapshot native net class prop support 1`] = `
 {
-  "netClassProps": false,
+  "netClassProps": true,
 }
 `;

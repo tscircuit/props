@@ -4232,6 +4232,25 @@ export const netAliasProps = z.object({
 })
 ```
 
+### netclass
+
+```typescript
+/** A named PCB trace-width class, scoped to the containing subcircuit. */
+export interface NetClassProps {
+  name: string
+  nets: string[]
+  traceWidth?: Distance
+  priority?: number
+}
+/** Lower values take precedence, then class name. Defaults to zero. */
+export const netClassProps = z.object({
+  name: z.string().min(1),
+  nets: z.array(z.string().regex(/^net\.[^\s>]+$/)),
+  traceWidth: distance.pipe(z.number().finite().positive()).optional(),
+  priority: z.number().int().nonnegative().optional(),
+})
+```
+
 ### netlabel
 
 ```typescript

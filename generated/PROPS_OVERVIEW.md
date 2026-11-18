@@ -2497,6 +2497,17 @@ export interface NetAliasProps {
 }
 
 
+export interface NetClassProps {
+  name: string
+  /** Explicit net selectors, e.g. ["net.VCC"]. An empty list defines an unused class. */
+  nets: string[]
+  /** Nominal trace width. Numbers are mm; omitted values inherit the next class/board width. */
+  traceWidth?: Distance
+  /** Lower values take precedence, then class name. Defaults to zero. */
+  priority?: number
+}
+
+
 export interface NetLabelProps {
   net?: string
   connection?: string

@@ -30,6 +30,7 @@ export * from "./common/kicadPinMetadata"
 export * from "./customDrc"
 
 export * from "./components/board"
+export * from "./components/netclass"
 export * from "./components/pcb-bend"
 export * from "./components/pcb-soldermask-opening"
 export * from "./components/pcb-stiffener"

@@ -2581,6 +2581,11 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean;
+  /** Signed margin on each side as a fraction of the local pad width/height.
+   * Added to solderPasteMargin. Omitted ratios add no relative margin.
+   * For a 4 x 2 mm pad, { x: -0.1, y: -0.25 } gives 3.2 x 1 mm at zero absolute margin.
+   */
+  solderPasteMarginRatio?: SolderPasteMarginRatio;
   solderPasteMargin?: Distance;
 }
 ```
@@ -2607,10 +2612,7 @@ export interface SolderJumperProps extends JumperProps {
 ### RectSolderPasteProps `<solderpaste />`
 
 ```ts
-export interface RectSolderPasteProps extends Omit<
-  PcbLayoutProps,
-  "pcbRotation"
-> {
+export interface RectSolderPasteProps extends PcbLayoutProps {
   shape: "rect";
   width: Distance;
   height: Distance;

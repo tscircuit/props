@@ -3,8 +3,7 @@ import { distance, type Distance } from "lib/common/distance"
 import { boolean, string, z } from "zod"
 import { expectTypesMatch } from "lib/typecheck"
 
-export interface RectSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface RectSolderPasteProps extends PcbLayoutProps {
   shape: "rect"
   width: Distance
   height: Distance
@@ -20,13 +19,11 @@ export type SolderPasteProps = RectSolderPasteProps | CircleSolderPasteProps
 
 // zod
 
-export const rectSolderPasteProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("rect"),
-    width: distance,
-    height: distance,
-  })
+export const rectSolderPasteProps = pcbLayoutProps.extend({
+  shape: z.literal("rect"),
+  width: distance,
+  height: distance,
+})
 type InferredRectSolderPasteProps = z.input<typeof rectSolderPasteProps>
 expectTypesMatch<InferredRectSolderPasteProps, RectSolderPasteProps>(true)
 

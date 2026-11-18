@@ -79,7 +79,6 @@ namespace, PCB references, and a complete overview example.
 | `<mountedboard />`                             | [`MountedBoardProps`](#mountedboardprops-mountedboard)                                                              |
 | `<net />`                                      | [`NetProps`](#netprops-net)                                                                                         |
 | `<netalias />`                                 | [`NetAliasProps`](#netaliasprops-netalias)                                                                          |
-| `<netclass />`                                 | [`NetClassProps`](#netclassprops-netclass)                                                                          |
 | `<netlabel />`                                 | [`NetLabelProps`](#netlabelprops-netlabel)                                                                          |
 | `<opamp />`                                    | [`OpAmpProps`](#opampprops-opamp)                                                                                   |
 | `<panel />`                                    | [`PanelProps`](#panelprops-panel)                                                                                   |
@@ -1547,23 +1546,6 @@ export interface NetAliasProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/netalias.ts)
-
-### NetClassProps `<netclass />`
-
-```ts
-export interface NetClassProps {
-  name: string;
-  /** Explicit net selectors, e.g. ["net.VCC"]. Empty defines an unused class;
-   * the reserved Default class instead supplies the fallback for every net in scope. */
-  nets: string[];
-  /** Nominal trace width. Numbers are mm; omitted values inherit the next class/board width. */
-  traceWidth?: Distance;
-  /** Lower values take precedence, then class name. Defaults to zero. */
-  priority?: number;
-}
-```
-
-[Source](https://github.com/tscircuit/props/blob/main/lib/components/netclass.ts)
 
 ### NetLabelProps `<netlabel />`
 

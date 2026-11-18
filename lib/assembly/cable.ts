@@ -1,6 +1,9 @@
 import { assemblyBomProps, type AssemblyBomProps } from "./bom"
+import { distance } from "circuit-json"
+import type { Distance } from "lib/common/distance"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import { wireAwg } from "./cablewire"
 
 export type AssemblyCableStandard = "usb_c"
 
@@ -20,6 +23,18 @@ export interface AssemblyCableProps extends AssemblyBomProps {
   waypointAnchor?: "start" | "end"
   /** Board orientation for waypoint axes. Required when waypoints is defined. */
   waypointAxisOrientation?: "board_at_start" | "board_at_end"
+  /** Manufactured length between the two connector wire exits, e.g. "50mm". A build specification; routing and slack do not change it. */
+  length?: Distance
+  /** Symmetric plus/minus tolerance on length. Requires length. */
+  lengthTolerance?: Distance
+  /** Designator of the cable's own connector at the from end on harness drawings and wiring tables, e.g. "H1". */
+  fromConnectorName?: string
+  /** Designator of the cable's own connector at the to end. */
+  toConnectorName?: string
+  /** Conductor gauge inherited by assembly.cablewire children: 22 or "22awg". */
+  wireAwg?: number | string
+  /** assembly.cablewire children stating the pin-to-pin wiring. Omit to leave wiring unstated. */
+  children?: any
 }
 
 export const assemblyCableProps = z
@@ -43,8 +58,23 @@ export const assemblyCableProps = z
     waypointAxisOrientation: z
       .enum(["board_at_start", "board_at_end"])
       .optional(),
+    length: distance.pipe(z.number().finite().positive()).optional(),
+    lengthTolerance: distance
+      .pipe(z.number().finite().nonnegative())
+      .optional(),
+    fromConnectorName: z.string().trim().min(1).optional(),
+    toConnectorName: z.string().trim().min(1).optional(),
+    wireAwg: wireAwg.optional(),
+    children: z.any().optional(),
   })
   .superRefine((cable, context) => {
+    if (cable.lengthTolerance !== undefined && cable.length === undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["lengthTolerance"],
+        message: "lengthTolerance requires length",
+      })
+    }
     if (cable.waypoints === undefined) return
 
     if (cable.waypointAnchor === undefined) {

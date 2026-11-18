@@ -6,6 +6,9 @@ import { assemblyDrawingTitleBlockProps } from "./titleblock"
 import { assemblyDrawingPageProps } from "./page"
 import { assemblyDrawingPartViewProps } from "./partview"
 import { assemblyDrawingDimensionProps } from "./dimension"
+import { assemblyDrawingHarnessViewProps } from "./harnessview"
+import { assemblyDrawingWiringTableProps } from "./wiringtable"
+import { assemblyDrawingBomTableProps } from "./bomtable"
 
 export * from "./page"
 export * from "./page-size"
@@ -23,6 +26,9 @@ export const assemblyDrawingProps = {
   titleblock: assemblyDrawingTitleBlockProps,
   partview: assemblyDrawingPartViewProps,
   dimension: assemblyDrawingDimensionProps,
+  harnessview: assemblyDrawingHarnessViewProps,
+  wiringtable: assemblyDrawingWiringTableProps,
+  bomtable: assemblyDrawingBomTableProps,
 } as const
 export * from "./stage"
 export * from "./partlabel"
@@ -31,3 +37,7 @@ export * from "./note"
 export * from "./explosionview"
 
 export type { AssemblyDrawingPaperPositionProps } from "./paper-position"
+
+export * from "./harnessview"
+export * from "./wiringtable"
+export * from "./bomtable"

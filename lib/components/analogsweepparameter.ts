@@ -56,6 +56,44 @@ export interface AnalogCurrentSweepParameterProps
   currentSourceRef: string
 }
 
+export interface AnalogSwitchPositionSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "position"
+  /** Selector for the rotary switch whose simulation-only position is swept. */
+  switchRef: string
+}
+
+const parseIntegerSweepInput = (raw: number | string, ctx: z.RefinementCtx) => {
+  const parsed =
+    typeof raw === "number"
+      ? raw
+      : raw.trim().length > 0
+        ? Number(raw.trim())
+        : Number.NaN
+  if (!Number.isFinite(parsed) || !Number.isInteger(parsed)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Switch position sweep values must be integers",
+    })
+    return z.NEVER
+  }
+  return parsed
+}
+
+const positionCoordinateQuantity: z.ZodType<
+  number,
+  z.ZodTypeDef,
+  number | string
+> = z
+  .union([z.number(), z.string()])
+  .transform(parseIntegerSweepInput)
+  .pipe(z.number().int().min(1))
+
+const positionStepQuantity: z.ZodType<number, z.ZodTypeDef, number | string> = z
+  .union([z.number(), z.string()])
+  .transform(parseIntegerSweepInput)
+  .pipe(z.number().int())
+
 const resistanceSweepQuantity = resistance.pipe(z.number())
 const capacitanceSweepQuantity = capacitance.pipe(z.number())
 const inductanceSweepQuantity = inductance.pipe(z.number())
@@ -109,6 +147,18 @@ export const analogCurrentSweepParameterProps = z
     ...createAnalogSweepCoordinateProps(currentSweepQuantity),
     parameterType: z.literal("current"),
     currentSourceRef: z.string().min(1),
+  })
+  .strict()
+
+export const analogSwitchPositionSweepParameterProps = z
+  .object({
+    name: z.string().optional(),
+    values: z.array(positionCoordinateQuantity).min(1).optional(),
+    start: positionCoordinateQuantity.optional(),
+    stop: positionCoordinateQuantity.optional(),
+    step: positionStepQuantity.optional(),
+    parameterType: z.literal("position"),
+    switchRef: z.string().min(1),
   })
   .strict()
 
@@ -176,6 +226,7 @@ export type AnalogSweepParameterProps =
   | AnalogInductanceSweepParameterProps
   | AnalogVoltageSweepParameterProps
   | AnalogCurrentSweepParameterProps
+  | AnalogSwitchPositionSweepParameterProps
 
 export const analogSweepParameterProps = z
   .discriminatedUnion("parameterType", [
@@ -184,6 +235,7 @@ export const analogSweepParameterProps = z
     analogInductanceSweepParameterProps,
     analogVoltageSweepParameterProps,
     analogCurrentSweepParameterProps,
+    analogSwitchPositionSweepParameterProps,
   ])
   .superRefine(validateAnalogSweepCoordinates)
 
@@ -206,6 +258,10 @@ expectTypesMatch<
 expectTypesMatch<
   AnalogCurrentSweepParameterProps,
   z.input<typeof analogCurrentSweepParameterProps>
+>(true)
+expectTypesMatch<
+  AnalogSwitchPositionSweepParameterProps,
+  z.input<typeof analogSwitchPositionSweepParameterProps>
 >(true)
 expectTypesMatch<
   AnalogSweepParameterProps,

@@ -134,6 +134,14 @@ export interface AnalogSimulationProps {
 }
 
 
+export interface AnalogSwitchPositionSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "position"
+  /** Selector for the rotary switch whose simulation-only position is swept. */
+  switchRef: string
+}
+
+
 export interface AnalogTransientSimulationProps
   extends AnalogAnalysisSimulationBaseProps {
   /** Simulation duration. Raw numbers are milliseconds. Defaults to 10ms. */
@@ -3509,6 +3517,37 @@ export interface ResonatorProps extends CommonComponentProps {
   frequency: number | string
   loadCapacitance: number | string
   pinVariant?: ResonatorPinVariant
+}
+
+
+export interface RotarySwitchProps extends CommonComponentProps {
+  /**
+   * Number of independent poles (decks). Defaults to 1.
+   */
+  poles?: number
+  /**
+   * Number of selectable positions (throws) per pole. Minimum 2.
+   *
+   * Physical pin numbering follows KiCad's `Switch:SW_Rotary_NxM` convention:
+   * throw pins are `1 .. poles * positions` (`(pole - 1) * positions + pos`)
+   * and common (wiper) pins are `poles * positions + 1 .. poles * (positions + 1)`.
+   */
+  positions: number
+  /**
+   * Selected 1-indexed position (`1 .. positions`) during analog simulation.
+   * Sweepable with `<analog.sweepparameter parameterType="position" switchRef="..." />`.
+   */
+  simPosition?: number
+  pinLabels?: PinLabelsProp<SchematicPinLabel>
+  /**
+   * Pin names or aliases intentionally left unconnected.
+   */
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[]
+  connections?: Connections<string>
+  schPinArrangement?: SchematicPinArrangement
+  schPinStyle?: SchematicPinStyle
+  schWidth?: number | string
+  schHeight?: number | string
 }
 
 

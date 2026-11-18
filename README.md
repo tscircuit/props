@@ -2607,10 +2607,7 @@ export interface SolderJumperProps extends JumperProps {
 ### RectSolderPasteProps `<solderpaste />`
 
 ```ts
-export interface RectSolderPasteProps extends Omit<
-  PcbLayoutProps,
-  "pcbRotation"
-> {
+export interface RectSolderPasteProps extends PcbLayoutProps {
   shape: "rect";
   width: Distance;
   height: Distance;

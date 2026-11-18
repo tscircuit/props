@@ -6009,8 +6009,7 @@ export const solderjumperProps = jumperProps.extend({
 ### solderpaste
 
 ```typescript
-export interface RectSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface RectSolderPasteProps extends PcbLayoutProps {
   shape: "rect"
   width: Distance
   height: Distance
@@ -6020,13 +6019,11 @@ export interface CircleSolderPasteProps
   shape: "circle"
   radius: Distance
 }
-export const rectSolderPasteProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("rect"),
-    width: distance,
-    height: distance,
-  })
+export const rectSolderPasteProps = pcbLayoutProps.extend({
+  shape: z.literal("rect"),
+  width: distance,
+  height: distance,
+})
 export const circleSolderPasteProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({

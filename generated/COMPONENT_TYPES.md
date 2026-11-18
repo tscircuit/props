@@ -5811,6 +5811,11 @@ export const silkscreenTextProps = pcbLayoutProps.extend({
 ### smtpad
 
 ```typescript
+/** Per-side fractions of local width/height, added to solderPasteMargin. */
+export interface SolderPasteMarginRatio {
+  x: number
+  y: number
+}
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
   shape: "rect"
@@ -5828,6 +5833,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
+  solderPasteMarginRatio?: SolderPasteMarginRatio
   solderPasteMargin?: Distance
 }
 export interface RotatedRectSmtPadProps
@@ -5848,6 +5854,7 @@ export interface RotatedRectSmtPadProps
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
+  solderPasteMarginRatio?: SolderPasteMarginRatio
   solderPasteMargin?: Distance
 }
 export interface CircleSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
@@ -5923,6 +5930,7 @@ export const rectSmtPadProps = pcbLayoutProps
     solderMaskMarginBottom: distance.optional(),
     noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
+    solderPasteMarginRatio: solderPasteMarginRatio.optional(),
   })
 export const rotatedRectSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })
@@ -5942,6 +5950,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     solderMaskMarginBottom: distance.optional(),
     noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
+    solderPasteMarginRatio: solderPasteMarginRatio.optional(),
   })
 export const circleSmtPadProps = pcbLayoutProps
   .omit({ pcbRotation: true })

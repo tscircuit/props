@@ -120,7 +120,7 @@ heading row.
 | --- | --- |
 | `assembly.cable` additions | `cad_cable.nominal_length`, `length_tolerance`, `from_connector_name`, `to_connector_name` |
 | `assembly.cablewire` | `cad_cable_wire`, with inherited gauge and style resolved |
-| `assembly.drawing.harnessview` | `drawing_harness_view`; `showBalloons` becomes `drawing_balloon` records with resolved text and position |
+| `assembly.drawing.harnessview` | `drawing_wiring_harness_view`; `showBalloons` becomes `drawing_balloon` records with resolved text and position |
 | `assembly.drawing.wiringtable`, `assembly.drawing.bomtable` | `drawing_table` plus one `drawing_table_cell` per cell, with resolved text, column widths and row heights |
 
 Circuit JSON has one table element. The wiring list and the parts list are

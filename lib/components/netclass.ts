@@ -6,7 +6,8 @@ import { expectTypesMatch } from "lib/typecheck"
 /** A named PCB trace-width class, scoped to the containing subcircuit. */
 export interface NetClassProps {
   name: string
-  /** Explicit net selectors, e.g. ["net.VCC"]. An empty list defines an unused class. */
+  /** Explicit net selectors, e.g. ["net.VCC"]. Empty defines an unused class;
+   * the reserved Default class instead supplies the fallback for every net in scope. */
   nets: string[]
   /** Nominal trace width. Numbers are mm; omitted values inherit the next class/board width. */
   traceWidth?: Distance

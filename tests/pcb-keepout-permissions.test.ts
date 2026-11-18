@@ -10,7 +10,11 @@ test("keepout permissions preserve booleans and omission across all shapes", () 
     { shape: "circle", radius: 3 },
   ] satisfies PcbKeepoutProps[]
   for (const keepout of keepouts) {
-    for (const field of ["allowTraces", "allowPlacements"] as const) {
+    for (const field of [
+      "allowTraces",
+      "allowPlacements",
+      "allowCopperPour",
+    ] as const) {
       expect(pcbKeepoutProps.parse(keepout)).not.toHaveProperty(field)
       for (const value of [true, false]) {
         const input = { ...keepout, [field]: value }
@@ -22,10 +26,20 @@ test("keepout permissions preserve booleans and omission across all shapes", () 
         ).toBe(false)
       }
     }
+    const placementsAndPour = pcbKeepoutProps.parse({
+      ...keepout,
+      allowPlacements: true,
+      allowCopperPour: true,
+    })
+    expect(placementsAndPour).toHaveProperty("allowPlacements", true)
+    expect(placementsAndPour).toHaveProperty("allowCopperPour", true)
+    expect(placementsAndPour).not.toHaveProperty("allowTraces")
+
     const combined = {
       ...keepout,
       allowTraces: true,
       allowPlacements: true,
+      allowCopperPour: true,
       warningOnly: true,
     }
     expect(pcbKeepoutProps.parse(combined)).toMatchObject(combined)

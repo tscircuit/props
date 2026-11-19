@@ -1716,11 +1716,19 @@ export interface AnalogSimulationProps {
   spiceOptions?: SpiceOptions
   graphIndependentAxes?: boolean
 }
+/**
+ * SPICE solver settings. itl1 (initial operating point), itl2 (DC sweep), and
+ * itl4 (transient timestep) accept positive integer iteration counts only.
+ * Omitted options use the engine default; values are forwarded unchanged.
+ */
 export interface SpiceOptions {
   method?: "trap" | "gear"
   reltol?: number | string
   abstol?: number | string
   vntol?: number | string
+  itl1?: number
+  itl2?: number
+  itl4?: number
 }
 export interface AnalogAnalysisSimulationBaseProps {
   name?: string

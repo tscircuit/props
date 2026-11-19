@@ -31,6 +31,11 @@ export interface AssemblyStickerProps
    */
   width?: Distance
   height?: Distance
+  /** Radius of the sticker's rounded corners, in mm or a distance string. The
+   * artwork is cut to the rounded outline. It cannot exceed half of the
+   * width or of the height. Omit for square corners.
+   */
+  cornerRadius?: Distance
   /** Sticker thickness including its adhesive, in mm or a distance string.
    * Omitted when unspecified; no thickness is assumed.
    */
@@ -54,6 +59,7 @@ export const assemblyStickerProps = z
       .optional(),
     width: extent.optional(),
     height: extent.optional(),
+    cornerRadius: distance.pipe(z.number().nonnegative().finite()).optional(),
     thickness: extent.optional(),
     backgroundColor: z.string().trim().min(1).optional(),
   })
@@ -74,6 +80,21 @@ export const assemblyStickerProps = z
         path: [missing[0]!],
         message: "Provide width and height together when there is no imageUrl",
       })
+    }
+    // A size that follows the image's aspect ratio is not known here, so only
+    // the sizes that were given can bound the radius.
+    for (const prop of ["width", "height"] as const) {
+      const size = sticker[prop]
+      if (
+        sticker.cornerRadius !== undefined &&
+        size !== undefined &&
+        sticker.cornerRadius > size / 2
+      )
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["cornerRadius"],
+          message: `cornerRadius cannot exceed half of the ${prop}`,
+        })
     }
   })
 

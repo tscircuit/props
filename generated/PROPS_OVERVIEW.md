@@ -689,6 +689,11 @@ export interface AssemblyStickerProps
    */
   width?: Distance
   height?: Distance
+  /** Radius of the sticker's rounded corners, in mm or a distance string. The
+   * artwork is cut to the rounded outline. It cannot exceed half of the
+   * width or of the height. Omit for square corners.
+   */
+  cornerRadius?: Distance
   /** Sticker thickness including its adhesive, in mm or a distance string.
    * Omitted when unspecified; no thickness is assumed.
    */

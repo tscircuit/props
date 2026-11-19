@@ -1620,6 +1620,16 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  /** Square-pulse delay; defaults to zero. Raw numbers are milliseconds. */
+  pulseDelay?: number | string
+  /** Square-pulse rise time; defaults to 1 ns. Raw numbers are milliseconds. */
+  riseTime?: number | string
+  /** Square-pulse fall time; defaults to 1 ns. Raw numbers are milliseconds. */
+  fallTime?: number | string
+  /** Square-pulse high time; overrides period * dutyCycle. Raw numbers are ms. */
+  pulseWidth?: number | string
+  /** Square-pulse period; overrides 1 / frequency. Raw numbers are milliseconds. */
+  period?: number | string
   /** Small-signal AC magnitude. Raw numbers are amperes. */
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */

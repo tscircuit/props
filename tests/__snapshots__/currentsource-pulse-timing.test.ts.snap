@@ -3,8 +3,13 @@
 exports[`current sources retain explicit pulse timing 1`] = `
 {
   "current": 0.5,
+  "fallTime": 0.01,
   "name": "LOAD",
   "peakToPeakCurrent": 0.5,
+  "period": 20,
+  "pulseDelay": 20,
+  "pulseWidth": 10,
+  "riseTime": 0.01,
   "waveShape": "square",
 }
 `;

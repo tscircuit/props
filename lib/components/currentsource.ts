@@ -1,4 +1,4 @@
-import { frequency, rotation, current } from "circuit-json"
+import { frequency, ms, rotation, current } from "circuit-json"
 import {
   type CommonComponentProps,
   commonComponentProps,
@@ -21,6 +21,16 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  /** Square-pulse delay; defaults to zero. Raw numbers are milliseconds. */
+  pulseDelay?: number | string
+  /** Square-pulse rise time; defaults to 1 ns. Raw numbers are milliseconds. */
+  riseTime?: number | string
+  /** Square-pulse fall time; defaults to 1 ns. Raw numbers are milliseconds. */
+  fallTime?: number | string
+  /** Square-pulse high time; overrides period * dutyCycle. Raw numbers are ms. */
+  pulseWidth?: number | string
+  /** Square-pulse period; overrides 1 / frequency. Raw numbers are milliseconds. */
+  period?: number | string
   /** Small-signal AC magnitude. Raw numbers are amperes. */
   acMagnitude?: number | string
   /** Small-signal AC phase. Raw numbers are degrees. */
@@ -53,6 +63,11 @@ export const currentSourceProps = commonComponentProps.extend({
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
   dutyCycle: percentage.optional(),
+  pulseDelay: ms.optional(),
+  riseTime: ms.optional(),
+  fallTime: ms.optional(),
+  pulseWidth: ms.optional(),
+  period: ms.optional(),
   acMagnitude: current.optional(),
   acPhase: rotation.optional(),
   connections: createConnectionsProp(currentSourcePinLabels).optional(),

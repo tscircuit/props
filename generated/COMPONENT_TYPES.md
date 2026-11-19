@@ -2859,6 +2859,11 @@ export interface CurrentSourceProps<PinLabel extends string = string>
   waveShape?: WaveShape
   phase?: number | string
   dutyCycle?: number | string
+  pulseDelay?: number | string
+  riseTime?: number | string
+  fallTime?: number | string
+  pulseWidth?: number | string
+  period?: number | string
   acMagnitude?: number | string
   acPhase?: number | string
   connections?: Connections<CurrentSourcePinLabels>
@@ -2871,6 +2876,11 @@ export const currentSourceProps = commonComponentProps.extend({
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
   dutyCycle: percentage.optional(),
+  pulseDelay: ms.optional(),
+  riseTime: ms.optional(),
+  fallTime: ms.optional(),
+  pulseWidth: ms.optional(),
+  period: ms.optional(),
   acMagnitude: current.optional(),
   acPhase: rotation.optional(),
   connections: createConnectionsProp(currentSourcePinLabels).optional(),

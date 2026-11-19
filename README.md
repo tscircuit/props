@@ -940,6 +940,16 @@ export interface CurrentSourceProps<
   waveShape?: WaveShape;
   phase?: number | string;
   dutyCycle?: number | string;
+  /** Square-pulse delay; defaults to zero. Raw numbers are milliseconds. */
+  pulseDelay?: number | string;
+  /** Square-pulse rise time; defaults to 1 ns. Raw numbers are milliseconds. */
+  riseTime?: number | string;
+  /** Square-pulse fall time; defaults to 1 ns. Raw numbers are milliseconds. */
+  fallTime?: number | string;
+  /** Square-pulse high time; overrides period * dutyCycle. Raw numbers are ms. */
+  pulseWidth?: number | string;
+  /** Square-pulse period; overrides 1 / frequency. Raw numbers are milliseconds. */
+  period?: number | string;
   /** Small-signal AC magnitude. Raw numbers are amperes. */
   acMagnitude?: number | string;
   /** Small-signal AC phase. Raw numbers are degrees. */
@@ -1107,11 +1117,7 @@ export type FabricationNoteRectProps = z.input<typeof fabricationNoteRectProps>;
 export interface FabricationNoteTextProps extends PcbLayoutProps {
   text: string;
   anchorAlignment?:
-    | "center"
-    | "top_left"
-    | "top_right"
-    | "bottom_left"
-    | "bottom_right";
+    "center" | "top_left" | "top_right" | "bottom_left" | "bottom_right";
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
@@ -1863,11 +1869,7 @@ export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 export interface PcbNoteTextProps extends PcbLayoutProps {
   text: string;
   anchorAlignment?:
-    | "center"
-    | "top_left"
-    | "top_right"
-    | "bottom_left"
-    | "bottom_right";
+    "center" | "top_left" | "top_right" | "bottom_left" | "bottom_right";
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
@@ -3085,7 +3087,6 @@ export interface PlatformConfig {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/platformConfig.ts)
-
 <!-- PLATFORM_CONFIG_END -->
 
 <!-- PROJECT_CONFIG_START -->
@@ -3112,5 +3113,4 @@ export interface ProjectConfig extends Pick<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/projectConfig.ts)
-
 <!-- PROJECT_CONFIG_END -->

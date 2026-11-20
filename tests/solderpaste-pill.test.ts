@@ -27,20 +27,17 @@ beforeAll(() => {
   expect(apertures).toHaveLength(6)
 })
 
-test(
-  "solder paste props retain the real USB1046 stencil geometry",
-  () => {
-    for (const aperture of apertures) {
-      const input = {
-        shape: aperture.shape,
-        width: aperture.width,
-        height: aperture.height,
-        radius: aperture.radius,
-        pcbX: aperture.x,
-        pcbY: aperture.y,
-        layer: aperture.layer,
-      }
-      expect(solderPasteProps.parse(input)).toMatchObject(input)
+test("solder paste props retain the real USB1046 stencil geometry", () => {
+  for (const aperture of apertures) {
+    const input = {
+      shape: aperture.shape,
+      width: aperture.width,
+      height: aperture.height,
+      radius: aperture.radius,
+      pcbX: aperture.x,
+      pcbY: aperture.y,
+      layer: aperture.layer,
     }
-  },
-)
+    expect(solderPasteProps.parse(input)).toMatchObject(input)
+  }
+})

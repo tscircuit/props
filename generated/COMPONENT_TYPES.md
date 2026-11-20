@@ -4485,6 +4485,7 @@ pcbLayoutProps.omit({ pcbRotation: true }).extend({
     warningOnly: z.boolean().optional(),
     allowTraces: z.boolean().optional(),
     allowPlacements: z.boolean().optional(),
+    allowCopperPour: z.boolean().optional(),
     excludeRefs: z
       .array(z.string())
       .optional()
@@ -4492,7 +4493,7 @@ pcbLayoutProps.omit({ pcbRotation: true }).extend({
         'Component selectors excluded from the keepout, such as ".ANT1"',
       ),
   }),
-/** Allow components and their pads/plated holes without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded. */
+/** Allow copper pours inside the keepout without excluding pour fill. False or omitted excludes copper pours. */
   pcbLayoutProps.extend({
     shape: z.literal("rect"),
     width: distance,
@@ -4501,6 +4502,7 @@ pcbLayoutProps.omit({ pcbRotation: true }).extend({
     warningOnly: z.boolean().optional(),
     allowTraces: z.boolean().optional(),
     allowPlacements: z.boolean().optional(),
+    allowCopperPour: z.boolean().optional(),
     excludeRefs: z
       .array(z.string())
       .optional()

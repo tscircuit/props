@@ -9,10 +9,12 @@ export const pcbKeepoutProps = z.union([
     layers: z.array(layer_ref).optional(),
     /** Report keepout violations as warnings when true. Omit for normal enforcement. */
     warningOnly: z.boolean().optional(),
-    /** Allow trace crossings without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded. */
+    /** Allow trace crossings without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded unless allowCopperPour is true. */
     allowTraces: z.boolean().optional(),
-    /** Allow components and their pads/plated holes without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded. */
+    /** Allow components and their pads/plated holes without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded unless allowCopperPour is true. */
     allowPlacements: z.boolean().optional(),
+    /** Allow copper pours inside the keepout without excluding pour fill. False or omitted excludes copper pours. */
+    allowCopperPour: z.boolean().optional(),
     excludeRefs: z
       .array(z.string())
       .optional()
@@ -27,10 +29,12 @@ export const pcbKeepoutProps = z.union([
     layers: z.array(layer_ref).optional(),
     /** Report keepout violations as warnings when true. Omit for normal enforcement. */
     warningOnly: z.boolean().optional(),
-    /** Allow trace crossings without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded. */
+    /** Allow trace crossings without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded unless allowCopperPour is true. */
     allowTraces: z.boolean().optional(),
-    /** Allow components and their pads/plated holes without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded. */
+    /** Allow components and their pads/plated holes without keepout diagnostics. False or omitted retains enforcement; copper pours remain excluded unless allowCopperPour is true. */
     allowPlacements: z.boolean().optional(),
+    /** Allow copper pours inside the keepout without excluding pour fill. False or omitted excludes copper pours. */
+    allowCopperPour: z.boolean().optional(),
     excludeRefs: z
       .array(z.string())
       .optional()

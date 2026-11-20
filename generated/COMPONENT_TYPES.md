@@ -6019,6 +6019,9 @@ export interface CircleSolderPasteProps
   shape: "circle"
   radius: Distance
 }
+export interface PillSolderPasteProps extends PcbLayoutProps, PillShapeProps {
+  radius: Distance
+}
 export const rectSolderPasteProps = pcbLayoutProps.extend({
   shape: z.literal("rect"),
   width: distance,
@@ -6028,6 +6031,9 @@ export const circleSolderPasteProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
     shape: z.literal("circle"),
+    radius: distance,
+  })
+  .extend({
     radius: distance,
   })
 ```

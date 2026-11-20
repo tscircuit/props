@@ -3072,6 +3072,12 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 
 
+export interface PillSolderPasteProps extends PcbLayoutProps, PillShapeProps {
+  /** Explicit corner radius; a capsule uses half the smaller dimension. */
+  radius: Distance
+}
+
+
 export interface PillWithRectPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "layer"> {
   name?: string

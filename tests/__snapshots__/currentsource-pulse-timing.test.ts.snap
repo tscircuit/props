@@ -1,0 +1,10 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`current sources retain explicit pulse timing 1`] = `
+{
+  "current": 0.5,
+  "name": "LOAD",
+  "peakToPeakCurrent": 0.5,
+  "waveShape": "square",
+}
+`;

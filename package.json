@@ -44,7 +44,8 @@
     "tsup": "^8.0.2",
     "tsx": "^4.10.2",
     "typescript": "^5.4.5",
-    "zod": "3"
+    "zod": "3",
+    "kicad-to-circuit-json": "0.0.153"
   },
   "peerDependencies": {
     "circuit-json": "*",

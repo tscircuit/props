@@ -1,6 +1,7 @@
 import { pcbLayoutProps, type PcbLayoutProps } from "lib/common/layout"
 import { distance, type Distance } from "lib/common/distance"
-import { boolean, string, z } from "zod"
+import { z } from "zod"
+import { pillShapeProps, type PillShapeProps } from "lib/common/commonShape"
 import { expectTypesMatch } from "lib/typecheck"
 
 export interface RectSolderPasteProps extends PcbLayoutProps {
@@ -15,7 +16,15 @@ export interface CircleSolderPasteProps
   radius: Distance
 }
 
-export type SolderPasteProps = RectSolderPasteProps | CircleSolderPasteProps
+export interface PillSolderPasteProps extends PcbLayoutProps, PillShapeProps {
+  /** Explicit corner radius; a capsule uses half the smaller dimension. */
+  radius: Distance
+}
+
+export type SolderPasteProps =
+  | RectSolderPasteProps
+  | CircleSolderPasteProps
+  | PillSolderPasteProps
 
 // zod
 
@@ -36,9 +45,18 @@ export const circleSolderPasteProps = pcbLayoutProps
 type InferredCircleSolderPasteProps = z.input<typeof circleSolderPasteProps>
 expectTypesMatch<InferredCircleSolderPasteProps, CircleSolderPasteProps>(true)
 
+export const pillSolderPasteProps = pcbLayoutProps
+  .merge(pillShapeProps)
+  .extend({
+    radius: distance,
+  })
+type InferredPillSolderPasteProps = z.input<typeof pillSolderPasteProps>
+expectTypesMatch<InferredPillSolderPasteProps, PillSolderPasteProps>(true)
+
 export const solderPasteProps = z.union([
   circleSolderPasteProps,
   rectSolderPasteProps,
+  pillSolderPasteProps,
 ])
 
 export type InferredSolderPasteProps = z.input<typeof solderPasteProps>

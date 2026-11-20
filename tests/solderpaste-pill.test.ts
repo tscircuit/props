@@ -27,7 +27,7 @@ beforeAll(() => {
   expect(apertures).toHaveLength(6)
 })
 
-test.failing(
+test(
   "solder paste props retain the real USB1046 stencil geometry",
   () => {
     for (const aperture of apertures) {

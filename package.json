@@ -33,7 +33,7 @@
     "@types/react": "^18.3.2",
     "ava": "^6.1.3",
     "bun-match-svg": "^0.0.17",
-    "circuit-json": "^0.0.518",
+    "circuit-json": "https://pkg.pr.new/tscircuit/circuit-json/circuit-json@419411e",
     "circuit-to-svg": "^0.0.443",
     "expect-type": "^1.3.0",
     "glob": "^11.0.0",
@@ -47,7 +47,7 @@
     "zod": "3"
   },
   "peerDependencies": {
-    "circuit-json": "*",
+    "circuit-json": "https://pkg.pr.new/tscircuit/circuit-json/circuit-json@419411e",
     "react": "*",
     "zod": "*"
   }

@@ -2097,7 +2097,7 @@ export const boardOutlinePoint = z
   })
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
-  schematicLengthUnit?: z.infer<typeof schematicLengthUnit>
+  schematicLengthUnit?: "mm" | "9.236363636363636mm"
   title?: string
   mountedTo?: string
   mountGap?: Distance

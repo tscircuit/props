@@ -2147,6 +2147,10 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
+    defaultSchematicLengthUnit:
+      subcircuitGroupProps.shape.defaultSchematicLengthUnit.default(
+        "9.236363636363636mm",
+      ),
     mountedTo: z
       .string()
       .trim()
@@ -3713,6 +3717,7 @@ const autorouterVersion = z
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
+  defaultSchematicLengthUnit?: SchematicLengthUnit
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   placementDrcChecksDisabled?: boolean
@@ -3868,6 +3873,9 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
+  defaultSchematicLengthUnit: z
+    .enum(["mm", "in", "9.236363636363636mm"])
+    .optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),
@@ -5159,8 +5167,6 @@ export const portProps = commonLayoutProps.extend({
   aliases: z.array(z.string()).optional(),
   layer: z.string().optional(),
   layers: z.array(z.string()).optional(),
-  schX: z.number().optional(),
-  schY: z.number().optional(),
   direction: direction.optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   kicadPinMetadata: kicadPinMetadata.optional(),

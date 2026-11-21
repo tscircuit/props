@@ -587,9 +587,13 @@ const autorouterVersion = z
     return "latest"
   })
 
+export type SchematicLengthUnit = "mm" | "in" | "9.236363636363636mm"
+
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
+  /** Default unit for bare schX and schY coordinates. Subcircuits inherit it when omitted. Boards default to the legacy sheet scale (10.16 mm per 1.1 units). In mm or in mode, a coordinate with an explicit unit uses its own unit. */
+  defaultSchematicLengthUnit?: SchematicLengthUnit
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   /**
@@ -782,6 +786,9 @@ export const baseGroupProps = commonLayoutProps.extend({
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
 
 export const subcircuitGroupProps = baseGroupProps.extend({
+  defaultSchematicLengthUnit: z
+    .enum(["mm", "in", "9.236363636363636mm"])
+    .optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

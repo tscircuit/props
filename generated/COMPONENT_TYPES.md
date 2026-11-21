@@ -4906,8 +4906,10 @@ export interface CirclePlatedHoleProps
   padDiameter?: number | string
   portHints?: PortHints
   solderMaskMargin?: Distance
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
+/** Omit automatic solder paste apertures for this plated hole. */
 export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   connectsTo?: string | string[]
@@ -4921,9 +4923,10 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
 
   innerWidth?: number | string
   innerHeight?: number | string
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
-/** @deprecated use holeHeight */
+/** Omit automatic solder paste apertures for this plated hole. */
 export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   name?: string
   rectPad?: boolean
@@ -4941,9 +4944,10 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
 
   portHints?: PortHints
   solderMaskMargin?: Distance
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
-/** @deprecated use holeHeight */
+/** Omit automatic solder paste apertures for this plated hole. */
 export interface CircularHoleWithRectPlatedProps
   extends Omit<PcbLayoutProps, "layer"> {
   name?: string
@@ -4959,8 +4963,10 @@ export interface CircularHoleWithRectPlatedProps
   holeOffsetX?: number | string
   holeOffsetY?: number | string
   solderMaskMargin?: Distance
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
+/** Omit automatic solder paste apertures for this plated hole. */
 export interface PillWithRectPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "layer"> {
   name?: string
@@ -4977,8 +4983,10 @@ export interface PillWithRectPadPlatedHoleProps
   holeOffsetY?: number | string
   rectBorderRadius?: number | string
   solderMaskMargin?: Distance
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
+/** Omit automatic solder paste apertures for this plated hole. */
 export interface HoleWithPolygonPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "pcbRotation" | "layer"> {
   name?: string
@@ -4993,8 +5001,10 @@ export interface HoleWithPolygonPadPlatedHoleProps
   holeOffsetY: number | string
   portHints?: PortHints
   solderMaskMargin?: Distance
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
+/** Omit automatic solder paste apertures for this plated hole. */
 export type PlatedHoleProps =
   | CirclePlatedHoleProps
   | OvalPlatedHoleProps
@@ -5056,6 +5066,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       padDiameter: distance.optional().describe("Diameter of the copper pad"),
       portHints: portHints.optional(),
       solderMaskMargin: distance.optional(),
+      noSolderPaste: z.boolean().optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ layer: true }).extend({
@@ -5070,6 +5081,7 @@ pcbLayoutProps.omit({ layer: true }).extend({
       innerHeight: distance.optional().describe("DEPRECATED use holeHeight"),
       portHints: portHints.optional(),
       solderMaskMargin: distance.optional(),
+      noSolderPaste: z.boolean().optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ layer: true }).extend({
@@ -5087,6 +5099,7 @@ pcbLayoutProps.omit({ layer: true }).extend({
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
       solderMaskMargin: distance.optional(),
+      noSolderPaste: z.boolean().optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ layer: true }).extend({
@@ -5103,6 +5116,7 @@ pcbLayoutProps.omit({ layer: true }).extend({
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
       solderMaskMargin: distance.optional(),
+      noSolderPaste: z.boolean().optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ layer: true }).extend({
@@ -5120,6 +5134,7 @@ pcbLayoutProps.omit({ layer: true }).extend({
       holeOffsetX: distance.optional(),
       holeOffsetY: distance.optional(),
       solderMaskMargin: distance.optional(),
+      noSolderPaste: z.boolean().optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
 pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
@@ -5135,6 +5150,7 @@ pcbLayoutProps.omit({ pcbRotation: true, layer: true }).extend({
       holeOffsetY: distance,
       portHints: portHints.optional(),
       solderMaskMargin: distance.optional(),
+      noSolderPaste: z.boolean().optional(),
       coveredWithSolderMask: z.boolean().optional(),
     }),
 ```

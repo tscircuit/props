@@ -1389,6 +1389,8 @@ export interface CirclePlatedHoleProps
   padDiameter?: number | string
   portHints?: PortHints
   solderMaskMargin?: Distance
+  /** Omit automatic solder paste apertures for this plated hole. */
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
 
@@ -1435,6 +1437,8 @@ export interface CircularHoleWithRectPlatedProps
   holeOffsetX?: number | string
   holeOffsetY?: number | string
   solderMaskMargin?: Distance
+  /** Omit automatic solder paste apertures for this plated hole. */
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
 
@@ -2091,6 +2095,8 @@ export interface HoleWithPolygonPadPlatedHoleProps
   holeOffsetY: number | string
   portHints?: PortHints
   solderMaskMargin?: Distance
+  /** Omit automatic solder paste apertures for this plated hole. */
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
 
@@ -2646,6 +2652,8 @@ export interface OvalPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
   innerWidth?: number | string
   /** @deprecated use holeHeight */
   innerHeight?: number | string
+  /** Omit automatic solder paste apertures for this plated hole. */
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
 
@@ -3046,6 +3054,8 @@ export interface PillPlatedHoleProps extends Omit<PcbLayoutProps, "layer"> {
 
   portHints?: PortHints
   solderMaskMargin?: Distance
+  /** Omit automatic solder paste apertures for this plated hole. */
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
 
@@ -3095,6 +3105,8 @@ export interface PillWithRectPadPlatedHoleProps
   holeOffsetY?: number | string
   rectBorderRadius?: number | string
   solderMaskMargin?: Distance
+  /** Omit automatic solder paste apertures for this plated hole. */
+  noSolderPaste?: boolean
   coveredWithSolderMask?: boolean
 }
 

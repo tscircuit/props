@@ -754,6 +754,7 @@ export interface AutorouterConfig {
     | "auto_local"
     | "auto_cloud"
     | "auto_jumper"
+    | "tscircuit"
     | "tscircuit_beta"
     | "krt"
     | "freerouting"

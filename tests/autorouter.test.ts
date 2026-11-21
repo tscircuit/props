@@ -1,9 +1,11 @@
 import { expect, spyOn, test } from "bun:test"
 import {
   type AutorouterConfig,
+  type AutorouterPreset,
   type ImplicitBreakoutPointSolverFn,
   type RoutingTolerances,
   autorouterConfig,
+  autorouterPreset,
   autorouterProp,
   routingTolerances,
   subcircuitGroupPropsWithBool,
@@ -116,6 +118,15 @@ test("supports an implicit breakout point solver override", async () => {
 test("supports laser prefab preset", () => {
   const result = autorouterProp.parse("laser_prefab")
   expect(result).toBe("laser_prefab")
+})
+
+test("supports explicit tscircuit autorouter selection", () => {
+  const preset: AutorouterPreset = "tscircuit"
+  const config: AutorouterConfig = { preset, allowViaInPad: true }
+
+  expect(autorouterPreset.parse(preset)).toBe(preset)
+  expect(autorouterProp.parse(preset)).toBe(preset)
+  expect(autorouterProp.parse(config)).toEqual(config)
 })
 
 test("supports tscircuit beta preset", () => {

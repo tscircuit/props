@@ -373,6 +373,7 @@ export interface AutorouterConfig {
     | "auto_local"
     | "auto_cloud"
     | "auto_jumper"
+    | "tscircuit"
     | "tscircuit_beta"
     | "krt"
     | "freerouting"
@@ -397,6 +398,7 @@ export type AutorouterPreset =
   | "auto_local"
   | "auto_cloud"
   | "auto_jumper"
+  | "tscircuit"
   | "tscircuit_beta"
   | "krt"
   | "freerouting"
@@ -475,6 +477,7 @@ export const autorouterConfig = z.object({
       "auto_local",
       "auto_cloud",
       "auto_jumper",
+      "tscircuit",
       "tscircuit_beta",
       "krt",
       "freerouting",
@@ -505,6 +508,7 @@ export const autorouterPreset = z.union([
   z.literal("auto_local"),
   z.literal("auto_cloud"),
   z.literal("auto_jumper"),
+  z.literal("tscircuit"),
   z.literal("tscircuit_beta"),
   z.literal("krt"),
   z.literal("freerouting"),

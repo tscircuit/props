@@ -141,4 +141,46 @@ test("analog parameter sweep accepts values or a complete range", () => {
       step: "1mA",
     }),
   ).toThrow("Provide either values or start/stop/step")
+
+  expect(
+    analogSweepParameterProps.parse({
+      parameterType: "position",
+      switchRef: ".SW1",
+      values: [1, "2", 3],
+    }),
+  ).toMatchObject({
+    parameterType: "position",
+    switchRef: ".SW1",
+    values: [1, 2, 3],
+  })
+
+  expect(
+    analogSweepParameterProps.parse({
+      parameterType: "position",
+      switchRef: ".SW1",
+      start: 3,
+      stop: 1,
+      step: -1,
+    }),
+  ).toMatchObject({
+    start: 3,
+    stop: 1,
+    step: -1,
+  })
+
+  expect(() =>
+    analogSweepParameterProps.parse({
+      parameterType: "position",
+      switchRef: ".SW1",
+      values: [0, 1],
+    }),
+  ).toThrow()
+
+  expect(() =>
+    analogSweepParameterProps.parse({
+      parameterType: "position",
+      switchRef: ".SW1",
+      values: [1.5],
+    }),
+  ).toThrow("Switch position sweep values must be integers")
 })

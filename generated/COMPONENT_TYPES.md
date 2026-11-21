@@ -1785,6 +1785,12 @@ export interface AnalogCurrentSweepParameterProps
   currentSourceRef: string
 }
 /** Selector for the current source whose simulation-only current is swept. */
+export interface AnalogSwitchPositionSweepParameterProps
+  extends AnalogSweepCoordinatesProps {
+  parameterType: "position"
+  switchRef: string
+}
+/** Selector for the rotary switch whose simulation-only position is swept. */
 export const analogResistanceSweepParameterProps = z
   .object({
     ...createAnalogSweepCoordinateProps(resistanceSweepQuantity),
@@ -1818,6 +1824,17 @@ export const analogCurrentSweepParameterProps = z
     ...createAnalogSweepCoordinateProps(currentSweepQuantity),
     parameterType: z.literal("current"),
     currentSourceRef: z.string().min(1),
+  })
+  .strict()
+export const analogSwitchPositionSweepParameterProps = z
+  .object({
+    name: z.string().optional(),
+    values: z.array(positionCoordinateQuantity).min(1).optional(),
+    start: positionCoordinateQuantity.optional(),
+    stop: positionCoordinateQuantity.optional(),
+    step: positionStepQuantity.optional(),
+    parameterType: z.literal("position"),
+    switchRef: z.string().min(1),
   })
   .strict()
 ```
@@ -5253,6 +5270,38 @@ export const resonatorProps = commonComponentProps.extend({
   loadCapacitance: capacitance,
   pinVariant: z.enum(["no_ground", "ground_pin", "two_ground_pins"]).optional(),
 })
+```
+
+### rotary-switch
+
+```typescript
+export interface RotarySwitchProps extends CommonComponentProps {
+  poles?: number
+  positions: number
+  simPosition?: number
+  pinLabels?: PinLabelsProp<SchematicPinLabel>
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[]
+  connections?: Connections<string>
+  schPinArrangement?: SchematicPinArrangement
+  schPinStyle?: SchematicPinStyle
+  schWidth?: number | string
+  schHeight?: number | string
+}
+.extend({
+    poles: z.number().int().min(1).optional().default(1),
+    positions: z.number().int().min(2),
+    simPosition: z.number().int().min(1).optional(),
+    pinLabels: pinLabelsProp.optional(),
+    noConnect: noConnectProp.optional(),
+    connections: z
+      .custom<Connections<string>>()
+      .pipe(z.record(z.string(), connectionTarget))
+      .optional(),
+    schPinArrangement: schematicPinArrangement.optional(),
+    schPinStyle: schematicPinStyle.optional(),
+    schWidth: distance.optional(),
+    schHeight: distance.optional(),
+  })
 ```
 
 ### schematic-arc

@@ -107,6 +107,7 @@ namespace, PCB references, and a complete overview example.
 | `<pushbutton />`                               | [`PushButtonProps`](#pushbuttonprops-pushbutton)                                                                    |
 | `<resistor />`                                 | [`ResistorProps`](#resistorprops-resistor)                                                                          |
 | `<resonator />`                                | [`ResonatorProps`](#resonatorprops-resonator)                                                                       |
+| `<rotaryswitch />`                             | [`RotarySwitchProps`](#rotaryswitchprops-rotaryswitch)                                                              |
 | `<schematicarc />`                             | [`SchematicArcProps`](#schematicarcprops-schematicarc)                                                              |
 | `<schematicbox />`                             | [`SchematicBoxProps`](#schematicboxprops-schematicbox)                                                              |
 | `<schematiccell />`                            | [`SchematicCellProps`](#schematiccellprops-schematiccell)                                                           |
@@ -1107,11 +1108,7 @@ export type FabricationNoteRectProps = z.input<typeof fabricationNoteRectProps>;
 export interface FabricationNoteTextProps extends PcbLayoutProps {
   text: string;
   anchorAlignment?:
-    | "center"
-    | "top_left"
-    | "top_right"
-    | "bottom_left"
-    | "bottom_right";
+    "center" | "top_left" | "top_right" | "bottom_left" | "bottom_right";
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
@@ -1863,11 +1860,7 @@ export interface PcbNoteRectProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 export interface PcbNoteTextProps extends PcbLayoutProps {
   text: string;
   anchorAlignment?:
-    | "center"
-    | "top_left"
-    | "top_right"
-    | "bottom_left"
-    | "bottom_right";
+    "center" | "top_left" | "top_right" | "bottom_left" | "bottom_right";
   font?: "tscircuit2024";
   fontSize?: string | number;
   color?: string;
@@ -2188,6 +2181,42 @@ export interface ResonatorProps extends CommonComponentProps {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/components/resonator.ts)
+
+### RotarySwitchProps `<rotaryswitch />`
+
+```ts
+export interface RotarySwitchProps extends CommonComponentProps {
+  /**
+   * Number of independent poles (decks). Defaults to 1.
+   */
+  poles?: number;
+  /**
+   * Number of selectable positions (throws) per pole. Minimum 2.
+   *
+   * Physical pin numbering follows KiCad's `Switch:SW_Rotary_NxM` convention:
+   * throw pins are `1 .. poles * positions` (`(pole - 1) * positions + pos`)
+   * and common (wiper) pins are `poles * positions + 1 .. poles * (positions + 1)`.
+   */
+  positions: number;
+  /**
+   * Selected 1-indexed position (`1 .. positions`) during analog simulation.
+   * Sweepable with `<analog.sweepparameter parameterType="position" switchRef="..." />`.
+   */
+  simPosition?: number;
+  pinLabels?: PinLabelsProp<SchematicPinLabel>;
+  /**
+   * Pin names or aliases intentionally left unconnected.
+   */
+  noConnect?: readonly SchematicPinLabel[] | SchematicPinLabel[];
+  connections?: Connections<string>;
+  schPinArrangement?: SchematicPinArrangement;
+  schPinStyle?: SchematicPinStyle;
+  schWidth?: number | string;
+  schHeight?: number | string;
+}
+```
+
+[Source](https://github.com/tscircuit/props/blob/main/lib/components/rotary-switch.ts)
 
 ### SchematicArcProps `<schematicarc />`
 
@@ -3085,7 +3114,6 @@ export interface PlatformConfig {
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/platformConfig.ts)
-
 <!-- PLATFORM_CONFIG_END -->
 
 <!-- PROJECT_CONFIG_START -->
@@ -3112,5 +3140,4 @@ export interface ProjectConfig extends Pick<
 ```
 
 [Source](https://github.com/tscircuit/props/blob/main/lib/projectConfig.ts)
-
 <!-- PROJECT_CONFIG_END -->

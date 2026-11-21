@@ -348,6 +348,7 @@ export interface AutorouterConfig {
   serverMode?: "job" | "solve-endpoint"
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
+  /** @deprecated Set minTraceToPadEdgeClearance on <board> or <autoroutingphase> instead. */
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean

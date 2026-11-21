@@ -1002,6 +1002,8 @@ export interface BoardOutlinePoint extends Point {
 
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
+  /** Unit for schX and schY. The default preserves legacy placement (10.16 mm per 1.1 units). In mm mode, numbers are millimeters and unit strings such as "1in" are converted to millimeters. */
+  schematicLengthUnit?: z.infer<typeof schematicLengthUnit>
   title?: string
   /** e.g. "NEMA17.backface". */
   mountedTo?: string

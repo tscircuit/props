@@ -2097,6 +2097,7 @@ export const boardOutlinePoint = z
   })
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
+  schematicLengthUnit?: z.infer<typeof schematicLengthUnit>
   title?: string
   mountedTo?: string
   mountGap?: Distance
@@ -2147,6 +2148,11 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
+    schematicLengthUnit: schematicLengthUnit
+      .default(legacySchematicLengthUnit)
+      .describe(
+        'Unit for schX and schY. The default preserves legacy placement (10.16 mm per 1.1 units). In mm mode, numbers are millimeters and unit strings such as "1in" are converted to millimeters.',
+      ),
     mountedTo: z
       .string()
       .trim()
@@ -5159,8 +5165,6 @@ export const portProps = commonLayoutProps.extend({
   aliases: z.array(z.string()).optional(),
   layer: z.string().optional(),
   layers: z.array(z.string()).optional(),
-  schX: z.number().optional(),
-  schY: z.number().optional(),
   direction: direction.optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   kicadPinMetadata: kicadPinMetadata.optional(),

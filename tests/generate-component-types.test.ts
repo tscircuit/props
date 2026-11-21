@@ -20,17 +20,23 @@ test("completes nested union expressions and trailing validator chains", () => {
 })
 
 test("completes IBIS and digital stimulus validators from their source", () => {
-  const ibis = readFileSync("lib/common/ibis.ts", "utf8")
+  const ibis = readFileSync("lib/common/ibis.ts", "utf8").replace(
+    /\r\n?/g,
+    "\n",
+  )
   const ibisDeclaration = ibis.slice(
     ibis.indexOf("export const ibisPinReferences"),
     ibis.indexOf("export type IbisPinReferences"),
   )
   expect(extractInterfaces(ibis).join("")).toContain(ibisDeclaration)
+  expect(extractInterfaces(ibis.replace(/\n/g, "\r\n")).join("")).toContain(
+    ibisDeclaration,
+  )
 
   const digital = readFileSync(
     "lib/components/analogdigitalstimulus.ts",
     "utf8",
-  )
+  ).replace(/\r\n?/g, "\n")
   const digitalDeclaration = digital.slice(
     digital.indexOf("export const analogDigitalStimulusProps"),
     digital.indexOf("expectTypesMatch<"),
@@ -65,7 +71,10 @@ test("documents typed validator exports without truncating their expressions", (
     `${typedValidator}\n`,
   ])
   for (const kind of ["Footprint", "Symbol"]) {
-    const source = readFileSync(`lib/common/kicad${kind}Metadata.ts`, "utf8")
+    const source = readFileSync(
+      `lib/common/kicad${kind}Metadata.ts`,
+      "utf8",
+    ).replace(/\r\n?/g, "\n")
     const declaration = source
       .slice(
         source.indexOf(`export const kicad${kind}Properties:`),

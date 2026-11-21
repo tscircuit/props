@@ -6,14 +6,15 @@ import ts from "typescript"
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export function extractInterfaces(content: string): string[] {
+  const normalizedContent = content.replace(/\r\n?/g, "\n")
   const interfaces: string[] = []
   const source = ts.createSourceFile(
     "props.ts",
-    content,
+    normalizedContent,
     ts.ScriptTarget.Latest,
   )
   const declarations = source.statements.filter(ts.isVariableStatement)
-  const lines = content.split("\n")
+  const lines = normalizedContent.split("\n")
   let currentInterface = ""
   let isCapturing = false
   let captureComments = ""

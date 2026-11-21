@@ -1002,8 +1002,6 @@ export interface BoardOutlinePoint extends Point {
 
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
-  /** Unit for schX and schY. The default preserves legacy placement (10.16 mm per 1.1 units). In mm mode, numbers are millimeters and unit strings such as "1in" are converted to millimeters. */
-  schematicLengthUnit?: "mm" | "9.236363636363636mm"
   title?: string
   /** e.g. "NEMA17.backface". */
   mountedTo?: string
@@ -3932,6 +3930,8 @@ export interface StampboardProps extends BoardProps {
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
+  /** Default unit for bare schX and schY coordinates. Subcircuits inherit it when omitted. Boards default to the legacy sheet scale (10.16 mm per 1.1 units). In mm or in mode, a coordinate with an explicit unit uses its own unit. */
+  defaultSchematicLengthUnit?: SchematicLengthUnit
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   /**

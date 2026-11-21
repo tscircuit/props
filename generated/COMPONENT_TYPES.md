@@ -2097,7 +2097,6 @@ export const boardOutlinePoint = z
   })
 export interface BoardProps
   extends Omit<SubcircuitGroupProps, "subcircuit" | "connections" | "outline"> {
-  schematicLengthUnit?: "mm" | "9.236363636363636mm"
   title?: string
   mountedTo?: string
   mountGap?: Distance
@@ -2148,10 +2147,9 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
-    schematicLengthUnit: schematicLengthUnit
-      .default(legacySchematicLengthUnit)
-      .describe(
-        'Unit for schX and schY. The default preserves legacy placement (10.16 mm per 1.1 units). In mm mode, numbers are millimeters and unit strings such as "1in" are converted to millimeters.',
+    defaultSchematicLengthUnit:
+      subcircuitGroupProps.shape.defaultSchematicLengthUnit.default(
+        "9.236363636363636mm",
       ),
     mountedTo: z
       .string()
@@ -3719,6 +3717,7 @@ const autorouterVersion = z
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
+  defaultSchematicLengthUnit?: SchematicLengthUnit
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   placementDrcChecksDisabled?: boolean
@@ -3874,6 +3873,9 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
+  defaultSchematicLengthUnit: z
+    .enum(["mm", "in", "9.236363636363636mm"])
+    .optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

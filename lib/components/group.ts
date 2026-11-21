@@ -1,4 +1,6 @@
 import {
+  schematic_length_unit,
+  type SchematicLengthUnit,
   layer_ref,
   length,
   distance,
@@ -587,7 +589,7 @@ const autorouterVersion = z
     return "latest"
   })
 
-export type SchematicLengthUnit = "mm" | "in" | "9.236363636363636mm"
+export type { SchematicLengthUnit } from "circuit-json"
 
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
@@ -786,9 +788,7 @@ export const baseGroupProps = commonLayoutProps.extend({
 export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
 
 export const subcircuitGroupProps = baseGroupProps.extend({
-  defaultSchematicLengthUnit: z
-    .enum(["mm", "in", "9.236363636363636mm"])
-    .optional(),
+  defaultSchematicLengthUnit: schematic_length_unit.optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

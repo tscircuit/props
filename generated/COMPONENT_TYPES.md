@@ -2149,7 +2149,7 @@ export const boardProps = subcircuitGroupProps
   .extend({
     defaultSchematicLengthUnit:
       subcircuitGroupProps.shape.defaultSchematicLengthUnit.default(
-        "9.236363636363636mm",
+        DEFAULT_SCHEMATIC_LENGTH_UNIT,
       ),
     mountedTo: z
       .string()
@@ -3873,9 +3873,7 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
-  defaultSchematicLengthUnit: z
-    .enum(["mm", "in", "9.236363636363636mm"])
-    .optional(),
+  defaultSchematicLengthUnit: schematic_length_unit.optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),

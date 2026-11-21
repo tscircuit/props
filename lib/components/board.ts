@@ -1,3 +1,4 @@
+import { DEFAULT_SCHEMATIC_LENGTH_UNIT } from "circuit-json"
 import type { AutocompleteString } from "lib/common/autocomplete"
 import { distance, type Distance } from "lib/common/distance"
 import { ninePointAnchor } from "lib/common/ninePointAnchor"
@@ -178,7 +179,7 @@ export const boardProps = subcircuitGroupProps
   .extend({
     defaultSchematicLengthUnit:
       subcircuitGroupProps.shape.defaultSchematicLengthUnit.default(
-        "9.236363636363636mm",
+        DEFAULT_SCHEMATIC_LENGTH_UNIT,
       ),
     mountedTo: z
       .string()

@@ -6651,7 +6651,7 @@ export const pcbReturnCurrentSimulationProps = z
 ### pcb-transient-channel-simulation
 
 ```typescript
-/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and passive unlisted nets. Rendering and board-dependent diagnostics belong to core. */
+/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and configurable aggressors. Other unlisted nets remain passive. Rendering and board-dependent diagnostics belong to core. */
 export interface PcbTransientChannelSimulationProps {
   name?: string
   bitRate: string | number
@@ -6661,7 +6661,7 @@ export interface PcbTransientChannelSimulationProps {
   aggressorDisabled?: boolean
   children?: ReactNode
 }
-/** Tri-state every aggressor (high impedance) and ignore aggressorPattern. Pattern "0" actively drives low. Every aggressor's IBIS model must support disabling its output. */
+/** Parses the props for one PCB transient channel simulation. */
 export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),

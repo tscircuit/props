@@ -4,5 +4,5 @@ import { pcbTransientChannelSimulationProps } from "../lib/simulation/pcb-transi
 test("omitted aggressor controls stay absent", () => {
   expect(
     pcbTransientChannelSimulationProps.parse({ bitRate: "50Mbps" }),
-  ).toEqual({ bitRate: 50e6, allowUnroutedTraces: false })
+  ).toStrictEqual({ bitRate: 50e6, allowUnroutedTraces: false })
 })

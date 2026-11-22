@@ -3014,9 +3014,9 @@ export interface PcbTransientChannelSimulationProps {
   duration?: string | number
   /** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
   allowUnroutedTraces?: boolean
-  /** Pattern for aggressors, the output-capable pins coupled to the selected channels outside their endpoints. Uses the channel pattern syntax. "0" and "1" drive quiet low and high, while "prbs7", "clock", or switching bits drive transitions. The selected channels (victims) keep their own `pattern` and `driverDisabled` settings. */
+  /** Drive pattern for aggressors. Aggressors are output-capable pins coupled to the simulation's channels, excluding the driver pins of all channels in that simulation. Accepts a non-empty string after trimming, using channel pattern syntax. "0" and "1" drive quiet low and high, while "prbs7", "clock", or switching bits drive transitions. The channels keep their own `pattern` and `driverDisabled` settings. Absent stays absent without a default for the simulation consumer to interpret. */
   aggressorPattern?: string
-  /** Tri-state every aggressor (high impedance) and ignore aggressorPattern. Pattern "0" actively drives low. Every aggressor's IBIS model must support disabling its output. */
+  /** Optional boolean. When true, tri-state every aggressor (high impedance) and ignore `aggressorPattern`. Every aggressor's IBIS model must support disabling its output. Explicit false is preserved and leaves `aggressorPattern` in effect if supplied. Absent stays absent without a default for the simulation consumer to interpret. */
   aggressorDisabled?: boolean
   children?: ReactNode
 }

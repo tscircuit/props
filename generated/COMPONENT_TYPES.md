@@ -6657,19 +6657,19 @@ export interface PcbTransientChannelSimulationProps {
   bitRate: string | number
   duration?: string | number
   allowUnroutedTraces?: boolean
-  nearbyDriverPattern?: string
-  nearbyDriversDisabled?: boolean
+  aggressorPattern?: string
+  aggressorsDisabled?: boolean
   children?: ReactNode
 }
-/** Tri-state nearby drivers (high impedance) and ignore their pattern. Every nearby driver's IBIS model must support a disable state. */
+/** Tri-state every aggressor (high impedance) and ignore aggressorPattern. Pattern "0" actively drives low. Every aggressor's IBIS model must support disabling its output. */
 export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
     duration: signalDurationOrUi.optional(),
     allowUnroutedTraces: z.boolean().default(false),
-    nearbyDriverPattern: z.string().trim().min(1).optional(),
-    nearbyDriversDisabled: z.boolean().optional(),
+    aggressorPattern: z.string().trim().min(1).optional(),
+    aggressorsDisabled: z.boolean().optional(),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()

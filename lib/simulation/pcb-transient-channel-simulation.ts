@@ -13,10 +13,10 @@ export interface PcbTransientChannelSimulationProps {
   duration?: string | number
   /** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
   allowUnroutedTraces?: boolean
-  /** Open pattern string for retained output drivers outside the selected channels. Examples: prbs15, clock, or literal bits. Constant patterns "0" and "1" declare quiet signals. */
-  nearbyDriverPattern?: string
-  /** Tri-state nearby drivers (high impedance) and ignore their pattern. Every nearby driver's IBIS model must support a disable state. */
-  nearbyDriversDisabled?: boolean
+  /** Pattern for aggressors, the output-capable pins coupled to the selected channels outside their endpoints. Uses the channel pattern syntax. "0" and "1" drive quiet low and high, while "prbs7", "clock", or switching bits drive transitions. The selected channels (victims) keep their own `pattern` and `driverDisabled` settings. */
+  aggressorPattern?: string
+  /** Tri-state every aggressor (high impedance) and ignore aggressorPattern. Pattern "0" actively drives low. Every aggressor's IBIS model must support disabling its output. */
+  aggressorsDisabled?: boolean
   children?: ReactNode
 }
 
@@ -26,8 +26,8 @@ export const pcbTransientChannelSimulationProps = z
     bitRate: signalBitRate,
     duration: signalDurationOrUi.optional(),
     allowUnroutedTraces: z.boolean().default(false),
-    nearbyDriverPattern: z.string().trim().min(1).optional(),
-    nearbyDriversDisabled: z.boolean().optional(),
+    aggressorPattern: z.string().trim().min(1).optional(),
+    aggressorsDisabled: z.boolean().optional(),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()

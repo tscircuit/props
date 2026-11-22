@@ -214,6 +214,32 @@ export interface AssemblyCableProps extends AssemblyBomProps {
   waypointAnchor?: "start" | "end"
   /** Board orientation for waypoint axes. Required when waypoints is defined. */
   waypointAxisOrientation?: "board_at_start" | "board_at_end"
+  /** Manufactured length between the two connector wire exits, e.g. "50mm". A build specification; routing and slack do not change it. */
+  length?: Distance
+  /** Symmetric plus/minus tolerance on length. Requires length. */
+  lengthTolerance?: Distance
+  /** Designator of the cable's own connector at the from end on harness drawings and wiring tables, e.g. "H1". */
+  fromConnectorName?: string
+  /** Designator of the cable's own connector at the to end. */
+  toConnectorName?: string
+  /** Conductor gauge inherited by assembly.cablewire children: 22 or "22awg". */
+  wireAwg?: number | string
+  /** assembly.cablewire children stating the pin-to-pin wiring. Omit to leave wiring unstated. */
+  children?: any
+}
+
+
+export interface AssemblyCableWireProps {
+  /** Signal or conductor name, e.g. "A+". */
+  name?: string
+  /** Contact on the connector at the cable's from end: 1 or "pin1". */
+  fromPin: number | string
+  /** Contact on the connector at the cable's to end: 1 or "pin1". */
+  toPin: number | string
+  /** Insulation color as it should read on a drawing, e.g. "black" or "red/white". */
+  color?: string
+  /** Conductor gauge: 22 or "22awg". Omitted inherits the cable's wireAwg. */
+  awg?: number | string
 }
 
 
@@ -224,6 +250,18 @@ export interface AssemblyDeviceProps extends AssemblyBomProps {
   modelUrl?: string
   /** Modelprinter/footprinter string, trimmed; mutually exclusive with other model sources. */
   model?: string
+}
+
+
+export interface AssemblyDrawingBomTableProps {
+  name?: string
+  /** Selector for the cable or subassembly whose direct BOM children are the rows. Omit to list the top-level BOM of the assembly that owns the page. */
+  partRef?: string
+  /** Where the anchorAlignment point of the table sits, relative to the drawing page anchor, mm; +X right, +Y up. */
+  paperX: Distance
+  paperY: Distance
+  /** Which point of the table paperX/paperY locates. Required: a table's position is never implied. */
+  anchorAlignment: NinePointAnchor
 }
 
 
@@ -260,6 +298,29 @@ export interface AssemblyDrawingExplosionViewProps
   showTrails?: boolean
   /** Geometry comes from the referenced explosion stage's owning assembly. */
   partRef?: never
+}
+
+
+export interface AssemblyDrawingHarnessViewProps {
+  name?: string
+  displayName?: string
+  /** Selector for the assembly.cable to draw. */
+  cableRef: string
+  /** Viewport center relative to the drawing page anchor, mm; +X right, +Y up. Defaults to 0 on axes without a relative reference. */
+  centerX?: Distance
+  centerY?: Distance
+  /** Sibling view selectors, with the same meaning and conflicts as on assembly.drawing.partview. */
+  leftOfRef?: string
+  rightOfRef?: string
+  aboveRef?: string
+  belowRef?: string
+  /** Paper-space viewport size; dimensions must be positive. */
+  width: Distance
+  height: Distance
+  /** Circle the item numbers of the cable's connectors, contacts and wire. Requires an assembly.drawing.bomtable on the same page. Defaults to false. */
+  showBalloons?: boolean
+  /** Nested assembly.drawing.note annotations. */
+  children?: any
 }
 
 
@@ -383,6 +444,20 @@ export interface AssemblyDrawingTitleBlockProps {
   approvalPerson?: string
   sheetNumber?: number
   numberOfSheets?: number
+}
+
+
+export interface AssemblyDrawingWiringTableProps {
+  name?: string
+  /** Selector for the assembly.cable whose wires are listed. */
+  cableRef: string
+  /** Heading row spanning the table. Omitted draws no heading. */
+  title?: string
+  /** Where the anchorAlignment point of the table sits, relative to the drawing page anchor, mm; +X right, +Y up. */
+  paperX: Distance
+  paperY: Distance
+  /** Which point of the table paperX/paperY locates. Required: a table's position is never implied. */
+  anchorAlignment: NinePointAnchor
 }
 
 
@@ -614,6 +689,11 @@ export interface AssemblyStickerProps
    */
   width?: Distance
   height?: Distance
+  /** Radius of the sticker's rounded corners, in mm or a distance string. The
+   * artwork is cut to the rounded outline. It cannot exceed half of the
+   * width or of the height. Omit for square corners.
+   */
+  cornerRadius?: Distance
   /** Sticker thickness including its adhesive, in mm or a distance string.
    * Omitted when unspecified; no thickness is assumed.
    */
@@ -649,6 +729,7 @@ export interface AutorouterConfig {
   serverMode?: "job" | "solve-endpoint"
   serverCacheEnabled?: boolean
   cache?: PcbRouteCache
+  /** @deprecated Set minTraceToPadEdgeClearance on <board> or <autoroutingphase> instead. */
   traceClearance?: Distance
   availableJumperTypes?: Array<"1206x4" | "0603">
   allowViaInPad?: boolean
@@ -673,6 +754,7 @@ export interface AutorouterConfig {
     | "auto_local"
     | "auto_cloud"
     | "auto_jumper"
+    | "tscircuit"
     | "tscircuit_beta"
     | "krt"
     | "freerouting"
@@ -2992,6 +3074,12 @@ export interface PillSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 
 
+export interface PillSolderPasteProps extends PcbLayoutProps, PillShapeProps {
+  /** Explicit corner radius; a capsule uses half the smaller dimension. */
+  radius: Distance
+}
+
+
 export interface PillWithRectPadPlatedHoleProps
   extends Omit<PcbLayoutProps, "layer"> {
   name?: string
@@ -3401,8 +3489,7 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
 }
 
 
-export interface RectSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface RectSolderPasteProps extends PcbLayoutProps {
   shape: "rect"
   width: Distance
   height: Distance
@@ -3843,6 +3930,8 @@ export interface StampboardProps extends BoardProps {
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
+  /** Default unit for bare schX and schY coordinates. Subcircuits inherit it when omitted. Boards default to the legacy sheet scale (10.16 mm per 1.1 units). In mm or in mode, a coordinate with an explicit unit uses its own unit. */
+  defaultSchematicLengthUnit?: SchematicLengthUnit
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   /**

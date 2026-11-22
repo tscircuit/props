@@ -19,8 +19,6 @@ export const portProps = commonLayoutProps.extend({
   aliases: z.array(z.string()).optional(),
   layer: z.string().optional(),
   layers: z.array(z.string()).optional(),
-  schX: z.number().optional(),
-  schY: z.number().optional(),
   direction: direction.optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   kicadPinMetadata: kicadPinMetadata.optional(),

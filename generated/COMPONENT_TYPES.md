@@ -2147,6 +2147,10 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
+    defaultSchematicLengthUnit:
+      subcircuitGroupProps.shape.defaultSchematicLengthUnit.default(
+        "9.236363636363636mm",
+      ),
     mountedTo: z
       .string()
       .trim()
@@ -3583,6 +3587,7 @@ export interface AutorouterConfig {
     | "auto_local"
     | "auto_cloud"
     | "auto_jumper"
+    | "tscircuit"
     | "tscircuit_beta"
     | "krt"
     | "freerouting"
@@ -3650,6 +3655,7 @@ export const autorouterConfig = z.object({
       "auto_local",
       "auto_cloud",
       "auto_jumper",
+      "tscircuit",
       "tscircuit_beta",
       "krt",
       "freerouting",
@@ -3711,6 +3717,7 @@ const autorouterVersion = z
 export interface SubcircuitGroupProps
   extends BaseGroupProps,
     RoutingTolerances {
+  defaultSchematicLengthUnit?: SchematicLengthUnit
   manualEdits?: ManualEditsFileInput
   routingDisabled?: boolean
   placementDrcChecksDisabled?: boolean
@@ -3866,6 +3873,9 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 export const subcircuitGroupProps = baseGroupProps.extend({
+  defaultSchematicLengthUnit: z
+    .enum(["mm", "in", "9.236363636363636mm"])
+    .optional(),
   manualEdits: manual_edits_file.optional(),
   schAutoLayoutEnabled: z.boolean().optional(),
   schTraceAutoLabelEnabled: z.boolean().optional(),
@@ -5159,8 +5169,6 @@ export const portProps = commonLayoutProps.extend({
   aliases: z.array(z.string()).optional(),
   layer: z.string().optional(),
   layers: z.array(z.string()).optional(),
-  schX: z.number().optional(),
-  schY: z.number().optional(),
   direction: direction.optional(),
   connectsTo: z.string().or(z.array(z.string())).optional(),
   kicadPinMetadata: kicadPinMetadata.optional(),
@@ -6011,8 +6019,7 @@ export const solderjumperProps = jumperProps.extend({
 ### solderpaste
 
 ```typescript
-export interface RectSolderPasteProps
-  extends Omit<PcbLayoutProps, "pcbRotation"> {
+export interface RectSolderPasteProps extends PcbLayoutProps {
   shape: "rect"
   width: Distance
   height: Distance
@@ -6022,17 +6029,21 @@ export interface CircleSolderPasteProps
   shape: "circle"
   radius: Distance
 }
-export const rectSolderPasteProps = pcbLayoutProps
-  .omit({ pcbRotation: true })
-  .extend({
-    shape: z.literal("rect"),
-    width: distance,
-    height: distance,
-  })
+export interface PillSolderPasteProps extends PcbLayoutProps, PillShapeProps {
+  radius: Distance
+}
+export const rectSolderPasteProps = pcbLayoutProps.extend({
+  shape: z.literal("rect"),
+  width: distance,
+  height: distance,
+})
 export const circleSolderPasteProps = pcbLayoutProps
   .omit({ pcbRotation: true })
   .extend({
     shape: z.literal("circle"),
+    radius: distance,
+  })
+  .extend({
     radius: distance,
   })
 ```

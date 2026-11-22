@@ -176,6 +176,10 @@ export interface BoardProps
 export const boardProps = subcircuitGroupProps
   .omit({ connections: true })
   .extend({
+    defaultSchematicLengthUnit:
+      subcircuitGroupProps.shape.defaultSchematicLengthUnit.default(
+        "9.236363636363636mm",
+      ),
     mountedTo: z
       .string()
       .trim()

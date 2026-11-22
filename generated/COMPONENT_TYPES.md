@@ -6657,15 +6657,19 @@ export interface PcbTransientChannelSimulationProps {
   bitRate: string | number
   duration?: string | number
   allowUnroutedTraces?: boolean
+  nearbyDriverPattern?: string
+  nearbyDriversDisabled?: boolean
   children?: ReactNode
 }
-/** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
+/** Tri-state nearby drivers (high impedance) and ignore their pattern. Every nearby driver's IBIS model must support a disable state. */
 export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
     duration: signalDurationOrUi.optional(),
     allowUnroutedTraces: z.boolean().default(false),
+    nearbyDriverPattern: z.string().trim().min(1).optional(),
+    nearbyDriversDisabled: z.boolean().optional(),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()

@@ -1958,6 +1958,10 @@ export interface PcbTransientChannelSimulationProps {
   duration?: string | number;
   /** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
   allowUnroutedTraces?: boolean;
+  /** Open pattern string for retained output drivers outside the selected channels. Examples: prbs15, clock, or literal bits. Constant patterns "0" and "1" declare quiet signals. */
+  nearbyDriverPattern?: string;
+  /** Tri-state nearby drivers (high impedance) and ignore their pattern. Every nearby driver's IBIS model must support a disable state. */
+  nearbyDriversDisabled?: boolean;
   children?: ReactNode;
 }
 ```

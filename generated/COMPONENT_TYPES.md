@@ -6658,7 +6658,7 @@ export interface PcbTransientChannelSimulationProps {
   duration?: string | number
   allowUnroutedTraces?: boolean
   aggressorPattern?: string
-  aggressorsDisabled?: boolean
+  aggressorDisabled?: boolean
   children?: ReactNode
 }
 /** Tri-state every aggressor (high impedance) and ignore aggressorPattern. Pattern "0" actively drives low. Every aggressor's IBIS model must support disabling its output. */
@@ -6669,7 +6669,7 @@ export const pcbTransientChannelSimulationProps = z
     duration: signalDurationOrUi.optional(),
     allowUnroutedTraces: z.boolean().default(false),
     aggressorPattern: z.string().trim().min(1).optional(),
-    aggressorsDisabled: z.boolean().optional(),
+    aggressorDisabled: z.boolean().optional(),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()

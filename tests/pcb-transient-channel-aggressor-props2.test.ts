@@ -6,12 +6,12 @@ test("aggressor controls preserve the pattern and disabled flag", () => {
     pcbTransientChannelSimulationProps.parse({
       bitRate: 50e6,
       aggressorPattern: " prbs15 ",
-      aggressorsDisabled: false,
+      aggressorDisabled: false,
     }),
   ).toEqual({
     bitRate: 50e6,
     allowUnroutedTraces: false,
     aggressorPattern: "prbs15",
-    aggressorsDisabled: false,
+    aggressorDisabled: false,
   })
 })

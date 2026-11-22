@@ -3,7 +3,7 @@ import { expectTypesMatch } from "lib/typecheck"
 import type { ReactNode } from "react"
 import { z } from "zod"
 
-/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and configurable aggressors. Other unlisted nets remain passive. Rendering and board-dependent diagnostics belong to core. */
+/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and configurable aggressors. Other unlisted nets remain passive. Core renders the simulation block. The simulation consumer validates aggressor states against the board and its IBIS models. */
 export interface PcbTransientChannelSimulationProps {
   /** Required when the board contains more than one SI block. */
   name?: string

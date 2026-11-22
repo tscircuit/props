@@ -6651,7 +6651,7 @@ export const pcbReturnCurrentSimulationProps = z
 ### pcb-transient-channel-simulation
 
 ```typescript
-/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and configurable aggressors. Other unlisted nets remain passive. Rendering and board-dependent diagnostics belong to core. */
+/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and configurable aggressors. Other unlisted nets remain passive. Core renders the simulation block. The simulation consumer validates aggressor states against the board and its IBIS models. */
 export interface PcbTransientChannelSimulationProps {
   name?: string
   bitRate: string | number

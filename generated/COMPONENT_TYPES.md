@@ -2110,6 +2110,7 @@ export interface BoardProps
     | "jlcpcb_standard_20260912"
   material?: "fr4" | "fr1" | "flex"
   layers?: 1 | 2 | 4 | 6 | 8 | 10
+  routingLayers?: LayerRefInput[]
   allowBlindAndBuriedVias?: boolean
   routeRemaining?: boolean
   defaultViaTenting?:
@@ -2192,6 +2193,7 @@ export const boardProps = subcircuitGroupProps
         z.literal(10),
       ])
       .default(2),
+    routingLayers: z.array(layer_ref).min(1).optional(),
     allowBlindAndBuriedVias: z
       .boolean()
       .default(false)

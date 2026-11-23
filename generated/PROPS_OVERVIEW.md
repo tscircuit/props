@@ -1022,6 +1022,8 @@ export interface BoardProps
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
+  /** Copper layers available for planar traces. Omit to allow all board layers. Vias may span other layers. */
+  routingLayers?: LayerRefInput[]
   /**
    * Whether the autorouter may generate blind and buried vias. Defaults to
    * false, which restricts newly generated vias to the full board stack.

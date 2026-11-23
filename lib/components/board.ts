@@ -4,6 +4,7 @@ import { ninePointAnchor } from "lib/common/ninePointAnchor"
 import { type Point, point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
+import { layer_ref, type LayerRefInput } from "circuit-json"
 import { subcircuitGroupProps, type SubcircuitGroupProps } from "./group"
 import {
   boardMountOrientation,
@@ -104,6 +105,8 @@ export interface BoardProps
   material?: "fr4" | "fr1" | "flex"
   /** Number of layers for the PCB */
   layers?: 1 | 2 | 4 | 6 | 8 | 10
+  /** Copper layers available for planar traces. Omit to allow all board layers. Vias may span other layers. */
+  routingLayers?: LayerRefInput[]
   /**
    * Whether the autorouter may generate blind and buried vias. Defaults to
    * false, which restricts newly generated vias to the full board stack.
@@ -221,6 +224,7 @@ export const boardProps = subcircuitGroupProps
         z.literal(10),
       ])
       .default(2),
+    routingLayers: z.array(layer_ref).min(1).optional(),
     allowBlindAndBuriedVias: z
       .boolean()
       .default(false)

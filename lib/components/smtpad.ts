@@ -9,21 +9,7 @@ import { portHints, type PortHints } from "lib/common/portHints"
 import { point, type Point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 
-/**
- * Finite per-side fractions of local width (x) and height (y), added to the
- * absolute solderPasteMargin. Negative shrinks, positive expands, and zero
- * adds no relative margin. Both axes are required; omitting the prop keeps
- * existing paste sizing. The board default supplies an omitted absolute margin.
- */
-export interface SolderPasteMarginRatio {
-  x: number
-  y: number
-}
-
-const solderPasteMarginRatio = z.object({
-  x: z.number().finite(),
-  y: z.number().finite(),
-})
+const solderPasteMarginRatio = z.number().finite()
 
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
@@ -42,7 +28,10 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
-  solderPasteMarginRatio?: SolderPasteMarginRatio
+  // Per-edge fraction of each pad dimension, added to the absolute margin.
+  // At zero absolute margin, -0.05 gives 90% size.
+  // Omit to preserve existing paste sizing.
+  solderPasteMarginRatio?: number
   solderPasteMargin?: Distance
 }
 
@@ -64,7 +53,10 @@ export interface RotatedRectSmtPadProps
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
-  solderPasteMarginRatio?: SolderPasteMarginRatio
+  // Per-edge fraction of each pad dimension, added to the absolute margin.
+  // At zero absolute margin, -0.05 gives 90% size.
+  // Omit to preserve existing paste sizing.
+  solderPasteMarginRatio?: number
   solderPasteMargin?: Distance
 }
 

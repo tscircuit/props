@@ -6651,21 +6651,30 @@ export const pcbReturnCurrentSimulationProps = z
 ### pcb-transient-channel-simulation
 
 ```typescript
-/** One coupled SI test using the typical IBIS corner, ideal die rails with package parasitics, and passive unlisted nets. Rendering and board-dependent diagnostics belong to core. */
+/**
+ * One coupled SI test using the typical IBIS corner, ideal die rails with
+ * package parasitics, and configurable aggressors. Other unlisted nets remain
+ * passive. Core renders the simulation block. The simulation consumer validates
+ * aggressor states against the board and its IBIS models.
+ */
 export interface PcbTransientChannelSimulationProps {
   name?: string
   bitRate: string | number
   duration?: string | number
   allowUnroutedTraces?: boolean
+  aggressorPattern?: string
+  aggressorDisabled?: boolean
   children?: ReactNode
 }
-/** Treat unrouted traces as ideal connections instead of reporting an error. Default: false. */
+/** Parses the props for one PCB transient channel simulation. */
 export const pcbTransientChannelSimulationProps = z
   .object({
     name: z.string().trim().min(1).optional(),
     bitRate: signalBitRate,
     duration: signalDurationOrUi.optional(),
     allowUnroutedTraces: z.boolean().default(false),
+    aggressorPattern: z.string().trim().min(1).optional(),
+    aggressorDisabled: z.boolean().optional(),
     children: z.custom<ReactNode>().optional(),
   })
   .strict()

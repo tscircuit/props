@@ -2833,7 +2833,7 @@ export const crystalPins = [
 export interface CrystalProps<PinLabel extends string = string>
   extends CommonComponentProps<PinLabel> {
   frequency: number | string
-  loadCapacitance: number | string
+  loadCapacitance?: number | string
   maxTraceLength?: number | string
   manufacturerPartNumber?: string
   pinVariant?: PinVariant
@@ -2843,7 +2843,7 @@ export interface CrystalProps<PinLabel extends string = string>
 /** Maximum allowed PCB trace length between the crystal and its connected component */
 export const crystalProps = commonComponentProps.extend({
   frequency: frequency,
-  loadCapacitance: capacitance,
+  loadCapacitance: capacitance.optional(),
   maxTraceLength: distance.optional(),
   manufacturerPartNumber: z.string().optional(),
   pinVariant: z.enum(["two_pin", "four_pin"]).optional(),

@@ -13,6 +13,12 @@ test("should parse crystal props with 2pin variant", () => {
 
   const parsedProps = crystalProps.parse(rawProps)
   expect(parsedProps.pinVariant).toBe("two_pin")
+  expect(parsedProps.loadCapacitance).toBe(20e-12)
+})
+
+test("should parse crystal props without load capacitance", () => {
+  const rawProps: CrystalProps = { name: "Y1", frequency: "16MHz" }
+  expect(crystalProps.parse(rawProps).loadCapacitance).toBeUndefined()
 })
 
 test("should parse manufacturerPartNumber and mpn", () => {

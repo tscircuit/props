@@ -9,6 +9,8 @@ import { portHints, type PortHints } from "lib/common/portHints"
 import { point, type Point } from "lib/common/point"
 import { expectTypesMatch } from "lib/typecheck"
 
+const solderPasteMarginRatio = z.number().finite()
+
 export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   name?: string
   shape: "rect"
@@ -26,6 +28,10 @@ export interface RectSmtPadProps extends Omit<PcbLayoutProps, "pcbRotation"> {
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
+  // Per-edge fraction of each pad dimension, added to the absolute margin.
+  // At zero absolute margin, -0.05 gives 90% size.
+  // Omit to preserve existing paste sizing.
+  solderPasteMarginRatio?: number
   solderPasteMargin?: Distance
 }
 
@@ -47,6 +53,10 @@ export interface RotatedRectSmtPadProps
   // Disable solder paste without affecting the solder mask.
   // Omitted or false preserves default paste behavior; true overrides solderPasteMargin.
   noSolderPaste?: boolean
+  // Per-edge fraction of each pad dimension, added to the absolute margin.
+  // At zero absolute margin, -0.05 gives 90% size.
+  // Omit to preserve existing paste sizing.
+  solderPasteMarginRatio?: number
   solderPasteMargin?: Distance
 }
 
@@ -139,6 +149,7 @@ export const rectSmtPadProps = pcbLayoutProps
     solderMaskMarginBottom: distance.optional(),
     noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
+    solderPasteMarginRatio: solderPasteMarginRatio.optional(),
   })
 type InferredRectSmtPadProps = z.input<typeof rectSmtPadProps>
 expectTypesMatch<InferredRectSmtPadProps, RectSmtPadProps>(true)
@@ -161,6 +172,7 @@ export const rotatedRectSmtPadProps = pcbLayoutProps
     solderMaskMarginBottom: distance.optional(),
     noSolderPaste: z.boolean().optional(),
     solderPasteMargin: distance.optional(),
+    solderPasteMarginRatio: solderPasteMarginRatio.optional(),
   })
 type InferredRotatedRectSmtPadProps = z.input<typeof rotatedRectSmtPadProps>
 expectTypesMatch<InferredRotatedRectSmtPadProps, RotatedRectSmtPadProps>(true)

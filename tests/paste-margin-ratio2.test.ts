@@ -1,7 +1,7 @@
 import { expect, test } from "bun:test"
 import { smtPadProps } from "lib/components/smtpad"
 
-test.failing("paste margin ratios reject objects and non-finite values", () => {
+test("paste margin ratios reject objects and non-finite values", () => {
   for (const ratio of [
     Infinity,
     -Infinity,

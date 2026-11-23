@@ -4,16 +4,21 @@ import { smtPadProps } from "lib/components/smtpad"
 test.failing(
   "paste ratios reject missing axes and non-finite fractions",
   () => {
-    const pad = { shape: "rect", width: 4, height: 2 }
-    expect(
-      smtPadProps.safeParse({ ...pad, solderPasteMarginRatio: { x: -0.1 } })
-        .success,
-    ).toBe(false)
-    expect(
-      smtPadProps.safeParse({
-        ...pad,
-        solderPasteMarginRatio: { x: Infinity, y: 0 },
-      }).success,
-    ).toBe(false)
+    for (const ratio of [
+      { x: -0.05 },
+      { y: -0.1 },
+      { x: Infinity, y: 0 },
+      { x: 0, y: -Infinity },
+      { x: NaN, y: 0 },
+    ]) {
+      expect(
+        smtPadProps.safeParse({
+          shape: "rect",
+          width: 0.6,
+          height: 1.1,
+          solderPasteMarginRatio: ratio,
+        }).success,
+      ).toBe(false)
+    }
   },
 )

@@ -783,7 +783,13 @@ export const baseGroupProps = commonLayoutProps.extend({
   pcbAnchorAlignment: pcbAnchorAlignmentAutocomplete.optional(),
 })
 
-export const partsEngine = z.custom<PartsEngine>((v) => "findPart" in v)
+export const partsEngine = z.custom<PartsEngine>(
+  (v) =>
+    typeof v === "object" &&
+    v !== null &&
+    "findPart" in v &&
+    typeof v.findPart === "function",
+)
 
 export const subcircuitGroupProps = baseGroupProps.extend({
   defaultSchematicLengthUnit: z

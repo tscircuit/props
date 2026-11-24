@@ -23,6 +23,40 @@ test("should parse tolerance percentage for resistor", () => {
   expect(parsed.tolerance).toBeCloseTo(0.05)
 })
 
+test("should reject malformed tolerance strings instead of truncating", () => {
+  for (const tolerance of ["0.05abc", "5%%", "0.1 volts", "0.1.2", "abc"]) {
+    expect(() =>
+      resistorProps.parse({ name: "R", resistance: 1000, tolerance }),
+    ).toThrow()
+  }
+})
+
+test("should keep accepting valid tolerance strings", () => {
+  for (const [tolerance, expected] of [
+    ["5%", 0.05],
+    ["0.05", 0.05],
+    ["5% ", 0.05],
+    ["5 %", 0.05],
+    ["1e-1", 0.1],
+    [".25", 0.25],
+  ] as const) {
+    const parsed = resistorProps.parse({
+      name: "R",
+      resistance: 1000,
+      tolerance,
+    })
+    expect(parsed.tolerance).toBeCloseTo(expected)
+  }
+})
+
+test("should keep rejecting out-of-range tolerances", () => {
+  for (const tolerance of ["150%", 2, "-5%"]) {
+    expect(() =>
+      resistorProps.parse({ name: "R", resistance: 1000, tolerance }),
+    ).toThrow()
+  }
+})
+
 test("should parse resistance strings to numbers", () => {
   const parsed = resistorProps.parse({
     name: "R3",

@@ -66,16 +66,21 @@ export const resistorProps = commonComponentProps.extend({
   footprint: resistorFootprintProp,
   resistance,
   tolerance: z
-    .union([z.string(), z.number()])
-    .transform((val) => {
-      if (typeof val === "string") {
-        if (val.endsWith("%")) {
-          return parseFloat(val.slice(0, -1)) / 100
-        }
-        return parseFloat(val)
-      }
-      return val
-    })
+    .union([
+      z.number(),
+      z
+        .string()
+        .trim()
+        .regex(
+          /^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*%?$/,
+          "Expected a tolerance fraction or percentage",
+        )
+        .transform((value) =>
+          value.endsWith("%")
+            ? Number(value.slice(0, -1)) / 100
+            : Number(value),
+        ),
+    ])
     .pipe(
       z
         .number()

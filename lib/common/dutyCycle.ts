@@ -9,19 +9,29 @@ import { z } from "zod"
  * being silently truncated the way `parseFloat` would truncate it.
  */
 export const dutyCycle = z
-  .union([
-    z.number(),
-    z
-      .string()
-      .trim()
-      .regex(
-        /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*%?$/,
-        'Duty cycle must be a number or a percentage string such as "50%"',
-      )
-      .transform((value) =>
-        value.endsWith("%") ? Number(value.slice(0, -1)) / 100 : Number(value),
-      ),
-  ])
+  .union(
+    [
+      z.number(),
+      z
+        .string()
+        .trim()
+        .regex(
+          /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?\s*%?$/,
+          'Duty cycle must be a number or a percentage string such as "50%"',
+        )
+        .transform((value) =>
+          value.endsWith("%")
+            ? Number(value.slice(0, -1)) / 100
+            : Number(value),
+        ),
+    ],
+    {
+      errorMap: () => ({
+        message:
+          'Duty cycle must be a number or a percentage string such as "50%"',
+      }),
+    },
+  )
   .pipe(
     z
       .number()

@@ -50,3 +50,25 @@ test("dutyCycle still enforces the 0-1 range", () => {
     }
   }
 })
+
+test("dutyCycle surfaces a helpful message for malformed values", () => {
+  for (const [, schema, name] of sourceSchemas) {
+    for (const dutyCycle of ["0.5abc", "50%%", "abc"] as const) {
+      const result = schema.safeParse({ name, dutyCycle })
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.error.issues.map((i) => i.message).join(" ")).toContain(
+          "Duty cycle must be a number or a percentage string",
+        )
+      }
+    }
+    // Range errors keep their specific messages from the .pipe stage
+    const tooBig = schema.safeParse({ name, dutyCycle: "150%" })
+    expect(tooBig.success).toBe(false)
+    if (!tooBig.success) {
+      expect(tooBig.error.issues.map((i) => i.message).join(" ")).toContain(
+        "cannot be greater than 100%",
+      )
+    }
+  }
+})

@@ -168,6 +168,7 @@ export {
   type TraceSpacing,
 } from "./common/traceSpacing"
 export { impedanceTarget, type ImpedanceTarget } from "./common/impedanceTarget"
+export { dutyCycle } from "./common/dutyCycle"
 
 export * from "./components/paneltab"
 export * from "./components/paneltabkeepout"

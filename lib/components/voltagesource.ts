@@ -5,6 +5,7 @@ import {
   lrPolarPins,
 } from "lib/common/layout"
 import { createConnectionsProp } from "lib/common/connectionsProp"
+import { dutyCycle } from "lib/common/dutyCycle"
 import type { Connections } from "lib/utility-types/connections-and-selectors"
 import { expectTypesMatch } from "lib/typecheck"
 import { z } from "zod"
@@ -21,6 +22,7 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   peakToPeakVoltage?: number | string
   waveShape?: WaveShape
   phase?: number | string
+  /** Fraction from 0 to 1, or a percentage string such as "50%". */
   dutyCycle?: number | string
   pulseDelay?: number | string
   riseTime?: number | string
@@ -34,31 +36,13 @@ export interface VoltageSourceProps<PinLabel extends string = string>
   connections?: Connections<VoltageSourcePinLabels>
 }
 
-const percentage = z
-  .union([z.string(), z.number()])
-  .transform((val) => {
-    if (typeof val === "string") {
-      if (val.endsWith("%")) {
-        return parseFloat(val.slice(0, -1)) / 100
-      }
-      return parseFloat(val)
-    }
-    return val
-  })
-  .pipe(
-    z
-      .number()
-      .min(0, "Duty cycle must be non-negative")
-      .max(1, "Duty cycle cannot be greater than 100%"),
-  )
-
 export const voltageSourceProps = commonComponentProps.extend({
   voltage: voltage.optional(),
   frequency: frequency.optional(),
   peakToPeakVoltage: voltage.optional(),
   waveShape: z.enum(["sinewave", "square", "triangle", "sawtooth"]).optional(),
   phase: rotation.optional(),
-  dutyCycle: percentage.optional(),
+  dutyCycle: dutyCycle.optional(),
   pulseDelay: ms.optional(),
   riseTime: ms.optional(),
   fallTime: ms.optional(),

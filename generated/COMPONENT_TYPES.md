@@ -2338,6 +2338,8 @@ export interface BusProps {
   connections: string[]
   routingPhaseIndex?: number | null
   maxLengthSkew?: number | string
+  skewReference?: "range" | "mean" | "references"
+  lengthMatchingPaths?: [string, string][]
   targetImpedance?: ImpedanceTarget
   targetImpedanceMin?: number | string
   targetImpedanceMax?: number | string
@@ -2361,6 +2363,8 @@ export const busProps = z
     connections: z.array(z.string()).min(1),
     routingPhaseIndex: z.number().nullable().optional(),
     maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
+    skewReference: z.enum(["range", "mean", "references"]).optional(),
+    lengthMatchingPaths: z.array(z.tuple([z.string(), z.string()])).min(1).optional(),
     targetImpedance: impedanceTarget.optional(),
     targetImpedanceMin: positiveImpedance.optional(),
     targetImpedanceMax: positiveImpedance.optional(),
@@ -2371,6 +2375,13 @@ export const busProps = z
   })
   .superRefine((props, ctx) => {
     validateRouteLengths(props, ctx)
+    if (props.skewReference === "references" && !props.lengthMatchTo) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'skewReference="references" requires lengthMatchTo',
+        path: ["lengthMatchTo"],
+      })
+    }
     validateImpedanceTarget(
       props.targetImpedance,
       props.targetImpedanceMin,

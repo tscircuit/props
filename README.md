@@ -653,6 +653,12 @@ export interface BusProps {
   routingPhaseIndex?: number | null;
   /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
   maxLengthSkew?: number | string;
+  /** Range by default. "mean" bounds deviation from the group mean;
+   * "references" compares each member to the traces selected by lengthMatchTo. */
+  skewReference?: "range" | "mean" | "references";
+  /** Port-selector endpoint pairs for matching paths through branched nets.
+   * Every other terminal remains electrically connected. */
+  lengthMatchingPaths?: [string, string][];
   /** Intended single-ended impedance, e.g. "50±25ohm". Raw numbers are ohms. */
   targetImpedance?: ImpedanceTarget;
   /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */

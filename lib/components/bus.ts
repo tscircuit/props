@@ -47,6 +47,12 @@ export interface BusProps {
   routingPhaseIndex?: number | null
   /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
   maxLengthSkew?: number | string
+  /** Range by default. "mean" bounds deviation from the group mean;
+   * "references" compares each member to the traces selected by lengthMatchTo. */
+  skewReference?: "range" | "mean" | "references"
+  /** Port-selector endpoint pairs for matching paths through branched nets.
+   * Every other terminal remains electrically connected. */
+  lengthMatchingPaths?: [string, string][]
   /** Intended single-ended impedance, e.g. "50±25ohm". Raw numbers are ohms. */
   targetImpedance?: ImpedanceTarget
   /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */
@@ -76,6 +82,11 @@ export const busProps = z
     connections: z.array(z.string()).min(1),
     routingPhaseIndex: z.number().nullable().optional(),
     maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
+    skewReference: z.enum(["range", "mean", "references"]).optional(),
+    lengthMatchingPaths: z
+      .array(z.tuple([z.string(), z.string()]))
+      .min(1)
+      .optional(),
     targetImpedance: impedanceTarget.optional(),
     targetImpedanceMin: positiveImpedance.optional(),
     targetImpedanceMax: positiveImpedance.optional(),
@@ -86,6 +97,13 @@ export const busProps = z
   })
   .superRefine((props, ctx) => {
     validateRouteLengths(props, ctx)
+    if (props.skewReference === "references" && !props.lengthMatchTo) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'skewReference="references" requires lengthMatchTo',
+        path: ["lengthMatchTo"],
+      })
+    }
     validateImpedanceTarget(
       props.targetImpedance,
       props.targetImpedanceMin,

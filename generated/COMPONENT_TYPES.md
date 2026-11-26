@@ -2338,6 +2338,7 @@ export interface BusProps {
   connections: string[]
   routingPhaseIndex?: number | null
   maxLengthSkew?: number | string
+  lengthSkewReference?: "range" | "mean"
   targetImpedance?: ImpedanceTarget
   targetImpedanceMin?: number | string
   targetImpedanceMax?: number | string
@@ -2361,6 +2362,7 @@ export const busProps = z
     connections: z.array(z.string()).min(1),
     routingPhaseIndex: z.number().nullable().optional(),
     maxLengthSkew: distance.pipe(z.number().min(0).finite()).optional(),
+    lengthSkewReference: z.enum(["range", "mean"]).optional(),
     targetImpedance: impedanceTarget.optional(),
     targetImpedanceMin: positiveImpedance.optional(),
     targetImpedanceMax: positiveImpedance.optional(),

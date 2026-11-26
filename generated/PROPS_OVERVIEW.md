@@ -1166,8 +1166,11 @@ export interface BusProps {
   connections: string[]
   /** If set, every trace in this bus is assigned to this autorouting phase. */
   routingPhaseIndex?: number | null
-  /** Maximum routed-length difference between bus members. Raw numbers are millimeters. */
+  /** Maximum routed-length skew using lengthSkewReference. Raw numbers are millimeters. */
   maxLengthSkew?: number | string
+  /** Comparison for maxLengthSkew: "range" (default) compares longest and shortest;
+   * "mean" compares each member with the arithmetic mean of all member lengths. */
+  lengthSkewReference?: "range" | "mean"
   /** Intended single-ended impedance, e.g. "50±25ohm". Raw numbers are ohms. */
   targetImpedance?: ImpedanceTarget
   /** Inclusive minimum/maximum acceptable impedance, in ohms. May be used without a nominal target. */

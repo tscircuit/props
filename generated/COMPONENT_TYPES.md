@@ -3917,6 +3917,8 @@ export interface CircleHoleProps extends PcbLayoutProps {
   name?: string
   shape?: "circle"
   diameter?: Distance
+  // Alias of diameter; normalized to diameter on parse. Errors if both are set and disagree.
+  holeDiameter?: Distance
   radius?: Distance
   solderMaskMargin?: Distance
   coveredWithSolderMask?: boolean
@@ -3948,32 +3950,33 @@ export interface RectHoleProps extends PcbLayoutProps {
 .extend({
     name: z.string().optional(),
     shape: z.literal("circle").optional(),
-    diameter: distance.optional(),
-    radius: distance.optional(),
+    diameter: positiveDistance.optional(),
+    holeDiameter: positiveDistance.optional(),
+    radius: positiveDistance.optional(),
     solderMaskMargin: distance.optional(),
     coveredWithSolderMask: z.boolean().optional(),
   })
 const pillHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),
   shape: z.literal("pill"),
-  width: distance,
-  height: distance,
+  width: positiveDistance,
+  height: positiveDistance,
   solderMaskMargin: distance.optional(),
   coveredWithSolderMask: z.boolean().optional(),
 })
 const ovalHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),
   shape: z.literal("oval"),
-  width: distance,
-  height: distance,
+  width: positiveDistance,
+  height: positiveDistance,
   solderMaskMargin: distance.optional(),
   coveredWithSolderMask: z.boolean().optional(),
 })
 const rectHoleProps = pcbLayoutProps.extend({
   name: z.string().optional(),
   shape: z.literal("rect"),
-  width: distance,
-  height: distance,
+  width: positiveDistance,
+  height: positiveDistance,
   solderMaskMargin: distance.optional(),
   coveredWithSolderMask: z.boolean().optional(),
 })

@@ -49,6 +49,6 @@
   "peerDependencies": {
     "circuit-json": "*",
     "react": "*",
-    "zod": "*"
+    "zod": "3"
   }
 }
